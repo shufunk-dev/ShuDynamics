@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": "enchantedwood:enchanted_coal"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_coal_block"
+  }
+}

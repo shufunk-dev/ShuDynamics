@@ -1,0 +1,14 @@
+﻿{
+    "layers":  {
+                   "humanoid":  [
+                                    {
+                                        "texture":  "enchantedwood:tin"
+                                    }
+                                ],
+                   "humanoid_leggings":  [
+                                             {
+                                                 "texture":  "enchantedwood:tin"
+                                             }
+                                         ]
+               }
+}

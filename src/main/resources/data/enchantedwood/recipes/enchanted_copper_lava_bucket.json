@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "DBD",
+    "DDD"
+  ],
+  "key": {
+    "D": "enchantedwood:enchanted_dust",
+    "B": "enchantedwood:copper_lava_bucket"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_copper_lava_bucket"
+  }
+}

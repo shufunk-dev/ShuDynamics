@@ -1,0 +1,15 @@
+﻿{
+    "key":  {
+                "I":  "enchantedwood:tin_ingot"
+            },
+    "category":  "equipment",
+    "pattern":  [
+                    "III",
+                    "I I"
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:tin_helmet"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

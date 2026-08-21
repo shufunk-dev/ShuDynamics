@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["SRS", "RBR", "SRS"],
+  "key": { "S": "enchantedwood:steel_ingot", "R": "minecraft:redstone_block", "B": "enchantedwood:aluminum_battery" },
+  "result": { "id": "enchantedwood:steel_battery", "count": 1 }
+}

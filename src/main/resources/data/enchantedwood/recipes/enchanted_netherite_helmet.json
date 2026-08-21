@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "M M"
+  ],
+  "key": {
+    "M": "enchantedwood:enchanted_netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_netherite_helmet"
+  }
+}

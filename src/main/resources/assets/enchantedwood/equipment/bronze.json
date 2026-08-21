@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enchantedwood:bronze"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enchantedwood:bronze"
+      }
+    ]
+  }
+}

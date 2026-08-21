@@ -1,0 +1,16 @@
+﻿{
+    "key":  {
+                "I":  "enchantedwood:titanium_ingot"
+            },
+    "category":  "equipment",
+    "pattern":  [
+                    "I I",
+                    "III",
+                    "III"
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:titanium_chestplate"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

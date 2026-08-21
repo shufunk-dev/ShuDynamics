@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "enchantedwood:block/enchanted_storage_terminal" },
+    "facing=south": { "model": "enchantedwood:block/enchanted_storage_terminal", "y": 180 },
+    "facing=west": { "model": "enchantedwood:block/enchanted_storage_terminal", "y": 270 },
+    "facing=east": { "model": "enchantedwood:block/enchanted_storage_terminal", "y": 90 }
+  }
+}

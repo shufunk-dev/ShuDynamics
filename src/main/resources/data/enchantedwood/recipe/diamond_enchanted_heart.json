@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EDE",
+    "DHD",
+    "EDE"
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "D": "enchantedwood:diamond_dust",
+    "H": "enchantedwood:gold_enchanted_heart"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:diamond_enchanted_heart"
+  }
+}

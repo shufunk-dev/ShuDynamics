@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "enchantedwood:tin_dust",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:tin_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

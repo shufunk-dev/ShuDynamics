@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["SS ", " / ", " / "],
+  "key": { "S": "enchantedwood:steel_ingot", "/": "minecraft:stick" },
+  "result": { "id": "enchantedwood:steel_hoe", "count": 1 }
+}

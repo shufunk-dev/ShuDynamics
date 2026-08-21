@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RCR",
+    "BGB",
+    "RCR"
+  ],
+  "key": {
+    "G": "enchantedwood:copper_gear",
+    "C": "minecraft:copper_ingot",
+    "B": "enchantedwood:enchanted_dust",
+    "R": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_copper_gear"
+  }
+}
+

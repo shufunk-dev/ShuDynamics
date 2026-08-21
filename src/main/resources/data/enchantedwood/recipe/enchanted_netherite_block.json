@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "NNN",
+    "NNN"
+  ],
+  "key": {
+    "N": "enchantedwood:enchanted_netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_netherite_block"
+  }
+}

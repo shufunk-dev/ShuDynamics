@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "key": {
+    "C": "minecraft:cobblestone",
+    "D": "enchantedwood:enchanted_dust"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_cobblestone"
+  }
+}

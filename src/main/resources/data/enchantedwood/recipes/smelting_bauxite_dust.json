@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.2,
+  "ingredient": "enchantedwood:bauxite_dust",
+  "result": {
+    "id": "enchantedwood:raw_bauxite"
+  }
+}

@@ -1,0 +1,1 @@
+{"variants":{"facing=north":{"model":"enchantedwood:block/aluminum_battery"},"facing=south":{"model":"enchantedwood:block/aluminum_battery","y":180},"facing=west":{"model":"enchantedwood:block/aluminum_battery","y":270},"facing=east":{"model":"enchantedwood:block/aluminum_battery","y":90}}}

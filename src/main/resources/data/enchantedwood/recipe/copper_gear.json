@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "CGC",
+    " C "
+  ],
+  "key": {
+    "G": "enchantedwood:iron_gear",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:copper_gear"
+  }
+}

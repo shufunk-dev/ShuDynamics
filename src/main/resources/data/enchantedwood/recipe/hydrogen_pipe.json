@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "GGG",
+    " T "
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "count": 6,
+    "id": "enchantedwood:hydrogen_pipe"
+  }
+}

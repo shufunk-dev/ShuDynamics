@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " E ",
+    "ECE",
+    " E "
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "C": "enchantedwood:storage_crystal_64k"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:wireless_storage_crystal"
+  }
+}

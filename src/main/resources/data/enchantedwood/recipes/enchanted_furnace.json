@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "CFC",
+    "CCC"
+  ],
+  "key": {
+    "C": "enchantedwood:enchanted_cobblestone",
+    "F": "minecraft:furnace"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_furnace"
+  }
+}

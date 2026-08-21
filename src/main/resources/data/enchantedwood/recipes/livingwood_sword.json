@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "H",
+    "H",
+    "S"
+  ],
+  "key": {
+    "H": "enchantedwood:infused_heartwood",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:livingwood_sword"
+  }
+}

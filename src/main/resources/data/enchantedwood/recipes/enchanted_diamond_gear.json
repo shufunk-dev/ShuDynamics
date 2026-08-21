@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RDR",
+    "BGB",
+    "RDR"
+  ],
+  "key": {
+    "G": "enchantedwood:diamond_gear",
+    "D": "minecraft:diamond",
+    "B": "enchantedwood:enchanted_dust",
+    "R": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_diamond_gear"
+  }
+}
+

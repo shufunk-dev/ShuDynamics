@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "BGB",
+    " B "
+  ],
+  "key": {
+    "B": "enchantedwood:bronze_ingot",
+    "G": "enchantedwood:copper_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:bronze_gear"
+  }
+}

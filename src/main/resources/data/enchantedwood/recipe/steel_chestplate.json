@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["S S", "SSS", "SSS"],
+  "key": { "S": "enchantedwood:steel_ingot" },
+  "result": { "id": "enchantedwood:steel_chestplate", "count": 1 }
+}

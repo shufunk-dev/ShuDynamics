@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "enchantedwood:raw_titanium",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_ingot"
+  },
+  "experience": 0.8,
+  "cookingtime": 200
+}

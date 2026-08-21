@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "HAH",
+    "ACA",
+    "GAG"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "H": "enchantedwood:hydrogen_canister",
+    "C": "minecraft:iron_chestplate",
+    "G": "enchantedwood:aluminum_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:hydrogen_jetpack"
+  }
+}

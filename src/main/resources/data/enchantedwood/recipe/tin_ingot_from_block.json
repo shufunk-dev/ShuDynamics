@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:tin_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:tin_ingot"
+  }
+}

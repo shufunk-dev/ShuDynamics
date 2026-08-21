@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EIE",
+    "IHI",
+    "EIE"
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "I": "enchantedwood:iron_dust",
+    "H": "enchantedwood:enchanted_heart"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:iron_enchanted_heart"
+  }
+}

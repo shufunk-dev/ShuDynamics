@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FBF",
+    "BWB",
+    "FBF"
+  ],
+  "key": {
+    "W": "enchantedwood:enchanted_dust",
+    "B": "#minecraft:logs",
+    "F": "#minecraft:flowers"
+  },
+  "result": {
+    "count": 2,
+    "id": "enchantedwood:infused_heartwood"
+  }
+}
+

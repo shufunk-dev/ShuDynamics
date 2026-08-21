@@ -1,0 +1,50 @@
+# Gradle Build & Cache
+.gradle/
+build/
+bin/
+out/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
+# Minecraft Runtime & Fabric Loom
+run/
+runs/
+server/
+.fabric/
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+
+# AI Agents & Workspace Customizations
+.agents/
+AGENTS.md
+
+# Wiki & Documentation Site
+wiki/
+
+# Generated Development Reports & Checklists
+*.html
+ShuMod_Development_Report.html
+ShuMod_Item_Checklist.html
+
+# Scratch Generation & Automation Scripts
+*.js
+
+# OS & Temp Files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+*.patch
+.env
+.env.local
+255 255 255

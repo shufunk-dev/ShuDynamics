@@ -1,0 +1,14 @@
+﻿{
+    "layers":  {
+                   "humanoid":  [
+                                    {
+                                        "texture":  "enchantedwood:titanium"
+                                    }
+                                ],
+                   "humanoid_leggings":  [
+                                             {
+                                                 "texture":  "enchantedwood:titanium"
+                                             }
+                                         ]
+               }
+}

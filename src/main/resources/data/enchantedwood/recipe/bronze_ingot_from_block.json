@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:bronze_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:bronze_ingot"
+  }
+}

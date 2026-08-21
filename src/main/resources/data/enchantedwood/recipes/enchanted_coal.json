@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " B ",
+    "BCB",
+    " B "
+  ],
+  "key": {
+    "C": "#minecraft:coals",
+    "B": "enchantedwood:enchanted_dust"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:enchanted_coal"
+  }
+}
+

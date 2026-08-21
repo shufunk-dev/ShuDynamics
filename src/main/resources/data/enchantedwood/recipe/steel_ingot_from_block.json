@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": ["enchantedwood:steel_block"],
+  "result": { "id": "enchantedwood:steel_ingot", "count": 9 }
+}

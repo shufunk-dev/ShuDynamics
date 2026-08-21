@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "DGD",
+    " D "
+  ],
+  "key": {
+    "G": "enchantedwood:gold_gear",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:diamond_gear"
+  }
+}

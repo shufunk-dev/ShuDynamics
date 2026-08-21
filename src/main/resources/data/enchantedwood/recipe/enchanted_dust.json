@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LFL",
+    "AWA",
+    "LFL"
+  ],
+  "key": {
+    "W": "#minecraft:logs",
+    "F": "#minecraft:flowers",
+    "L": "#minecraft:leaves",
+    "A": [
+      "minecraft:apple",
+      "minecraft:sweet_berries",
+      "minecraft:glow_berries",
+      "minecraft:bread",
+      "minecraft:carrot",
+      "minecraft:potato",
+      "minecraft:melon_slice"
+    ]
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:enchanted_dust"
+  }
+}

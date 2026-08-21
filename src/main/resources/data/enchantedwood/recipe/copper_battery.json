@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CGC",
+    "RER",
+    "CCC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "G": "enchantedwood:copper_gear",
+    "R": "minecraft:redstone",
+    "E": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:copper_battery"
+  }
+}

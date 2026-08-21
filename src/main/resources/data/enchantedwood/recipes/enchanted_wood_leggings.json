@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WWW",
+    "W W",
+    "W W"
+  ],
+  "key": {
+    "W": "enchantedwood:enchanted_wood"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_wood_leggings"
+  }
+}

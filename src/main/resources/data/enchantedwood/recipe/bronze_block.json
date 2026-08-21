@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": "enchantedwood:bronze_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:bronze_block"
+  }
+}

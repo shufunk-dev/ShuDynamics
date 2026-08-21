@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": "enchantedwood:titanium_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_block"
+  }
+}
+

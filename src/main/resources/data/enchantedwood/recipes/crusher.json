@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "RSR",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "R": "enchantedwood:titanium_roller",
+    "S": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:crusher"
+  }
+}

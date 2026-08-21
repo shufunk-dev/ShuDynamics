@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:enchanted_cobblestone",
+    "enchantedwood:enchanted_furnace",
+    "enchantedwood:crusher",
+    "enchantedwood:dust_smelter",
+    "enchantedwood:bauxite_ore",
+    "enchantedwood:deepslate_bauxite_ore",
+    "enchantedwood:raw_bauxite_block",
+    "enchantedwood:copper_generator",
+    "enchantedwood:copper_battery",
+    "enchantedwood:copper_cable",
+    "enchantedwood:gas_pipe",
+    "enchantedwood:oxygen_generator"
+  ]
+}

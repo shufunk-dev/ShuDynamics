@@ -1,0 +1,17 @@
+﻿{
+    "key":  {
+                "S":  "minecraft:stick",
+                "I":  "enchantedwood:tin_ingot"
+            },
+    "category":  "equipment",
+    "pattern":  [
+                    "II ",
+                    "IS ",
+                    " S "
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:tin_axe"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

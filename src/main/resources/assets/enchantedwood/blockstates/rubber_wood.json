@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "enchantedwood:block/rubber_wood"
+    },
+    "axis=z": {
+      "model": "enchantedwood:block/rubber_wood",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "enchantedwood:block/rubber_wood",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

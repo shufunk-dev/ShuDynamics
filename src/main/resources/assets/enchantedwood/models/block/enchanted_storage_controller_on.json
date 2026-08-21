@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/orientable",
+    "textures": {
+        "top": "enchantedwood:block/enchanted_furnace_top",
+        "front": "enchantedwood:block/dust_smelter_front_on_netherite",
+        "side": "enchantedwood:block/dust_smelter_side_netherite"
+    }
+}

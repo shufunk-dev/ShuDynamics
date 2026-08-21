@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "CSC",
+    "DDD"
+  ],
+  "key": {
+    "D": "enchantedwood:enchanted_dust",
+    "C": "enchantedwood:storage_crystal_1k",
+    "S": "enchantedwood:enchanted_diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:storage_crystal_4k"
+  }
+}

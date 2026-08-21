@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "FDF",
+    "WHW",
+    "WDW"
+  ],
+  "key": {
+    "F": "minecraft:feather",
+    "W": "enchantedwood:enchanted_wood",
+    "D": "enchantedwood:enchanted_dust",
+    "H": "enchantedwood:infused_heartwood"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_cape"
+  }
+}

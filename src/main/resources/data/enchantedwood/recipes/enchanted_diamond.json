@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "DED",
+    " D "
+  ],
+  "key": {
+    "E": "minecraft:diamond",
+    "D": "enchantedwood:enchanted_dust"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_diamond"
+  }
+}

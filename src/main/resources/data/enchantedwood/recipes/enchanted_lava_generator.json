@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "CFC",
+    "GGG"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:cobblestone",
+    "F": "enchantedwood:enchanted_furnace",
+    "G": "enchantedwood:iron_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_lava_generator"
+  }
+}

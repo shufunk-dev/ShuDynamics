@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EGE",
+    "GHG",
+    "EGE"
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "G": "enchantedwood:gold_dust",
+    "H": "enchantedwood:iron_enchanted_heart"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:gold_enchanted_heart"
+  }
+}

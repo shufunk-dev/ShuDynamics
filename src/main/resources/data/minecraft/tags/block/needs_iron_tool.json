@@ -1,0 +1,28 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:tin_ore",
+    "enchantedwood:deepslate_tin_ore",
+    "enchantedwood:raw_tin_block",
+    "enchantedwood:tin_block",
+    "enchantedwood:titanium_ore",
+    "enchantedwood:deepslate_titanium_ore",
+    "enchantedwood:raw_titanium_block",
+    "enchantedwood:titanium_block",
+    "enchantedwood:enchanted_coal_block",
+    "enchantedwood:enchanted_lava_generator",
+    "enchantedwood:aluminum_block",
+    "enchantedwood:aluminum_refiner",
+    "enchantedwood:aluminum_generator",
+    "enchantedwood:aluminum_battery",
+    "enchantedwood:aluminum_cable",
+    "enchantedwood:coke_oven",
+    "enchantedwood:steel_blast_furnace",
+    "enchantedwood:steel_generator",
+    "enchantedwood:steel_battery",
+    "enchantedwood:steel_cable",
+    "enchantedwood:steel_block",
+    "enchantedwood:bronze_block",
+    "enchantedwood:coke_coal_block"
+  ]
+}

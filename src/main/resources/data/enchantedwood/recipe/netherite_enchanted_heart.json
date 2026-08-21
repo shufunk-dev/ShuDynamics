@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ENE",
+    "NHN",
+    "ENE"
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "N": "enchantedwood:netherite_dust",
+    "H": "enchantedwood:diamond_enchanted_heart"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:netherite_enchanted_heart"
+  }
+}

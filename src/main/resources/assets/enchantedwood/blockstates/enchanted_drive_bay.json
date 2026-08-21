@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "enchantedwood:block/enchanted_drive_bay" },
+    "facing=south": { "model": "enchantedwood:block/enchanted_drive_bay", "y": 180 },
+    "facing=west": { "model": "enchantedwood:block/enchanted_drive_bay", "y": 270 },
+    "facing=east": { "model": "enchantedwood:block/enchanted_drive_bay", "y": 90 }
+  }
+}

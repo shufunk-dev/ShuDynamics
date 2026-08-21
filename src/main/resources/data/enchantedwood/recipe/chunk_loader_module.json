@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WSE",
+    "S#S",
+    "ESW"
+  ],
+  "key": {
+    "W": "enchantedwood:enchanted_wood",
+    "S": "enchantedwood:steel_ingot",
+    "E": "minecraft:ender_eye",
+    "#": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:chunk_loader_module"
+  }
+}

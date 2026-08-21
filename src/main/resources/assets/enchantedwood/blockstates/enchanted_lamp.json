@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "enchantedwood:block/enchanted_lamp"
+    },
+    "lit=true": {
+      "model": "enchantedwood:block/enchanted_lamp_on"
+    }
+  }
+}

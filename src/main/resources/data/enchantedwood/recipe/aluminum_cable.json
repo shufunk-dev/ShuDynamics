@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "RER",
+    "AAA"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "R": "minecraft:redstone",
+    "E": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 6,
+    "id": "enchantedwood:aluminum_cable"
+  }
+}

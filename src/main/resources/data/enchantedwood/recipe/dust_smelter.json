@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "FSF",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "F": "minecraft:furnace",
+    "S": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:dust_smelter"
+  }
+}

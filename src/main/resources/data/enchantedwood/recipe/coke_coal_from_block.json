@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:coke_coal_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:coke_coal"
+  }
+}

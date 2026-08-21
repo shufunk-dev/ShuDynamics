@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:enchanted_heart",
+    "enchantedwood:iron_enchanted_heart",
+    "enchantedwood:gold_enchanted_heart",
+    "enchantedwood:diamond_enchanted_heart",
+    "enchantedwood:netherite_enchanted_heart"
+  ]
+}

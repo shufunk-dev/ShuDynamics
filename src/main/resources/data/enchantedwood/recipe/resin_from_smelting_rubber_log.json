@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "enchantedwood:rubber_log",
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:resin"
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

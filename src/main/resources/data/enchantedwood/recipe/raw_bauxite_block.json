@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": "enchantedwood:raw_bauxite"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:raw_bauxite_block"
+  }
+}

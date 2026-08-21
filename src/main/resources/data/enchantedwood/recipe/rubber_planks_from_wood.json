@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "enchantedwood:rubber_wood"
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:rubber_planks"
+  }
+}

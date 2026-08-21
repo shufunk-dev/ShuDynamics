@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "B B",
+    "B B"
+  ],
+  "key": {
+    "B": "enchantedwood:bronze_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:bronze_boots"
+  }
+}

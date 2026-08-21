@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "GCG",
+    "RER"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "G": "enchantedwood:aluminum_gear",
+    "C": "enchantedwood:copper_generator",
+    "R": "enchantedwood:enchanted_redstone",
+    "E": "enchantedwood:enchanted_diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:aluminum_generator"
+  }
+}

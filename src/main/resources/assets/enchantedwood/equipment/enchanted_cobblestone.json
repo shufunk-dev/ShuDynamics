@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enchantedwood:enchanted_cobblestone"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enchantedwood:enchanted_cobblestone"
+      }
+    ]
+  }
+}

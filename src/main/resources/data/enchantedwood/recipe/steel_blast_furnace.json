@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGT",
+    "TBT",
+    "TGT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:aluminum_gear",
+    "B": "minecraft:blast_furnace"
+  },
+  "result": {
+    "id": "enchantedwood:steel_blast_furnace",
+    "count": 1
+  }
+}

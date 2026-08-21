@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "A A",
+    " A "
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:aluminum_gear"
+  }
+}

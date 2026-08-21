@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IBI",
+    "BGB",
+    "IBI"
+  ],
+  "key": {
+    "G": "enchantedwood:gold_gear",
+    "B": "enchantedwood:enchanted_dust",
+    "I": "minecraft:gold_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_gold_gear"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "enchantedwood:block/rubber_leaves"
+  }
+}

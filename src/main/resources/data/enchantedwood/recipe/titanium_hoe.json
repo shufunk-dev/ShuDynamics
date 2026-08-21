@@ -1,0 +1,17 @@
+﻿{
+    "key":  {
+                "S":  "minecraft:stick",
+                "I":  "enchantedwood:titanium_ingot"
+            },
+    "category":  "equipment",
+    "pattern":  [
+                    "II ",
+                    " S ",
+                    " S "
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:titanium_hoe"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

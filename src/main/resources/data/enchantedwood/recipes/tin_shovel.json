@@ -1,0 +1,17 @@
+﻿{
+    "key":  {
+                "S":  "minecraft:stick",
+                "I":  "enchantedwood:tin_ingot"
+            },
+    "category":  "equipment",
+    "pattern":  [
+                    "I",
+                    "S",
+                    "S"
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:tin_shovel"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

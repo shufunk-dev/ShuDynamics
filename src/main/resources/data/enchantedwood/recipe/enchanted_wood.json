@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "WDW",
+    "DWD",
+    "WDW"
+  ],
+  "key": {
+    "W": "#minecraft:logs",
+    "D": "enchantedwood:enchanted_dust"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:enchanted_wood"
+  }
+}

@@ -1,0 +1,425 @@
+﻿{
+    "credit":  "Made for ShuMod by Antigravity",
+    "textures":  {
+                     "particle":  "enchantedwood:block/enchanted_furnace_side",
+                     "top":  "enchantedwood:block/enchanted_furnace_top",
+                     "front":  "enchantedwood:block/enchanted_furnace_front_on",
+                     "side":  "enchantedwood:block/enchanted_furnace_side"
+                 },
+    "elements":  [
+                     {
+                         "comment":  "Outer Stone Body",
+                         "from":  [
+                                      0,
+                                      0,
+                                      0
+                                  ],
+                         "to":  [
+                                    16,
+                                    15,
+                                    16
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                0,
+                                                                1,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#front"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               1,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                0,
+                                                                1,
+                                                                16,
+                                                                16
+                                                            ],
+                                                     "texture":  "#side"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               1,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             0,
+                                                             0,
+                                                             16,
+                                                             16
+                                                         ],
+                                                  "texture":  "#top"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               0,
+                                                               0,
+                                                               16,
+                                                               16
+                                                           ],
+                                                    "texture":  "#side",
+                                                    "cullface":  "down"
+                                                }
+                                   }
+                     },
+                     {
+                         "comment":  "Extruded Top Arch Lintel",
+                         "from":  [
+                                      1,
+                                      11,
+                                      -0.5
+                                  ],
+                         "to":  [
+                                    15,
+                                    14,
+                                    0.5
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                1,
+                                                                2,
+                                                                15,
+                                                                5
+                                                            ],
+                                                     "texture":  "#front"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               0,
+                                                               2,
+                                                               1,
+                                                               5
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               2,
+                                                               1,
+                                                               5
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             1,
+                                                             0,
+                                                             15,
+                                                             1
+                                                         ],
+                                                  "texture":  "#top"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               1,
+                                                               0,
+                                                               15,
+                                                               1
+                                                           ],
+                                                    "texture":  "#top"
+                                                }
+                                   }
+                     },
+                     {
+                         "comment":  "Left Arch Pillar",
+                         "from":  [
+                                      1,
+                                      1,
+                                      -0.5
+                                  ],
+                         "to":  [
+                                    4,
+                                    11,
+                                    0.5
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                1,
+                                                                5,
+                                                                4,
+                                                                15
+                                                            ],
+                                                     "texture":  "#front"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               0,
+                                                               5,
+                                                               1,
+                                                               15
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             1,
+                                                             0,
+                                                             4,
+                                                             1
+                                                         ],
+                                                  "texture":  "#top"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               1,
+                                                               0,
+                                                               4,
+                                                               1
+                                                           ],
+                                                    "texture":  "#top"
+                                                }
+                                   }
+                     },
+                     {
+                         "comment":  "Right Arch Pillar",
+                         "from":  [
+                                      12,
+                                      1,
+                                      -0.5
+                                  ],
+                         "to":  [
+                                    15,
+                                    11,
+                                    0.5
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                12,
+                                                                5,
+                                                                15,
+                                                                15
+                                                            ],
+                                                     "texture":  "#front"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               15,
+                                                               5,
+                                                               16,
+                                                               15
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             12,
+                                                             0,
+                                                             15,
+                                                             1
+                                                         ],
+                                                  "texture":  "#top"
+                                              },
+                                       "down":  {
+                                                    "uv":  [
+                                                               12,
+                                                               0,
+                                                               15,
+                                                               1
+                                                           ],
+                                                    "texture":  "#top"
+                                                }
+                                   }
+                     },
+                     {
+                         "comment":  "Top Beveled Border Ridge",
+                         "from":  [
+                                      1,
+                                      15,
+                                      1
+                                  ],
+                         "to":  [
+                                    15,
+                                    16.5,
+                                    15
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "uv":  [
+                                                                1,
+                                                                0,
+                                                                15,
+                                                                1.5
+                                                            ],
+                                                     "texture":  "#front"
+                                                 },
+                                       "east":  {
+                                                    "uv":  [
+                                                               1,
+                                                               0,
+                                                               15,
+                                                               1.5
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "south":  {
+                                                     "uv":  [
+                                                                1,
+                                                                0,
+                                                                15,
+                                                                1.5
+                                                            ],
+                                                     "texture":  "#side"
+                                                 },
+                                       "west":  {
+                                                    "uv":  [
+                                                               1,
+                                                               0,
+                                                               15,
+                                                               1.5
+                                                           ],
+                                                    "texture":  "#side"
+                                                },
+                                       "up":  {
+                                                  "uv":  [
+                                                             1,
+                                                             1,
+                                                             15,
+                                                             15
+                                                         ],
+                                                  "texture":  "#top"
+                                              }
+                                   }
+                     }
+                 ],
+    "parent":  "minecraft:block/block",
+    "display":  {
+                    "thirdperson_righthand":  {
+                                                  "rotation":  [
+                                                                   75,
+                                                                   45,
+                                                                   0
+                                                               ],
+                                                  "translation":  [
+                                                                      0,
+                                                                      2.5,
+                                                                      0
+                                                                  ],
+                                                  "scale":  [
+                                                                0.375,
+                                                                0.375,
+                                                                0.375
+                                                            ]
+                                              },
+                    "thirdperson_lefthand":  {
+                                                 "rotation":  [
+                                                                  75,
+                                                                  45,
+                                                                  0
+                                                              ],
+                                                 "translation":  [
+                                                                     0,
+                                                                     2.5,
+                                                                     0
+                                                                 ],
+                                                 "scale":  [
+                                                               0.375,
+                                                               0.375,
+                                                               0.375
+                                                           ]
+                                             },
+                    "firstperson_righthand":  {
+                                                  "rotation":  [
+                                                                   0,
+                                                                   45,
+                                                                   0
+                                                               ],
+                                                  "translation":  [
+                                                                      0,
+                                                                      0,
+                                                                      0
+                                                                  ],
+                                                  "scale":  [
+                                                                0.40,
+                                                                0.40,
+                                                                0.40
+                                                            ]
+                                              },
+                    "firstperson_lefthand":  {
+                                                 "rotation":  [
+                                                                  0,
+                                                                  225,
+                                                                  0
+                                                              ],
+                                                 "translation":  [
+                                                                     0,
+                                                                     0,
+                                                                     0
+                                                                 ],
+                                                 "scale":  [
+                                                               0.40,
+                                                               0.40,
+                                                               0.40
+                                                           ]
+                                             },
+                    "ground":  {
+                                   "rotation":  [
+                                                    0,
+                                                    0,
+                                                    0
+                                                ],
+                                   "translation":  [
+                                                       0,
+                                                       3,
+                                                       0
+                                                   ],
+                                   "scale":  [
+                                                 0.25,
+                                                 0.25,
+                                                 0.25
+                                             ]
+                               },
+                    "gui":  {
+                                "rotation":  [
+                                                 30,
+                                                 225,
+                                                 0
+                                             ],
+                                "translation":  [
+                                                    0,
+                                                    0,
+                                                    0
+                                                ],
+                                "scale":  [
+                                              0.625,
+                                              0.625,
+                                              0.625
+                                          ]
+                            },
+                    "fixed":  {
+                                  "rotation":  [
+                                                   0,
+                                                   0,
+                                                   0
+                                               ],
+                                  "translation":  [
+                                                      0,
+                                                      0,
+                                                      0
+                                                  ],
+                                  "scale":  [
+                                                0.5,
+                                                0.5,
+                                                0.5
+                                            ]
+                              }
+                }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "GEG",
+    "SSS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "minecraft:gold_ingot",
+    "E": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 6,
+    "id": "enchantedwood:steel_cable"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "enchantedwood:block/stripped_rubber_log"
+    },
+    "axis=z": {
+      "model": "enchantedwood:block/stripped_rubber_log_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "enchantedwood:block/stripped_rubber_log_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

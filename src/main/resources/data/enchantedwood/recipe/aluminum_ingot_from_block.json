@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:aluminum_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:aluminum_ingot"
+  }
+}

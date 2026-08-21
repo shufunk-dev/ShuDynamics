@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "AAA",
+    "A/A",
+    " / "
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "/": "minecraft:stick"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:aluminum_hammer"
+  }
+}

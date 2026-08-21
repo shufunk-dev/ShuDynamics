@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "enchantedwood",
+  "version": "${version}",
+  "name": "ShuMod",
+  "description": "Magical tools, enchanted cobblestone, furnaces, redstone, gears, and ore doubler machines.",
+  "authors": [
+    "shufunk"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/enchantedwood/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.enchantedwood.EnchantedWoodMod"
+    ],
+    "client": [
+      "net.enchantedwood.EnchantedWoodClient"
+    ]
+  },
+  "mixins": [
+    "enchantedwood.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": ">=1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

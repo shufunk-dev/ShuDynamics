@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["DGD", "GEG", "DGD"],
+  "key": { "G": "enchantedwood:steel_gear", "D": "enchantedwood:enchanted_dust", "E": "enchantedwood:enchanted_diamond" },
+  "result": { "id": "enchantedwood:enchanted_steel_gear", "count": 1 }
+}

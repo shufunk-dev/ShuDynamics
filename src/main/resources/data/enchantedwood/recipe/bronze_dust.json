@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:copper_dust",
+    "enchantedwood:copper_dust",
+    "enchantedwood:copper_dust",
+    "enchantedwood:tin_dust"
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:bronze_dust"
+  }
+}

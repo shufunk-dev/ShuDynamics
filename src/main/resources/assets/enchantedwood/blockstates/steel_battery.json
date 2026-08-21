@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "enchantedwood:block/steel_battery" },
+    "facing=east":  { "model": "enchantedwood:block/steel_battery", "y": 90 },
+    "facing=south": { "model": "enchantedwood:block/steel_battery", "y": 180 },
+    "facing=west":  { "model": "enchantedwood:block/steel_battery", "y": 270 }
+  }
+}

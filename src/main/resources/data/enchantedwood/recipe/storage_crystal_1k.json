@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "DQD",
+    "DDD"
+  ],
+  "key": {
+    "D": "enchantedwood:enchanted_dust",
+    "Q": "minecraft:quartz"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:storage_crystal_1k"
+  }
+}

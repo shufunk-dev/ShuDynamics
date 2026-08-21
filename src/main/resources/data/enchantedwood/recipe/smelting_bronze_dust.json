@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "enchantedwood:bronze_dust",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:bronze_ingot"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

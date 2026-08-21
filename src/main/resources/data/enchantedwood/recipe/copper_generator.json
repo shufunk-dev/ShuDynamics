@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "GFG",
+    "RER"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "G": "enchantedwood:copper_gear",
+    "F": "minecraft:furnace",
+    "R": "minecraft:redstone",
+    "E": "enchantedwood:enchanted_cobblestone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:copper_generator"
+  }
+}

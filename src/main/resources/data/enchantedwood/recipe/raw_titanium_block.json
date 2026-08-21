@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TTT",
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:raw_titanium"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:raw_titanium_block"
+  }
+}

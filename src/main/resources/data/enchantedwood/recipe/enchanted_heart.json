@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FDF",
+    "DED",
+    "FDF"
+  ],
+  "key": {
+    "F": "minecraft:rotten_flesh",
+    "D": "enchantedwood:enchanted_dust",
+    "E": "enchantedwood:infused_heartwood"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_heart"
+  }
+}

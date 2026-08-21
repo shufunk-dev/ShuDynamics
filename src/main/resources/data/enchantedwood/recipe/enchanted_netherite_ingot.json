@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RDR",
+    "DND",
+    "RDR"
+  ],
+  "key": {
+    "N": "minecraft:netherite_ingot",
+    "D": "enchantedwood:enchanted_dust",
+    "R": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_netherite_ingot"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RNR",
+    "BGB",
+    "RNR"
+  ],
+  "key": {
+    "G": "enchantedwood:netherite_gear",
+    "N": "minecraft:netherite_ingot",
+    "B": "enchantedwood:enchanted_dust",
+    "R": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_netherite_gear"
+  }
+}
+

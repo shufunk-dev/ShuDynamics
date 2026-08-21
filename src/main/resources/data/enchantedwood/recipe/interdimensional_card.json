@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NEN",
+    "C#C",
+    "NEN"
+  ],
+  "key": {
+    "N": "enchantedwood:enchanted_netherite_ingot",
+    "E": "minecraft:ender_eye",
+    "C": "enchantedwood:storage_crystal_16k",
+    "#": "enchantedwood:enchanted_diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:interdimensional_card"
+  }
+}
