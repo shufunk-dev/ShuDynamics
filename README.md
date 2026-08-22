@@ -35,7 +35,7 @@
   * **Interdimensional Card**: Grants remote storage access across dimensions (Nether & The End).
 
 ### 🛡️ 4. Tools, Armor & 3x3 Mining
-* **Tiered Armor & Weapons**: Full gear progression including Tin, Bronze, Aluminum, Titanium, and Enchanted Netherite.
+* **Tiered Armor & Weapons**: Full gear progression including Tin, Bronze, Aluminum, Titanium, Enchanted Diamond, and Enchanted Netherite.
 * **3x3 Mining Hammers**: Heavy-duty excavation tools designed for rapid subterranean mining.
 * **Special Archetypes**: Livingwood weapons and Barkskin equipment offering unique passives and survivability.
 * **Health Lockets & Crystals**: Permanent health-pool expansion items.

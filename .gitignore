@@ -33,6 +33,8 @@ wiki/
 *.html
 ShuMod_Development_Report.html
 ShuMod_Item_Checklist.html
+shumod-v1.0.0-release-report.html
+shumod-development-effort-report.html
 
 # Scratch Generation & Automation Scripts
 *.js
