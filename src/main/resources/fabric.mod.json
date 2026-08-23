@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "enchantedwood",
   "version": "${version}",
-  "name": "ShuMod",
+  "name": "ShuTech",
   "description": "Magical tools, enchanted cobblestone, furnaces, redstone, gears, and ore doubler machines.",
   "authors": [
     "shufunk"

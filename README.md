@@ -1,20 +1,22 @@
-# ✨ ShuMod
+# ✨ ShuTech
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Documentation](https://img.shields.io/badge/Wiki-shumod.shufunk.net-8B5CF6.svg?style=flat-square)](https://shumod.shufunk.net)
+[![Documentation](https://img.shields.io/badge/Wiki-shutech.shufunk.net-8B5CF6.svg?style=flat-square)](https://shutech.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-gold.svg?style=flat-square)]()
-[![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)]()
+[![Release](https://img.shields.io/badge/Release-v1.0.1-gold.svg?style=flat-square)](https://github.com/shufunk-dev/ShuTech/releases/latest)
+[![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuMod** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
+**ShuTech** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
 
-🌐 **Official Wiki & Guide**: [https://shumod.shufunk.net](https://shumod.shufunk.net)
+* 🌐 **Official Wiki & Guide**: [https://shutech.shufunk.net](https://shutech.shufunk.net)
+* 📥 **Latest Release (.jar)**: [GitHub Releases (v1.0.1)](https://github.com/shufunk-dev/ShuTech/releases/latest)
+* 📦 **GitHub Repository**: [https://github.com/shufunk-dev/ShuTech](https://github.com/shufunk-dev/ShuTech)
 
 ---
 
-## 🌟 Key Features (v1.0.0 Release)
+## 🌟 Key Features (v1.0.1 Release)
 
 ### ⚡ 1. Tiered Energy & Power Grids
 * **Multi-Tier Generators**: Clean energy generation across Copper, Aluminum, and Steel tiers.
@@ -57,8 +59,8 @@ Clone the repository and compile using the included Gradle wrapper:
 
 ```bash
 # Clone the repository
-git clone https://github.com/shufunk-dev/ShuMod.git
-cd ShuMod
+git clone https://github.com/shufunk-dev/ShuTech.git
+cd ShuTech
 
 # Build the mod JAR on Windows
 .\gradlew.bat build
@@ -69,7 +71,7 @@ cd ShuMod
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shumod-1.0.0.jar
+build/libs/shutech-1.0.1.jar
 ```
 
 ---
