@@ -11,8 +11,6 @@
 **ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
-* 📥 **Latest Release (.jar)**: [GitHub Releases (v1.1.0)](https://github.com/shufunk-dev/ShuDynamics/releases/latest)
-* 📦 **GitHub Repository**: [https://github.com/shufunk-dev/ShuDynamics](https://github.com/shufunk-dev/ShuDynamics)
 
 ---
 
