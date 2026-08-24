@@ -421,6 +421,21 @@ public class ModBlocks {
                     .resistance(3.0f)
                     .nonOpaque()));
 
+    public static final Block MINING_PORTAL = registerBlockWithoutItem("mining_portal",
+            new net.enchantedwood.block.custom.MiningPortalBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "mining_portal")))
+                    .noCollision()
+                    .strength(-1.0F)
+                    .sounds(BlockSoundGroup.GLASS)
+                    .luminance(state -> 11)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
+                    .nonOpaque()));
+
+    private static Block registerBlockWithoutItem(String name, Block block) {
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+        return Registry.register(Registries.BLOCK, blockKey, block);
+    }
+
     private static Block registerBlock(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));

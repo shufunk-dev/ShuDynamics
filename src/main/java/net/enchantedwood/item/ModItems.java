@@ -35,6 +35,7 @@ public class ModItems {
     public static final Item ENCHANTED_WOOD = registerItem("enchanted_wood", Item::new);
     public static final Item ENCHANTED_COAL = registerItem("enchanted_coal", Item::new);
     public static final Item ENCHANTED_REDSTONE = registerItem("enchanted_redstone", EnchantedRedstoneItem::new);
+    public static final Item ENCHANTED_EMERALD = registerItem("enchanted_emerald", net.enchantedwood.item.custom.EnchantedEmeraldItem::new);
     public static final Item ENCHANTED_CAPE = registerItem("enchanted_cape", settings -> new net.enchantedwood.item.custom.EnchantedCapeItem(settings.maxCount(1)));
     public static final Item RESIN = registerItem("resin", Item::new);
     public static final Item RUBBER = registerItem("rubber", Item::new);
@@ -341,6 +342,7 @@ public class ModItems {
                 entries.add(ENCHANTED_WOOD);
                 entries.add(ENCHANTED_COAL);
                 entries.add(ENCHANTED_REDSTONE);
+                entries.add(ENCHANTED_EMERALD);
                 entries.add(RAW_TIN);
                 entries.add(net.enchantedwood.block.ModBlocks.TIN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TIN_ORE);

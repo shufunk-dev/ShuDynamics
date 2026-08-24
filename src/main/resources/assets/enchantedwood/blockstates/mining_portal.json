@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "enchantedwood:block/mining_portal_ns"
+    },
+    "axis=z": {
+      "model": "enchantedwood:block/mining_portal_ew"
+    }
+  }
+}

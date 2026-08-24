@@ -13,7 +13,7 @@ hero:
       text: 🚀 Getting Started
       link: /getting-started/
     - theme: alt
-      text: 📥 Download v1.0.1 (.jar)
+      text: 📥 Download v1.1.0 (.jar)
       link: https://github.com/shufunk-dev/ShuDynamics/releases/latest
     - theme: alt
       text: ⚙️ Explore Machines
@@ -115,8 +115,8 @@ features:
       <span class="quick-desc">New Dimensions, Modular ATVs, Supercomputers, and upcoming tech.</span>
     </a>
     <a href="https://github.com/shufunk-dev/ShuDynamics/releases/latest" target="_blank" rel="noopener noreferrer" class="quick-card" style="border-color: rgba(234, 179, 8, 0.4); background: rgba(45, 38, 20, 0.6);">
-      <span class="quick-title" style="color: #fde047;">📥 Download v1.0.1 (.jar)</span>
-      <span class="quick-desc">Get the latest compiled v1.0.1 mod JAR from GitHub Releases ready for your mods folder.</span>
+      <span class="quick-title" style="color: #fde047;">📥 Download v1.1.0 (.jar)</span>
+      <span class="quick-desc">Get the latest compiled v1.1.0 mod JAR from GitHub Releases ready for your mods folder.</span>
     </a>
     <a href="https://github.com/shufunk-dev/ShuDynamics" target="_blank" rel="noopener noreferrer" class="quick-card" style="border-color: rgba(139, 92, 246, 0.4); background: rgba(30, 27, 50, 0.6);">
       <span class="quick-title" style="color: #c4b5fd;">⭐ GitHub Repository</span>

@@ -45,11 +45,6 @@ public class EnchantedWoodClient implements ClientModInitializer {
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
 
-
-
-
-
-
         CustomHeartHudRenderer.register();
 
         // Register Keybinding 'C' to open Equipment GUI

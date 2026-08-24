@@ -5,18 +5,18 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
 [![Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v1.0.1-gold.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases/latest)
+[![Release](https://img.shields.io/badge/Release-v1.1.0-gold.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases/latest)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
 **ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
-* 📥 **Latest Release (.jar)**: [GitHub Releases (v1.0.1)](https://github.com/shufunk-dev/ShuDynamics/releases/latest)
+* 📥 **Latest Release (.jar)**: [GitHub Releases (v1.1.0)](https://github.com/shufunk-dev/ShuDynamics/releases/latest)
 * 📦 **GitHub Repository**: [https://github.com/shufunk-dev/ShuDynamics](https://github.com/shufunk-dev/ShuDynamics)
 
 ---
 
-## 🌟 Key Features (v1.0.1 Release)
+## 🌟 Key Features (v1.1.0 Release)
 
 ### ⚡ 1. Tiered Energy & Power Grids
 * **Multi-Tier Generators**: Clean energy generation across Copper, Aluminum, and Steel tiers.
@@ -71,7 +71,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-1.0.1.jar
+build/libs/shudynamics-1.1.0.jar
 ```
 
 ---

@@ -6,6 +6,8 @@
   "item.enchantedwood.enchanted_wood": "Enchanted Wood",
   "item.enchantedwood.enchanted_coal": "Enchanted Coal",
   "item.enchantedwood.enchanted_redstone": "Enchanted Redstone Dust",
+  "item.enchantedwood.enchanted_emerald": "Enchanted Emerald",
+  "block.enchantedwood.mining_portal": "Mining Dimension Portal",
 
   "item.enchantedwood.raw_tin": "Raw Tin",
   "item.enchantedwood.tin_ingot": "Tin Ingot",

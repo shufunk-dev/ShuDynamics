@@ -20,6 +20,7 @@ public class EnchantedWoodMod implements ModInitializer {
         ModItems.registerModItems();
         ModBlockEntities.registerBlockEntities();
         ModScreenHandlers.registerScreenHandlers();
+        net.enchantedwood.world.dimension.ModDimensions.registerDimensions();
         net.enchantedwood.world.ModWorldGeneration.generateOres();
         net.enchantedwood.event.PlayerEquipmentState.register();
         net.enchantedwood.command.EquipmentCommand.register();
