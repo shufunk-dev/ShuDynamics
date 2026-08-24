@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:enchanted_emerald"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.mining_dimension.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.mining_dimension.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:enchanted_emerald"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0"
+    ]
+  ],
+  "parent": "enchantedwood:infused_heartwood"
+}

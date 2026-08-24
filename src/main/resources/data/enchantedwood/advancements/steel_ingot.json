@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.steel_ingot.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.steel_ingot.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:steel_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0"
+    ]
+  ],
+  "parent": "enchantedwood:steel_blast_furnace"
+}

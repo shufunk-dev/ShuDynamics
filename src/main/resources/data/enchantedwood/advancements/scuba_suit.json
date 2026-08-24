@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:scuba_chestplate"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.scuba_suit.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.scuba_suit.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:scuba_chestplate"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0"
+    ]
+  ],
+  "parent": "enchantedwood:electrolyzer"
+}

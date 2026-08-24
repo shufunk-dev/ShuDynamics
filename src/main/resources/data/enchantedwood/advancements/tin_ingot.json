@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:tin_ingot"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.tin_ingot.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.tin_ingot.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:tin_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0"
+    ]
+  ],
+  "parent": "enchantedwood:root"
+}

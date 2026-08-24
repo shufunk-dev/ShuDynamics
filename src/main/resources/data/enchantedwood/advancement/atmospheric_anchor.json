@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:atmospheric_anchor"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.atmospheric_anchor.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.atmospheric_anchor.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:atmospheric_anchor"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0"
+    ]
+  ],
+  "parent": "enchantedwood:scuba_suit"
+}

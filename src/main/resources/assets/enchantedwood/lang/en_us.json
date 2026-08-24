@@ -1,6 +1,5 @@
 {
   "itemGroup.enchantedwood.enchanted_wood_group": "ShuDynamics",
-  
   "item.enchantedwood.infused_heartwood": "Infused Heartwood",
   "item.enchantedwood.enchanted_dust": "Enchanted Dust",
   "item.enchantedwood.enchanted_wood": "Enchanted Wood",
@@ -8,7 +7,6 @@
   "item.enchantedwood.enchanted_redstone": "Enchanted Redstone Dust",
   "item.enchantedwood.enchanted_emerald": "Enchanted Emerald",
   "block.enchantedwood.mining_portal": "Mining Dimension Portal",
-
   "item.enchantedwood.raw_tin": "Raw Tin",
   "item.enchantedwood.tin_ingot": "Tin Ingot",
   "item.enchantedwood.bronze_ingot": "Bronze Ingot",
@@ -19,7 +17,6 @@
   "item.enchantedwood.gold_enchanted_heart": "Gold Enchanted Heart Locket",
   "item.enchantedwood.diamond_enchanted_heart": "Diamond Enchanted Heart Locket",
   "item.enchantedwood.netherite_enchanted_heart": "Netherite Enchanted Heart Locket",
-
   "item.enchantedwood.iron_gear": "Iron Gear",
   "item.enchantedwood.enchanted_iron_gear": "Enchanted Iron Gear",
   "item.enchantedwood.copper_gear": "Copper Gear",
@@ -32,7 +29,6 @@
   "item.enchantedwood.enchanted_diamond_gear": "Enchanted Diamond Gear",
   "item.enchantedwood.netherite_gear": "Netherite Gear",
   "item.enchantedwood.enchanted_netherite_gear": "Enchanted Netherite Gear",
-
   "item.enchantedwood.iron_dust": "Iron Dust",
   "item.enchantedwood.copper_dust": "Copper Dust",
   "item.enchantedwood.tin_dust": "Tin Dust",
@@ -42,28 +38,23 @@
   "item.enchantedwood.netherite_dust": "Netherite Dust",
   "item.enchantedwood.emerald_dust": "Emerald Dust",
   "item.enchantedwood.coal_dust": "Coal Dust",
-
   "block.enchantedwood.tin_ore": "Tin Ore",
   "block.enchantedwood.deepslate_tin_ore": "Deepslate Tin Ore",
   "block.enchantedwood.raw_tin_block": "Block of Raw Tin",
   "block.enchantedwood.tin_block": "Block of Tin",
-
   "item.enchantedwood.bronze_sword": "Bronze Sword",
   "item.enchantedwood.bronze_pickaxe": "Bronze Pickaxe",
   "item.enchantedwood.bronze_axe": "Bronze Axe",
   "item.enchantedwood.bronze_shovel": "Bronze Shovel",
   "item.enchantedwood.bronze_hoe": "Bronze Hoe",
   "item.enchantedwood.wooden_shears": "Wooden Shears",
-
   "item.enchantedwood.bronze_helmet": "Bronze Helmet",
   "item.enchantedwood.bronze_chestplate": "Bronze Chestplate",
   "item.enchantedwood.bronze_leggings": "Bronze Leggings",
   "item.enchantedwood.bronze_boots": "Bronze Boots",
-
   "block.enchantedwood.enchanted_cobblestone": "Enchanted Cobblestone",
   "block.enchantedwood.enchanted_furnace": "Enchanted Furnace",
   "container.enchantedwood.enchanted_furnace": "Enchanted Furnace",
-
   "item.enchantedwood.raw_titanium": "Raw Titanium",
   "item.enchantedwood.titanium_ingot": "Titanium Ingot",
   "item.enchantedwood.titanium_dust": "Titanium Dust",
@@ -72,23 +63,19 @@
   "block.enchantedwood.deepslate_titanium_ore": "Deepslate Titanium Ore",
   "block.enchantedwood.raw_titanium_block": "Block of Raw Titanium",
   "block.enchantedwood.titanium_block": "Block of Titanium",
-
   "block.enchantedwood.crusher": "Crusher",
   "container.enchantedwood.crusher": "Crusher Machine",
   "message.enchantedwood.upgraded_tier": "Upgraded Crusher to %s Tier!",
   "message.enchantedwood.upgrade_requires_redstone": "Upgrading requires Enchanted Redstone Dust in inventory!",
-  
   "item.enchantedwood.livingwood_sword": "Livingwood Sword",
   "item.enchantedwood.barkskin_pickaxe": "Barkskin Pickaxe",
   "item.enchantedwood.ironwood_axe": "Ironwood Axe",
   "item.enchantedwood.verdant_shovel": "Verdant Shovel",
   "item.enchantedwood.elderwood_hoe": "Elderwood Hoe",
-  
   "item.enchantedwood.enchanted_wood_helmet": "Enchanted Wood Helmet",
   "item.enchantedwood.enchanted_wood_chestplate": "Enchanted Wood Chestplate",
   "item.enchantedwood.enchanted_wood_leggings": "Enchanted Wood Leggings",
   "item.enchantedwood.enchanted_wood_boots": "Enchanted Wood Boots",
-
   "item.enchantedwood.enchanted_cobblestone_sword": "Enchanted Cobblestone Sword",
   "item.enchantedwood.enchanted_cobblestone_pickaxe": "Enchanted Cobblestone Pickaxe",
   "item.enchantedwood.enchanted_cobblestone_axe": "Enchanted Cobblestone Axe",
@@ -104,28 +91,23 @@
   "item.enchantedwood.netherite_hammer": "Netherite Sledgehammer",
   "item.enchantedwood.titanium_hammer": "Titanium Sledgehammer",
   "item.enchantedwood.enchanted_cobblestone_hammer": "Enchanted Cobblestone Hammer",
-
   "item.enchantedwood.enchanted_cobblestone_helmet": "Enchanted Cobblestone Helmet",
   "item.enchantedwood.enchanted_cobblestone_chestplate": "Enchanted Cobblestone Chestplate",
   "item.enchantedwood.enchanted_cobblestone_leggings": "Enchanted Cobblestone Leggings",
   "item.enchantedwood.enchanted_cobblestone_boots": "Enchanted Cobblestone Boots",
-
   "item.enchantedwood.enchanted_diamond_hammer": "Enchanted Diamond Hammer",
   "item.enchantedwood.enchanted_diamond_helmet": "Enchanted Diamond Helmet",
   "item.enchantedwood.enchanted_diamond_chestplate": "Enchanted Diamond Chestplate",
   "item.enchantedwood.enchanted_diamond_leggings": "Enchanted Diamond Leggings",
   "item.enchantedwood.enchanted_diamond_boots": "Enchanted Diamond Boots",
-
   "item.enchantedwood.enchanted_netherite_hammer": "Enchanted Netherite Hammer",
   "item.enchantedwood.enchanted_netherite_helmet": "Enchanted Netherite Helmet",
   "item.enchantedwood.enchanted_netherite_chestplate": "Enchanted Netherite Chestplate",
   "item.enchantedwood.enchanted_netherite_leggings": "Enchanted Netherite Leggings",
   "item.enchantedwood.enchanted_netherite_boots": "Enchanted Netherite Boots",
   "item.enchantedwood.enchanted_cape": "Enchanted Cape",
-
   "block.enchantedwood.dust_smelter": "Dust Smelter",
   "container.enchantedwood.dust_smelter": "Dust Smelter",
-
   "item.enchantedwood.copper_bucket": "Copper Bucket",
   "item.enchantedwood.copper_water_bucket": "Copper Water Bucket",
   "item.enchantedwood.copper_lava_bucket": "Copper Lava Bucket",
@@ -133,11 +115,9 @@
   "item.enchantedwood.copper_powder_snow_bucket": "Copper Powder Snow Bucket",
   "item.enchantedwood.enchanted_lava_bucket": "Enchanted Lava Bucket",
   "item.enchantedwood.enchanted_copper_lava_bucket": "Enchanted Copper Lava Bucket",
-
   "block.enchantedwood.enchanted_coal_block": "Enchanted Coal Block",
   "block.enchantedwood.enchanted_lava_generator": "Enchanted Lava Generator",
   "container.enchantedwood.enchanted_lava_generator": "Enchanted Lava Generator",
-
   "block.enchantedwood.enchanted_chest": "Enchanted Chest",
   "item.enchantedwood.copper_enchanted_chest": "Copper Enchanted Chest",
   "item.enchantedwood.bronze_enchanted_chest": "Bronze Enchanted Chest",
@@ -147,21 +127,17 @@
   "item.enchantedwood.netherite_enchanted_chest": "Netherite Enchanted Chest",
   "container.enchantedwood.enchanted_chest": "Enchanted Storage Chest",
   "message.enchantedwood.upgraded_chest_tier": "Upgraded Enchanted Chest to %s Tier!",
-
-
   "block.enchantedwood.enchanted_storage_controller": "Enchanted Storage Controller",
   "container.enchantedwood.enchanted_storage_controller": "Enchanted Storage Controller",
   "block.enchantedwood.enchanted_drive_bay": "Enchanted Drive Bay",
   "container.enchantedwood.enchanted_drive_bay": "Enchanted Drive Bay",
   "block.enchantedwood.enchanted_storage_terminal": "Enchanted Storage Terminal",
   "container.enchantedwood.enchanted_storage_terminal": "Enchanted Storage Terminal",
-
   "item.enchantedwood.storage_crystal_1k": "1k Storage Crystal",
   "item.enchantedwood.storage_crystal_4k": "4k Storage Crystal",
   "item.enchantedwood.storage_crystal_16k": "16k Storage Crystal",
   "item.enchantedwood.storage_crystal_64k": "64k Storage Crystal",
   "item.enchantedwood.wireless_storage_crystal": "Wireless Storage Crystal",
-
   "item.enchantedwood.tin_sword": "Tin Sword",
   "item.enchantedwood.tin_pickaxe": "Tin Pickaxe",
   "item.enchantedwood.tin_axe": "Tin Axe",
@@ -171,7 +147,6 @@
   "item.enchantedwood.tin_chestplate": "Tin Chestplate",
   "item.enchantedwood.tin_leggings": "Tin Leggings",
   "item.enchantedwood.tin_boots": "Tin Boots",
-
   "item.enchantedwood.titanium_sword": "Titanium Sword",
   "item.enchantedwood.titanium_pickaxe": "Titanium Pickaxe",
   "item.enchantedwood.titanium_axe": "Titanium Axe",
@@ -181,13 +156,11 @@
   "item.enchantedwood.titanium_chestplate": "Titanium Chestplate",
   "item.enchantedwood.titanium_leggings": "Titanium Leggings",
   "item.enchantedwood.titanium_boots": "Titanium Boots",
-
   "block.enchantedwood.copper_generator": "Copper Generator",
   "container.enchantedwood.copper_generator": "Copper Generator",
   "block.enchantedwood.copper_battery": "Copper Energy Cell",
   "container.enchantedwood.copper_battery": "Copper Energy Cell",
   "block.enchantedwood.copper_cable": "Copper Energy Cable",
-
   "block.enchantedwood.bauxite_ore": "Bauxite Ore",
   "block.enchantedwood.deepslate_bauxite_ore": "Deepslate Bauxite Ore",
   "block.enchantedwood.raw_bauxite_block": "Block of Raw Bauxite",
@@ -203,7 +176,6 @@
   "block.enchantedwood.aluminum_battery": "Aluminum Energy Cell",
   "container.enchantedwood.aluminum_battery": "Aluminum Energy Cell (Tier 2)",
   "block.enchantedwood.aluminum_cable": "Aluminum Energy Cable",
-
   "item.enchantedwood.raw_bauxite": "Raw Bauxite",
   "item.enchantedwood.aluminum_ingot": "Aluminum Ingot",
   "item.enchantedwood.bauxite_dust": "Bauxite Dust",
@@ -213,7 +185,6 @@
   "item.enchantedwood.hydrogen_canister": "Hydrogen Canister",
   "item.enchantedwood.hydrogen_jetpack": "Hydrogen Jetpack",
   "item.enchantedwood.oxy_hydrogen_torch": "Oxy-Hydrogen Thermal Torch",
-
   "item.enchantedwood.aluminum_sword": "Aluminum Sword",
   "item.enchantedwood.aluminum_pickaxe": "Aluminum Pickaxe",
   "item.enchantedwood.aluminum_axe": "Aluminum Axe",
@@ -225,7 +196,6 @@
   "item.enchantedwood.aluminum_leggings": "Aluminum Leggings",
   "item.enchantedwood.aluminum_boots": "Aluminum Boots",
   "item.enchantedwood.enchanted_aluminum_gear": "Enchanted Aluminum Gear",
-
   "block.enchantedwood.coke_oven": "Coke Oven",
   "container.enchantedwood.coke_oven": "Coke Pyrolysis Chamber",
   "block.enchantedwood.steel_blast_furnace": "Steel Blast Furnace",
@@ -236,13 +206,11 @@
   "container.enchantedwood.steel_battery": "Steel Energy Cell (Tier 3)",
   "block.enchantedwood.steel_cable": "Steel Energy Cable",
   "block.enchantedwood.steel_block": "Block of Steel",
-
   "item.enchantedwood.coke_coal": "Coke Coal",
   "item.enchantedwood.steel_ingot": "Steel Ingot",
   "item.enchantedwood.steel_dust": "Steel Dust",
   "item.enchantedwood.steel_gear": "Steel Gear",
   "item.enchantedwood.enchanted_steel_gear": "Enchanted Steel Gear",
-
   "item.enchantedwood.steel_sword": "Steel Sword",
   "item.enchantedwood.steel_pickaxe": "Steel Pickaxe",
   "item.enchantedwood.steel_axe": "Steel Axe",
@@ -253,11 +221,9 @@
   "item.enchantedwood.steel_chestplate": "Steel Chestplate",
   "item.enchantedwood.steel_leggings": "Steel Leggings",
   "item.enchantedwood.steel_boots": "Steel Boots",
-
   "block.enchantedwood.bronze_block": "Block of Bronze",
   "block.enchantedwood.coke_coal_block": "Block of Coke Coal",
   "block.enchantedwood.enchanted_netherite_block": "Block of Enchanted Netherite",
-
   "block.enchantedwood.rubber_log": "Rubber Log",
   "block.enchantedwood.rubber_wood": "Rubber Wood",
   "block.enchantedwood.stripped_rubber_log": "Stripped Rubber Log",
@@ -265,21 +231,50 @@
   "block.enchantedwood.rubber_planks": "Rubber Planks",
   "block.enchantedwood.rubber_leaves": "Rubber Leaves",
   "block.enchantedwood.rubber_sapling": "Rubber Sapling",
-
   "item.enchantedwood.resin": "Sticky Resin",
   "item.enchantedwood.rubber": "Rubber",
   "block.enchantedwood.enchanted_lamp": "Enchanted Lamp",
-
   "item.enchantedwood.chunk_loader_module": "Chunk Loader Module",
   "item.enchantedwood.interdimensional_card": "Interdimensional Card",
-
   "item.enchantedwood.diving_mask": "Diving Mask",
   "item.enchantedwood.scuba_chestplate": "Scuba Tank Chestplate",
   "item.enchantedwood.wetsuit_leggings": "Wetsuit Leggings",
   "item.enchantedwood.diving_flippers": "Diving Flippers",
   "block.enchantedwood.atmospheric_anchor": "Atmospheric Anchor",
   "item.enchantedwood.atmospheric_anchor": "Atmospheric Anchor",
-
-  "subtitles.enchantedwood.storage_controller_hum": "Storage Controller hums"
+  "subtitles.enchantedwood.storage_controller_hum": "Storage Controller hums",
+  "advancements.enchantedwood.root.title": "ShuDynamics",
+  "advancements.enchantedwood.root.description": "Nature's infusion meets advanced engineering and automation.",
+  "advancements.enchantedwood.enchanted_dust.title": "Arcane Pollen",
+  "advancements.enchantedwood.enchanted_dust.description": "Obtain shimmering Enchanted Dust from enchanted flora.",
+  "advancements.enchantedwood.infused_heartwood.title": "Heart of the Forest",
+  "advancements.enchantedwood.infused_heartwood.description": "Infuse raw timber with pure enchanted essence.",
+  "advancements.enchantedwood.mining_dimension.title": "Subterranean Gateway",
+  "advancements.enchantedwood.mining_dimension.description": "Craft an Enchanted Emerald to ignite the Mining Dimension Portal!",
+  "advancements.enchantedwood.tin_ingot.title": "Tin Age",
+  "advancements.enchantedwood.tin_ingot.description": "Mine and smelt native Tin Ore.",
+  "advancements.enchantedwood.bronze_ingot.title": "Bronze Metallurgy",
+  "advancements.enchantedwood.bronze_ingot.description": "Alloy Copper and Tin dust to create durable Bronze.",
+  "advancements.enchantedwood.coke_oven.title": "Clean Carbon",
+  "advancements.enchantedwood.coke_oven.description": "Construct a Coke Oven and synthesize high-efficiency Coke Coal.",
+  "advancements.enchantedwood.steel_blast_furnace.title": "Reaction Pyrolysis",
+  "advancements.enchantedwood.steel_blast_furnace.description": "Assemble a high-temperature Steel Blast Furnace.",
+  "advancements.enchantedwood.steel_ingot.title": "Industrial Age",
+  "advancements.enchantedwood.steel_ingot.description": "Refine raw iron with coke carbon to forge high-tensile Steel.",
+  "advancements.enchantedwood.power_grid.title": "High Voltage",
+  "advancements.enchantedwood.power_grid.description": "Build electrical generators, cables, and energy storage cells.",
+  "advancements.enchantedwood.rubber.title": "Polymer Synthesis",
+  "advancements.enchantedwood.rubber.description": "Harvest sticky resin from rubber trees and vulcanize raw Rubber.",
+  "advancements.enchantedwood.electrolyzer.title": "Electrolysis",
+  "advancements.enchantedwood.electrolyzer.description": "Split water into pressurized Oxygen and Hydrogen gas canisters.",
+  "advancements.enchantedwood.scuba_suit.title": "Deep Sea Explorer",
+  "advancements.enchantedwood.scuba_suit.description": "Assemble pressurized Scuba Gear to conquer underwater depths.",
+  "advancements.enchantedwood.atmospheric_anchor.title": "Barometric Anomaly",
+  "advancements.enchantedwood.atmospheric_anchor.description": "Forge Anomaly Keystone #1 (Atmospheric Anchor) using ocean-depth mastery.",
+  "advancements.enchantedwood.storage_controller.title": "Central Nervous System",
+  "advancements.enchantedwood.storage_controller.description": "Power and activate an Enchanted Storage Controller.",
+  "advancements.enchantedwood.storage_crystal.title": "Quantum Memory",
+  "advancements.enchantedwood.storage_crystal.description": "Craft a high-density Storage Crystal and install it in a Drive Bay.",
+  "advancements.enchantedwood.wireless_crystal.title": "Quantum Entanglement",
+  "advancements.enchantedwood.wireless_crystal.description": "Link a Wireless Storage Crystal to access your system from anywhere."
 }
-

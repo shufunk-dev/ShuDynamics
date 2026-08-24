@@ -1,0 +1,68 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:storage_crystal_64k"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.storage_crystal.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.storage_crystal.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_item_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:storage_crystal_1k"
+          }
+        ]
+      }
+    },
+    "has_item_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:storage_crystal_4k"
+          }
+        ]
+      }
+    },
+    "has_item_2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:storage_crystal_16k"
+          }
+        ]
+      }
+    },
+    "has_item_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:storage_crystal_64k"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_0",
+      "has_item_1",
+      "has_item_2",
+      "has_item_3"
+    ]
+  ],
+  "parent": "enchantedwood:storage_controller"
+}
