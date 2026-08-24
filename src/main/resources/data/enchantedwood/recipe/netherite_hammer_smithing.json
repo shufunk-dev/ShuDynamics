@@ -1,14 +1,8 @@
 {
   "type": "minecraft:smithing_transform",
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  },
-  "base": {
-    "item": "enchantedwood:diamond_hammer"
-  },
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "base": "enchantedwood:diamond_hammer",
+  "addition": "minecraft:netherite_ingot",
   "result": {
     "count": 1,
     "id": "enchantedwood:netherite_hammer"
