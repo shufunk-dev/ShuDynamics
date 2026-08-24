@@ -23,7 +23,7 @@ export default defineConfig({
       { text: 'Machines & Power', link: '/machines/' },
       { text: 'Storage Network', link: '/storage/' },
       { text: 'Roadmap & Future', link: '/backlog/' },
-      { text: '📥 Releases', link: 'https://github.com/shufunk-dev/ShuDynamics/releases' }
+      { text: '🔥 CurseForge', link: 'https://www.curseforge.com/minecraft/mc-mods/shudynamics' }
     ],
 
     socialLinks: [

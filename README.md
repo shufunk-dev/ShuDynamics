@@ -5,13 +5,15 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
 [![Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
-[![Stable Release](https://img.shields.io/badge/Stable-v1.0.1-green.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
+[![Stable Release](https://img.shields.io/badge/Stable-v1.0.1-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![Experimental](https://img.shields.io/badge/Experimental-v1.1.0--dev-orange.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
 **ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
+* 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 
 ---
 

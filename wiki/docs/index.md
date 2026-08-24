@@ -13,8 +13,8 @@ hero:
       text: 🚀 Getting Started
       link: /getting-started/
     - theme: alt
-      text: 📥 Download v1.1.0 (.jar)
-      link: https://github.com/shufunk-dev/ShuDynamics/releases/latest
+      text: 🔥 CurseForge
+      link: https://www.curseforge.com/minecraft/mc-mods/shudynamics
     - theme: alt
       text: ⚙️ Explore Machines
       link: /machines/
@@ -114,9 +114,9 @@ features:
       <span class="quick-title">🚀 Roadmap & Future Tech</span>
       <span class="quick-desc">New Dimensions, Modular ATVs, Supercomputers, and upcoming tech.</span>
     </a>
-    <a href="https://github.com/shufunk-dev/ShuDynamics/releases/latest" target="_blank" rel="noopener noreferrer" class="quick-card" style="border-color: rgba(234, 179, 8, 0.4); background: rgba(45, 38, 20, 0.6);">
-      <span class="quick-title" style="color: #fde047;">📥 Download v1.1.0 (.jar)</span>
-      <span class="quick-desc">Get the latest compiled v1.1.0 mod JAR from GitHub Releases ready for your mods folder.</span>
+    <a href="https://www.curseforge.com/minecraft/mc-mods/shudynamics" target="_blank" rel="noopener noreferrer" class="quick-card" style="border-color: rgba(241, 100, 54, 0.4); background: rgba(45, 25, 15, 0.6);">
+      <span class="quick-title" style="color: #fb923c;">🔥 CurseForge Page</span>
+      <span class="quick-desc">Download stable releases, install via CurseForge App, and track mod updates.</span>
     </a>
     <a href="https://github.com/shufunk-dev/ShuDynamics" target="_blank" rel="noopener noreferrer" class="quick-card" style="border-color: rgba(139, 92, 246, 0.4); background: rgba(30, 27, 50, 0.6);">
       <span class="quick-title" style="color: #c4b5fd;">⭐ GitHub Repository</span>

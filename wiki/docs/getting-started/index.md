@@ -2,10 +2,10 @@
 
 Welcome to **ShuDynamics**! This mod introduces a complete progression system combining magical nature infusion with industrial high-tech automation.
 
-::: tip 📥 Quick Download & Installation (v1.1.0)
-Don't want to compile from source? 
-* **Download the Mod**: Grab the latest pre-compiled **[shudynamics-1.1.0.jar](https://github.com/shufunk-dev/ShuDynamics/releases/latest)** directly from GitHub Releases!
-* **Installation**: Drop `shudynamics-1.1.0.jar` into your Minecraft `.minecraft/mods` directory (requires **Fabric Loader** and **Fabric API** for Minecraft 1.21.1+).
+::: tip 📥 Download & Installation
+Get the mod directly from CurseForge or compile from source:
+* **CurseForge Page**: Grab stable releases from **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/shudynamics)** or install via the CurseForge App!
+* **Manual Installation**: Drop the compiled `.jar` into your Minecraft `.minecraft/mods` directory (requires **Fabric Loader** and **Fabric API** for Minecraft 1.21.1+).
 * **Source Code & Issues**: Visit the **[GitHub Repository](https://github.com/shufunk-dev/ShuDynamics)** to view source code, report bugs, or request features.
 :::
 
