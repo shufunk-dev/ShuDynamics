@@ -42,12 +42,16 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> burnTime;
-                case 1 -> totalBurnTime;
-                case 2 -> energyStorage.getEnergy();
-                case 3 -> energyStorage.getMaxEnergy();
-                case 4 -> hasChunkLoader() ? 1 : 0;
-                case 5 -> hasInterdimensionalCard() ? 1 : 0;
+                case 0 -> burnTime & 0xFFFF;
+                case 1 -> (burnTime >> 16) & 0xFFFF;
+                case 2 -> totalBurnTime & 0xFFFF;
+                case 3 -> (totalBurnTime >> 16) & 0xFFFF;
+                case 4 -> energyStorage.getEnergy() & 0xFFFF;
+                case 5 -> (energyStorage.getEnergy() >> 16) & 0xFFFF;
+                case 6 -> energyStorage.getMaxEnergy() & 0xFFFF;
+                case 7 -> (energyStorage.getMaxEnergy() >> 16) & 0xFFFF;
+                case 8 -> hasChunkLoader() ? 1 : 0;
+                case 9 -> hasInterdimensionalCard() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -55,15 +59,18 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 0 -> burnTime = value;
-                case 1 -> totalBurnTime = value;
-                case 2 -> energyStorage.setEnergy(value);
+                case 0 -> burnTime = (burnTime & 0xFFFF0000) | (value & 0xFFFF);
+                case 1 -> burnTime = (burnTime & 0x0000FFFF) | ((value & 0xFFFF) << 16);
+                case 2 -> totalBurnTime = (totalBurnTime & 0xFFFF0000) | (value & 0xFFFF);
+                case 3 -> totalBurnTime = (totalBurnTime & 0x0000FFFF) | ((value & 0xFFFF) << 16);
+                case 4 -> energyStorage.setEnergy((energyStorage.getEnergy() & 0xFFFF0000) | (value & 0xFFFF));
+                case 5 -> energyStorage.setEnergy((energyStorage.getEnergy() & 0x0000FFFF) | ((value & 0xFFFF) << 16));
             }
         }
 
         @Override
         public int size() {
-            return 6;
+            return 10;
         }
     };
 

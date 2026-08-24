@@ -17,7 +17,7 @@ public class EnchantedStorageControllerScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public EnchantedStorageControllerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(6));
+        this(syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(10));
     }
 
     public EnchantedStorageControllerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -69,27 +69,27 @@ public class EnchantedStorageControllerScreenHandler extends ScreenHandler {
     }
 
     public int getBurnTime() {
-        return propertyDelegate.get(0);
+        return (propertyDelegate.get(0) & 0xFFFF) | ((propertyDelegate.get(1) & 0xFFFF) << 16);
     }
 
     public int getTotalBurnTime() {
-        return propertyDelegate.get(1);
+        return (propertyDelegate.get(2) & 0xFFFF) | ((propertyDelegate.get(3) & 0xFFFF) << 16);
     }
 
     public int getEnergy() {
-        return propertyDelegate.get(2);
+        return (propertyDelegate.get(4) & 0xFFFF) | ((propertyDelegate.get(5) & 0xFFFF) << 16);
     }
 
     public int getMaxEnergy() {
-        return propertyDelegate.get(3);
+        return (propertyDelegate.get(6) & 0xFFFF) | ((propertyDelegate.get(7) & 0xFFFF) << 16);
     }
 
     public boolean hasChunkLoader() {
-        return propertyDelegate.get(4) > 0;
+        return propertyDelegate.get(8) > 0;
     }
 
     public boolean hasInterdimensionalCard() {
-        return propertyDelegate.get(5) > 0;
+        return propertyDelegate.get(9) > 0;
     }
 
     public boolean isGridPowered() {
