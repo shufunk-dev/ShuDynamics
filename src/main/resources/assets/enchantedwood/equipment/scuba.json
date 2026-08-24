@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enchantedwood:scuba"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enchantedwood:scuba"
+      }
+    ]
+  }
+}

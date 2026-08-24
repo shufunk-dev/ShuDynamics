@@ -1,6 +1,6 @@
 {
-  "version": "1.0.1",
-  "count": 182,
+  "version": "1.2.0",
+  "count": 189,
   "recipes": {
     "aluminum_axe": {
       "id": "aluminum_axe",
@@ -659,6 +659,54 @@
       "output": {
         "name": "Aluminum Sword",
         "icon": "/textures/item/aluminum_sword.png",
+        "count": 1
+      }
+    },
+    "atmospheric_anchor": {
+      "id": "atmospheric_anchor",
+      "type": "shaped",
+      "title": "Crafting Atmospheric Anchor",
+      "grid": [
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Oxygen Canister",
+          "icon": "/textures/item/oxygen_canister.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Infused Heartwood",
+          "icon": "/textures/item/infused_heartwood.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Crying Obsidian",
+          "icon": "/textures/item/crying_obsidian.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        }
+      ],
+      "output": {
+        "name": "Atmospheric Anchor",
+        "icon": "/textures/item/atmospheric_anchor.png",
         "count": 1
       }
     },
@@ -1793,6 +1841,78 @@
       "output": {
         "name": "Diamond Sledgehammer",
         "icon": "/textures/item/diamond_hammer.png",
+        "count": 1
+      }
+    },
+    "diving_flippers": {
+      "id": "diving_flippers",
+      "type": "shaped",
+      "title": "Crafting Diving Flippers",
+      "grid": [
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Diving Flippers",
+        "icon": "/textures/item/diving_flippers.png",
+        "count": 1
+      }
+    },
+    "diving_mask": {
+      "id": "diving_mask",
+      "type": "shaped",
+      "title": "Crafting Diving Mask",
+      "grid": [
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Glass Pane",
+          "icon": "/textures/item/glass_pane.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Glass Pane",
+          "icon": "/textures/item/glass_pane.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Diving Mask",
+        "icon": "/textures/item/diving_mask.png",
         "count": 1
       }
     },
@@ -3129,6 +3249,78 @@
         "name": "Enchanted Dust",
         "icon": "/textures/item/enchanted_dust.png",
         "count": 4
+      }
+    },
+    "enchanted_emerald": {
+      "id": "enchanted_emerald",
+      "type": "shaped",
+      "title": "Crafting Enchanted Emerald",
+      "grid": [
+        null,
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        {
+          "name": "Emerald",
+          "icon": "/textures/item/emerald.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Enchanted Emerald",
+        "icon": "/textures/item/enchanted_emerald.png",
+        "count": 1
+      }
+    },
+    "enchanted_emerald_shapeless": {
+      "id": "enchanted_emerald_shapeless",
+      "type": "shapeless",
+      "title": "Crafting Enchanted Emerald (Shapeless)",
+      "grid": [
+        {
+          "name": "Emerald",
+          "icon": "/textures/item/emerald.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Enchanted Emerald",
+        "icon": "/textures/item/enchanted_emerald.png",
+        "count": 1
       }
     },
     "enchanted_furnace": {
@@ -5243,6 +5435,51 @@
         "count": 3
       }
     },
+    "scuba_chestplate": {
+      "id": "scuba_chestplate",
+      "type": "shaped",
+      "title": "Crafting Scuba Chestplate",
+      "grid": [
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Oxygen Canister",
+          "icon": "/textures/item/oxygen_canister.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Oxygen Canister",
+          "icon": "/textures/item/oxygen_canister.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        }
+      ],
+      "output": {
+        "name": "Scuba Chestplate",
+        "icon": "/textures/item/scuba_chestplate.png",
+        "count": 1
+      }
+    },
     "steel_axe": {
       "id": "steel_axe",
       "type": "shaped",
@@ -7058,6 +7295,48 @@
       "output": {
         "name": "Verdant Shovel",
         "icon": "/textures/item/verdant_shovel.png",
+        "count": 1
+      }
+    },
+    "wetsuit_leggings": {
+      "id": "wetsuit_leggings",
+      "type": "shaped",
+      "title": "Crafting Wetsuit Leggings",
+      "grid": [
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        }
+      ],
+      "output": {
+        "name": "Wetsuit Leggings",
+        "icon": "/textures/item/wetsuit_leggings.png",
         "count": 1
       }
     },

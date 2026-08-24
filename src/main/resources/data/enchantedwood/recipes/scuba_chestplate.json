@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "R R",
+    "OCO",
+    "RRR"
+  ],
+  "key": {
+    "R": "enchantedwood:rubber",
+    "O": "enchantedwood:oxygen_canister",
+    "C": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:scuba_chestplate"
+  }
+}

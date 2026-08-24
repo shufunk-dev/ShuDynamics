@@ -18,6 +18,7 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_STEEL = of("repairs_steel");
         public static final TagKey<Item> REPAIRS_ENCHANTED_DIAMOND = of("repairs_enchanted_diamond");
         public static final TagKey<Item> REPAIRS_ENCHANTED_NETHERITE = of("repairs_enchanted_netherite");
+        public static final TagKey<Item> REPAIRS_SCUBA = of("repairs_scuba");
 
         private static TagKey<Item> of(String id) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, id));

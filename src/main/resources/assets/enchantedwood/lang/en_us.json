@@ -270,6 +270,13 @@
   "block.enchantedwood.enchanted_lamp": "Enchanted Lamp",
 
   "item.enchantedwood.chunk_loader_module": "Chunk Loader Module",
-  "item.enchantedwood.interdimensional_card": "Interdimensional Card"
+  "item.enchantedwood.interdimensional_card": "Interdimensional Card",
+
+  "item.enchantedwood.diving_mask": "Diving Mask",
+  "item.enchantedwood.scuba_chestplate": "Scuba Tank Chestplate",
+  "item.enchantedwood.wetsuit_leggings": "Wetsuit Leggings",
+  "item.enchantedwood.diving_flippers": "Diving Flippers",
+  "block.enchantedwood.atmospheric_anchor": "Atmospheric Anchor",
+  "item.enchantedwood.atmospheric_anchor": "Atmospheric Anchor"
 }
 

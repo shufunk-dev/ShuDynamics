@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "ROR",
+    "RHR",
+    "RCR"
+  ],
+  "key": {
+    "R": "enchantedwood:rubber",
+    "O": "enchantedwood:oxygen_canister",
+    "H": "enchantedwood:infused_heartwood",
+    "C": "minecraft:crying_obsidian"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:atmospheric_anchor"
+  }
+}

@@ -164,4 +164,21 @@ public class ModArmorMaterials {
             ModTags.Items.REPAIRS_ENCHANTED_NETHERITE,
             RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_netherite"))
     );
+
+    // Scuba / Diving Suit (15 total defense, specialized water resistance)
+    public static final ArmorMaterial SCUBA = new ArmorMaterial(
+            22,
+            Map.of(
+                    EquipmentType.HELMET, 2,
+                    EquipmentType.CHESTPLATE, 6,
+                    EquipmentType.LEGGINGS, 5,
+                    EquipmentType.BOOTS, 2
+            ),
+            14,
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+            0.5f,
+            0.0f,
+            ModTags.Items.REPAIRS_SCUBA,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "scuba"))
+    );
 }

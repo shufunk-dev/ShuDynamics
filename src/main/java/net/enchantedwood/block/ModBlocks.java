@@ -431,6 +431,14 @@ public class ModBlocks {
                     .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
                     .nonOpaque()));
 
+    public static final Block ATMOSPHERIC_ANCHOR = registerBlock("atmospheric_anchor",
+            new net.enchantedwood.block.custom.AtmosphericAnchorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "atmospheric_anchor")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);

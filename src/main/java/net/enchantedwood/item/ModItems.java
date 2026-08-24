@@ -322,6 +322,16 @@ public class ModItems {
     public static final Item DIAMOND_ENCHANTED_CHEST = registerItem("diamond_enchanted_chest", settings -> new net.enchantedwood.item.custom.EnchantedChestTierItem(net.enchantedwood.block.custom.GearTier.DIAMOND, settings));
     public static final Item NETHERITE_ENCHANTED_CHEST = registerItem("netherite_enchanted_chest", settings -> new net.enchantedwood.item.custom.EnchantedChestTierItem(net.enchantedwood.block.custom.GearTier.NETHERITE, settings.fireproof()));
 
+    // Scuba & Underwater Diving Equipment (v1.2.0)
+    public static final Item DIVING_MASK = registerItem("diving_mask",
+            settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.HELMET.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.HELMET)));
+    public static final Item SCUBA_CHESTPLATE = registerItem("scuba_chestplate",
+            settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.CHESTPLATE.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.CHESTPLATE)));
+    public static final Item WETSUIT_LEGGINGS = registerItem("wetsuit_leggings",
+            settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.LEGGINGS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.LEGGINGS)));
+    public static final Item DIVING_FLIPPERS = registerItem("diving_flippers",
+            settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.BOOTS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.BOOTS)));
+
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
     public static final ItemGroup ENCHANTED_WOOD_GROUP = FabricItemGroup.builder()
@@ -560,6 +570,15 @@ public class ModItems {
                 // Storage Network Upgrades
                 entries.add(CHUNK_LOADER_MODULE);
                 entries.add(INTERDIMENSIONAL_CARD);
+
+                // Scuba & Underwater Diving Equipment (v1.2.0)
+                entries.add(DIVING_MASK);
+                entries.add(SCUBA_CHESTPLATE);
+                entries.add(WETSUIT_LEGGINGS);
+                entries.add(DIVING_FLIPPERS);
+
+                // Anomaly Keystones
+                entries.add(net.enchantedwood.block.ModBlocks.ATMOSPHERIC_ANCHOR);
 
                 // Enchanted Lighting
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAMP);
