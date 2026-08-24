@@ -27,7 +27,9 @@ server/
 AGENTS.md
 
 # Wiki & Documentation Site
-wiki/
+wiki/node_modules/
+wiki/docs/.vitepress/dist/
+wiki/docs/.vitepress/cache/
 
 # Generated Development Reports & Checklists
 *.html

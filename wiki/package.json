@@ -1,0 +1,16 @@
+{
+  "name": "shudynamics-wiki",
+  "version": "1.0.0",
+  "description": "Official documentation and wiki for the ShuDynamics Minecraft mod",
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync_assets.js && node scripts/sync_data.js",
+    "dev": "node scripts/sync_assets.js && node scripts/sync_data.js && vitepress dev docs",
+    "build": "node scripts/sync_assets.js && node scripts/sync_data.js && vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13"
+  }
+}
