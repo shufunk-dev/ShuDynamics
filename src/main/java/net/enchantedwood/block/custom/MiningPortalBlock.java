@@ -109,16 +109,50 @@ public class MiningPortalBlock extends Block {
     private void teleportPlayer(ServerPlayerEntity player, ServerWorld targetWorld, BlockPos portalPos, Direction.Axis axis) {
         int targetX = portalPos.getX();
         int targetZ = portalPos.getZ();
-        int targetY = Math.max(64, Math.min(100, portalPos.getY()));
+        int targetY = Math.max(targetWorld.getBottomY() + 10, Math.min(targetWorld.getTopYInclusive() - 20, portalPos.getY()));
 
-        BlockPos basePos = new BlockPos(targetX, targetY, targetZ);
-        buildSafePortalDestination(targetWorld, basePos, axis);
+        // 1. Search for existing portal in target world within 16 blocks
+        BlockPos existingPortalPos = null;
+        for (int dx = -16; dx <= 16; dx++) {
+            for (int dz = -16; dz <= 16; dz++) {
+                for (int dy = -16; dy <= 16; dy++) {
+                    BlockPos check = new BlockPos(targetX + dx, targetY + dy, targetZ + dz);
+                    if (targetWorld.isChunkLoaded(check.getX() >> 4, check.getZ() >> 4)) {
+                        if (targetWorld.getBlockState(check).isOf(this)) {
+                            existingPortalPos = check;
+                            break;
+                        }
+                    }
+                }
+                if (existingPortalPos != null) break;
+            }
+            if (existingPortalPos != null) break;
+        }
 
-        // Position player safely in front of the destination portal
-        Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-        double spawnX = basePos.getX() + 1.5 + frontDir.getOffsetX() * 1.2;
-        double spawnY = basePos.getY() + 1.0;
-        double spawnZ = basePos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+        double spawnX;
+        double spawnY;
+        double spawnZ;
+
+        if (existingPortalPos != null) {
+            // Re-use existing portal without modifying anything!
+            BlockState existingState = targetWorld.getBlockState(existingPortalPos);
+            Direction.Axis foundAxis = existingState.contains(AXIS) ? existingState.get(AXIS) : axis;
+            Direction frontDir = foundAxis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+
+            spawnX = existingPortalPos.getX() + 0.5 + frontDir.getOffsetX() * 1.2;
+            spawnY = existingPortalPos.getY();
+            spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+        } else {
+            // Only create new portal if none exists
+            int safeY = Math.max(64, Math.min(100, targetY));
+            BlockPos basePos = new BlockPos(targetX, safeY, targetZ);
+            buildSafePortalDestination(targetWorld, basePos, axis);
+
+            Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+            spawnX = basePos.getX() + 1.5 + frontDir.getOffsetX() * 1.2;
+            spawnY = basePos.getY() + 1.0;
+            spawnZ = basePos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+        }
 
         player.setPortalCooldown(100);
         player.teleport(targetWorld, spawnX, spawnY, spawnZ, Set.of(), player.getYaw(), player.getPitch(), true);
