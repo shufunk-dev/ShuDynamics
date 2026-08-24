@@ -60,7 +60,7 @@ public class EnchantedStorageControllerBlock extends HorizontalFacingBlock imple
             double e = pos.getY() + 0.6;
             double f = pos.getZ() + 0.5;
             if (random.nextDouble() < 0.2) {
-                world.playSoundClient(d, e, f, net.minecraft.sound.SoundEvents.BLOCK_PORTAL_AMBIENT, net.minecraft.sound.SoundCategory.BLOCKS, 0.25F, 1.5F, false);
+                world.playSoundClient(d, e, f, net.enchantedwood.sound.ModSounds.CONTROLLER_HUM, net.minecraft.sound.SoundCategory.BLOCKS, 0.35F, 1.0F, false);
             }
 
             Direction direction = state.get(FACING);

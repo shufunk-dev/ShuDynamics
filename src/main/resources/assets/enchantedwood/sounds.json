@@ -1,0 +1,9 @@
+{
+  "block.storage_controller.hum": {
+    "category": "blocks",
+    "subtitle": "subtitles.enchantedwood.storage_controller_hum",
+    "sounds": [
+      "enchantedwood:block/controller_hum"
+    ]
+  }
+}

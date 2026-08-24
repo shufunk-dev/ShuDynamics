@@ -278,6 +278,8 @@
   "item.enchantedwood.wetsuit_leggings": "Wetsuit Leggings",
   "item.enchantedwood.diving_flippers": "Diving Flippers",
   "block.enchantedwood.atmospheric_anchor": "Atmospheric Anchor",
-  "item.enchantedwood.atmospheric_anchor": "Atmospheric Anchor"
+  "item.enchantedwood.atmospheric_anchor": "Atmospheric Anchor",
+
+  "subtitles.enchantedwood.storage_controller_hum": "Storage Controller hums"
 }
 
