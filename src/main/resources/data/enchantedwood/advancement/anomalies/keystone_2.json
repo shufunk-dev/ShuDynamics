@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:mystery_keystone"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.keystone_2.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.keystone_2.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/root"
+}

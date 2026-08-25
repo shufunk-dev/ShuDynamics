@@ -1,6 +1,6 @@
 {
   "version": "1.2.0",
-  "count": 189,
+  "count": 190,
   "recipes": {
     "aluminum_axe": {
       "id": "aluminum_axe",
@@ -61,7 +61,7 @@
         },
         {
           "name": "Copper Energy Cell",
-          "icon": "/textures/item/copper_battery.png"
+          "icon": "/textures/block/copper_battery_front.png"
         },
         {
           "name": "Enchanted Redstone Dust",
@@ -82,7 +82,7 @@
       ],
       "output": {
         "name": "Aluminum Energy Cell",
-        "icon": "/textures/item/aluminum_battery.png",
+        "icon": "/textures/block/aluminum_battery_front.png",
         "count": 1
       }
     },
@@ -316,7 +316,7 @@
         },
         {
           "name": "Copper Generator",
-          "icon": "/textures/item/copper_generator.png"
+          "icon": "/textures/block/copper_generator_front.png"
         },
         {
           "name": "Aluminum Gear",
@@ -337,7 +337,7 @@
       ],
       "output": {
         "name": "Aluminum Generator",
-        "icon": "/textures/item/aluminum_generator.png",
+        "icon": "/textures/block/aluminum_generator_front.png",
         "count": 1
       }
     },
@@ -598,7 +598,7 @@
       ],
       "output": {
         "name": "Aluminum Refiner",
-        "icon": "/textures/item/aluminum_refiner.png",
+        "icon": "/textures/block/aluminum_refiner_front.png",
         "count": 1
       }
     },
@@ -697,7 +697,7 @@
         },
         {
           "name": "Crying Obsidian",
-          "icon": "/textures/item/crying_obsidian.png"
+          "icon": "/textures/block/crying_obsidian.png"
         },
         {
           "name": "Rubber",
@@ -706,7 +706,7 @@
       ],
       "output": {
         "name": "Atmospheric Anchor",
-        "icon": "/textures/item/atmospheric_anchor.png",
+        "icon": "/textures/block/atmospheric_anchor.png",
         "count": 1
       }
     },
@@ -1414,7 +1414,7 @@
       ],
       "output": {
         "name": "Coke Oven",
-        "icon": "/textures/item/coke_oven.png",
+        "icon": "/textures/block/coke_oven_front.png",
         "count": 1
       }
     },
@@ -1462,7 +1462,7 @@
       ],
       "output": {
         "name": "Copper Energy Cell",
-        "icon": "/textures/item/copper_battery.png",
+        "icon": "/textures/block/copper_battery_front.png",
         "count": 1
       }
     },
@@ -1624,7 +1624,7 @@
       ],
       "output": {
         "name": "Copper Generator",
-        "icon": "/textures/item/copper_generator.png",
+        "icon": "/textures/block/copper_generator_front.png",
         "count": 1
       }
     },
@@ -1714,7 +1714,7 @@
       ],
       "output": {
         "name": "Crusher",
-        "icon": "/textures/item/crusher.png",
+        "icon": "/textures/block/crusher_front.png",
         "count": 1
       }
     },
@@ -1960,7 +1960,7 @@
       ],
       "output": {
         "name": "Dust Smelter",
-        "icon": "/textures/item/dust_smelter.png",
+        "icon": "/textures/block/dust_smelter_front.png",
         "count": 1
       }
     },
@@ -2269,7 +2269,7 @@
       ],
       "output": {
         "name": "Enchanted Chest",
-        "icon": "/textures/item/enchanted_chest.png",
+        "icon": "/textures/block/enchanted_chest_front.png",
         "count": 1
       }
     },
@@ -2289,8 +2289,8 @@
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#coals",
-          "icon": "/textures/item/#coals.png"
+          "name": "Coals",
+          "icon": "/textures/item/coals.png"
         },
         {
           "name": "Enchanted Dust",
@@ -3177,12 +3177,12 @@
         },
         {
           "name": "Enchanted Chest",
-          "icon": "/textures/item/enchanted_chest.png"
+          "icon": "/textures/block/enchanted_chest_front.png"
         },
         null,
         {
           "name": "Enchanted Chest",
-          "icon": "/textures/item/enchanted_chest.png"
+          "icon": "/textures/block/enchanted_chest_front.png"
         },
         {
           "name": "Iron Ingot",
@@ -3199,7 +3199,7 @@
       ],
       "output": {
         "name": "Enchanted Drive Bay",
-        "icon": "/textures/item/enchanted_drive_bay.png",
+        "icon": "/textures/block/enchanted_chest_front.png",
         "count": 1
       }
     },
@@ -3209,40 +3209,40 @@
       "title": "Crafting Enchanted Dust",
       "grid": [
         {
-          "name": "#leaves",
-          "icon": "/textures/item/#leaves.png"
+          "name": "Leaves",
+          "icon": "/textures/item/leaves.png"
         },
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
         },
         {
-          "name": "#leaves",
-          "icon": "/textures/item/#leaves.png"
-        },
-        {
-          "name": "",
-          "icon": null
-        },
-        {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Leaves",
+          "icon": "/textures/item/leaves.png"
         },
         {
           "name": "",
           "icon": null
         },
         {
-          "name": "#leaves",
-          "icon": "/textures/item/#leaves.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "",
+          "icon": null
         },
         {
-          "name": "#leaves",
-          "icon": "/textures/item/#leaves.png"
+          "name": "Leaves",
+          "icon": "/textures/item/leaves.png"
+        },
+        {
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
+        },
+        {
+          "name": "Leaves",
+          "icon": "/textures/item/leaves.png"
         }
       ],
       "output": {
@@ -3367,7 +3367,7 @@
       ],
       "output": {
         "name": "Enchanted Furnace",
-        "icon": "/textures/item/enchanted_furnace.png",
+        "icon": "/textures/block/enchanted_furnace_front.png",
         "count": 1
       }
     },
@@ -3622,7 +3622,7 @@
         },
         {
           "name": "Enchanted Furnace",
-          "icon": "/textures/item/enchanted_furnace.png"
+          "icon": "/textures/block/enchanted_furnace_front.png"
         },
         {
           "name": "Cobblestone",
@@ -3643,7 +3643,7 @@
       ],
       "output": {
         "name": "Enchanted Lava Generator",
-        "icon": "/textures/item/enchanted_lava_generator.png",
+        "icon": "/textures/block/enchanted_lava_generator_front.png",
         "count": 1
       }
     },
@@ -4141,7 +4141,7 @@
       ],
       "output": {
         "name": "Enchanted Storage Controller",
-        "icon": "/textures/item/enchanted_storage_controller.png",
+        "icon": "/textures/block/enchanted_chest_front.png",
         "count": 1
       }
     },
@@ -4189,7 +4189,7 @@
       ],
       "output": {
         "name": "Enchanted Storage Terminal",
-        "icon": "/textures/item/enchanted_storage_terminal.png",
+        "icon": "/textures/block/enchanted_chest_front.png",
         "count": 1
       }
     },
@@ -4199,40 +4199,40 @@
       "title": "Crafting Enchanted Wood",
       "grid": [
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
           "name": "Enchanted Dust",
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
           "name": "Enchanted Dust",
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
           "name": "Enchanted Dust",
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
           "name": "Enchanted Dust",
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         }
       ],
       "output": {
@@ -4649,40 +4649,40 @@
       "title": "Crafting Infused Heartwood",
       "grid": [
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
           "name": "Enchanted Dust",
           "icon": "/textures/item/enchanted_dust.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
         },
         {
-          "name": "#logs",
-          "icon": "/textures/item/#logs.png"
+          "name": "Any Wood Log",
+          "icon": "/textures/block/oak_log.png"
         },
         {
-          "name": "#flowers",
-          "icon": "/textures/item/#flowers.png"
+          "name": "Any Flower",
+          "icon": "/textures/item/flower.png"
         }
       ],
       "output": {
@@ -5098,7 +5098,7 @@
       ],
       "output": {
         "name": "Electrolyzer (Oxygen Generator)",
-        "icon": "/textures/item/oxygen_generator.png",
+        "icon": "/textures/block/oxygen_generator_front.png",
         "count": 1
       }
     },
@@ -5385,7 +5385,7 @@
       "grid": [
         {
           "name": "Rubber Wood",
-          "icon": "/textures/item/rubber_wood.png"
+          "icon": "/textures/block/rubber_log.png"
         },
         null,
         null,
@@ -5431,14 +5431,14 @@
       ],
       "output": {
         "name": "Rubber Wood",
-        "icon": "/textures/item/rubber_wood.png",
+        "icon": "/textures/block/rubber_log.png",
         "count": 3
       }
     },
     "scuba_chestplate": {
       "id": "scuba_chestplate",
       "type": "shaped",
-      "title": "Crafting Scuba Chestplate",
+      "title": "Crafting Scuba Tank Chestplate",
       "grid": [
         {
           "name": "Rubber",
@@ -5475,8 +5475,44 @@
         }
       ],
       "output": {
-        "name": "Scuba Chestplate",
+        "name": "Scuba Tank Chestplate",
         "icon": "/textures/item/scuba_chestplate.png",
+        "count": 1
+      }
+    },
+    "snorkel": {
+      "id": "snorkel",
+      "type": "shaped",
+      "title": "Crafting Snorkel",
+      "grid": [
+        null,
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Glass Pane",
+          "icon": "/textures/item/glass_pane.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        }
+      ],
+      "output": {
+        "name": "Snorkel",
+        "icon": "/textures/item/snorkel.png",
         "count": 1
       }
     },
@@ -5539,7 +5575,7 @@
         },
         {
           "name": "Aluminum Energy Cell",
-          "icon": "/textures/item/aluminum_battery.png"
+          "icon": "/textures/block/aluminum_battery_front.png"
         },
         {
           "name": "Redstone Block",
@@ -5560,7 +5596,7 @@
       ],
       "output": {
         "name": "Steel Energy Cell",
-        "icon": "/textures/item/steel_battery.png",
+        "icon": "/textures/block/steel_battery_front.png",
         "count": 1
       }
     },
@@ -5608,7 +5644,7 @@
       ],
       "output": {
         "name": "Steel Blast Furnace",
-        "icon": "/textures/item/steel_blast_furnace.png",
+        "icon": "/textures/block/steel_blast_furnace_front.png",
         "count": 1
       }
     },
@@ -5845,7 +5881,7 @@
         },
         {
           "name": "Aluminum Generator",
-          "icon": "/textures/item/aluminum_generator.png"
+          "icon": "/textures/block/aluminum_generator_front.png"
         },
         {
           "name": "Steel Gear",
@@ -5866,7 +5902,7 @@
       ],
       "output": {
         "name": "Steel Generator",
-        "icon": "/textures/item/steel_generator.png",
+        "icon": "/textures/block/steel_generator_front.png",
         "count": 1
       }
     },
@@ -6406,7 +6442,7 @@
       ],
       "output": {
         "name": "Stripped Rubber Wood",
-        "icon": "/textures/item/stripped_rubber_wood.png",
+        "icon": "/textures/block/stripped_rubber_log.png",
         "count": 3
       }
     },
@@ -7382,28 +7418,28 @@
       "title": "Crafting Wooden Sledgehammer",
       "grid": [
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         {
           "name": "Stick",
           "icon": "/textures/item/stick.png"
         },
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         null,
         {
@@ -7425,13 +7461,13 @@
       "grid": [
         null,
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         null,
         {
-          "name": "#planks",
-          "icon": "/textures/item/#planks.png"
+          "name": "Planks",
+          "icon": "/textures/item/planks.png"
         },
         null,
         null,

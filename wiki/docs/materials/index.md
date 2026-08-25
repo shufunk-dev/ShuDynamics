@@ -117,3 +117,27 @@ ShuDynamics introduces new world generation ores, industrial polymers, alloys, a
     <p style="font-size:13px; color:#9ca3af; margin:0;">Enables cross-dimensional wireless access so you can access your Overworld base directly while in the Nether or End!</p>
   </div>
 </div>
+
+---
+
+## 🌌 Dimensional Anomalies & The Keystone Nexus (v1.2.0)
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;">
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/block/atmospheric_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#f472b6;">Atmospheric Anchor (Keystone #1)</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Blueprint unlocked upon assembling full Scuba Gear. Crafted from Cured Rubber, Oxygen Canisters, Infused Heartwood, and Crying Obsidian.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Emits localized dimensional barometric resonance mist.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/mystery_keystone.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#c4b5fd;">Unknown Anomaly Keystones (#2 - #6)</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Part of the 7-milestone <em>Keystone Nexus</em> advancement quest. Unlocked and revealed across various extreme survival challenges.</p>
+  </div>
+</div>
+

@@ -323,6 +323,8 @@ public class ModItems {
     public static final Item NETHERITE_ENCHANTED_CHEST = registerItem("netherite_enchanted_chest", settings -> new net.enchantedwood.item.custom.EnchantedChestTierItem(net.enchantedwood.block.custom.GearTier.NETHERITE, settings.fireproof()));
 
     // Scuba & Underwater Diving Equipment (v1.2.0)
+    public static final Item SNORKEL = registerItem("snorkel",
+            settings -> new net.enchantedwood.item.custom.SnorkelItem(EquipmentType.HELMET.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.HELMET)));
     public static final Item DIVING_MASK = registerItem("diving_mask",
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.HELMET.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.HELMET)));
     public static final Item SCUBA_CHESTPLATE = registerItem("scuba_chestplate",
@@ -331,6 +333,7 @@ public class ModItems {
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.LEGGINGS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.LEGGINGS)));
     public static final Item DIVING_FLIPPERS = registerItem("diving_flippers",
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.BOOTS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.BOOTS)));
+    public static final Item MYSTERY_KEYSTONE = registerItem("mystery_keystone", Item::new);
 
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
@@ -572,6 +575,7 @@ public class ModItems {
                 entries.add(INTERDIMENSIONAL_CARD);
 
                 // Scuba & Underwater Diving Equipment (v1.2.0)
+                entries.add(SNORKEL);
                 entries.add(DIVING_MASK);
                 entries.add(SCUBA_CHESTPLATE);
                 entries.add(WETSUIT_LEGGINGS);

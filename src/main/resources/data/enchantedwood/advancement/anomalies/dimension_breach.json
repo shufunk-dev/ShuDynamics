@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:interdimensional_card"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.dimension_breach.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.dimension_breach.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "entered_mining_dimension": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "enchantedwood:mining_dimension"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "entered_mining_dimension"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/root"
+}

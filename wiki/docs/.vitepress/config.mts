@@ -52,6 +52,7 @@ export default defineConfig({
           text: 'Equipment & Combat',
           items: [
             { text: 'Armor Sets Overview', link: '/tools-and-armor/' },
+            { text: 'Diving Gear & Scuba Life Support', link: '/tools-and-armor/diving' },
             { text: 'Tools & 3x3 Mining Hammers', link: '/tools-and-armor/tools' },
             { text: 'Livingwood & Barkskin Specials', link: '/tools-and-armor/special-weapons' }
           ]

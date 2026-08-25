@@ -6,18 +6,18 @@
 [![Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Stable Release](https://img.shields.io/badge/Stable-v1.1.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Experimental](https://img.shields.io/badge/Experimental-v1.2.0--dev-orange.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics)
+[![Stable Release](https://img.shields.io/badge/Stable-v1.2.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
+[![Experimental](https://img.shields.io/badge/Next-v1.3.0--dev-orange.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, and remote wireless crystal item access.
+**ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, remote wireless crystal item access, and deep-sea exploration life support.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 
 ---
 
-## 🌟 Core Mod Features (v1.1.0 Stable / v1.2.0 Dev)
+## 🌟 Core Mod Features (v1.2.0 Release)
 
 ### ⚡ 1. Tiered Energy & Power Grids
 * **Multi-Tier Generators**: Clean energy generation across Copper, Aluminum, and Steel tiers.
@@ -30,20 +30,32 @@
 * **Smart Auto-Fuel**: Machines intelligently fall back to solid fuel when energy reserves are depleted.
 
 ### 📦 3. Digital Storage Networks & Crystal Drives
-* **Enchanted Storage Controller**: Central brain of your item network supporting dual-input hybrid power and 3 dedicated upgrade bays.
+* **Enchanted Storage Controller**: Central brain of your item network with ambient positional audio, dual-input hybrid power, and 3 dedicated upgrade bays.
 * **6-Slot Drive Bay**: Digital crystal drive bay featuring dynamic **Green $\rightarrow$ Yellow $\rightarrow$ Purple $\rightarrow$ Red** LED capacity monitoring and anti-data loss safety locks.
 * **54-Slot Storage Terminal**: Unified 6x9 network interface with real-time search filtering and instant item retrieval.
 * **Wireless Expansion**:
   * **Chunk Loader Module**: Keeps the controller and attached drives active across the entire Overworld.
   * **Interdimensional Card**: Grants remote storage access across dimensions (Nether & The End).
 
-### 🛡️ 4. Tools, Armor & 3x3 Mining
+### 🤿 4. Diving Equipment & Aquatic Life Support (v1.2.0)
+* **Early-Game Snorkel**: Surface-breathing oxygen replenish and 3x extended lung capacity when diving.
+* **Modular Scuba Suit**:
+  * **Diving Mask**: Conduit Vision and fast underwater mining.
+  * **Scuba Tank Chestplate**: Infinite pressurized underwater oxygen supply.
+  * **Wetsuit Leggings**: Streamlined polymer granting Dolphin's Grace swimming.
+  * **Diving Flippers**: High-speed ocean propulsion.
+
+### 🌌 5. Dimensional Keystones & Progression
+* **Atmospheric Anchor (Keystone #1)**: Blueprint unlocked upon mastering deep-sea atmospheric pressures.
+* **The Keystone Nexus Tab**: Dedicated 7-node radial quest progression tracking the discovery and crafting of all dimensional anomalies.
+
+### 🛡️ 6. Tools, Armor & 3x3 Mining
 * **Tiered Armor & Weapons**: Full gear progression including Tin, Bronze, Aluminum, Titanium, Enchanted Diamond, and Enchanted Netherite.
 * **3x3 Mining Hammers**: Heavy-duty excavation tools designed for rapid subterranean mining.
 * **Special Archetypes**: Livingwood weapons and Barkskin equipment offering unique passives and survivability.
 * **Health Lockets & Crystals**: Permanent health-pool expansion items.
 
-### 🌲 5. Natural Resources & Base Utilities
+### 🌲 7. Natural Resources & Base Utilities
 * **Rubber Trees & Polymers**: Harvest Sticky Resin from Rubber Trees and vulcanize Cured Rubber Sheets for insulation.
 * **Enchanted Lamps**: Multi-state base illumination with wireless right-click control and a 32-block hostile mob spawn sanctuary ward.
 
@@ -72,7 +84,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-1.1.0.jar
+build/libs/shudynamics-1.2.0.jar
 ```
 
 ---

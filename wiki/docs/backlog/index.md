@@ -228,29 +228,6 @@ In future updates, **ShuDynamics** is expanding beyond the boundaries of vanilla
 
 ---
 
-## 🤿 Polymer Diving & Underwater Gear
-
-<div class="feature-grid">
-  <div class="feature-card cyan-border">
-    <h4 class="card-title cyan-title">🤿 Tier 1: Early-Game Snorkel</h4>
-    <p class="card-sub">Crafted with Cured Rubber + Glass.</p>
-    <ul class="card-list">
-      <li>Triples underwater breath duration (+200% oxygen time).</li>
-      <li>Instantly refills bubbles near surface water.</li>
-    </ul>
-  </div>
-  <div class="feature-card purple-border">
-    <h4 class="card-title purple-title">🤿 Tier 2: Powered Scuba Apparatus</h4>
-    <p class="card-sub">Uses Oxygen Canisters from the Oxygen Generator.</p>
-    <ul class="card-list">
-      <li>True infinite underwater breathing with clear deep-sea vision.</li>
-      <li>Removes underwater mining fatigue (Aqua Affinity).</li>
-    </ul>
-  </div>
-</div>
-
----
-
 ## 🏗️ Automated Chunk Excavator
 
 <div class="multiblock-card purple-border">
@@ -277,8 +254,15 @@ In future updates, **ShuDynamics** is expanding beyond the boundaries of vanilla
 
 ---
 
-## ✅ Completed in v1.0 Release Build
+## ✅ Completed Releases & Features
 
+### 🌟 v1.2.0 (Aquatic Life Support & Dimensional Keystones)
+* 🤿 **Early-Game Snorkel**: Surface-breathing oxygen replenish and 3x extended lung capacity when diving.
+* 🌊 **Full Pressurized Scuba Gear**: Diving Mask (Conduit Vision), Scuba Tank Chestplate (Infinite Oxygen), Wetsuit Leggings (Dolphin's Grace), and Diving Flippers (Speed II propulsion).
+* 🌌 **Atmospheric Anchor & Keystone Nexus**: Anomaly Keystone #1 discovery event and dedicated 7-node radial quest progression tab.
+* 🔊 **Audio & Synced Energy Polish**: Custom positional computer hum audio and robust 32-bit property synchronization.
+
+### 🌟 v1.0.0 & v1.1.0 Foundation
 * 🌲 **Rubber Tree & Polymer Material System**: Natural generation, saplings, stripped logs, resin, and cured rubber sheets.
 * 💡 **Enchanted Lamp & Sanctuary Ward**: Toggleable Light 15 with 32-block hostile mob spawn prevention aura.
 * ⚡ **Dual Hybrid Power Storage Controller**: 10 FE/t electrical grid + emergency fuel failover.
@@ -286,6 +270,7 @@ In future updates, **ShuDynamics** is expanding beyond the boundaries of vanilla
 * 🛡️ **Anti-Data Loss Drive Failsafe Lock**: Extraction protection on active drives.
 * 🛰️ **Chunk Loader Module & Interdimensional Card**: Infinite Overworld range and cross-dimensional access from Nether/End.
 * 🖥️ **54-Slot Digital Storage Terminal**: Full 6x9 network inventory with real-time search.
+* ⛏️ **Mining Dimension (Quarry Expanse)**: Custom dimension with portal ignition and resettable save folders.
 
 <style>
 .roadmap-feature-box {

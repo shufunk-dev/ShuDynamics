@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:mystery_keystone"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.root.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/crying_obsidian.png"
+  },
+  "criteria": {
+    "auto_unlock": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "auto_unlock"
+    ]
+  ]
+}
