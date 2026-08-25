@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AAA"
+  ],
+  "key": {
+    "A": "enchantedwood:asphalt_block"
+  },
+  "result": {
+    "count": 6,
+    "id": "enchantedwood:asphalt_slab"
+  }
+}

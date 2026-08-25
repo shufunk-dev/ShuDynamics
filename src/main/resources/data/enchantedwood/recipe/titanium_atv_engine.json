@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "TET",
+    "TGT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "E": "enchantedwood:steel_atv_engine",
+    "G": "enchantedwood:titanium_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_atv_engine"
+  }
+}

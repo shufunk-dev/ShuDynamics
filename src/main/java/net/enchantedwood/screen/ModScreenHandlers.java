@@ -80,6 +80,18 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_battery"),
                     new ScreenHandlerType<>(SteelBatteryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<FuelRefineryScreenHandler> FUEL_REFINERY_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery"),
+                    new ScreenHandlerType<>(FuelRefineryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<RoadPaverScreenHandler> ROAD_PAVER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver"),
+                    new ScreenHandlerType<>(RoadPaverScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<AtvScreenHandler> ATV_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "atv"),
+                    new ScreenHandlerType<>(AtvScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }

@@ -25,6 +25,7 @@ import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.item.custom.EnchantedRedstoneItem;
 import net.enchantedwood.item.custom.GearItem;
 
+import net.minecraft.component.type.FoodComponent;
 import java.util.function.Function;
 
 public class ModItems {
@@ -39,6 +40,37 @@ public class ModItems {
     public static final Item ENCHANTED_CAPE = registerItem("enchanted_cape", settings -> new net.enchantedwood.item.custom.EnchantedCapeItem(settings.maxCount(1)));
     public static final Item RESIN = registerItem("resin", Item::new);
     public static final Item RUBBER = registerItem("rubber", Item::new);
+
+    // Agriculture & Crops
+    public static final Item CORN = registerItem("corn", settings -> new Item(settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.6f).build())));
+    public static final Item ROASTED_CORN = registerItem("roasted_corn", settings -> new Item(settings.food(new FoodComponent.Builder().nutrition(7).saturationModifier(0.8f).build())));
+    public static final Item CORN_SEEDS = registerItem("corn_seeds", settings -> new BlockItem(net.enchantedwood.block.ModBlocks.CORN_CROP, settings));
+
+    // Petrochemicals & Fuels
+    public static final Item CRUDE_OIL_SLUDGE = registerItem("crude_oil_sludge", Item::new);
+    public static final Item MINERAL_TAR = registerItem("mineral_tar", Item::new);
+    public static final Item BIOFUEL_CANISTER = registerItem("biofuel_canister", settings -> new Item(settings.maxCount(16)));
+    public static final Item GASOLINE_CANISTER = registerItem("gasoline_canister", settings -> new Item(settings.maxCount(16)));
+    public static final Item HIGH_OCTANE_FUEL_CANISTER = registerItem("high_octane_fuel_canister", settings -> new Item(settings.maxCount(16)));
+
+    // Modular All-Terrain Vehicle (ATV) & Components
+    public static final Item ATV_ITEM = registerItem("atv", settings -> new net.enchantedwood.item.custom.AtvItem(settings.maxCount(1)));
+    public static final Item ATV_SEAT = registerItem("atv_seat", Item::new);
+    public static final Item RUBBER_TIRE = registerItem("rubber_tire", Item::new);
+    public static final Item STEEL_RIM_TIRE = registerItem("steel_rim_tire", Item::new);
+    public static final Item TITANIUM_STUDDED_TIRE = registerItem("titanium_studded_tire", Item::new);
+    public static final Item COPPER_ATV_ENGINE = registerItem("copper_atv_engine", Item::new);
+    public static final Item ALUMINUM_ATV_ENGINE = registerItem("aluminum_atv_engine", Item::new);
+    public static final Item STEEL_ATV_ENGINE = registerItem("steel_atv_engine", Item::new);
+    public static final Item TITANIUM_ATV_ENGINE = registerItem("titanium_atv_engine", Item::new);
+    public static final Item STEEL_SUSPENSION = registerItem("steel_suspension", Item::new);
+    public static final Item TITANIUM_SUSPENSION = registerItem("titanium_suspension", Item::new);
+    public static final Item ALUMINUM_ATV_CHASSIS = registerItem("aluminum_atv_chassis", Item::new);
+    public static final Item STEEL_ATV_CHASSIS = registerItem("steel_atv_chassis", Item::new);
+    public static final Item TITANIUM_ATV_CHASSIS = registerItem("titanium_atv_chassis", Item::new);
+    public static final Item SMALL_CARGO_TRUNK = registerItem("small_cargo_trunk", Item::new);
+    public static final Item MEDIUM_CARGO_TRUNK = registerItem("medium_cargo_trunk", Item::new);
+    public static final Item LARGE_CARGO_TRUNK = registerItem("large_cargo_trunk", Item::new);
 
     // Base Gears
     public static final Item IRON_GEAR = registerItem("iron_gear", settings -> new GearItem(GearTier.IRON, false, settings));
@@ -583,6 +615,42 @@ public class ModItems {
 
                 // Anomaly Keystones
                 entries.add(net.enchantedwood.block.ModBlocks.ATMOSPHERIC_ANCHOR);
+
+                // Agriculture & Biofuels
+                entries.add(CORN);
+                entries.add(ROASTED_CORN);
+                entries.add(CORN_SEEDS);
+
+                // Petrochemicals & Fuels
+                entries.add(net.enchantedwood.block.ModBlocks.OIL_SAND);
+                entries.add(CRUDE_OIL_SLUDGE);
+                entries.add(MINERAL_TAR);
+                entries.add(BIOFUEL_CANISTER);
+                entries.add(GASOLINE_CANISTER);
+                entries.add(HIGH_OCTANE_FUEL_CANISTER);
+                entries.add(net.enchantedwood.block.ModBlocks.FUEL_REFINERY);
+                entries.add(net.enchantedwood.block.ModBlocks.ROAD_PAVER);
+                entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
+
+                // Modular All-Terrain Vehicles (ATV) & Upgrades
+                entries.add(ATV_ITEM);
+                entries.add(ATV_SEAT);
+                entries.add(RUBBER_TIRE);
+                entries.add(STEEL_RIM_TIRE);
+                entries.add(TITANIUM_STUDDED_TIRE);
+                entries.add(COPPER_ATV_ENGINE);
+                entries.add(ALUMINUM_ATV_ENGINE);
+                entries.add(STEEL_ATV_ENGINE);
+                entries.add(TITANIUM_ATV_ENGINE);
+                entries.add(STEEL_SUSPENSION);
+                entries.add(TITANIUM_SUSPENSION);
+                entries.add(ALUMINUM_ATV_CHASSIS);
+                entries.add(STEEL_ATV_CHASSIS);
+                entries.add(TITANIUM_ATV_CHASSIS);
+                entries.add(SMALL_CARGO_TRUNK);
+                entries.add(MEDIUM_CARGO_TRUNK);
+                entries.add(LARGE_CARGO_TRUNK);
 
                 // Enchanted Lighting
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAMP);

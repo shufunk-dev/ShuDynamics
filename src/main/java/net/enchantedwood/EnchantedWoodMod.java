@@ -18,6 +18,7 @@ public class EnchantedWoodMod implements ModInitializer {
         LOGGER.info("Initializing Enchanted Wood Mod!");
         ModBlocks.registerModBlocks();
         ModItems.registerModItems();
+        net.enchantedwood.entity.ModEntities.registerModEntities();
         net.enchantedwood.sound.ModSounds.registerModSounds();
         ModBlockEntities.registerBlockEntities();
         ModScreenHandlers.registerScreenHandlers();

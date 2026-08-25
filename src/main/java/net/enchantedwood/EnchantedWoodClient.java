@@ -42,8 +42,13 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.STEEL_BLAST_FURNACE_SCREEN_HANDLER, net.enchantedwood.screen.SteelBlastFurnaceScreen::new);
         HandledScreens.register(ModScreenHandlers.STEEL_GENERATOR_SCREEN_HANDLER, net.enchantedwood.screen.SteelGeneratorScreen::new);
         HandledScreens.register(ModScreenHandlers.STEEL_BATTERY_SCREEN_HANDLER, net.enchantedwood.screen.SteelBatteryScreen::new);
+        HandledScreens.register(ModScreenHandlers.FUEL_REFINERY_SCREEN_HANDLER, net.enchantedwood.screen.FuelRefineryScreen::new);
+        HandledScreens.register(ModScreenHandlers.ROAD_PAVER_SCREEN_HANDLER, net.enchantedwood.screen.RoadPaverScreen::new);
+        HandledScreens.register(ModScreenHandlers.ATV_SCREEN_HANDLER, net.enchantedwood.screen.AtvScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);
 
         CustomHeartHudRenderer.register();
 

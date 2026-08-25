@@ -439,6 +439,57 @@ public class ModBlocks {
                     .resistance(1200.0f)
                     .requiresTool()));
 
+    public static final Block OIL_SAND = registerBlock("oil_sand",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))
+                    .sounds(BlockSoundGroup.SAND)
+                    .hardness(0.8f)
+                    .resistance(0.8f)));
+
+    public static final Block ASPHALT_BLOCK = registerBlock("asphalt_block",
+            new net.enchantedwood.block.custom.AsphaltBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_block")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()));
+
+    public static final Block ASPHALT_SLAB = registerBlock("asphalt_slab",
+            new net.minecraft.block.SlabBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_slab")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()));
+
+    public static final Block FUEL_REFINERY = registerBlock("fuel_refinery",
+            new net.enchantedwood.block.custom.FuelRefineryBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.FuelRefineryBlock.LIT) ? 13 : 0)));
+
+    public static final Block ROAD_PAVER = registerBlock("road_paver",
+            new net.enchantedwood.block.custom.RoadPaverBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverBlock.PAVING) ? 10 : 0)));
+
+    public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
+            new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "corn_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque()));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);

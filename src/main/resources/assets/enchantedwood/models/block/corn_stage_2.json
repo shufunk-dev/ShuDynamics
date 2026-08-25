@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "enchantedwood:block/corn_stage_2"
+  }
+}

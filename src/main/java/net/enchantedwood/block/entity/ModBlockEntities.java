@@ -179,6 +179,20 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(EnchantedLampBlockEntity::new, ModBlocks.ENCHANTED_LAMP).build()
             );
 
+    public static final BlockEntityType<FuelRefineryBlockEntity> FUEL_REFINERY_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery"),
+                    FabricBlockEntityTypeBuilder.create(FuelRefineryBlockEntity::new, ModBlocks.FUEL_REFINERY).build()
+            );
+
+    public static final BlockEntityType<RoadPaverBlockEntity> ROAD_PAVER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver"),
+                    FabricBlockEntityTypeBuilder.create(RoadPaverBlockEntity::new, ModBlocks.ROAD_PAVER).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    "TMT",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "M": "enchantedwood:medium_cargo_trunk"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:large_cargo_trunk"
+  }
+}

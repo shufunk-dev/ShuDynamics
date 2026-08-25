@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SES",
+    "SGS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "E": "enchantedwood:aluminum_atv_engine",
+    "G": "enchantedwood:steel_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:steel_atv_engine"
+  }
+}

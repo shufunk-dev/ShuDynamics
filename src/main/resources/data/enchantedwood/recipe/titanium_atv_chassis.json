@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    "TCT",
+    "T T"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "C": "enchantedwood:steel_atv_chassis"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_atv_chassis"
+  }
+}

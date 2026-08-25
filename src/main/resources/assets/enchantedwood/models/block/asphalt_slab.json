@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "enchantedwood:block/asphalt_block",
+    "top": "enchantedwood:block/asphalt_block",
+    "side": "enchantedwood:block/asphalt_block"
+  }
+}

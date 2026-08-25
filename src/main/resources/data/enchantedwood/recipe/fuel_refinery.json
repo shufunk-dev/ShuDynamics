@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "SFS",
+    "SRS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "enchantedwood:steel_gear",
+    "F": "minecraft:blast_furnace",
+    "R": "enchantedwood:enchanted_redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:fuel_refinery"
+  }
+}

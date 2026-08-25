@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "RFR",
+    "SAS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "enchantedwood:steel_gear",
+    "R": "enchantedwood:titanium_roller",
+    "F": "minecraft:blast_furnace",
+    "A": "enchantedwood:asphalt_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:road_paver"
+  }
+}

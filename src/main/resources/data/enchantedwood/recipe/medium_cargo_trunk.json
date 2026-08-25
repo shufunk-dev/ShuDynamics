@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "STS",
+    "SSS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "T": "enchantedwood:small_cargo_trunk"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:medium_cargo_trunk"
+  }
+}

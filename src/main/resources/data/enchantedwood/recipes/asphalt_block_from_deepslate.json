@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "DTD",
+    "TGT",
+    "DTD"
+  ],
+  "key": {
+    "D": "minecraft:cobbled_deepslate",
+    "T": "enchantedwood:mineral_tar",
+    "G": "minecraft:gravel"
+  },
+  "result": {
+    "count": 8,
+    "id": "enchantedwood:asphalt_block"
+  }
+}

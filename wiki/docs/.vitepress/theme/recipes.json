@@ -1,7 +1,97 @@
 {
-  "version": "1.2.0",
-  "count": 190,
+  "version": "1.3.0",
+  "count": 212,
   "recipes": {
+    "aluminum_atv_chassis": {
+      "id": "aluminum_atv_chassis",
+      "type": "shaped",
+      "title": "Crafting Aluminum Lightweight Chassis",
+      "grid": [
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        null,
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        null,
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Aluminum Lightweight Chassis",
+        "icon": "/textures/item/aluminum_atv_chassis.png",
+        "count": 1
+      }
+    },
+    "aluminum_atv_engine": {
+      "id": "aluminum_atv_engine",
+      "type": "shaped",
+      "title": "Crafting Aluminum Agile V4 Engine",
+      "grid": [
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Copper Starter Engine",
+          "icon": "/textures/item/copper_atv_engine.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        },
+        {
+          "name": "Aluminum Gear",
+          "icon": "/textures/item/aluminum_gear.png"
+        },
+        {
+          "name": "Aluminum Ingot",
+          "icon": "/textures/item/aluminum_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Aluminum Agile V4 Engine",
+        "icon": "/textures/item/aluminum_atv_engine.png",
+        "count": 1
+      }
+    },
     "aluminum_axe": {
       "id": "aluminum_axe",
       "type": "shaped",
@@ -662,6 +752,132 @@
         "count": 1
       }
     },
+    "asphalt_block_from_cobblestone": {
+      "id": "asphalt_block_from_cobblestone",
+      "type": "shaped",
+      "title": "Crafting Asphalt Block",
+      "grid": [
+        {
+          "name": "Cobblestone",
+          "icon": "/textures/item/cobblestone.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobblestone",
+          "icon": "/textures/item/cobblestone.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Gravel",
+          "icon": "/textures/block/gravel.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobblestone",
+          "icon": "/textures/item/cobblestone.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobblestone",
+          "icon": "/textures/item/cobblestone.png"
+        }
+      ],
+      "output": {
+        "name": "Asphalt Block",
+        "icon": "/textures/block/asphalt_block.png",
+        "count": 8
+      }
+    },
+    "asphalt_block_from_deepslate": {
+      "id": "asphalt_block_from_deepslate",
+      "type": "shaped",
+      "title": "Crafting Asphalt Block",
+      "grid": [
+        {
+          "name": "Cobbled Deepslate",
+          "icon": "/textures/block/cobbled_deepslate.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobbled Deepslate",
+          "icon": "/textures/block/cobbled_deepslate.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Gravel",
+          "icon": "/textures/block/gravel.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobbled Deepslate",
+          "icon": "/textures/block/cobbled_deepslate.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        {
+          "name": "Cobbled Deepslate",
+          "icon": "/textures/block/cobbled_deepslate.png"
+        }
+      ],
+      "output": {
+        "name": "Asphalt Block",
+        "icon": "/textures/block/asphalt_block.png",
+        "count": 8
+      }
+    },
+    "asphalt_slab": {
+      "id": "asphalt_slab",
+      "type": "shaped",
+      "title": "Crafting Asphalt Slab",
+      "grid": [
+        {
+          "name": "Asphalt Block",
+          "icon": "/textures/block/asphalt_block.png"
+        },
+        {
+          "name": "Asphalt Block",
+          "icon": "/textures/block/asphalt_block.png"
+        },
+        {
+          "name": "Asphalt Block",
+          "icon": "/textures/block/asphalt_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Asphalt Slab",
+        "icon": "/textures/item/asphalt_slab.png",
+        "count": 6
+      }
+    },
     "atmospheric_anchor": {
       "id": "atmospheric_anchor",
       "type": "shaped",
@@ -707,6 +923,78 @@
       "output": {
         "name": "Atmospheric Anchor",
         "icon": "/textures/block/atmospheric_anchor.png",
+        "count": 1
+      }
+    },
+    "atv": {
+      "id": "atv",
+      "type": "shaped",
+      "title": "Crafting All-Terrain Vehicle (ATV)",
+      "grid": [
+        null,
+        {
+          "name": "Padded ATV Seat",
+          "icon": "/textures/item/atv_seat.png"
+        },
+        null,
+        {
+          "name": "Rubber Off-Road Tire",
+          "icon": "/textures/item/rubber_tire.png"
+        },
+        {
+          "name": "Copper Starter Engine",
+          "icon": "/textures/item/copper_atv_engine.png"
+        },
+        {
+          "name": "Rubber Off-Road Tire",
+          "icon": "/textures/item/rubber_tire.png"
+        },
+        {
+          "name": "Rubber Off-Road Tire",
+          "icon": "/textures/item/rubber_tire.png"
+        },
+        {
+          "name": "Steel Reinforced Chassis",
+          "icon": "/textures/item/steel_atv_chassis.png"
+        },
+        {
+          "name": "Rubber Off-Road Tire",
+          "icon": "/textures/item/rubber_tire.png"
+        }
+      ],
+      "output": {
+        "name": "All-Terrain Vehicle (ATV)",
+        "icon": "/textures/item/atv.png",
+        "count": 1
+      }
+    },
+    "atv_seat": {
+      "id": "atv_seat",
+      "type": "shaped",
+      "title": "Crafting Padded ATV Seat",
+      "grid": [
+        {
+          "name": "Leather",
+          "icon": "/textures/item/leather.png"
+        },
+        null,
+        null,
+        {
+          "name": "Black Wool",
+          "icon": "/textures/block/black_wool.png"
+        },
+        null,
+        null,
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Padded ATV Seat",
+        "icon": "/textures/item/atv_seat.png",
         "count": 1
       }
     },
@@ -1415,6 +1703,54 @@
       "output": {
         "name": "Coke Oven",
         "icon": "/textures/block/coke_oven_front.png",
+        "count": 1
+      }
+    },
+    "copper_atv_engine": {
+      "id": "copper_atv_engine",
+      "type": "shaped",
+      "title": "Crafting Copper Starter Engine",
+      "grid": [
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Copper Gear",
+          "icon": "/textures/item/copper_gear.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Copper Ingot",
+          "icon": "/textures/item/copper_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Copper Starter Engine",
+        "icon": "/textures/item/copper_atv_engine.png",
         "count": 1
       }
     },
@@ -4397,6 +4733,54 @@
         "count": 1
       }
     },
+    "fuel_refinery": {
+      "id": "fuel_refinery",
+      "type": "shaped",
+      "title": "Crafting Fuel Refinery",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Gear",
+          "icon": "/textures/item/steel_gear.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Blast Furnace",
+          "icon": "/textures/item/blast_furnace.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Enchanted Redstone Dust",
+          "icon": "/textures/item/enchanted_redstone.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Fuel Refinery",
+        "icon": "/textures/block/fuel_refinery_front.png",
+        "count": 1
+      }
+    },
     "gas_pipe": {
       "id": "gas_pipe",
       "type": "shaped",
@@ -4898,6 +5282,54 @@
         "count": 1
       }
     },
+    "large_cargo_trunk": {
+      "id": "large_cargo_trunk",
+      "type": "shaped",
+      "title": "Crafting Large Cargo Trunk (27-Slot)",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Medium Cargo Trunk (18-Slot)",
+          "icon": "/textures/item/medium_cargo_trunk.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Large Cargo Trunk (27-Slot)",
+        "icon": "/textures/item/large_cargo_trunk.png",
+        "count": 1
+      }
+    },
     "livingwood_sword": {
       "id": "livingwood_sword",
       "type": "shaped",
@@ -4925,6 +5357,54 @@
       "output": {
         "name": "Livingwood Sword",
         "icon": "/textures/item/livingwood_sword.png",
+        "count": 1
+      }
+    },
+    "medium_cargo_trunk": {
+      "id": "medium_cargo_trunk",
+      "type": "shaped",
+      "title": "Crafting Medium Cargo Trunk (18-Slot)",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Small Cargo Trunk (9-Slot)",
+          "icon": "/textures/item/small_cargo_trunk.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Medium Cargo Trunk (18-Slot)",
+        "icon": "/textures/item/medium_cargo_trunk.png",
         "count": 1
       }
     },
@@ -5354,6 +5834,54 @@
         "count": 9
       }
     },
+    "road_paver": {
+      "id": "road_paver",
+      "type": "shaped",
+      "title": "Crafting Autonomous Road Paver",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Gear",
+          "icon": "/textures/item/steel_gear.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Titanium Roller",
+          "icon": "/textures/item/titanium_roller.png"
+        },
+        {
+          "name": "Blast Furnace",
+          "icon": "/textures/item/blast_furnace.png"
+        },
+        {
+          "name": "Titanium Roller",
+          "icon": "/textures/item/titanium_roller.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Asphalt Block",
+          "icon": "/textures/block/asphalt_block.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Autonomous Road Paver",
+        "icon": "/textures/block/road_paver_front.png",
+        "count": 1
+      }
+    },
     "rubber_planks_from_log": {
       "id": "rubber_planks_from_log",
       "type": "shapeless",
@@ -5400,6 +5928,42 @@
         "name": "Rubber Planks",
         "icon": "/textures/block/rubber_planks.png",
         "count": 4
+      }
+    },
+    "rubber_tire": {
+      "id": "rubber_tire",
+      "type": "shaped",
+      "title": "Crafting Rubber Off-Road Tire",
+      "grid": [
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null,
+        {
+          "name": "Rubber",
+          "icon": "/textures/item/rubber.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Rubber Off-Road Tire",
+        "icon": "/textures/item/rubber_tire.png",
+        "count": 2
       }
     },
     "rubber_wood": {
@@ -5480,6 +6044,54 @@
         "count": 1
       }
     },
+    "small_cargo_trunk": {
+      "id": "small_cargo_trunk",
+      "type": "shaped",
+      "title": "Crafting Small Cargo Trunk (9-Slot)",
+      "grid": [
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Chest",
+          "icon": "/textures/item/chest.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        },
+        {
+          "name": "Iron Ingot",
+          "icon": "/textures/item/iron_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Small Cargo Trunk (9-Slot)",
+        "icon": "/textures/item/small_cargo_trunk.png",
+        "count": 1
+      }
+    },
     "snorkel": {
       "id": "snorkel",
       "type": "shaped",
@@ -5513,6 +6125,96 @@
       "output": {
         "name": "Snorkel",
         "icon": "/textures/item/snorkel.png",
+        "count": 1
+      }
+    },
+    "steel_atv_chassis": {
+      "id": "steel_atv_chassis",
+      "type": "shaped",
+      "title": "Crafting Steel Reinforced Chassis",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Steel Reinforced Chassis",
+        "icon": "/textures/item/steel_atv_chassis.png",
+        "count": 1
+      }
+    },
+    "steel_atv_engine": {
+      "id": "steel_atv_engine",
+      "type": "shaped",
+      "title": "Crafting Steel High-Torque V8 Engine",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Aluminum Agile V4 Engine",
+          "icon": "/textures/item/aluminum_atv_engine.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Steel Gear",
+          "icon": "/textures/item/steel_gear.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Steel High-Torque V8 Engine",
+        "icon": "/textures/item/steel_atv_engine.png",
         "count": 1
       }
     },
@@ -6119,6 +6821,42 @@
         "count": 1
       }
     },
+    "steel_rim_tire": {
+      "id": "steel_rim_tire",
+      "type": "shaped",
+      "title": "Crafting Steel-Rim Heavy Tire",
+      "grid": [
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        {
+          "name": "Rubber Off-Road Tire",
+          "icon": "/textures/item/rubber_tire.png"
+        },
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Steel-Rim Heavy Tire",
+        "icon": "/textures/item/steel_rim_tire.png",
+        "count": 1
+      }
+    },
     "steel_shovel": {
       "id": "steel_shovel",
       "type": "shaped",
@@ -6147,6 +6885,36 @@
         "name": "Steel Shovel",
         "icon": "/textures/item/steel_shovel.png",
         "count": 1
+      }
+    },
+    "steel_suspension": {
+      "id": "steel_suspension",
+      "type": "shaped",
+      "title": "Crafting Steel Suspension Shocks",
+      "grid": [
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Iron Bars",
+          "icon": "/textures/block/iron_bars.png"
+        },
+        null,
+        null,
+        {
+          "name": "Steel Ingot",
+          "icon": "/textures/item/steel_ingot.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Steel Suspension Shocks",
+        "icon": "/textures/item/steel_suspension.png",
+        "count": 2
       }
     },
     "steel_sword": {
@@ -6839,6 +7607,96 @@
         "count": 1
       }
     },
+    "titanium_atv_chassis": {
+      "id": "titanium_atv_chassis",
+      "type": "shaped",
+      "title": "Crafting Titanium Hazard-Shield Chassis",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Steel Reinforced Chassis",
+          "icon": "/textures/item/steel_atv_chassis.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Titanium Hazard-Shield Chassis",
+        "icon": "/textures/item/titanium_atv_chassis.png",
+        "count": 1
+      }
+    },
+    "titanium_atv_engine": {
+      "id": "titanium_atv_engine",
+      "type": "shaped",
+      "title": "Crafting Titanium Twin-Turbo Engine",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Steel High-Torque V8 Engine",
+          "icon": "/textures/item/steel_atv_engine.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Gear",
+          "icon": "/textures/item/titanium_gear.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Titanium Twin-Turbo Engine",
+        "icon": "/textures/item/titanium_atv_engine.png",
+        "count": 1
+      }
+    },
     "titanium_axe": {
       "id": "titanium_axe",
       "type": "shaped",
@@ -7272,6 +8130,72 @@
         "name": "Titanium Shovel",
         "icon": "/textures/item/titanium_shovel.png",
         "count": 1
+      }
+    },
+    "titanium_studded_tire": {
+      "id": "titanium_studded_tire",
+      "type": "shaped",
+      "title": "Crafting Titanium-Studded Ice Tire",
+      "grid": [
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Steel-Rim Heavy Tire",
+          "icon": "/textures/item/steel_rim_tire.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Titanium-Studded Ice Tire",
+        "icon": "/textures/item/titanium_studded_tire.png",
+        "count": 1
+      }
+    },
+    "titanium_suspension": {
+      "id": "titanium_suspension",
+      "type": "shaped",
+      "title": "Crafting Titanium Heavy-Duty Suspension",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Steel Suspension Shocks",
+          "icon": "/textures/item/steel_suspension.png"
+        },
+        null,
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Titanium Heavy-Duty Suspension",
+        "icon": "/textures/item/titanium_suspension.png",
+        "count": 2
       }
     },
     "titanium_sword": {

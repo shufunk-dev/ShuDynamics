@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "STS",
+    " S "
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "T": "enchantedwood:rubber_tire"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:steel_rim_tire"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "AEA",
+    "AGA"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "E": "enchantedwood:copper_atv_engine",
+    "G": "enchantedwood:aluminum_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:aluminum_atv_engine"
+  }
+}

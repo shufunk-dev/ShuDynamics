@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CPC",
+    "CGC",
+    "CRC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "P": "minecraft:piston",
+    "G": "enchantedwood:copper_gear",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:copper_atv_engine"
+  }
+}

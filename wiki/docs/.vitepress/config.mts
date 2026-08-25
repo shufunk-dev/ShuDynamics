@@ -21,6 +21,8 @@ export default defineConfig({
       { text: 'Materials', link: '/materials/' },
       { text: 'Tools & Armor', link: '/tools-and-armor/' },
       { text: 'Machines & Power', link: '/machines/' },
+      { text: 'Vehicles & ATV', link: '/vehicles-and-atv/' },
+      { text: 'Fuels & Roads', link: '/petrochemicals-and-fuels/' },
       { text: 'Storage Network', link: '/storage/' },
       { text: 'Roadmap & Future', link: '/backlog/' },
       { text: '🔥 CurseForge', link: 'https://www.curseforge.com/minecraft/mc-mods/shudynamics' }
@@ -67,6 +69,13 @@ export default defineConfig({
             { text: 'Furnaces & Coke Ovens', link: '/machines/furnaces-and-ovens' },
             { text: 'Refiners & Blast Furnaces', link: '/machines/refiners' },
             { text: 'Gas & Oxygen Systems', link: '/machines/oxygen-and-gas' }
+          ]
+        },
+        {
+          text: 'Vehicles, Fuels & Infrastructure',
+          items: [
+            { text: 'Modular All-Terrain Vehicles (ATV)', link: '/vehicles-and-atv/' },
+            { text: 'Petrochemicals, Refining & Road Pavers', link: '/petrochemicals-and-fuels/' }
           ]
         },
         {

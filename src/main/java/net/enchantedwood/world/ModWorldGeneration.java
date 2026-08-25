@@ -35,6 +35,12 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> RUBBER_TREE_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_tree"));
 
+    public static final RegistryKey<ConfiguredFeature<?, ?>> OIL_SAND_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand"));
+
+    public static final RegistryKey<PlacedFeature> OIL_SAND_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand"));
+
     public static void generateOres() {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
@@ -58,6 +64,17 @@ public class ModWorldGeneration {
                 BiomeSelectors.foundInOverworld(),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 RUBBER_TREE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(
+                        net.minecraft.world.biome.BiomeKeys.DESERT,
+                        net.minecraft.world.biome.BiomeKeys.BADLANDS,
+                        net.minecraft.world.biome.BiomeKeys.ERODED_BADLANDS,
+                        net.minecraft.world.biome.BiomeKeys.WOODED_BADLANDS
+                ),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                OIL_SAND_PLACED_KEY
         );
     }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "TST",
+    " T "
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "S": "enchantedwood:steel_rim_tire"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_studded_tire"
+  }
+}
