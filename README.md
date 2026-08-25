@@ -63,6 +63,11 @@
 
 ## 🛠️ Building & Compiling from Source
 
+> [!NOTE]
+> **Experimental / Bleeding-Edge Builds**: Compiling directly from source builds the latest development snapshot containing cutting-edge, experimental features that may still be in active testing. 
+> 
+> If you are looking for a **stable, thoroughly tested experience** for your regular survival worlds or modpacks, we strongly recommend downloading official release JARs from our **[GitHub Releases](https://github.com/shufunk-dev/ShuDynamics/releases)** page or directly from **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/shudynamics)**.
+
 ### Prerequisites
 * **Java Development Kit (JDK) 21** or higher.
 * Git.
@@ -84,7 +89,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-1.2.0.jar
+build/libs/shudynamics-1.3.0.jar
 ```
 
 ---
