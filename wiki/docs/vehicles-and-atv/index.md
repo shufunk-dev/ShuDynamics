@@ -1,6 +1,10 @@
 # Modular All-Terrain Vehicles (ATV)
 
-The **Modular All-Terrain Vehicle (ATV)** is high-speed exploration and cargo logistics machine designed for traversing rugged landscapes, mountains, caves, and paved highway networks across dimensions.
+::: warning 🧪 Experimental Feature (v1.3.0 Snapshot)
+This feature is part of the **v1.3.0 development snapshot** and is currently in active gameplay testing. Mechanics, fuel consumption rates, modular tiers, and crafting recipes are subject to balance adjustments prior to the official v1.3.0 release.
+:::
+
+The **Modular All-Terrain Vehicle (ATV)** is a high-speed exploration and cargo logistics machine designed for traversing rugged landscapes, mountains, caves, and paved highway networks across dimensions.
 
 ---
 

@@ -1,5 +1,9 @@
 # Petrochemicals, Refining & Road Infrastructure
 
+::: warning 🧪 Experimental Feature (v1.3.0 Snapshot)
+This feature is part of the **v1.3.0 development snapshot** and is currently in active gameplay testing. Distillation recipes, crop yields, and road paver energy costs are subject to balance adjustments prior to the official v1.3.0 release.
+:::
+
 ShuDynamics introduces a complete petrochemical and biofuels processing network. Refine crude deposits from arid biomes or ferment agricultural crops to power vehicles, machines, and construct automated highway networks.
 
 ---

@@ -72,10 +72,10 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Vehicles, Fuels & Infrastructure',
+          text: 'Vehicles & Fuels (🧪 v1.3 Experimental)',
           items: [
-            { text: 'Modular All-Terrain Vehicles (ATV)', link: '/vehicles-and-atv/' },
-            { text: 'Petrochemicals, Refining & Road Pavers', link: '/petrochemicals-and-fuels/' }
+            { text: 'Modular ATVs (🧪 Experimental)', link: '/vehicles-and-atv/' },
+            { text: 'Petrochemicals & Road Pavers (🧪 Experimental)', link: '/petrochemicals-and-fuels/' }
           ]
         },
         {
