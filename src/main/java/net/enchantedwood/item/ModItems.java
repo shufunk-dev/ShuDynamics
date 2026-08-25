@@ -730,6 +730,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
 
                 // Modular All-Terrain Vehicles (ATV) & Upgrades
+                entries.add(net.enchantedwood.block.ModBlocks.VEHICLE_FABRICATOR);
                 entries.add(ATV_ITEM);
                 entries.add(ATV_SEAT);
                 entries.add(RUBBER_TIRE);

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "enchantedwood:block/vehicle_fabricator_front",
+    "north": "enchantedwood:block/vehicle_fabricator_front",
+    "south": "enchantedwood:block/vehicle_fabricator_side",
+    "east": "enchantedwood:block/vehicle_fabricator_side",
+    "west": "enchantedwood:block/vehicle_fabricator_side",
+    "up": "enchantedwood:block/vehicle_fabricator_top",
+    "down": "enchantedwood:block/vehicle_fabricator_side"
+  }
+}

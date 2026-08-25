@@ -45,6 +45,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.FUEL_REFINERY_SCREEN_HANDLER, net.enchantedwood.screen.FuelRefineryScreen::new);
         HandledScreens.register(ModScreenHandlers.ROAD_PAVER_SCREEN_HANDLER, net.enchantedwood.screen.RoadPaverScreen::new);
         HandledScreens.register(ModScreenHandlers.ATV_SCREEN_HANDLER, net.enchantedwood.screen.AtvScreen::new);
+        HandledScreens.register(ModScreenHandlers.VEHICLE_FABRICATOR_SCREEN_HANDLER, net.enchantedwood.screen.VehicleFabricatorScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);

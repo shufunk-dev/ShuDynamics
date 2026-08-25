@@ -259,6 +259,8 @@
   "item.enchantedwood.corn_seeds": "Corn Kernels",
   "entity.enchantedwood.atv": "All-Terrain Vehicle (ATV)",
   "item.enchantedwood.atv": "All-Terrain Vehicle (ATV)",
+  "block.enchantedwood.vehicle_fabricator": "Vehicle Fabricator & Tuning Bay",
+  "container.enchantedwood.vehicle_fabricator": "Vehicle Fabricator",
   "item.enchantedwood.atv_seat": "Padded ATV Seat",
   "item.enchantedwood.rubber_tire": "Rubber Off-Road Tire",
   "item.enchantedwood.steel_rim_tire": "Steel-Rim Heavy Tire",

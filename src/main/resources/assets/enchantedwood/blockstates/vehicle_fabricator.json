@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "enchantedwood:block/vehicle_fabricator",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "enchantedwood:block/vehicle_fabricator",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "enchantedwood:block/vehicle_fabricator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "enchantedwood:block/vehicle_fabricator",
+      "y": 270
+    }
+  }
+}

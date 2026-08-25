@@ -40,6 +40,16 @@ The **Modular All-Terrain Vehicle (ATV)** is a high-speed exploration and cargo 
 
 ---
 
+## 🏭 Vehicle Fabricator & Tuning Bay
+
+The **Vehicle Fabricator & Tuning Bay** is the dedicated automotive workshop workstation for assembling and customizing modular ATVs:
+
+1. **Assembly / Fabrication**: Place your chosen **Seat**, **Engine**, **Chassis**, **Suspension**, **Tires (4)**, and optional **Cargo Trunk** into the blueprint grid, then click the **[ 🛠️ ]** button to synthesize your custom ATV.
+2. **Hot-Swap Modification**: Place any existing ATV into the top modification slot. The fabricator automatically unpacks the installed modules onto the workbench. Swap in upgraded engines, studded tires, or larger trunks, and click **[ 🛠️ ]** to apply upgrades!
+3. **Power Requirement**: Consumes **100 FE** per fabrication or modification operation. Connect power cables or insert an Energy Battery.
+
+---
+
 ## 🛠️ Modular Component Tiers
 
 ### 1. Engine Tiers

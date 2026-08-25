@@ -488,6 +488,16 @@ public class ModBlocks {
             Text.literal("§7Autonomous highway construction crawler. Consumes §e50 FE/step§7."),
             Text.literal("§8Clears a 3-wide path, lays Asphalt foundation, and advances forward."));
 
+    public static final Block VEHICLE_FABRICATOR = registerBlockWithTooltip("vehicle_fabricator",
+            new net.enchantedwood.block.custom.VehicleFabricatorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "vehicle_fabricator")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()),
+            Text.literal("§7Vehicle workshop for fabricating & modifying Modular ATVs."),
+            Text.literal("§8Assemble custom engines, chassis, tires, suspensions & trunks."));
+
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "corn_crop")))

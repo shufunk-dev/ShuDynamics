@@ -92,6 +92,10 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "atv"),
                     new ScreenHandlerType<>(AtvScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<VehicleFabricatorScreenHandler> VEHICLE_FABRICATOR_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "vehicle_fabricator"),
+                    new ScreenHandlerType<>(VehicleFabricatorScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }
