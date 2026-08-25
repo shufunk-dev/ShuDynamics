@@ -29,6 +29,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.event.PlayerFlightHandler.register();
         net.enchantedwood.event.PlayerHealthHandler.register();
         net.enchantedwood.event.WoodenShearsSheepHandler.register();
+        net.enchantedwood.event.CornSeedLootHandler.register();
 
         // Strippable Rubber Wood
         net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_LOG, ModBlocks.STRIPPED_RUBBER_LOG);
