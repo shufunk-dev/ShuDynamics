@@ -22,7 +22,9 @@ import net.enchantedwood.screen.EnchantedStorageTerminalScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
-    public static final int STORAGE_SLOTS = 54; // 6 rows x 9 columns
+    public static final int TOTAL_PAGES = 10;
+    public static final int PAGE_SIZE = 54;
+    public static final int STORAGE_SLOTS = TOTAL_PAGES * PAGE_SIZE; // 540 storage slots (10 full pages)
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(STORAGE_SLOTS, ItemStack.EMPTY);
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
@@ -150,6 +152,7 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
 
     @Override
     public ItemStack getStack(int slot) {
+        if (slot < 0 || slot >= inventory.size()) return ItemStack.EMPTY;
         return inventory.get(slot);
     }
 
@@ -169,11 +172,13 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
 
     @Override
     public void setStack(int slot, ItemStack stack) {
-        inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (slot >= 0 && slot < inventory.size()) {
+            inventory.set(slot, stack);
+            if (stack.getCount() > getMaxCountPerStack()) {
+                stack.setCount(getMaxCountPerStack());
+            }
+            markDirty();
         }
-        markDirty();
     }
 
     @Override
