@@ -18,7 +18,7 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public VehicleFabricatorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(VehicleFabricatorBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(5));
+        this(syncId, playerInventory, new SimpleInventory(VehicleFabricatorBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8));
     }
 
     public VehicleFabricatorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -132,11 +132,24 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
         return this.propertyDelegate.get(4) > 0;
     }
 
+    public int getProgress() {
+        return this.propertyDelegate.get(5);
+    }
+
+    public int getMaxProgress() {
+        int max = this.propertyDelegate.get(6);
+        return max > 0 ? max : 200;
+    }
+
+    public boolean isFabricating() {
+        return this.propertyDelegate.get(7) > 0;
+    }
+
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
         if (id == 0) {
             if (this.inventory instanceof VehicleFabricatorBlockEntity fabricator) {
-                return fabricator.fabricateOrUpgrade();
+                return fabricator.startFabrication();
             }
         }
         return false;

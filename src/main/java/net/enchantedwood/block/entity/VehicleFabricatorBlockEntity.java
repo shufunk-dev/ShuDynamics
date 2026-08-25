@@ -16,6 +16,8 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
@@ -45,6 +47,10 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(10000, 200);
 
+    private int progress = 0;
+    private int maxProgress = 200;
+    private boolean isFabricating = false;
+
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
@@ -54,6 +60,9 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                 case 2 -> energyStorage.getMaxEnergy() & 0xFFFF;
                 case 3 -> (energyStorage.getMaxEnergy() >> 16) & 0xFFFF;
                 case 4 -> canFabricate() ? 1 : 0;
+                case 5 -> progress;
+                case 6 -> maxProgress;
+                case 7 -> isFabricating ? 1 : 0;
                 default -> 0;
             };
         }
@@ -71,12 +80,15 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                     int low = current & 0xFFFF;
                     energyStorage.setEnergy(low | ((value & 0xFFFF) << 16));
                 }
+                case 5 -> progress = value;
+                case 6 -> maxProgress = value;
+                case 7 -> isFabricating = (value != 0);
             }
         }
 
         @Override
         public int size() {
-            return 5;
+            return 8;
         }
     };
 
@@ -110,6 +122,9 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         this.inventory.clear();
         Inventories.readData(view, this.inventory);
         this.energyStorage.readData(view);
+        this.progress = view.getInt("Progress", 0);
+        this.maxProgress = view.getInt("MaxProgress", 200);
+        this.isFabricating = view.getBoolean("IsFabricating", false);
     }
 
     @Override
@@ -117,6 +132,9 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         super.writeData(view);
         Inventories.writeData(view, this.inventory);
         this.energyStorage.writeData(view);
+        view.putInt("Progress", this.progress);
+        view.putInt("MaxProgress", this.maxProgress);
+        view.putBoolean("IsFabricating", this.isFabricating);
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, VehicleFabricatorBlockEntity entity) {
@@ -134,7 +152,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
 
         // 2. Auto-unpack ATV when placed into VEHICLE_SLOT if module slots 1-6 are empty
         ItemStack atvStack = entity.inventory.get(VEHICLE_SLOT);
-        if (!atvStack.isEmpty() && atvStack.isOf(ModItems.ATV_ITEM)) {
+        if (!entity.isFabricating && !atvStack.isEmpty() && atvStack.isOf(ModItems.ATV_ITEM)) {
             boolean modulesEmpty = entity.inventory.get(SEAT_SLOT).isEmpty() &&
                                   entity.inventory.get(ENGINE_SLOT).isEmpty() &&
                                   entity.inventory.get(CHASSIS_SLOT).isEmpty() &&
@@ -155,6 +173,38 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                 }
             }
         }
+
+        // 3. Active Assembly / Tuning Process
+        if (entity.isFabricating) {
+            if (!entity.canFabricate()) {
+                // Cancel if ingredients were removed or output got blocked
+                entity.isFabricating = false;
+                entity.progress = 0;
+                entity.markDirty();
+                return;
+            }
+
+            // Power consumption: 5 FE/t during fabrication
+            if (entity.energyStorage.getEnergy() >= 5) {
+                entity.energyStorage.extractEnergy(5, false);
+                entity.progress++;
+
+                // Fabrication audio & mechanical sounds
+                if (entity.progress % 30 == 0) {
+                    world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.4f, 1.2f);
+                } else if (entity.progress % 15 == 0) {
+                    world.playSound(null, pos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 0.5f, 1.4f);
+                }
+
+                // Completion
+                if (entity.progress >= entity.maxProgress) {
+                    entity.finishFabrication();
+                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 0.8f, 1.2f);
+                    world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.BLOCKS, 0.6f, 1.5f);
+                }
+                entity.markDirty();
+            }
+        }
     }
 
     private void unpackModuleFromTag(NbtCompound tag, String key, int slot, int count) {
@@ -170,6 +220,42 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         }
     }
 
+    public int calculateTotalTime() {
+        int baseTime = 60; // 3 seconds base alignment
+
+        // Engine Tier Time
+        ItemStack engine = inventory.get(ENGINE_SLOT);
+        if (engine.isOf(ModItems.COPPER_ATV_ENGINE)) baseTime += 40;        // +2.0s
+        else if (engine.isOf(ModItems.ALUMINUM_ATV_ENGINE)) baseTime += 80;  // +4.0s
+        else if (engine.isOf(ModItems.STEEL_ATV_ENGINE)) baseTime += 140;   // +7.0s
+        else if (engine.isOf(ModItems.TITANIUM_ATV_ENGINE)) baseTime += 220;// +11.0s
+
+        // Chassis Tier Time
+        ItemStack chassis = inventory.get(CHASSIS_SLOT);
+        if (chassis.isOf(ModItems.ALUMINUM_ATV_CHASSIS)) baseTime += 40;    // +2.0s
+        else if (chassis.isOf(ModItems.STEEL_ATV_CHASSIS)) baseTime += 80;  // +4.0s
+        else if (chassis.isOf(ModItems.TITANIUM_ATV_CHASSIS)) baseTime += 160; // +8.0s
+
+        // Tires Tier Time
+        ItemStack tires = inventory.get(TIRES_SLOT);
+        if (tires.isOf(ModItems.RUBBER_TIRE)) baseTime += 20;               // +1.0s
+        else if (tires.isOf(ModItems.STEEL_RIM_TIRE)) baseTime += 40;       // +2.0s
+        else if (tires.isOf(ModItems.TITANIUM_STUDDED_TIRE)) baseTime += 80;// +4.0s
+
+        // Suspension Tier Time
+        ItemStack suspension = inventory.get(SUSPENSION_SLOT);
+        if (suspension.isOf(ModItems.STEEL_SUSPENSION)) baseTime += 30;     // +1.5s
+        else if (suspension.isOf(ModItems.TITANIUM_SUSPENSION)) baseTime += 60; // +3.0s
+
+        // Cargo Trunk Tier Time
+        ItemStack trunk = inventory.get(TRUNK_SLOT);
+        if (trunk.isOf(ModItems.SMALL_CARGO_TRUNK)) baseTime += 20;         // +1.0s
+        else if (trunk.isOf(ModItems.MEDIUM_CARGO_TRUNK)) baseTime += 40;   // +2.0s
+        else if (trunk.isOf(ModItems.LARGE_CARGO_TRUNK)) baseTime += 80;    // +4.0s
+
+        return baseTime;
+    }
+
     public boolean canFabricate() {
         boolean hasSeat = inventory.get(SEAT_SLOT).isOf(ModItems.ATV_SEAT);
         boolean hasEngine = isEngine(inventory.get(ENGINE_SLOT));
@@ -181,14 +267,17 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         return hasSeat && hasEngine && hasChassis && hasSuspension && hasTires && outputEmpty;
     }
 
-    public boolean fabricateOrUpgrade() {
-        if (!canFabricate()) return false;
+    public boolean startFabrication() {
+        if (!canFabricate() || isFabricating) return false;
 
-        // Energy requirement: 100 FE
-        if (energyStorage.getEnergy() >= 100) {
-            energyStorage.extractEnergy(100, false);
-        }
+        this.maxProgress = calculateTotalTime();
+        this.progress = 0;
+        this.isFabricating = true;
+        markDirty();
+        return true;
+    }
 
+    private void finishFabrication() {
         ItemStack atvResult = new ItemStack(ModItems.ATV_ITEM);
         NbtCompound tag = new NbtCompound();
 
@@ -243,8 +332,9 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         }
 
         inventory.set(OUTPUT_SLOT, atvResult);
+        this.isFabricating = false;
+        this.progress = 0;
         markDirty();
-        return true;
     }
 
     public static boolean isEngine(ItemStack stack) {

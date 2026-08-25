@@ -60,10 +60,32 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
             int energyY = (y + 19) + (94 - scaledHeight);
             context.fill(x + 9, energyY, x + 19, y + 19 + 94, 0xFFFF2222);
         }
+
+        // Draw Assembly Progress Arrow (x + 138, y + 45, w: 24, h: 4)
+        if (this.handler.isFabricating()) {
+            int progress = this.handler.getProgress();
+            int maxProgress = this.handler.getMaxProgress();
+            if (maxProgress > 0) {
+                int progressWidth = Math.min(24, (int) ((long) progress * 24 / maxProgress));
+                // Cyan / Green active fabrication progress bar
+                context.fill(x + 138, y + 46, x + 138 + progressWidth, y + 49, 0xFF00FFCC);
+            }
+        }
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // Update assemble button text / active state
+        if (this.assembleButton != null) {
+            if (this.handler.isFabricating()) {
+                this.assembleButton.setMessage(Text.literal("⏳"));
+                this.assembleButton.active = false;
+            } else {
+                this.assembleButton.setMessage(Text.literal("🛠️"));
+                this.assembleButton.active = this.handler.canFabricate();
+            }
+        }
+
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
@@ -78,17 +100,27 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
             context.drawTooltip(this.textRenderer, List.of(
                     Text.literal("§e⚡ Energy Storage"),
                     Text.literal(String.format("§f%,d / %,d FE", energy, maxEnergy)),
-                    Text.literal("§7Draws 100 FE per assembly.")
+                    Text.literal("§7Draws 5 FE/t during fabrication.")
             ), mouseX, mouseY);
         }
 
-        // Assemble Button Hover Tooltip (x + 138 .. 162, y + 52 .. 70)
-        if (mouseX >= x + 138 && mouseX <= x + 162 && mouseY >= y + 52 && mouseY <= y + 70) {
-            boolean ready = this.handler.canFabricate();
-            if (ready) {
+        // Assemble Button & Progress Hover Tooltip (x + 138 .. 162, y + 45 .. 70)
+        if (mouseX >= x + 138 && mouseX <= x + 162 && mouseY >= y + 45 && mouseY <= y + 70) {
+            if (this.handler.isFabricating()) {
+                int progress = this.handler.getProgress();
+                int maxProgress = this.handler.getMaxProgress();
+                double remainingSeconds = (double) (maxProgress - progress) / 20.0;
+                int percent = (int) ((double) progress * 100.0 / maxProgress);
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b⚙️ Fabrication in Progress..."),
+                        Text.literal(String.format("§fProgress: §a%d%% §7(%.1fs remaining)", percent, remainingSeconds)),
+                        Text.literal("§8Hydraulic tooling and alignment in progress.")
+                ), mouseX, mouseY);
+            } else if (this.handler.canFabricate()) {
                 context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§a🛠️ Assemble / Apply Upgrades"),
-                        Text.literal("§7Click to synthesize your custom Modular ATV!")
+                        Text.literal("§7Click to start tiered assembly timer!"),
+                        Text.literal("§8Higher tier components require longer precision fabrication.")
                 ), mouseX, mouseY);
             } else {
                 context.drawTooltip(this.textRenderer, List.of(
