@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "TET",
+    "TCT"
+  ],
+  "key": {
+    "S": "enchantedwood:atv_seat",
+    "T": "enchantedwood:rubber_tire",
+    "E": "enchantedwood:aluminum_atv_engine",
+    "C": "enchantedwood:aluminum_atv_chassis"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:atv"
+  }
+}

@@ -42,35 +42,131 @@ public class ModItems {
     public static final Item RUBBER = registerItem("rubber", Item::new);
 
     // Agriculture & Crops
-    public static final Item CORN = registerItem("corn", settings -> new Item(settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.6f).build())));
-    public static final Item ROASTED_CORN = registerItem("roasted_corn", settings -> new Item(settings.food(new FoodComponent.Builder().nutrition(7).saturationModifier(0.8f).build())));
-    public static final Item CORN_SEEDS = registerItem("corn_seeds", settings -> new BlockItem(net.enchantedwood.block.ModBlocks.CORN_CROP, settings));
+    public static final Item CORN = registerItem("corn", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.6f).build()),
+            Text.literal("§7Can be §eRoasted §7on fire for food, or distilled in a"),
+            Text.literal("§eFuel Refinery §7(§62 Corn + Empty Canister§7) into §aBiofuel§7.")
+    ));
+    public static final Item ROASTED_CORN = registerItem("roasted_corn", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(7).saturationModifier(0.8f).build()),
+            Text.literal("§aDelicious roasted sweet corn. Restores 7 food points.")
+    ));
+    public static final Item CORN_SEEDS = registerItem("corn_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.CORN_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to grow 8-stage Sweet Corn."),
+            Text.literal("§8Obtained by breaking wild grass or crafting with Enchanted Dust.")
+    ));
 
     // Petrochemicals & Fuels
-    public static final Item CRUDE_OIL_SLUDGE = registerItem("crude_oil_sludge", Item::new);
-    public static final Item MINERAL_TAR = registerItem("mineral_tar", Item::new);
-    public static final Item BIOFUEL_CANISTER = registerItem("biofuel_canister", settings -> new Item(settings.maxCount(16)));
-    public static final Item GASOLINE_CANISTER = registerItem("gasoline_canister", settings -> new Item(settings.maxCount(16)));
-    public static final Item HIGH_OCTANE_FUEL_CANISTER = registerItem("high_octane_fuel_canister", settings -> new Item(settings.maxCount(16)));
+    public static final Item CRUDE_OIL_SLUDGE = registerItem("crude_oil_sludge", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Distill in a §eFuel Refinery §7with an §fEmpty Gas Canister§7."),
+            Text.literal("§8Outputs: §6Gasoline Canister §8+ §8Mineral Tar §8byproduct.")
+    ));
+    public static final Item MINERAL_TAR = registerItem("mineral_tar", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Petrochemical byproduct used to synthesize §8Asphalt Blocks§7."),
+            Text.literal("§8Craft with Cobblestone/Deepslate + Gravel.")
+    ));
+    public static final Item BIOFUEL_CANISTER = registerItem("biofuel_canister", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§aEco-Friendly Ethanol Fuel §7for §eATV Engines§7."),
+            Text.literal("§8Synthesized in Fuel Refinery from Corn, Wheat, or Potatoes.")
+    ));
+    public static final Item GASOLINE_CANISTER = registerItem("gasoline_canister", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§6Refined Hydrocarbon Fuel §7for §eATV Engines§7."),
+            Text.literal("§8Combine with 2 Corn in Fuel Refinery for §dHigh-Octane Racing Fuel§8.")
+    ));
+    public static final Item HIGH_OCTANE_FUEL_CANISTER = registerItem("high_octane_fuel_canister", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§dPremium Racing Fuel §7providing maximum acceleration & top speed."),
+            Text.literal("§8Required for Titanium Twin-Turbo ATV Engines.")
+    ));
 
     // Modular All-Terrain Vehicle (ATV) & Components
     public static final Item ATV_ITEM = registerItem("atv", settings -> new net.enchantedwood.item.custom.AtvItem(settings.maxCount(1)));
-    public static final Item ATV_SEAT = registerItem("atv_seat", Item::new);
-    public static final Item RUBBER_TIRE = registerItem("rubber_tire", Item::new);
-    public static final Item STEEL_RIM_TIRE = registerItem("steel_rim_tire", Item::new);
-    public static final Item TITANIUM_STUDDED_TIRE = registerItem("titanium_studded_tire", Item::new);
-    public static final Item COPPER_ATV_ENGINE = registerItem("copper_atv_engine", Item::new);
-    public static final Item ALUMINUM_ATV_ENGINE = registerItem("aluminum_atv_engine", Item::new);
-    public static final Item STEEL_ATV_ENGINE = registerItem("steel_atv_engine", Item::new);
-    public static final Item TITANIUM_ATV_ENGINE = registerItem("titanium_atv_engine", Item::new);
-    public static final Item STEEL_SUSPENSION = registerItem("steel_suspension", Item::new);
-    public static final Item TITANIUM_SUSPENSION = registerItem("titanium_suspension", Item::new);
-    public static final Item ALUMINUM_ATV_CHASSIS = registerItem("aluminum_atv_chassis", Item::new);
-    public static final Item STEEL_ATV_CHASSIS = registerItem("steel_atv_chassis", Item::new);
-    public static final Item TITANIUM_ATV_CHASSIS = registerItem("titanium_atv_chassis", Item::new);
-    public static final Item SMALL_CARGO_TRUNK = registerItem("small_cargo_trunk", Item::new);
-    public static final Item MEDIUM_CARGO_TRUNK = registerItem("medium_cargo_trunk", Item::new);
-    public static final Item LARGE_CARGO_TRUNK = registerItem("large_cargo_trunk", Item::new);
+    public static final Item ATV_SEAT = registerItem("atv_seat", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Core component for assembling an All-Terrain Vehicle."),
+            Text.literal("§8Craft with Leather + Black Wool + Iron Ingot.")
+    ));
+    public static final Item RUBBER_TIRE = registerItem("rubber_tire", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Standard vulcanized rubber tire with balanced all-terrain grip."),
+            Text.literal("§8Craft with 4 Rubber around 1 Iron Ingot.")
+    ));
+    public static final Item STEEL_RIM_TIRE = registerItem("steel_rim_tire", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Reinforced steel rim tire with improved highway stability."),
+            Text.literal("§8Craft with Rubber Tire + Steel Ingot.")
+    ));
+    public static final Item TITANIUM_STUDDED_TIRE = registerItem("titanium_studded_tire", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§bStudded ice-grip tire for maximum traction on snow & ice."),
+            Text.literal("§8Craft with Rubber Tire + Titanium Ingot.")
+    ));
+    public static final Item COPPER_ATV_ENGINE = registerItem("copper_atv_engine", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§eStarter Engine §8(~25 km/h) §7• Fuel: Biofuel / Gasoline"),
+            Text.literal("§8Craft with Copper Ingots, Piston, Copper Gear, and Redstone.")
+    ));
+    public static final Item ALUMINUM_ATV_ENGINE = registerItem("aluminum_atv_engine", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§bAgile V4 Engine §8(~40 km/h) §7• Fuel: Biofuel / Gasoline"),
+            Text.literal("§8Craft with Aluminum Ingots, Piston, Aluminum Gear, and Redstone.")
+    ));
+    public static final Item STEEL_ATV_ENGINE = registerItem("steel_atv_engine", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7High-Torque V8 Engine §8(~55 km/h) §7• Fuel: Gasoline / High-Octane"),
+            Text.literal("§8Craft with Steel Ingots, Piston, Steel Gear, and Enchanted Redstone.")
+    ));
+    public static final Item TITANIUM_ATV_ENGINE = registerItem("titanium_atv_engine", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§dTwin-Turbo Nitro Engine §8(~80 km/h) §7• Fuel: High-Octane Racing Fuel"),
+            Text.literal("§8Craft with Titanium Ingots, Piston, Enchanted Steel Gear, and Enchanted Redstone.")
+    ));
+    public static final Item STEEL_SUSPENSION = registerItem("steel_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Shock absorbers providing §e1.0-block step-up §7& fall absorption."),
+            Text.literal("§8Craft with Steel Ingots + Iron Bars.")
+    ));
+    public static final Item TITANIUM_SUSPENSION = registerItem("titanium_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Heavy-duty suspension providing §e1.5-block step-up §7& full fall negation."),
+            Text.literal("§8Craft with Titanium Ingots + Iron Bars.")
+    ));
+    public static final Item ALUMINUM_ATV_CHASSIS = registerItem("aluminum_atv_chassis", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§bLightweight racing chassis frame for agile handling."),
+            Text.literal("§8Craft with 7 Aluminum Ingots in an H-shape.")
+    ));
+    public static final Item STEEL_ATV_CHASSIS = registerItem("steel_atv_chassis", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Reinforced steel chassis offering balanced structural durability."),
+            Text.literal("§8Craft with 7 Steel Ingots in an H-shape.")
+    ));
+    public static final Item TITANIUM_ATV_CHASSIS = registerItem("titanium_atv_chassis", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§dHeavy hazard-shielded chassis built for dimensional exploration."),
+            Text.literal("§8Craft with 7 Titanium Ingots in an H-shape.")
+    ));
+    public static final Item SMALL_CARGO_TRUNK = registerItem("small_cargo_trunk", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Adds §e9 inventory slots §7to the ATV rear cargo rack."),
+            Text.literal("§8Craft with Iron Ingots around a Chest.")
+    ));
+    public static final Item MEDIUM_CARGO_TRUNK = registerItem("medium_cargo_trunk", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Adds §e18 inventory slots §7to the ATV rear cargo rack."),
+            Text.literal("§8Craft with Steel Ingots around a Small Cargo Trunk.")
+    ));
+    public static final Item LARGE_CARGO_TRUNK = registerItem("large_cargo_trunk", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Adds §e27 inventory slots §7to the ATV rear cargo rack."),
+            Text.literal("§8Craft with Titanium Ingots around a Medium Cargo Trunk.")
+    ));
 
     // Base Gears
     public static final Item IRON_GEAR = registerItem("iron_gear", settings -> new GearItem(GearTier.IRON, false, settings));

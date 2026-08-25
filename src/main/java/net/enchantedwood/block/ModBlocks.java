@@ -10,6 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.block.custom.EnchantedFurnaceBlock;
@@ -439,46 +440,53 @@ public class ModBlocks {
                     .resistance(1200.0f)
                     .requiresTool()));
 
-    public static final Block OIL_SAND = registerBlock("oil_sand",
+    public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
             new Block(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))
                     .sounds(BlockSoundGroup.SAND)
                     .hardness(0.8f)
-                    .resistance(0.8f)));
+                    .resistance(0.8f)),
+            Text.literal("§7Mine with a shovel in deserts/badlands to gather §6Crude Oil Sludge§7."));
 
-    public static final Block ASPHALT_BLOCK = registerBlock("asphalt_block",
+    public static final Block ASPHALT_BLOCK = registerBlockWithTooltip("asphalt_block",
             new net.enchantedwood.block.custom.AsphaltBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_block")))
                     .sounds(BlockSoundGroup.STONE)
                     .hardness(2.0f)
                     .resistance(6.0f)
-                    .requiresTool()));
+                    .requiresTool()),
+            Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
-    public static final Block ASPHALT_SLAB = registerBlock("asphalt_slab",
+    public static final Block ASPHALT_SLAB = registerBlockWithTooltip("asphalt_slab",
             new net.minecraft.block.SlabBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_slab")))
                     .sounds(BlockSoundGroup.STONE)
                     .hardness(2.0f)
                     .resistance(6.0f)
-                    .requiresTool()));
+                    .requiresTool()),
+            Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
-    public static final Block FUEL_REFINERY = registerBlock("fuel_refinery",
+    public static final Block FUEL_REFINERY = registerBlockWithTooltip("fuel_refinery",
             new net.enchantedwood.block.custom.FuelRefineryBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery")))
                     .sounds(BlockSoundGroup.METAL)
                     .hardness(4.0f)
                     .resistance(8.0f)
                     .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.FuelRefineryBlock.LIT) ? 13 : 0)));
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.FuelRefineryBlock.LIT) ? 13 : 0)),
+            Text.literal("§7Fractional distillation chamber. Consumes §e20 FE/t§7."),
+            Text.literal("§8Distills Crude Sludge into Gasoline & crops into Biofuel."));
 
-    public static final Block ROAD_PAVER = registerBlock("road_paver",
+    public static final Block ROAD_PAVER = registerBlockWithTooltip("road_paver",
             new net.enchantedwood.block.custom.RoadPaverBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver")))
                     .sounds(BlockSoundGroup.METAL)
                     .hardness(4.0f)
                     .resistance(8.0f)
                     .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverBlock.PAVING) ? 10 : 0)));
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverBlock.PAVING) ? 10 : 0)),
+            Text.literal("§7Autonomous highway construction crawler. Consumes §e50 FE/step§7."),
+            Text.literal("§8Clears a 3-wide path, lays Asphalt foundation, and advances forward."));
 
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
@@ -501,6 +509,16 @@ public class ModBlocks {
 
         Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
         Registry.register(Registries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey()));
+
+        return registeredBlock;
+    }
+
+    private static Block registerBlockWithTooltip(String name, Block block, Text... tooltips) {
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+
+        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
+        Registry.register(Registries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipBlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey(), tooltips));
 
         return registeredBlock;
     }
