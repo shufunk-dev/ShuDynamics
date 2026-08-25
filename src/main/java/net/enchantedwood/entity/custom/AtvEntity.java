@@ -18,6 +18,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
@@ -94,13 +95,34 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         this.dataTracker.set(MAX_FUEL, Math.max(1, max));
     }
 
+    @Override
     public boolean isAttackable() {
+        return true;
+    }
+
+    @Override
+    public boolean canHit() {
+        return !this.isRemoved();
+    }
+
+    @Override
+    public boolean isCollidable(Entity other) {
         return true;
     }
 
     @Override
     public boolean isPushable() {
         return true;
+    }
+
+    @Override
+    public boolean collidesWith(Entity other) {
+        return (other.isCollidable(this) || other.isPushable()) && !this.isConnectedThroughVehicle(other);
+    }
+
+    @Override
+    protected Vec3d getPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scale) {
+        return new Vec3d(0.0, 0.45 * scale, 0.0);
     }
 
     @Override
@@ -157,6 +179,15 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         NbtCompound tag = new NbtCompound();
         tag.putInt("FuelLevel", getFuelLevel());
         tag.putInt("MaxFuel", getMaxFuel());
+
+        for (int i = 0; i < TOTAL_INVENTORY_SIZE; i++) {
+            ItemStack s = this.inventory.get(i);
+            if (!s.isEmpty()) {
+                tag.putString("Slot_" + i, Registries.ITEM.getId(s.getItem()).toString());
+                tag.putInt("Count_" + i, s.getCount());
+            }
+        }
+
         stack.set(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.of(tag));
     }
 
@@ -167,6 +198,20 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             int fuel = tag.getInt("FuelLevel", 0);
             int max = tag.getInt("MaxFuel", 1000);
             setFuelLevel(fuel, max);
+
+            this.inventory.clear();
+            for (int i = 0; i < TOTAL_INVENTORY_SIZE; i++) {
+                if (tag.contains("Slot_" + i)) {
+                    String itemId = tag.getString("Slot_" + i).orElse("");
+                    if (!itemId.isEmpty()) {
+                        net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(itemId);
+                        if (Registries.ITEM.containsId(id)) {
+                            int count = tag.getInt("Count_" + i).orElse(1);
+                            this.inventory.set(i, new ItemStack(Registries.ITEM.get(id), Math.max(1, count)));
+                        }
+                    }
+                }
+            }
         }
     }
 
