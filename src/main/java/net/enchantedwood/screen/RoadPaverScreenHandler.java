@@ -1,6 +1,10 @@
 package net.enchantedwood.screen;
 
 import net.enchantedwood.block.ModBlocks;
+import net.enchantedwood.block.entity.RoadPaverBlockEntity;
+import net.enchantedwood.energy.EnergyProvider;
+import net.enchantedwood.energy.ItemEnergyProvider;
+import net.enchantedwood.item.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -16,12 +20,12 @@ public class RoadPaverScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public RoadPaverScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(10), new ArrayPropertyDelegate(7));
+        this(syncId, playerInventory, new SimpleInventory(RoadPaverBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(9));
     }
 
     public RoadPaverScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.ROAD_PAVER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 10);
+        checkSize(inventory, RoadPaverBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
@@ -41,7 +45,22 @@ public class RoadPaverScreenHandler extends ScreenHandler {
         }
 
         // Slot 9: Battery Charge Slot (x=12, y=53)
-        this.addSlot(new Slot(inventory, 9, 12, 53));
+        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.BATTERY_SLOT, 12, 53) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
+            }
+        });
+
+        // Slot 10: Engine Fuel Slot (x=148, y=53)
+        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.FUEL_SLOT, 148, 53) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isOf(ModItems.GASOLINE_CANISTER) || stack.isOf(ModItems.BIOFUEL_CANISTER)
+                        || stack.isOf(ModItems.HIGH_OCTANE_FUEL_CANISTER) || stack.isOf(net.minecraft.item.Items.COAL)
+                        || stack.isOf(net.minecraft.item.Items.CHARCOAL) || stack.isOf(ModItems.COKE_COAL);
+            }
+        });
 
         // Player Inventory
         for (int row = 0; row < 3; ++row) {
@@ -86,6 +105,22 @@ public class RoadPaverScreenHandler extends ScreenHandler {
         return maxEnergy != 0 && energy != 0 ? (int) (energy * energyBarHeight / maxEnergy) : 0;
     }
 
+    public int getFuelLevel() {
+        return propertyDelegate.get(7);
+    }
+
+    public int getMaxFuel() {
+        int max = propertyDelegate.get(8);
+        return max > 0 ? max : 3000;
+    }
+
+    public int getScaledFuel() {
+        int fuel = getFuelLevel();
+        int maxFuel = getMaxFuel();
+        int fuelBarHeight = 36;
+        return maxFuel != 0 && fuel != 0 ? (fuel * fuelBarHeight / maxFuel) : 0;
+    }
+
     @Override
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
@@ -93,12 +128,22 @@ public class RoadPaverScreenHandler extends ScreenHandler {
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < 10) {
-                if (!this.insertItem(originalStack, 10, this.slots.size(), true)) {
+            if (invSlot < RoadPaverBlockEntity.INVENTORY_SIZE) {
+                if (!this.insertItem(originalStack, RoadPaverBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 10, false)) {
-                return ItemStack.EMPTY;
+            } else {
+                if (originalStack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || originalStack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+                    if (!this.insertItem(originalStack, 0, 9, false)) return ItemStack.EMPTY;
+                } else if (originalStack.getItem() instanceof ItemEnergyProvider || originalStack.getItem() instanceof EnergyProvider) {
+                    if (!this.insertItem(originalStack, RoadPaverBlockEntity.BATTERY_SLOT, RoadPaverBlockEntity.BATTERY_SLOT + 1, false)) return ItemStack.EMPTY;
+                } else if (originalStack.isOf(ModItems.GASOLINE_CANISTER) || originalStack.isOf(ModItems.BIOFUEL_CANISTER)
+                        || originalStack.isOf(ModItems.HIGH_OCTANE_FUEL_CANISTER) || originalStack.isOf(net.minecraft.item.Items.COAL)
+                        || originalStack.isOf(net.minecraft.item.Items.CHARCOAL) || originalStack.isOf(ModItems.COKE_COAL)) {
+                    if (!this.insertItem(originalStack, RoadPaverBlockEntity.FUEL_SLOT, RoadPaverBlockEntity.FUEL_SLOT + 1, false)) return ItemStack.EMPTY;
+                } else {
+                    return ItemStack.EMPTY;
+                }
             }
 
             if (originalStack.isEmpty()) {

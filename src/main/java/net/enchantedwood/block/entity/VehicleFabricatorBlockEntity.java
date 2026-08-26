@@ -140,11 +140,17 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, VehicleFabricatorBlockEntity entity) {
         // 1. Charge from battery slot if present
         ItemStack batteryStack = entity.inventory.get(BATTERY_SLOT);
-        if (!batteryStack.isEmpty() && batteryStack.getItem() instanceof EnergyProvider provider) {
-            EnergyStorage batteryStorage = provider.getEnergyStorage(null);
+        if (!batteryStack.isEmpty()) {
+            EnergyStorage batteryStorage = null;
+            if (batteryStack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider itemProvider) {
+                batteryStorage = itemProvider.getEnergyStorage(batteryStack);
+            } else if (batteryStack.getItem() instanceof EnergyProvider provider) {
+                batteryStorage = provider.getEnergyStorage(null);
+            }
+
             if (batteryStorage != null && batteryStorage.getEnergy() > 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
                 int needed = entity.energyStorage.getMaxEnergy() - entity.energyStorage.getEnergy();
-                int extracted = batteryStorage.extractEnergy(Math.min(needed, 100), false);
+                int extracted = batteryStorage.extractEnergy(Math.min(needed, 500), false);
                 entity.energyStorage.insertEnergy(extracted, false);
                 entity.markDirty();
             }

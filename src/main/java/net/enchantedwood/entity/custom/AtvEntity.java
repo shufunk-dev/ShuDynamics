@@ -438,7 +438,13 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 fuelStack.decrement(1);
             }
             // 5. Battery Charge
-            else if (fuelStack.getItem() instanceof EnergyProvider provider) {
+            else if (fuelStack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider itemProvider) {
+                EnergyStorage storage = itemProvider.getEnergyStorage(fuelStack);
+                if (storage != null && storage.getEnergy() >= 100) {
+                    int extracted = storage.extractEnergy(100, false);
+                    setFuelLevel(getFuelLevel() + extracted, 5000);
+                }
+            } else if (fuelStack.getItem() instanceof EnergyProvider provider) {
                 EnergyStorage storage = provider.getEnergyStorage(null);
                 if (storage != null && storage.getEnergy() >= 100) {
                     int extracted = storage.extractEnergy(100, false);

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ARA",
+    "ABA",
+    "ARA"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "R": "minecraft:redstone",
+    "B": "enchantedwood:copper_battery_pack"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:aluminum_battery_pack"
+  }
+}

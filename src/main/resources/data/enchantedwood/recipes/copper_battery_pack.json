@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CRC",
+    "CUC",
+    "CRC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:redstone",
+    "U": "enchantedwood:rubber"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:copper_battery_pack"
+  }
+}

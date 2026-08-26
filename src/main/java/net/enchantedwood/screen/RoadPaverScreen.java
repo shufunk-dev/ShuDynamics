@@ -35,11 +35,21 @@ public class RoadPaverScreen extends HandledScreen<RoadPaverScreenHandler> {
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 13, y + 51 - energyHeight, 176.0f, 36.0f - energyHeight, 12, energyHeight, 256, 256);
         }
 
-        // 2. Active Paving Indicator
+        // 2. Fuel Gauge Bar (x + 149, y + 15, width 14, height 36)
+        int fuelHeight = this.handler.getScaledFuel();
+        if (fuelHeight > 0) {
+            context.fillGradient(x + 149, y + 51 - fuelHeight, x + 163, y + 51, 0xFFFF8800, 0xFFCC3300);
+        }
+
+        // 3. Section Labels
+        context.drawText(this.textRenderer, Text.literal("§7Bat"), x + 10, y + 43, 0x888888, false);
+        context.drawText(this.textRenderer, Text.literal("§7Gas"), x + 148, y + 43, 0x888888, false);
+
+        // 4. Active Paving Indicator
         if (this.handler.isPaving()) {
-            context.drawText(this.textRenderer, Text.literal("§a▶ PAVING ROAD"), x + 62, y + 74, 0x55FF55, false);
+            context.drawText(this.textRenderer, Text.literal("§a▶ PAVING ROAD"), x + 50, y + 74, 0x55FF55, false);
         } else {
-            context.drawText(this.textRenderer, Text.literal("§7⏸ IDLE"), x + 62, y + 74, 0x888888, false);
+            context.drawText(this.textRenderer, Text.literal("§7⏸ IDLE"), x + 72, y + 74, 0x888888, false);
         }
     }
 
@@ -52,12 +62,23 @@ public class RoadPaverScreen extends HandledScreen<RoadPaverScreenHandler> {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
 
-        // Energy Tooltip
+        // Energy Tooltip (Left)
         if (mouseX >= x + 12 && mouseX <= x + 26 && mouseY >= y + 14 && mouseY <= y + 52) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§e⚡ Energy Storage"),
+                    Text.literal("§e⚡ Electrical Guidance System"),
                     Text.literal(String.format("§f%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
-                    Text.literal("§7Draws 50 FE per 3-block row")
+                    Text.literal("§7Draws 50 FE per 3-block row"),
+                    Text.literal("§8Powers onboard GPS & laser leveling")
+            ), mouseX, mouseY);
+        }
+
+        // Fuel Tooltip (Right)
+        if (mouseX >= x + 147 && mouseX <= x + 165 && mouseY >= y + 14 && mouseY <= y + 52) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§6🔥 Engine Combustion Fuel"),
+                    Text.literal(String.format("§f%,d / %,d Fuel", this.handler.getFuelLevel(), this.handler.getMaxFuel())),
+                    Text.literal("§7Accepts Gasoline, Biofuel, High-Octane, or Coal"),
+                    Text.literal("§8Powers heavy compaction roller")
             ), mouseX, mouseY);
         }
     }

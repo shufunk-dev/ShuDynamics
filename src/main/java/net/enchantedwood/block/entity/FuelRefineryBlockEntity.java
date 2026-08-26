@@ -130,11 +130,17 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
 
         // 1. Charge from battery slot if present
         ItemStack batteryStack = entity.inventory.get(BATTERY_SLOT);
-        if (!batteryStack.isEmpty() && batteryStack.getItem() instanceof EnergyProvider provider) {
-            EnergyStorage batteryStorage = provider.getEnergyStorage(null);
+        if (!batteryStack.isEmpty()) {
+            EnergyStorage batteryStorage = null;
+            if (batteryStack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider itemProvider) {
+                batteryStorage = itemProvider.getEnergyStorage(batteryStack);
+            } else if (batteryStack.getItem() instanceof EnergyProvider provider) {
+                batteryStorage = provider.getEnergyStorage(null);
+            }
+
             if (batteryStorage != null && batteryStorage.getEnergy() > 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
                 int needed = entity.energyStorage.getMaxEnergy() - entity.energyStorage.getEnergy();
-                int extracted = batteryStorage.extractEnergy(Math.min(needed, 100), false);
+                int extracted = batteryStorage.extractEnergy(Math.min(needed, 500), false);
                 entity.energyStorage.insertEnergy(extracted, false);
                 stateChanged = true;
             }
@@ -271,7 +277,7 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
             return stack.isOf(ModItems.EMPTY_GAS_CANISTER) || stack.isOf(ModItems.CORN);
         }
         if (slot == BATTERY_SLOT) {
-            return stack.getItem() instanceof EnergyProvider;
+            return stack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
         }
         return false;
     }

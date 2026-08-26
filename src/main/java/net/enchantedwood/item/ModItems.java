@@ -463,6 +463,14 @@ public class ModItems {
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.BOOTS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.BOOTS)));
     public static final Item MYSTERY_KEYSTONE = registerItem("mystery_keystone", Item::new);
 
+    // Portable Handheld Battery Packs (v1.3.0)
+    public static final Item COPPER_BATTERY_PACK = registerItem("copper_battery_pack",
+            settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 10_000, 200, 200));
+    public static final Item ALUMINUM_BATTERY_PACK = registerItem("aluminum_battery_pack",
+            settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 50_000, 500, 500));
+    public static final Item STEEL_BATTERY_PACK = registerItem("steel_battery_pack",
+            settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 250_000, 2_000, 2_000));
+
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
     public static final ItemGroup ENCHANTED_WOOD_GROUP = FabricItemGroup.builder()
@@ -529,6 +537,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAVA_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.COPPER_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.COPPER_BATTERY);
+                entries.add(COPPER_BATTERY_PACK);
                 entries.add(net.enchantedwood.block.ModBlocks.COPPER_CABLE);
 
 
@@ -632,6 +641,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ALUMINUM_REFINER);
                 entries.add(net.enchantedwood.block.ModBlocks.ALUMINUM_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.ALUMINUM_BATTERY);
+                entries.add(ALUMINUM_BATTERY_PACK);
                 entries.add(net.enchantedwood.block.ModBlocks.ALUMINUM_CABLE);
 
                 entries.add(net.enchantedwood.block.ModBlocks.BAUXITE_ORE);
@@ -666,6 +676,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.STEEL_BLAST_FURNACE);
                 entries.add(net.enchantedwood.block.ModBlocks.STEEL_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.STEEL_BATTERY);
+                entries.add(STEEL_BATTERY_PACK);
                 entries.add(net.enchantedwood.block.ModBlocks.STEEL_CABLE);
                 entries.add(net.enchantedwood.block.ModBlocks.STEEL_BLOCK);
 

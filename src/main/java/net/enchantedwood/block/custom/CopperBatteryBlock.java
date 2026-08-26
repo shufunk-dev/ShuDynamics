@@ -2,6 +2,8 @@ package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -69,6 +71,35 @@ public class CopperBatteryBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        ItemStack held = player.getStackInHand(player.getActiveHand() != null ? player.getActiveHand() : net.minecraft.util.Hand.MAIN_HAND);
+        if (held.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider batteryItem) {
+            if (!world.isClient()) {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof net.enchantedwood.energy.EnergyProvider provider) {
+                    net.enchantedwood.energy.EnergyStorage blockStorage = provider.getEnergyStorage(null);
+                    net.enchantedwood.energy.EnergyStorage itemStorage = batteryItem.getEnergyStorage(held);
+                    if (blockStorage != null && itemStorage != null) {
+                        int needed = itemStorage.getMaxEnergy() - itemStorage.getEnergy();
+                        if (needed > 0 && blockStorage.getEnergy() > 0) {
+                            int toTransfer = Math.min(needed, blockStorage.getEnergy());
+                            int extracted = blockStorage.extractEnergy(toTransfer, false);
+                            itemStorage.insertEnergy(extracted, false);
+                            world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.5f);
+                            player.sendMessage(Text.literal("§b⚡ Battery Charged: §f" + itemStorage.getEnergy() + " / " + itemStorage.getMaxEnergy() + " FE"), true);
+                            return ActionResult.SUCCESS;
+                        } else if (needed == 0) {
+                            player.sendMessage(Text.literal("§a✔ Battery is already fully charged!"), true);
+                            return ActionResult.SUCCESS;
+                        } else {
+                            player.sendMessage(Text.literal("§e⚠ Battery Block is depleted."), true);
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+
         if (!world.isClient()) {
             NamedScreenHandlerFactory screenHandlerFactory = (NamedScreenHandlerFactory) world.getBlockEntity(pos);
             if (screenHandlerFactory != null) {

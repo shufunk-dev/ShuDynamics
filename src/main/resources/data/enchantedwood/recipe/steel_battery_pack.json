@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "SBS",
+    "SGS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "minecraft:gold_ingot",
+    "B": "enchantedwood:aluminum_battery_pack"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:steel_battery_pack"
+  }
+}
