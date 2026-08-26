@@ -187,6 +187,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         }
 
         if (!world.isClient()) {
+            net.enchantedwood.item.custom.AtvItem.triggerAnomaly2Unlock(player, world);
             if (!this.hasPassengers()) {
                 player.startRiding(this);
                 return ActionResult.SUCCESS;

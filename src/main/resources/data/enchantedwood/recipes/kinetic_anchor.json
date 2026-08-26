@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "TGT",
+    "RHR",
+    "ACA"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:gasoline_canister",
+    "R": "enchantedwood:rubber",
+    "H": "enchantedwood:infused_heartwood",
+    "A": "enchantedwood:asphalt_block",
+    "C": "minecraft:crying_obsidian"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:kinetic_anchor"
+  }
+}

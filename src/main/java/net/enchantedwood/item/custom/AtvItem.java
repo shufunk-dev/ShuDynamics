@@ -39,6 +39,34 @@ public class AtvItem extends Item {
         world.spawnEntity(atv);
         stack.decrement(1);
 
+        if (context.getPlayer() != null) {
+            triggerAnomaly2Unlock(context.getPlayer(), world);
+        }
+
         return ActionResult.SUCCESS;
+    }
+
+    public static void triggerAnomaly2Unlock(PlayerEntity player, World world) {
+        if (player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer && !world.isClient()) {
+            if (serverPlayer.addCommandTag("unlocked_kinetic_anchor")) {
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        net.minecraft.sound.SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, net.minecraft.sound.SoundCategory.PLAYERS, 1.0f, 1.0f);
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        net.minecraft.sound.SoundEvents.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, net.minecraft.sound.SoundCategory.PLAYERS, 0.8f, 1.4f);
+
+                player.sendMessage(net.minecraft.text.Text.literal(""), false);
+                player.sendMessage(net.minecraft.text.Text.literal("§5✦ §d§l[DIMENSIONAL RESONANCE DETECTED] §5✦"), false);
+                player.sendMessage(net.minecraft.text.Text.literal("§fBy mastering terrestrial kinetic propulsion, you have unlocked the blueprint for:"), false);
+                player.sendMessage(net.minecraft.text.Text.literal("§b⚙ §e§lAnomaly Keystone #2: §6Kinetic Anchor"), false);
+                player.sendMessage(net.minecraft.text.Text.literal("§8(Craft with Titanium Ingot, Gasoline Canister, Rubber, Infused Heartwood, Asphalt & Crying Obsidian)"), false);
+                player.sendMessage(net.minecraft.text.Text.literal(""), false);
+
+                player.sendMessage(net.minecraft.text.Text.literal("§a✔ Anomaly Keystone #2 Unlocked: Kinetic Anchor"), true);
+
+                try {
+                    serverPlayer.unlockRecipes(java.util.List.of(net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.RECIPE, net.minecraft.util.Identifier.of(net.enchantedwood.EnchantedWoodMod.MOD_ID, "kinetic_anchor"))));
+                } catch (Exception ignored) {}
+            }
+        }
     }
 }

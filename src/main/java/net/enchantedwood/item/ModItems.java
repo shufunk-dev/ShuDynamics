@@ -711,6 +711,7 @@ public class ModItems {
 
                 // Anomaly Keystones
                 entries.add(net.enchantedwood.block.ModBlocks.ATMOSPHERIC_ANCHOR);
+                entries.add(net.enchantedwood.block.ModBlocks.KINETIC_ANCHOR);
 
                 // Agriculture & Biofuels
                 entries.add(CORN);

@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "enchantedwood:atv"
+      "id": "enchantedwood:kinetic_anchor"
     },
     "title": {
       "translate": "advancements.enchantedwood.anomalies.keystone_2.title"
@@ -24,11 +24,22 @@
           }
         ]
       }
+    },
+    "crafted_kinetic_anchor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:kinetic_anchor"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
-      "crafted_atv"
+      "crafted_atv",
+      "crafted_kinetic_anchor"
     ]
   ],
   "parent": "enchantedwood:anomalies/root"

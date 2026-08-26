@@ -440,6 +440,14 @@ public class ModBlocks {
                     .resistance(1200.0f)
                     .requiresTool()));
 
+    public static final Block KINETIC_ANCHOR = registerBlock("kinetic_anchor",
+            new net.enchantedwood.block.custom.KineticAnchorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "kinetic_anchor")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()));
+
     public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
             new Block(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))
