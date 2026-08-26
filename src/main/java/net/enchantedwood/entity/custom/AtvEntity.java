@@ -72,6 +72,11 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
+    public float getStepHeight() {
+        return 1.0f;
+    }
+
+    @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         builder.add(SPEED, 0.0f);
         builder.add(FUEL_LEVEL, 0);
@@ -246,21 +251,35 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     private void handleRiderControl(PlayerEntity player) {
-        float forward = player.forwardSpeed;
-        float sideways = player.sidewaysSpeed;
+        float forward = 0.0f;
+        float sideways = 0.0f;
 
-        // Steering rotation
-        if (Math.abs(this.currentSpeed) > 0.02f) {
-            float turnAmount = sideways * 4.0f * (this.currentSpeed >= 0 ? 1 : -1);
-            this.setYaw(this.getYaw() + turnAmount);
+        if (player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer) {
+            net.minecraft.util.PlayerInput input = serverPlayer.getPlayerInput();
+            if (input.forward()) forward += 1.0f;
+            if (input.backward()) forward -= 1.0f;
+            if (input.left()) sideways += 1.0f;
+            if (input.right()) sideways -= 1.0f;
+        } else {
+            forward = player.forwardSpeed;
+            sideways = player.sidewaysSpeed;
+        }
+
+        // Steering rotation: smooth steer towards player look direction with A/D turning
+        if (Math.abs(this.currentSpeed) > 0.01f || forward != 0) {
+            float targetYaw = player.getYaw() - (sideways * 25.0f);
+            this.setYaw(MathHelper.lerpAngleDegrees(0.15f, this.getYaw(), targetYaw));
         }
 
         // Engine max speed and acceleration calculation
         float maxForwardSpeed = 0.35f; // Base starter speed (~25 km/h)
-        float accelRate = 0.03f;
+        float accelRate = 0.04f;
 
         ItemStack engine = inventory.get(ENGINE_SLOT);
-        if (engine.isOf(ModItems.ALUMINUM_ATV_ENGINE)) {
+        if (engine.isOf(ModItems.COPPER_ATV_ENGINE)) {
+            maxForwardSpeed = 0.40f;
+            accelRate = 0.035f;
+        } else if (engine.isOf(ModItems.ALUMINUM_ATV_ENGINE)) {
             maxForwardSpeed = 0.55f;
             accelRate = 0.05f;
         } else if (engine.isOf(ModItems.STEEL_ATV_ENGINE)) {
