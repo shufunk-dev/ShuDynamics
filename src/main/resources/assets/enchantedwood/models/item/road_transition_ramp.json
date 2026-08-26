@@ -1,3 +1,90 @@
 {
-  "parent": "enchantedwood:block/road_transition_ramp"
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "enchantedwood:block/concrete_curb",
+    "all": "enchantedwood:block/concrete_curb"
+  },
+  "display": {
+    "gui": {
+      "rotation": [ 30, 225, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.625, 0.625, 0.625 ]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 3, 0 ],
+      "scale": [ 0.25, 0.25, 0.25 ]
+    },
+    "fixed": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.5, 0.5, 0.5 ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [ 75, 45, 0 ],
+      "translation": [ 0, 2.5, 0 ],
+      "scale": [ 0.375, 0.375, 0.375 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, 45, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 225, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
+  "elements": [
+    {
+      "comment": "Solid Base & Step 1",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "down":  { "uv": [0, 0, 16, 16], "texture": "#all" },
+        "up":    { "uv": [0, 0, 16, 16], "texture": "#all" },
+        "north": { "uv": [0, 14, 16, 16], "texture": "#all" },
+        "south": { "uv": [0, 14, 16, 16], "texture": "#all" },
+        "west":  { "uv": [0, 14, 16, 16], "texture": "#all" },
+        "east":  { "uv": [0, 14, 16, 16], "texture": "#all" }
+      }
+    },
+    {
+      "comment": "Step 2 Layer",
+      "from": [0, 2, 0],
+      "to": [16, 4, 12],
+      "faces": {
+        "up":    { "uv": [0, 0, 16, 12], "texture": "#all" },
+        "north": { "uv": [0, 12, 16, 14], "texture": "#all" },
+        "south": { "uv": [0, 12, 16, 14], "texture": "#all" },
+        "west":  { "uv": [0, 12, 12, 14], "texture": "#all" },
+        "east":  { "uv": [4, 12, 16, 14], "texture": "#all" }
+      }
+    },
+    {
+      "comment": "Step 3 Layer",
+      "from": [0, 4, 0],
+      "to": [16, 6, 8],
+      "faces": {
+        "up":    { "uv": [0, 0, 16, 8], "texture": "#all" },
+        "north": { "uv": [0, 10, 16, 12], "texture": "#all" },
+        "south": { "uv": [0, 10, 16, 12], "texture": "#all" },
+        "west":  { "uv": [0, 10, 8, 12], "texture": "#all" },
+        "east":  { "uv": [8, 10, 16, 12], "texture": "#all" }
+      }
+    },
+    {
+      "comment": "Step 4 Layer",
+      "from": [0, 6, 0],
+      "to": [16, 8, 4],
+      "faces": {
+        "up":    { "uv": [0, 0, 16, 4], "texture": "#all" },
+        "north": { "uv": [0, 8, 16, 10], "texture": "#all" },
+        "south": { "uv": [0, 8, 16, 10], "texture": "#all" },
+        "west":  { "uv": [0, 8, 4, 10], "texture": "#all" },
+        "east":  { "uv": [12, 8, 16, 10], "texture": "#all" }
+      }
+    }
+  ]
 }
