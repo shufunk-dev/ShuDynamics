@@ -21,22 +21,22 @@ public class ConcreteCurbBlock extends HorizontalFacingBlock {
     public static final MapCodec<ConcreteCurbBlock> CODEC = createCodec(ConcreteCurbBlock::new);
     public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
 
-    // Raised curb profile (half block height on roadway side, full 10px height on sidewalk/outer edge)
+    // Raised 3/4 block height (12px) on outer sidewalk/grass edge, half block height (8px) on roadway side
     private static final VoxelShape SHAPE_NORTH = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 8, 16),
-            Block.createCuboidShape(0, 8, 0, 16, 10, 6)
+            Block.createCuboidShape(0, 8, 0, 16, 12, 6)
     );
     private static final VoxelShape SHAPE_SOUTH = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 8, 16),
-            Block.createCuboidShape(0, 8, 10, 16, 10, 16)
+            Block.createCuboidShape(0, 8, 10, 16, 12, 16)
     );
     private static final VoxelShape SHAPE_WEST = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 8, 16),
-            Block.createCuboidShape(0, 8, 0, 6, 10, 16)
+            Block.createCuboidShape(0, 8, 0, 6, 12, 16)
     );
     private static final VoxelShape SHAPE_EAST = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 8, 16),
-            Block.createCuboidShape(10, 8, 0, 16, 10, 16)
+            Block.createCuboidShape(10, 8, 0, 16, 12, 16)
     );
 
     public ConcreteCurbBlock(Settings settings) {

@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
@@ -20,37 +21,65 @@ import net.minecraft.world.BlockView;
 public class RoadTransitionRampBlock extends HorizontalFacingBlock {
     public static final MapCodec<RoadTransitionRampBlock> CODEC = createCodec(RoadTransitionRampBlock::new);
     public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
+    public static final EnumProperty<BlockHalf> HALF = Properties.BLOCK_HALF;
 
-    // Sloped ramp rising from 0px (outer ground) to 8px (road slab height)
-    // FACING points towards the higher (road) side!
-    private static final VoxelShape RAMP_NORTH = VoxelShapes.union(
+    // Bottom Half Ramps (0..8px) - for ground level entry
+    private static final VoxelShape RAMP_NORTH_BOTTOM = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 12, 16, 2, 16),
             Block.createCuboidShape(0, 0, 8, 16, 4, 12),
             Block.createCuboidShape(0, 0, 4, 16, 6, 8),
             Block.createCuboidShape(0, 0, 0, 16, 8, 4)
     );
-    private static final VoxelShape RAMP_SOUTH = VoxelShapes.union(
+    private static final VoxelShape RAMP_SOUTH_BOTTOM = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 16, 2, 4),
             Block.createCuboidShape(0, 0, 4, 16, 4, 8),
             Block.createCuboidShape(0, 0, 8, 16, 6, 12),
             Block.createCuboidShape(0, 0, 12, 16, 8, 16)
     );
-    private static final VoxelShape RAMP_WEST = VoxelShapes.union(
+    private static final VoxelShape RAMP_WEST_BOTTOM = VoxelShapes.union(
             Block.createCuboidShape(12, 0, 0, 16, 2, 16),
             Block.createCuboidShape(8, 0, 0, 12, 4, 16),
             Block.createCuboidShape(4, 0, 0, 8, 6, 16),
             Block.createCuboidShape(0, 0, 0, 4, 8, 16)
     );
-    private static final VoxelShape RAMP_EAST = VoxelShapes.union(
+    private static final VoxelShape RAMP_EAST_BOTTOM = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 0, 4, 2, 16),
             Block.createCuboidShape(4, 0, 0, 8, 4, 16),
             Block.createCuboidShape(8, 0, 0, 12, 6, 16),
             Block.createCuboidShape(12, 0, 0, 16, 8, 16)
     );
 
+    // Top Half Ramps (8..16px) - sits directly on top of bottom slabs/asphalt without floating!
+    private static final VoxelShape RAMP_NORTH_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 8, 12, 16, 10, 16),
+            Block.createCuboidShape(0, 8, 8, 16, 12, 12),
+            Block.createCuboidShape(0, 8, 4, 16, 14, 8),
+            Block.createCuboidShape(0, 8, 0, 16, 16, 4)
+    );
+    private static final VoxelShape RAMP_SOUTH_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 8, 0, 16, 10, 4),
+            Block.createCuboidShape(0, 8, 4, 16, 12, 8),
+            Block.createCuboidShape(0, 8, 8, 16, 14, 12),
+            Block.createCuboidShape(0, 8, 12, 16, 16, 16)
+    );
+    private static final VoxelShape RAMP_WEST_TOP = VoxelShapes.union(
+            Block.createCuboidShape(12, 8, 0, 16, 10, 16),
+            Block.createCuboidShape(8, 8, 0, 12, 12, 16),
+            Block.createCuboidShape(4, 8, 0, 8, 14, 16),
+            Block.createCuboidShape(0, 8, 0, 4, 16, 16)
+    );
+    private static final VoxelShape RAMP_EAST_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 8, 0, 4, 10, 16),
+            Block.createCuboidShape(4, 8, 0, 8, 12, 16),
+            Block.createCuboidShape(8, 8, 0, 12, 14, 16),
+            Block.createCuboidShape(12, 8, 0, 16, 16, 16)
+    );
+
     public RoadTransitionRampBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.getDefaultState()
+                .with(FACING, Direction.NORTH)
+                .with(HALF, BlockHalf.BOTTOM));
     }
 
     @Override
@@ -60,22 +89,33 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        // Points towards the road (direction the player is facing when placing)
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+        Direction side = ctx.getSide();
+        BlockPos pos = ctx.getBlockPos();
+        double hitY = ctx.getHitPos().y - (double) pos.getY();
+
+        BlockHalf half = BlockHalf.BOTTOM;
+        if (side == Direction.DOWN || (side != Direction.UP && hitY > 0.5)) {
+            half = BlockHalf.TOP;
+        }
+
+        return this.getDefaultState()
+                .with(FACING, ctx.getHorizontalPlayerFacing())
+                .with(HALF, half);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, HALF);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        boolean isTop = state.get(HALF) == BlockHalf.TOP;
         return switch (state.get(FACING)) {
-            case SOUTH -> RAMP_SOUTH;
-            case WEST -> RAMP_WEST;
-            case EAST -> RAMP_EAST;
-            default -> RAMP_NORTH;
+            case SOUTH -> isTop ? RAMP_SOUTH_TOP : RAMP_SOUTH_BOTTOM;
+            case WEST -> isTop ? RAMP_WEST_TOP : RAMP_WEST_BOTTOM;
+            case EAST -> isTop ? RAMP_EAST_TOP : RAMP_EAST_BOTTOM;
+            default -> isTop ? RAMP_NORTH_TOP : RAMP_NORTH_BOTTOM;
         };
     }
 
