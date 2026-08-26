@@ -44,16 +44,16 @@ public class RoadPaverScreenHandler extends ScreenHandler {
             }
         }
 
-        // Slot 9: Battery Charge Slot (x=12, y=53)
-        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.BATTERY_SLOT, 12, 53) {
+        // Slot 9: Battery Charge Slot (x=12, y=56)
+        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.BATTERY_SLOT, 12, 56) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
             }
         });
 
-        // Slot 10: Engine Fuel Slot (x=148, y=53)
-        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.FUEL_SLOT, 148, 53) {
+        // Slot 10: Engine Fuel Slot (x=148, y=56)
+        this.addSlot(new Slot(inventory, RoadPaverBlockEntity.FUEL_SLOT, 148, 56) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.isOf(ModItems.GASOLINE_CANISTER) || stack.isOf(ModItems.BIOFUEL_CANISTER)
