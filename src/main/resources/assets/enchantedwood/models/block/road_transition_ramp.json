@@ -2,7 +2,8 @@
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "enchantedwood:block/concrete_curb",
-    "all": "enchantedwood:block/concrete_curb"
+    "all": "enchantedwood:block/concrete_curb",
+    "texture": "enchantedwood:block/concrete_curb"
   },
   "display": {
     "gui": {
@@ -44,9 +45,9 @@
         "down":  { "texture": "#all", "cullface": "down" },
         "up":    { "texture": "#all" },
         "north": { "texture": "#all" },
-        "south": { "texture": "#all", "cullface": "south" },
-        "west":  { "texture": "#all", "cullface": "west" },
-        "east":  { "texture": "#all", "cullface": "east" }
+        "south": { "texture": "#all" },
+        "west":  { "texture": "#all" },
+        "east":  { "texture": "#all" }
       }
     },
     {
@@ -56,8 +57,9 @@
         "down":  { "texture": "#all", "cullface": "down" },
         "up":    { "texture": "#all" },
         "north": { "texture": "#all" },
-        "west":  { "texture": "#all", "cullface": "west" },
-        "east":  { "texture": "#all", "cullface": "east" }
+        "south": { "texture": "#all" },
+        "west":  { "texture": "#all" },
+        "east":  { "texture": "#all" }
       }
     },
     {
@@ -67,8 +69,9 @@
         "down":  { "texture": "#all", "cullface": "down" },
         "up":    { "texture": "#all" },
         "north": { "texture": "#all" },
-        "west":  { "texture": "#all", "cullface": "west" },
-        "east":  { "texture": "#all", "cullface": "east" }
+        "south": { "texture": "#all" },
+        "west":  { "texture": "#all" },
+        "east":  { "texture": "#all" }
       }
     },
     {
@@ -77,9 +80,10 @@
       "faces": {
         "down":  { "texture": "#all", "cullface": "down" },
         "up":    { "texture": "#all" },
-        "north": { "texture": "#all", "cullface": "north" },
-        "west":  { "texture": "#all", "cullface": "west" },
-        "east":  { "texture": "#all", "cullface": "east" }
+        "north": { "texture": "#all" },
+        "south": { "texture": "#all" },
+        "west":  { "texture": "#all" },
+        "east":  { "texture": "#all" }
       }
     }
   ]
