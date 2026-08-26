@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "GDG",
-    "DTD",
-    "GDG"
+    "CGC",
+    "GTG",
+    "CGC"
   ],
   "key": {
-    "D": "minecraft:cobbled_deepslate",
+    "C": "minecraft:cobblestone",
     "G": "minecraft:gravel",
     "T": "enchantedwood:mineral_tar"
   },
   "result": {
-    "count": 8,
-    "id": "enchantedwood:asphalt_block"
+    "count": 16,
+    "id": "enchantedwood:asphalt_slab"
   }
 }

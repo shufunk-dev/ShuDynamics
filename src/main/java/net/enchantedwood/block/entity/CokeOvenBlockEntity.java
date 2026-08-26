@@ -9,6 +9,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -26,8 +27,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
     public static final int TOTAL_COOK_TIME = 200; // 10 seconds per Coke Coal
+    public static final int INVENTORY_SIZE = 3;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
+    public static final int INPUT_SLOT = 0;
+    public static final int OUTPUT_SLOT = 1;
+    public static final int TAR_SLOT = 2;
+
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int cookTime = 0;
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
@@ -69,21 +75,32 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, CokeOvenBlockEntity entity) {
         boolean stateChanged = false;
 
-        ItemStack input = entity.inventory.get(0);
-        ItemStack output = entity.inventory.get(1);
+        ItemStack input = entity.inventory.get(INPUT_SLOT);
+        ItemStack output = entity.inventory.get(OUTPUT_SLOT);
+        ItemStack tarOutput = entity.inventory.get(TAR_SLOT);
 
-        boolean hasValidInput = input.isOf(Items.COAL) || input.isOf(Items.CHARCOAL);
+        boolean hasValidInput = isValidInput(input);
         boolean hasOutputSpace = output.isEmpty() || (output.isOf(ModItems.COKE_COAL) && output.getCount() < output.getMaxCount());
+        boolean hasTarSpace = tarOutput.isEmpty() || (tarOutput.isOf(ModItems.MINERAL_TAR) && tarOutput.getCount() < tarOutput.getMaxCount());
 
-        if (hasValidInput && hasOutputSpace) {
+        if (hasValidInput && hasOutputSpace && hasTarSpace) {
             entity.cookTime++;
             if (entity.cookTime >= TOTAL_COOK_TIME) {
                 entity.cookTime = 0;
                 input.decrement(1);
+
+                // 1. Primary Output: Coke Coal
                 if (output.isEmpty()) {
-                    entity.inventory.set(1, new ItemStack(ModItems.COKE_COAL));
+                    entity.inventory.set(OUTPUT_SLOT, new ItemStack(ModItems.COKE_COAL));
                 } else {
                     output.increment(1);
+                }
+
+                // 2. Byproduct Output: Mineral Tar
+                if (tarOutput.isEmpty()) {
+                    entity.inventory.set(TAR_SLOT, new ItemStack(ModItems.MINERAL_TAR));
+                } else {
+                    tarOutput.increment(1);
                 }
             }
             stateChanged = true;
@@ -94,7 +111,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
             }
         }
 
-        boolean isCookingNow = hasValidInput && hasOutputSpace;
+        boolean isCookingNow = hasValidInput && hasOutputSpace && hasTarSpace;
         if (state.get(CokeOvenBlock.LIT) != isCookingNow) {
             world.setBlockState(pos, state.with(CokeOvenBlock.LIT, isCookingNow), 3);
             stateChanged = true;
@@ -103,6 +120,10 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
         if (stateChanged) {
             markDirty(world, pos, state);
         }
+    }
+
+    private static boolean isValidInput(ItemStack stack) {
+        return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL) || stack.isIn(ItemTags.LOGS);
     }
 
     @Override
@@ -124,19 +145,19 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     @Override
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) {
-            return new int[]{1}; // Output
+            return new int[]{OUTPUT_SLOT, TAR_SLOT};
         }
-        return new int[]{0}; // Input
+        return new int[]{INPUT_SLOT};
     }
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return slot == 0 && (stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL));
+        return slot == INPUT_SLOT && isValidInput(stack);
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return slot == 1;
+        return slot == OUTPUT_SLOT || slot == TAR_SLOT;
     }
 
     @Override

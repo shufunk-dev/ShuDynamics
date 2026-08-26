@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.3,
+  "ingredient": "enchantedwood:oil_sand",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:mineral_tar"
+  }
+}

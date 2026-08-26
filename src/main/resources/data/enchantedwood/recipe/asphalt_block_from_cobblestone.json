@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
+    "GCG",
     "CTC",
-    "TGT",
-    "CTC"
+    "GCG"
   ],
   "key": {
     "C": "minecraft:cobblestone",
-    "T": "enchantedwood:mineral_tar",
-    "G": "minecraft:gravel"
+    "G": "minecraft:gravel",
+    "T": "enchantedwood:mineral_tar"
   },
   "result": {
     "count": 8,

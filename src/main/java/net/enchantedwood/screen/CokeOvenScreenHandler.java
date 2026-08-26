@@ -1,44 +1,53 @@
 package net.enchantedwood.screen;
 
+import net.enchantedwood.block.entity.CokeOvenBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.enchantedwood.item.ModItems;
 
 public class CokeOvenScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
 
     public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(2), new ArrayPropertyDelegate(2));
+        this(syncId, playerInventory, new SimpleInventory(CokeOvenBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(2));
     }
 
     public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.COKE_OVEN_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 2);
+        checkSize(inventory, CokeOvenBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
         inventory.onOpen(playerInventory.player);
         this.addProperties(propertyDelegate);
 
-        // Input Slot (Coal / Charcoal) at (56, 35)
-        this.addSlot(new Slot(inventory, 0, 56, 35) {
+        // Input Slot (Coal / Charcoal / Logs) at (56, 35)
+        this.addSlot(new Slot(inventory, CokeOvenBlockEntity.INPUT_SLOT, 56, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL);
+                return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL) || stack.isIn(ItemTags.LOGS);
             }
         });
 
-        // Output Slot (Coke Coal) at (116, 35)
-        this.addSlot(new Slot(inventory, 1, 116, 35) {
+        // Primary Output Slot (Coke Coal) at (116, 35)
+        this.addSlot(new Slot(inventory, CokeOvenBlockEntity.OUTPUT_SLOT, 116, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return false;
+            }
+        });
+
+        // Byproduct Output Slot (Mineral Tar) at (142, 35)
+        this.addSlot(new Slot(inventory, CokeOvenBlockEntity.TAR_SLOT, 142, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
@@ -64,7 +73,7 @@ public class CokeOvenScreenHandler extends ScreenHandler {
 
     public int getTotalCookTime() {
         int total = this.propertyDelegate.get(1);
-        return total > 0 ? total : 200;
+        return total > 0 ? total : CokeOvenBlockEntity.TOTAL_COOK_TIME;
     }
 
     public boolean isCooking() {
@@ -82,26 +91,27 @@ public class CokeOvenScreenHandler extends ScreenHandler {
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot == 1) { // Output slot
-                if (!this.insertItem(originalStack, 2, 38, true)) {
+
+            if (invSlot == CokeOvenBlockEntity.OUTPUT_SLOT || invSlot == CokeOvenBlockEntity.TAR_SLOT) {
+                if (!this.insertItem(originalStack, CokeOvenBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onQuickTransfer(originalStack, newStack);
-            } else if (invSlot == 0) { // Input slot
-                if (!this.insertItem(originalStack, 2, 38, false)) {
+            } else if (invSlot == CokeOvenBlockEntity.INPUT_SLOT) {
+                if (!this.insertItem(originalStack, CokeOvenBlockEntity.INVENTORY_SIZE, this.slots.size(), false)) {
                     return ItemStack.EMPTY;
                 }
             } else { // Player Inventory
-                if (originalStack.isOf(Items.COAL) || originalStack.isOf(Items.CHARCOAL)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                if (originalStack.isOf(Items.COAL) || originalStack.isOf(Items.CHARCOAL) || originalStack.isIn(ItemTags.LOGS)) {
+                    if (!this.insertItem(originalStack, CokeOvenBlockEntity.INPUT_SLOT, CokeOvenBlockEntity.INPUT_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (invSlot >= 2 && invSlot < 29) {
-                    if (!this.insertItem(originalStack, 29, 38, false)) {
+                } else if (invSlot >= CokeOvenBlockEntity.INVENTORY_SIZE && invSlot < CokeOvenBlockEntity.INVENTORY_SIZE + 27) {
+                    if (!this.insertItem(originalStack, CokeOvenBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (invSlot >= 29 && invSlot < 38) {
-                    if (!this.insertItem(originalStack, 2, 29, false)) {
+                } else if (invSlot >= CokeOvenBlockEntity.INVENTORY_SIZE + 27 && invSlot < this.slots.size()) {
+                    if (!this.insertItem(originalStack, CokeOvenBlockEntity.INVENTORY_SIZE, CokeOvenBlockEntity.INVENTORY_SIZE + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }

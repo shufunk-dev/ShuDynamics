@@ -249,16 +249,21 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
         return count;
     }
 
-    private void consumeAsphalt(int amount) {
-        int needed = amount;
-        for (int i = 0; i < 9 && needed > 0; i++) {
+    private ItemStack consumeOneAsphalt() {
+        // Prioritize slabs if available, otherwise full blocks
+        for (int i = 0; i < 9; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
-                int take = Math.min(stack.getCount(), needed);
-                stack.decrement(take);
-                needed -= take;
+            if (stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+                return stack.split(1);
             }
         }
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.get(i);
+            if (stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem())) {
+                return stack.split(1);
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     private void paveRoadAhead(ServerWorld world, BlockPos pos, Direction facing) {
@@ -286,11 +291,16 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
                 world.breakBlock(clearPos2, true);
             }
 
-            // Lay asphalt foundation
-            world.setBlockState(groundPos, ModBlocks.ASPHALT_BLOCK.getDefaultState(), 3);
+            // Consume material and lay asphalt
+            ItemStack placedItem = consumeOneAsphalt();
+            if (!placedItem.isEmpty()) {
+                if (placedItem.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+                    world.setBlockState(groundPos, ModBlocks.ASPHALT_SLAB.getDefaultState().with(net.minecraft.block.SlabBlock.TYPE, net.minecraft.block.enums.SlabType.BOTTOM), 3);
+                } else {
+                    world.setBlockState(groundPos, ModBlocks.ASPHALT_BLOCK.getDefaultState(), 3);
+                }
+            }
         }
-
-        consumeAsphalt(3);
 
         // Move paver forward by 1 block if path is clear
         BlockPos nextPaverPos = pos.offset(facing);

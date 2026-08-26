@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
+    "GDG",
     "DTD",
-    "TGT",
-    "DTD"
+    "GDG"
   ],
   "key": {
     "D": "minecraft:cobbled_deepslate",
-    "T": "enchantedwood:mineral_tar",
-    "G": "minecraft:gravel"
+    "G": "minecraft:gravel",
+    "T": "enchantedwood:mineral_tar"
   },
   "result": {
     "count": 8,
