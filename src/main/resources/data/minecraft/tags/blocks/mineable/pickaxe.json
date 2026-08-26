@@ -43,6 +43,9 @@
     "enchantedwood:coke_coal_block",
     "enchantedwood:enchanted_netherite_block",
     "enchantedwood:atmospheric_anchor",
-    "enchantedwood:kinetic_anchor"
+    "enchantedwood:kinetic_anchor",
+    "enchantedwood:road_paver",
+    "enchantedwood:fuel_refinery",
+    "enchantedwood:vehicle_fabricator"
   ]
 }
