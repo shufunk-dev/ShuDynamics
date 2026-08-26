@@ -51,6 +51,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);
 
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+
         CustomHeartHudRenderer.register();
 
         // Register Keybinding 'C' to open Equipment GUI
