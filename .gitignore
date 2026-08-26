@@ -38,6 +38,8 @@ shumod-development-effort-report.html
 
 # Scratch Generation & Automation Scripts
 *.js
+*.ps1
+CURSEFORGE_DESCRIPTION.md
 
 # OS & Temp Files
 .DS_Store
