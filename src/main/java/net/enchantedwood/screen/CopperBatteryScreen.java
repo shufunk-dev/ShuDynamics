@@ -22,6 +22,15 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         this.backgroundHeight = 166;
     }
 
+    private void drawSlotBox(DrawContext context, int boxX, int boxY) {
+        // Standard Minecraft 18x18 slot frame
+        context.fill(boxX, boxY, boxX + 18, boxY + 1, 0xFF373737);       // Top shadow
+        context.fill(boxX, boxY, boxX + 1, boxY + 18, 0xFF373737);       // Left shadow
+        context.fill(boxX + 1, boxY + 1, boxX + 17, boxY + 17, 0xFF8B8B8B); // Slot background
+        context.fill(boxX + 1, boxY + 17, boxX + 18, boxY + 18, 0xFFFFFFFF); // Bottom highlight
+        context.fill(boxX + 17, boxY + 1, boxX + 18, boxY + 18, 0xFFFFFFFF); // Right highlight
+    }
+
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
@@ -29,7 +38,11 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
 
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
 
-        // 1. Draw Large Energy Bar (width = 100px, at x + 38, y + 36)
+        // 1. Draw Visible Slot Frames for Discharge & Charge
+        drawSlotBox(context, x + 15, y + 34); // Discharge slot at (16, 35)
+        drawSlotBox(context, x + 143, y + 34); // Charge slot at (144, 35)
+
+        // 2. Draw Large Energy Bar (width = 100px, at x + 38, y + 36)
         int energyWidth = this.handler.getScaledEnergy(100);
         if (energyWidth > 0) {
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 38, y + 36, 0.0f, 166.0f, energyWidth, 18, 256, 256);
@@ -49,9 +62,9 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         int rateStrWidth = this.textRenderer.getWidth(rateStr);
         context.drawText(this.textRenderer, rateStr, (this.backgroundWidth - rateStrWidth) / 2, 58, 0x7E7E7E, false);
 
-        // Slot indicators
-        context.drawText(this.textRenderer, Text.literal("§7IN"), 18, 24, 0x888888, false);
-        context.drawText(this.textRenderer, Text.literal("§7OUT"), 143, 24, 0x888888, false);
+        // Slot indicators above slots
+        context.drawText(this.textRenderer, Text.literal("§6IN"), 19, 23, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("§bOUT"), 144, 23, 0x555555, false);
 
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
     }
@@ -80,7 +93,7 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         // Discharge Slot Tooltip
         if (mouseX >= x + 15 && mouseX <= x + 33 && mouseY >= y + 34 && mouseY <= y + 52) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6📥 Discharge Slot"),
+                    Text.literal("§6📥 Discharge Slot (IN)"),
                     Text.literal("§7Place any battery pack here to drain power into this cell.")
             ), mouseX, mouseY);
         }
@@ -88,7 +101,7 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         // Charge Slot Tooltip
         if (mouseX >= x + 143 && mouseX <= x + 161 && mouseY >= y + 34 && mouseY <= y + 52) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§b⚡ Charge Slot"),
+                    Text.literal("§b⚡ Charge Slot (OUT)"),
                     Text.literal("§7Place any battery pack or tool here to rapidly recharge it.")
             ), mouseX, mouseY);
         }
