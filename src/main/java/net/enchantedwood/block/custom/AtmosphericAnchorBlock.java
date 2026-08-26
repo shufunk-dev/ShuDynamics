@@ -31,15 +31,15 @@ public class AtmosphericAnchorBlock extends Block {
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient() && player != null && !player.isCreative()) {
             ItemStack tool = player.getMainHandStack();
-            boolean isTool = tool.isIn(ItemTags.PICKAXES) || tool.isIn(ItemTags.AXES) || tool.isIn(ItemTags.HOES) || tool.isIn(ItemTags.SHOVELS);
+            boolean isPickaxe = tool.isIn(ItemTags.PICKAXES);
             boolean isEnchanted = tool.hasEnchantments()
                     || (tool.get(DataComponentTypes.ENCHANTMENTS) != null && !tool.get(DataComponentTypes.ENCHANTMENTS).isEmpty())
                     || (tool.get(DataComponentTypes.STORED_ENCHANTMENTS) != null && !tool.get(DataComponentTypes.STORED_ENCHANTMENTS).isEmpty());
 
-            if (isTool && isEnchanted) {
+            if (isPickaxe && isEnchanted) {
                 dropStack(world, pos, new ItemStack(this));
             } else {
-                player.sendMessage(Text.literal("§c⚠ Anomaly Keystone destabilized! An enchanted pickaxe or axe is required to harvest it."), true);
+                player.sendMessage(Text.literal("§c⚠ Anomaly Keystone destabilized! An enchanted pickaxe is required to harvest it."), true);
                 world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.BLOCKS, 1.0f, 0.8f);
             }
         }
