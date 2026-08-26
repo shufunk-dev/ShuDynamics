@@ -44,9 +44,48 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
     }
 
     @Override
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        // Draw Section Headers
+        context.drawText(this.textRenderer, Text.literal("Parts"), 16, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Trunk"), 74, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Power"), 136, 7, 0x555555, false);
+
+        // Player Inventory Title
+        context.drawText(this.textRenderer, this.playerInventoryTitle, 8, 73, 0x404040, false);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
+    }
+
+    @Override
+    protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
+        super.drawMouseoverTooltip(context, x, y);
+
+        // If hovering over an empty module slot, display helper tooltip
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.handler.getCursorStack().isEmpty()) {
+            int slotId = this.focusedSlot.id;
+            Text tooltip = null;
+            if (slotId == AtvEntity.ENGINE_SLOT) {
+                tooltip = Text.literal("§eEngine Slot§r\n§7Insert Aluminum, Steel, or Titanium ATV Engine.");
+            } else if (slotId == AtvEntity.TIRE_SLOT) {
+                tooltip = Text.literal("§eTires Slot§r\n§7Insert Rubber, Steel-Rim, or Titanium Studded Tires.");
+            } else if (slotId == AtvEntity.SUSPENSION_SLOT) {
+                tooltip = Text.literal("§eSuspension Slot§r\n§7Insert Steel or Titanium Suspension.");
+            } else if (slotId == AtvEntity.CHASSIS_SLOT) {
+                tooltip = Text.literal("§eChassis Slot§r\n§7Insert Aluminum, Steel, or Titanium ATV Chassis.");
+            } else if (slotId == AtvEntity.TRUNK_SLOT) {
+                tooltip = Text.literal("§eCargo Trunk Slot§r\n§7Insert Small, Medium, or Large Cargo Trunk.");
+            } else if (slotId == AtvEntity.FUEL_SLOT) {
+                tooltip = Text.literal("§6Fuel / Battery Slot§r\n§7Insert Gasoline, Biofuel, High-Octane, Coal, or Charged Battery.");
+            }
+
+            if (tooltip != null) {
+                context.drawTooltip(this.textRenderer, tooltip, x, y);
+            }
+        }
     }
 }
