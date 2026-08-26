@@ -1,7 +1,12 @@
 package net.enchantedwood.screen;
 
+import net.enchantedwood.block.entity.CopperBatteryBlockEntity;
+import net.enchantedwood.energy.EnergyProvider;
+import net.enchantedwood.energy.ItemEnergyProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
@@ -9,16 +14,36 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
 public class CopperBatteryScreenHandler extends ScreenHandler {
+    private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
 
     public CopperBatteryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, null, new ArrayPropertyDelegate(5));
+        this(syncId, playerInventory, new SimpleInventory(CopperBatteryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(5));
     }
 
-    public CopperBatteryScreenHandler(int syncId, PlayerInventory playerInventory, Object unused, PropertyDelegate propertyDelegate) {
+    public CopperBatteryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.COPPER_BATTERY_SCREEN_HANDLER, syncId);
+        checkSize(inventory, CopperBatteryBlockEntity.INVENTORY_SIZE);
+        this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
         this.addProperties(propertyDelegate);
+        inventory.onOpen(playerInventory.player);
+
+        // Slot 0: Discharge Slot (x=16, y=35)
+        this.addSlot(new Slot(inventory, CopperBatteryBlockEntity.DISCHARGE_SLOT, 16, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
+            }
+        });
+
+        // Slot 1: Charge Slot (x=144, y=35)
+        this.addSlot(new Slot(inventory, CopperBatteryBlockEntity.CHARGE_SLOT, 144, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
+            }
+        });
 
         // Player Inventory (3 rows of 9)
         for (int row = 0; row < 3; ++row) {
@@ -39,7 +64,7 @@ public class CopperBatteryScreenHandler extends ScreenHandler {
 
     public int getMaxEnergy() {
         int max = (this.propertyDelegate.get(2) & 0xFFFF) | ((this.propertyDelegate.get(3) & 0xFFFF) << 16);
-        return max > 0 ? max : 500_000;
+        return max > 0 ? max : CopperBatteryBlockEntity.BATTERY_CAPACITY;
     }
 
     public int getMaxTransfer() {
@@ -59,12 +84,18 @@ public class CopperBatteryScreenHandler extends ScreenHandler {
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < 27) {
-                if (!this.insertItem(originalStack, 27, 36, false)) {
+
+            if (invSlot < CopperBatteryBlockEntity.INVENTORY_SIZE) {
+                if (!this.insertItem(originalStack, CopperBatteryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (invSlot < 36) {
-                if (!this.insertItem(originalStack, 0, 27, false)) {
+            } else {
+                if (originalStack.getItem() instanceof ItemEnergyProvider || originalStack.getItem() instanceof EnergyProvider) {
+                    if (!this.insertItem(originalStack, CopperBatteryBlockEntity.CHARGE_SLOT, CopperBatteryBlockEntity.CHARGE_SLOT + 1, false) &&
+                        !this.insertItem(originalStack, CopperBatteryBlockEntity.DISCHARGE_SLOT, CopperBatteryBlockEntity.DISCHARGE_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
                     return ItemStack.EMPTY;
                 }
             }
@@ -86,6 +117,6 @@ public class CopperBatteryScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return true;
+        return this.inventory.canPlayerUse(player);
     }
 }

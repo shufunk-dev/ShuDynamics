@@ -49,6 +49,10 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         int rateStrWidth = this.textRenderer.getWidth(rateStr);
         context.drawText(this.textRenderer, rateStr, (this.backgroundWidth - rateStrWidth) / 2, 58, 0x7E7E7E, false);
 
+        // Slot indicators
+        context.drawText(this.textRenderer, Text.literal("§7IN"), 18, 24, 0x888888, false);
+        context.drawText(this.textRenderer, Text.literal("§7OUT"), 143, 24, 0x888888, false);
+
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
     }
 
@@ -58,9 +62,10 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
 
-        // Energy Meter Hover Tooltip
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
+
+        // Energy Meter Hover Tooltip
         if (mouseX >= x + 37 && mouseX <= x + 139 && mouseY >= y + 35 && mouseY <= y + 55) {
             double percent = (double) this.handler.getEnergy() / (double) this.handler.getMaxEnergy() * 100.0;
             String energyText = String.format("%,d / %,d FE (%.1f%%)", this.handler.getEnergy(), this.handler.getMaxEnergy(), percent);
@@ -69,6 +74,22 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
                     Text.literal("§6Copper Energy Cell"),
                     Text.literal("§e" + energyText),
                     Text.literal("§7" + transferText)
+            ), mouseX, mouseY);
+        }
+
+        // Discharge Slot Tooltip
+        if (mouseX >= x + 15 && mouseX <= x + 33 && mouseY >= y + 34 && mouseY <= y + 52) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§6📥 Discharge Slot"),
+                    Text.literal("§7Place any battery pack here to drain power into this cell.")
+            ), mouseX, mouseY);
+        }
+
+        // Charge Slot Tooltip
+        if (mouseX >= x + 143 && mouseX <= x + 161 && mouseY >= y + 34 && mouseY <= y + 52) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§b⚡ Charge Slot"),
+                    Text.literal("§7Place any battery pack or tool here to rapidly recharge it.")
             ), mouseX, mouseY);
         }
     }

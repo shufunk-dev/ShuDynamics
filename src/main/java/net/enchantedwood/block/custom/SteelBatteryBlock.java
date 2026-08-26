@@ -110,6 +110,17 @@ public class SteelBatteryBlock extends BlockWithEntity {
     }
 
     @Override
+    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof SteelBatteryBlockEntity battery) {
+                net.minecraft.util.ItemScatterer.spawn(world, pos, battery);
+            }
+            super.onStateReplaced(state, world, pos, moved);
+        }
+    }
+
+    @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }

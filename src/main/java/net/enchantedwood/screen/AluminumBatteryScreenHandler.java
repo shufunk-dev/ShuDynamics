@@ -1,7 +1,12 @@
 package net.enchantedwood.screen;
 
+import net.enchantedwood.block.entity.AluminumBatteryBlockEntity;
+import net.enchantedwood.energy.EnergyProvider;
+import net.enchantedwood.energy.ItemEnergyProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
@@ -9,25 +14,45 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
 public class AluminumBatteryScreenHandler extends ScreenHandler {
+    private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
 
     public AluminumBatteryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, null, new ArrayPropertyDelegate(5));
+        this(syncId, playerInventory, new SimpleInventory(AluminumBatteryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(5));
     }
 
-    public AluminumBatteryScreenHandler(int syncId, PlayerInventory playerInventory, Object unused, PropertyDelegate propertyDelegate) {
+    public AluminumBatteryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
         super(ModScreenHandlers.ALUMINUM_BATTERY_SCREEN_HANDLER, syncId);
+        checkSize(inventory, AluminumBatteryBlockEntity.INVENTORY_SIZE);
+        this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
         this.addProperties(propertyDelegate);
+        inventory.onOpen(playerInventory.player);
 
-        // Player Inventory
+        // Slot 0: Discharge Slot (x=16, y=35)
+        this.addSlot(new Slot(inventory, AluminumBatteryBlockEntity.DISCHARGE_SLOT, 16, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
+            }
+        });
+
+        // Slot 1: Charge Slot (x=144, y=35)
+        this.addSlot(new Slot(inventory, AluminumBatteryBlockEntity.CHARGE_SLOT, 144, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
+            }
+        });
+
+        // Player Inventory (3 rows of 9)
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
             }
         }
 
-        // Player Hotbar
+        // Player Hotbar (1 row of 9)
         for (int col = 0; col < 9; ++col) {
             this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         }
@@ -39,7 +64,7 @@ public class AluminumBatteryScreenHandler extends ScreenHandler {
 
     public int getMaxEnergy() {
         int max = (this.propertyDelegate.get(2) & 0xFFFF) | ((this.propertyDelegate.get(3) & 0xFFFF) << 16);
-        return max > 0 ? max : 5_000_000;
+        return max > 0 ? max : AluminumBatteryBlockEntity.BATTERY_CAPACITY;
     }
 
     public int getMaxTransfer() {
@@ -48,7 +73,8 @@ public class AluminumBatteryScreenHandler extends ScreenHandler {
 
     public int getScaledEnergy(int pixels) {
         int max = getMaxEnergy();
-        return max > 0 ? (int) (((long) getEnergy() * pixels) / max) : 0;
+        if (max <= 0) return 0;
+        return (int) (((long) getEnergy() * pixels) / max);
     }
 
     @Override
@@ -58,12 +84,18 @@ public class AluminumBatteryScreenHandler extends ScreenHandler {
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < 27) {
-                if (!this.insertItem(originalStack, 27, 36, false)) {
+
+            if (invSlot < AluminumBatteryBlockEntity.INVENTORY_SIZE) {
+                if (!this.insertItem(originalStack, AluminumBatteryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (invSlot < 36) {
-                if (!this.insertItem(originalStack, 0, 27, false)) {
+            } else {
+                if (originalStack.getItem() instanceof ItemEnergyProvider || originalStack.getItem() instanceof EnergyProvider) {
+                    if (!this.insertItem(originalStack, AluminumBatteryBlockEntity.CHARGE_SLOT, AluminumBatteryBlockEntity.CHARGE_SLOT + 1, false) &&
+                        !this.insertItem(originalStack, AluminumBatteryBlockEntity.DISCHARGE_SLOT, AluminumBatteryBlockEntity.DISCHARGE_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
                     return ItemStack.EMPTY;
                 }
             }
@@ -84,5 +116,7 @@ public class AluminumBatteryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) { return true; }
+    public boolean canUse(PlayerEntity player) {
+        return this.inventory.canPlayerUse(player);
+    }
 }
