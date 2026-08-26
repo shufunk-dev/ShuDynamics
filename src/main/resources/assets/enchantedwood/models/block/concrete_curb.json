@@ -2,8 +2,7 @@
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "enchantedwood:block/concrete_curb",
-    "all": "enchantedwood:block/concrete_curb",
-    "texture": "enchantedwood:block/concrete_curb"
+    "all": "enchantedwood:block/concrete_curb"
   },
   "display": {
     "gui": {
@@ -42,23 +41,23 @@
       "from": [0, 0, 0],
       "to": [16, 8, 16],
       "faces": {
-        "down":  { "texture": "#all", "cullface": "down" },
-        "up":    { "texture": "#all" },
-        "north": { "texture": "#all" },
-        "south": { "texture": "#all" },
-        "west":  { "texture": "#all" },
-        "east":  { "texture": "#all" }
+        "down":  { "uv": [0, 0, 16, 16], "texture": "#all", "cullface": "down" },
+        "up":    { "uv": [0, 0, 16, 16], "texture": "#all" },
+        "north": { "uv": [0, 8, 16, 16], "texture": "#all" },
+        "south": { "uv": [0, 8, 16, 16], "texture": "#all" },
+        "west":  { "uv": [0, 8, 16, 16], "texture": "#all" },
+        "east":  { "uv": [0, 8, 16, 16], "texture": "#all" }
       }
     },
     {
       "from": [0, 8, 0],
       "to": [16, 12, 6],
       "faces": {
-        "up":    { "texture": "#all" },
-        "north": { "texture": "#all" },
-        "south": { "texture": "#all" },
-        "west":  { "texture": "#all" },
-        "east":  { "texture": "#all" }
+        "up":    { "uv": [0, 0, 16, 6], "texture": "#all" },
+        "north": { "uv": [0, 4, 16, 8], "texture": "#all" },
+        "south": { "uv": [0, 4, 16, 8], "texture": "#all" },
+        "west":  { "uv": [0, 4, 6, 8], "texture": "#all" },
+        "east":  { "uv": [10, 4, 16, 8], "texture": "#all" }
       }
     }
   ]

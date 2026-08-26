@@ -777,6 +777,15 @@ public class ModItems {
                 entries.add(MEDIUM_CARGO_TRUNK);
                 entries.add(LARGE_CARGO_TRUNK);
 
+                // Autonomous Road Paving & Highway System (v1.3.0)
+                entries.add(net.enchantedwood.block.ModBlocks.ROAD_PAVER);
+                entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
+                entries.add(net.enchantedwood.block.ModBlocks.CONCRETE_CURB);
+                entries.add(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP);
+                entries.add(UNFIRED_CONCRETE_CURB);
+                entries.add(UNFIRED_ROAD_TRANSITION_RAMP);
+
                 // Enchanted Lighting
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAMP);
             })
