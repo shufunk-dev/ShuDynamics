@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "enchantedwood:block/road_transition_ramp"
+    "facing=north,type=ground": {
+      "model": "enchantedwood:block/road_transition_ramp_ground"
     },
-    "facing=south": {
-      "model": "enchantedwood:block/road_transition_ramp",
+    "facing=south,type=ground": {
+      "model": "enchantedwood:block/road_transition_ramp_ground",
       "y": 180
     },
-    "facing=west": {
-      "model": "enchantedwood:block/road_transition_ramp",
+    "facing=west,type=ground": {
+      "model": "enchantedwood:block/road_transition_ramp_ground",
       "y": 270
     },
-    "facing=east": {
-      "model": "enchantedwood:block/road_transition_ramp",
+    "facing=east,type=ground": {
+      "model": "enchantedwood:block/road_transition_ramp_ground",
+      "y": 90
+    },
+    "facing=north,type=road": {
+      "model": "enchantedwood:block/road_transition_ramp_road"
+    },
+    "facing=south,type=road": {
+      "model": "enchantedwood:block/road_transition_ramp_road",
+      "y": 180
+    },
+    "facing=west,type=road": {
+      "model": "enchantedwood:block/road_transition_ramp_road",
+      "y": 270
+    },
+    "facing=east,type=road": {
+      "model": "enchantedwood:block/road_transition_ramp_road",
       "y": 90
     }
   }
