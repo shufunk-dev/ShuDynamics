@@ -1,19 +1,98 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,shape=straight": {
       "model": "enchantedwood:block/concrete_curb"
     },
-    "facing=south": {
+    "facing=east,shape=straight": {
       "model": "enchantedwood:block/concrete_curb",
-      "y": 180
+      "y": 90,
+      "uvlock": true
     },
-    "facing=west": {
+    "facing=south,shape=straight": {
       "model": "enchantedwood:block/concrete_curb",
-      "y": 270
+      "y": 180,
+      "uvlock": true
     },
-    "facing=east": {
+    "facing=west,shape=straight": {
       "model": "enchantedwood:block/concrete_curb",
-      "y": 90
+      "y": 270,
+      "uvlock": true
+    },
+
+    "facing=north,shape=inner_left": {
+      "model": "enchantedwood:block/concrete_curb_inner"
+    },
+    "facing=east,shape=inner_left": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,shape=inner_left": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,shape=inner_left": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 270,
+      "uvlock": true
+    },
+
+    "facing=north,shape=inner_right": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,shape=inner_right": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,shape=inner_right": {
+      "model": "enchantedwood:block/concrete_curb_inner",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,shape=inner_right": {
+      "model": "enchantedwood:block/concrete_curb_inner"
+    },
+
+    "facing=north,shape=outer_left": {
+      "model": "enchantedwood:block/concrete_curb_outer"
+    },
+    "facing=east,shape=outer_left": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,shape=outer_left": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,shape=outer_left": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 270,
+      "uvlock": true
+    },
+
+    "facing=north,shape=outer_right": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,shape=outer_right": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,shape=outer_right": {
+      "model": "enchantedwood:block/concrete_curb_outer",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,shape=outer_right": {
+      "model": "enchantedwood:block/concrete_curb_outer"
     }
   }
 }
