@@ -13,6 +13,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.vehicle.AbstractBoatEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inventory {
+public class AtvEntity extends AbstractBoatEntity implements NamedScreenHandlerFactory, Inventory {
 
     // 6 Module Slots: 0:Engine, 1:Tires, 2:Suspension, 3:Chassis, 4:Trunk, 5:Fuel/Battery
     public static final int ENGINE_SLOT = 0;
@@ -60,9 +61,13 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     private float currentSpeed = 0.0f;
     public float wheelRotation = 0.0f;
     private int fuelBurnTime = 0;
+    private boolean pressingLeft;
+    private boolean pressingRight;
+    private boolean pressingForward;
+    private boolean pressingBack;
 
-    public AtvEntity(EntityType<? extends Entity> type, World world) {
-        super(type, world);
+    public AtvEntity(EntityType<? extends AbstractBoatEntity> type, World world) {
+        super(type, world, () -> ModItems.ATV_ITEM);
         this.intersectionChecked = true;
     }
 
@@ -72,8 +77,16 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    public float getStepHeight() {
-        return 1.0f;
+    protected double getPassengerAttachmentY(EntityDimensions dimensions) {
+        return 0.45;
+    }
+
+    @Override
+    public void setInputs(boolean left, boolean right, boolean forward, boolean back) {
+        this.pressingLeft = left;
+        this.pressingRight = right;
+        this.pressingForward = forward;
+        this.pressingBack = back;
     }
 
     @Override
@@ -224,51 +237,57 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     public void tick() {
         super.tick();
 
+        LivingEntity rider = this.getControllingPassenger();
+
+        if (this.isLogicalSideForUpdatingMovement()) {
+            // Player Driving on Client / Unoccupied Vehicle on Server
+            if (rider instanceof PlayerEntity player) {
+                handleRiderControl(player);
+            } else {
+                this.currentSpeed = MathHelper.lerp(0.1f, this.currentSpeed, 0.0f);
+                this.targetSpeed = 0.0f;
+            }
+
+            applyMovementPhysics();
+        } else {
+            this.setVelocity(Vec3d.ZERO);
+        }
+
         World world = this.getEntityWorld();
         if (world.isClient()) {
             this.wheelRotation += this.currentSpeed * 25.0f;
-            return;
-        }
-
-        // Process fuel burn & replenishment from fuel slot
-        processFuel();
-
-        // Driving physics with controlling passenger
-        LivingEntity rider = this.getControllingPassenger();
-        if (rider != null && rider instanceof PlayerEntity player) {
-            handleRiderControl(player);
         } else {
-            // Decelerate when no rider
-            this.currentSpeed = MathHelper.lerp(0.1f, this.currentSpeed, 0.0f);
-            this.targetSpeed = 0.0f;
+            // Server side fuel, exhaust & gauges
+            processFuel();
+            if (rider != null && Math.abs(this.currentSpeed) > 0.05f) {
+                consumeFuel(1);
+                if (this.random.nextInt(3) == 0) {
+                    Vec3d exhaustPos = this.getEntityPos().subtract(this.getRotationVector().multiply(0.9)).add(0, 0.4, 0);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
+                }
+            }
+            this.dataTracker.set(SPEED, this.currentSpeed * 72.0f);
         }
-
-        // Apply physics motion
-        applyMovementPhysics();
-
-        // Sync speed
-        this.dataTracker.set(SPEED, this.currentSpeed * 72.0f); // Display speed in km/h approximation
     }
 
     private void handleRiderControl(PlayerEntity player) {
         float forward = 0.0f;
         float sideways = 0.0f;
 
-        if (player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer) {
-            net.minecraft.util.PlayerInput input = serverPlayer.getPlayerInput();
-            if (input.forward()) forward += 1.0f;
-            if (input.backward()) forward -= 1.0f;
-            if (input.left()) sideways += 1.0f;
-            if (input.right()) sideways -= 1.0f;
-        } else {
-            forward = player.forwardSpeed;
-            sideways = player.sidewaysSpeed;
-        }
+        if (this.pressingForward) forward += 1.0f;
+        if (this.pressingBack) forward -= 1.0f;
+        if (this.pressingLeft) sideways += 1.0f;
+        if (this.pressingRight) sideways -= 1.0f;
 
-        // Steering rotation: smooth steer towards player look direction with A/D turning
-        if (Math.abs(this.currentSpeed) > 0.01f || forward != 0) {
-            float targetYaw = player.getYaw() - (sideways * 25.0f);
-            this.setYaw(MathHelper.lerpAngleDegrees(0.15f, this.getYaw(), targetYaw));
+        // Steering rotation: A/D keys turn, and smooth lerp towards camera view
+        if (this.pressingLeft) {
+            this.setYaw(this.getYaw() - 3.5f);
+        }
+        if (this.pressingRight) {
+            this.setYaw(this.getYaw() + 3.5f);
+        }
+        if (forward != 0) {
+            this.setYaw(MathHelper.lerpAngleDegrees(0.12f, this.getYaw(), player.getYaw()));
         }
 
         // Engine max speed and acceleration calculation
@@ -300,22 +319,14 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
         if (hasPower && forward > 0) {
             this.targetSpeed = maxForwardSpeed * forward;
-            consumeFuel(1);
         } else if (hasPower && forward < 0) {
             this.targetSpeed = -maxForwardSpeed * 0.4f; // Reverse speed
-            consumeFuel(1);
         } else {
             this.targetSpeed = 0.0f;
         }
 
         // Smooth acceleration & braking
         this.currentSpeed = MathHelper.lerp(accelRate, this.currentSpeed, this.targetSpeed);
-
-        // Exhaust particles when accelerating
-        if (hasPower && Math.abs(this.currentSpeed) > 0.1f && this.random.nextInt(3) == 0) {
-            Vec3d exhaustPos = this.getEntityPos().subtract(this.getRotationVector().multiply(0.9)).add(0, 0.4, 0);
-            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
-        }
     }
 
     private void applyMovementPhysics() {
@@ -323,7 +334,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         Vec3d horizontalMovement = new Vec3d(look.x * this.currentSpeed, 0, look.z * this.currentSpeed);
 
         Vec3d velocity = this.getVelocity();
-        double gravity = this.hasNoGravity() ? 0.0 : -0.08;
+        double gravity = this.hasNoGravity() ? 0.0 : (this.isOnGround() ? 0.0 : -0.05);
 
         this.setVelocity(horizontalMovement.x, velocity.y + gravity, horizontalMovement.z);
         this.move(MovementType.SELF, this.getVelocity());
