@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -23,7 +24,7 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
     public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
     public static final EnumProperty<BlockHalf> HALF = Properties.BLOCK_HALF;
 
-    // Bottom Half Ramps (0..8px) - for ground level entry
+    // Bottom Half Ramps (0..8px) - for ground level entry up to slab
     private static final VoxelShape RAMP_NORTH_BOTTOM = VoxelShapes.union(
             Block.createCuboidShape(0, 0, 12, 16, 2, 16),
             Block.createCuboidShape(0, 0, 8, 16, 4, 12),
@@ -49,26 +50,30 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
             Block.createCuboidShape(12, 0, 0, 16, 8, 16)
     );
 
-    // Top Half Ramps (8..16px) - sits directly on top of bottom slabs/asphalt without floating!
+    // Top Half Ramps with solid lower base (0..16px) - sits directly on top of bottom slabs/asphalt with NO floating gap!
     private static final VoxelShape RAMP_NORTH_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 0, 0, 16, 8, 16), // Solid foundation filling the slab space
             Block.createCuboidShape(0, 8, 12, 16, 10, 16),
             Block.createCuboidShape(0, 8, 8, 16, 12, 12),
             Block.createCuboidShape(0, 8, 4, 16, 14, 8),
             Block.createCuboidShape(0, 8, 0, 16, 16, 4)
     );
     private static final VoxelShape RAMP_SOUTH_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 0, 0, 16, 8, 16),
             Block.createCuboidShape(0, 8, 0, 16, 10, 4),
             Block.createCuboidShape(0, 8, 4, 16, 12, 8),
             Block.createCuboidShape(0, 8, 8, 16, 14, 12),
             Block.createCuboidShape(0, 8, 12, 16, 16, 16)
     );
     private static final VoxelShape RAMP_WEST_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 0, 0, 16, 8, 16),
             Block.createCuboidShape(12, 8, 0, 16, 10, 16),
             Block.createCuboidShape(8, 8, 0, 12, 12, 16),
             Block.createCuboidShape(4, 8, 0, 8, 14, 16),
             Block.createCuboidShape(0, 8, 0, 4, 16, 16)
     );
     private static final VoxelShape RAMP_EAST_TOP = VoxelShapes.union(
+            Block.createCuboidShape(0, 0, 0, 16, 8, 16),
             Block.createCuboidShape(0, 8, 0, 4, 10, 16),
             Block.createCuboidShape(4, 8, 0, 8, 12, 16),
             Block.createCuboidShape(8, 8, 0, 12, 14, 16),
@@ -91,12 +96,17 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         Direction side = ctx.getSide();
         BlockPos pos = ctx.getBlockPos();
+        BlockState stateBelow = ctx.getWorld().getBlockState(pos.down());
         double hitY = ctx.getHitPos().y - (double) pos.getY();
 
-        BlockHalf half = BlockHalf.BOTTOM;
-        if (side == Direction.DOWN || (side != Direction.UP && hitY > 0.5)) {
-            half = BlockHalf.TOP;
-        }
+        // If placed directly on top of an asphalt slab or any half slab, use TOP mode (solid base + slope)
+        boolean isOverSlab = stateBelow.getBlock() instanceof SlabBlock 
+                || stateBelow.getBlock() instanceof AsphaltSlabBlock
+                || (side == Direction.UP && (ctx.getWorld().getBlockState(pos).isAir() && (stateBelow.getBlock() instanceof SlabBlock || stateBelow.getBlock() instanceof AsphaltSlabBlock)));
+
+        BlockHalf half = (isOverSlab || side == Direction.DOWN || (side != Direction.UP && hitY > 0.5)) 
+                ? BlockHalf.TOP 
+                : BlockHalf.BOTTOM;
 
         return this.getDefaultState()
                 .with(FACING, ctx.getHorizontalPlayerFacing())
