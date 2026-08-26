@@ -466,7 +466,7 @@ public class ModBlocks {
             Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
     public static final Block ASPHALT_SLAB = registerBlockWithTooltip("asphalt_slab",
-            new net.minecraft.block.SlabBlock(AbstractBlock.Settings.create()
+            new net.enchantedwood.block.custom.AsphaltSlabBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_slab")))
                     .sounds(BlockSoundGroup.STONE)
                     .hardness(2.0f)

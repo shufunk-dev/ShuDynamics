@@ -1,19 +1,4 @@
 {
   "type": "minecraft:block",
-  "pools": [
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "enchantedwood:asphalt_slab",
-          "functions": [
-            {
-              "function": "minecraft:explosion_decay"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "pools": []
 }

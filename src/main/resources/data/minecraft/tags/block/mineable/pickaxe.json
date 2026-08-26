@@ -46,6 +46,8 @@
     "enchantedwood:kinetic_anchor",
     "enchantedwood:road_paver",
     "enchantedwood:fuel_refinery",
-    "enchantedwood:vehicle_fabricator"
+    "enchantedwood:vehicle_fabricator",
+    "enchantedwood:asphalt_block",
+    "enchantedwood:asphalt_slab"
   ]
 }
