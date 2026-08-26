@@ -74,7 +74,24 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
     @Override
     public float getStepHeight() {
-        return 1.0f;
+        // Tiered Step Height based on installed Tires & Suspension
+        float step = 1.25f; // Base Rubber Tires climb dirt paths & 1-block steps
+
+        ItemStack tires = inventory.get(TIRE_SLOT);
+        if (tires.isOf(ModItems.STEEL_RIM_TIRE)) {
+            step = 1.5f;
+        } else if (tires.isOf(ModItems.TITANIUM_STUDDED_TIRE)) {
+            step = 1.75f;
+        }
+
+        ItemStack suspension = inventory.get(SUSPENSION_SLOT);
+        if (suspension.isOf(ModItems.STEEL_SUSPENSION)) {
+            step += 0.1f;
+        } else if (suspension.isOf(ModItems.TITANIUM_SUSPENSION)) {
+            step += 0.25f; // Up to 2.0 blocks clearance with Titanium Tires + Suspension
+        }
+
+        return step;
     }
 
     @Override
@@ -312,18 +329,26 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         if (pressLeft) sideways += 1.0f;
         if (pressRight) sideways -= 1.0f;
 
-        // Steering rotation: A/D keys turn, and smooth lerp towards camera view
+        // 1. Steering sensitivity based on installed Tires
+        float turnSpeed = 3.5f;
+        ItemStack tires = inventory.get(TIRE_SLOT);
+        if (tires.isOf(ModItems.STEEL_RIM_TIRE)) {
+            turnSpeed = 4.2f;
+        } else if (tires.isOf(ModItems.TITANIUM_STUDDED_TIRE)) {
+            turnSpeed = 5.0f;
+        }
+
         if (pressLeft) {
-            this.setYaw(this.getYaw() - 3.5f);
+            this.setYaw(this.getYaw() - turnSpeed);
         }
         if (pressRight) {
-            this.setYaw(this.getYaw() + 3.5f);
+            this.setYaw(this.getYaw() + turnSpeed);
         }
         if (forward != 0) {
             this.setYaw(MathHelper.lerpAngleDegrees(0.15f, this.getYaw(), player.getYaw()));
         }
 
-        // Engine max speed and acceleration calculation
+        // 2. Engine max speed and acceleration calculation
         float maxForwardSpeed = 0.35f; // Base starter speed (~25 km/h)
         float accelRate = 0.04f;
 
@@ -342,7 +367,16 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             accelRate = 0.07f;
         }
 
-        // Check if riding on Asphalt for +25% speed bonus
+        // 3. Chassis weight & performance modifiers
+        ItemStack chassis = inventory.get(CHASSIS_SLOT);
+        if (chassis.isOf(ModItems.ALUMINUM_ATV_CHASSIS)) {
+            accelRate *= 1.20f; // Lightweight aluminum accelerates 20% faster
+        } else if (chassis.isOf(ModItems.TITANIUM_ATV_CHASSIS)) {
+            maxForwardSpeed *= 1.10f; // Titanium gives +10% top speed & +25% acceleration
+            accelRate *= 1.25f;
+        }
+
+        // 4. Asphalt speed bonus (+25%)
         BlockPos below = this.getBlockPos().down();
         if (this.getEntityWorld().getBlockState(below).isOf(ModBlocks.ASPHALT_BLOCK) || this.getEntityWorld().getBlockState(this.getBlockPos()).isOf(ModBlocks.ASPHALT_SLAB)) {
             maxForwardSpeed *= 1.25f;
