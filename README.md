@@ -46,6 +46,7 @@
 
 ### 🌌 5. Dimensional Keystones & Progression
 * **Atmospheric Anchor (Keystone #1)**: Blueprint unlocked upon mastering deep-sea atmospheric pressures.
+* **Kinetic Anchor (Keystone #2 - v1.3.0)**: Blueprint unlocked upon assembling and driving an ATV to master land mobility.
 * **The Keystone Nexus Tab**: Dedicated 7-node radial quest progression tracking the discovery and crafting of all dimensional anomalies.
 
 ### 🛡️ 6. Tools, Armor & 3x3 Mining
