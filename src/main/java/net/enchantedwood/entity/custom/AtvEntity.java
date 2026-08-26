@@ -13,7 +13,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.vehicle.AbstractBoatEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -22,6 +21,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
@@ -35,7 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AtvEntity extends AbstractBoatEntity implements NamedScreenHandlerFactory, Inventory {
+public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inventory {
 
     // 6 Module Slots: 0:Engine, 1:Tires, 2:Suspension, 3:Chassis, 4:Trunk, 5:Fuel/Battery
     public static final int ENGINE_SLOT = 0;
@@ -61,13 +61,9 @@ public class AtvEntity extends AbstractBoatEntity implements NamedScreenHandlerF
     private float currentSpeed = 0.0f;
     public float wheelRotation = 0.0f;
     private int fuelBurnTime = 0;
-    private boolean pressingLeft;
-    private boolean pressingRight;
-    private boolean pressingForward;
-    private boolean pressingBack;
 
-    public AtvEntity(EntityType<? extends AbstractBoatEntity> type, World world) {
-        super(type, world, () -> ModItems.ATV_ITEM);
+    public AtvEntity(EntityType<? extends Entity> type, World world) {
+        super(type, world);
         this.intersectionChecked = true;
     }
 
@@ -77,16 +73,8 @@ public class AtvEntity extends AbstractBoatEntity implements NamedScreenHandlerF
     }
 
     @Override
-    protected double getPassengerAttachmentY(EntityDimensions dimensions) {
-        return 0.45;
-    }
-
-    @Override
-    public void setInputs(boolean left, boolean right, boolean forward, boolean back) {
-        this.pressingLeft = left;
-        this.pressingRight = right;
-        this.pressingForward = forward;
-        this.pressingBack = back;
+    public float getStepHeight() {
+        return 1.0f;
     }
 
     @Override
@@ -270,24 +258,69 @@ public class AtvEntity extends AbstractBoatEntity implements NamedScreenHandlerF
         }
     }
 
+    private boolean getForwardInput(LivingEntity rider) {
+        if (rider instanceof ServerPlayerEntity sp) {
+            return sp.getPlayerInput().forward();
+        }
+        if (rider instanceof PlayerEntity p) {
+            return p.forwardSpeed > 0.1f;
+        }
+        return false;
+    }
+
+    private boolean getBackwardInput(LivingEntity rider) {
+        if (rider instanceof ServerPlayerEntity sp) {
+            return sp.getPlayerInput().backward();
+        }
+        if (rider instanceof PlayerEntity p) {
+            return p.forwardSpeed < -0.1f;
+        }
+        return false;
+    }
+
+    private boolean getLeftInput(LivingEntity rider) {
+        if (rider instanceof ServerPlayerEntity sp) {
+            return sp.getPlayerInput().left();
+        }
+        if (rider instanceof PlayerEntity p) {
+            return p.sidewaysSpeed > 0.1f;
+        }
+        return false;
+    }
+
+    private boolean getRightInput(LivingEntity rider) {
+        if (rider instanceof ServerPlayerEntity sp) {
+            return sp.getPlayerInput().right();
+        }
+        if (rider instanceof PlayerEntity p) {
+            return p.sidewaysSpeed < -0.1f;
+        }
+        return false;
+    }
+
     private void handleRiderControl(PlayerEntity player) {
         float forward = 0.0f;
         float sideways = 0.0f;
 
-        if (this.pressingForward) forward += 1.0f;
-        if (this.pressingBack) forward -= 1.0f;
-        if (this.pressingLeft) sideways += 1.0f;
-        if (this.pressingRight) sideways -= 1.0f;
+        boolean pressForward = getForwardInput(player);
+        boolean pressBackward = getBackwardInput(player);
+        boolean pressLeft = getLeftInput(player);
+        boolean pressRight = getRightInput(player);
+
+        if (pressForward) forward += 1.0f;
+        if (pressBackward) forward -= 1.0f;
+        if (pressLeft) sideways += 1.0f;
+        if (pressRight) sideways -= 1.0f;
 
         // Steering rotation: A/D keys turn, and smooth lerp towards camera view
-        if (this.pressingLeft) {
+        if (pressLeft) {
             this.setYaw(this.getYaw() - 3.5f);
         }
-        if (this.pressingRight) {
+        if (pressRight) {
             this.setYaw(this.getYaw() + 3.5f);
         }
         if (forward != 0) {
-            this.setYaw(MathHelper.lerpAngleDegrees(0.12f, this.getYaw(), player.getYaw()));
+            this.setYaw(MathHelper.lerpAngleDegrees(0.15f, this.getYaw(), player.getYaw()));
         }
 
         // Engine max speed and acceleration calculation
