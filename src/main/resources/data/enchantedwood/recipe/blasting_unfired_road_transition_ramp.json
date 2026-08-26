@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "building",
+  "cookingtime": 100,
+  "experience": 0.2,
+  "ingredient": "enchantedwood:unfired_road_transition_ramp",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:road_transition_ramp"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "enchantedwood:block/road_transition_ramp"
+    },
+    "facing=south": {
+      "model": "enchantedwood:block/road_transition_ramp",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "enchantedwood:block/road_transition_ramp",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "enchantedwood:block/road_transition_ramp",
+      "y": 90
+    }
+  }
+}

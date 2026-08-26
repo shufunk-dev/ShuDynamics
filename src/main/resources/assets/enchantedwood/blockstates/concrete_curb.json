@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "enchantedwood:block/concrete_curb"
+    },
+    "facing=south": {
+      "model": "enchantedwood:block/concrete_curb",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "enchantedwood:block/concrete_curb",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "enchantedwood:block/concrete_curb",
+      "y": 90
+    }
+  }
+}

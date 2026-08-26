@@ -474,6 +474,24 @@ public class ModBlocks {
                     .requiresTool()),
             Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
+    public static final Block CONCRETE_CURB = registerBlockWithTooltip("concrete_curb",
+            new net.enchantedwood.block.custom.ConcreteCurbBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "concrete_curb")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§7Flanks 5-wide highways with raised outer edge barriers."));
+
+    public static final Block ROAD_TRANSITION_RAMP = registerBlockWithTooltip("road_transition_ramp",
+            new net.enchantedwood.block.custom.RoadTransitionRampBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_transition_ramp")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§7Smooth 0-to-8px slope connecting terrain to asphalt pavement."));
+
     public static final Block FUEL_REFINERY = registerBlockWithTooltip("fuel_refinery",
             new net.enchantedwood.block.custom.FuelRefineryBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery")))

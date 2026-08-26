@@ -48,6 +48,8 @@
     "enchantedwood:fuel_refinery",
     "enchantedwood:vehicle_fabricator",
     "enchantedwood:asphalt_block",
-    "enchantedwood:asphalt_slab"
+    "enchantedwood:asphalt_slab",
+    "enchantedwood:concrete_curb",
+    "enchantedwood:road_transition_ramp"
   ]
 }

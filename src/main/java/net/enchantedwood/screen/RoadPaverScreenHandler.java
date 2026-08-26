@@ -38,7 +38,9 @@ public class RoadPaverScreenHandler extends ScreenHandler {
                 this.addSlot(new Slot(inventory, c + r * 3, 62 + c * 18, 18 + r * 18) {
                     @Override
                     public boolean canInsert(ItemStack stack) {
-                        return stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem());
+                        return stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())
+                                || stack.isOf(net.minecraft.item.Items.CLAY_BALL) || stack.isOf(net.minecraft.item.Items.CLAY)
+                                || stack.isOf(ModBlocks.CONCRETE_CURB.asItem());
                     }
                 });
             }
@@ -133,7 +135,9 @@ public class RoadPaverScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (originalStack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || originalStack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+                if (originalStack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || originalStack.isOf(ModBlocks.ASPHALT_SLAB.asItem())
+                        || originalStack.isOf(net.minecraft.item.Items.CLAY_BALL) || originalStack.isOf(net.minecraft.item.Items.CLAY)
+                        || originalStack.isOf(ModBlocks.CONCRETE_CURB.asItem())) {
                     if (!this.insertItem(originalStack, 0, 9, false)) return ItemStack.EMPTY;
                 } else if (originalStack.getItem() instanceof ItemEnergyProvider || originalStack.getItem() instanceof EnergyProvider) {
                     if (!this.insertItem(originalStack, RoadPaverBlockEntity.BATTERY_SLOT, RoadPaverBlockEntity.BATTERY_SLOT + 1, false)) return ItemStack.EMPTY;

@@ -85,6 +85,18 @@ public class ModItems {
             Text.literal("§8Required for Titanium Twin-Turbo ATV Engines.")
     ));
 
+    // Highway & Road Transition Clay Molds
+    public static final Item UNFIRED_CONCRETE_CURB = registerItem("unfired_concrete_curb", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Unfired clay mold for concrete curbs."),
+            Text.literal("§8Smelt in a Furnace to fire into a finished Concrete Curb.")
+    ));
+    public static final Item UNFIRED_ROAD_TRANSITION_RAMP = registerItem("unfired_road_transition_ramp", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Unfired sloped clay mold for road transition ramps."),
+            Text.literal("§8Smelt in a Furnace to fire into a finished Road Transition Ramp.")
+    ));
+
     // Modular All-Terrain Vehicle (ATV) & Components
     public static final Item ATV_ITEM = registerItem("atv", settings -> new net.enchantedwood.item.custom.AtvItem(settings.maxCount(1)));
     public static final Item ATV_SEAT = registerItem("atv_seat", settings -> new net.enchantedwood.item.custom.TooltipItem(
@@ -740,6 +752,10 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ROAD_PAVER);
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK);
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
+                entries.add(net.enchantedwood.block.ModBlocks.CONCRETE_CURB);
+                entries.add(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP);
+                entries.add(UNFIRED_CONCRETE_CURB);
+                entries.add(UNFIRED_ROAD_TRANSITION_RAMP);
 
                 // Modular All-Terrain Vehicles (ATV) & Upgrades
                 entries.add(net.enchantedwood.block.ModBlocks.VEHICLE_FABRICATOR);

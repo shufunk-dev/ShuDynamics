@@ -249,6 +249,19 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
         return count;
     }
 
+    private int countClay() {
+        int count = 0;
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.get(i);
+            if (stack.isOf(net.minecraft.item.Items.CLAY_BALL) || stack.isOf(ModBlocks.CONCRETE_CURB.asItem())) {
+                count += stack.getCount();
+            } else if (stack.isOf(net.minecraft.item.Items.CLAY)) {
+                count += stack.getCount() * 4;
+            }
+        }
+        return count;
+    }
+
     private ItemStack consumeOneAsphalt() {
         // Prioritize slabs if available, otherwise full blocks
         for (int i = 0; i < 9; i++) {
@@ -266,32 +279,75 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
         return ItemStack.EMPTY;
     }
 
+    private boolean consumeOneClay() {
+        // 1. Direct concrete curb
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.get(i);
+            if (stack.isOf(ModBlocks.CONCRETE_CURB.asItem())) {
+                stack.decrement(1);
+                return true;
+            }
+        }
+        // 2. Raw clay ball
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.get(i);
+            if (stack.isOf(net.minecraft.item.Items.CLAY_BALL)) {
+                stack.decrement(1);
+                return true;
+            }
+        }
+        // 3. Raw clay block
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.get(i);
+            if (stack.isOf(net.minecraft.item.Items.CLAY)) {
+                stack.decrement(1);
+                // Return 3 clay balls to remaining slots if possible
+                ItemStack remainder = new ItemStack(net.minecraft.item.Items.CLAY_BALL, 3);
+                for (int j = 0; j < 9; j++) {
+                    if (remainder.isEmpty()) break;
+                    ItemStack target = inventory.get(j);
+                    if (target.isEmpty()) {
+                        inventory.set(j, remainder);
+                        break;
+                    } else if (target.isOf(net.minecraft.item.Items.CLAY_BALL) && target.getCount() < 64) {
+                        int toAdd = Math.min(remainder.getCount(), 64 - target.getCount());
+                        target.increment(toAdd);
+                        remainder.decrement(toAdd);
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void paveRoadAhead(ServerWorld world, BlockPos pos, Direction facing) {
         Direction leftDir = facing.rotateYCounterclockwise();
         Direction rightDir = facing.rotateYClockwise();
         BlockPos aheadCenter = pos.offset(facing);
 
-        BlockPos[] roadPositions = new BlockPos[]{
-                aheadCenter.offset(leftDir),
+        // 5 Columns: [-2: Left Curb, -1: Left Asphalt, 0: Center Asphalt, +1: Right Asphalt, +2: Right Curb]
+        BlockPos[] curbLeftPositions = new BlockPos[]{ aheadCenter.offset(leftDir, 2) };
+        BlockPos[] asphaltPositions = new BlockPos[]{
+                aheadCenter.offset(leftDir, 1),
                 aheadCenter,
-                aheadCenter.offset(rightDir)
+                aheadCenter.offset(rightDir, 1)
         };
+        BlockPos[] curbRightPositions = new BlockPos[]{ aheadCenter.offset(rightDir, 2) };
 
-        // Pave all 3 columns
-        for (BlockPos roadPos : roadPositions) {
+        // 1. Clear and Pave Left Curb (-2)
+        for (BlockPos curbPos : curbLeftPositions) {
+            clearPath(world, curbPos);
+            BlockPos groundPos = curbPos.down();
+            if (consumeOneClay()) {
+                world.setBlockState(groundPos, ModBlocks.CONCRETE_CURB.getDefaultState().with(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, leftDir), 3);
+            }
+        }
+
+        // 2. Clear and Pave Center Asphalt Columns (-1, 0, 1)
+        for (BlockPos roadPos : asphaltPositions) {
+            clearPath(world, roadPos);
             BlockPos groundPos = roadPos.down();
-            BlockPos clearPos1 = roadPos;
-            BlockPos clearPos2 = roadPos.up();
-
-            // Clear obstructions
-            if (!world.isAir(clearPos1) && world.getBlockState(clearPos1).getBlock() != ModBlocks.ROAD_PAVER) {
-                world.breakBlock(clearPos1, true);
-            }
-            if (!world.isAir(clearPos2)) {
-                world.breakBlock(clearPos2, true);
-            }
-
-            // Consume material and lay asphalt
             ItemStack placedItem = consumeOneAsphalt();
             if (!placedItem.isEmpty()) {
                 if (placedItem.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
@@ -299,6 +355,15 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
                 } else {
                     world.setBlockState(groundPos, ModBlocks.ASPHALT_BLOCK.getDefaultState(), 3);
                 }
+            }
+        }
+
+        // 3. Clear and Pave Right Curb (+2)
+        for (BlockPos curbPos : curbRightPositions) {
+            clearPath(world, curbPos);
+            BlockPos groundPos = curbPos.down();
+            if (consumeOneClay()) {
+                world.setBlockState(groundPos, ModBlocks.CONCRETE_CURB.getDefaultState().with(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, rightDir), 3);
             }
         }
 
@@ -331,7 +396,17 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
         }
     }
 
-    // SidedInventory
+    private void clearPath(ServerWorld world, BlockPos pos) {
+        BlockPos clearPos1 = pos;
+        BlockPos clearPos2 = pos.up();
+        if (!world.isAir(clearPos1) && world.getBlockState(clearPos1).getBlock() != ModBlocks.ROAD_PAVER) {
+            world.breakBlock(clearPos1, true);
+        }
+        if (!world.isAir(clearPos2)) {
+            world.breakBlock(clearPos2, true);
+        }
+    }
+
     @Override
     public int[] getAvailableSlots(Direction side) {
         return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -340,7 +415,9 @@ public class RoadPaverBlockEntity extends BlockEntity implements NamedScreenHand
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot < 9) {
-            return stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem());
+            return stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())
+                    || stack.isOf(net.minecraft.item.Items.CLAY_BALL) || stack.isOf(net.minecraft.item.Items.CLAY)
+                    || stack.isOf(ModBlocks.CONCRETE_CURB.asItem());
         }
         if (slot == BATTERY_SLOT) {
             return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
