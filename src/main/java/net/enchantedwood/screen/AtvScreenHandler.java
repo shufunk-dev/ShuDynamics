@@ -23,66 +23,27 @@ public class AtvScreenHandler extends ScreenHandler {
 
         inventory.onOpen(playerInventory.player);
 
-        // 1. Module Slots
+        // 1. Installed Vehicle Components (Locked / Display-Only; modify at Vehicle Fabricator)
         // Slot 0: Engine (x=18, y=18)
-        this.addSlot(new Slot(inventory, AtvEntity.ENGINE_SLOT, 18, 18) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.COPPER_ATV_ENGINE)
-                        || stack.isOf(net.enchantedwood.item.ModItems.ALUMINUM_ATV_ENGINE)
-                        || stack.isOf(net.enchantedwood.item.ModItems.STEEL_ATV_ENGINE)
-                        || stack.isOf(net.enchantedwood.item.ModItems.TITANIUM_ATV_ENGINE);
-            }
-        });
+        this.addSlot(new ReadOnlyModuleSlot(inventory, AtvEntity.ENGINE_SLOT, 18, 18));
         // Slot 1: Tires (x=18, y=38)
-        this.addSlot(new Slot(inventory, AtvEntity.TIRE_SLOT, 18, 38) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.RUBBER_TIRE)
-                        || stack.isOf(net.enchantedwood.item.ModItems.STEEL_RIM_TIRE)
-                        || stack.isOf(net.enchantedwood.item.ModItems.TITANIUM_STUDDED_TIRE);
-            }
-        });
+        this.addSlot(new ReadOnlyModuleSlot(inventory, AtvEntity.TIRE_SLOT, 18, 38));
         // Slot 2: Suspension (x=18, y=58)
-        this.addSlot(new Slot(inventory, AtvEntity.SUSPENSION_SLOT, 18, 58) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.STEEL_SUSPENSION)
-                        || stack.isOf(net.enchantedwood.item.ModItems.TITANIUM_SUSPENSION);
-            }
-        });
+        this.addSlot(new ReadOnlyModuleSlot(inventory, AtvEntity.SUSPENSION_SLOT, 18, 58));
         // Slot 3: Chassis (x=142, y=18)
-        this.addSlot(new Slot(inventory, AtvEntity.CHASSIS_SLOT, 142, 18) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.ALUMINUM_ATV_CHASSIS)
-                        || stack.isOf(net.enchantedwood.item.ModItems.STEEL_ATV_CHASSIS)
-                        || stack.isOf(net.enchantedwood.item.ModItems.TITANIUM_ATV_CHASSIS);
-            }
-        });
+        this.addSlot(new ReadOnlyModuleSlot(inventory, AtvEntity.CHASSIS_SLOT, 142, 18));
         // Slot 4: Cargo Trunk (x=142, y=38)
-        this.addSlot(new Slot(inventory, AtvEntity.TRUNK_SLOT, 142, 38) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.SMALL_CARGO_TRUNK)
-                        || stack.isOf(net.enchantedwood.item.ModItems.MEDIUM_CARGO_TRUNK)
-                        || stack.isOf(net.enchantedwood.item.ModItems.LARGE_CARGO_TRUNK);
-            }
-        });
-        // Slot 5: Fuel / Battery (x=142, y=58)
+        this.addSlot(new ReadOnlyModuleSlot(inventory, AtvEntity.TRUNK_SLOT, 142, 38));
+
+        // Slot 5: Fuel / Battery Slot (Interactive; accepts fuel & batteries)
         this.addSlot(new Slot(inventory, AtvEntity.FUEL_SLOT, 142, 58) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(net.enchantedwood.item.ModItems.GASOLINE_CANISTER)
-                        || stack.isOf(net.enchantedwood.item.ModItems.BIOFUEL_CANISTER)
-                        || stack.isOf(net.enchantedwood.item.ModItems.HIGH_OCTANE_FUEL_CANISTER)
-                        || stack.isOf(net.minecraft.item.Items.COAL)
-                        || stack.isOf(net.minecraft.item.Items.CHARCOAL)
-                        || stack.getItem() instanceof net.enchantedwood.energy.EnergyProvider;
+                return isFuel(stack);
             }
         });
 
-        // 2. Trunk Storage (Slots 6-14: 9 slots starting at x=44, y=28 - 3x3 compact rack)
+        // 2. Trunk Storage (Slots 6-14: 9 cargo slots in 3x3 center rack)
         for (int r = 0; r < 3; ++r) {
             for (int c = 0; c < 3; ++c) {
                 this.addSlot(new Slot(inventory, AtvEntity.MODULE_SLOTS_COUNT + c + r * 3, 62 + c * 18, 18 + r * 18));
@@ -102,6 +63,31 @@ public class AtvScreenHandler extends ScreenHandler {
         }
     }
 
+    public static boolean isFuel(ItemStack stack) {
+        return stack.isOf(net.enchantedwood.item.ModItems.GASOLINE_CANISTER)
+                || stack.isOf(net.enchantedwood.item.ModItems.BIOFUEL_CANISTER)
+                || stack.isOf(net.enchantedwood.item.ModItems.HIGH_OCTANE_FUEL_CANISTER)
+                || stack.isOf(net.minecraft.item.Items.COAL)
+                || stack.isOf(net.minecraft.item.Items.CHARCOAL)
+                || stack.getItem() instanceof net.enchantedwood.energy.EnergyProvider;
+    }
+
+    private static class ReadOnlyModuleSlot extends Slot {
+        public ReadOnlyModuleSlot(Inventory inventory, int index, int x, int y) {
+            super(inventory, index, x, y);
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public boolean canTakeItems(PlayerEntity playerEntity) {
+            return false;
+        }
+    }
+
     public Inventory getAtvInventory() {
         return this.inventory;
     }
@@ -113,12 +99,32 @@ public class AtvScreenHandler extends ScreenHandler {
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < 15) { // ATV slots (6 module + 9 trunk)
+
+            if (invSlot < 15) { // ATV Slots
+                if (invSlot < 5) {
+                    // Cannot move locked module slots
+                    return ItemStack.EMPTY;
+                }
+                // Move from ATV fuel slot (5) or trunk storage (6-14) to player inventory
                 if (!this.insertItem(originalStack, 15, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 15, false)) {
-                return ItemStack.EMPTY;
+            } else {
+                // Moving from Player Inventory into ATV:
+                if (isFuel(originalStack)) {
+                    // Try fuel slot first
+                    if (!this.insertItem(originalStack, 5, 6, false)) {
+                        // Then trunk storage
+                        if (!this.insertItem(originalStack, 6, 15, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                } else {
+                    // Regular items go directly into cargo trunk storage
+                    if (!this.insertItem(originalStack, 6, 15, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
 
             if (originalStack.isEmpty()) {

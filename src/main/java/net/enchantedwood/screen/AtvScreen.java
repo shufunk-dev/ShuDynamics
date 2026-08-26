@@ -46,9 +46,9 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         // Draw Section Headers
-        context.drawText(this.textRenderer, Text.literal("Parts"), 16, 7, 0x555555, false);
-        context.drawText(this.textRenderer, Text.literal("Trunk"), 74, 7, 0x555555, false);
-        context.drawText(this.textRenderer, Text.literal("Power"), 136, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Installed"), 10, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Cargo"), 74, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Fuel"), 140, 7, 0x555555, false);
 
         // Player Inventory Title
         context.drawText(this.textRenderer, this.playerInventoryTitle, 8, 73, 0x404040, false);
@@ -65,21 +65,27 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
     protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
         super.drawMouseoverTooltip(context, x, y);
 
-        // If hovering over an empty module slot, display helper tooltip
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.handler.getCursorStack().isEmpty()) {
+        // If hovering over module or fuel slots
+        if (this.focusedSlot != null && this.handler.getCursorStack().isEmpty()) {
             int slotId = this.focusedSlot.id;
             Text tooltip = null;
-            if (slotId == AtvEntity.ENGINE_SLOT) {
-                tooltip = Text.literal("§eEngine Slot§r\n§7Insert Aluminum, Steel, or Titanium ATV Engine.");
-            } else if (slotId == AtvEntity.TIRE_SLOT) {
-                tooltip = Text.literal("§eTires Slot§r\n§7Insert Rubber, Steel-Rim, or Titanium Studded Tires.");
-            } else if (slotId == AtvEntity.SUSPENSION_SLOT) {
-                tooltip = Text.literal("§eSuspension Slot§r\n§7Insert Steel or Titanium Suspension.");
-            } else if (slotId == AtvEntity.CHASSIS_SLOT) {
-                tooltip = Text.literal("§eChassis Slot§r\n§7Insert Aluminum, Steel, or Titanium ATV Chassis.");
-            } else if (slotId == AtvEntity.TRUNK_SLOT) {
-                tooltip = Text.literal("§eCargo Trunk Slot§r\n§7Insert Small, Medium, or Large Cargo Trunk.");
-            } else if (slotId == AtvEntity.FUEL_SLOT) {
+
+            if (slotId < 5) {
+                String slotName = switch (slotId) {
+                    case AtvEntity.ENGINE_SLOT -> "Engine";
+                    case AtvEntity.TIRE_SLOT -> "Tires";
+                    case AtvEntity.SUSPENSION_SLOT -> "Suspension";
+                    case AtvEntity.CHASSIS_SLOT -> "Chassis";
+                    case AtvEntity.TRUNK_SLOT -> "Cargo Trunk";
+                    default -> "Part";
+                };
+
+                if (this.focusedSlot.hasStack()) {
+                    tooltip = Text.literal("§bInstalled " + slotName + "§r\n§8Modify/upgrade at Vehicle Fabricator");
+                } else {
+                    tooltip = Text.literal("§8No " + slotName + " Installed§r\n§7Install at Vehicle Fabricator");
+                }
+            } else if (slotId == AtvEntity.FUEL_SLOT && !this.focusedSlot.hasStack()) {
                 tooltip = Text.literal("§6Fuel / Battery Slot§r\n§7Insert Gasoline, Biofuel, High-Octane, Coal, or Charged Battery.");
             }
 
