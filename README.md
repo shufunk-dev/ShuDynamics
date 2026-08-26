@@ -6,18 +6,17 @@
 [![Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Stable Release](https://img.shields.io/badge/Stable-v1.2.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Experimental](https://img.shields.io/badge/Next-v1.3.0--dev-orange.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics)
+[![Stable Release](https://img.shields.io/badge/Stable-v1.3.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an all-in-one tech, magic, energy, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, remote wireless crystal item access, and deep-sea exploration life support.
+**ShuDynamics** is an all-in-one tech, magic, energy, modular vehicle, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, modular all-terrain vehicles, and automated road infrastructure.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 
 ---
 
-## 🌟 Core Mod Features (v1.2.0 Release)
+## 🌟 Core Mod Features (v1.3.0 Release)
 
 ### ⚡ 1. Tiered Energy & Power Grids
 * **Multi-Tier Generators**: Clean energy generation across Copper, Aluminum, and Steel tiers.
@@ -55,9 +54,16 @@
 * **Special Archetypes**: Livingwood weapons and Barkskin equipment offering unique passives and survivability.
 * **Health Lockets & Crystals**: Permanent health-pool expansion items.
 
-### 🌲 7. Natural Resources & Base Utilities
-* **Rubber Trees & Polymers**: Harvest Sticky Resin from Rubber Trees and vulcanize Cured Rubber Sheets for insulation.
-* **Enchanted Lamps**: Multi-state base illumination with wireless right-click control and a 32-block hostile mob spawn sanctuary ward.
+### 🏎️ 8. Modular All-Terrain Vehicles (ATV) & Fabricator (v1.3.0)
+* **Custom Modular ATV**: High-mobility exploration vehicle with 6 swappable component slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, and Fuel/Batteries).
+* **Vehicle Fabricator & Tuning Bay**: Dedicated vehicle construction station with item retrieval and vehicle customization.
+* **Fall Damage Immunity & Speed Scaling**: Advanced suspension absorbs all cliff falls, while road surfaces provide speed multipliers.
+
+### 🛣️ 9. Petrochemicals & Road Infrastructure (v1.3.0)
+* **Oil Sand & Distillation**: Naturally generating Oil Sand deposits refined in the powered **Fuel Refinery** into Gasoline, Biofuel, and High-Octane Racing Fuel.
+* **Asphalt Roads & Slabs**: Speed-boost paved surfaces with accurate pickaxe mining mechanics.
+* **Auto-Connecting Curbs & Ramps**: Multi-state Concrete Curbs with seamless corner connections and transition ramps.
+* **Autonomous Road Paver**: Machine that automatically lays 3-wide asphalt roads and extrudes curbs on either side.
 
 ---
 
