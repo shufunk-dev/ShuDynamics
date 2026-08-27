@@ -3,6 +3,8 @@ package net.enchantedwood.block;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -637,6 +639,83 @@ public class ModBlocks {
             Text.literal("§7Vehicle workshop for fabricating & modifying Modular ATVs."),
             Text.literal("§8Assemble custom engines, chassis, tires, suspensions & trunks."));
 
+    // Phase 2: Nether Factory & Tier 4 Power Grid
+    public static final Block TUNGSTEN_BATTERY = registerBlockWithTooltip("tungsten_battery",
+            new net.enchantedwood.block.custom.TungstenBatteryBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_battery")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(12.0f)
+                    .requiresTool()),
+            Text.literal("§6Tier 4 Heavy Energy Storage (100,000,000 FE)"),
+            Text.literal("§8Max Transfer: §e25,000 FE/t§8. Refractory insulation."));
+
+    public static final Block TUNGSTEN_CABLE = registerBlockWithTooltip("tungsten_cable",
+            new net.enchantedwood.block.custom.TungstenCableBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_cable")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(2.5f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Tier 4 Heavy Energy Cable"),
+            Text.literal("§8Max Transfer: §e25,000 FE/t§8. Lava & blast proof."));
+
+    public static final Block GEOTHERMAL_GENERATOR = registerBlockWithTooltip("geothermal_generator",
+            new net.enchantedwood.block.custom.GeothermalGeneratorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "geothermal_generator")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.GeothermalGeneratorBlock.LIT) ? 14 : 0)),
+            Text.literal("§6Tier 4 Geothermal Thermal Generator"),
+            Text.literal("§8Generates §e750 FE/t§8 from Lava and Nether heat sources."));
+
+    public static final Block ALLOY_FOUNDRY = registerBlockWithTooltip("alloy_foundry",
+            new net.enchantedwood.block.custom.AlloyFoundryBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.AlloyFoundryBlock.LIT) ? 13 : 0)),
+            Text.literal("§6Industrial Alloy Induction Foundry"),
+            Text.literal("§8Dual-induction melting & casting for Manyullyn & Tungsten Carbide."));
+
+    public static final Block MAGMA_CRUCIBLE = registerBlockWithTooltip("magma_crucible",
+            new net.enchantedwood.block.custom.MagmaCrucibleBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "magma_crucible")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.MagmaCrucibleBlock.LIT) ? 13 : 0)),
+            Text.literal("§6Magma Crucible & Mineral Extractor"),
+            Text.literal("§8Melts Basalt, Blackstone & Magma into Lava, Sulfur & Volcanic Ash."));
+
+    public static final Block LAVA_PUMP = registerBlockWithTooltip("lava_pump",
+            new net.enchantedwood.block.custom.LavaPumpBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "lava_pump")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.LavaPumpBlock.LIT) ? 12 : 0)),
+            Text.literal("§6Submersible Thermal Lava Pump"),
+            Text.literal("§8Pumps liquid lava from Nether seas into adjacent pipes and generators."));
+
+    public static final Block CRUSHER_MK2 = registerBlockWithTooltip("crusher_mk2",
+            new net.enchantedwood.block.custom.CrusherMk2Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.CrusherMk2Block.LIT) ? 13 : 0)),
+            Text.literal("§6Industrial Crusher MK2"),
+            Text.literal("§83x-6x Ore Yield Multiplier + Secondary Mineral Byproducts."));
+
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "corn_crop")))
@@ -646,6 +725,61 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.CROP)
                     .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
                     .nonOpaque()));
+
+    public static final Block VOLCANIC_SOIL = registerBlockWithTooltip("volcanic_soil",
+            new net.enchantedwood.block.custom.VolcanicSoilBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_soil")))
+                    .sounds(BlockSoundGroup.MUD)
+                    .hardness(0.8f)
+                    .resistance(0.8f)
+                    .ticksRandomly()),
+            Text.literal("§6Volcanic Mineral Soil"),
+            Text.literal("§8Self-hydrating fertile soil that accelerates crop and sapling growth automatically."));
+
+    public static final Block SOIL_INFUSER = registerBlockWithTooltip("soil_infuser",
+            new net.enchantedwood.block.custom.SoilInfuserBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "soil_infuser")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.SoilInfuserBlock.LIT) ? 11 : 0)),
+            Text.literal("§6Volcanic Soil Infuser"),
+            Text.literal("§8Synthesizes hyper-fertile Volcanic Mineral Soil from Dirt and Volcanic Ash."));
+
+    public static final Block POZZOLANIC_ASPHALT = registerBlockWithTooltip("pozzolanic_asphalt",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "pozzolanic_asphalt")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§6Pozzolanic Roman Asphalt"),
+            Text.literal("§8Ultra-durable ancient Roman pavement made with volcanic ash."));
+
+    public static final Block VOLCANIC_BRICKS = registerBlock("volcanic_bricks",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_bricks")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.5f)
+                    .resistance(8.0f)
+                    .requiresTool()));
+
+    public static final Block VOLCANIC_BRICK_STAIRS = registerBlock("volcanic_brick_stairs",
+            new StairsBlock(VOLCANIC_BRICKS.getDefaultState(), AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_brick_stairs")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.5f)
+                    .resistance(8.0f)
+                    .requiresTool()));
+
+    public static final Block VOLCANIC_BRICK_SLAB = registerBlock("volcanic_brick_slab",
+            new SlabBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_brick_slab")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.5f)
+                    .resistance(8.0f)
+                    .requiresTool()));
 
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));

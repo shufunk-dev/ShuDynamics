@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TPT",
+    "PCP",
+    "TGT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "P": "minecraft:piston",
+    "C": "minecraft:bucket",
+    "G": "enchantedwood:tungsten_cable"
+  },
+  "result": {
+    "id": "enchantedwood:lava_pump",
+    "count": 1
+  }
+}

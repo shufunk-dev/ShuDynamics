@@ -35,6 +35,7 @@ public class CustomHeartHudRenderer {
 
     private static void onRenderHud(DrawContext context, RenderTickCounter renderTickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
+        if (client.options.hudHidden) return;
         PlayerEntity player = client.player;
         if (player == null || player.isSpectator() || player.isCreative()) return;
 

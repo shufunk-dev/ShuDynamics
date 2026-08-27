@@ -200,6 +200,63 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(VehicleFabricatorBlockEntity::new, ModBlocks.VEHICLE_FABRICATOR).build()
             );
 
+    // Phase 2: Nether Factory & Tier 4 Power Grid
+    public static final BlockEntityType<TungstenBatteryBlockEntity> TUNGSTEN_BATTERY_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_battery"),
+                    FabricBlockEntityTypeBuilder.create(TungstenBatteryBlockEntity::new, ModBlocks.TUNGSTEN_BATTERY).build()
+            );
+
+    public static final BlockEntityType<TungstenCableBlockEntity> TUNGSTEN_CABLE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_cable"),
+                    FabricBlockEntityTypeBuilder.create(TungstenCableBlockEntity::new, ModBlocks.TUNGSTEN_CABLE).build()
+            );
+
+    public static final BlockEntityType<GeothermalGeneratorBlockEntity> GEOTHERMAL_GENERATOR_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "geothermal_generator"),
+                    FabricBlockEntityTypeBuilder.create(GeothermalGeneratorBlockEntity::new, ModBlocks.GEOTHERMAL_GENERATOR).build()
+            );
+
+    public static final BlockEntityType<AlloyFoundryBlockEntity> ALLOY_FOUNDRY_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
+                    FabricBlockEntityTypeBuilder.create(AlloyFoundryBlockEntity::new, ModBlocks.ALLOY_FOUNDRY).build()
+            );
+
+    public static final BlockEntityType<MagmaCrucibleBlockEntity> MAGMA_CRUCIBLE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "magma_crucible"),
+                    FabricBlockEntityTypeBuilder.create(MagmaCrucibleBlockEntity::new, ModBlocks.MAGMA_CRUCIBLE).build()
+            );
+
+    public static final BlockEntityType<LavaPumpBlockEntity> LAVA_PUMP_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "lava_pump"),
+                    FabricBlockEntityTypeBuilder.create(LavaPumpBlockEntity::new, ModBlocks.LAVA_PUMP).build()
+            );
+
+    public static final BlockEntityType<CrusherMk2BlockEntity> CRUSHER_MK2_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2"),
+                    FabricBlockEntityTypeBuilder.create(CrusherMk2BlockEntity::new, ModBlocks.CRUSHER_MK2).build()
+            );
+
+    public static final BlockEntityType<SoilInfuserBlockEntity> SOIL_INFUSER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "soil_infuser"),
+                    FabricBlockEntityTypeBuilder.create(SoilInfuserBlockEntity::new, ModBlocks.SOIL_INFUSER).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

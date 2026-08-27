@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PVP",
+    "SMF",
+    "TCT"
+  ],
+  "key": {
+    "P": "minecraft:piston",
+    "V": "enchantedwood:volcanic_fertilizer",
+    "S": "enchantedwood:steel_plate",
+    "M": "enchantedwood:manyullyn_ingot",
+    "F": "minecraft:furnace",
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "C": "enchantedwood:tungsten_cable"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:soil_infuser"
+  }
+}

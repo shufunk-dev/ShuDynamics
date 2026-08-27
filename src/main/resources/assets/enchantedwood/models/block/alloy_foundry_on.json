@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/alloy_foundry_top",
+    "front": "enchantedwood:block/alloy_foundry_front_on",
+    "side": "enchantedwood:block/alloy_foundry_side"
+  }
+}

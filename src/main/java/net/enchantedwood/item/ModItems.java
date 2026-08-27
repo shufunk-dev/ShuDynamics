@@ -289,6 +289,7 @@ public class ModItems {
     // Volcanic Minerals & Byproducts
     public static final Item SULFUR_DUST = registerItem("sulfur_dust", Item::new);
     public static final Item VOLCANIC_ASH = registerItem("volcanic_ash", Item::new);
+    public static final Item VOLCANIC_FERTILIZER = registerItem("volcanic_fertilizer", net.enchantedwood.item.custom.VolcanicFertilizerItem::new);
     public static final Item FIRE_CRYSTAL = registerItem("fire_crystal", settings -> new Item(settings.fireproof()));
 
     // Steel Tools & Weapons
@@ -879,7 +880,25 @@ public class ModItems {
 
                 entries.add(SULFUR_DUST);
                 entries.add(VOLCANIC_ASH);
+                entries.add(VOLCANIC_FERTILIZER);
                 entries.add(FIRE_CRYSTAL);
+
+                // Nether Factory & Tier 4 Power Infrastructure
+                entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_BATTERY);
+                entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_CABLE);
+                entries.add(net.enchantedwood.block.ModBlocks.GEOTHERMAL_GENERATOR);
+                entries.add(net.enchantedwood.block.ModBlocks.ALLOY_FOUNDRY);
+                entries.add(net.enchantedwood.block.ModBlocks.MAGMA_CRUCIBLE);
+                entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);
+                entries.add(net.enchantedwood.block.ModBlocks.CRUSHER_MK2);
+                entries.add(net.enchantedwood.block.ModBlocks.SOIL_INFUSER);
+
+                // Volcanic Agronomy & Pozzolanic Architecture
+                entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
+                entries.add(net.enchantedwood.block.ModBlocks.POZZOLANIC_ASPHALT);
+                entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_BRICKS);
+                entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_BRICK_STAIRS);
+                entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_BRICK_SLAB);
 
                 // Agriculture & Biofuels
                 entries.add(CORN);

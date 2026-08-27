@@ -96,6 +96,35 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "vehicle_fabricator"),
                     new ScreenHandlerType<>(VehicleFabricatorScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    // Phase 2: Nether Factory & Tier 4 Grid
+    public static final ScreenHandlerType<TungstenBatteryScreenHandler> TUNGSTEN_BATTERY_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_battery"),
+                    new ScreenHandlerType<>(TungstenBatteryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<GeothermalGeneratorScreenHandler> GEOTHERMAL_GENERATOR_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "geothermal_generator"),
+                    new ScreenHandlerType<>(GeothermalGeneratorScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<AlloyFoundryScreenHandler> ALLOY_FOUNDRY_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
+                    new ScreenHandlerType<>(AlloyFoundryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<MagmaCrucibleScreenHandler> MAGMA_CRUCIBLE_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "magma_crucible"),
+                    new ScreenHandlerType<>(MagmaCrucibleScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<LavaPumpScreenHandler> LAVA_PUMP_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "lava_pump"),
+                    new ScreenHandlerType<>(LavaPumpScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<CrusherMk2ScreenHandler> CRUSHER_MK2_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2"),
+                    new ScreenHandlerType<>(CrusherMk2ScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<SoilInfuserScreenHandler> SOIL_INFUSER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "soil_infuser"),
+                    new ScreenHandlerType<>(SoilInfuserScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }

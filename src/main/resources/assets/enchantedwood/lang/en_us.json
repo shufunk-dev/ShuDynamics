@@ -420,5 +420,28 @@
   "item.enchantedwood.manyullyn_helmet": "Manyullyn Helmet",
   "item.enchantedwood.manyullyn_chestplate": "Manyullyn Chestplate",
   "item.enchantedwood.manyullyn_leggings": "Manyullyn Leggings",
-  "item.enchantedwood.manyullyn_boots": "Manyullyn Boots"
+  "item.enchantedwood.manyullyn_boots": "Manyullyn Boots",
+
+  "block.enchantedwood.tungsten_battery": "Tungsten Heavy Battery",
+  "container.enchantedwood.tungsten_battery": "Tungsten Heavy Battery (Tier 4)",
+  "block.enchantedwood.tungsten_cable": "Tungsten Heavy Energy Cable",
+  "block.enchantedwood.geothermal_generator": "Geothermal Generator",
+  "container.enchantedwood.geothermal_generator": "Geothermal Thermal Generator",
+  "block.enchantedwood.alloy_foundry": "Industrial Alloy Foundry",
+  "container.enchantedwood.alloy_foundry": "Industrial Alloy Induction Foundry",
+  "block.enchantedwood.magma_crucible": "Magma Crucible",
+  "container.enchantedwood.magma_crucible": "Magma Crucible & Mineral Extractor",
+  "block.enchantedwood.lava_pump": "Submersible Lava Pump",
+  "container.enchantedwood.lava_pump": "Submersible Thermal Lava Pump",
+  "block.enchantedwood.crusher_mk2": "Industrial Crusher MK2",
+  "container.enchantedwood.crusher_mk2": "Industrial Crusher MK2",
+
+  "item.enchantedwood.volcanic_fertilizer": "Volcanic Super Fertilizer",
+  "block.enchantedwood.volcanic_soil": "Volcanic Mineral Soil",
+  "block.enchantedwood.soil_infuser": "Volcanic Soil Infuser",
+  "container.enchantedwood.soil_infuser": "Volcanic Soil Infuser & Compressor",
+  "block.enchantedwood.pozzolanic_asphalt": "Pozzolanic Roman Asphalt",
+  "block.enchantedwood.volcanic_bricks": "Volcanic Bricks",
+  "block.enchantedwood.volcanic_brick_stairs": "Volcanic Brick Stairs",
+  "block.enchantedwood.volcanic_brick_slab": "Volcanic Brick Slab"
 }

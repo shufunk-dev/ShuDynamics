@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "enchantedwood:block/tungsten_battery"
+    },
+    "facing=south": {
+      "model": "enchantedwood:block/tungsten_battery",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "enchantedwood:block/tungsten_battery",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "enchantedwood:block/tungsten_battery",
+      "y": 90
+    }
+  }
+}

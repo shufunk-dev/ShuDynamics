@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "VB",
+    "BV"
+  ],
+  "key": {
+    "V": "enchantedwood:volcanic_ash",
+    "B": "minecraft:basalt"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:volcanic_bricks"
+  }
+}

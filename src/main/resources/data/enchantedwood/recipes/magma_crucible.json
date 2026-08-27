@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TCT",
+    "BGB",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_plate",
+    "C": "minecraft:cauldron",
+    "B": "minecraft:blaze_rod",
+    "G": "enchantedwood:geothermal_generator"
+  },
+  "result": {
+    "id": "enchantedwood:magma_crucible",
+    "count": 1
+  }
+}

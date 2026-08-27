@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "enchantedwood:block/soil_infuser_side",
+    "north": "enchantedwood:block/soil_infuser_front",
+    "south": "enchantedwood:block/soil_infuser_side",
+    "east": "enchantedwood:block/soil_infuser_side",
+    "west": "enchantedwood:block/soil_infuser_side",
+    "up": "enchantedwood:block/soil_infuser_top",
+    "down": "enchantedwood:block/soil_infuser_bottom"
+  }
+}

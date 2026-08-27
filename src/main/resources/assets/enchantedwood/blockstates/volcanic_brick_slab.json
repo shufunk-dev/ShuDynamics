@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "enchantedwood:block/volcanic_brick_slab" },
+    "type=top": { "model": "enchantedwood:block/volcanic_brick_slab_top" },
+    "type=double": { "model": "enchantedwood:block/volcanic_bricks" }
+  }
+}

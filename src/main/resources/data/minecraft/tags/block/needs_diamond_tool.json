@@ -5,6 +5,9 @@
     "enchantedwood:manyullyn_block",
     "enchantedwood:thermal_anchor",
     "enchantedwood:metallurgical_anchor",
-    "enchantedwood:plasma_anchor"
+    "enchantedwood:plasma_anchor",
+    "enchantedwood:tungsten_battery",
+    "enchantedwood:alloy_foundry",
+    "enchantedwood:crusher_mk2"
   ]
 }

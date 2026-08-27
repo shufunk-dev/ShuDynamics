@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/crusher_mk2_top",
+    "front": "enchantedwood:block/crusher_mk2_front",
+    "side": "enchantedwood:block/crusher_mk2_side"
+  }
+}

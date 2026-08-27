@@ -63,6 +63,13 @@
     "enchantedwood:ardite_ore",
     "enchantedwood:raw_ardite_block",
     "enchantedwood:ardite_block",
-    "enchantedwood:manyullyn_block"
+    "enchantedwood:manyullyn_block",
+    "enchantedwood:tungsten_battery",
+    "enchantedwood:tungsten_cable",
+    "enchantedwood:geothermal_generator",
+    "enchantedwood:alloy_foundry",
+    "enchantedwood:magma_crucible",
+    "enchantedwood:lava_pump",
+    "enchantedwood:crusher_mk2"
   ]
 }

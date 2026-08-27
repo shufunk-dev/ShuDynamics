@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": "enchantedwood:volcanic_bricks"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:volcanic_brick_stairs"
+  }
+}

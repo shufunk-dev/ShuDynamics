@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TDT",
+    "DCD",
+    "TMT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "D": "minecraft:diamond",
+    "C": "enchantedwood:crusher",
+    "M": "enchantedwood:manyullyn_plate"
+  },
+  "result": {
+    "id": "enchantedwood:crusher_mk2",
+    "count": 1
+  }
+}

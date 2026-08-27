@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "AVA",
+    "VT ",
+    "   "
+  ],
+  "key": {
+    "V": "enchantedwood:volcanic_ash",
+    "A": "minecraft:sand",
+    "T": "enchantedwood:mineral_tar"
+  },
+  "result": {
+    "count": 8,
+    "id": "enchantedwood:pozzolanic_asphalt"
+  }
+}

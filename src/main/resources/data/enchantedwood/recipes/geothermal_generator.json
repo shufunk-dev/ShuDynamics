@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TCT",
+    "LGL",
+    "MPM"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_plate",
+    "C": "enchantedwood:tungsten_cable",
+    "L": "minecraft:lava_bucket",
+    "G": "enchantedwood:steel_generator",
+    "M": "minecraft:magma_block",
+    "P": "enchantedwood:fire_crystal"
+  },
+  "result": {
+    "id": "enchantedwood:geothermal_generator",
+    "count": 1
+  }
+}

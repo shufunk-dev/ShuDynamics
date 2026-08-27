@@ -223,6 +223,13 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
             return 9;
         }
 
+        // Dense Nether Ores in MK1 Crusher (Option A - Soft Gated)
+        if (item == ModItems.RAW_TUNGSTEN || item == ModBlocks.NETHER_TUNGSTEN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TUNGSTEN_ORE.asItem() ||
+            item == ModItems.RAW_COBALT || item == ModBlocks.COBALT_ORE.asItem() ||
+            item == ModItems.RAW_ARDITE || item == ModBlocks.ARDITE_ORE.asItem()) {
+            return (tier == GearTier.DIAMOND || tier == GearTier.NETHERITE) ? 2 : 1;
+        }
+
         // Standard Ores & Raw materials
         return multiplier;
     }

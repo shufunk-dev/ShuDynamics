@@ -47,6 +47,15 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.ATV_SCREEN_HANDLER, net.enchantedwood.screen.AtvScreen::new);
         HandledScreens.register(ModScreenHandlers.VEHICLE_FABRICATOR_SCREEN_HANDLER, net.enchantedwood.screen.VehicleFabricatorScreen::new);
 
+        // Phase 2: Nether Factory & Tier 4 Power Grid
+        HandledScreens.register(ModScreenHandlers.TUNGSTEN_BATTERY_SCREEN_HANDLER, net.enchantedwood.screen.TungstenBatteryScreen::new);
+        HandledScreens.register(ModScreenHandlers.GEOTHERMAL_GENERATOR_SCREEN_HANDLER, net.enchantedwood.screen.GeothermalGeneratorScreen::new);
+        HandledScreens.register(ModScreenHandlers.ALLOY_FOUNDRY_SCREEN_HANDLER, net.enchantedwood.screen.AlloyFoundryScreen::new);
+        HandledScreens.register(ModScreenHandlers.MAGMA_CRUCIBLE_SCREEN_HANDLER, net.enchantedwood.screen.MagmaCrucibleScreen::new);
+        HandledScreens.register(ModScreenHandlers.LAVA_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.LavaPumpScreen::new);
+        HandledScreens.register(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.CrusherMk2Screen::new);
+        HandledScreens.register(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, net.enchantedwood.screen.SoilInfuserScreen::new);
+
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);

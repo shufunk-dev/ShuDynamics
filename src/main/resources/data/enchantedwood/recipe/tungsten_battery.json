@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TCT",
+    "SBS",
+    "TPT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "C": "enchantedwood:tungsten_cable",
+    "S": "enchantedwood:steel_battery",
+    "B": "enchantedwood:manyullyn_plate",
+    "P": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "enchantedwood:tungsten_battery",
+    "count": 1
+  }
+}

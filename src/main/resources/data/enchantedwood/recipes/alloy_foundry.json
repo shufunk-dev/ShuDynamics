@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TCT",
+    "CFC",
+    "TMT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "C": "enchantedwood:cobalt_plate",
+    "F": "enchantedwood:steel_blast_furnace",
+    "M": "enchantedwood:ardite_plate"
+  },
+  "result": {
+    "id": "enchantedwood:alloy_foundry",
+    "count": 1
+  }
+}

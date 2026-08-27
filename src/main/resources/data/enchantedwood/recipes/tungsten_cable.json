@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "RER",
+    "TTT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_nugget",
+    "R": "minecraft:redstone",
+    "E": "enchantedwood:steel_cable"
+  },
+  "result": {
+    "id": "enchantedwood:tungsten_cable",
+    "count": 6
+  }
+}

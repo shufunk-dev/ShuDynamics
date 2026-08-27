@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/lava_pump_top",
+    "front": "enchantedwood:block/lava_pump_front_on",
+    "side": "enchantedwood:block/lava_pump_side"
+  }
+}
