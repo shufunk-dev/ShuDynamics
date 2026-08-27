@@ -55,12 +55,12 @@
 * **Special Archetypes**: Livingwood weapons and Barkskin equipment offering unique passives and survivability.
 * **Health Lockets & Crystals**: Permanent health-pool expansion items.
 
-### 🏎️ 8. Modular All-Terrain Vehicles (ATV) & Fabricator (v1.3.0)
+### 🏎️ 7. Modular All-Terrain Vehicles (ATV) & Fabricator (v1.3.0)
 * **Custom Modular ATV**: High-mobility exploration vehicle with 6 swappable component slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, and Fuel/Batteries).
 * **Vehicle Fabricator & Tuning Bay**: Dedicated vehicle construction station with item retrieval and vehicle customization.
 * **Fall Damage Immunity & Speed Scaling**: Advanced suspension absorbs all cliff falls, while road surfaces provide speed multipliers.
 
-### 🛣️ 9. Petrochemicals & Road Infrastructure (v1.3.0)
+### 🛣️ 8. Petrochemicals & Road Infrastructure (v1.3.0)
 * **Oil Sand & Distillation**: Naturally generating Oil Sand deposits refined in the powered **Fuel Refinery** into Gasoline, Biofuel, and High-Octane Racing Fuel.
 * **Asphalt Roads & Slabs**: Speed-boost paved surfaces with accurate pickaxe mining mechanics.
 * **Auto-Connecting Curbs & Ramps**: Multi-state Concrete Curbs with seamless corner connections and transition ramps.
