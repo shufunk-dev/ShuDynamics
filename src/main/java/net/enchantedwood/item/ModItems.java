@@ -261,6 +261,36 @@ public class ModItems {
     public static final Item STEEL_GEAR = registerItem("steel_gear", settings -> new GearItem(GearTier.STEEL, false, settings));
     public static final Item ENCHANTED_STEEL_GEAR = registerItem("enchanted_steel_gear", settings -> new GearItem(GearTier.STEEL, true, settings));
 
+    // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
+    public static final Item RAW_TUNGSTEN = registerItem("raw_tungsten", Item::new);
+    public static final Item TUNGSTEN_INGOT = registerItem("tungsten_ingot", Item::new);
+    public static final Item TUNGSTEN_NUGGET = registerItem("tungsten_nugget", Item::new);
+    public static final Item TUNGSTEN_DUST = registerItem("tungsten_dust", Item::new);
+    public static final Item TUNGSTEN_PLATE = registerItem("tungsten_plate", Item::new);
+    public static final Item TUNGSTEN_CARBIDE_INGOT = registerItem("tungsten_carbide_ingot", settings -> new Item(settings.fireproof()));
+
+    public static final Item RAW_COBALT = registerItem("raw_cobalt", Item::new);
+    public static final Item COBALT_INGOT = registerItem("cobalt_ingot", Item::new);
+    public static final Item COBALT_NUGGET = registerItem("cobalt_nugget", Item::new);
+    public static final Item COBALT_DUST = registerItem("cobalt_dust", Item::new);
+    public static final Item COBALT_PLATE = registerItem("cobalt_plate", Item::new);
+
+    public static final Item RAW_ARDITE = registerItem("raw_ardite", Item::new);
+    public static final Item ARDITE_INGOT = registerItem("ardite_ingot", Item::new);
+    public static final Item ARDITE_NUGGET = registerItem("ardite_nugget", Item::new);
+    public static final Item ARDITE_DUST = registerItem("ardite_dust", Item::new);
+    public static final Item ARDITE_PLATE = registerItem("ardite_plate", Item::new);
+
+    public static final Item MANYULLYN_INGOT = registerItem("manyullyn_ingot", settings -> new Item(settings.fireproof()));
+    public static final Item MANYULLYN_NUGGET = registerItem("manyullyn_nugget", settings -> new Item(settings.fireproof()));
+    public static final Item MANYULLYN_DUST = registerItem("manyullyn_dust", settings -> new Item(settings.fireproof()));
+    public static final Item MANYULLYN_PLATE = registerItem("manyullyn_plate", settings -> new Item(settings.fireproof()));
+
+    // Volcanic Minerals & Byproducts
+    public static final Item SULFUR_DUST = registerItem("sulfur_dust", Item::new);
+    public static final Item VOLCANIC_ASH = registerItem("volcanic_ash", Item::new);
+    public static final Item FIRE_CRYSTAL = registerItem("fire_crystal", settings -> new Item(settings.fireproof()));
+
     // Steel Tools & Weapons
     public static final Item STEEL_SWORD = registerItem("steel_sword", settings -> new Item(settings.sword(ModMaterials.STEEL, 3.5f, -2.4f)));
     public static final Item STEEL_PICKAXE = registerItem("steel_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.STEEL, 1.5f, -2.8f)));
@@ -274,6 +304,48 @@ public class ModItems {
     public static final Item STEEL_CHESTPLATE = registerItem("steel_chestplate", settings -> new Item(settings.armor(ModArmorMaterials.STEEL, EquipmentType.CHESTPLATE)));
     public static final Item STEEL_LEGGINGS = registerItem("steel_leggings", settings -> new Item(settings.armor(ModArmorMaterials.STEEL, EquipmentType.LEGGINGS)));
     public static final Item STEEL_BOOTS = registerItem("steel_boots", settings -> new Item(settings.armor(ModArmorMaterials.STEEL, EquipmentType.BOOTS)));
+
+    // Cobalt Tools & Weapons (High attack speed & velocity)
+    public static final Item COBALT_SWORD = registerItem("cobalt_sword", settings -> new Item(settings.sword(ModMaterials.COBALT, 3.5f, -2.2f)));
+    public static final Item COBALT_PICKAXE = registerItem("cobalt_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.COBALT, 1.5f, -2.6f)));
+    public static final Item COBALT_AXE = registerItem("cobalt_axe", settings -> new Item(settings.axe(ModMaterials.COBALT, 6.0f, -2.8f)));
+    public static final Item COBALT_SHOVEL = registerItem("cobalt_shovel", settings -> new Item(settings.shovel(ModMaterials.COBALT, 1.5f, -2.8f)));
+    public static final Item COBALT_HOE = registerItem("cobalt_hoe", settings -> new Item(settings.hoe(ModMaterials.COBALT, -2.0f, 0.0f)));
+    public static final Item COBALT_HAMMER = registerItem("cobalt_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.COBALT, 4.5f, -2.8f)));
+
+    // Cobalt Armor (Lightweight agility)
+    public static final Item COBALT_HELMET = registerItem("cobalt_helmet", settings -> new Item(settings.armor(ModArmorMaterials.COBALT, EquipmentType.HELMET)));
+    public static final Item COBALT_CHESTPLATE = registerItem("cobalt_chestplate", settings -> new Item(settings.armor(ModArmorMaterials.COBALT, EquipmentType.CHESTPLATE)));
+    public static final Item COBALT_LEGGINGS = registerItem("cobalt_leggings", settings -> new Item(settings.armor(ModArmorMaterials.COBALT, EquipmentType.LEGGINGS)));
+    public static final Item COBALT_BOOTS = registerItem("cobalt_boots", settings -> new Item(settings.armor(ModArmorMaterials.COBALT, EquipmentType.BOOTS)));
+
+    // Ardite Tools & Weapons (Heavy durability & stonebound)
+    public static final Item ARDITE_SWORD = registerItem("ardite_sword", settings -> new Item(settings.sword(ModMaterials.ARDITE, 4.0f, -2.5f)));
+    public static final Item ARDITE_PICKAXE = registerItem("ardite_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.ARDITE, 2.0f, -2.9f)));
+    public static final Item ARDITE_AXE = registerItem("ardite_axe", settings -> new Item(settings.axe(ModMaterials.ARDITE, 7.0f, -3.1f)));
+    public static final Item ARDITE_SHOVEL = registerItem("ardite_shovel", settings -> new Item(settings.shovel(ModMaterials.ARDITE, 2.0f, -3.0f)));
+    public static final Item ARDITE_HOE = registerItem("ardite_hoe", settings -> new Item(settings.hoe(ModMaterials.ARDITE, -1.0f, -1.0f)));
+    public static final Item ARDITE_HAMMER = registerItem("ardite_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.ARDITE, 5.5f, -3.1f)));
+
+    // Ardite Armor (Heavy fortitude)
+    public static final Item ARDITE_HELMET = registerItem("ardite_helmet", settings -> new Item(settings.armor(ModArmorMaterials.ARDITE, EquipmentType.HELMET)));
+    public static final Item ARDITE_CHESTPLATE = registerItem("ardite_chestplate", settings -> new Item(settings.armor(ModArmorMaterials.ARDITE, EquipmentType.CHESTPLATE)));
+    public static final Item ARDITE_LEGGINGS = registerItem("ardite_leggings", settings -> new Item(settings.armor(ModArmorMaterials.ARDITE, EquipmentType.LEGGINGS)));
+    public static final Item ARDITE_BOOTS = registerItem("ardite_boots", settings -> new Item(settings.armor(ModArmorMaterials.ARDITE, EquipmentType.BOOTS)));
+
+    // Manyullyn Tools & Weapons (Supreme Nether Masterwork - Fireproof)
+    public static final Item MANYULLYN_SWORD = registerItem("manyullyn_sword", settings -> new Item(settings.sword(ModMaterials.MANYULLYN, 6.0f, -2.4f).fireproof()));
+    public static final Item MANYULLYN_PICKAXE = registerItem("manyullyn_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.MANYULLYN, 2.5f, -2.7f).fireproof()));
+    public static final Item MANYULLYN_AXE = registerItem("manyullyn_axe", settings -> new Item(settings.axe(ModMaterials.MANYULLYN, 8.0f, -2.9f).fireproof()));
+    public static final Item MANYULLYN_SHOVEL = registerItem("manyullyn_shovel", settings -> new Item(settings.shovel(ModMaterials.MANYULLYN, 2.5f, -2.9f).fireproof()));
+    public static final Item MANYULLYN_HOE = registerItem("manyullyn_hoe", settings -> new Item(settings.hoe(ModMaterials.MANYULLYN, -1.0f, 0.0f).fireproof()));
+    public static final Item MANYULLYN_HAMMER = registerItem("manyullyn_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.MANYULLYN, 7.0f, -2.9f).fireproof()));
+
+    // Manyullyn Armor (Supreme Nether Masterwork - Fireproof)
+    public static final Item MANYULLYN_HELMET = registerItem("manyullyn_helmet", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.HELMET).fireproof()));
+    public static final Item MANYULLYN_CHESTPLATE = registerItem("manyullyn_chestplate", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.CHESTPLATE).fireproof()));
+    public static final Item MANYULLYN_LEGGINGS = registerItem("manyullyn_leggings", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.LEGGINGS).fireproof()));
+    public static final Item MANYULLYN_BOOTS = registerItem("manyullyn_boots", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.BOOTS).fireproof()));
 
     // Aluminum Tools & Weapons
     public static final Item ALUMINUM_SWORD = registerItem("aluminum_sword", settings -> new Item(settings.sword(ModMaterials.ALUMINUM, 3.0f, -2.4f)));
@@ -735,6 +807,79 @@ public class ModItems {
                 // Anomaly Keystones
                 entries.add(net.enchantedwood.block.ModBlocks.ATMOSPHERIC_ANCHOR);
                 entries.add(net.enchantedwood.block.ModBlocks.KINETIC_ANCHOR);
+                entries.add(net.enchantedwood.block.ModBlocks.THERMAL_ANCHOR);
+                entries.add(net.enchantedwood.block.ModBlocks.METALLURGICAL_ANCHOR);
+                entries.add(net.enchantedwood.block.ModBlocks.PLASMA_ANCHOR);
+
+                // Nether Metallurgy & Materials
+                entries.add(RAW_TUNGSTEN);
+                entries.add(TUNGSTEN_INGOT);
+                entries.add(TUNGSTEN_NUGGET);
+                entries.add(TUNGSTEN_DUST);
+                entries.add(TUNGSTEN_PLATE);
+                entries.add(TUNGSTEN_CARBIDE_INGOT);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_TUNGSTEN_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TUNGSTEN_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.RAW_TUNGSTEN_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_BLOCK);
+
+                entries.add(RAW_COBALT);
+                entries.add(COBALT_INGOT);
+                entries.add(COBALT_NUGGET);
+                entries.add(COBALT_DUST);
+                entries.add(COBALT_PLATE);
+                entries.add(COBALT_SWORD);
+                entries.add(COBALT_PICKAXE);
+                entries.add(COBALT_AXE);
+                entries.add(COBALT_SHOVEL);
+                entries.add(COBALT_HOE);
+                entries.add(COBALT_HAMMER);
+                entries.add(COBALT_HELMET);
+                entries.add(COBALT_CHESTPLATE);
+                entries.add(COBALT_LEGGINGS);
+                entries.add(COBALT_BOOTS);
+                entries.add(net.enchantedwood.block.ModBlocks.COBALT_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.RAW_COBALT_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.COBALT_BLOCK);
+
+                entries.add(RAW_ARDITE);
+                entries.add(ARDITE_INGOT);
+                entries.add(ARDITE_NUGGET);
+                entries.add(ARDITE_DUST);
+                entries.add(ARDITE_PLATE);
+                entries.add(ARDITE_SWORD);
+                entries.add(ARDITE_PICKAXE);
+                entries.add(ARDITE_AXE);
+                entries.add(ARDITE_SHOVEL);
+                entries.add(ARDITE_HOE);
+                entries.add(ARDITE_HAMMER);
+                entries.add(ARDITE_HELMET);
+                entries.add(ARDITE_CHESTPLATE);
+                entries.add(ARDITE_LEGGINGS);
+                entries.add(ARDITE_BOOTS);
+                entries.add(net.enchantedwood.block.ModBlocks.ARDITE_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.RAW_ARDITE_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.ARDITE_BLOCK);
+
+                entries.add(MANYULLYN_INGOT);
+                entries.add(MANYULLYN_NUGGET);
+                entries.add(MANYULLYN_DUST);
+                entries.add(MANYULLYN_PLATE);
+                entries.add(MANYULLYN_SWORD);
+                entries.add(MANYULLYN_PICKAXE);
+                entries.add(MANYULLYN_AXE);
+                entries.add(MANYULLYN_SHOVEL);
+                entries.add(MANYULLYN_HOE);
+                entries.add(MANYULLYN_HAMMER);
+                entries.add(MANYULLYN_HELMET);
+                entries.add(MANYULLYN_CHESTPLATE);
+                entries.add(MANYULLYN_LEGGINGS);
+                entries.add(MANYULLYN_BOOTS);
+                entries.add(net.enchantedwood.block.ModBlocks.MANYULLYN_BLOCK);
+
+                entries.add(SULFUR_DUST);
+                entries.add(VOLCANIC_ASH);
+                entries.add(FIRE_CRYSTAL);
 
                 // Agriculture & Biofuels
                 entries.add(CORN);

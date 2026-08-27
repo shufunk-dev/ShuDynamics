@@ -94,4 +94,31 @@ public class ModMaterials {
             35,
             ModTags.Items.REPAIRS_ENCHANTED_NETHERITE
     );
+
+    public static final ToolMaterial COBALT = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            1400,
+            14.0f,
+            3.5f,
+            18,
+            ModTags.Items.REPAIRS_COBALT
+    );
+
+    public static final ToolMaterial ARDITE = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            2400,
+            9.0f,
+            4.0f,
+            16,
+            ModTags.Items.REPAIRS_ARDITE
+    );
+
+    public static final ToolMaterial MANYULLYN = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+            3500,
+            18.0f,
+            5.5f,
+            24,
+            ModTags.Items.REPAIRS_MANYULLYN
+    );
 }

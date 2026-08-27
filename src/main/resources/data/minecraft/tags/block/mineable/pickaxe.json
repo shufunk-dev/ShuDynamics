@@ -49,7 +49,20 @@
     "enchantedwood:vehicle_fabricator",
     "enchantedwood:asphalt_block",
     "enchantedwood:asphalt_slab",
-    "enchantedwood:concrete_curb",
-    "enchantedwood:road_transition_ramp"
+    "enchantedwood:road_transition_ramp",
+    "enchantedwood:thermal_anchor",
+    "enchantedwood:metallurgical_anchor",
+    "enchantedwood:plasma_anchor",
+    "enchantedwood:nether_tungsten_ore",
+    "enchantedwood:deepslate_tungsten_ore",
+    "enchantedwood:raw_tungsten_block",
+    "enchantedwood:tungsten_block",
+    "enchantedwood:cobalt_ore",
+    "enchantedwood:raw_cobalt_block",
+    "enchantedwood:cobalt_block",
+    "enchantedwood:ardite_ore",
+    "enchantedwood:raw_ardite_block",
+    "enchantedwood:ardite_block",
+    "enchantedwood:manyullyn_block"
   ]
 }

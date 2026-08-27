@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "enchantedwood:cobalt_ingot",
+    "/": "minecraft:stick"
+  },
+  "pattern": [
+    "##",
+    " /",
+    " /"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:cobalt_hoe"
+  }
+}

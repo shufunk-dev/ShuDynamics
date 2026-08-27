@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "enchantedwood:enchanted_netherite_block"
+    "enchantedwood:enchanted_netherite_block",
+    "enchantedwood:manyullyn_block",
+    "enchantedwood:thermal_anchor",
+    "enchantedwood:metallurgical_anchor",
+    "enchantedwood:plasma_anchor"
   ]
 }

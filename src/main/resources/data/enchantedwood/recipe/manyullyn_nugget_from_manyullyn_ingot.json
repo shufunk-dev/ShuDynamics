@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:manyullyn_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:manyullyn_nugget"
+  }
+}

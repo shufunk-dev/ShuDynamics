@@ -448,6 +448,119 @@ public class ModBlocks {
                     .resistance(1200.0f)
                     .requiresTool()));
 
+    public static final Block THERMAL_ANCHOR = registerBlock("thermal_anchor",
+            new net.enchantedwood.block.custom.ThermalAnchorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "thermal_anchor")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()));
+
+    public static final Block METALLURGICAL_ANCHOR = registerBlock("metallurgical_anchor",
+            new net.enchantedwood.block.custom.MetallurgicalAnchorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "metallurgical_anchor")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()));
+
+    public static final Block PLASMA_ANCHOR = registerBlock("plasma_anchor",
+            new net.enchantedwood.block.custom.PlasmaAnchorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "plasma_anchor")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()));
+
+    // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
+    public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_tungsten_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.5f)
+                    .resistance(3.5f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_TUNGSTEN_ORE = registerBlock("deepslate_tungsten_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tungsten_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(5.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block RAW_TUNGSTEN_BLOCK = registerBlock("raw_tungsten_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_tungsten_block")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(6.0f)
+                    .resistance(7.0f)
+                    .requiresTool()));
+
+    public static final Block TUNGSTEN_BLOCK = registerBlock("tungsten_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_block")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(8.0f)
+                    .requiresTool()));
+
+    public static final Block COBALT_ORE = registerBlock("cobalt_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cobalt_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(4.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block RAW_COBALT_BLOCK = registerBlock("raw_cobalt_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_cobalt_block")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(5.5f)
+                    .resistance(6.5f)
+                    .requiresTool()));
+
+    public static final Block COBALT_BLOCK = registerBlock("cobalt_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cobalt_block")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(5.0f)
+                    .resistance(7.0f)
+                    .requiresTool()));
+
+    public static final Block ARDITE_ORE = registerBlock("ardite_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ardite_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(4.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block RAW_ARDITE_BLOCK = registerBlock("raw_ardite_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_ardite_block")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(5.5f)
+                    .resistance(6.5f)
+                    .requiresTool()));
+
+    public static final Block ARDITE_BLOCK = registerBlock("ardite_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ardite_block")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(5.0f)
+                    .resistance(7.0f)
+                    .requiresTool()));
+
+    public static final Block MANYULLYN_BLOCK = registerBlock("manyullyn_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "manyullyn_block")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(7.0f)
+                    .resistance(12.0f)
+                    .requiresTool()));
+
     public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
             new Block(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))

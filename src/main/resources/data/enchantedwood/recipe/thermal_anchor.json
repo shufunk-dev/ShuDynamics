@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "F": "enchantedwood:fire_crystal",
+    "B": "minecraft:crying_obsidian",
+    "E": "enchantedwood:infused_heartwood"
+  },
+  "pattern": [
+    "TFT",
+    "BEB",
+    "TTT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:thermal_anchor"
+  }
+}

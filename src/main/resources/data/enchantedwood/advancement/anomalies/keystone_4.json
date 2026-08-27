@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "enchantedwood:mystery_keystone"
+      "id": "enchantedwood:metallurgical_anchor"
     },
     "title": {
       "translate": "advancements.enchantedwood.anomalies.keystone_4.title"
@@ -15,13 +15,20 @@
     "hidden": false
   },
   "criteria": {
-    "unlocked": {
-      "trigger": "minecraft:impossible"
+    "crafted_metallurgical_anchor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:metallurgical_anchor"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
-      "unlocked"
+      "crafted_metallurgical_anchor"
     ]
   ],
   "parent": "enchantedwood:anomalies/root"

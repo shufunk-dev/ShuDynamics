@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:raw_cobalt_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "enchantedwood:raw_cobalt"
+  }
+}

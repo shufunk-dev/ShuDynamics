@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:blaze_powder",
+    "M": "minecraft:magma_cream",
+    "Q": "minecraft:quartz",
+    "E": "enchantedwood:enchanted_dust"
+  },
+  "pattern": [
+    "BMB",
+    "MQM",
+    "BEB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:fire_crystal"
+  }
+}

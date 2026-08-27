@@ -181,4 +181,55 @@ public class ModArmorMaterials {
             ModTags.Items.REPAIRS_SCUBA,
             RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "scuba"))
     );
+
+    // Cobalt (21 total defense, lightweight & high speed)
+    public static final ArmorMaterial COBALT = new ArmorMaterial(
+            32,
+            Map.of(
+                    EquipmentType.HELMET, 3,
+                    EquipmentType.CHESTPLATE, 8,
+                    EquipmentType.LEGGINGS, 7,
+                    EquipmentType.BOOTS, 3
+            ),
+            18,
+            SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND,
+            2.0f,
+            0.0f,
+            ModTags.Items.REPAIRS_COBALT,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "cobalt"))
+    );
+
+    // Ardite (22 total defense, high durability & knockback resistance)
+    public static final ArmorMaterial ARDITE = new ArmorMaterial(
+            45,
+            Map.of(
+                    EquipmentType.HELMET, 3,
+                    EquipmentType.CHESTPLATE, 8,
+                    EquipmentType.LEGGINGS, 8,
+                    EquipmentType.BOOTS, 3
+            ),
+            16,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            2.5f,
+            0.2f,
+            ModTags.Items.REPAIRS_ARDITE,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "ardite"))
+    );
+
+    // Manyullyn (25 total defense, fireproof supreme Nether armor)
+    public static final ArmorMaterial MANYULLYN = new ArmorMaterial(
+            60,
+            Map.of(
+                    EquipmentType.HELMET, 4,
+                    EquipmentType.CHESTPLATE, 9,
+                    EquipmentType.LEGGINGS, 8,
+                    EquipmentType.BOOTS, 4
+            ),
+            24,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.5f,
+            0.25f,
+            ModTags.Items.REPAIRS_MANYULLYN,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "manyullyn"))
+    );
 }

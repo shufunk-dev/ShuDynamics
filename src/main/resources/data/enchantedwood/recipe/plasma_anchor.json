@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "enchantedwood:manyullyn_plate",
+    "B": "minecraft:blaze_rod",
+    "N": "minecraft:nether_star",
+    "E": "enchantedwood:infused_heartwood"
+  },
+  "pattern": [
+    "MBM",
+    "BEN",
+    "MBM"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:plasma_anchor"
+  }
+}

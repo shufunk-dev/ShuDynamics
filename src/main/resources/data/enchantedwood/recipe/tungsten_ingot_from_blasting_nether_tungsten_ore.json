@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.9,
+  "ingredient": "enchantedwood:nether_tungsten_ore",
+  "result": {
+    "id": "enchantedwood:tungsten_ingot"
+  }
+}

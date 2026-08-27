@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": "enchantedwood:manyullyn_ingot",
+    "P": "enchantedwood:manyullyn_plate",
+    "L": "enchantedwood:enchanted_lava_bucket",
+    "E": "enchantedwood:infused_heartwood"
+  },
+  "pattern": [
+    "MPM",
+    "LEL",
+    "MPM"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:metallurgical_anchor"
+  }
+}

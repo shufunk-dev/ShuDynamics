@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gunpowder",
+    "minecraft:blaze_powder",
+    "enchantedwood:enchanted_dust"
+  ],
+  "result": {
+    "count": 2,
+    "id": "enchantedwood:sulfur_dust"
+  }
+}

@@ -206,6 +206,11 @@ public class DustSmelterBlockEntity extends BlockEntity implements NamedScreenHa
         if (item == ModItems.TIN_DUST) return ModItems.TIN_INGOT;
         if (item == ModItems.BRONZE_DUST) return ModItems.BRONZE_INGOT;
         if (item == ModItems.TITANIUM_DUST) return ModItems.TITANIUM_INGOT;
+        if (item == ModItems.STEEL_DUST) return ModItems.STEEL_INGOT;
+        if (item == ModItems.TUNGSTEN_DUST) return ModItems.TUNGSTEN_INGOT;
+        if (item == ModItems.COBALT_DUST) return ModItems.COBALT_INGOT;
+        if (item == ModItems.ARDITE_DUST) return ModItems.ARDITE_INGOT;
+        if (item == ModItems.MANYULLYN_DUST) return ModItems.MANYULLYN_INGOT;
         if (item == ModItems.GOLD_DUST) return Items.GOLD_INGOT;
         if (item == ModItems.DIAMOND_DUST) return Items.DIAMOND;
         if (item == ModItems.NETHERITE_DUST) return Items.NETHERITE_INGOT;

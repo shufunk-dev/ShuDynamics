@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:manyullyn_ingot"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.manyullyn_ingot.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.manyullyn_ingot.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_manyullyn": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:manyullyn_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_manyullyn"
+    ]
+  ],
+  "parent": "enchantedwood:nether_prospector"
+}

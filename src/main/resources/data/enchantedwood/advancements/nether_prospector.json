@@ -1,0 +1,48 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:cobalt_ingot"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.nether_prospector.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.nether_prospector.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_cobalt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cobalt_ingot"
+          }
+        ]
+      }
+    },
+    "has_ardite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:ardite_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cobalt"
+    ],
+    [
+      "has_ardite"
+    ]
+  ],
+  "parent": "enchantedwood:mining_dimension"
+}

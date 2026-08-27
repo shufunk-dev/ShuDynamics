@@ -214,12 +214,12 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         }
 
         // Compressed raw blocks yield 9x
-        if (item == Items.RAW_IRON_BLOCK || item == Items.RAW_COPPER_BLOCK || item == Items.RAW_GOLD_BLOCK || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem()) {
+        if (item == Items.RAW_IRON_BLOCK || item == Items.RAW_COPPER_BLOCK || item == Items.RAW_GOLD_BLOCK || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModBlocks.RAW_TUNGSTEN_BLOCK.asItem() || item == ModBlocks.RAW_COBALT_BLOCK.asItem() || item == ModBlocks.RAW_ARDITE_BLOCK.asItem()) {
             return multiplier * 9;
         }
 
         // Ingot blocks
-        if (item == Items.IRON_BLOCK || item == Items.COPPER_BLOCK || item == Items.GOLD_BLOCK || item == Items.DIAMOND_BLOCK || item == Items.NETHERITE_BLOCK || item == Items.EMERALD_BLOCK || item == Items.COAL_BLOCK || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem() || item == ModBlocks.TITANIUM_BLOCK.asItem() || item == ModBlocks.TIN_BLOCK.asItem() || item == ModBlocks.BRONZE_BLOCK.asItem() || item == ModBlocks.STEEL_BLOCK.asItem() || item == ModBlocks.ALUMINUM_BLOCK.asItem() || item == ModBlocks.COKE_COAL_BLOCK.asItem()) {
+        if (item == Items.IRON_BLOCK || item == Items.COPPER_BLOCK || item == Items.GOLD_BLOCK || item == Items.DIAMOND_BLOCK || item == Items.NETHERITE_BLOCK || item == Items.EMERALD_BLOCK || item == Items.COAL_BLOCK || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem() || item == ModBlocks.TITANIUM_BLOCK.asItem() || item == ModBlocks.TIN_BLOCK.asItem() || item == ModBlocks.BRONZE_BLOCK.asItem() || item == ModBlocks.STEEL_BLOCK.asItem() || item == ModBlocks.ALUMINUM_BLOCK.asItem() || item == ModBlocks.COKE_COAL_BLOCK.asItem() || item == ModBlocks.TUNGSTEN_BLOCK.asItem() || item == ModBlocks.COBALT_BLOCK.asItem() || item == ModBlocks.ARDITE_BLOCK.asItem() || item == ModBlocks.MANYULLYN_BLOCK.asItem()) {
             return 9;
         }
 
@@ -236,6 +236,10 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.BRONZE_INGOT || item == ModBlocks.BRONZE_BLOCK.asItem()) return 0.8f;
         if (item == ModItems.STEEL_INGOT || item == ModBlocks.STEEL_BLOCK.asItem()) return 0.8f;
         if (item == ModItems.RAW_TITANIUM || item == ModBlocks.TITANIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TITANIUM_ORE.asItem() || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModItems.TITANIUM_INGOT || item == ModBlocks.TITANIUM_BLOCK.asItem()) return 0.8f;
+        if (item == ModItems.RAW_TUNGSTEN || item == ModBlocks.NETHER_TUNGSTEN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TUNGSTEN_ORE.asItem() || item == ModBlocks.RAW_TUNGSTEN_BLOCK.asItem() || item == ModItems.TUNGSTEN_INGOT || item == ModBlocks.TUNGSTEN_BLOCK.asItem()) return 1.0f;
+        if (item == ModItems.RAW_COBALT || item == ModBlocks.COBALT_ORE.asItem() || item == ModBlocks.RAW_COBALT_BLOCK.asItem() || item == ModItems.COBALT_INGOT || item == ModBlocks.COBALT_BLOCK.asItem()) return 1.0f;
+        if (item == ModItems.RAW_ARDITE || item == ModBlocks.ARDITE_ORE.asItem() || item == ModBlocks.RAW_ARDITE_BLOCK.asItem() || item == ModItems.ARDITE_INGOT || item == ModBlocks.ARDITE_BLOCK.asItem()) return 1.0f;
+        if (item == ModItems.MANYULLYN_INGOT || item == ModBlocks.MANYULLYN_BLOCK.asItem()) return 1.5f;
         if (item == Items.RAW_GOLD || item == Items.GOLD_ORE || item == Items.DEEPSLATE_GOLD_ORE || item == Items.NETHER_GOLD_ORE || item == Items.RAW_GOLD_BLOCK || item == Items.GOLD_INGOT || item == Items.GOLD_BLOCK) return 1.0f;
         if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return 1.0f;
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return 2.0f;
@@ -255,6 +259,10 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.BRONZE_INGOT || item == ModBlocks.BRONZE_BLOCK.asItem()) return ModItems.BRONZE_DUST;
         if (item == ModItems.STEEL_INGOT || item == ModBlocks.STEEL_BLOCK.asItem()) return ModItems.STEEL_DUST;
         if (item == ModItems.RAW_TITANIUM || item == ModBlocks.TITANIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TITANIUM_ORE.asItem() || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModItems.TITANIUM_INGOT || item == ModBlocks.TITANIUM_BLOCK.asItem()) return ModItems.TITANIUM_DUST;
+        if (item == ModItems.RAW_TUNGSTEN || item == ModBlocks.NETHER_TUNGSTEN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TUNGSTEN_ORE.asItem() || item == ModBlocks.RAW_TUNGSTEN_BLOCK.asItem() || item == ModItems.TUNGSTEN_INGOT || item == ModBlocks.TUNGSTEN_BLOCK.asItem()) return ModItems.TUNGSTEN_DUST;
+        if (item == ModItems.RAW_COBALT || item == ModBlocks.COBALT_ORE.asItem() || item == ModBlocks.RAW_COBALT_BLOCK.asItem() || item == ModItems.COBALT_INGOT || item == ModBlocks.COBALT_BLOCK.asItem()) return ModItems.COBALT_DUST;
+        if (item == ModItems.RAW_ARDITE || item == ModBlocks.ARDITE_ORE.asItem() || item == ModBlocks.RAW_ARDITE_BLOCK.asItem() || item == ModItems.ARDITE_INGOT || item == ModBlocks.ARDITE_BLOCK.asItem()) return ModItems.ARDITE_DUST;
+        if (item == ModItems.MANYULLYN_INGOT || item == ModBlocks.MANYULLYN_BLOCK.asItem()) return ModItems.MANYULLYN_DUST;
         if (item == Items.RAW_GOLD || item == Items.GOLD_ORE || item == Items.DEEPSLATE_GOLD_ORE || item == Items.NETHER_GOLD_ORE || item == Items.RAW_GOLD_BLOCK || item == Items.GOLD_INGOT || item == Items.GOLD_BLOCK) return ModItems.GOLD_DUST;
         if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return ModItems.DIAMOND_DUST;
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return ModItems.NETHERITE_DUST;

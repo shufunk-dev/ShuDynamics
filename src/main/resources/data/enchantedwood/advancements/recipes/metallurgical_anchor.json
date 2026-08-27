@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_manyullyn_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:manyullyn_ingot"
+          }
+        ]
+      }
+    },
+    "has_manyullyn_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:manyullyn_plate"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "enchantedwood:metallurgical_anchor"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_manyullyn_ingot",
+      "has_manyullyn_plate",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "enchantedwood:metallurgical_anchor"
+    ]
+  }
+}

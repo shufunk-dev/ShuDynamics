@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tungsten_carbide": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:tungsten_carbide_ingot"
+          }
+        ]
+      }
+    },
+    "has_fire_crystal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:fire_crystal"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "enchantedwood:thermal_anchor"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_tungsten_carbide",
+      "has_fire_crystal",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "enchantedwood:thermal_anchor"
+    ]
+  }
+}
