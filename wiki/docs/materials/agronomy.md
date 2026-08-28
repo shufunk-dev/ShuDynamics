@@ -43,8 +43,8 @@ ShuDynamics introduces a high-potency agronomy and automated farming suite engin
     'Inputs': 'Dirt + Volcanic Ash + Lava / Catalyst',
     'Output': 'Volcanic Soil'
   }"
-  placedImage=""
-  guiImage=""
+  placedImage="/images/machines/soil_infuser_placed.png"
+  guiImage="/images/machines/soil_infuser_gui.png"
 />
 
 ### 📜 Soil Infuser Recipe
