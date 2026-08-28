@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "enchantedwood:oil_sand",
     "enchantedwood:volcanic_soil"
   ]
 }

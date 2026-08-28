@@ -53,6 +53,11 @@ public class CornCropBlock extends CropBlock {
     }
 
     @Override
+    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
+        return floor.isOf(net.minecraft.block.Blocks.FARMLAND) || floor.isOf(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
+    }
+
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }

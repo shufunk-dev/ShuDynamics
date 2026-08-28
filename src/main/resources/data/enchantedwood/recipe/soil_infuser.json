@@ -3,17 +3,15 @@
   "category": "misc",
   "pattern": [
     "PVP",
-    "SMF",
-    "TCT"
+    "TFT",
+    "TRT"
   ],
   "key": {
     "P": "minecraft:piston",
-    "V": "enchantedwood:volcanic_fertilizer",
-    "S": "enchantedwood:steel_plate",
-    "M": "enchantedwood:manyullyn_ingot",
+    "V": "enchantedwood:volcanic_ash",
+    "T": "enchantedwood:titanium_ingot",
     "F": "minecraft:furnace",
-    "T": "enchantedwood:tungsten_carbide_ingot",
-    "C": "enchantedwood:tungsten_cable"
+    "R": "enchantedwood:enchanted_redstone"
   },
   "result": {
     "count": 1,
