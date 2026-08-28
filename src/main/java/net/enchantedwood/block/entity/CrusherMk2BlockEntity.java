@@ -324,7 +324,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) return new int[]{PRIMARY_OUTPUT_SLOT, BYPRODUCT_OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT};
-        return new int[]{INPUT_SLOT, GEAR_SLOT};
+        return new int[]{INPUT_SLOT, GEAR_SLOT, PRIMARY_OUTPUT_SLOT, BYPRODUCT_OUTPUT_SLOT};
     }
 
     @Override

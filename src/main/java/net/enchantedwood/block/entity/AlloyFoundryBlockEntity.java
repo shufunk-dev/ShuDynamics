@@ -256,7 +256,7 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) return new int[]{OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT_A, INPUT_SLOT_B};
-        return new int[]{INPUT_SLOT_A, INPUT_SLOT_B, GEAR_SLOT};
+        return new int[]{INPUT_SLOT_A, INPUT_SLOT_B, GEAR_SLOT, OUTPUT_SLOT};
     }
 
     @Override

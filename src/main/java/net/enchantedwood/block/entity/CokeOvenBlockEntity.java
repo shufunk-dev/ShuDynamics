@@ -147,7 +147,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
         if (side == Direction.DOWN) {
             return new int[]{OUTPUT_SLOT, TAR_SLOT};
         }
-        return new int[]{INPUT_SLOT};
+        return new int[]{INPUT_SLOT, OUTPUT_SLOT, TAR_SLOT};
     }
 
     @Override

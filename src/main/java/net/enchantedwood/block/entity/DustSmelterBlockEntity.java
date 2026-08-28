@@ -244,7 +244,7 @@ public class DustSmelterBlockEntity extends BlockEntity implements NamedScreenHa
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) return new int[]{2};
         if (side == Direction.UP) return new int[]{0};
-        return new int[]{0, 1};
+        return new int[]{0, 1, 2};
     }
 
     @Override

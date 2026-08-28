@@ -244,7 +244,7 @@ public class SteelBlastFurnaceBlockEntity extends BlockEntity implements NamedSc
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) return new int[]{2, 4}; // Steel Out, Empty Canister Out
         if (side == Direction.UP) return new int[]{0};       // Iron In
-        return new int[]{1, 3};                             // Coke Coal In, H2 Canister In
+        return new int[]{1, 3, 2, 4};                       // Coke Coal In, H2 In, Steel Out, Empty Canister Out
     }
 
     @Override
