@@ -67,8 +67,8 @@ ShuDynamics provides specialized high-temperature metallurgical processing machi
     'Dual Reagent Slots': 'Accepts 2 distinct primary input metals',
     'Output': 'High-purity alloy ingots'
   }"
-  placedImage=""
-  guiImage=""
+  placedImage="/images/machines/alloy_foundry_placed.png"
+  guiImage="/images/machines/alloy_foundry_gui.png"
 />
 
 ---
@@ -89,8 +89,8 @@ ShuDynamics provides specialized high-temperature metallurgical processing machi
     'Melting Rates': 'Cobblestone, Netherrack, Basalt, Magma Blocks $\\rightarrow$ Liquid Lava',
     'Fluid Pushing': 'Automatically feeds connected Lava Pipes and Titanium Reservoirs'
   }"
-  placedImage=""
-  guiImage=""
+  placedImage="/images/machines/magma_crucible_placed.png"
+  guiImage="/images/machines/magma_crucible_gui.png"
 />
 
 ---
