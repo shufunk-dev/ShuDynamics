@@ -51,30 +51,15 @@ When building compact automation setups where multiple pipes run parallel or cro
 
 ## 🛠️ Crafting Recipes
 
-### 1. Item Transport Pipe ($8\times$)
-```
-[  Tin Ingot  ] [  Tin Ingot  ] [  Tin Ingot  ]
-[    Glass    ] [  Redstone   ] [    Glass    ]
-[  Tin Ingot  ] [  Tin Ingot  ] [  Tin Ingot  ]
-```
+### 1. Item Transport Pipe
+<MinecraftRecipe id="item_pipe" />
 
-### 2. Item Extractor ($2\times$)
-```
-[   (Empty)   ] [  Redstone   ] [   (Empty)   ]
-[  Redstone   ] [  Item Pipe  ] [  Redstone   ]
-[   (Empty)   ] [  Item Pipe  ] [   (Empty)   ]
-```
+### 2. Item Extractor
+<MinecraftRecipe id="item_extractor" />
 
-### 3. Item Inserter ($2\times$)
-```
-[   (Empty)   ] [ Gold Ingot  ] [   (Empty)   ]
-[  Redstone   ] [  Item Pipe  ] [  Redstone   ]
-[   (Empty)   ] [  Item Pipe  ] [   (Empty)   ]
-```
+### 3. Item Inserter
+<MinecraftRecipe id="item_inserter" />
 
 ### 4. Industrial Wrench
-```
-[ Titanium Ingot ] [     (Empty)     ] [ Titanium Ingot ]
-[    (Empty)     ] [ Titanium Ingot  ] [    (Empty)     ]
-[    (Empty)     ] [ Titanium Ingot  ] [    (Empty)     ]
-```
+<MinecraftRecipe id="wrench" />
+
