@@ -96,8 +96,8 @@ Generators burn combustible solid fuels (Coal, Charcoal, Logs, or high-density *
     'Lava Tank Capacity': '8,000 mB (8 Buckets)',
     'Auto-Push': 'Direct high-voltage cable pushing to connected batteries and machines'
   }"
-  placedImage=""
-  guiImage=""
+  placedImage="/images/machines/geothermal_generator_placed.png"
+  guiImage="/images/machines/geothermal_generator_gui.png"
 />
 
 ---
