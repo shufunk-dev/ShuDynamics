@@ -211,17 +211,24 @@ With the **Resettable Mining Dimension (Quarry Expanse)** already live in the mo
 
 ---
 
-## ✅ Completed Releases & Features
+## 📦 Version History & Release Status
 
-### 🌟 v1.4.0 (Nether Metallurgy, Agronomy, Fluid & Item Logistics)
+::: tip 🚀 Release Status Overview
+* **Current Stable Release (CurseForge & GitHub):** **v1.3.0** (ATVs, Fuel Refinery, Petrochemicals & Road Network).
+* **Active Testing Build (Experimental Preview):** **v1.4.0** (Nether Metallurgy, Agronomy, Volcanic Soil, Fluids & Item Logistics).
+* **Upcoming Major Milestone:** **v1.5.0** (Automated Chunk Quarry & 3x3x3 Multiblock Supercomputer).
+:::
+
+### 🧪 v1.4.0 (Experimental Preview / Testing Build)
 * 📦 **Item Logistics & Industrial Wrench**: Item Pipes, Item Inserters, and Wrench with 4-way side configuration (Insert, Extract, Disconnect, Plug).
 * 🌋 **Agronomy & Volcanic Soil**: Soil Infuser machine, Volcanic Soil with self-hydrating bonemeal bursts, Sweet Corn, Volcanic Fertilizer, and right-click auto-harvest hoes.
 * 🧪 **Lava Fluids & 5x5 Reservoir**: Submersible Lava Pump, high-temperature Lava Pipes, and 5x5 Titanium Multiblock Reservoir.
 * 🏭 **Tier 4 Machines & Metallurgy**: Geothermal Magma Generator (400 E/t), Alloy Foundry, Magma Crucible, and Mechanical Crusher Mk2 with dual output chambers.
 * 🔮 **Anomaly Keystones 3–5**: Metallurgical Anchor (#3), Plasma Anchor (#4), and Thermal Anchor (#5).
-* 🔋 **Tungsten Power Grid & 3x3 Mining Hammers**: 1,000,000 FE Tungsten Battery Pack, 12,800 E/t Tungsten Cables, and full set of 3x3 Mining Sledgehammers.
+* 🔋 **Tungsten & Basalt Power Grid**: 1,000,000 FE Tungsten Battery Pack, 12,800 E/t Tungsten Cables, 25,600 E/t Basalt Cables, and 3x3 Mining Sledgehammers.
+* ⚡ **Blaze Plasma & Survival Modules**: Blaze Overclock Core (+200% machine speed), Thermal Refractory Plating (Fire Resistance & Lava Buoyancy), Infernal Hammer, and Plasma Flamethrower.
 
-### 🌟 v1.3.0 (Modular All-Terrain Vehicles, Petrochemicals & Road Infrastructure)
+### 🌟 v1.3.0 (Current Stable Release — Live on CurseForge)
 * 🏎️ **Modular All-Terrain Vehicle (ATV)**: High-speed drivable exploration vehicle featuring 6 customizable module slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, Fuel/Batteries), 25% asphalt top-speed boost, and full fall-damage immunity.
 * 🛠️ **Vehicle Fabricator & Tuning Bay**: Dedicated vehicle assembly and maintenance station with dynamic slot validation and vehicle item pick-up.
 * 🌾 **Sweet Corn & Biofuel Agriculture**: 8-stage crop cycle producing food and bio-ethanol feedstock.

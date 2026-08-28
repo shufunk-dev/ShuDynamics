@@ -1,5 +1,9 @@
 # Universal Item Logistics & Industrial Wrench
 
+::: warning 🧪 Experimental Feature (v1.4.0 Testing Build)
+Item Logistics and the Industrial Wrench are currently part of the **v1.4.0 Experimental Testing Build**. While fully functional and verified in-game, mechanics and recipe costs are subject to community balance tuning.
+:::
+
 ShuDynamics features a built-in, lightweight, modular item transport and automation system designed for high-performance factory routing on Minecraft 1.21.2+.
 
 ---

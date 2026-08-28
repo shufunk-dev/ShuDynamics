@@ -1,5 +1,9 @@
 # 🌾 Agronomy, Volcanic Soil & Nether Farming
 
+::: warning 🧪 Experimental Feature (v1.4.0 Testing Build)
+Volcanic Soil, the Soil Infuser, and Volcanic Agronomy features are currently part of the **v1.4.0 Experimental Testing Build**. Mechanics, growth pulse tick rates, and harvest logic are in active testing.
+:::
+
 ShuDynamics introduces a high-potency agronomy and automated farming suite engineered to cultivate crops and timber even in extreme environments like the **Nether**.
 
 ---
