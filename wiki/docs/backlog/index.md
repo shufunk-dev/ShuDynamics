@@ -43,9 +43,38 @@ With the **Resettable Mining Dimension (Quarry Expanse)** already live in the mo
   </div>
 </div>
 
+### 🖥️ 2. Modular Supercomputer & Automation Hub (3x3x3 Multiblock)
+
+<div class="roadmap-feature-box cyan-theme">
+  <div class="box-header">
+    <span class="box-icon">🖥️</span>
+    <div>
+      <h3 class="box-title cyan-text">Modular Supercomputer // 3x3x3 Automation Mainframe</h3>
+      <span class="badge cyan-badge">🧠 Recipe Automation & Autocrafting Grid</span>
+    </div>
+  </div>
+  <p class="box-intro">
+    An advanced modular computation mainframe designed for digital pattern encoding, multi-machine factory orchestration, and recursive automated crafting calculations.
+  </p>
+  <div class="sub-grid">
+    <div class="sub-card cyan-card">
+      <h4 class="card-title cyan-title">🧩 Modular Core Construction</h4>
+      <p class="card-desc">Formed as a 3x3x3 hollow multiblock with Processing Cores, Heat Sinks, and Frame Casings linked directly to your Storage Network.</p>
+    </div>
+    <div class="sub-card cyan-card">
+      <h4 class="card-title cyan-title">⚡ Autonomous Multi-Step Crafting</h4>
+      <p class="card-desc">Calculates deep recipe trees automatically, pulling raw ingredients from drive bays and dispatching sub-components to connected machines.</p>
+    </div>
+    <div class="sub-card cyan-card">
+      <h4 class="card-title cyan-title">📡 Factory Routing & Logic</h4>
+      <p class="card-desc">Interfaces with Item Logistics conduits and Storage Controllers to automate continuous factory replenishment without player intervention.</p>
+    </div>
+  </div>
+</div>
+
 ---
 
-### 🌌 2. Dimensional Singularity (Keystone #6) & The Anomaly Gateway
+### 🌌 3. Dimensional Singularity (Keystone #6) & The Anomaly Gateway
 
 <div class="roadmap-feature-box purple-theme">
   <div class="box-header">
@@ -178,31 +207,7 @@ With the **Resettable Mining Dimension (Quarry Expanse)** already live in the mo
   </div>
 </div>
 
----
 
-## 🏗️ Automated Chunk Excavator
-
-<div class="multiblock-card purple-border">
-  <img src="/textures/item/titanium_roller.png" class="mb-icon" />
-  <div>
-    <h3 class="mb-title purple-title">Automated Chunk Excavator</h3>
-    <p class="mb-desc">Energy-driven multiblock quarry that excavates downward chunk-by-chunk, automatically sorting ores and piping materials into your storage network.</p>
-  </div>
-</div>
-
-## 🖥️ Modular Supercomputer & Automation Hub
-
-<div class="multiblock-card cyan-border">
-  <img src="/textures/item/storage_crystal_64k.png" class="mb-icon" />
-  <div>
-    <h3 class="mb-title cyan-title">3x3x3 Multiblock Supercomputer & Automation Brain</h3>
-    <p class="mb-desc">An advanced modular computation mainframe designed for future industrial automation routines, autonomous crafting calculation, and heavy automated task execution.</p>
-    <ul class="card-list">
-      <li>Constructed as a 3x3x3 multiblock structure with Processing Cores, Heat Sinks, and Frame Casings.</li>
-      <li>Will power upcoming automated crafting grids and complex multi-machine factory logic.</li>
-    </ul>
-  </div>
-</div>
 
 ---
 
