@@ -1,7 +1,55 @@
 {
-  "version": "1.3.0",
-  "count": 223,
+  "version": "1.4.0",
+  "count": 311,
   "recipes": {
+    "alloy_foundry": {
+      "id": "alloy_foundry",
+      "type": "shaped",
+      "title": "Crafting Industrial Alloy Foundry",
+      "grid": [
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Cobalt Plate",
+          "icon": "/textures/item/cobalt_plate.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Cobalt Plate",
+          "icon": "/textures/item/cobalt_plate.png"
+        },
+        {
+          "name": "Steel Blast Furnace",
+          "icon": "/textures/block/steel_blast_furnace_front.png"
+        },
+        {
+          "name": "Cobalt Plate",
+          "icon": "/textures/item/cobalt_plate.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Ardite Plate",
+          "icon": "/textures/item/ardite_plate.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Industrial Alloy Foundry",
+        "icon": "/textures/block/alloy_foundry_front.png",
+        "count": 1
+      }
+    },
     "aluminum_atv_chassis": {
       "id": "aluminum_atv_chassis",
       "type": "shaped",
@@ -797,6 +845,546 @@
       "output": {
         "name": "Aluminum Sword",
         "icon": "/textures/item/aluminum_sword.png",
+        "count": 1
+      }
+    },
+    "ardite_axe": {
+      "id": "ardite_axe",
+      "type": "shaped",
+      "title": "Crafting Ardite Axe",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Ardite Axe",
+        "icon": "/textures/item/ardite_axe.png",
+        "count": 1
+      }
+    },
+    "ardite_block": {
+      "id": "ardite_block",
+      "type": "shaped",
+      "title": "Crafting Block of Ardite",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Ardite",
+        "icon": "/textures/block/ardite_block.png",
+        "count": 1
+      }
+    },
+    "ardite_boots": {
+      "id": "ardite_boots",
+      "type": "shaped",
+      "title": "Crafting Ardite Boots",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Boots",
+        "icon": "/textures/item/ardite_boots.png",
+        "count": 1
+      }
+    },
+    "ardite_chestplate": {
+      "id": "ardite_chestplate",
+      "type": "shaped",
+      "title": "Crafting Ardite Chestplate",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Ardite Chestplate",
+        "icon": "/textures/item/ardite_chestplate.png",
+        "count": 1
+      }
+    },
+    "ardite_hammer": {
+      "id": "ardite_hammer",
+      "type": "shaped",
+      "title": "Crafting Ardite Mining Hammer",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Ardite Mining Hammer",
+        "icon": "/textures/item/ardite_hammer.png",
+        "count": 1
+      }
+    },
+    "ardite_helmet": {
+      "id": "ardite_helmet",
+      "type": "shaped",
+      "title": "Crafting Ardite Helmet",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Helmet",
+        "icon": "/textures/item/ardite_helmet.png",
+        "count": 1
+      }
+    },
+    "ardite_hoe": {
+      "id": "ardite_hoe",
+      "type": "shaped",
+      "title": "Crafting Ardite Hoe",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Ardite Hoe",
+        "icon": "/textures/item/ardite_hoe.png",
+        "count": 1
+      }
+    },
+    "ardite_ingot_from_ardite_block": {
+      "id": "ardite_ingot_from_ardite_block",
+      "type": "shapeless",
+      "title": "Crafting Ardite Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Ardite",
+          "icon": "/textures/block/ardite_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Ingot",
+        "icon": "/textures/item/ardite_ingot.png",
+        "count": 9
+      }
+    },
+    "ardite_ingot_from_nuggets": {
+      "id": "ardite_ingot_from_nuggets",
+      "type": "shaped",
+      "title": "Crafting Ardite Ingot",
+      "grid": [
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        },
+        {
+          "name": "Ardite Nugget",
+          "icon": "/textures/item/ardite_nugget.png"
+        }
+      ],
+      "output": {
+        "name": "Ardite Ingot",
+        "icon": "/textures/item/ardite_ingot.png",
+        "count": 1
+      }
+    },
+    "ardite_leggings": {
+      "id": "ardite_leggings",
+      "type": "shaped",
+      "title": "Crafting Ardite Leggings",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Ardite Leggings",
+        "icon": "/textures/item/ardite_leggings.png",
+        "count": 1
+      }
+    },
+    "ardite_nugget_from_ardite_ingot": {
+      "id": "ardite_nugget_from_ardite_ingot",
+      "type": "shapeless",
+      "title": "Crafting Ardite Nugget (Shapeless)",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Nugget",
+        "icon": "/textures/item/ardite_nugget.png",
+        "count": 9
+      }
+    },
+    "ardite_pickaxe": {
+      "id": "ardite_pickaxe",
+      "type": "shaped",
+      "title": "Crafting Ardite Pickaxe",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Ardite Pickaxe",
+        "icon": "/textures/item/ardite_pickaxe.png",
+        "count": 1
+      }
+    },
+    "ardite_plate": {
+      "id": "ardite_plate",
+      "type": "shaped",
+      "title": "Crafting Ardite Plate",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Plate",
+        "icon": "/textures/item/ardite_plate.png",
+        "count": 2
+      }
+    },
+    "ardite_shovel": {
+      "id": "ardite_shovel",
+      "type": "shaped",
+      "title": "Crafting Ardite Shovel",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Shovel",
+        "icon": "/textures/item/ardite_shovel.png",
+        "count": 1
+      }
+    },
+    "ardite_sword": {
+      "id": "ardite_sword",
+      "type": "shaped",
+      "title": "Crafting Ardite Sword",
+      "grid": [
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Ardite Sword",
+        "icon": "/textures/item/ardite_sword.png",
         "count": 1
       }
     },
@@ -1766,6 +2354,546 @@
         "count": 1
       }
     },
+    "cobalt_axe": {
+      "id": "cobalt_axe",
+      "type": "shaped",
+      "title": "Crafting Cobalt Axe",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Cobalt Axe",
+        "icon": "/textures/item/cobalt_axe.png",
+        "count": 1
+      }
+    },
+    "cobalt_block": {
+      "id": "cobalt_block",
+      "type": "shaped",
+      "title": "Crafting Block of Cobalt",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Cobalt",
+        "icon": "/textures/block/cobalt_block.png",
+        "count": 1
+      }
+    },
+    "cobalt_boots": {
+      "id": "cobalt_boots",
+      "type": "shaped",
+      "title": "Crafting Cobalt Boots",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Boots",
+        "icon": "/textures/item/cobalt_boots.png",
+        "count": 1
+      }
+    },
+    "cobalt_chestplate": {
+      "id": "cobalt_chestplate",
+      "type": "shaped",
+      "title": "Crafting Cobalt Chestplate",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Cobalt Chestplate",
+        "icon": "/textures/item/cobalt_chestplate.png",
+        "count": 1
+      }
+    },
+    "cobalt_hammer": {
+      "id": "cobalt_hammer",
+      "type": "shaped",
+      "title": "Crafting Cobalt Mining Hammer",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Cobalt Mining Hammer",
+        "icon": "/textures/item/cobalt_hammer.png",
+        "count": 1
+      }
+    },
+    "cobalt_helmet": {
+      "id": "cobalt_helmet",
+      "type": "shaped",
+      "title": "Crafting Cobalt Helmet",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Helmet",
+        "icon": "/textures/item/cobalt_helmet.png",
+        "count": 1
+      }
+    },
+    "cobalt_hoe": {
+      "id": "cobalt_hoe",
+      "type": "shaped",
+      "title": "Crafting Cobalt Hoe",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Cobalt Hoe",
+        "icon": "/textures/item/cobalt_hoe.png",
+        "count": 1
+      }
+    },
+    "cobalt_ingot_from_cobalt_block": {
+      "id": "cobalt_ingot_from_cobalt_block",
+      "type": "shapeless",
+      "title": "Crafting Cobalt Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Cobalt",
+          "icon": "/textures/block/cobalt_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Ingot",
+        "icon": "/textures/item/cobalt_ingot.png",
+        "count": 9
+      }
+    },
+    "cobalt_ingot_from_nuggets": {
+      "id": "cobalt_ingot_from_nuggets",
+      "type": "shaped",
+      "title": "Crafting Cobalt Ingot",
+      "grid": [
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        },
+        {
+          "name": "Cobalt Nugget",
+          "icon": "/textures/item/cobalt_nugget.png"
+        }
+      ],
+      "output": {
+        "name": "Cobalt Ingot",
+        "icon": "/textures/item/cobalt_ingot.png",
+        "count": 1
+      }
+    },
+    "cobalt_leggings": {
+      "id": "cobalt_leggings",
+      "type": "shaped",
+      "title": "Crafting Cobalt Leggings",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Cobalt Leggings",
+        "icon": "/textures/item/cobalt_leggings.png",
+        "count": 1
+      }
+    },
+    "cobalt_nugget_from_cobalt_ingot": {
+      "id": "cobalt_nugget_from_cobalt_ingot",
+      "type": "shapeless",
+      "title": "Crafting Cobalt Nugget (Shapeless)",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Nugget",
+        "icon": "/textures/item/cobalt_nugget.png",
+        "count": 9
+      }
+    },
+    "cobalt_pickaxe": {
+      "id": "cobalt_pickaxe",
+      "type": "shaped",
+      "title": "Crafting Cobalt Pickaxe",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Cobalt Pickaxe",
+        "icon": "/textures/item/cobalt_pickaxe.png",
+        "count": 1
+      }
+    },
+    "cobalt_plate": {
+      "id": "cobalt_plate",
+      "type": "shaped",
+      "title": "Crafting Cobalt Plate",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Plate",
+        "icon": "/textures/item/cobalt_plate.png",
+        "count": 2
+      }
+    },
+    "cobalt_shovel": {
+      "id": "cobalt_shovel",
+      "type": "shaped",
+      "title": "Crafting Cobalt Shovel",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Shovel",
+        "icon": "/textures/item/cobalt_shovel.png",
+        "count": 1
+      }
+    },
+    "cobalt_sword": {
+      "id": "cobalt_sword",
+      "type": "shaped",
+      "title": "Crafting Cobalt Sword",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Cobalt Sword",
+        "icon": "/textures/item/cobalt_sword.png",
+        "count": 1
+      }
+    },
     "coke_coal_block": {
       "id": "coke_coal_block",
       "type": "shaped",
@@ -2306,6 +3434,54 @@
       "output": {
         "name": "Crusher",
         "icon": "/textures/block/crusher_front.png",
+        "count": 1
+      }
+    },
+    "crusher_mk2": {
+      "id": "crusher_mk2",
+      "type": "shaped",
+      "title": "Crafting Industrial Crusher MK2",
+      "grid": [
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Diamond",
+          "icon": "/textures/item/diamond.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Diamond",
+          "icon": "/textures/item/diamond.png"
+        },
+        {
+          "name": "Crusher",
+          "icon": "/textures/block/crusher_front.png"
+        },
+        {
+          "name": "Diamond",
+          "icon": "/textures/item/diamond.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Industrial Crusher MK2",
+        "icon": "/textures/block/crusher_mk2_front.png",
         "count": 1
       }
     },
@@ -4988,6 +6164,54 @@
         "count": 1
       }
     },
+    "fire_crystal": {
+      "id": "fire_crystal",
+      "type": "shaped",
+      "title": "Crafting Fire Crystal",
+      "grid": [
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        },
+        {
+          "name": "Magma Cream",
+          "icon": "/textures/item/magma_cream.png"
+        },
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        },
+        {
+          "name": "Magma Cream",
+          "icon": "/textures/item/magma_cream.png"
+        },
+        {
+          "name": "Quartz",
+          "icon": "/textures/item/quartz.png"
+        },
+        {
+          "name": "Magma Cream",
+          "icon": "/textures/item/magma_cream.png"
+        },
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        }
+      ],
+      "output": {
+        "name": "Fire Crystal",
+        "icon": "/textures/item/fire_crystal.png",
+        "count": 1
+      }
+    },
     "fuel_refinery": {
       "id": "fuel_refinery",
       "type": "shaped",
@@ -5070,6 +6294,54 @@
         "name": "Oxygen Gas Pipe",
         "icon": "/textures/block/gas_pipe.png",
         "count": 6
+      }
+    },
+    "geothermal_generator": {
+      "id": "geothermal_generator",
+      "type": "shaped",
+      "title": "Crafting Geothermal Generator",
+      "grid": [
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Tungsten Heavy Energy Cable",
+          "icon": "/textures/block/tungsten_cable.png"
+        },
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Lava Bucket",
+          "icon": "/textures/item/lava_bucket.png"
+        },
+        {
+          "name": "Steel Generator",
+          "icon": "/textures/block/steel_generator_front.png"
+        },
+        {
+          "name": "Lava Bucket",
+          "icon": "/textures/item/lava_bucket.png"
+        },
+        {
+          "name": "Magma Block",
+          "icon": "/textures/item/magma_block.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Magma Block",
+          "icon": "/textures/item/magma_block.png"
+        }
+      ],
+      "output": {
+        "name": "Geothermal Generator",
+        "icon": "/textures/block/geothermal_generator_front.png",
+        "count": 1
       }
     },
     "golden_hammer": {
@@ -5537,6 +6809,126 @@
         "count": 1
       }
     },
+    "item_extractor": {
+      "id": "item_extractor",
+      "type": "shaped",
+      "title": "Crafting Item Extractor",
+      "grid": [
+        null,
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        null,
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Item Transport Pipe",
+          "icon": "/textures/block/item_pipe.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        null,
+        {
+          "name": "Item Transport Pipe",
+          "icon": "/textures/block/item_pipe.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Item Extractor",
+        "icon": "/textures/block/item_extractor.png",
+        "count": 2
+      }
+    },
+    "item_inserter": {
+      "id": "item_inserter",
+      "type": "shaped",
+      "title": "Crafting Item Inserter",
+      "grid": [
+        null,
+        {
+          "name": "Gold Ingot",
+          "icon": "/textures/item/gold_ingot.png"
+        },
+        null,
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Item Transport Pipe",
+          "icon": "/textures/block/item_pipe.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        null,
+        {
+          "name": "Item Transport Pipe",
+          "icon": "/textures/block/item_pipe.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Item Inserter",
+        "icon": "/textures/block/item_inserter.png",
+        "count": 2
+      }
+    },
+    "item_pipe": {
+      "id": "item_pipe",
+      "type": "shaped",
+      "title": "Crafting Item Transport Pipe",
+      "grid": [
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        },
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        },
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        },
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        },
+        {
+          "name": "Tin Ingot",
+          "icon": "/textures/item/tin_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Item Transport Pipe",
+        "icon": "/textures/block/item_pipe.png",
+        "count": 8
+      }
+    },
     "kinetic_anchor": {
       "id": "kinetic_anchor",
       "type": "shaped",
@@ -5633,6 +7025,54 @@
         "count": 1
       }
     },
+    "lava_pump": {
+      "id": "lava_pump",
+      "type": "shaped",
+      "title": "Crafting Submersible Lava Pump",
+      "grid": [
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Bucket",
+          "icon": "/textures/item/bucket.png"
+        },
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Tungsten Heavy Energy Cable",
+          "icon": "/textures/block/tungsten_cable.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Submersible Lava Pump",
+        "icon": "/textures/block/lava_pump_front.png",
+        "count": 1
+      }
+    },
     "livingwood_sword": {
       "id": "livingwood_sword",
       "type": "shaped",
@@ -5660,6 +7100,651 @@
       "output": {
         "name": "Enchanted Wood Sword",
         "icon": "/textures/item/livingwood_sword.png",
+        "count": 1
+      }
+    },
+    "magma_crucible": {
+      "id": "magma_crucible",
+      "type": "shaped",
+      "title": "Crafting Magma Crucible",
+      "grid": [
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Cauldron",
+          "icon": "/textures/item/cauldron.png"
+        },
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Geothermal Generator",
+          "icon": "/textures/block/geothermal_generator_front.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        },
+        {
+          "name": "Tungsten Plate",
+          "icon": "/textures/item/tungsten_plate.png"
+        }
+      ],
+      "output": {
+        "name": "Magma Crucible",
+        "icon": "/textures/block/magma_crucible_front.png",
+        "count": 1
+      }
+    },
+    "manyullyn_axe": {
+      "id": "manyullyn_axe",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Axe",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Axe",
+        "icon": "/textures/item/manyullyn_axe.png",
+        "count": 1
+      }
+    },
+    "manyullyn_block": {
+      "id": "manyullyn_block",
+      "type": "shaped",
+      "title": "Crafting Block of Manyullyn",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Manyullyn",
+        "icon": "/textures/block/manyullyn_block.png",
+        "count": 1
+      }
+    },
+    "manyullyn_boots": {
+      "id": "manyullyn_boots",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Boots",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Boots",
+        "icon": "/textures/item/manyullyn_boots.png",
+        "count": 1
+      }
+    },
+    "manyullyn_chestplate": {
+      "id": "manyullyn_chestplate",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Chestplate",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Manyullyn Chestplate",
+        "icon": "/textures/item/manyullyn_chestplate.png",
+        "count": 1
+      }
+    },
+    "manyullyn_dust_from_blending": {
+      "id": "manyullyn_dust_from_blending",
+      "type": "shapeless",
+      "title": "Crafting Manyullyn Dust (Shapeless)",
+      "grid": [
+        {
+          "name": "Cobalt Dust",
+          "icon": "/textures/item/cobalt_dust.png"
+        },
+        {
+          "name": "Ardite Dust",
+          "icon": "/textures/item/ardite_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Dust",
+        "icon": "/textures/item/manyullyn_dust.png",
+        "count": 2
+      }
+    },
+    "manyullyn_hammer": {
+      "id": "manyullyn_hammer",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Mining Hammer",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Mining Hammer",
+        "icon": "/textures/item/manyullyn_hammer.png",
+        "count": 1
+      }
+    },
+    "manyullyn_helmet": {
+      "id": "manyullyn_helmet",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Helmet",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Helmet",
+        "icon": "/textures/item/manyullyn_helmet.png",
+        "count": 1
+      }
+    },
+    "manyullyn_hoe": {
+      "id": "manyullyn_hoe",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Hoe",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Hoe",
+        "icon": "/textures/item/manyullyn_hoe.png",
+        "count": 1
+      }
+    },
+    "manyullyn_ingot_from_alloy": {
+      "id": "manyullyn_ingot_from_alloy",
+      "type": "shapeless",
+      "title": "Crafting Manyullyn Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Cobalt Ingot",
+          "icon": "/textures/item/cobalt_ingot.png"
+        },
+        {
+          "name": "Ardite Ingot",
+          "icon": "/textures/item/ardite_ingot.png"
+        },
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Ingot",
+        "icon": "/textures/item/manyullyn_ingot.png",
+        "count": 2
+      }
+    },
+    "manyullyn_ingot_from_manyullyn_block": {
+      "id": "manyullyn_ingot_from_manyullyn_block",
+      "type": "shapeless",
+      "title": "Crafting Manyullyn Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Manyullyn",
+          "icon": "/textures/block/manyullyn_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Ingot",
+        "icon": "/textures/item/manyullyn_ingot.png",
+        "count": 9
+      }
+    },
+    "manyullyn_ingot_from_nuggets": {
+      "id": "manyullyn_ingot_from_nuggets",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Ingot",
+      "grid": [
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        },
+        {
+          "name": "Manyullyn Nugget",
+          "icon": "/textures/item/manyullyn_nugget.png"
+        }
+      ],
+      "output": {
+        "name": "Manyullyn Ingot",
+        "icon": "/textures/item/manyullyn_ingot.png",
+        "count": 1
+      }
+    },
+    "manyullyn_leggings": {
+      "id": "manyullyn_leggings",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Leggings",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Manyullyn Leggings",
+        "icon": "/textures/item/manyullyn_leggings.png",
+        "count": 1
+      }
+    },
+    "manyullyn_nugget_from_manyullyn_ingot": {
+      "id": "manyullyn_nugget_from_manyullyn_ingot",
+      "type": "shapeless",
+      "title": "Crafting Manyullyn Nugget (Shapeless)",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Nugget",
+        "icon": "/textures/item/manyullyn_nugget.png",
+        "count": 9
+      }
+    },
+    "manyullyn_pickaxe": {
+      "id": "manyullyn_pickaxe",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Pickaxe",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Pickaxe",
+        "icon": "/textures/item/manyullyn_pickaxe.png",
+        "count": 1
+      }
+    },
+    "manyullyn_plate": {
+      "id": "manyullyn_plate",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Plate",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Plate",
+        "icon": "/textures/item/manyullyn_plate.png",
+        "count": 2
+      }
+    },
+    "manyullyn_shovel": {
+      "id": "manyullyn_shovel",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Shovel",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Shovel",
+        "icon": "/textures/item/manyullyn_shovel.png",
+        "count": 1
+      }
+    },
+    "manyullyn_sword": {
+      "id": "manyullyn_sword",
+      "type": "shaped",
+      "title": "Crafting Manyullyn Sword",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Stick",
+          "icon": "/textures/item/stick.png"
+        },
+        null,
+        null
+      ],
+      "output": {
+        "name": "Manyullyn Sword",
+        "icon": "/textures/item/manyullyn_sword.png",
         "count": 1
       }
     },
@@ -5708,6 +7793,54 @@
       "output": {
         "name": "Medium Cargo Trunk (18-Slot)",
         "icon": "/textures/item/medium_cargo_trunk.png",
+        "count": 1
+      }
+    },
+    "metallurgical_anchor": {
+      "id": "metallurgical_anchor",
+      "type": "shaped",
+      "title": "Crafting Metallurgical Anchor",
+      "grid": [
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Enchanted Lava Bucket",
+          "icon": "/textures/item/enchanted_lava_bucket.png"
+        },
+        {
+          "name": "Infused Heartwood",
+          "icon": "/textures/item/infused_heartwood.png"
+        },
+        {
+          "name": "Enchanted Lava Bucket",
+          "icon": "/textures/item/enchanted_lava_bucket.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Manyullyn Ingot",
+          "icon": "/textures/item/manyullyn_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Metallurgical Anchor",
+        "icon": "/textures/item/metallurgical_anchor.png",
         "count": 1
       }
     },
@@ -5921,6 +8054,162 @@
         "count": 1
       }
     },
+    "plasma_anchor": {
+      "id": "plasma_anchor",
+      "type": "shaped",
+      "title": "Crafting Plasma Anchor",
+      "grid": [
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Infused Heartwood",
+          "icon": "/textures/item/infused_heartwood.png"
+        },
+        {
+          "name": "Nether Star",
+          "icon": "/textures/item/nether_star.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        }
+      ],
+      "output": {
+        "name": "Plasma Anchor",
+        "icon": "/textures/item/plasma_anchor.png",
+        "count": 1
+      }
+    },
+    "pozzolanic_asphalt": {
+      "id": "pozzolanic_asphalt",
+      "type": "shaped",
+      "title": "Crafting Pozzolanic Roman Asphalt",
+      "grid": [
+        {
+          "name": "Sand",
+          "icon": "/textures/block/sand.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Sand",
+          "icon": "/textures/block/sand.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Mineral Tar",
+          "icon": "/textures/item/mineral_tar.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Pozzolanic Roman Asphalt",
+        "icon": "/textures/block/pozzolanic_asphalt.png",
+        "count": 8
+      }
+    },
+    "raw_ardite_block": {
+      "id": "raw_ardite_block",
+      "type": "shaped",
+      "title": "Crafting Block of Raw Ardite",
+      "grid": [
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        },
+        {
+          "name": "Raw Ardite",
+          "icon": "/textures/item/raw_ardite.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Raw Ardite",
+        "icon": "/textures/block/raw_ardite_block.png",
+        "count": 1
+      }
+    },
+    "raw_ardite_from_raw_ardite_block": {
+      "id": "raw_ardite_from_raw_ardite_block",
+      "type": "shapeless",
+      "title": "Crafting Raw Ardite (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Raw Ardite",
+          "icon": "/textures/block/raw_ardite_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Raw Ardite",
+        "icon": "/textures/item/raw_ardite.png",
+        "count": 9
+      }
+    },
     "raw_bauxite_block": {
       "id": "raw_bauxite_block",
       "type": "shaped",
@@ -5990,6 +8279,78 @@
       "output": {
         "name": "Raw Bauxite",
         "icon": "/textures/item/raw_bauxite.png",
+        "count": 9
+      }
+    },
+    "raw_cobalt_block": {
+      "id": "raw_cobalt_block",
+      "type": "shaped",
+      "title": "Crafting Block of Raw Cobalt",
+      "grid": [
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        },
+        {
+          "name": "Raw Cobalt",
+          "icon": "/textures/item/raw_cobalt.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Raw Cobalt",
+        "icon": "/textures/block/raw_cobalt_block.png",
+        "count": 1
+      }
+    },
+    "raw_cobalt_from_raw_cobalt_block": {
+      "id": "raw_cobalt_from_raw_cobalt_block",
+      "type": "shapeless",
+      "title": "Crafting Raw Cobalt (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Raw Cobalt",
+          "icon": "/textures/block/raw_cobalt_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Raw Cobalt",
+        "icon": "/textures/item/raw_cobalt.png",
         "count": 9
       }
     },
@@ -6135,6 +8496,126 @@
         "name": "Raw Titanium",
         "icon": "/textures/item/raw_titanium.png",
         "count": 9
+      }
+    },
+    "raw_tungsten_block": {
+      "id": "raw_tungsten_block",
+      "type": "shaped",
+      "title": "Crafting Block of Raw Tungsten",
+      "grid": [
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        },
+        {
+          "name": "Raw Tungsten",
+          "icon": "/textures/item/raw_tungsten.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Raw Tungsten",
+        "icon": "/textures/block/raw_tungsten_block.png",
+        "count": 1
+      }
+    },
+    "raw_tungsten_from_raw_tungsten_block": {
+      "id": "raw_tungsten_from_raw_tungsten_block",
+      "type": "shapeless",
+      "title": "Crafting Raw Tungsten (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Raw Tungsten",
+          "icon": "/textures/block/raw_tungsten_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Raw Tungsten",
+        "icon": "/textures/item/raw_tungsten.png",
+        "count": 9
+      }
+    },
+    "reinforced_tank_glass": {
+      "id": "reinforced_tank_glass",
+      "type": "shaped",
+      "title": "Crafting Reinforced Tank Glass",
+      "grid": [
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        }
+      ],
+      "output": {
+        "name": "Reinforced Tank Glass",
+        "icon": "/textures/block/reinforced_tank_glass.png",
+        "count": 8
       }
     },
     "road_paver": {
@@ -6428,6 +8909,54 @@
       "output": {
         "name": "Snorkel",
         "icon": "/textures/item/snorkel.png",
+        "count": 1
+      }
+    },
+    "soil_infuser": {
+      "id": "soil_infuser",
+      "type": "shaped",
+      "title": "Crafting Volcanic Soil Infuser",
+      "grid": [
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Piston",
+          "icon": "/textures/block/piston.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Furnace",
+          "icon": "/textures/item/furnace.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Enchanted Redstone Dust",
+          "icon": "/textures/item/enchanted_redstone.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Volcanic Soil Infuser",
+        "icon": "/textures/block/soil_infuser_front.png",
         "count": 1
       }
     },
@@ -7565,6 +10094,84 @@
         "count": 3
       }
     },
+    "sulfur_dust": {
+      "id": "sulfur_dust",
+      "type": "shapeless",
+      "title": "Crafting Sulfur Dust (Shapeless)",
+      "grid": [
+        {
+          "name": "Gunpowder",
+          "icon": "/textures/item/gunpowder.png"
+        },
+        {
+          "name": "Blaze Powder",
+          "icon": "/textures/item/blaze_powder.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Sulfur Dust",
+        "icon": "/textures/item/sulfur_dust.png",
+        "count": 2
+      }
+    },
+    "thermal_anchor": {
+      "id": "thermal_anchor",
+      "type": "shaped",
+      "title": "Crafting Thermal Anchor",
+      "grid": [
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Crying Obsidian",
+          "icon": "/textures/block/crying_obsidian.png"
+        },
+        {
+          "name": "Infused Heartwood",
+          "icon": "/textures/item/infused_heartwood.png"
+        },
+        {
+          "name": "Crying Obsidian",
+          "icon": "/textures/block/crying_obsidian.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Thermal Anchor",
+        "icon": "/textures/item/thermal_anchor.png",
+        "count": 1
+      }
+    },
     "tin_axe": {
       "id": "tin_axe",
       "type": "shaped",
@@ -8345,6 +10952,54 @@
         "count": 9
       }
     },
+    "titanium_lava_pipe": {
+      "id": "titanium_lava_pipe",
+      "type": "shaped",
+      "title": "Crafting Titanium Lava Pipe",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Obsidian",
+          "icon": "/textures/block/obsidian.png"
+        },
+        {
+          "name": "Glass",
+          "icon": "/textures/item/glass.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Titanium Lava Pipe",
+        "icon": "/textures/block/titanium_lava_pipe.png",
+        "count": 6
+      }
+    },
     "titanium_leggings": {
       "id": "titanium_leggings",
       "type": "shaped",
@@ -8579,6 +11234,462 @@
         "count": 1
       }
     },
+    "titanium_tank_casing": {
+      "id": "titanium_tank_casing",
+      "type": "shaped",
+      "title": "Crafting Titanium Tank Casing",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Obsidian",
+          "icon": "/textures/block/obsidian.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Obsidian",
+          "icon": "/textures/block/obsidian.png"
+        },
+        null,
+        {
+          "name": "Obsidian",
+          "icon": "/textures/block/obsidian.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Obsidian",
+          "icon": "/textures/block/obsidian.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Titanium Tank Casing",
+        "icon": "/textures/block/titanium_tank_casing.png",
+        "count": 4
+      }
+    },
+    "titanium_tank_inbound_port": {
+      "id": "titanium_tank_inbound_port",
+      "type": "shaped",
+      "title": "Crafting Titanium Tank Inbound Port",
+      "grid": [
+        null,
+        {
+          "name": "Titanium Lava Pipe",
+          "icon": "/textures/block/titanium_lava_pipe.png"
+        },
+        null,
+        null,
+        {
+          "name": "Titanium Tank Casing",
+          "icon": "/textures/block/titanium_tank_casing.png"
+        },
+        null,
+        null,
+        {
+          "name": "Bucket",
+          "icon": "/textures/item/bucket.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Titanium Tank Inbound Port",
+        "icon": "/textures/block/titanium_tank_inbound_port.png",
+        "count": 1
+      }
+    },
+    "tungsten_battery": {
+      "id": "tungsten_battery",
+      "type": "shaped",
+      "title": "Crafting Tungsten Heavy Battery",
+      "grid": [
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Tungsten Heavy Energy Cable",
+          "icon": "/textures/block/tungsten_cable.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Steel Energy Cell",
+          "icon": "/textures/block/steel_battery_front.png"
+        },
+        {
+          "name": "Manyullyn Plate",
+          "icon": "/textures/item/manyullyn_plate.png"
+        },
+        {
+          "name": "Steel Energy Cell",
+          "icon": "/textures/block/steel_battery_front.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Redstone Block",
+          "icon": "/textures/item/redstone_block.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Tungsten Heavy Battery",
+        "icon": "/textures/block/tungsten_battery_front.png",
+        "count": 1
+      }
+    },
+    "tungsten_battery_pack": {
+      "id": "tungsten_battery_pack",
+      "type": "shaped",
+      "title": "Crafting Tungsten Battery Pack",
+      "grid": [
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Gold Ingot",
+          "icon": "/textures/item/gold_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Steel Battery Pack",
+          "icon": "/textures/item/steel_battery_pack.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Gold Ingot",
+          "icon": "/textures/item/gold_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Tungsten Battery Pack",
+        "icon": "/textures/item/tungsten_battery_pack.png",
+        "count": 1
+      }
+    },
+    "tungsten_block": {
+      "id": "tungsten_block",
+      "type": "shaped",
+      "title": "Crafting Block of Tungsten",
+      "grid": [
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        }
+      ],
+      "output": {
+        "name": "Block of Tungsten",
+        "icon": "/textures/block/tungsten_block.png",
+        "count": 1
+      }
+    },
+    "tungsten_cable": {
+      "id": "tungsten_cable",
+      "type": "shaped",
+      "title": "Crafting Tungsten Heavy Energy Cable",
+      "grid": [
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Steel Energy Cable",
+          "icon": "/textures/block/steel_cable.png"
+        },
+        {
+          "name": "Redstone",
+          "icon": "/textures/item/redstone.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        }
+      ],
+      "output": {
+        "name": "Tungsten Heavy Energy Cable",
+        "icon": "/textures/block/tungsten_cable.png",
+        "count": 6
+      }
+    },
+    "tungsten_carbide_ingot_from_blasting": {
+      "id": "tungsten_carbide_ingot_from_blasting",
+      "type": "shapeless",
+      "title": "Crafting Tungsten Carbide Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Coke Coal",
+          "icon": "/textures/item/coke_coal.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Tungsten Carbide Ingot",
+        "icon": "/textures/item/tungsten_carbide_ingot.png",
+        "count": 1
+      }
+    },
+    "tungsten_carbide_ingot_from_dust": {
+      "id": "tungsten_carbide_ingot_from_dust",
+      "type": "shapeless",
+      "title": "Crafting Tungsten Carbide Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Tungsten Dust",
+          "icon": "/textures/item/tungsten_dust.png"
+        },
+        {
+          "name": "Coke Coal",
+          "icon": "/textures/item/coke_coal.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Tungsten Carbide Ingot",
+        "icon": "/textures/item/tungsten_carbide_ingot.png",
+        "count": 1
+      }
+    },
+    "tungsten_ingot_from_nuggets": {
+      "id": "tungsten_ingot_from_nuggets",
+      "type": "shaped",
+      "title": "Crafting Tungsten Ingot",
+      "grid": [
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        },
+        {
+          "name": "Tungsten Nugget",
+          "icon": "/textures/item/tungsten_nugget.png"
+        }
+      ],
+      "output": {
+        "name": "Tungsten Ingot",
+        "icon": "/textures/item/tungsten_ingot.png",
+        "count": 1
+      }
+    },
+    "tungsten_ingot_from_tungsten_block": {
+      "id": "tungsten_ingot_from_tungsten_block",
+      "type": "shapeless",
+      "title": "Crafting Tungsten Ingot (Shapeless)",
+      "grid": [
+        {
+          "name": "Block of Tungsten",
+          "icon": "/textures/block/tungsten_block.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Tungsten Ingot",
+        "icon": "/textures/item/tungsten_ingot.png",
+        "count": 9
+      }
+    },
+    "tungsten_nugget_from_tungsten_ingot": {
+      "id": "tungsten_nugget_from_tungsten_ingot",
+      "type": "shapeless",
+      "title": "Crafting Tungsten Nugget (Shapeless)",
+      "grid": [
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Tungsten Nugget",
+        "icon": "/textures/item/tungsten_nugget.png",
+        "count": 9
+      }
+    },
+    "tungsten_plate": {
+      "id": "tungsten_plate",
+      "type": "shaped",
+      "title": "Crafting Tungsten Plate",
+      "grid": [
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        null,
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        {
+          "name": "Tungsten Ingot",
+          "icon": "/textures/item/tungsten_ingot.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Tungsten Plate",
+        "icon": "/textures/item/tungsten_plate.png",
+        "count": 2
+      }
+    },
     "unfired_concrete_curb": {
       "id": "unfired_concrete_curb",
       "type": "shaped",
@@ -8712,6 +11823,168 @@
         "name": "Enchanted Wood Shovel",
         "icon": "/textures/item/verdant_shovel.png",
         "count": 1
+      }
+    },
+    "volcanic_ash": {
+      "id": "volcanic_ash",
+      "type": "shapeless",
+      "title": "Crafting Volcanic Ash (Shapeless)",
+      "grid": [
+        {
+          "name": "Basalt",
+          "icon": "/textures/item/basalt.png"
+        },
+        {
+          "name": "Charcoal",
+          "icon": "/textures/item/charcoal.png"
+        },
+        {
+          "name": "Enchanted Dust",
+          "icon": "/textures/item/enchanted_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Volcanic Ash",
+        "icon": "/textures/item/volcanic_ash.png",
+        "count": 2
+      }
+    },
+    "volcanic_bricks": {
+      "id": "volcanic_bricks",
+      "type": "shaped",
+      "title": "Crafting Volcanic Bricks",
+      "grid": [
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Basalt",
+          "icon": "/textures/item/basalt.png"
+        },
+        null,
+        {
+          "name": "Basalt",
+          "icon": "/textures/item/basalt.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Volcanic Bricks",
+        "icon": "/textures/block/volcanic_bricks.png",
+        "count": 4
+      }
+    },
+    "volcanic_brick_slab": {
+      "id": "volcanic_brick_slab",
+      "type": "shaped",
+      "title": "Crafting Volcanic Brick Slab",
+      "grid": [
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Volcanic Brick Slab",
+        "icon": "/textures/item/volcanic_brick_slab.png",
+        "count": 6
+      }
+    },
+    "volcanic_brick_stairs": {
+      "id": "volcanic_brick_stairs",
+      "type": "shaped",
+      "title": "Crafting Volcanic Brick Stairs",
+      "grid": [
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        null,
+        null,
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        null,
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        }
+      ],
+      "output": {
+        "name": "Volcanic Brick Stairs",
+        "icon": "/textures/item/volcanic_brick_stairs.png",
+        "count": 4
+      }
+    },
+    "volcanic_fertilizer": {
+      "id": "volcanic_fertilizer",
+      "type": "shapeless",
+      "title": "Crafting Volcanic Super Fertilizer (Shapeless)",
+      "grid": [
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Bone Meal",
+          "icon": "/textures/item/bone_meal.png"
+        },
+        {
+          "name": "Sulfur Dust",
+          "icon": "/textures/item/sulfur_dust.png"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "output": {
+        "name": "Volcanic Super Fertilizer",
+        "icon": "/textures/item/volcanic_fertilizer.png",
+        "count": 4
       }
     },
     "wetsuit_leggings": {
@@ -8858,6 +12131,39 @@
       "output": {
         "name": "Wooden Shears",
         "icon": "/textures/item/wooden_shears.png",
+        "count": 1
+      }
+    },
+    "wrench": {
+      "id": "wrench",
+      "type": "shaped",
+      "title": "Crafting Industrial Wrench",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null,
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Industrial Wrench",
+        "icon": "/textures/item/wrench.png",
         "count": 1
       }
     }

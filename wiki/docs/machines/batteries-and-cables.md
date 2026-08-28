@@ -65,6 +65,7 @@ Portable Battery Packs are lightweight, rechargeable energy cells you can carry 
 | **Copper Battery Pack** | **10,000 FE** | 200 FE/t | 200 FE/t | Early exploration, small tool charging |
 | **Aluminum Battery Pack** | **50,000 FE** | 500 FE/t | 500 FE/t | Mid-tier ATV cruising, mobile power |
 | **Steel Battery Pack** | **250,000 FE** | 2,000 FE/t | 2,000 FE/t | Long-distance expeditions, heavy machinery |
+| **Tungsten Battery Pack** | **1,000,000 FE** | 8,000 FE/t | 8,000 FE/t | Extreme operations, high-voltage portable grid |
 
 ---
 
@@ -77,6 +78,8 @@ Cables connect machines, generators, and batteries seamlessly across all 6 block
 | **Copper Cable** | **200 E/t** | Copper Generator & Copper Battery |
 | **Aluminum Cable** | **800 E/t** | Aluminum Generator, Refiners, Oxygen Gen |
 | **Steel Cable** | **3,200 E/t** | Steel Generator & Heavy Machinery |
+| **Tungsten Cable** | **12,800 E/t** | Geothermal Generators, Foundries & High-Tier Batteries |
+
 
 ---
 

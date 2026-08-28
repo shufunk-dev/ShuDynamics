@@ -208,12 +208,21 @@ In future updates, **ShuDynamics** is expanding beyond the boundaries of vanilla
 
 ## ✅ Completed Releases & Features
 
+### 🌟 v1.4.0 (Nether Metallurgy, Agronomy, Fluid & Item Logistics)
+* 📦 **Item Logistics & Industrial Wrench**: Item Pipes, Item Inserters, and Wrench with 4-way side configuration (Insert, Extract, Disconnect, Plug).
+* 🌋 **Agronomy & Volcanic Soil**: Soil Infuser machine, Volcanic Soil with self-hydrating bonemeal bursts, Sweet Corn, Volcanic Fertilizer, and right-click auto-harvest hoes.
+* 🧪 **Lava Fluids & 5x5 Reservoir**: Submersible Lava Pump, high-temperature Lava Pipes, and 5x5 Titanium Multiblock Reservoir.
+* 🏭 **Tier 4 Machines & Metallurgy**: Geothermal Magma Generator (400 E/t), Alloy Foundry, Magma Crucible, and Mechanical Crusher Mk2 with dual output chambers.
+* 🔮 **Anomaly Keystones 3–5**: Metallurgical Anchor (#3), Plasma Anchor (#4), and Thermal Anchor (#5).
+* 🔋 **Tungsten Power Grid & 3x3 Mining Hammers**: 1,000,000 FE Tungsten Battery Pack, 12,800 E/t Tungsten Cables, and full set of 3x3 Mining Sledgehammers.
+
 ### 🌟 v1.3.0 (Modular All-Terrain Vehicles, Petrochemicals & Road Infrastructure)
 * 🏎️ **Modular All-Terrain Vehicle (ATV)**: High-speed drivable exploration vehicle featuring 6 customizable module slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, Fuel/Batteries), 25% asphalt top-speed boost, and full fall-damage immunity.
 * 🛠️ **Vehicle Fabricator & Tuning Bay**: Dedicated vehicle assembly and maintenance station with dynamic slot validation and vehicle item pick-up.
 * 🌾 **Sweet Corn & Biofuel Agriculture**: 8-stage crop cycle producing food and bio-ethanol feedstock.
 * 🛢️ **Petrochemicals & Fuel Refinery**: Oil Sand world generation, Crude Oil Sludge extraction, Mineral Tar, and refinery distillation for Gasoline, Biofuel, and High-Octane Racing Fuel.
 * 🛣️ **Autonomous Road Infrastructure**: Speed-boost Asphalt Blocks and Slabs, multi-shape auto-connecting Concrete Curbs (Straight, Inner, Outer corners), dual-mode Road Transition Ramps, and the Autonomous Road Paver.
+
 
 ### 🌟 v1.2.0 (Aquatic Life Support & Dimensional Keystones)
 * 🤿 **Early-Game Snorkel**: Surface-breathing oxygen replenish and 3x extended lung capacity when diving.

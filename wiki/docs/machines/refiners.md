@@ -51,6 +51,50 @@ ShuDynamics provides specialized high-temperature metallurgical processing machi
 
 ---
 
+## 🏭 Alloy Foundry (Tier 4)
+
+<MachineShowcase 
+  name="Alloy Foundry"
+  icon="/textures/block/alloy_foundry_front.png"
+  tier="Tier 4 (Advanced Metallurgy)"
+  tierClass="tier-high"
+  category="Thermal Alloy Fusion"
+  description="Dual-input pyrometallurgical furnace engineered to fuse complex multi-element metal alloys (Bronze, Steel, Titanium alloys) using electric thermal arc induction."
+  :specs="{
+    'Energy Consumption': '150 E/tick',
+    'Max Energy Buffer': '250,000 E',
+    'Process Duration': '120 ticks (6.0 seconds per batch)',
+    'Dual Reagent Slots': 'Accepts 2 distinct primary input metals',
+    'Output': 'High-purity alloy ingots'
+  }"
+  placedImage=""
+  guiImage=""
+/>
+
+---
+
+## 💎 Magma Crucible (Tier 4)
+
+<MachineShowcase 
+  name="Magma Crucible"
+  icon="/textures/block/magma_crucible_front.png"
+  tier="Tier 4 (Nether Tech)"
+  tierClass="tier-high"
+  category="Thermal Phase Change & Liquefaction"
+  description="High-temperature electric melting chamber. Melts stone, cobblestone, netherrack, and mineral blocks into liquid lava and molten metals."
+  :specs="{
+    'Energy Consumption': '200 E/tick',
+    'Max Energy Buffer': '500,000 E',
+    'Lava Tank Buffer': '16,000 mB (16 Buckets of liquid Lava)',
+    'Melting Rates': 'Cobblestone, Netherrack, Basalt, Magma Blocks $\\rightarrow$ Liquid Lava',
+    'Fluid Pushing': 'Automatically feeds connected Lava Pipes and Titanium Reservoirs'
+  }"
+  placedImage=""
+  guiImage=""
+/>
+
+---
+
 ## 📋 Metallurgy & Refining Recipes
 
 | Input Reagents | Energy Cost | Processing Time | Output Product | Machine / Method |
@@ -60,4 +104,7 @@ ShuDynamics provides specialized high-temperature metallurgical processing machi
 | **Raw Tin** | 1,600 E | 4 Seconds | **1x Tin Ingot** | Aluminum Refiner |
 | **Iron Ingot + Coke Coal** | 20,000 E | 5 Seconds | **1x Steel Ingot** | Steel Blast Furnace (Standard) |
 | **Iron Ingot + 200 mB H₂** | 12,000 E | 3 Seconds | **1x Steel Ingot** | Steel Blast Furnace (Green Steel) |
+| **Copper Ingot + Tin Ingot** | 18,000 E | 6 Seconds | **2x Bronze Ingot** | Alloy Foundry |
+| **4x Cobblestone / Netherrack** | 24,000 E | 6 Seconds | **1,000 mB Lava** | Magma Crucible |
+
 

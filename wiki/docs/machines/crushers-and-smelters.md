@@ -39,6 +39,29 @@ Inserting a crafted gear into the dedicated **Gear Socket** permanently scales t
 
 ---
 
+## 🪨 Mechanical Crusher Mk2 (Tier 4)
+
+<MachineShowcase 
+  name="Mechanical Crusher Mk2"
+  icon="/textures/block/crusher_mk2_front.png"
+  tier="Tier 4 (Heavy Industrial)"
+  tierClass="tier-high"
+  category="Heavy Double-Output Pulverization"
+  description="Next-generation high-torque industrial crusher. Features twin synchronized grinding chambers, dual output capacity, and a massive internal energy reservoir."
+  :specs="{
+    'Energy Consumption': '120 E/tick',
+    'Max Energy Buffer': '250,000 E',
+    'Base Processing Time': '80 ticks (4.0 seconds — 2x faster than Mk1!)',
+    'Dual Chamber Multiplier': 'Processes 2 items simultaneously with gear bonuses',
+    'Gear Socket': 'Accepts all gear tiers for up to 8x dust output per raw ore!'
+  }"
+  placedImage=""
+  guiImage=""
+/>
+
+
+---
+
 ## ⚡ High-Speed Dust Smelter
 
 <MachineShowcase 

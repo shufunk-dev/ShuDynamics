@@ -234,3 +234,28 @@ The **Enchanted Storage Terminal** provides a full 6x9 item matrix with real-tim
 1. **🔗 Binding**: Sneak + Right-Click your Storage Controller or Terminal with a **Wireless Storage Crystal**.
 2. **⚓ Infinite Overworld Access**: Install a **Chunk Loader Module** in the Controller to keep your base chunk active 24/7.
 3. **🌌 Cross-Dimensional Access**: Install an **Interdimensional Card** in the Controller to access your base storage directly from the **Nether** or the **End**!
+
+---
+
+## 🛢️ 5×5 Titanium Multi-Block Reservoir
+
+For industrial bulk fluid logistics, ShuDynamics provides the **5×5 Titanium Reservoir**:
+
+<div style="background:rgba(26,28,43,0.8); border:1px solid rgba(14,165,233,0.4); border-radius:12px; padding:20px; margin:20px 0;">
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+    <img src="/textures/block/titanium_block.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+    <div>
+      <h3 style="margin:0; font-size:18px; color:#38bdf8;">5×5 Titanium Reservoir</h3>
+      <span style="font-size:12px; color:#0ea5e9; text-transform:uppercase; font-weight:700;">Multi-Block Bulk Fluid Containment</span>
+    </div>
+  </div>
+  <p style="font-size:14px; color:#d1d5db; line-height:1.6; margin:0 0 12px 0;">
+    A heavy-duty multiblock tank constructed from reinforced Titanium Casings, Valve Ports, and Structural Frames. Capable of storing hundreds of buckets of liquid Lava, Water, Gasoline, and Biofuel.
+  </p>
+  <ul style="font-size:13px; color:#e5e7eb; line-height:1.6; padding-left:20px; margin:0;">
+    <li><strong>Dual Fluid Compatibility:</strong> Connects to both standard fluid pipes and high-temperature <strong>Lava Pipes</strong>.</li>
+    <li><strong>Integrated Valve Output:</strong> Automatically equalizes pressure and outputs fluid to connected generators and crucibles.</li>
+    <li><strong>Visual Level Gauges:</strong> Real-time fill levels visible from outside the reservoir casing.</li>
+  </ul>
+</div>
+

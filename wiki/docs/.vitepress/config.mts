@@ -47,7 +47,9 @@ export default defineConfig({
             { text: 'Ores, Metals & Ingots', link: '/materials/' },
             { text: 'Ore Dusts & Processing', link: '/materials/dusts' },
             { text: 'Gears & Mechanical Parts', link: '/materials/gears' },
-            { text: 'Health Lockets & Crystals', link: '/materials/crystals' }
+            { text: 'Health Lockets & Crystals', link: '/materials/crystals' },
+            { text: 'Agronomy & Volcanic Soil', link: '/materials/agronomy' },
+            { text: 'Dimensional Keystones', link: '/materials/keystones' }
           ]
         },
         {
