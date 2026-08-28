@@ -1510,7 +1510,7 @@
       ],
       "output": {
         "name": "Asphalt Slab",
-        "icon": "/textures/item/asphalt_slab.png",
+        "icon": "/textures/block/asphalt_block.png",
         "count": 6
       }
     },
@@ -1558,7 +1558,7 @@
       ],
       "output": {
         "name": "Asphalt Slab",
-        "icon": "/textures/item/asphalt_slab.png",
+        "icon": "/textures/block/asphalt_block.png",
         "count": 16
       }
     },
@@ -10642,7 +10642,7 @@
         },
         {
           "name": "Titanium Gear",
-          "icon": "/textures/item/titanium_gear.png"
+          "icon": "/textures/item/enchanted_steel_gear.png"
         },
         {
           "name": "Titanium Ingot",
@@ -11914,7 +11914,7 @@
       ],
       "output": {
         "name": "Volcanic Brick Slab",
-        "icon": "/textures/item/volcanic_brick_slab.png",
+        "icon": "/textures/block/volcanic_bricks.png",
         "count": 6
       }
     },
@@ -11953,7 +11953,7 @@
       ],
       "output": {
         "name": "Volcanic Brick Stairs",
-        "icon": "/textures/item/volcanic_brick_stairs.png",
+        "icon": "/textures/block/volcanic_bricks.png",
         "count": 4
       }
     },
