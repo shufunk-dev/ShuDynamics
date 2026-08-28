@@ -39,6 +39,7 @@ shumod-v1.0.0-release-report.html
 shumod-development-effort-report.html
 
 # Scratch Generation & Automation Scripts
+scratch/
 *.js
 *.ps1
 CURSEFORGE_DESCRIPTION.md
