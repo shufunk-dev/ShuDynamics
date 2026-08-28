@@ -182,8 +182,31 @@ For the full detailed breakdown and mechanics, see the **[Dimensional Keystones 
   </div>
 </div>
 
-### Kinetic Anchor Crafting Recipe
-<MinecraftRecipe id="kinetic_anchor" />
+### 📜 Keystone Crafting Recipes
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin:20px 0;">
+  <div>
+    <h4>1. Atmospheric Anchor (#1)</h4>
+    <MinecraftRecipe id="atmospheric_anchor" />
+  </div>
+  <div>
+    <h4>2. Kinetic Anchor (#2)</h4>
+    <MinecraftRecipe id="kinetic_anchor" />
+  </div>
+  <div>
+    <h4>3. Metallurgical Anchor (#3)</h4>
+    <MinecraftRecipe id="metallurgical_anchor" />
+  </div>
+  <div>
+    <h4>4. Plasma Anchor (#4)</h4>
+    <MinecraftRecipe id="plasma_anchor" />
+  </div>
+  <div>
+    <h4>5. Thermal Anchor (#5)</h4>
+    <MinecraftRecipe id="thermal_anchor" />
+  </div>
+</div>
+
 
 
 

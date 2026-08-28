@@ -102,7 +102,25 @@ Across reality, **6 Anomaly Keystones** form the cosmic stabilization matrix. Ke
 
 </div>
 
+## 📜 Crafting Recipes
+
+### 1. Atmospheric Anchor (Keystone #1)
+<MinecraftRecipe id="atmospheric_anchor" />
+
+### 2. Kinetic Anchor (Keystone #2)
+<MinecraftRecipe id="kinetic_anchor" />
+
+### 3. Metallurgical Anchor (Keystone #3)
+<MinecraftRecipe id="metallurgical_anchor" />
+
+### 4. Plasma Anchor (Keystone #4)
+<MinecraftRecipe id="plasma_anchor" />
+
+### 5. Thermal Anchor (Keystone #5)
+<MinecraftRecipe id="thermal_anchor" />
+
 ---
 
 ## ⚠️ Anchor Harvesting Warning
 When breaking any Anomaly Keystone in survival mode, **an Enchanted Pickaxe is strictly required**. Breaking an anchor with standard iron, diamond, or non-enchanted tools destabilizes the keystone's spatial matrix and permanently shatters it!
+
