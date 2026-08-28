@@ -122,35 +122,68 @@ ShuDynamics introduces new world generation ores, industrial polymers, alloys, a
 
 ## 🌌 Dimensional Anomalies & The Keystone Nexus
 
+Ancient dimensional disturbances across reality have manifested as **6 Anomaly Keystones**. Keystones **1 through 5** are fully constructible in **v1.4.0**, forming the backbone of advanced metallurgy, energy containment, and environmental stabilization.
+
+For the full detailed breakdown and mechanics, see the **[Dimensional Keystones Guide](/materials/keystones)**.
+
 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;">
-  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:16px;">
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(56,189,248,0.3); border-radius:12px; padding:16px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
       <img src="/textures/block/atmospheric_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
-      <h3 style="margin:0; font-size:16px; color:#f472b6;">Atmospheric Anchor (Keystone #1)</h3>
+      <h3 style="margin:0; font-size:16px; color:#38bdf8;">Atmospheric Anchor (#1)</h3>
     </div>
-    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Blueprint unlocked upon assembling full Scuba Gear. Crafted from Cured Rubber, Oxygen Canisters, Infused Heartwood, and Crying Obsidian.</p>
-    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Emits localized dimensional barometric resonance mist.</p>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Deep-sea spatial anchor radiating a life-sustaining pressurized oxygen bubble.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Unlocked via Scuba diving exploration.</p>
   </div>
 
-  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(249,115,22,0.3); border-radius:12px; padding:16px;">
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(168,85,247,0.3); border-radius:12px; padding:16px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
       <img src="/textures/block/kinetic_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
-      <h3 style="margin:0; font-size:16px; color:#fb923c;">Kinetic Anchor (Keystone #2)</h3>
+      <h3 style="margin:0; font-size:16px; color:#c084fc;">Kinetic Anchor (#2)</h3>
     </div>
-    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Blueprint unlocked upon assembling and driving an ATV. Crafted from Titanium Ingots, Gasoline, Rubber, Infused Heartwood, Asphalt, and Crying Obsidian.</p>
-    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Harnesses high-velocity rotational kinetic momentum.</p>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Harnesses spatial momentum, vehicle suspension stability, and kinetic damping.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Unlocked upon assembling and driving an ATV.</p>
   </div>
 
-  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(234,179,8,0.3); border-radius:12px; padding:16px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-      <img src="/textures/item/mystery_keystone.png" style="width:36px; height:36px; image-rendering:pixelated;" />
-      <h3 style="margin:0; font-size:16px; color:#c4b5fd;">Unknown Anomaly Keystones (#3 - #6)</h3>
+      <img src="/textures/block/metallurgical_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#fde047;">Metallurgical Anchor (#3)</h3>
     </div>
-    <p style="font-size:13px; color:#9ca3af; margin:0;">Part of the 7-milestone <em>Keystone Nexus</em> advancement quest. Unlocked and revealed across future extreme survival challenges.</p>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Catalyzes pyrometallurgical bonding in Alloy Foundries and Steel Blast Furnaces.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Unlocked via high-temperature industrial smelting.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/block/plasma_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#f472b6;">Plasma Anchor (#4)</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">High-energy ionization anchor stabilizing high-voltage Tungsten grids.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Unlocked via advanced plasma containment.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(239,68,68,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/block/thermal_anchor.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#f87171;">Thermal Anchor (#5)</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">Taps Nether planetary core heat, boosting Geothermal Generators and Lava Pumps.</p>
+    <p style="font-size:12px; color:#a78bfa; margin:0;">✦ Unlocked via geothermal harnessing.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px dashed rgba(168,85,247,0.4); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:24px;">🌀</div>
+      <h3 style="margin:0; font-size:16px; color:#c084fc;">Dimensional Singularity (#6)</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 6px 0;">The 6th and final Anomaly Keystone required to ignite the upcoming Dimensional Gateway.</p>
+    <p style="font-size:12px; color:#e9d5ff; font-weight:700; margin:0;">✦ Arriving in v1.5.0</p>
   </div>
 </div>
 
 ### Kinetic Anchor Crafting Recipe
 <MinecraftRecipe id="kinetic_anchor" />
+
 
 
