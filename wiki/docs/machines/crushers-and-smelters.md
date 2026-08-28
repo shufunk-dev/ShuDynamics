@@ -55,8 +55,8 @@ Inserting a crafted gear into the dedicated **Gear Socket** permanently scales t
     'Dual Chamber Multiplier': 'Processes 2 items simultaneously with gear bonuses',
     'Gear Socket': 'Accepts all gear tiers for up to 8x dust output per raw ore!'
   }"
-  placedImage=""
-  guiImage=""
+  placedImage="/images/machines/crusher_mk2_placed.png"
+  guiImage="/images/machines/crusher_mk2_gui.png"
 />
 
 
