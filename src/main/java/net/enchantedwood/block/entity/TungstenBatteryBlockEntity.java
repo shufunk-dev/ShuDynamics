@@ -136,7 +136,7 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
             }
         }
 
-        // Push energy to adjacent machines and consumers
+        // Push energy directly to adjacent machine consumers (excluding cables/batteries/generators)
         if (entity.energyStorage.getEnergy() > 0) {
             int available = Math.min(entity.energyStorage.getEnergy(), MAX_TRANSFER);
             for (Direction dir : Direction.values()) {
@@ -150,28 +150,19 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
                         !(targetBe instanceof CopperGeneratorBlockEntity) &&
                         !(targetBe instanceof AluminumGeneratorBlockEntity) &&
                         !(targetBe instanceof SteelGeneratorBlockEntity) &&
-                        !(targetBe instanceof GeothermalGeneratorBlockEntity)) {
+                        !(targetBe instanceof GeothermalGeneratorBlockEntity) &&
+                        !(targetBe instanceof TungstenCableBlockEntity) &&
+                        !(targetBe instanceof SteelCableBlockEntity) &&
+                        !(targetBe instanceof AluminumCableBlockEntity) &&
+                        !(targetBe instanceof CopperCableBlockEntity)) {
 
-                    // If connected to a cable, only output if the cable is currently empty (to avoid immediate ping-pong loop)
-                    if (targetBe instanceof TungstenCableBlockEntity cableBe) {
-                        EnergyStorage cableStorage = cableBe.getEnergyStorage(dir.getOpposite());
-                        if (cableStorage != null && cableStorage.getEnergy() == 0) {
-                            int inserted = cableStorage.insertEnergy(available, false);
-                            if (inserted > 0) {
-                                entity.energyStorage.extractEnergy(inserted, false);
-                                available -= inserted;
-                                dirty = true;
-                            }
-                        }
-                    } else {
-                        EnergyStorage targetStorage = provider.getEnergyStorage(dir.getOpposite());
-                        if (targetStorage != null && targetStorage.canInsert()) {
-                            int inserted = targetStorage.insertEnergy(available, false);
-                            if (inserted > 0) {
-                                entity.energyStorage.extractEnergy(inserted, false);
-                                available -= inserted;
-                                dirty = true;
-                            }
+                    EnergyStorage targetStorage = provider.getEnergyStorage(dir.getOpposite());
+                    if (targetStorage != null && targetStorage.canInsert() && targetStorage.getEnergy() < targetStorage.getMaxEnergy()) {
+                        int inserted = targetStorage.insertEnergy(available, false);
+                        if (inserted > 0) {
+                            entity.energyStorage.extractEnergy(inserted, false);
+                            available -= inserted;
+                            dirty = true;
                         }
                     }
                 }

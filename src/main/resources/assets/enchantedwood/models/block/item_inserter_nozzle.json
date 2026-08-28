@@ -1,0 +1,34 @@
+{
+  "textures": {
+    "particle": "enchantedwood:block/item_inserter",
+    "wire": "enchantedwood:block/item_inserter"
+  },
+  "elements": [
+    {
+      "comment": "Funnel Base",
+      "from": [ 4, 4, 0 ],
+      "to": [ 12, 12, 5 ],
+      "faces": {
+        "north": { "uv": [ 4, 4, 12, 12 ], "texture": "#wire" },
+        "east":  { "uv": [ 0, 4, 5, 12 ], "texture": "#wire" },
+        "south": { "uv": [ 4, 4, 12, 12 ], "texture": "#wire" },
+        "west":  { "uv": [ 0, 4, 5, 12 ], "texture": "#wire" },
+        "up":    { "uv": [ 4, 0, 12, 5 ], "texture": "#wire" },
+        "down":  { "uv": [ 4, 0, 12, 5 ], "texture": "#wire" }
+      }
+    },
+    {
+      "comment": "Flange Lip",
+      "from": [ 3, 3, 0 ],
+      "to": [ 13, 13, 2 ],
+      "faces": {
+        "north": { "uv": [ 3, 3, 13, 13 ], "texture": "#wire" },
+        "east":  { "uv": [ 0, 3, 2, 13 ], "texture": "#wire" },
+        "south": { "uv": [ 3, 3, 13, 13 ], "texture": "#wire" },
+        "west":  { "uv": [ 0, 3, 2, 13 ], "texture": "#wire" },
+        "up":    { "uv": [ 3, 0, 13, 2 ], "texture": "#wire" },
+        "down":  { "uv": [ 3, 0, 13, 2 ], "texture": "#wire" }
+      }
+    }
+  ]
+}

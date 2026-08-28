@@ -424,6 +424,7 @@
 
   "block.enchantedwood.tungsten_battery": "Tungsten Heavy Battery",
   "container.enchantedwood.tungsten_battery": "Tungsten Heavy Battery (Tier 4)",
+  "item.enchantedwood.tungsten_battery_pack": "Tungsten Battery Pack",
   "block.enchantedwood.tungsten_cable": "Tungsten Heavy Energy Cable",
   "block.enchantedwood.geothermal_generator": "Geothermal Generator",
   "container.enchantedwood.geothermal_generator": "Geothermal Thermal Generator",
@@ -443,5 +444,15 @@
   "block.enchantedwood.pozzolanic_asphalt": "Pozzolanic Roman Asphalt",
   "block.enchantedwood.volcanic_bricks": "Volcanic Bricks",
   "block.enchantedwood.volcanic_brick_stairs": "Volcanic Brick Stairs",
-  "block.enchantedwood.volcanic_brick_slab": "Volcanic Brick Slab"
+  "block.enchantedwood.volcanic_brick_slab": "Volcanic Brick Slab",
+
+  "block.enchantedwood.titanium_lava_pipe": "Titanium Lava Pipe",
+  "block.enchantedwood.titanium_tank_casing": "Titanium Tank Casing",
+  "block.enchantedwood.reinforced_tank_glass": "Reinforced Tank Glass",
+  "block.enchantedwood.titanium_tank_inbound_port": "Titanium Tank Inbound Port",
+  "container.enchantedwood.titanium_tank": "5x5 Titanium Lava Reservoir",
+  "block.enchantedwood.item_pipe": "Item Transport Pipe",
+  "block.enchantedwood.item_extractor": "Item Extractor",
+  "block.enchantedwood.item_inserter": "Item Inserter",
+  "item.enchantedwood.wrench": "Industrial Wrench"
 }

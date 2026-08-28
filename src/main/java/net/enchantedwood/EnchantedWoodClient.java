@@ -55,12 +55,14 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.LAVA_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.LavaPumpScreen::new);
         HandledScreens.register(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.CrusherMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, net.enchantedwood.screen.SoilInfuserScreen::new);
+        HandledScreens.register(ModScreenHandlers.TITANIUM_TANK_SCREEN_HANDLER, net.enchantedwood.screen.TitaniumTankScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);
 
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
 
         CustomHeartHudRenderer.register();
 

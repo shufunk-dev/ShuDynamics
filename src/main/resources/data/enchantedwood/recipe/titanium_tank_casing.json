@@ -1,0 +1,17 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "TOT",
+    "O O",
+    "TOT"
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:titanium_tank_casing"
+  }
+}

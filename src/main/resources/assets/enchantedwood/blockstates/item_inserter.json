@@ -1,0 +1,23 @@
+{
+  "multipart": [
+    { "apply": { "model": "enchantedwood:block/item_pipe_core" } },
+    { "when": { "facing": "north" }, "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "y": 0 } },
+    { "when": { "facing": "south" }, "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "y": 180 } },
+    { "when": { "facing": "west" },  "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "y": 270 } },
+    { "when": { "facing": "east" },  "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "y": 90 } },
+    { "when": { "facing": "up" },    "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "x": 270 } },
+    { "when": { "facing": "down" },  "apply": { "model": "enchantedwood:block/item_inserter_nozzle", "x": 90 } },
+    { "when": { "north": "connected" }, "apply": { "model": "enchantedwood:block/item_pipe_side", "y": 0 } },
+    { "when": { "south": "connected" }, "apply": { "model": "enchantedwood:block/item_pipe_side", "y": 180 } },
+    { "when": { "west": "connected" },  "apply": { "model": "enchantedwood:block/item_pipe_side", "y": 270 } },
+    { "when": { "east": "connected" },  "apply": { "model": "enchantedwood:block/item_pipe_side", "y": 90 } },
+    { "when": { "up": "connected" },    "apply": { "model": "enchantedwood:block/item_pipe_side", "x": 270 } },
+    { "when": { "down": "connected" },  "apply": { "model": "enchantedwood:block/item_pipe_side", "x": 90 } },
+    { "when": { "north": "disconnected" }, "apply": { "model": "enchantedwood:block/item_pipe_plug", "y": 0 } },
+    { "when": { "south": "disconnected" }, "apply": { "model": "enchantedwood:block/item_pipe_plug", "y": 180 } },
+    { "when": { "west": "disconnected" },  "apply": { "model": "enchantedwood:block/item_pipe_plug", "y": 270 } },
+    { "when": { "east": "disconnected" },  "apply": { "model": "enchantedwood:block/item_pipe_plug", "y": 90 } },
+    { "when": { "up": "disconnected" },    "apply": { "model": "enchantedwood:block/item_pipe_plug", "x": 270 } },
+    { "when": { "down": "disconnected" },  "apply": { "model": "enchantedwood:block/item_pipe_plug", "x": 90 } }
+  ]
+}

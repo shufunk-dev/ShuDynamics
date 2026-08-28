@@ -26,12 +26,13 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.enchantedwood.fluid.LavaProvider;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class GeothermalGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class GeothermalGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider {
     public static final int CAPACITY = 1_000_000;
-    public static final int MAX_EXTRACT = 10_000;
+    public static final int MAX_EXTRACT = 25_000;
     public static final int BASE_GENERATION = 750; // 750 FE/t
     public static final int MAX_LAVA = 10_000; // 10,000 mB
 
@@ -296,5 +297,31 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
     @Override
     public void clear() {
         inventory.clear();
+    }
+
+    @Override
+    public int getMaxLava() {
+        return MAX_LAVA;
+    }
+
+    @Override
+    public int insertLava(int amount, boolean simulate) {
+        int space = MAX_LAVA - this.lavaAmount;
+        int inserted = Math.min(space, amount);
+        if (!simulate && inserted > 0) {
+            this.lavaAmount += inserted;
+            markDirty();
+        }
+        return inserted;
+    }
+
+    @Override
+    public int extractLava(int amount, boolean simulate) {
+        return 0; // Geothermal Generator is strictly a consumer
+    }
+
+    @Override
+    public boolean canExtractLava() {
+        return false;
     }
 }

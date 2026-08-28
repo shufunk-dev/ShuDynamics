@@ -16,6 +16,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 import net.minecraft.world.block.WireOrientation;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.block.entity.TungstenCableBlockEntity;
@@ -123,6 +125,21 @@ public class TungstenCableBlock extends BlockWithEntity {
                 .with(WEST, canConnectTo(world, pos, Direction.WEST))
                 .with(UP, canConnectTo(world, pos, Direction.UP))
                 .with(DOWN, canConnectTo(world, pos, Direction.DOWN));
+    }
+
+    @Override
+    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, net.minecraft.util.math.random.Random random) {
+        return state.with(
+                switch (direction) {
+                    case NORTH -> NORTH;
+                    case SOUTH -> SOUTH;
+                    case EAST -> EAST;
+                    case WEST -> WEST;
+                    case UP -> UP;
+                    case DOWN -> DOWN;
+                },
+                canConnectTo(world, pos, direction)
+        );
     }
 
     @Override

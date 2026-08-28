@@ -70,6 +70,13 @@
     "enchantedwood:alloy_foundry",
     "enchantedwood:magma_crucible",
     "enchantedwood:lava_pump",
-    "enchantedwood:crusher_mk2"
+    "enchantedwood:crusher_mk2",
+    "enchantedwood:titanium_lava_pipe",
+    "enchantedwood:titanium_tank_casing",
+    "enchantedwood:reinforced_tank_glass",
+    "enchantedwood:titanium_tank_inbound_port",
+    "enchantedwood:item_pipe",
+    "enchantedwood:item_extractor",
+    "enchantedwood:item_inserter"
   ]
 }

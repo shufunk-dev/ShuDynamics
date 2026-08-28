@@ -257,6 +257,49 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(SoilInfuserBlockEntity::new, ModBlocks.SOIL_INFUSER).build()
             );
 
+    public static final BlockEntityType<TitaniumLavaPipeBlockEntity> TITANIUM_LAVA_PIPE_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_lava_pipe"),
+                    FabricBlockEntityTypeBuilder.create(TitaniumLavaPipeBlockEntity::new, ModBlocks.TITANIUM_LAVA_PIPE).build()
+            );
+
+    public static final BlockEntityType<TitaniumTankCasingBlockEntity> TITANIUM_TANK_CASING_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_casing"),
+                    FabricBlockEntityTypeBuilder.create(TitaniumTankCasingBlockEntity::new, ModBlocks.TITANIUM_TANK_CASING).build()
+            );
+
+    public static final BlockEntityType<TitaniumTankControllerBlockEntity> TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_controller"),
+                    FabricBlockEntityTypeBuilder.create(TitaniumTankControllerBlockEntity::new, ModBlocks.TITANIUM_TANK_INBOUND_PORT).build()
+            );
+
+    // Universal Item Logistics System
+    public static final BlockEntityType<ItemPipeBlockEntity> ITEM_PIPE_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "item_pipe"),
+                    FabricBlockEntityTypeBuilder.create(ItemPipeBlockEntity::new, ModBlocks.ITEM_PIPE).build()
+            );
+
+    public static final BlockEntityType<ItemExtractorBlockEntity> ITEM_EXTRACTOR_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "item_extractor"),
+                    FabricBlockEntityTypeBuilder.create(ItemExtractorBlockEntity::new, ModBlocks.ITEM_EXTRACTOR).build()
+            );
+
+    public static final BlockEntityType<ItemInserterBlockEntity> ITEM_INSERTER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "item_inserter"),
+                    FabricBlockEntityTypeBuilder.create(ItemInserterBlockEntity::new, ModBlocks.ITEM_INSERTER).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

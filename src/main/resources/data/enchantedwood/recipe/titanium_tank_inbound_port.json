@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "enchantedwood:titanium_tank_casing",
+    "P": "enchantedwood:titanium_lava_pipe",
+    "B": "minecraft:bucket"
+  },
+  "pattern": [
+    " P ",
+    " C ",
+    " B "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_tank_inbound_port"
+  }
+}

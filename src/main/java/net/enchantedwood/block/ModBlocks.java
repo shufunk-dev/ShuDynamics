@@ -781,6 +781,83 @@ public class ModBlocks {
                     .resistance(8.0f)
                     .requiresTool()));
 
+    // 5x5 Multiblock Titanium Lava Reservoir & Titanium Lava Pipes
+    public static final Block TITANIUM_LAVA_PIPE = registerBlockWithTooltip("titanium_lava_pipe",
+            new net.enchantedwood.block.custom.TitaniumLavaPipeBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_lava_pipe")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(2.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Titanium Lava Pipe"),
+            Text.literal("§8High-temp titanium alloy pipe (1,668°C rating). Transfers 500 mB/t."));
+
+    public static final Block TITANIUM_TANK_CASING = registerBlockWithTooltip("titanium_tank_casing",
+            new net.enchantedwood.block.custom.TitaniumTankCasingBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_casing")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(18.0f)
+                    .requiresTool()),
+            Text.literal("§6Titanium Tank Casing"),
+            Text.literal("§85x5x5 Multiblock structural frame. Acts as Outbound Valve when formed."));
+
+    public static final Block REINFORCED_TANK_GLASS = registerBlockWithTooltip("reinforced_tank_glass",
+            new net.enchantedwood.block.custom.ReinforcedTankGlassBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "reinforced_tank_glass")))
+                    .sounds(BlockSoundGroup.GLASS)
+                    .hardness(3.0f)
+                    .resistance(18.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Reinforced Tank Glass"),
+            Text.literal("§8Pressure-treated quartz viewing glass. Drops itself when mined."));
+
+    public static final Block TITANIUM_TANK_INBOUND_PORT = registerBlockWithTooltip("titanium_tank_inbound_port",
+            new net.enchantedwood.block.custom.TitaniumTankInboundPortBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_inbound_port")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(18.0f)
+                    .requiresTool()),
+            Text.literal("§6Titanium Tank Inbound Port"),
+            Text.literal("§8Top-center 5x5 Multiblock Valve. Inbound lava pipes connect here."));
+
+    // Universal Item Logistics System
+    public static final Block ITEM_PIPE = registerBlockWithTooltip("item_pipe",
+            new net.enchantedwood.block.custom.ItemPipeBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_pipe")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(1.5f)
+                    .resistance(6.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Item Transport Pipe"),
+            Text.literal("§8Modular 6-way item conduit for routing items between extractors and inserters."));
+
+    public static final Block ITEM_EXTRACTOR = registerBlockWithTooltip("item_extractor",
+            new net.enchantedwood.block.custom.ItemExtractorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_extractor")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Item Extractor"),
+            Text.literal("§8Actively pulls items from machine outputs and chests into the pipe network."));
+
+    public static final Block ITEM_INSERTER = registerBlockWithTooltip("item_inserter",
+            new net.enchantedwood.block.custom.ItemInserterBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_inserter")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§6Item Inserter"),
+            Text.literal("§8Actively injects routed items from the pipe network into target containers and machines."));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);

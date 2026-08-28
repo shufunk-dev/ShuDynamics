@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "RPR",
+    " P "
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:redstone",
+    "P": "enchantedwood:item_pipe"
+  },
+  "result": {
+    "count": 2,
+    "id": "enchantedwood:item_inserter"
+  }
+}

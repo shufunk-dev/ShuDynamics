@@ -1,0 +1,12 @@
+﻿{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "enchantedwood:block/titanium_tank_inbound_port",
+    "down": "enchantedwood:block/titanium_tank_casing",
+    "up": "enchantedwood:block/titanium_tank_inbound_port_top",
+    "north": "enchantedwood:block/titanium_tank_inbound_port",
+    "south": "enchantedwood:block/titanium_tank_inbound_port",
+    "east": "enchantedwood:block/titanium_tank_inbound_port",
+    "west": "enchantedwood:block/titanium_tank_inbound_port"
+  }
+}

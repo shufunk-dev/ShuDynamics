@@ -27,11 +27,12 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.enchantedwood.fluid.LavaProvider;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 25; // 25 FE/t
@@ -175,15 +176,18 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
             }
         }
 
-        // 3. Push lava directly into adjacent Geothermal Generators or machines
+        // 3. Push lava directly into adjacent Lava Providers (Pipes, Generators, Tanks)
         if (entity.lavaAmount > 0) {
             for (Direction dir : Direction.values()) {
                 BlockEntity be = world.getBlockEntity(pos.offset(dir));
-                if (be instanceof GeothermalGeneratorBlockEntity geo) {
-                    int added = geo.addLava(Math.min(entity.lavaAmount, 250));
-                    if (added > 0) {
-                        entity.lavaAmount -= added;
-                        dirty = true;
+                if (be instanceof LavaProvider provider && !(be instanceof LavaPumpBlockEntity)) {
+                    if (provider.canInsertLava()) {
+                        int toSend = Math.min(entity.lavaAmount, 250);
+                        int inserted = provider.insertLava(toSend, false);
+                        if (inserted > 0) {
+                            entity.lavaAmount -= inserted;
+                            dirty = true;
+                        }
                     }
                 }
             }
@@ -295,5 +299,35 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     @Override
     public void clear() {
         inventory.clear();
+    }
+
+    @Override
+    public int getMaxLava() {
+        return MAX_LAVA;
+    }
+
+    @Override
+    public int insertLava(int amount, boolean simulate) {
+        return 0; // Lava Pump only exports pumped lava
+    }
+
+    @Override
+    public boolean canInsertLava() {
+        return false;
+    }
+
+    @Override
+    public int extractLava(int amount, boolean simulate) {
+        int extracted = Math.min(this.lavaAmount, amount);
+        if (!simulate && extracted > 0) {
+            this.lavaAmount -= extracted;
+            markDirty();
+        }
+        return extracted;
+    }
+
+    @Override
+    public boolean canExtractLava() {
+        return this.lavaAmount > 0;
     }
 }

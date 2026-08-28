@@ -1,0 +1,21 @@
+{
+  "textures": {
+    "particle": "enchantedwood:block/pipe_plug",
+    "plug": "enchantedwood:block/pipe_plug"
+  },
+  "elements": [
+    {
+      "comment": "Plug Plate on North Face",
+      "from": [ 4.5, 4.5, 4.0 ],
+      "to": [ 11.5, 11.5, 5.0 ],
+      "faces": {
+        "north": { "uv": [ 4.5, 4.5, 11.5, 11.5 ], "texture": "#plug" },
+        "east":  { "uv": [ 4, 4, 5, 12 ], "texture": "#plug" },
+        "south": { "uv": [ 4.5, 4.5, 11.5, 11.5 ], "texture": "#plug" },
+        "west":  { "uv": [ 4, 4, 5, 12 ], "texture": "#plug" },
+        "up":    { "uv": [ 4.5, 4, 11.5, 5 ], "texture": "#plug" },
+        "down":  { "uv": [ 4.5, 4, 11.5, 5 ], "texture": "#plug" }
+      }
+    }
+  ]
+}

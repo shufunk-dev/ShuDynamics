@@ -27,10 +27,11 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.enchantedwood.fluid.LavaProvider;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 35; // 35 FE/t
@@ -260,7 +261,7 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreen
     public int[] getAvailableSlots(Direction side) {
         if (side == Direction.DOWN) return new int[]{MINERAL_OUTPUT_SLOT, BUCKET_OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT, BUCKET_INPUT_SLOT};
-        return new int[]{INPUT_SLOT, BUCKET_INPUT_SLOT, GEAR_SLOT};
+        return new int[]{INPUT_SLOT, BUCKET_INPUT_SLOT, GEAR_SLOT, MINERAL_OUTPUT_SLOT, BUCKET_OUTPUT_SLOT};
     }
 
     @Override
@@ -321,5 +322,35 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreen
     @Override
     public void clear() {
         inventory.clear();
+    }
+
+    @Override
+    public int getMaxLava() {
+        return MAX_LAVA;
+    }
+
+    @Override
+    public int insertLava(int amount, boolean simulate) {
+        return 0; // Magma Crucible only exports melted lava
+    }
+
+    @Override
+    public boolean canInsertLava() {
+        return false;
+    }
+
+    @Override
+    public int extractLava(int amount, boolean simulate) {
+        int extracted = Math.min(this.lavaAmount, amount);
+        if (!simulate && extracted > 0) {
+            this.lavaAmount -= extracted;
+            markDirty();
+        }
+        return extracted;
+    }
+
+    @Override
+    public boolean canExtractLava() {
+        return this.lavaAmount > 0;
     }
 }

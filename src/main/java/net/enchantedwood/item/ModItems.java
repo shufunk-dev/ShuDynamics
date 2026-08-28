@@ -555,6 +555,12 @@ public class ModItems {
             settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 50_000, 500, 500));
     public static final Item STEEL_BATTERY_PACK = registerItem("steel_battery_pack",
             settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 250_000, 2_000, 2_000));
+    public static final Item TUNGSTEN_BATTERY_PACK = registerItem("tungsten_battery_pack",
+            settings -> new net.enchantedwood.item.custom.BatteryItem(settings, 1_250_000, 10_000, 10_000));
+
+    // Industrial Logistics Tools
+    public static final Item WRENCH = registerItem("wrench",
+            settings -> new net.enchantedwood.item.custom.WrenchItem(settings));
 
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
@@ -885,6 +891,7 @@ public class ModItems {
 
                 // Nether Factory & Tier 4 Power Infrastructure
                 entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_BATTERY);
+                entries.add(TUNGSTEN_BATTERY_PACK);
                 entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_CABLE);
                 entries.add(net.enchantedwood.block.ModBlocks.GEOTHERMAL_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.ALLOY_FOUNDRY);
@@ -892,6 +899,18 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);
                 entries.add(net.enchantedwood.block.ModBlocks.CRUSHER_MK2);
                 entries.add(net.enchantedwood.block.ModBlocks.SOIL_INFUSER);
+
+                // 5x5 Multiblock Titanium Lava Reservoir & Titanium Lava Pipes
+                entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_LAVA_PIPE);
+                entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_TANK_CASING);
+                entries.add(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS);
+                entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_TANK_INBOUND_PORT);
+
+                // Universal Item Logistics System
+                entries.add(net.enchantedwood.block.ModBlocks.ITEM_PIPE);
+                entries.add(net.enchantedwood.block.ModBlocks.ITEM_EXTRACTOR);
+                entries.add(net.enchantedwood.block.ModBlocks.ITEM_INSERTER);
+                entries.add(WRENCH);
 
                 // Volcanic Agronomy & Pozzolanic Architecture
                 entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
