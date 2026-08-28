@@ -8,55 +8,55 @@ Features listed on this roadmap are modular and in active exploration. They may 
 
 ---
 
-## 🌌 Dimensional Gateways (Two Upcoming Dimensions)
+## 🌌 Upcoming Major Releases (v1.5.0 Milestone)
 
-In future updates, **ShuDynamics** is expanding beyond the boundaries of vanilla Minecraft with **two distinct new dimensions** designed for both survival convenience and deep lore exploration:
+With the **Resettable Mining Dimension (Quarry Expanse)** already live in the mod, version **v1.5.0** will focus on high-throughput automated excavation and the final dimensional ignition:
 
 ---
 
-### ⛏️ 1. The Resettable Mining Dimension (Quarry Expanse)
+### ⛏️ 1. Automated Chunk Excavator (Multiblock Quarry)
 
 <div class="roadmap-feature-box gold-theme">
   <div class="box-header">
-    <span class="box-icon">⛏️</span>
+    <span class="box-icon">🏗️</span>
     <div>
-      <h3 class="box-title gold-text">The Quarry Expanse // Disposable Mining Realm</h3>
-      <span class="badge gold-badge">🛠️ Survival Utility & World-Gen Protection</span>
+      <h3 class="box-title gold-text">Automated Chunk Excavator // Deep Quarry Engine</h3>
+      <span class="badge gold-badge">⚡ High-Voltage Automation & Chunk Excavation</span>
     </div>
   </div>
   <p class="box-intro">
-    A dedicated, infinite resource-rich dimension mirroring Overworld geology, engineered specifically for high-efficiency strip mining, automated chunk quarries, and safe long-term world updating.
+    A heavy multiblock quarry engine designed to be deployed in the Mining Dimension or Overworld. Continuously excavates downward layer-by-layer, filtering valuable ores, and feeding directly into your storage network.
   </p>
   <div class="sub-grid">
     <div class="sub-card gold-card">
-      <h4 class="card-title gold-title">🔄 100% Resettable & Recreatable</h4>
-      <p class="card-desc">Isolated inside its own dimension save folder. You can safely delete the dimension folder at any time to regenerate completely pristine, fresh terrain with zero risk to your main base.</p>
+      <h4 class="card-title gold-title">⚡ High-Voltage Energy Driven</h4>
+      <p class="card-desc">Operates on Tungsten and Basalt-tier power grids (10,000+ FE/t) with upgradeable speed and fortune modules.</p>
     </div>
     <div class="sub-card gold-card">
-      <h4 class="card-title gold-title">🛡️ Ever-Updated World-Gen</h4>
-      <p class="card-desc">Whenever new mod updates introduce fresh ores, minerals, or subterranean features, simply reset the Mining Realm to discover newly added materials without restarting your world save!</p>
+      <h4 class="card-title gold-title">📦 Smart Sorting & Filtering</h4>
+      <p class="card-desc">Integrates directly with Item Transport Pipes and Storage Controllers to void stone or route mineral ores automatically.</p>
     </div>
     <div class="sub-card gold-card">
-      <h4 class="card-title gold-title">🔬 Custom Dimension Engine</h4>
-      <p class="card-desc">Serves as ShuDynamics' initial testbed to establish seamless Fabric custom dimension loading, cross-dimensional teleportation, and wireless storage sync.</p>
+      <h4 class="card-title gold-title">⛏️ Non-Destructive Mining Mode</h4>
+      <p class="card-desc">Features optional silk-touch and ore-only selective scanning routines to minimize world destruction.</p>
     </div>
   </div>
 </div>
 
 ---
 
-### 🌌 2. Uncharted Dimension: [CLASSIFIED / THE ANOMALY]
+### 🌌 2. Dimensional Singularity (Keystone #6) & The Anomaly Gateway
 
 <div class="roadmap-feature-box purple-theme">
   <div class="box-header">
     <span class="box-icon">🌀</span>
     <div>
-      <h3 class="box-title purple-text">Dimensional Anomaly // A Mysterious Realm Awaits</h3>
-      <span class="badge purple-badge">🔮 Redacted Roadmap Entry</span>
+      <h3 class="box-title purple-text">Dimensional Singularity // The Final Keystone Ignition</h3>
+      <span class="badge purple-badge">🔮 v1.5.0 Pinnacle Quest</span>
     </div>
   </div>
   <p class="box-intro">
-    Deep energy fluctuations and spatial distortions have begun registering across the storage controller's quantum sensors. Something ancient, alien, and completely undiscovered lies far beyond the known boundaries of the Overworld, Nether, and End...
+    The 6th and final Anomaly Keystone. Combining all 6 keystones in the Keystone Nexus stabilizes the dimensional frequency, unlocking the mysterious Gateway of Resonance to an uncharted exotic realm.
   </p>
   <div class="sub-grid">
     <div class="sub-card purple-card">
