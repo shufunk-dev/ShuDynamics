@@ -4,7 +4,9 @@ Ancient dimensional disturbances across reality have manifested as **Anomaly Key
 
 ---
 
-## 🏛️ The Five Anomaly Anchors
+## 🏛️ The Six Anomaly Keystones
+
+Across reality, **6 Anomaly Keystones** form the cosmic stabilization matrix. Keystones **1 through 5** are fully discoverable and constructible in **v1.4.0**, with the **6th and final Keystone** arriving in **v1.5.0** to unlock the final dimensional portal!
 
 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin:20px 0;">
 
@@ -80,6 +82,21 @@ Ancient dimensional disturbances across reality have manifested as **Anomaly Key
     <ul style="font-size:12px; color:#d1d5db; padding-left:18px; margin:0; line-height:1.5;">
       <li>Enhances Geothermal Generator output and Lava Pump draw rates.</li>
       <li>Protects surrounding structures against extreme heat damage.</li>
+    </ul>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.8); border:1px dashed rgba(168,85,247,0.4); border-radius:12px; padding:18px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+      <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:24px;">🌀</div>
+      <div>
+        <h4 style="margin:0; font-size:16px; color:#c084fc;">6. Dimensional Singularity Anchor</h4>
+        <span style="font-size:11px; color:#a855f7; text-transform:uppercase; font-weight:700;">Keystone #6 // Coming in v1.5.0</span>
+      </div>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0 0 10px 0;">The final keystone in the cosmic sequence. Channels the ultimate spatial harmonic required to breach the dimensional barrier.</p>
+    <ul style="font-size:12px; color:#d1d5db; padding-left:18px; margin:0; line-height:1.5;">
+      <li>Will complete the Keystone Nexus network.</li>
+      <li>Required for igniting the upcoming Tier 4 Dimensional Gateway.</li>
     </ul>
   </div>
 
