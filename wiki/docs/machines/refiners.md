@@ -103,8 +103,26 @@ ShuDynamics provides specialized high-temperature metallurgical processing machi
 | **Raw Titanium** | 5,000 E | 10 Seconds | **1x Titanium Ingot** | Aluminum Refiner |
 | **Raw Tin** | 1,600 E | 4 Seconds | **1x Tin Ingot** | Aluminum Refiner |
 | **Iron Ingot + Coke Coal** | 20,000 E | 5 Seconds | **1x Steel Ingot** | Steel Blast Furnace (Standard) |
+| **Iron Ingot + Basalt Flux Catalyst** | 10,000 E | 2.5 Seconds | **2x Steel Ingot** | Steel Blast Furnace (Catalyst Boost) |
 | **Iron Ingot + 200 mB H₂** | 12,000 E | 3 Seconds | **1x Steel Ingot** | Steel Blast Furnace (Green Steel) |
 | **Copper Ingot + Tin Ingot** | 18,000 E | 6 Seconds | **2x Bronze Ingot** | Alloy Foundry |
+| **Obsidian + Titanium Ingot** | 18,000 E | 6 Seconds | **2x Reinforced Obsidian** | Alloy Foundry |
+| **Glass + Fire Crystal / Ash** | 18,000 E | 6 Seconds | **2x Volcanic Glass** | Alloy Foundry |
 | **4x Cobblestone / Netherrack** | 24,000 E | 6 Seconds | **1,000 mB Lava** | Magma Crucible |
+
+---
+
+## ⚡ Blaze Overclock Core
+
+The **Blaze Overclock Core** (`enchantedwood:blaze_overclock_core`) can be inserted into the Gear/Upgrade socket of all machines to unlock maximum turbo performance:
+* **Operating Speed**: **+200% faster processing** (reduces cycle time to under 1 second per item!).
+* **Output Multiplier**: Maximizes yield multipliers up to **8x ore outputs** in Crushers and Foundries.
+* **Fireproof**: 100% immune to fire and lava destruction.
+
+### Crafting Recipe
+<MinecraftRecipe id="blaze_overclock_core" />
+
+### Basalt Flux Catalyst Recipe
+<MinecraftRecipe id="basalt_flux_catalyst" />
 
 

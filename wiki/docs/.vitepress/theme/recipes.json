@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "count": 311,
+  "count": 317,
   "recipes": {
     "alloy_foundry": {
       "id": "alloy_foundry",
@@ -1799,6 +1799,150 @@
       "output": {
         "name": "Enchanted Wood Pickaxe",
         "icon": "/textures/item/barkskin_pickaxe.png",
+        "count": 1
+      }
+    },
+    "basalt_cable": {
+      "id": "basalt_cable",
+      "type": "shaped",
+      "title": "Crafting Basalt-Insulated Super Cable",
+      "grid": [
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Tungsten Heavy Energy Cable",
+          "icon": "/textures/block/tungsten_cable.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Tungsten Heavy Energy Cable",
+          "icon": "/textures/block/tungsten_cable.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        }
+      ],
+      "output": {
+        "name": "Basalt-Insulated Super Cable",
+        "icon": "/textures/block/basalt_cable.png",
+        "count": 6
+      }
+    },
+    "basalt_flux_catalyst": {
+      "id": "basalt_flux_catalyst",
+      "type": "shaped",
+      "title": "Crafting Basalt Flux Catalyst",
+      "grid": [
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Sulfur Dust",
+          "icon": "/textures/item/sulfur_dust.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Sulfur Dust",
+          "icon": "/textures/item/sulfur_dust.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Sulfur Dust",
+          "icon": "/textures/item/sulfur_dust.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        },
+        {
+          "name": "Sulfur Dust",
+          "icon": "/textures/item/sulfur_dust.png"
+        },
+        {
+          "name": "Volcanic Ash",
+          "icon": "/textures/item/volcanic_ash.png"
+        }
+      ],
+      "output": {
+        "name": "Basalt Flux Catalyst",
+        "icon": "/textures/item/basalt_flux_catalyst.png",
+        "count": 4
+      }
+    },
+    "blaze_overclock_core": {
+      "id": "blaze_overclock_core",
+      "type": "shaped",
+      "title": "Crafting Blaze Overclock Core",
+      "grid": [
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Tungsten Carbide Ingot",
+          "icon": "/textures/item/tungsten_carbide_ingot.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        }
+      ],
+      "output": {
+        "name": "Blaze Overclock Core",
+        "icon": "/textures/item/blaze_overclock_core.png",
         "count": 1
       }
     },
@@ -6554,6 +6698,48 @@
         "count": 6
       }
     },
+    "infernal_hammer": {
+      "id": "infernal_hammer",
+      "type": "shaped",
+      "title": "Crafting Infernal Auto-Smelt Sledgehammer",
+      "grid": [
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        null,
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Infernal Auto-Smelt Sledgehammer",
+        "icon": "/textures/item/infernal_hammer.png",
+        "count": 1
+      }
+    },
     "infused_heartwood": {
       "id": "infused_heartwood",
       "type": "shaped",
@@ -8099,6 +8285,48 @@
       "output": {
         "name": "Plasma Anchor",
         "icon": "/textures/item/plasma_anchor.png",
+        "count": 1
+      }
+    },
+    "plasma_flamethrower": {
+      "id": "plasma_flamethrower",
+      "type": "shaped",
+      "title": "Crafting Thermal Plasma Flamethrower",
+      "grid": [
+        null,
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Empty Gas Canister",
+          "icon": "/textures/item/empty_gas_canister.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Blaze Rod",
+          "icon": "/textures/item/blaze_rod.png"
+        },
+        null
+      ],
+      "output": {
+        "name": "Thermal Plasma Flamethrower",
+        "icon": "/textures/item/plasma_flamethrower.png",
         "count": 1
       }
     },
@@ -10169,6 +10397,54 @@
       "output": {
         "name": "Thermal Anchor",
         "icon": "/textures/item/thermal_anchor.png",
+        "count": 1
+      }
+    },
+    "thermal_refractory_plating": {
+      "id": "thermal_refractory_plating",
+      "type": "shaped",
+      "title": "Crafting Thermal Refractory Plating",
+      "grid": [
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Titanium Ingot",
+          "icon": "/textures/item/titanium_ingot.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        },
+        {
+          "name": "Fire Crystal",
+          "icon": "/textures/item/fire_crystal.png"
+        },
+        {
+          "name": "Volcanic Bricks",
+          "icon": "/textures/block/volcanic_bricks.png"
+        }
+      ],
+      "output": {
+        "name": "Thermal Refractory Plating",
+        "icon": "/textures/item/thermal_refractory_plating.png",
         "count": 1
       }
     },

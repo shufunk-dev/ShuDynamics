@@ -106,6 +106,7 @@ public class DustSmelterBlockEntity extends BlockEntity implements NamedScreenHa
             case GOLD -> 80;
             case DIAMOND -> 50;
             case NETHERITE -> 25;
+            case BLAZE_OVERCLOCK -> 15;
             default -> 160;
         };
     }

@@ -97,6 +97,7 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
             case GOLD -> 70;
             case DIAMOND -> 45;
             case NETHERITE -> 20;
+            case BLAZE_OVERCLOCK -> 15;
             default -> 160;
         };
     }
@@ -199,6 +200,17 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
         if (isIron(itemA) && isCarbon(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.STEEL_INGOT, 1);
         if (isCarbon(itemA) && isIron(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.STEEL_INGOT, 1);
 
+        // Basalt Flux Catalyst Recipes
+        if (isIron(itemA) && isFlux(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.STEEL_INGOT, 2);
+        if (isFlux(itemA) && isIron(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.STEEL_INGOT, 2);
+
+        // Reinforced Obsidian & Volcanic Glass Casting
+        if (isObsidian(itemA) && isTitanium(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.REINFORCED_OBSIDIAN.asItem(), 2);
+        if (isTitanium(itemA) && isObsidian(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.REINFORCED_OBSIDIAN.asItem(), 2);
+
+        if (isGlass(itemA) && isVolcanicOrFire(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS.asItem(), 2);
+        if (isVolcanicOrFire(itemA) && isGlass(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS.asItem(), 2);
+
         return null;
     }
 
@@ -226,8 +238,28 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
         return item == ModItems.TIN_INGOT || item == ModItems.TIN_DUST || item == ModItems.RAW_TIN;
     }
 
+    private static boolean isTitanium(Item item) {
+        return item == ModItems.TITANIUM_INGOT || item == ModItems.TITANIUM_DUST || item == ModItems.RAW_TITANIUM;
+    }
+
     private static boolean isIron(Item item) {
         return item == Items.IRON_INGOT || item == ModItems.IRON_DUST || item == Items.RAW_IRON;
+    }
+
+    private static boolean isFlux(Item item) {
+        return item == ModItems.BASALT_FLUX_CATALYST;
+    }
+
+    private static boolean isObsidian(Item item) {
+        return item == Items.OBSIDIAN || item == Items.CRYING_OBSIDIAN;
+    }
+
+    private static boolean isGlass(Item item) {
+        return item == Items.GLASS || item == Items.GLASS_PANE;
+    }
+
+    private static boolean isVolcanicOrFire(Item item) {
+        return item == ModItems.FIRE_CRYSTAL || item == ModItems.VOLCANIC_ASH || item == ModItems.SULFUR_DUST;
     }
 
     @Override

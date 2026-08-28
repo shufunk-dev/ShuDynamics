@@ -79,7 +79,7 @@ Cables connect machines, generators, and batteries seamlessly across all 6 block
 | **Aluminum Cable** | **800 E/t** | Aluminum Generator, Refiners, Oxygen Gen |
 | **Steel Cable** | **3,200 E/t** | Steel Generator & Heavy Machinery |
 | **Tungsten Cable** | **12,800 E/t** | Geothermal Generators, Foundries & High-Tier Batteries |
-
+| **Basalt-Insulated Cable** | **25,600 E/t** | Heavy Multiblocks, Overclocked Foundries & Extreme Grids (Explosion/Fireproof) |
 
 ---
 
@@ -111,3 +111,6 @@ Cables connect machines, generators, and batteries seamlessly across all 6 block
 
 ### Steel Cable
 <MinecraftRecipe id="steel_cable" />
+
+### Basalt-Insulated Super Cable
+<MinecraftRecipe id="basalt_cable" />

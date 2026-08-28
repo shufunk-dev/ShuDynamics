@@ -858,6 +858,37 @@ public class ModBlocks {
             Text.literal("§6Item Inserter"),
             Text.literal("§8Actively injects routed items from the pipe network into target containers and machines."));
 
+    // Nether Metallurgy & Heavy Infrastructure
+    public static final Block BASALT_CABLE = registerBlockWithTooltip("basalt_cable",
+            new net.enchantedwood.block.custom.BasaltCableBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "basalt_cable")))
+                    .sounds(BlockSoundGroup.BASALT)
+                    .hardness(3.0f)
+                    .resistance(1200.0f)
+                    .nonOpaque()),
+            Text.literal("§6Basalt-Insulated Super Cable"),
+            Text.literal("§e25,600 E/t Transfer §7• 100% Explosion-Proof & Fireproof."));
+
+    public static final Block REINFORCED_OBSIDIAN = registerBlockWithTooltip("reinforced_obsidian",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "reinforced_obsidian")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(50.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()),
+            Text.literal("§6Reinforced Obsidian"),
+            Text.literal("§8Wither-proof and immune to all explosions."));
+
+    public static final Block VOLCANIC_GLASS = registerBlockWithTooltip("volcanic_glass",
+            new net.minecraft.block.TransparentBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_glass")))
+                    .sounds(BlockSoundGroup.GLASS)
+                    .hardness(2.5f)
+                    .resistance(600.0f)
+                    .nonOpaque()),
+            Text.literal("§6Tough Volcanic Glass"),
+            Text.literal("§8Blast-resistant crystal glass. Drops itself when mined."));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);

@@ -215,6 +215,13 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(TungstenCableBlockEntity::new, ModBlocks.TUNGSTEN_CABLE).build()
             );
 
+    public static final BlockEntityType<BasaltCableBlockEntity> BASALT_CABLE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "basalt_cable"),
+                    FabricBlockEntityTypeBuilder.create(BasaltCableBlockEntity::new, ModBlocks.BASALT_CABLE).build()
+            );
+
     public static final BlockEntityType<GeothermalGeneratorBlockEntity> GEOTHERMAL_GENERATOR_BE =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,

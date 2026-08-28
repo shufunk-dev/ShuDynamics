@@ -98,6 +98,7 @@ public class SoilInfuserBlockEntity extends BlockEntity implements NamedScreenHa
             case GOLD -> 50;
             case DIAMOND -> 30;
             case NETHERITE -> 12;
+            case BLAZE_OVERCLOCK -> 8;
             default -> 120;
         };
     }
@@ -171,13 +172,16 @@ public class SoilInfuserBlockEntity extends BlockEntity implements NamedScreenHa
         ItemStack mineral = inventory.get(INPUT_SLOT_MINERAL);
         ItemStack out = inventory.get(OUTPUT_SLOT);
 
+        boolean isFlux = mineral.isOf(ModItems.BASALT_FLUX_CATALYST);
+        int yield = isFlux ? 4 : 2;
+
         dirt.decrement(1);
         mineral.decrement(1);
 
         if (out.isEmpty()) {
-            inventory.set(OUTPUT_SLOT, new ItemStack(ModBlocks.VOLCANIC_SOIL, 2));
+            inventory.set(OUTPUT_SLOT, new ItemStack(ModBlocks.VOLCANIC_SOIL, yield));
         } else {
-            out.increment(2);
+            out.increment(yield);
         }
 
         this.experience += 1.0f;
@@ -188,7 +192,7 @@ public class SoilInfuserBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     public static boolean isMineralMaterial(Item item) {
-        return item == ModItems.VOLCANIC_ASH || item == ModItems.VOLCANIC_FERTILIZER || item == ModItems.SULFUR_DUST;
+        return item == ModItems.VOLCANIC_ASH || item == ModItems.VOLCANIC_FERTILIZER || item == ModItems.SULFUR_DUST || item == ModItems.BASALT_FLUX_CATALYST;
     }
 
     @Override

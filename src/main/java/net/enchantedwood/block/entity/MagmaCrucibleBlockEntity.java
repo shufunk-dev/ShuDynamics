@@ -102,6 +102,7 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreen
             case GOLD -> 60;
             case DIAMOND -> 40;
             case NETHERITE -> 18;
+            case BLAZE_OVERCLOCK -> 10;
             default -> 140;
         };
     }

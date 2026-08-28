@@ -77,6 +77,8 @@
     "enchantedwood:titanium_tank_inbound_port",
     "enchantedwood:item_pipe",
     "enchantedwood:item_extractor",
-    "enchantedwood:item_inserter"
+    "enchantedwood:item_inserter",
+    "enchantedwood:basalt_cable",
+    "enchantedwood:reinforced_obsidian"
   ]
 }

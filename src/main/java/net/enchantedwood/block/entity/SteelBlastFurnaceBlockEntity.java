@@ -163,8 +163,9 @@ public class SteelBlastFurnaceBlockEntity extends BlockEntity implements NamedSc
 
         // Method A: Green Steel (Hydrogen)
         boolean canGreenSmelt = hasIron && hasOutputSpace && hasEnergy && entity.hydrogenTank.getAmount() >= 10;
-        // Method B: Traditional (Coke Coal)
-        boolean canTradSmelt = hasIron && hasOutputSpace && hasEnergy && cokeInput.isOf(ModItems.COKE_COAL);
+        // Method B: Traditional (Coke Coal or Basalt Flux Catalyst)
+        boolean hasFlux = cokeInput.isOf(ModItems.BASALT_FLUX_CATALYST);
+        boolean canTradSmelt = hasIron && hasOutputSpace && hasEnergy && (cokeInput.isOf(ModItems.COKE_COAL) || hasFlux);
 
         if (canGreenSmelt) {
             entity.isGreenMode = true;
@@ -184,17 +185,19 @@ public class SteelBlastFurnaceBlockEntity extends BlockEntity implements NamedSc
             stateChanged = true;
         } else if (canTradSmelt) {
             entity.isGreenMode = false;
-            entity.totalCookTime = TRADITIONAL_COOK_TIME;
+            int cookTarget = hasFlux ? TRADITIONAL_COOK_TIME / 2 : TRADITIONAL_COOK_TIME;
+            entity.totalCookTime = cookTarget;
             entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
             entity.cookTime++;
-            if (entity.cookTime >= TRADITIONAL_COOK_TIME) {
+            if (entity.cookTime >= cookTarget) {
                 entity.cookTime = 0;
                 ironInput.decrement(1);
                 cokeInput.decrement(1);
+                int yield = hasFlux ? 2 : 1;
                 if (output.isEmpty()) {
-                    entity.inventory.set(2, new ItemStack(ModItems.STEEL_INGOT));
+                    entity.inventory.set(2, new ItemStack(ModItems.STEEL_INGOT, yield));
                 } else {
-                    output.increment(1);
+                    output.increment(yield);
                 }
             }
             stateChanged = true;

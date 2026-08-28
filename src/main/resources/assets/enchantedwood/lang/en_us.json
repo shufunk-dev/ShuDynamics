@@ -454,5 +454,14 @@
   "block.enchantedwood.item_pipe": "Item Transport Pipe",
   "block.enchantedwood.item_extractor": "Item Extractor",
   "block.enchantedwood.item_inserter": "Item Inserter",
-  "item.enchantedwood.wrench": "Industrial Wrench"
+  "item.enchantedwood.wrench": "Industrial Wrench",
+
+  "block.enchantedwood.basalt_cable": "Basalt-Insulated Super Cable",
+  "block.enchantedwood.reinforced_obsidian": "Reinforced Obsidian",
+  "block.enchantedwood.volcanic_glass": "Tough Volcanic Glass",
+  "item.enchantedwood.basalt_flux_catalyst": "Basalt Flux Catalyst",
+  "item.enchantedwood.thermal_refractory_plating": "Thermal Refractory Plating",
+  "item.enchantedwood.blaze_overclock_core": "Blaze Overclock Core",
+  "item.enchantedwood.infernal_hammer": "Infernal Auto-Smelt Sledgehammer",
+  "item.enchantedwood.plasma_flamethrower": "Thermal Plasma Flamethrower"
 }

@@ -98,6 +98,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             case GOLD -> 40;
             case DIAMOND -> 25;
             case NETHERITE -> 10;
+            case BLAZE_OVERCLOCK -> 6;
             default -> 100;
         };
     }
@@ -110,6 +111,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             case GOLD -> 4;
             case DIAMOND -> 5;
             case NETHERITE -> 6;
+            case BLAZE_OVERCLOCK -> 8;
             default -> 3;
         };
     }

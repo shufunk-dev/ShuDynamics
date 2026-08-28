@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB",
+    "CTC",
+    "BBB"
+  ],
+  "key": {
+    "B": "enchantedwood:volcanic_bricks",
+    "C": "enchantedwood:tungsten_cable",
+    "T": "enchantedwood:volcanic_ash"
+  },
+  "result": {
+    "count": 6,
+    "id": "enchantedwood:basalt_cable"
+  }
+}

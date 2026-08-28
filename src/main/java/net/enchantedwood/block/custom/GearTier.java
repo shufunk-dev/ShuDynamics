@@ -12,7 +12,8 @@ public enum GearTier implements StringIdentifiable {
     STEEL("steel", 4),
     GOLD("gold", 4),
     DIAMOND("diamond", 5),
-    NETHERITE("netherite", 6);
+    NETHERITE("netherite", 6),
+    BLAZE_OVERCLOCK("blaze_overclock", 8);
 
     private final String name;
     private final int baseOreYield;

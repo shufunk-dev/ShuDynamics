@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " TR",
+    "TGT",
+    "FR "
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "R": "minecraft:blaze_rod",
+    "G": "enchantedwood:empty_gas_canister",
+    "F": "enchantedwood:fire_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:plasma_flamethrower"
+  }
+}

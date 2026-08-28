@@ -191,4 +191,39 @@ ShuDynamics features unique custom armor sets across all progression tiers. Each
   setBonus="Netherite Aura: Fire immunity, extreme knockback resistance, and ultimate defense."
 />
 
+---
+
+## 🌋 Nether Survival Modules & Specialized Heavy Tools
+
+### 🛡️ Thermal Refractory Plating
+An advanced protective matrix engineered for extreme volcanic exploration:
+* **Passive Fire Resistance**: Grants continuous **Fire Resistance** and instant auto-extinguishing while carried in your inventory or off-hand.
+* **Lava Buoyancy & Mobility**: Enables frictionless movement and positive buoyancy across lava lakes.
+* **Fireproof**: Cannot burn or despawn in lava.
+
+#### Crafting Recipe
+<MinecraftRecipe id="thermal_refractory_plating" />
+
+---
+
+### 🔨 Infernal Auto-Smelt Sledgehammer
+A heavy Netherite-tier mining sledgehammer embedded with Fire Crystals:
+* **3x3 Excavation**: Clears 3x3 block areas in a single swing.
+* **Instant Auto-Smelt**: Instantly converts mined raw ores into smelted ingots (Raw Iron $\rightarrow$ Iron Ingot, Raw Copper $\rightarrow$ Copper Ingot, Raw Gold $\rightarrow$ Gold Ingot, Sand $\rightarrow$ Glass, Cobblestone $\rightarrow$ Stone).
+* **Durability**: 3,200 uses, 100% fireproof.
+
+#### Crafting Recipe
+<MinecraftRecipe id="infernal_hammer" />
+
+---
+
+### 🔫 Thermal Plasma Flamethrower
+A handheld plasma weapon projecting a sustained cone of superheated fire:
+* **Continuous Plasma Stream**: Unleashes a 12-block piercing plasma beam that passes through mobs.
+* **Target Ignition**: Sets enemies on fire for 8 seconds and deals direct thermal arc damage.
+* **Durability**: 850 Uses.
+
+#### Crafting Recipe
+<MinecraftRecipe id="plasma_flamethrower" />
+
 

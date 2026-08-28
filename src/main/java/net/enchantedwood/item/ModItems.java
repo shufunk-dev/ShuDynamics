@@ -562,6 +562,24 @@ public class ModItems {
     public static final Item WRENCH = registerItem("wrench",
             settings -> new net.enchantedwood.item.custom.WrenchItem(settings));
 
+    // Nether Metallurgy & High-Temp Technology Suite (v1.4.0 Finalization)
+    public static final Item BASALT_FLUX_CATALYST = registerItem("basalt_flux_catalyst",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings,
+                    Text.literal("§6✦ Basalt Pyrometallurgical Flux"),
+                    Text.literal("§7Doubles smelting yields and grants +50% speed in Blast Furnaces and Foundries.")));
+
+    public static final Item THERMAL_REFRACTORY_PLATING = registerItem("thermal_refractory_plating",
+            settings -> new net.enchantedwood.item.custom.ThermalRefractoryPlatingItem(settings.maxCount(1).fireproof()));
+
+    public static final Item BLAZE_OVERCLOCK_CORE = registerItem("blaze_overclock_core",
+            settings -> new GearItem(GearTier.BLAZE_OVERCLOCK, true, settings.maxCount(16).fireproof()));
+
+    public static final Item INFERNAL_HAMMER = registerItem("infernal_hammer",
+            settings -> new net.enchantedwood.item.custom.InfernalHammerItem(settings.pickaxe(net.minecraft.item.ToolMaterial.NETHERITE, 6.0f, -3.0f).fireproof()));
+
+    public static final Item PLASMA_FLAMETHROWER = registerItem("plasma_flamethrower",
+            settings -> new net.enchantedwood.item.custom.PlasmaFlamethrowerItem(settings.maxDamage(850).fireproof()));
+
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
     public static final ItemGroup ENCHANTED_WOOD_GROUP = FabricItemGroup.builder()
@@ -962,6 +980,16 @@ public class ModItems {
 
                 // Enchanted Lighting
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAMP);
+
+                // Nether Metallurgy & Heavy Technology Suite (v1.4.0 Finalization)
+                entries.add(net.enchantedwood.block.ModBlocks.BASALT_CABLE);
+                entries.add(net.enchantedwood.block.ModBlocks.REINFORCED_OBSIDIAN);
+                entries.add(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS);
+                entries.add(BASALT_FLUX_CATALYST);
+                entries.add(THERMAL_REFRACTORY_PLATING);
+                entries.add(BLAZE_OVERCLOCK_CORE);
+                entries.add(INFERNAL_HAMMER);
+                entries.add(PLASMA_FLAMETHROWER);
             })
             .build();
 

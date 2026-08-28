@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ASA",
+    "SBS",
+    "ASA"
+  ],
+  "key": {
+    "A": "enchantedwood:volcanic_ash",
+    "S": "enchantedwood:sulfur_dust",
+    "B": "enchantedwood:volcanic_bricks"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:basalt_flux_catalyst"
+  }
+}

@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RFR",
+    "FTF",
+    "RFR"
+  ],
+  "key": {
+    "R": "minecraft:blaze_rod",
+    "F": "enchantedwood:fire_crystal",
+    "T": "enchantedwood:tungsten_carbide_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:blaze_overclock_core"
+  }
+}

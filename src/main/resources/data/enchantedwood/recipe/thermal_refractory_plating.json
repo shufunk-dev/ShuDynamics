@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BFB",
+    "FTF",
+    "BFB"
+  ],
+  "key": {
+    "B": "enchantedwood:volcanic_bricks",
+    "F": "enchantedwood:fire_crystal",
+    "T": "enchantedwood:titanium_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:thermal_refractory_plating"
+  }
+}

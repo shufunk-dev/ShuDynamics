@@ -117,3 +117,25 @@ ShuDynamics introduces new world generation ores, industrial polymers, alloys, a
     <p style="font-size:13px; color:#9ca3af; margin:0;">Enables cross-dimensional wireless access so you can access your Overworld base directly while in the Nether or End!</p>
   </div>
 </div>
+
+---
+
+## 🏰 Blast-Proof Architecture & Heavy Nether Building Blocks
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;">
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(147,51,234,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/block/reinforced_obsidian.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#c084fc;">Reinforced Obsidian</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Pyrometallurgically fused Obsidian reinforced with Titanium. 100% Wither-proof and immune to all explosions (Blast Resistance 1200.0).</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(239,68,68,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/block/volcanic_glass.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#f87171;">Tough Volcanic Glass</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Clear crystal glass fused with Fire Crystals. Explosion-resistant (Blast Resistance 600.0) and drops itself when mined without Silk Touch.</p>
+  </div>
+</div>
