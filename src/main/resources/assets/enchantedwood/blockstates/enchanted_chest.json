@@ -39,6 +39,11 @@
     "facing=north,gear_tier=netherite": { "model": "enchantedwood:block/enchanted_chest_netherite" },
     "facing=south,gear_tier=netherite": { "model": "enchantedwood:block/enchanted_chest_netherite", "y": 180 },
     "facing=west,gear_tier=netherite": { "model": "enchantedwood:block/enchanted_chest_netherite", "y": 270 },
-    "facing=east,gear_tier=netherite": { "model": "enchantedwood:block/enchanted_chest_netherite", "y": 90 }
+    "facing=east,gear_tier=netherite": { "model": "enchantedwood:block/enchanted_chest_netherite", "y": 90 },
+
+    "facing=north,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock" },
+    "facing=south,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 180 },
+    "facing=west,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 270 },
+    "facing=east,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 90 }
   }
 }

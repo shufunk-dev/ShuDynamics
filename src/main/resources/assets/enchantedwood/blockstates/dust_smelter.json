@@ -88,6 +88,15 @@
     "facing=north,gear_tier=netherite,lit=true": { "model": "enchantedwood:block/dust_smelter_netherite_on" },
     "facing=south,gear_tier=netherite,lit=true": { "model": "enchantedwood:block/dust_smelter_netherite_on", "y": 180 },
     "facing=west,gear_tier=netherite,lit=true": { "model": "enchantedwood:block/dust_smelter_netherite_on", "y": 270 },
-    "facing=east,gear_tier=netherite,lit=true": { "model": "enchantedwood:block/dust_smelter_netherite_on", "y": 90 }
+    "facing=east,gear_tier=netherite,lit=true": { "model": "enchantedwood:block/dust_smelter_netherite_on", "y": 90 },
+
+    "facing=north,gear_tier=blaze_overclock,lit=false": { "model": "enchantedwood:block/dust_smelter_blaze_overclock" },
+    "facing=south,gear_tier=blaze_overclock,lit=false": { "model": "enchantedwood:block/dust_smelter_blaze_overclock", "y": 180 },
+    "facing=west,gear_tier=blaze_overclock,lit=false": { "model": "enchantedwood:block/dust_smelter_blaze_overclock", "y": 270 },
+    "facing=east,gear_tier=blaze_overclock,lit=false": { "model": "enchantedwood:block/dust_smelter_blaze_overclock", "y": 90 },
+    "facing=north,gear_tier=blaze_overclock,lit=true": { "model": "enchantedwood:block/dust_smelter_blaze_overclock_on" },
+    "facing=south,gear_tier=blaze_overclock,lit=true": { "model": "enchantedwood:block/dust_smelter_blaze_overclock_on", "y": 180 },
+    "facing=west,gear_tier=blaze_overclock,lit=true": { "model": "enchantedwood:block/dust_smelter_blaze_overclock_on", "y": 270 },
+    "facing=east,gear_tier=blaze_overclock,lit=true": { "model": "enchantedwood:block/dust_smelter_blaze_overclock_on", "y": 90 }
   }
 }

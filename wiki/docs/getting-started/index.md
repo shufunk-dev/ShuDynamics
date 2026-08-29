@@ -9,6 +9,11 @@ Get the mod directly from CurseForge or compile from source:
 * **Source Code & Issues**: Visit the **[GitHub Repository](https://github.com/shufunk-dev/ShuDynamics)** to view source code, report bugs, or request features.
 :::
 
+::: info 🔍 Recommended Companion Mods: JEI & EMI
+To view all custom multi-slot machine recipes, catalytic boosts, and fluid distillation chains in-game, we strongly recommend installing **[Just Enough Items (JEI)](https://www.curseforge.com/minecraft/mc-mods/jei)** alongside **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)** *(or REI + EMI)* in your mod profile!
+* **`R` (Recipes)** & **`U` (Uses)** will display custom tabs for the **Alloy Foundry**, **Crusher**, **Steel Blast Furnace**, **Soil Infuser**, **Coke Oven**, **Fuel Refinery**, **Magma Crucible**, **Basalt Flux Catalyst**, and **Blaze Overclock Cores**.
+:::
+
 ---
 
 ## 1. Core Materials

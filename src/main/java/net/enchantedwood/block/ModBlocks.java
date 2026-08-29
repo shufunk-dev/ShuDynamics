@@ -885,7 +885,11 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.GLASS)
                     .hardness(2.5f)
                     .resistance(600.0f)
-                    .nonOpaque()),
+                    .nonOpaque()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
             Text.literal("§6Tough Volcanic Glass"),
             Text.literal("§8Blast-resistant crystal glass. Drops itself when mined."));
 

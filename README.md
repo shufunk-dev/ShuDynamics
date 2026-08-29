@@ -6,74 +6,78 @@
 [![Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Stable Release](https://img.shields.io/badge/Stable-v1.3.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
+[![Stable Release](https://img.shields.io/badge/Stable-v1.4.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an all-in-one tech, magic, energy, modular vehicle, and digital storage progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, modular all-terrain vehicles, and automated road infrastructure.
+**ShuDynamics** is an all-in-one tech, magic, energy, modular vehicle, digital storage, and advanced metallurgy progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, modular all-terrain vehicles, geothermal fluid networks, and automated road infrastructure.
 
 * 🌐 **Official Wiki & Guide**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 
 ---
 
-## 🌟 Core Mod Features (v1.3.0 Release)
+## 🔍 Recommended Companion Mods (Recipe & Uses Lookups)
 
-### ⚡ 1. Tiered Energy & Power Grids
-* **Multi-Tier Generators**: Clean energy generation across Copper, Aluminum, and Steel tiers.
-* **Energy Storage**: High-capacity Battery Banks capable of buffering massive Energy buffers.
-* **Cable Networks**: Low-loss, directional insulated cables for energy distribution across your base.
+To get the best in-game survival experience and view all custom multi-slot machine recipes, dynamic overclocking boosts, and catalytic uses, we strongly recommend installing:
 
-### ⚙️ 2. Advanced Machinery & Gas Systems
-* **Electric Refiners**: High-speed ore doubling and metallurgy processing.
-* **Oxygen Generators & Gas Pipes**: Pressurized fluid/gas transport networks with real-time pressure regulation.
-* **Smart Auto-Fuel**: Machines intelligently fall back to solid fuel when energy reserves are depleted.
+* **[Just Enough Items (JEI)](https://www.curseforge.com/minecraft/mc-mods/jei)**: Standard in-game recipe browser with quick item search.
+* **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)** (or **REI + EMI**): Modern Fabric recipe engine that powers custom machine tabs (Alloy Foundry, Crusher, Soil Infuser, Blast Furnace, Coke Oven, Refinery, Magma Crucible) and catalytic boosts (**Basalt Flux Catalyst**, **Blaze Overclock Cores**, and **Speed Gears**).
 
-### 📦 3. Digital Storage Networks & Crystal Drives
-* **Enchanted Storage Controller**: Central brain of your item network with ambient positional audio, dual-input hybrid power, and 3 dedicated upgrade bays.
-* **6-Slot Drive Bay**: Digital crystal drive bay featuring dynamic **Green $\rightarrow$ Yellow $\rightarrow$ Purple $\rightarrow$ Red** LED capacity monitoring and anti-data loss safety locks.
-* **54-Slot Storage Terminal**: Unified 6x9 network interface with real-time search filtering and instant item retrieval.
-* **Wireless Expansion**:
-  * **Chunk Loader Module**: Keeps the controller and attached drives active across the entire Overworld.
-  * **Interdimensional Card**: Grants remote storage access across dimensions (Nether & The End).
+---
 
-### 🤿 4. Diving Equipment & Aquatic Life Support (v1.2.0)
-* **Early-Game Snorkel**: Surface-breathing oxygen replenish and 3x extended lung capacity when diving.
-* **Modular Scuba Suit**:
-  * **Diving Mask**: Conduit Vision and fast underwater mining.
-  * **Scuba Tank Chestplate**: Infinite pressurized underwater oxygen supply.
-  * **Wetsuit Leggings**: Streamlined polymer granting Dolphin's Grace swimming.
-  * **Diving Flippers**: High-speed ocean propulsion.
+## 🌟 Core Mod Features (v1.4.0 Release)
 
-### 🌌 5. Dimensional Keystones & Progression
-* **Atmospheric Anchor (Keystone #1)**: Blueprint unlocked upon mastering deep-sea atmospheric pressures.
-* **Kinetic Anchor (Keystone #2 - v1.3.0)**: Blueprint unlocked upon assembling and driving an ATV to master land mobility.
-* **The Keystone Nexus Tab**: Dedicated 7-node radial quest progression tracking the discovery and crafting of all dimensional anomalies.
+### 🌋 1. Nether Metallurgy & Advanced Metal Tiers (v1.4.0)
+* **New Nether & End Ores**: Cobalt, Ardite, Tungsten, Lead, Lumium, Ender, and Enderite worldgen ores.
+* **Advanced Alloys**: Manyullyn, Tungsten Carbide, Signalum, Lumium, Enderium, Bronze, and Enchanted Netherite.
+* **Indestructible Building**: Blast-proof **Reinforced Obsidian** (1200.0 resistance, Wither-immune) and transparent **Tough Volcanic Glass** (600.0 resistance, drops itself without Silk Touch).
 
-### 🛡️ 6. Tools, Armor & 3x3 Mining
-* **Tiered Armor & Weapons**: Full gear progression including Tin, Bronze, Aluminum, Titanium, Enchanted Diamond, and Enchanted Netherite.
-* **3x3 Mining Hammers**: Heavy-duty excavation tools designed for rapid subterranean mining.
-* **Special Archetypes**: Livingwood weapons and Barkskin equipment offering unique passives and survivability.
-* **Health Lockets & Crystals**: Permanent health-pool expansion items.
+### ⚡ 2. Tier 4 Geothermal Energy & High-Voltage Grid (v1.4.0)
+* **Geothermal Generators**: Continuous 400 FE/t passive power generated from liquid lava.
+* **High-Capacity Battery Banks**: 100,000,000 FE Tungsten Battery Units and 1,000,000 FE portable Battery Packs.
+* **Peak Power Cabling**: 25,600 FE/t **Basalt Energy Cables** and 25,000 FE/t **Tungsten Cables** with explosion and heat immunity.
+* **Fluid Logistics**: Submersible **Lava Pumps**, refractory **Lava Pipes**, and 5x5 Titanium Multiblock Reservoirs.
 
-### 🏎️ 7. Modular All-Terrain Vehicles (ATV) & Fabricator (v1.3.0)
-* **Custom Modular ATV**: High-mobility exploration vehicle with 6 swappable component slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, and Fuel/Batteries).
-* **Vehicle Fabricator & Tuning Bay**: Dedicated vehicle construction station with item retrieval and vehicle customization.
-* **Fall Damage Immunity & Speed Scaling**: Advanced suspension absorbs all cliff falls, while road surfaces provide speed multipliers.
+### 🏭 3. Pyrometallurgy, Overclocking & Machining (v1.4.0)
+* **Alloy Foundry**: Dual-input pyrometallurgical arc furnace for high-purity alloy synthesis.
+* **Steel Blast Furnace**: Traditional Coke Coal smelting or zero-carbon Green Hydrogen reduction with **Basalt Flux Catalyst** 2× speed/yield boosts.
+* **Mechanical Crusher Mk2**: Dual-chamber pulverizer with speed gear sockets scaling ore outputs up to 8×!
+* **Magma Crucible**: High-temperature rock liquefier converting stone, basalt, and obsidian into liquid lava.
+* **Blaze Overclock Cores**: Dedicated turbo overclock slots granting +200% operating speed across all machines.
 
-### 🛣️ 8. Petrochemicals & Road Infrastructure (v1.3.0)
-* **Oil Sand & Distillation**: Naturally generating Oil Sand deposits refined in the powered **Fuel Refinery** into Gasoline, Biofuel, and High-Octane Racing Fuel.
-* **Asphalt Roads & Slabs**: Speed-boost paved surfaces with accurate pickaxe mining mechanics.
-* **Auto-Connecting Curbs & Ramps**: Multi-state Concrete Curbs with seamless corner connections and transition ramps.
-* **Autonomous Road Paver**: Machine that automatically lays 3-wide asphalt roads and extrudes curbs on either side.
+### 📦 4. Universal Item Logistics (v1.4.0)
+* **Item Transport Pipes**: 6-way modular conduit network for high-throughput item routing.
+* **Extractors & Inserters**: Intelligent directional machine feeding and chest extraction.
+* **Industrial Wrench**: 4-way side configuration tool for instant pipe connection tuning.
+
+### 🌾 5. Agronomy & Volcanic Soil (v1.4.0)
+* **Soil Infuser**: Powered machine that enriches standard dirt with ash, sulfur, or catalysts.
+* **Volcanic Soil**: Farmland with built-in hydration and accelerated growth ticks.
+* **Volcanic Fertilizer & Sweet Corn**: High-saturation agricultural crops and bio-ethanol feedstock.
+
+### 🏎️ 6. Modular All-Terrain Vehicles (ATV) & Tuning Bay
+* **Drivable ATV**: High-mobility vehicle featuring 6 swappable module slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, and Fuel/Batteries).
+* **Vehicle Fabricator**: Dedicated tuning bay with shift-click vehicle retrieval.
+* **Cliff Fall Immunity**: Suspension springs absorb 100% of fall damage.
+
+### 🛣️ 7. Petrochemicals & Road Infrastructure
+* **Oil Sand & Distillation**: Refines crude oil sludge into Gasoline, Biofuel, and Jet Fuel.
+* **Asphalt Roads & Concrete Curbs**: Speed-boosting highways with auto-connecting corner curbs and transition ramps.
+* **Autonomous Road Paver**: Machine that automatically lays 3-wide asphalt roads and extrudes curbs.
+
+### 💾 8. Digital Storage Networks & Crystal Drives
+* **Enchanted Storage Controller**: Central mainframe with ambient audio, dual hybrid power inputs, and 3 expansion bays.
+* **6-Slot Drive Bay & 54-Slot Terminal**: 1k–64k Crystal Storage Drives with dynamic LED matrix and anti-data loss locks.
+* **Chunk Loader & Interdimensional Cards**: Infinite Overworld and cross-dimensional storage access.
+
+### 🔨 9. Tools, Armor & 3x3 Excavation
+* **3x3 Mining Hammers**: Heavy-duty hammers from Wood to Enchanted Netherite.
+* **Infernal Sledgehammer**: 3x3 excavation hammer with built-in auto-smelting for ores and cobblestone.
+* **Aquatic Scuba Gear**: Full modular diving suit with infinite pressurized oxygen and Dolphin's Grace swimming.
 
 ---
 
 ## 🛠️ Building & Compiling from Source
-
-> [!NOTE]
-> **Experimental / Bleeding-Edge Builds**: Compiling directly from source builds the latest development snapshot containing cutting-edge, experimental features that may still be in active testing. 
-> 
-> If you are looking for a **stable, thoroughly tested experience** for your regular survival worlds or modpacks, we strongly recommend downloading official release JARs from our **[GitHub Releases](https://github.com/shufunk-dev/ShuDynamics/releases)** page or directly from **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/shudynamics)**.
 
 ### Prerequisites
 * **Java Development Kit (JDK) 21** or higher.
@@ -96,7 +100,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-1.3.0.jar
+build/libs/shudynamics-1.4.0.jar
 ```
 
 ---
@@ -106,3 +110,4 @@ build/libs/shudynamics-1.3.0.jar
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more details.
 
 **Copyright © 2026 Shufelt Designs. All rights reserved.**
+

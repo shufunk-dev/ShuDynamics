@@ -63,6 +63,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
 
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS, net.minecraft.client.render.BlockRenderLayer.TRANSLUCENT);
 
         CustomHeartHudRenderer.register();
 

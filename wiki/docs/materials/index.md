@@ -41,6 +41,46 @@ ShuDynamics introduces new world generation ores, industrial polymers, alloys, a
 
   <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/cobalt_ingot.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#60a5fa;">Cobalt Ingot</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Smelted from Nether Cobalt Ore. High-tensile blue metal used to fuse Manyullyn alloys.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/ardite_ingot.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#fb923c;">Ardite Ingot</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Smelted from Nether Ardite Ore. Dense rust-orange metal possessing exceptional heat resistance.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/manyullyn_ingot.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#c084fc;">Manyullyn Ingot</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Nether Master Alloy fused in the Alloy Foundry (Cobalt + Ardite). Unmatched combat damage and durability.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/tungsten_ingot.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#e2e8f0;">Tungsten Ingot</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Heavy refractory element. Essential for Tier 4 heavy batteries, 25,000 FE/t cables, and high-voltage machinery.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <img src="/textures/item/tungsten_carbide_ingot.png" style="width:36px; height:36px; image-rendering:pixelated;" />
+      <h3 style="margin:0; font-size:16px; color:#94a3b8;">Tungsten Carbide Ingot</h3>
+    </div>
+    <p style="font-size:13px; color:#9ca3af; margin:0;">Ultra-hard composite sintered from Tungsten + Carbon in the Alloy Foundry. Maximum abrasion resistance.</p>
+  </div>
+
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:16px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
       <img src="/textures/item/enchanted_diamond.png" style="width:36px; height:36px; image-rendering:pixelated;" />
       <h3 style="margin:0; font-size:16px; color:#c4b5fd;">Enchanted Diamond</h3>
     </div>

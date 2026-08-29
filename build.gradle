@@ -25,6 +25,18 @@ repositories {
         name = 'Fabric'
         url = 'https://maven.fabricmc.net/'
     }
+    maven {
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com/'
+    }
+    maven {
+        name = 'Terraformers'
+        url = 'https://maven.terraformersmc.com/'
+    }
+    maven {
+        name = 'ModMaven'
+        url = 'https://modmaven.dev/'
+    }
     mavenCentral()
 }
 
@@ -34,10 +46,11 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-
-
     // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // EMI Recipe Viewer API
+    modCompileOnly "dev.emi:emi-fabric:1.1.16+1.21.1:api"
 }
 
 processResources {
@@ -53,7 +66,6 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    withSourcesJar()
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
@@ -64,5 +76,22 @@ java {
 jar {
     from("LICENSE") {
         rename "LICENSE", "LICENSE_${project.base.archivesName.get()}"
+    }
+}
+
+tasks.register('deployMod') {
+    dependsOn remapJar
+    doLast {
+        def src = remapJar.archiveFile.get().asFile
+        def targetDirs = [
+            file("C:/Projects/Minecraft Mod/scratch/mods"),
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/My Mod/mods")
+        ]
+        targetDirs.each { dir ->
+            if (!dir.exists()) dir.mkdirs()
+            def dest = new File(dir, src.name)
+            java.nio.file.Files.copy(src.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            println "DEPLOYED TO: " + dest.absolutePath + " (" + dest.length() + " bytes)"
+        }
     }
 }

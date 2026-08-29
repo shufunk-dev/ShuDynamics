@@ -214,19 +214,20 @@ With the **Resettable Mining Dimension (Quarry Expanse)** already live in the mo
 ## 📦 Version History & Release Status
 
 ::: tip 🚀 Release Status Overview
-* **Current Stable Release (CurseForge & GitHub):** **v1.3.0** (ATVs, Fuel Refinery, Petrochemicals & Road Network).
-* **Active Testing Build (Experimental Preview):** **v1.4.0** (Nether Metallurgy, Agronomy, Volcanic Soil, Fluids & Item Logistics).
-* **Upcoming Major Milestone:** **v1.5.0** (Automated Chunk Quarry & 3x3x3 Multiblock Supercomputer).
+* **Current Stable Release (CurseForge & GitHub):** **v1.4.0** (Nether Metallurgy, Agronomy, Volcanic Soil & Basalt Tech, High-Voltage Power Grid, Blaze Overclocking, Universal Item Logistics & 5x5 Lava Reservoir).
+* **Upcoming Major Milestone:** **v1.5.0** (Automated Multiblock Chunk Quarry, 3x3x3 Supercomputer Mainframe & Dimensional Singularity).
 :::
 
-### 🧪 v1.4.0 (Experimental Preview / Testing Build)
-* 📦 **Item Logistics & Industrial Wrench**: Item Pipes, Item Inserters, and Wrench with 4-way side configuration (Insert, Extract, Disconnect, Plug).
-* 🌋 **Agronomy & Volcanic Soil**: Soil Infuser machine, Volcanic Soil with self-hydrating bonemeal bursts, Sweet Corn, Volcanic Fertilizer, and right-click auto-harvest hoes.
-* 🧪 **Lava Fluids & 5x5 Reservoir**: Submersible Lava Pump, high-temperature Lava Pipes, and 5x5 Titanium Multiblock Reservoir.
-* 🏭 **Tier 4 Machines & Metallurgy**: Geothermal Magma Generator (400 E/t), Alloy Foundry, Magma Crucible, and Mechanical Crusher Mk2 with dual output chambers.
-* 🔮 **Anomaly Keystones 3–5**: Metallurgical Anchor (#3), Plasma Anchor (#4), and Thermal Anchor (#5).
-* 🔋 **Tungsten & Basalt Power Grid**: 1,000,000 FE Tungsten Battery Pack, 12,800 E/t Tungsten Cables, 25,600 E/t Basalt Cables, and 3x3 Mining Sledgehammers.
-* ⚡ **Blaze Plasma & Survival Modules**: Blaze Overclock Core (+200% machine speed), Thermal Refractory Plating (Fire Resistance & Lava Buoyancy), Infernal Hammer, and Plasma Flamethrower.
+### 🌟 v1.4.0 (Current Stable Release — Live on CurseForge)
+* 🌋 **Nether Metallurgy & Heavy Alloys**: Cobalt, Ardite, Tungsten, Lead, Lumium, Ender, and Enderite. Alloy Foundry crafting for Manyullyn, Tungsten Carbide, Signalum, Lumium, Enderium, Bronze, and Enchanted Netherite.
+* 🏰 **Blast-Proof Containment**: Reinforced Obsidian (1200.0 resistance, Wither-immune) and Tough Volcanic Glass (600.0 resistance, transparent, drops itself without Silk Touch).
+* ⚡ **Tier 4 Power Grid & Geothermal Energy**: Geothermal Generator (400 FE/t passive power from lava), 100,000,000 FE Tungsten Battery Units, 1,000,000 FE portable Battery Packs, 25,000 FE/t Tungsten Cables, and 25,600 FE/t Basalt Energy Cables.
+* 🧪 **Lava Logistics & 5x5 Reservoir**: Submersible Lava Pump, high-temperature Lava Pipes, and 5x5 Titanium Multiblock Reservoir.
+* 🏭 **Pyrometallurgy, Overclocking & Machining**: Alloy Foundry, Steel Blast Furnace (with Basalt Flux Catalyst 2× boosts & Green Hydrogen), Mechanical Crusher Mk2 with dual output chambers, Magma Crucible rock liquefier, and Blaze Overclock Cores (+200% machine speed).
+* 📦 **Universal Item Logistics**: 6-way Item Transport Pipes, Item Extractors, Item Inserters, and Industrial Wrench for 4-way side configuration.
+* 🌾 **Agronomy & Volcanic Soil**: Soil Infuser machine, Volcanic Soil with instant hydrating bonemeal bursts, Enriched Sulfur Soil, Volcanic Fertilizer, and right-click auto-harvest hoes.
+* 🔨 **Infernal Sledgehammer**: 3x3 excavation hammer with built-in auto-smelting for ores and cobblestone.
+* 🔍 **Recipe Viewer System**: Full Fabric EMI & JEI integration displaying all custom machine tabs, animated arrows, and catalytic boosts.
 
 ### 🌟 v1.3.0 (Current Stable Release — Live on CurseForge)
 * 🏎️ **Modular All-Terrain Vehicle (ATV)**: High-speed drivable exploration vehicle featuring 6 customizable module slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, Fuel/Batteries), 25% asphalt top-speed boost, and full fall-damage immunity.

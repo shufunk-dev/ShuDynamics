@@ -40,6 +40,38 @@ Ore dusts are finely milled mineral powders produced by crushing ores or using r
     <div><strong>Diamond Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Crystals & Infusion</span></div>
   </div>
   <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/cobalt_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Cobalt Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Nether blue dust</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/ardite_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Ardite Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Nether orange dust</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/manyullyn_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Manyullyn Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Pulverized master alloy</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/tungsten_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Tungsten Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Heavy refractory dust</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/steel_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Steel Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Pulverized industrial steel</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/sulfur_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Sulfur Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Agronomy & Soil Infusion</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/volcanic_ash.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Volcanic Ash</strong><br/><span style="font-size:11px; color:#9ca3af;">Crushed basalt & fertilizer</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+    <img src="/textures/item/obsidian_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
+    <div><strong>Obsidian Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Milled obsidian</span></div>
+  </div>
+  <div style="background:rgba(26,28,43,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
     <img src="/textures/item/netherite_dust.png" style="width:32px; height:32px; image-rendering:pixelated;" />
     <div><strong>Netherite Dust</strong><br/><span style="font-size:11px; color:#9ca3af;">Endgame synthesis</span></div>
   </div>

@@ -575,7 +575,7 @@ public class ModItems {
             settings -> new GearItem(GearTier.BLAZE_OVERCLOCK, true, settings.maxCount(16).fireproof()));
 
     public static final Item INFERNAL_HAMMER = registerItem("infernal_hammer",
-            settings -> new net.enchantedwood.item.custom.InfernalHammerItem(settings.pickaxe(net.minecraft.item.ToolMaterial.NETHERITE, 6.0f, -3.0f).fireproof()));
+            settings -> new net.enchantedwood.item.custom.InfernalHammerItem(settings.pickaxe(ModMaterials.MANYULLYN, 7.0f, -2.9f).fireproof()));
 
     public static final Item PLASMA_FLAMETHROWER = registerItem("plasma_flamethrower",
             settings -> new net.enchantedwood.item.custom.PlasmaFlamethrowerItem(settings.maxDamage(850).fireproof()));

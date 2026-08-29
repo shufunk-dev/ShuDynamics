@@ -22,6 +22,7 @@ Hammers mine a **3x3 area** centered on the block you break. Sneaking allows you
 | **Titanium Hammer** | 8.5x | 4,200 | Maximum quarrying power |
 | **Enchanted Diamond Hammer** | 10.0x | 5,500 | Supercharged excavation |
 | **Enchanted Netherite Hammer** | 12.0x | 8,000 | Ultimate 3x3 destruction |
+| **Infernal Sledgehammer** | 10.0x | 5,000 | **3x3 Auto-Smelt Mining** (Ores $\rightarrow$ Ingots, Cobblestone $\rightarrow$ Stone) |
 
 ---
 

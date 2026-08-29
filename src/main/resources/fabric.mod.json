@@ -17,6 +17,9 @@
     ],
     "client": [
       "net.enchantedwood.EnchantedWoodClient"
+    ],
+    "emi": [
+      "net.enchantedwood.compat.emi.EnchantedWoodEmiPlugin"
     ]
   },
   "mixins": [
