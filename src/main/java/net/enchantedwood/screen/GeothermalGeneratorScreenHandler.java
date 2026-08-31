@@ -116,6 +116,7 @@ public class GeothermalGeneratorScreenHandler extends ScreenHandler {
             case COPPER -> 1.4f;
             case BRONZE -> 1.6f;
             case GOLD -> 1.8f;
+            case TITANIUM -> 2.0f;
             case DIAMOND -> 2.2f;
             case NETHERITE -> 3.0f;
             default -> 1.0f;

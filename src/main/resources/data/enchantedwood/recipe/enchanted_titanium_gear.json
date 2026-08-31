@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DGD",
+    "GEG",
+    "DGD"
+  ],
+  "key": {
+    "G": "enchantedwood:titanium_gear",
+    "D": "enchantedwood:enchanted_dust",
+    "E": "enchantedwood:enchanted_diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_titanium_gear"
+  }
+}

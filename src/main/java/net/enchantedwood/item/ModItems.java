@@ -137,7 +137,7 @@ public class ModItems {
     public static final Item TITANIUM_ATV_ENGINE = registerItem("titanium_atv_engine", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings,
             Text.literal("§dTwin-Turbo Nitro Engine §8(~80 km/h) §7• Fuel: High-Octane Racing Fuel"),
-            Text.literal("§8Craft with Titanium Ingots, Piston, Enchanted Steel Gear, and Enchanted Redstone.")
+            Text.literal("§8Craft with Titanium Ingots, Steel ATV Engine, and Titanium Gear.")
     ));
     public static final Item STEEL_SUSPENSION = registerItem("steel_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings,
@@ -185,6 +185,7 @@ public class ModItems {
     public static final Item COPPER_GEAR = registerItem("copper_gear", settings -> new GearItem(GearTier.COPPER, false, settings));
     public static final Item BRONZE_GEAR = registerItem("bronze_gear", settings -> new GearItem(GearTier.BRONZE, false, settings));
     public static final Item GOLD_GEAR = registerItem("gold_gear", settings -> new GearItem(GearTier.GOLD, false, settings));
+    public static final Item TITANIUM_GEAR = registerItem("titanium_gear", settings -> new GearItem(GearTier.TITANIUM, false, settings));
     public static final Item DIAMOND_GEAR = registerItem("diamond_gear", settings -> new GearItem(GearTier.DIAMOND, false, settings));
     public static final Item NETHERITE_GEAR = registerItem("netherite_gear", settings -> new GearItem(GearTier.NETHERITE, false, settings));
 
@@ -193,6 +194,7 @@ public class ModItems {
     public static final Item ENCHANTED_COPPER_GEAR = registerItem("enchanted_copper_gear", settings -> new GearItem(GearTier.COPPER, true, settings));
     public static final Item ENCHANTED_BRONZE_GEAR = registerItem("enchanted_bronze_gear", settings -> new GearItem(GearTier.BRONZE, true, settings));
     public static final Item ENCHANTED_GOLD_GEAR = registerItem("enchanted_gold_gear", settings -> new GearItem(GearTier.GOLD, true, settings));
+    public static final Item ENCHANTED_TITANIUM_GEAR = registerItem("enchanted_titanium_gear", settings -> new GearItem(GearTier.TITANIUM, true, settings));
     public static final Item ENCHANTED_DIAMOND_GEAR = registerItem("enchanted_diamond_gear", settings -> new GearItem(GearTier.DIAMOND, true, settings));
     public static final Item ENCHANTED_NETHERITE_GEAR = registerItem("enchanted_netherite_gear", settings -> new GearItem(GearTier.NETHERITE, true, settings));
 
@@ -617,6 +619,8 @@ public class ModItems {
                 entries.add(ENCHANTED_BRONZE_GEAR);
                 entries.add(GOLD_GEAR);
                 entries.add(ENCHANTED_GOLD_GEAR);
+                entries.add(TITANIUM_GEAR);
+                entries.add(ENCHANTED_TITANIUM_GEAR);
                 entries.add(DIAMOND_GEAR);
                 entries.add(ENCHANTED_DIAMOND_GEAR);
                 entries.add(NETHERITE_GEAR);

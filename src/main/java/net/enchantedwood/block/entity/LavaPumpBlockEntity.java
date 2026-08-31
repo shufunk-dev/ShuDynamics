@@ -99,6 +99,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
             case COPPER -> 30;
             case BRONZE -> 25;
             case GOLD -> 20;
+            case TITANIUM -> 15;
             case DIAMOND -> 12;
             case NETHERITE -> 5;
             default -> 40;

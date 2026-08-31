@@ -32,7 +32,7 @@ public class AluminumGeneratorScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(inventory, 0, 80, 53) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return CopperGeneratorBlockEntity.getFuelTime(stack) > 0;
+                return CopperGeneratorBlockEntity.getFuelTime(playerInventory.player.getEntityWorld(), stack) > 0;
             }
         });
 
@@ -86,7 +86,7 @@ public class AluminumGeneratorScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (CopperGeneratorBlockEntity.getFuelTime(originalStack) > 0) {
+                if (CopperGeneratorBlockEntity.getFuelTime(player.getEntityWorld(), originalStack) > 0) {
                     if (!this.insertItem(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

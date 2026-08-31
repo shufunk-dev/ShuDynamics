@@ -109,6 +109,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
             case COPPER -> 3;
             case BRONZE -> 4;
             case GOLD -> 4;
+            case TITANIUM -> 5;
             case DIAMOND -> 5;
             case NETHERITE -> 6;
             default -> 3;

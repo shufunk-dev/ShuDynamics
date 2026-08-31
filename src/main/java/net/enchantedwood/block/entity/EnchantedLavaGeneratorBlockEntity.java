@@ -98,6 +98,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
             case COPPER -> 480;   // 24s
             case BRONZE -> 360;   // 18s
             case GOLD -> 240;     // 12s
+            case TITANIUM -> 180; // 9s
             case DIAMOND -> 120;  // 6s
             case NETHERITE -> 60; // 3s
             default -> 600;       // 30s

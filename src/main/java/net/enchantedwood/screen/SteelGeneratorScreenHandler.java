@@ -32,7 +32,7 @@ public class SteelGeneratorScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(inventory, 0, 80, 53) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return SteelGeneratorBlockEntity.getFuelTime(stack) > 0;
+                return SteelGeneratorBlockEntity.getFuelTime(playerInventory.player.getEntityWorld(), stack) > 0;
             }
         });
 
@@ -98,7 +98,7 @@ public class SteelGeneratorScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (SteelGeneratorBlockEntity.getFuelTime(originalStack) > 0) {
+                if (SteelGeneratorBlockEntity.getFuelTime(player.getEntityWorld(), originalStack) > 0) {
                     if (!this.insertItem(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

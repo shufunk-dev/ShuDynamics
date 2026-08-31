@@ -72,6 +72,15 @@
     "facing=west,gear_tier=gold,lit=true": { "model": "enchantedwood:block/ore_doubler_gold_on", "y": 270 },
     "facing=east,gear_tier=gold,lit=true": { "model": "enchantedwood:block/ore_doubler_gold_on", "y": 90 },
 
+    "facing=north,gear_tier=titanium,lit=false": { "model": "enchantedwood:block/ore_doubler_steel" },
+    "facing=south,gear_tier=titanium,lit=false": { "model": "enchantedwood:block/ore_doubler_steel", "y": 180 },
+    "facing=west,gear_tier=titanium,lit=false": { "model": "enchantedwood:block/ore_doubler_steel", "y": 270 },
+    "facing=east,gear_tier=titanium,lit=false": { "model": "enchantedwood:block/ore_doubler_steel", "y": 90 },
+    "facing=north,gear_tier=titanium,lit=true": { "model": "enchantedwood:block/ore_doubler_steel_on" },
+    "facing=south,gear_tier=titanium,lit=true": { "model": "enchantedwood:block/ore_doubler_steel_on", "y": 180 },
+    "facing=west,gear_tier=titanium,lit=true": { "model": "enchantedwood:block/ore_doubler_steel_on", "y": 270 },
+    "facing=east,gear_tier=titanium,lit=true": { "model": "enchantedwood:block/ore_doubler_steel_on", "y": 90 },
+
     "facing=north,gear_tier=diamond,lit=false": { "model": "enchantedwood:block/ore_doubler_diamond" },
     "facing=south,gear_tier=diamond,lit=false": { "model": "enchantedwood:block/ore_doubler_diamond", "y": 180 },
     "facing=west,gear_tier=diamond,lit=false": { "model": "enchantedwood:block/ore_doubler_diamond", "y": 270 },

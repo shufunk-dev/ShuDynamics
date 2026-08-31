@@ -102,11 +102,15 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
         if (entity.burnTime <= 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
             ItemStack fuelStack = entity.inventory.get(0);
             if (!fuelStack.isEmpty()) {
-                int fuelValue = CopperGeneratorBlockEntity.getFuelTime(fuelStack);
+                int fuelValue = CopperGeneratorBlockEntity.getFuelTime(world, fuelStack);
                 if (fuelValue > 0) {
                     entity.burnTime = fuelValue;
                     entity.totalBurnTime = fuelValue;
+                    ItemStack remainder = fuelStack.getRecipeRemainder();
                     fuelStack.decrement(1);
+                    if (fuelStack.isEmpty() && !remainder.isEmpty()) {
+                        entity.inventory.set(0, remainder.copy());
+                    }
                     stateChanged = true;
                 }
             }
@@ -170,7 +174,7 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return CopperGeneratorBlockEntity.getFuelTime(stack) > 0;
+        return CopperGeneratorBlockEntity.getFuelTime(this.getWorld(), stack) > 0;
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -90,18 +91,28 @@ public class SteelGeneratorBlockEntity extends BlockEntity implements NamedScree
     }
 
     public static int getFuelTime(ItemStack stack) {
+        return getFuelTime(null, stack);
+    }
+
+    public static int getFuelTime(@Nullable World world, ItemStack stack) {
         if (stack.isEmpty()) return 0;
+        if (world != null) {
+            int ticks = world.getFuelRegistry().getFuelTicks(stack);
+            if (ticks > 0) return ticks;
+        }
         Item item = stack.getItem();
         if (item == ModItems.ENCHANTED_DUST) return 8000;
-        if (item == ModItems.ENCHANTED_COAL) return 4800;
-        if (item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 48000;
+        if (item == ModItems.ENCHANTED_COAL) return 10000;
+        if (item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 90000;
         if (item == ModItems.COKE_COAL) return 3200;
+        if (item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 28800;
         if (item == Items.COAL_BLOCK) return 16000;
         if (item == Items.COAL || item == Items.CHARCOAL) return 1600;
         if (item == Items.LAVA_BUCKET || item == ModItems.COPPER_LAVA_BUCKET) return 20000;
         if (item == ModItems.ENCHANTED_LAVA_BUCKET || item == ModItems.ENCHANTED_COPPER_LAVA_BUCKET) return 60000;
         if (item == Items.BLAZE_ROD) return 2400;
         if (item == Items.WOODEN_PICKAXE || item == Items.WOODEN_AXE || item == Items.WOODEN_SHOVEL || item == Items.WOODEN_HOE || item == Items.WOODEN_SWORD) return 200;
+        if (item == Items.STICK) return 100;
         return 0;
     }
 
@@ -122,11 +133,15 @@ public class SteelGeneratorBlockEntity extends BlockEntity implements NamedScree
         if (entity.burnTime <= 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
             ItemStack fuelStack = entity.inventory.get(0);
             if (!fuelStack.isEmpty()) {
-                int fuelValue = getFuelTime(fuelStack);
+                int fuelValue = getFuelTime(world, fuelStack);
                 if (fuelValue > 0) {
                     entity.burnTime = fuelValue;
                     entity.totalBurnTime = fuelValue;
+                    ItemStack remainder = fuelStack.getRecipeRemainder();
                     fuelStack.decrement(1);
+                    if (fuelStack.isEmpty() && !remainder.isEmpty()) {
+                        entity.inventory.set(0, remainder.copy());
+                    }
                     stateChanged = true;
                 }
             }
@@ -191,7 +206,7 @@ public class SteelGeneratorBlockEntity extends BlockEntity implements NamedScree
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return getFuelTime(stack) > 0;
+        return getFuelTime(this.getWorld(), stack) > 0;
     }
 
     @Override

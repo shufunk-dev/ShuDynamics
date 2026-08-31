@@ -96,6 +96,7 @@ public class SoilInfuserBlockEntity extends BlockEntity implements NamedScreenHa
             case COPPER -> 80;
             case BRONZE -> 65;
             case GOLD -> 50;
+            case TITANIUM -> 40;
             case DIAMOND -> 30;
             case NETHERITE -> 12;
             case BLAZE_OVERCLOCK -> 8;

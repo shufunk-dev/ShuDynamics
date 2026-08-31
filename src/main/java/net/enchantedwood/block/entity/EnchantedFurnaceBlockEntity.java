@@ -46,20 +46,25 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
         return null;
     }
 
-    private static int getFuelBurnTime(ItemStack stack) {
+    private static int getFuelBurnTime(ServerWorld world, ItemStack stack) {
         if (stack.isEmpty()) return 0;
+        if (world != null) {
+            int ticks = world.getFuelRegistry().getFuelTicks(stack);
+            if (ticks > 0) return ticks;
+        }
         Item item = stack.getItem();
         if (item == ModItems.ENCHANTED_DUST) return 8000;
         if (item == ModItems.ENCHANTED_COAL) return 10000;
+        if (item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 90000;
+        if (item == ModItems.COKE_COAL) return 3200;
+        if (item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 28800;
         if (item == ModItems.COPPER_LAVA_BUCKET) return 20000;
         if (item == ModItems.ENCHANTED_LAVA_BUCKET || item == ModItems.ENCHANTED_COPPER_LAVA_BUCKET) return 60000;
         if (item == Items.LAVA_BUCKET) return 20000;
         if (item == Items.COAL || item == Items.CHARCOAL) return 1600;
         if (item == Items.COAL_BLOCK) return 16000;
-        if (item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 48000;
         if (item == Items.BLAZE_ROD) return 2400;
-        if (item == Items.WOODEN_PICKAXE || item == Items.WOODEN_AXE || item == Items.WOODEN_SHOVEL || item == Items.WOODEN_HOE || item == Items.WOODEN_SWORD) return 200;
-        return 300;
+        return 0;
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, EnchantedFurnaceBlockEntity furnace) {
@@ -79,7 +84,7 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
                 // Ignite fuel if furnace isn't lit
                 if (burnTime <= 0) {
                     ItemStack fuel = furnace.getStack(1);
-                    int fuelBurn = getFuelBurnTime(fuel);
+                    int fuelBurn = getFuelBurnTime(world, fuel);
                     if (fuelBurn > 0) {
                         furnace.propertyDelegate.set(0, fuelBurn);
                         furnace.propertyDelegate.set(1, fuelBurn);

@@ -176,6 +176,7 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
             case ALUMINUM -> 99;
             case STEEL -> 108;
             case GOLD -> 117;
+            case TITANIUM -> 126;
             case DIAMOND -> 135;
             case NETHERITE -> 162;
             default -> 54;
