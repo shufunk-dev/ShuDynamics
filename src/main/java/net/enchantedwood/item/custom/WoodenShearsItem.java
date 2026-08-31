@@ -13,10 +13,6 @@ public class WoodenShearsItem extends ShearsItem {
         super(settings.component(net.minecraft.component.DataComponentTypes.TOOL, ShearsItem.createToolComponent()));
     }
 
-    @Override
-    public boolean hasGlint(ItemStack stack) {
-        return true;
-    }
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
