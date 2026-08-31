@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:stone_tool_materials",
+    "minecraft:stone",
+    "minecraft:deepslate",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:tuff",
+    "minecraft:calcite",
+    "minecraft:basalt",
+    "minecraft:smooth_basalt",
+    "minecraft:mossy_cobblestone",
+    "minecraft:dripstone_block"
+  ]
+}

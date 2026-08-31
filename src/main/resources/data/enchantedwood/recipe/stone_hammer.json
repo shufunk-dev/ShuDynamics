@@ -7,7 +7,7 @@
     " S "
   ],
   "key": {
-    "M": "minecraft:cobblestone",
+    "M": "#enchantedwood:stone_tool_materials",
     "S": "minecraft:stick"
   },
   "result": {

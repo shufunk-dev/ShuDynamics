@@ -6,7 +6,7 @@ import net.enchantedwood.tag.ModTags;
 
 public class ModMaterials {
     public static final ToolMaterial ENCHANTED_WOOD = new ToolMaterial(
-            BlockTags.INCORRECT_FOR_WOODEN_TOOL,
+            BlockTags.INCORRECT_FOR_STONE_TOOL,
             500,
             7.0f,
             3.0f,
