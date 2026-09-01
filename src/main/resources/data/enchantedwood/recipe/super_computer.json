@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "S": "enchantedwood:storage_crystal_16k",
+    "G": "enchantedwood:diamond_gear",
+    "C": "enchantedwood:digital_converter",
+    "B": "enchantedwood:basalt_cable"
+  },
+  "pattern": [
+    "TST",
+    "GCG",
+    "TBT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:super_computer"
+  }
+}

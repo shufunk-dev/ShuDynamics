@@ -46,11 +46,50 @@ public class ItemInserterBlockEntity extends BlockEntity {
         markDirty();
     }
 
+    public boolean canAccept(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        for (ItemStack current : this.buffer) {
+            if (current.isEmpty()) return true;
+            if (ItemStack.areItemsAndComponentsEqual(current, stack) && current.getCount() < current.getMaxCount()) {
+                return true;
+            }
+        }
+        if (this.world != null) {
+            Direction facing = this.getCachedState().get(ItemInserterBlock.FACING);
+            BlockPos targetPos = this.pos.offset(facing);
+            Inventory targetInv = ItemTransportHelper.getInventoryAt(this.world, targetPos);
+            if (targetInv != null) {
+                for (int i = 0; i < targetInv.size(); i++) {
+                    ItemStack invStack = targetInv.getStack(i);
+                    if (invStack.isEmpty()) return true;
+                    if (ItemStack.areItemsAndComponentsEqual(invStack, stack) && invStack.getCount() < invStack.getMaxCount()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public ItemStack receiveItemFromPipe(ItemStack stack) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
         ItemStack toInsert = stack.copy();
 
-        // 1. Try to merge into matching slots
+        // 1. Directly insert into connected inventory for instant flow
+        if (this.world instanceof ServerWorld serverWorld) {
+            Direction facing = this.getCachedState().get(ItemInserterBlock.FACING);
+            BlockPos targetPos = this.pos.offset(facing);
+            Inventory targetInv = ItemTransportHelper.getInventoryAt(serverWorld, targetPos);
+            if (targetInv != null) {
+                toInsert = ItemTransportHelper.insertItem(targetInv, toInsert, facing.getOpposite());
+                if (toInsert.isEmpty()) {
+                    markDirty();
+                    return ItemStack.EMPTY;
+                }
+            }
+        }
+
+        // 2. Try to merge into matching buffer slots
         for (int i = 0; i < BUFFER_SIZE; i++) {
             ItemStack current = this.buffer.get(i);
             if (!current.isEmpty() && ItemStack.areItemsAndComponentsEqual(current, toInsert)) {
@@ -65,7 +104,7 @@ public class ItemInserterBlockEntity extends BlockEntity {
             }
         }
 
-        // 2. Insert into empty slots
+        // 3. Insert into empty buffer slots
         for (int i = 0; i < BUFFER_SIZE; i++) {
             ItemStack current = this.buffer.get(i);
             if (current.isEmpty()) {

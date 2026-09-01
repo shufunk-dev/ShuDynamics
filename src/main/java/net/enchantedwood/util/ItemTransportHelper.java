@@ -25,7 +25,8 @@ public final class ItemTransportHelper {
         }
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof ChestBlockEntity && block instanceof ChestBlock chestBlock) {
-            return ChestBlock.getInventory(chestBlock, state, world, pos, true);
+            Inventory inv = ChestBlock.getInventory(chestBlock, state, world, pos, true);
+            if (inv != null) return inv;
         }
         if (be instanceof Inventory inventory) {
             return inventory;

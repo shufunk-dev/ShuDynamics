@@ -88,6 +88,26 @@ public class ModBlocks {
                     .resistance(8.0f)
                     .requiresTool()));
 
+    public static final Block DIGITAL_CONVERTER = registerBlock("digital_converter",
+            new net.enchantedwood.block.custom.DigitalConverterBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "digital_converter")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.DigitalConverterBlock.LIT) ? 12 : 0)));
+
+    public static final Block SUPER_COMPUTER = registerBlockWithTooltip("super_computer",
+            new net.enchantedwood.block.custom.SuperComputerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "super_computer")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.SuperComputerBlock.LIT) ? 14 : 0)),
+            Text.literal("§6Quantum Super Computer (Auto-Crafter)"),
+            Text.literal("§8Pulls ingredients from Digital Storage Network crystals & auto-crafts recipes at high speed."));
+
     public static final Block ENCHANTED_COAL_BLOCK = registerBlock("enchanted_coal_block",
             new net.enchantedwood.block.custom.EnchantedCoalBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_coal_block")))
@@ -682,6 +702,17 @@ public class ModBlocks {
                     .luminance(state -> state.get(net.enchantedwood.block.custom.AlloyFoundryBlock.LIT) ? 13 : 0)),
             Text.literal("§6Industrial Alloy Induction Foundry"),
             Text.literal("§8Dual-induction melting & casting for Manyullyn & Tungsten Carbide."));
+
+    public static final Block ITEM_SALVAGER = registerBlockWithTooltip("item_salvager",
+            new net.enchantedwood.block.custom.ItemSalvagerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_salvager")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.ItemSalvagerBlock.LIT) ? 13 : 0)),
+            Text.literal("§6Automated Item Salvager & Recycler"),
+            Text.literal("§8Deconstructs uncraftables, horse armor, chainmail, minecarts & rails."));
 
     public static final Block MAGMA_CRUCIBLE = registerBlockWithTooltip("magma_crucible",
             new net.enchantedwood.block.custom.MagmaCrucibleBlock(AbstractBlock.Settings.create()

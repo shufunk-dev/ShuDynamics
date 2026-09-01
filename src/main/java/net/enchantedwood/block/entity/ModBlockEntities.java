@@ -66,6 +66,20 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(EnchantedStorageTerminalBlockEntity::new, ModBlocks.ENCHANTED_STORAGE_TERMINAL).build()
             );
 
+    public static final BlockEntityType<DigitalConverterBlockEntity> DIGITAL_CONVERTER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "digital_converter"),
+                    FabricBlockEntityTypeBuilder.create(DigitalConverterBlockEntity::new, ModBlocks.DIGITAL_CONVERTER).build()
+            );
+
+    public static final BlockEntityType<SuperComputerBlockEntity> SUPER_COMPUTER_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "super_computer"),
+                    FabricBlockEntityTypeBuilder.create(SuperComputerBlockEntity::new, ModBlocks.SUPER_COMPUTER).build()
+            );
+
     public static final BlockEntityType<CopperGeneratorBlockEntity> COPPER_GENERATOR_BLOCK_ENTITY =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
@@ -234,6 +248,13 @@ public class ModBlockEntities {
                     Registries.BLOCK_ENTITY_TYPE,
                     Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
                     FabricBlockEntityTypeBuilder.create(AlloyFoundryBlockEntity::new, ModBlocks.ALLOY_FOUNDRY).build()
+            );
+
+    public static final BlockEntityType<ItemSalvagerBlockEntity> ITEM_SALVAGER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "item_salvager"),
+                    FabricBlockEntityTypeBuilder.create(ItemSalvagerBlockEntity::new, ModBlocks.ITEM_SALVAGER).build()
             );
 
     public static final BlockEntityType<MagmaCrucibleBlockEntity> MAGMA_CRUCIBLE_BE =

@@ -51,11 +51,13 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.TUNGSTEN_BATTERY_SCREEN_HANDLER, net.enchantedwood.screen.TungstenBatteryScreen::new);
         HandledScreens.register(ModScreenHandlers.GEOTHERMAL_GENERATOR_SCREEN_HANDLER, net.enchantedwood.screen.GeothermalGeneratorScreen::new);
         HandledScreens.register(ModScreenHandlers.ALLOY_FOUNDRY_SCREEN_HANDLER, net.enchantedwood.screen.AlloyFoundryScreen::new);
+        HandledScreens.register(ModScreenHandlers.ITEM_SALVAGER_SCREEN_HANDLER, net.enchantedwood.screen.ItemSalvagerScreen::new);
         HandledScreens.register(ModScreenHandlers.MAGMA_CRUCIBLE_SCREEN_HANDLER, net.enchantedwood.screen.MagmaCrucibleScreen::new);
         HandledScreens.register(ModScreenHandlers.LAVA_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.LavaPumpScreen::new);
         HandledScreens.register(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.CrusherMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, net.enchantedwood.screen.SoilInfuserScreen::new);
         HandledScreens.register(ModScreenHandlers.TITANIUM_TANK_SCREEN_HANDLER, net.enchantedwood.screen.TitaniumTankScreen::new);
+        HandledScreens.register(ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, net.enchantedwood.screen.SuperComputerScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);

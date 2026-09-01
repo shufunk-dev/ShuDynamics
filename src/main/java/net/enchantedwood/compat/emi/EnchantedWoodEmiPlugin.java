@@ -84,6 +84,47 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(COKE_OVEN, EmiStack.of(ModBlocks.COKE_OVEN));
         registry.addWorkstation(FUEL_REFINERY, EmiStack.of(ModBlocks.FUEL_REFINERY));
         registry.addWorkstation(MAGMA_CRUCIBLE, EmiStack.of(ModBlocks.MAGMA_CRUCIBLE));
+        registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
+
+        // Recipe auto-transfer handler for Super Computer 3x3 Ghost Pattern Matrix
+        registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.EmiRecipeHandler<net.enchantedwood.screen.SuperComputerScreenHandler>() {
+            @Override
+            public dev.emi.emi.api.recipe.EmiPlayerInventory getInventory(net.minecraft.client.gui.screen.ingame.HandledScreen<net.enchantedwood.screen.SuperComputerScreenHandler> screen) {
+                return dev.emi.emi.api.recipe.EmiPlayerInventory.of(net.minecraft.client.MinecraftClient.getInstance().player);
+            }
+
+            @Override
+            public boolean supportsRecipe(EmiRecipe recipe) {
+                return recipe.getCategory() == dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING;
+            }
+
+            @Override
+            public boolean canCraft(EmiRecipe recipe, dev.emi.emi.api.recipe.handler.EmiCraftContext<net.enchantedwood.screen.SuperComputerScreenHandler> context) {
+                return true; // Always allow transferring into the ghost blueprint matrix!
+            }
+
+            @Override
+            public boolean craft(EmiRecipe recipe, dev.emi.emi.api.recipe.handler.EmiCraftContext<net.enchantedwood.screen.SuperComputerScreenHandler> context) {
+                List<ItemStack> pattern = new ArrayList<>(9);
+                List<EmiIngredient> inputs = recipe.getInputs();
+                for (int i = 0; i < 9; i++) {
+                    if (i < inputs.size() && !inputs.get(i).isEmpty()) {
+                        List<EmiStack> stacks = inputs.get(i).getEmiStacks();
+                        if (!stacks.isEmpty()) {
+                            pattern.add(stacks.get(0).getItemStack());
+                        } else {
+                            pattern.add(ItemStack.EMPTY);
+                        }
+                    } else {
+                        pattern.add(ItemStack.EMPTY);
+                    }
+                }
+
+                // Send ghost pattern packet to server to populate 3x3 matrix
+                net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.SetSuperComputerRecipePayload(pattern));
+                return true;
+            }
+        });
 
         // 1. Alloy Foundry Recipes
         registerAlloyRecipes(registry);

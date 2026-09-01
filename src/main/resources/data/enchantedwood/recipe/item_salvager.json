@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "CMC",
+    "SCS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "enchantedwood:diamond_gear",
+    "C": "enchantedwood:copper_cable",
+    "M": "enchantedwood:crusher"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:item_salvager"
+  }
+}

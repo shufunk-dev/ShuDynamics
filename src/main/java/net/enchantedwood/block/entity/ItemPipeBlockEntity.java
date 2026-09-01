@@ -11,8 +11,8 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemPipeBlockEntity extends BlockEntity {
     public static final int BUFFER_SIZE = 4;
@@ -50,6 +50,17 @@ public class ItemPipeBlockEntity extends BlockEntity {
     public boolean hasSpace() {
         for (ItemStack stack : this.buffer) {
             if (stack.isEmpty() || stack.getCount() < stack.getMaxCount()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canAccept(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        for (ItemStack current : this.buffer) {
+            if (current.isEmpty()) return true;
+            if (ItemStack.areItemsAndComponentsEqual(current, stack) && current.getCount() < current.getMaxCount()) {
                 return true;
             }
         }
@@ -105,58 +116,167 @@ public class ItemPipeBlockEntity extends BlockEntity {
 
         boolean dirty = false;
 
-        // Discover adjacent inserters and pipe neighbors (respecting wrench disconnections)
-        List<ItemInserterBlockEntity> inserters = new ArrayList<>();
-        List<ItemPipeBlockEntity> pipes = new ArrayList<>();
-
-        for (Direction dir : Direction.values()) {
-            if (entity.isDisconnected(dir)) continue;
-
-            BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
-            if (neighbor instanceof ItemInserterBlockEntity inserter) {
-                if (!inserter.isDisconnected(dir.getOpposite())) {
-                    inserters.add(inserter);
-                }
-            } else if (neighbor instanceof ItemPipeBlockEntity pipe && pipe != entity) {
-                if (!pipe.isDisconnected(dir.getOpposite()) && pipe.hasSpace()) {
-                    pipes.add(pipe);
-                }
-            }
-        }
-
-        // Try pushing buffered items: Priority 1 to Inserters, Priority 2 to downstream Pipes
         for (int i = 0; i < BUFFER_SIZE; i++) {
             ItemStack stack = entity.buffer.get(i);
             if (stack.isEmpty()) continue;
 
-            // 1. Try Inserters
-            for (ItemInserterBlockEntity inserter : inserters) {
-                ItemStack remaining = inserter.receiveItemFromPipe(stack);
-                if (remaining.getCount() != stack.getCount()) {
-                    entity.buffer.set(i, remaining);
-                    stack = remaining;
-                    dirty = true;
-                    if (stack.isEmpty()) break;
+            // 1. Direct check for adjacent inserters / digital converters (distance = 0)
+            boolean inserted = false;
+            for (Direction dir : Direction.values()) {
+                if (entity.isDisconnected(dir)) continue;
+                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                if (neighbor instanceof ItemInserterBlockEntity inserter) {
+                    if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
+                        ItemStack remaining = inserter.receiveItemFromPipe(stack);
+                        if (remaining.getCount() != stack.getCount()) {
+                            entity.buffer.set(i, remaining);
+                            stack = remaining;
+                            dirty = true;
+                            if (stack.isEmpty()) {
+                                inserted = true;
+                                break;
+                            }
+                        }
+                    }
+                } else if (neighbor instanceof DigitalConverterBlockEntity converter && converter.isNetworkOnline()) {
+                    ItemStack remaining = net.enchantedwood.util.ItemTransportHelper.insertItem(converter, stack, dir.getOpposite());
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        stack = remaining;
+                        dirty = true;
+                        if (stack.isEmpty()) {
+                            inserted = true;
+                            break;
+                        }
+                    }
                 }
             }
 
-            if (stack.isEmpty()) continue;
+            if (inserted || stack.isEmpty()) continue;
 
-            // 2. Try adjacent pipes
-            for (ItemPipeBlockEntity pipe : pipes) {
-                ItemStack remaining = pipe.insertItem(stack);
-                if (remaining.getCount() != stack.getCount()) {
-                    entity.buffer.set(i, remaining);
-                    dirty = true;
-                    break;
+            // 2. Use BFS network pathfinding to route towards the nearest reachable Inserter or Digital Converter
+            Direction bestRoute = findBestRoute(world, pos, entity, stack);
+            if (bestRoute != null) {
+                BlockEntity target = world.getBlockEntity(pos.offset(bestRoute));
+                if (target instanceof ItemPipeBlockEntity nextPipe) {
+                    ItemStack remaining = nextPipe.insertItem(stack);
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        dirty = true;
+                    }
+                } else if (target instanceof ItemExtractorBlockEntity nextExt) {
+                    ItemStack remaining = nextExt.insertItem(stack);
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        dirty = true;
+                    }
+                } else if (target instanceof ItemInserterBlockEntity inserter) {
+                    ItemStack remaining = inserter.receiveItemFromPipe(stack);
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        dirty = true;
+                    }
+                } else if (target instanceof DigitalConverterBlockEntity converter) {
+                    ItemStack remaining = net.enchantedwood.util.ItemTransportHelper.insertItem(converter, stack, bestRoute.getOpposite());
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        dirty = true;
+                    }
                 }
             }
         }
 
         if (dirty) {
             entity.markDirty();
-            entity.cooldown = 4; // Transfer step delay for smooth visual pacing
+            entity.cooldown = 2; // Smooth 2-tick transfer step
         }
+    }
+
+    @Nullable
+    public static Direction findBestRoute(ServerWorld world, BlockPos startPos, ItemPipeBlockEntity startPipe, ItemStack stack) {
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        Map<BlockPos, Direction> firstStepMap = new HashMap<>();
+        Set<BlockPos> visited = new HashSet<>();
+
+        visited.add(startPos);
+
+        for (Direction dir : Direction.values()) {
+            if (startPipe.isDisconnected(dir)) continue;
+            BlockPos neighborPos = startPos.offset(dir);
+            BlockEntity neighbor = world.getBlockEntity(neighborPos);
+
+            if (neighbor instanceof ItemInserterBlockEntity inserter) {
+                if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
+                    return dir;
+                }
+            } else if (neighbor instanceof DigitalConverterBlockEntity converter) {
+                if (converter.isNetworkOnline()) {
+                    return dir;
+                }
+            } else if (neighbor instanceof ItemPipeBlockEntity nextPipe) {
+                if (!nextPipe.isDisconnected(dir.getOpposite()) && nextPipe.canAccept(stack)) {
+                    queue.add(neighborPos);
+                    firstStepMap.put(neighborPos, dir);
+                    visited.add(neighborPos);
+                }
+            } else if (neighbor instanceof ItemExtractorBlockEntity nextExt) {
+                Direction extFacing = world.getBlockState(neighborPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+                if (dir.getOpposite() != extFacing && !nextExt.isDisconnected(dir.getOpposite()) && nextExt.canAccept(stack)) {
+                    queue.add(neighborPos);
+                    firstStepMap.put(neighborPos, dir);
+                    visited.add(neighborPos);
+                }
+            }
+        }
+
+        int searchLimit = 256;
+        while (!queue.isEmpty() && searchLimit-- > 0) {
+            BlockPos currentPos = queue.poll();
+            Direction firstStep = firstStepMap.get(currentPos);
+
+            BlockEntity currentBe = world.getBlockEntity(currentPos);
+            Direction currentFacing = null;
+            if (currentBe instanceof ItemExtractorBlockEntity ext) {
+                currentFacing = world.getBlockState(currentPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+            } else if (!(currentBe instanceof ItemPipeBlockEntity)) {
+                continue;
+            }
+
+            for (Direction dir : Direction.values()) {
+                if (currentFacing != null && dir == currentFacing) continue;
+                if (currentBe instanceof ItemPipeBlockEntity p && p.isDisconnected(dir)) continue;
+                if (currentBe instanceof ItemExtractorBlockEntity e && e.isDisconnected(dir)) continue;
+
+                BlockPos nextPos = currentPos.offset(dir);
+                if (visited.contains(nextPos)) continue;
+
+                BlockEntity nextBe = world.getBlockEntity(nextPos);
+                if (nextBe instanceof ItemInserterBlockEntity inserter) {
+                    if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
+                        return firstStep;
+                    }
+                } else if (nextBe instanceof DigitalConverterBlockEntity converter) {
+                    if (converter.isNetworkOnline()) {
+                        return firstStep;
+                    }
+                } else if (nextBe instanceof ItemPipeBlockEntity nextPipe) {
+                    if (!nextPipe.isDisconnected(dir.getOpposite())) {
+                        visited.add(nextPos);
+                        firstStepMap.put(nextPos, firstStep);
+                        queue.add(nextPos);
+                    }
+                } else if (nextBe instanceof ItemExtractorBlockEntity nextExt) {
+                    Direction extFacing = world.getBlockState(nextPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+                    if (dir.getOpposite() != extFacing && !nextExt.isDisconnected(dir.getOpposite())) {
+                        visited.add(nextPos);
+                        firstStepMap.put(nextPos, firstStep);
+                        queue.add(nextPos);
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override

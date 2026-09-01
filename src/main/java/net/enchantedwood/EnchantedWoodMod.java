@@ -22,6 +22,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.sound.ModSounds.registerModSounds();
         ModBlockEntities.registerBlockEntities();
         ModScreenHandlers.registerScreenHandlers();
+        net.enchantedwood.network.ModMessages.registerC2SPackets();
         net.enchantedwood.world.dimension.ModDimensions.registerDimensions();
         net.enchantedwood.world.ModWorldGeneration.generateOres();
         net.enchantedwood.event.PlayerEquipmentState.register();

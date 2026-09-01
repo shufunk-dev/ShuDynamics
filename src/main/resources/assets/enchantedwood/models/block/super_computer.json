@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "enchantedwood:block/tungsten_battery_top",
+    "bottom": "enchantedwood:block/tungsten_battery_top",
+    "front": "enchantedwood:block/crusher_mk2_front",
+    "side": "enchantedwood:block/tungsten_battery_side"
+  }
+}

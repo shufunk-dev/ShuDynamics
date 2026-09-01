@@ -432,6 +432,8 @@
   "container.enchantedwood.geothermal_generator": "Geothermal Thermal Generator",
   "block.enchantedwood.alloy_foundry": "Industrial Alloy Foundry",
   "container.enchantedwood.alloy_foundry": "Industrial Alloy Induction Foundry",
+  "block.enchantedwood.item_salvager": "Item Salvager",
+  "container.enchantedwood.item_salvager": "Automated Item Salvager",
   "block.enchantedwood.magma_crucible": "Magma Crucible",
   "container.enchantedwood.magma_crucible": "Magma Crucible & Mineral Extractor",
   "block.enchantedwood.lava_pump": "Submersible Lava Pump",
@@ -465,5 +467,17 @@
   "item.enchantedwood.thermal_refractory_plating": "Thermal Refractory Plating",
   "item.enchantedwood.blaze_overclock_core": "Blaze Overclock Core",
   "item.enchantedwood.infernal_hammer": "Infernal Auto-Smelt Sledgehammer",
-  "item.enchantedwood.plasma_flamethrower": "Thermal Plasma Flamethrower"
+  "item.enchantedwood.plasma_flamethrower": "Thermal Plasma Flamethrower",
+
+  "block.enchantedwood.digital_converter": "Digital Converter",
+  "block.enchantedwood.super_computer": "Super Computer (Auto-Crafter)",
+  "container.enchantedwood.super_computer": "Super Computer (Auto-Crafter)",
+  "block.enchantedwood.enchanted_storage_controller": "Enchanted Storage Controller",
+  "block.enchantedwood.enchanted_drive_bay": "Enchanted Drive Bay",
+  "block.enchantedwood.enchanted_storage_terminal": "Enchanted Storage Terminal",
+  "item.enchantedwood.storage_crystal_1k": "1k Storage Crystal",
+  "item.enchantedwood.storage_crystal_4k": "4k Storage Crystal",
+  "item.enchantedwood.storage_crystal_16k": "16k Storage Crystal",
+  "item.enchantedwood.storage_crystal_64k": "64k Storage Crystal",
+  "item.enchantedwood.wireless_storage_crystal": "Wireless Storage Crystal"
 }

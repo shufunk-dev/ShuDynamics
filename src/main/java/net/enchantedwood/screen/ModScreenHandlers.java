@@ -109,6 +109,10 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
                     new ScreenHandlerType<>(AlloyFoundryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<ItemSalvagerScreenHandler> ITEM_SALVAGER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "item_salvager"),
+                    new ScreenHandlerType<>(ItemSalvagerScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static final ScreenHandlerType<MagmaCrucibleScreenHandler> MAGMA_CRUCIBLE_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "magma_crucible"),
                     new ScreenHandlerType<>(MagmaCrucibleScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
@@ -128,6 +132,10 @@ public class ModScreenHandlers {
     public static final ScreenHandlerType<TitaniumTankScreenHandler> TITANIUM_TANK_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank"),
                     new ScreenHandlerType<>(TitaniumTankScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<SuperComputerScreenHandler> SUPER_COMPUTER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "super_computer"),
+                    new ScreenHandlerType<>(SuperComputerScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);

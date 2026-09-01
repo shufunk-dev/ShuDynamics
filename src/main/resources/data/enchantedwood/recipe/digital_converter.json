@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "H": "minecraft:hopper",
+    "C": "enchantedwood:copper_cable",
+    "Q": "minecraft:quartz"
+  },
+  "pattern": [
+    "THT",
+    "QCQ",
+    "TCT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:digital_converter"
+  }
+}

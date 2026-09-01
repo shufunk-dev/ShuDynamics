@@ -658,6 +658,8 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_CONTROLLER);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_DRIVE_BAY);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_TERMINAL);
+                entries.add(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER);
+                entries.add(net.enchantedwood.block.ModBlocks.SUPER_COMPUTER);
                 entries.add(STORAGE_CRYSTAL_1K);
                 entries.add(STORAGE_CRYSTAL_4K);
                 entries.add(STORAGE_CRYSTAL_16K);
@@ -917,6 +919,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_CABLE);
                 entries.add(net.enchantedwood.block.ModBlocks.GEOTHERMAL_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.ALLOY_FOUNDRY);
+                entries.add(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER);
                 entries.add(net.enchantedwood.block.ModBlocks.MAGMA_CRUCIBLE);
                 entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);
                 entries.add(net.enchantedwood.block.ModBlocks.CRUSHER_MK2);

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "enchantedwood:block/item_salvager_front_on",
+    "north": "enchantedwood:block/item_salvager_front_on",
+    "south": "enchantedwood:block/item_salvager_side",
+    "east": "enchantedwood:block/item_salvager_side",
+    "west": "enchantedwood:block/item_salvager_side",
+    "up": "enchantedwood:block/item_salvager_top",
+    "down": "enchantedwood:block/item_salvager_top"
+  }
+}
