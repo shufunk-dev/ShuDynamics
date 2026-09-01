@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": { "item": "minecraft:gold_ingot" },
+    "R": { "item": "enchantedwood:enchanted_redstone" },
+    "D": { "item": "minecraft:diamond" }
+  },
+  "pattern": [
+    "RGR",
+    "GDG",
+    "RGR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:range_upgrade_t1"
+  }
+}

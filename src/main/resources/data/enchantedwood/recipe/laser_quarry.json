@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": { "item": "enchantedwood:steel_ingot" },
+    "T": { "item": "enchantedwood:titanium_ingot" },
+    "G": { "item": "enchantedwood:diamond_gear" },
+    "C": { "item": "enchantedwood:digital_converter" },
+    "P": { "item": "enchantedwood:titanium_pickaxe" }
+  },
+  "pattern": [
+    "STS",
+    "GCG",
+    "TPT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:laser_quarry"
+  }
+}

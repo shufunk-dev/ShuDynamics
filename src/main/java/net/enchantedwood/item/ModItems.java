@@ -582,6 +582,27 @@ public class ModItems {
     public static final Item PLASMA_FLAMETHROWER = registerItem("plasma_flamethrower",
             settings -> new net.enchantedwood.item.custom.PlasmaFlamethrowerItem(settings.maxDamage(850).fireproof()));
 
+    // Quarry Upgrade Cores
+    public static final Item RANGE_UPGRADE_T1 = registerItem("range_upgrade_t1",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings.maxCount(16),
+                    Text.literal("§b✦ Tier 1 Quarry Range Core"),
+                    Text.literal("§7Expands Laser Quarry scanning perimeter to §e3x3 Chunks §7(48x48 blocks).")));
+
+    public static final Item RANGE_UPGRADE_T2 = registerItem("range_upgrade_t2",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings.maxCount(16),
+                    Text.literal("§d✦ Tier 2 Quarry Range Core"),
+                    Text.literal("§7Expands Laser Quarry scanning perimeter to §e5x5 Chunks §7(80x80 blocks).")));
+
+    public static final Item FORTUNE_CORE = registerItem("fortune_core",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings.maxCount(16),
+                    Text.literal("§6✦ Quarry Fortune Core"),
+                    Text.literal("§7Applies §eFortune III §7ore multiplication to extracted ores.")));
+
+    public static final Item SILK_TOUCH_CORE = registerItem("silk_touch_core",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings.maxCount(16),
+                    Text.literal("§a✦ Quarry Silk Touch Core"),
+                    Text.literal("§7Applies §eSilk Touch §7to harvest raw ore blocks intact.")));
+
     // Creative Tab
     public static final RegistryKey<ItemGroup> ENCHANTED_WOOD_GROUP_KEY = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_wood_group"));
     public static final ItemGroup ENCHANTED_WOOD_GROUP = FabricItemGroup.builder()
@@ -660,6 +681,11 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_TERMINAL);
                 entries.add(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER);
                 entries.add(net.enchantedwood.block.ModBlocks.SUPER_COMPUTER);
+                entries.add(net.enchantedwood.block.ModBlocks.LASER_QUARRY);
+                entries.add(RANGE_UPGRADE_T1);
+                entries.add(RANGE_UPGRADE_T2);
+                entries.add(FORTUNE_CORE);
+                entries.add(SILK_TOUCH_CORE);
                 entries.add(STORAGE_CRYSTAL_1K);
                 entries.add(STORAGE_CRYSTAL_4K);
                 entries.add(STORAGE_CRYSTAL_16K);

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": { "item": "minecraft:amethyst_shard" },
+    "C": { "item": "enchantedwood:copper_gear" },
+    "E": { "item": "enchantedwood:enchanted_emerald" }
+  },
+  "pattern": [
+    "ACA",
+    "CEC",
+    "ACA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:silk_touch_core"
+  }
+}

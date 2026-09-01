@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": { "item": "minecraft:diamond" },
+    "U": { "item": "enchantedwood:range_upgrade_t1" },
+    "C": { "item": "enchantedwood:fire_crystal" }
+  },
+  "pattern": [
+    "DUD",
+    "UCU",
+    "DUD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:range_upgrade_t2"
+  }
+}

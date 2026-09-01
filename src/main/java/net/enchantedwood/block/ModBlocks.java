@@ -108,6 +108,17 @@ public class ModBlocks {
             Text.literal("§6Quantum Super Computer (Auto-Crafter)"),
             Text.literal("§8Pulls ingredients from Digital Storage Network crystals & auto-crafts recipes at high speed."));
 
+    public static final Block LASER_QUARRY = registerBlockWithTooltip("laser_quarry",
+            new net.enchantedwood.block.custom.LaserQuarryBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "laser_quarry")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.LaserQuarryBlock.LIT) ? 14 : 0)),
+            Text.literal("§6Digital Laser Quarry"),
+            Text.literal("§8Autonomous chunk-based precision ore extraction & excavation rig."));
+
     public static final Block ENCHANTED_COAL_BLOCK = registerBlock("enchanted_coal_block",
             new net.enchantedwood.block.custom.EnchantedCoalBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_coal_block")))

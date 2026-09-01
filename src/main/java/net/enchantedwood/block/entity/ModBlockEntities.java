@@ -328,6 +328,13 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(ItemInserterBlockEntity::new, ModBlocks.ITEM_INSERTER).build()
             );
 
+    public static final BlockEntityType<LaserQuarryBlockEntity> LASER_QUARRY_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "laser_quarry"),
+                    FabricBlockEntityTypeBuilder.create(LaserQuarryBlockEntity::new, ModBlocks.LASER_QUARRY).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

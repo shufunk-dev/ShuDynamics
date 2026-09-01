@@ -12,6 +12,7 @@ public class ModMessages {
     public static void registerPackets() {
         PayloadTypeRegistry.playC2S().register(SetSuperComputerRecipePayload.ID, SetSuperComputerRecipePayload.CODEC);
         PayloadTypeRegistry.playS2C().register(SuperComputerStatusPayload.ID, SuperComputerStatusPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(LaserQuarryActionPayload.ID, LaserQuarryActionPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(SetSuperComputerRecipePayload.ID, (payload, context) -> {
             context.server().execute(() -> {
@@ -23,6 +24,17 @@ public class ModMessages {
                         superHandler.getSlot(i).markDirty();
                     }
                     superHandler.sendContentUpdates();
+                }
+            });
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(LaserQuarryActionPayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                ScreenHandler handler = context.player().currentScreenHandler;
+                if (handler instanceof net.enchantedwood.screen.LaserQuarryScreenHandler quarryHandler) {
+                    if (context.player().getEntityWorld().getBlockEntity(quarryHandler.blockPos) instanceof net.enchantedwood.block.entity.LaserQuarryBlockEntity quarry) {
+                        quarry.handleAction(payload.actionId());
+                    }
                 }
             });
         });

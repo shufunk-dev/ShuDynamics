@@ -477,7 +477,11 @@
   "block.enchantedwood.enchanted_storage_terminal": "Enchanted Storage Terminal",
   "item.enchantedwood.storage_crystal_1k": "1k Storage Crystal",
   "item.enchantedwood.storage_crystal_4k": "4k Storage Crystal",
-  "item.enchantedwood.storage_crystal_16k": "16k Storage Crystal",
-  "item.enchantedwood.storage_crystal_64k": "64k Storage Crystal",
-  "item.enchantedwood.wireless_storage_crystal": "Wireless Storage Crystal"
+  "item.enchantedwood.wireless_storage_crystal": "Wireless Storage Crystal",
+  "block.enchantedwood.laser_quarry": "Digital Laser Quarry",
+  "container.enchantedwood.laser_quarry": "Digital Laser Quarry",
+  "item.enchantedwood.range_upgrade_t1": "Quarry Range Core (Tier 1)",
+  "item.enchantedwood.range_upgrade_t2": "Quarry Range Core (Tier 2)",
+  "item.enchantedwood.fortune_core": "Quarry Fortune Core",
+  "item.enchantedwood.silk_touch_core": "Quarry Silk Touch Core"
 }

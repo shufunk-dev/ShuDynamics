@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/laser_quarry_top",
+    "front": "enchantedwood:block/laser_quarry_front_on",
+    "side": "enchantedwood:block/laser_quarry_side",
+    "bottom": "enchantedwood:block/laser_quarry_top"
+  }
+}
