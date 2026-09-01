@@ -90,7 +90,14 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.EmiRecipeHandler<net.enchantedwood.screen.SuperComputerScreenHandler>() {
             @Override
             public dev.emi.emi.api.recipe.EmiPlayerInventory getInventory(net.minecraft.client.gui.screen.ingame.HandledScreen<net.enchantedwood.screen.SuperComputerScreenHandler> screen) {
-                return dev.emi.emi.api.recipe.EmiPlayerInventory.of(net.minecraft.client.MinecraftClient.getInstance().player);
+                List<EmiStack> stacks = new ArrayList<>();
+                for (int i = 15; i < screen.getScreenHandler().slots.size(); i++) {
+                    ItemStack s = screen.getScreenHandler().getSlot(i).getStack();
+                    if (!s.isEmpty()) {
+                        stacks.add(EmiStack.of(s));
+                    }
+                }
+                return new dev.emi.emi.api.recipe.EmiPlayerInventory(stacks);
             }
 
             @Override

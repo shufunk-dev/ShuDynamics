@@ -19,6 +19,14 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
 
     private net.minecraft.client.gui.widget.ButtonWidget craftButton;
 
+    private static String lastStatus = "";
+    private static long lastStatusTime = 0;
+
+    public static void setLastStatus(String msg) {
+        lastStatus = msg;
+        lastStatusTime = System.currentTimeMillis();
+    }
+
     public SuperComputerScreen(SuperComputerScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
@@ -89,10 +97,24 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
 
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
+
+        // Render On-Screen Status Notification Banner directly visible while GUI is open
+        if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
+            Text statusText = Text.literal(lastStatus);
+            int textW = this.textRenderer.getWidth(statusText);
+            int bannerX = Math.max(4, (this.width - textW) / 2);
+            int bannerY = y - 16;
+
+            // Draw dark background box
+            context.fill(bannerX - 6, bannerY - 3, bannerX + textW + 6, bannerY + 11, 0xDD111111);
+            context.fill(bannerX - 5, bannerY - 2, bannerX + textW + 5, bannerY + 10, 0xEE222222);
+            context.drawText(this.textRenderer, statusText, bannerX, bannerY, 0xFFFFFF, true);
+        }
+
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
 
         // Energy Bar Hover Tooltip (x + 8 .. 16, y + 17 .. 49)
         if (mouseX >= x + 8 && mouseX <= x + 16 && mouseY >= y + 17 && mouseY <= y + 49) {
@@ -114,12 +136,16 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
 
         // Craft Button Hover Tooltip (x + 88 .. 120, y + 50 .. 68)
         if (mouseX >= x + 88 && mouseX <= x + 120 && mouseY >= y + 50 && mouseY <= y + 68) {
-            context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§a⚡ Execute Craft"),
-                    Text.literal("§7Click: Craft 1 batch"),
-                    Text.literal("§7Shift-Click: Craft all possible with what you have"),
-                    Text.literal("§8Uses materials from Digital Storage & Inventory.")
-            ), mouseX, mouseY);
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§a⚡ Execute Craft"));
+            lines.add(Text.literal("§7Click: Craft 1 batch"));
+            lines.add(Text.literal("§7Shift-Click: Craft all possible with what you have"));
+            lines.add(Text.literal("§8Uses materials from Digital Storage & Inventory."));
+            if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
+                lines.add(Text.literal(""));
+                lines.add(Text.literal("§7Latest Status: " + lastStatus));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
         // Network Status Tooltip (x + 158 .. 170, y + 4 .. 16)

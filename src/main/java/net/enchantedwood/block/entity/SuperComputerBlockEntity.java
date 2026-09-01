@@ -205,14 +205,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         if (patternEmpty) {
-            player.sendMessage(Text.literal("§c[Super Computer] Place items in the 3x3 matrix to program a recipe!"), true);
+            sendFeedback(player, "§c[Super Computer] Place items in the 3x3 matrix to program a recipe!");
             return;
         }
 
         CraftingRecipeInput recipeInput = CraftingRecipeInput.create(3, 3, patternStacks);
         Optional<RecipeEntry<CraftingRecipe>> match = serverWorld.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, recipeInput, serverWorld);
         if (match.isEmpty()) {
-            player.sendMessage(Text.literal("§c[Super Computer] No valid crafting recipe in the 3x3 grid!"), true);
+            sendFeedback(player, "§c[Super Computer] No valid crafting recipe in the 3x3 grid!");
             return;
         }
 
@@ -227,7 +227,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         for (int b = 0; b < maxBatches; b++) {
             if (!canAcceptOutput(resultStack)) {
                 if (craftedBatches == 0) {
-                    player.sendMessage(Text.literal("§c[Super Computer] Output buffer & digital storage are full!"), true);
+                    sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
                 }
                 break;
             }
@@ -243,9 +243,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             sb.append(entry.getValue()).append("x ").append(entry.getKey().getName().getString());
                             first = false;
                         }
-                        player.sendMessage(Text.literal(sb.toString()), true);
+                        sendFeedback(player, sb.toString());
                     } else {
-                        player.sendMessage(Text.literal("§c[Super Computer] Missing required materials in storage or inventory!"), true);
+                        sendFeedback(player, "§c[Super Computer] Missing required materials in storage or inventory!");
                     }
                 }
                 break;
@@ -256,7 +256,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             int totalEnergy = ENERGY_PER_CRAFT * plan.totalCraftingSteps;
             if (this.energyStorage.getEnergy() < totalEnergy && !drawNetworkPower()) {
                 if (craftedBatches == 0) {
-                    player.sendMessage(Text.literal("§c[Super Computer] Insufficient energy! (Needs " + totalEnergy + " FE)"), true);
+                    sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + totalEnergy + " FE)");
                 }
                 break;
             }
@@ -287,8 +287,15 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             markDirty();
             serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.6f, 1.2f);
             int totalYield = resultStack.getCount() * craftedBatches;
-            player.sendMessage(Text.literal("§a⚡ Crafted: §f" + totalYield + "x " + resultStack.getName().getString() + (totalCraftingStepsSum > craftedBatches ? " §7(" + totalCraftingStepsSum + " steps synthesized)" : "")), true);
+            sendFeedback(player, "§a⚡ Crafted: §f" + totalYield + "x " + resultStack.getName().getString() + (totalCraftingStepsSum > craftedBatches ? " §7(" + totalCraftingStepsSum + " steps synthesized)" : ""));
         }
+    }
+
+    private void sendFeedback(PlayerEntity player, String msg) {
+        if (player instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer) {
+            net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(serverPlayer, new net.enchantedwood.network.SuperComputerStatusPayload(msg));
+        }
+        player.sendMessage(Text.literal(msg), false);
     }
 
     public void executeManualCraft(PlayerEntity player) {

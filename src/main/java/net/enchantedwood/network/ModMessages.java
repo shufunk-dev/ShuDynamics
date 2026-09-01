@@ -1,14 +1,17 @@
 package net.enchantedwood.network;
 
+import net.enchantedwood.screen.SuperComputerScreen;
 import net.enchantedwood.screen.SuperComputerScreenHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
 public class ModMessages {
-    public static void registerC2SPackets() {
+    public static void registerPackets() {
         PayloadTypeRegistry.playC2S().register(SetSuperComputerRecipePayload.ID, SetSuperComputerRecipePayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(SuperComputerStatusPayload.ID, SuperComputerStatusPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(SetSuperComputerRecipePayload.ID, (payload, context) -> {
             context.server().execute(() -> {
@@ -21,6 +24,14 @@ public class ModMessages {
                     }
                     superHandler.sendContentUpdates();
                 }
+            });
+        });
+    }
+
+    public static void registerClientReceivers() {
+        ClientPlayNetworking.registerGlobalReceiver(SuperComputerStatusPayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                SuperComputerScreen.setLastStatus(payload.message());
             });
         });
     }
