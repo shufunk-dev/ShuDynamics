@@ -9,12 +9,16 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class DigitalConverterBlockEntity extends BlockEntity implements SidedInventory {
@@ -22,12 +26,67 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     private final DefaultedList<ItemStack> buffer = DefaultedList.ofSize(BUFFER_SIZE, ItemStack.EMPTY);
     private int checkTimer = 0;
 
+    // Remote network binding via Wrench
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
+
     public DigitalConverterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DIGITAL_CONVERTER_BLOCK_ENTITY, pos, state);
     }
 
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension;
+        markDirty();
+    }
+
+    public void unbindNetwork() {
+        this.boundNetworkPos = null;
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public String getBoundDimension() {
+        return this.boundDimension;
+    }
+
+    public boolean isBoundToRemote() {
+        return this.boundNetworkPos != null;
+    }
+
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
         if (this.world == null) return null;
+
+        // 1. Check bound remote network
+        if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+                BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+                if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                    return terminal;
+                } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
+                    // Search near controller for terminal
+                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    for (int dx = -16; dx <= 16; dx++) {
+                        for (int dy = -8; dy <= 8; dy++) {
+                            for (int dz = -16; dz <= 16; dz++) {
+                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
+                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
+                                if (candidate instanceof EnchantedStorageTerminalBlockEntity t && t.isNetworkOnline()) {
+                                    return t;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Fallback to local 16-block proximity
         BlockPos.Mutable mut = new BlockPos.Mutable();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -45,6 +104,34 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
 
     public @Nullable EnchantedStorageControllerBlockEntity getNetworkController() {
         if (this.world == null) return null;
+
+        // 1. Check bound remote network
+        if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+                BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+                if (be instanceof EnchantedStorageControllerBlockEntity controller) {
+                    return controller;
+                } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
+                    // Search near terminal for controller
+                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    for (int dx = -16; dx <= 16; dx++) {
+                        for (int dy = -8; dy <= 8; dy++) {
+                            for (int dz = -16; dz <= 16; dz++) {
+                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
+                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
+                                if (candidate instanceof EnchantedStorageControllerBlockEntity c) {
+                                    return c;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Fallback to local 16-block proximity
         BlockPos.Mutable mut = new BlockPos.Mutable();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -220,11 +307,23 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
         super.readData(view);
         this.buffer.clear();
         Inventories.readData(view, this.buffer);
+        if (view.contains("BoundX")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
     protected void writeData(WriteView view) {
         super.writeData(view);
         Inventories.writeData(view, this.buffer);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension);
+        }
     }
 }

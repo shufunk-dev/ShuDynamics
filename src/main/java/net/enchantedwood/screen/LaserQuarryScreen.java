@@ -58,7 +58,10 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
     }
 
     private Text getPauseText() {
-        return this.handler.isPaused() ? Text.literal("▶ Resume") : Text.literal("⏸ Pause");
+        if (this.handler.isPaused()) {
+            return (this.handler.getTotalMinedCount() == 0) ? Text.literal("▶ Start") : Text.literal("▶ Resume");
+        }
+        return Text.literal("⏸ Pause");
     }
 
     @Override
@@ -85,7 +88,7 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
         if (maxEnergy > 0 && energy > 0) {
             int scaledH = Math.min(54, (int) ((long) energy * 54 / maxEnergy));
             int energyY = (y + 18) + (54 - scaledH);
-            context.fill(x + 8, energyY, x + 16, y + 18 + 54, 0xFFFF2222);
+            context.fill(x + 8, energyY, x + 16, y + 18 + 54, 0xFFE53935);
         }
     }
 
@@ -93,16 +96,18 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
 
-        // Telemetry Text
-        String depthStr = "Y: " + this.handler.getScanY();
-        context.drawText(this.textRenderer, Text.literal(depthStr).formatted(net.minecraft.util.Formatting.GRAY), 22, 64, 0xAAAAAA, false);
-
+        // Telemetry LCD Display (x: 21..73, y: 64..75)
+        String depthStr = "Y:" + this.handler.getScanY();
         int radius = this.handler.getRangeChunkRadius();
-        String radiusStr = (radius == 0) ? "1x1 Chk" : (radius == 1 ? "3x3 Chk" : "5x5 Chk");
-        context.drawText(this.textRenderer, Text.literal(radiusStr).formatted(net.minecraft.util.Formatting.DARK_AQUA), 22, 73, 0x55FFFF, false);
+        String radiusStr = (radius == 0) ? "1x1" : (radius == 1 ? "3x3" : "5x5");
+        String tele = depthStr + " " + radiusStr;
+        context.drawText(this.textRenderer, Text.literal(tele).formatted(net.minecraft.util.Formatting.AQUA), 23, 66, 0x55FFFF, false);
 
         // Digital Storage Network status icon
-        if (this.handler.isNetworkOnline()) {
+        int netStatus = this.handler.getNetworkStatus();
+        if (netStatus == 2) {
+            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.AQUA), 162, 6, 0x55FFFF, false);
+        } else if (netStatus == 1) {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GREEN), 162, 6, 0x55FF55, false);
         } else {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.RED), 162, 6, 0xFF5555, false);
@@ -159,12 +164,18 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
         if (mouseX >= x + 158 && mouseX <= x + 170 && mouseY >= y + 4 && mouseY <= y + 16) {
             List<Text> lines = new ArrayList<>();
             lines.add(Text.literal("§b🌐 Digital Storage Link"));
-            if (this.handler.isNetworkOnline()) {
-                lines.add(Text.literal("§a● Online: Connected to Digital Storage Network"));
+            int netStatus = this.handler.getNetworkStatus();
+            if (netStatus == 2) {
+                lines.add(Text.literal("§b● Linked: Connected to Remote Base Network"));
+                lines.add(Text.literal("§7Mined ores directly teleport to Base Storage."));
+                lines.add(Text.literal("§7Draws operating power wirelessly from Base Battery."));
+            } else if (netStatus == 1) {
+                lines.add(Text.literal("§a● Online: Connected to Local Storage Network"));
                 lines.add(Text.literal("§7Mined ores directly deposit into Drive Bay crystals."));
             } else {
-                lines.add(Text.literal("§c● Offline: No active Storage Controller in range"));
-                lines.add(Text.literal("§8Outputs store in internal buffer or adjacent chests."));
+                lines.add(Text.literal("§c● Offline: No active Storage Network in range"));
+                lines.add(Text.literal("§7Outputs store in internal buffer or adjacent chests."));
+                lines.add(Text.literal("§8Sneak + Right-Click Wrench on Base Controller, then Quarry to link."));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }

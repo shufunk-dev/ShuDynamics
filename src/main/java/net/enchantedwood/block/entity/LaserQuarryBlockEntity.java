@@ -13,6 +13,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -24,10 +25,12 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.enchantedwood.block.custom.LaserQuarryBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
@@ -37,7 +40,9 @@ import net.enchantedwood.screen.LaserQuarryScreenHandler;
 import net.enchantedwood.util.ItemTransportHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
     public static final int INVENTORY_SIZE = 12;
@@ -58,7 +63,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(MAX_ENERGY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int mode = MODE_ORE_ONLY;
-    private boolean isPaused = false;
+    private boolean isPaused = true;
     private int totalMinedCount = 0;
 
     // Scan coordinates
@@ -68,21 +73,30 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     private boolean initializedScan = false;
     private int tickDelay = 0;
 
+    // Active chunk loading
+    private final Set<Long> forcedChunks = new HashSet<>();
+
     // Last target block for client rendering
     private @Nullable BlockPos currentTargetPos = null;
+
+    // Remote network binding via Wrench
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> energyStorage.getEnergy();
-                case 1 -> energyStorage.getMaxEnergy();
-                case 2 -> mode;
-                case 3 -> isPaused ? 1 : 0;
-                case 4 -> scanY;
-                case 5 -> totalMinedCount;
-                case 6 -> getRangeChunkRadius();
-                case 7 -> getNetworkTerminal() != null ? 1 : 0;
+                case 0 -> energyStorage.getEnergy() & 0xFFFF;
+                case 1 -> (energyStorage.getEnergy() >> 16) & 0xFFFF;
+                case 2 -> energyStorage.getMaxEnergy() & 0xFFFF;
+                case 3 -> (energyStorage.getMaxEnergy() >> 16) & 0xFFFF;
+                case 4 -> mode;
+                case 5 -> isPaused ? 1 : 0;
+                case 6 -> scanY;
+                case 7 -> totalMinedCount;
+                case 8 -> getRangeChunkRadius();
+                case 9 -> getNetworkTerminal() != null ? (isBoundToRemote() ? 2 : 1) : 0;
                 default -> 0;
             };
         }
@@ -90,16 +104,18 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 2 -> mode = value;
-                case 3 -> isPaused = (value == 1);
-                case 4 -> scanY = value;
-                case 5 -> totalMinedCount = value;
+                case 0 -> energyStorage.setEnergy((energyStorage.getEnergy() & 0xFFFF0000) | (value & 0xFFFF));
+                case 1 -> energyStorage.setEnergy((energyStorage.getEnergy() & 0x0000FFFF) | ((value & 0xFFFF) << 16));
+                case 4 -> mode = value;
+                case 5 -> isPaused = (value == 1);
+                case 6 -> scanY = value;
+                case 7 -> totalMinedCount = value;
             }
         }
 
         @Override
         public int size() {
-            return 8;
+            return 10;
         }
     };
 
@@ -119,6 +135,11 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         // Auto-eject items periodically
         if (world.getTime() % 10 == 0) {
             quarry.ejectOutputBuffer(world);
+        }
+
+        // Keep chunk tickets synchronized
+        if (world.getTime() % 20 == 0) {
+            quarry.updateChunkLoading(world);
         }
 
         if (!quarry.isPaused) {
@@ -370,16 +391,133 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
             }
             case 1 -> { // Toggle Pause
                 this.isPaused = !this.isPaused;
+                if (this.world instanceof ServerWorld sw) {
+                    updateChunkLoading(sw);
+                }
                 markDirty();
             }
             case 2 -> { // Reset Scan
                 resetScanCoordinates();
+                if (this.world instanceof ServerWorld sw) {
+                    updateChunkLoading(sw);
+                }
             }
         }
     }
 
+    public void updateChunkLoading(ServerWorld world) {
+        if (!this.isPaused && this.scanY >= world.getBottomY()) {
+            int radius = getRangeChunkRadius();
+            ChunkPos originChunk = new ChunkPos(this.pos);
+            Set<Long> targetChunks = new HashSet<>();
+            for (int cx = originChunk.x - radius; cx <= originChunk.x + radius; cx++) {
+                for (int cz = originChunk.z - radius; cz <= originChunk.z + radius; cz++) {
+                    targetChunks.add(ChunkPos.toLong(cx, cz));
+                }
+            }
+
+            // Unload chunks no longer needed (e.g. if range upgrade removed)
+            for (long chunkPosLong : new HashSet<>(this.forcedChunks)) {
+                if (!targetChunks.contains(chunkPosLong)) {
+                    int cx = ChunkPos.getPackedX(chunkPosLong);
+                    int cz = ChunkPos.getPackedZ(chunkPosLong);
+                    world.setChunkForced(cx, cz, false);
+                    this.forcedChunks.remove(chunkPosLong);
+                }
+            }
+
+            // Load new chunks
+            for (long chunkPosLong : targetChunks) {
+                if (!this.forcedChunks.contains(chunkPosLong)) {
+                    int cx = ChunkPos.getPackedX(chunkPosLong);
+                    int cz = ChunkPos.getPackedZ(chunkPosLong);
+                    world.setChunkForced(cx, cz, true);
+                    this.forcedChunks.add(chunkPosLong);
+                }
+            }
+        } else {
+            releaseChunkTickets(world);
+        }
+    }
+
+    public void releaseChunkTickets(ServerWorld world) {
+        for (long chunkPosLong : this.forcedChunks) {
+            int cx = ChunkPos.getPackedX(chunkPosLong);
+            int cz = ChunkPos.getPackedZ(chunkPosLong);
+            world.setChunkForced(cx, cz, false);
+        }
+        this.forcedChunks.clear();
+    }
+
+    @Override
+    public void markRemoved() {
+        if (this.world instanceof ServerWorld serverWorld) {
+            releaseChunkTickets(serverWorld);
+        }
+        super.markRemoved();
+    }
+
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension;
+        markDirty();
+    }
+
+    public void unbindNetwork() {
+        this.boundNetworkPos = null;
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public String getBoundDimension() {
+        return this.boundDimension;
+    }
+
+    public boolean isBoundToRemote() {
+        return this.boundNetworkPos != null;
+    }
+
     private boolean drawNetworkPower() {
         if (this.world == null) return false;
+
+        // 1. Check bound remote network
+        if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+                BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+                if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                    EnergyStorage storage = ctrl.getEnergyStorage(null);
+                    if (storage != null && storage.getEnergy() >= ENERGY_PER_BLOCK) {
+                        storage.extractEnergy(ENERGY_PER_BLOCK, false);
+                        return true;
+                    }
+                } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
+                    // Search near terminal for controller
+                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    for (int dx = -16; dx <= 16; dx++) {
+                        for (int dy = -8; dy <= 8; dy++) {
+                            for (int dz = -16; dz <= 16; dz++) {
+                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
+                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
+                                if (candidate instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                                    EnergyStorage storage = ctrl.getEnergyStorage(null);
+                                    if (storage != null && storage.getEnergy() >= ENERGY_PER_BLOCK) {
+                                        storage.extractEnergy(ENERGY_PER_BLOCK, false);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Fallback to local 16-block proximity
         BlockPos.Mutable mut = new BlockPos.Mutable();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -401,6 +539,34 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
     private @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
         if (this.world == null) return null;
+
+        // 1. Check bound remote network
+        if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+                BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+                if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                    return terminal;
+                } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
+                    // Search near controller for terminal
+                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    for (int dx = -16; dx <= 16; dx++) {
+                        for (int dy = -8; dy <= 8; dy++) {
+                            for (int dz = -16; dz <= 16; dz++) {
+                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
+                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
+                                if (candidate instanceof EnchantedStorageTerminalBlockEntity t && t.isNetworkOnline()) {
+                                    return t;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Fallback to local 16-block proximity
         BlockPos.Mutable mut = new BlockPos.Mutable();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -517,12 +683,18 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         Inventories.readData(view, this.inventory);
         this.energyStorage.setEnergy(view.getInt("Energy", 0));
         this.mode = view.getInt("Mode", 0);
-        this.isPaused = view.getBoolean("IsPaused", false);
+        this.isPaused = view.getBoolean("IsPaused", true);
         this.totalMinedCount = view.getInt("TotalMined", 0);
         this.scanX = view.getInt("ScanX", 0);
         this.scanY = view.getInt("ScanY", 0);
         this.scanZ = view.getInt("ScanZ", 0);
         this.initializedScan = view.getBoolean("InitializedScan", false);
+        if (view.contains("BoundX")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
@@ -537,5 +709,11 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         view.putInt("ScanY", this.scanY);
         view.putInt("ScanZ", this.scanZ);
         view.putBoolean("InitializedScan", this.initializedScan);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension);
+        }
     }
 }

@@ -119,6 +119,7 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
     protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof LaserQuarryBlockEntity quarryEntity) {
+            quarryEntity.releaseChunkTickets(world);
             ItemScatterer.spawn(world, pos, quarryEntity);
         }
         super.onStateReplaced(state, world, pos, moved);

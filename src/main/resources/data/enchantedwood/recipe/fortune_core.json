@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "E": { "item": "minecraft:emerald" },
-    "G": { "item": "enchantedwood:gold_gear" },
-    "D": { "item": "enchantedwood:enchanted_diamond" }
+    "E": "minecraft:emerald",
+    "G": "enchantedwood:gold_gear",
+    "D": "enchantedwood:enchanted_diamond"
   },
   "pattern": [
     "EGE",

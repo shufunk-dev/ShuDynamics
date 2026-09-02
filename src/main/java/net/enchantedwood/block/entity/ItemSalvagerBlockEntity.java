@@ -273,7 +273,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.IRONWOOD_AXE, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_WOOD, 3), new ItemStack(Items.STICK, 2));
         registerRecipe(net.enchantedwood.item.ModItems.VERDANT_SHOVEL, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_WOOD, 1), new ItemStack(Items.STICK, 2));
         registerRecipe(net.enchantedwood.item.ModItems.ELDERWOOD_HOE, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_WOOD, 2), new ItemStack(Items.STICK, 2));
-        registerRecipe(net.enchantedwood.item.ModItems.WOODEN_SHEARS, 1, 60, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_WOOD, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.WOODEN_SHEARS, 1, 40, new ItemStack(Items.OAK_PLANKS, 2));
 
         // Enchanted Cobblestone Tools
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_COBBLESTONE_SWORD, 1, 100, new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE.asItem(), 2), new ItemStack(Items.STICK, 1));
@@ -366,6 +366,18 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.CHUNK_LOADER_MODULE, 1, 240, new ItemStack(Items.ENDER_PEARL, 4), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1));
         registerRecipe(net.enchantedwood.item.ModItems.INTERDIMENSIONAL_CARD, 1, 300, new ItemStack(Items.NETHERITE_INGOT, 2), new ItemStack(Items.ENDER_EYE, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND, 1));
 
+        // Quarry Cores & Upgrades
+        registerRecipe(net.enchantedwood.item.ModItems.RANGE_UPGRADE_T1, 1, 160, new ItemStack(Items.GOLD_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_REDSTONE, 4), new ItemStack(Items.DIAMOND, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.RANGE_UPGRADE_T2, 1, 260, new ItemStack(Items.DIAMOND, 4), new ItemStack(net.enchantedwood.item.ModItems.RANGE_UPGRADE_T1, 4), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.FORTUNE_CORE, 1, 240, new ItemStack(Items.EMERALD, 4), new ItemStack(net.enchantedwood.item.ModItems.GOLD_GEAR, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.SILK_TOUCH_CORE, 1, 200, new ItemStack(Items.AMETHYST_SHARD, 4), new ItemStack(net.enchantedwood.item.ModItems.COPPER_GEAR, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_EMERALD, 1));
+
+        // Plates
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_PLATE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ARDITE_PLATE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.ARDITE_INGOT, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.COBALT_PLATE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.COBALT_INGOT, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.MANYULLYN_PLATE, 1, 180, new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_INGOT, 2));
+
         // Cables, Pipes & Logistics (Batched)
         registerRecipe(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 6, 100, new ItemStack(Items.COPPER_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 6));
         registerRecipe(net.enchantedwood.block.ModBlocks.ALUMINUM_CABLE.asItem(), 6, 100, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 6));
@@ -441,12 +453,13 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_FURNACE.asItem(), 1, 160, new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE.asItem(), 8), new ItemStack(Items.FURNACE, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 3), new ItemStack(net.enchantedwood.block.ModBlocks.CRUSHER.asItem(), 1));
 
-        // Digital Storage Blocks
+        // Digital Storage Blocks & Automation
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_CONTROLLER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 2), new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_CHEST.asItem(), 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_TERMINAL.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(Items.GLASS, 2), new ItemStack(net.enchantedwood.item.ModItems.STORAGE_CRYSTAL_1K, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_DRIVE_BAY.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(Items.CHEST, 2), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER.asItem(), 1, 200, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(Items.HOPPER, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 2), new ItemStack(Items.QUARTZ, 2));
         registerRecipe(net.enchantedwood.block.ModBlocks.SUPER_COMPUTER.asItem(), 1, 360, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_CARBIDE_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STORAGE_CRYSTAL_16K, 1), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 2), new ItemStack(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER.asItem(), 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.LASER_QUARRY.asItem(), 1, 360, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 2), new ItemStack(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER.asItem(), 1));
 
         // Multiblock Fluid Tanks
         registerRecipe(net.enchantedwood.block.ModBlocks.TITANIUM_TANK_CASING.asItem(), 4, 160, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 8));

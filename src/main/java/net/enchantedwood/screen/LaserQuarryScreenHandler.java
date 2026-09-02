@@ -19,11 +19,11 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     public final BlockPos blockPos;
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8), BlockPos.ORIGIN);
+        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), BlockPos.ORIGIN);
     }
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8), pos);
+        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), pos);
     }
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -96,35 +96,39 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     }
 
     public int getEnergy() {
-        return this.propertyDelegate.get(0);
+        return (this.propertyDelegate.get(1) << 16) | (this.propertyDelegate.get(0) & 0xFFFF);
     }
 
     public int getMaxEnergy() {
-        return this.propertyDelegate.get(1);
+        return (this.propertyDelegate.get(3) << 16) | (this.propertyDelegate.get(2) & 0xFFFF);
     }
 
     public int getMode() {
-        return this.propertyDelegate.get(2);
-    }
-
-    public boolean isPaused() {
-        return this.propertyDelegate.get(3) == 1;
-    }
-
-    public int getScanY() {
         return this.propertyDelegate.get(4);
     }
 
+    public boolean isPaused() {
+        return this.propertyDelegate.get(5) == 1;
+    }
+
+    public int getScanY() {
+        return (short) this.propertyDelegate.get(6);
+    }
+
     public int getTotalMinedCount() {
-        return this.propertyDelegate.get(5);
+        return this.propertyDelegate.get(7);
     }
 
     public int getRangeChunkRadius() {
-        return this.propertyDelegate.get(6);
+        return this.propertyDelegate.get(8);
     }
 
     public boolean isNetworkOnline() {
-        return this.propertyDelegate.get(7) == 1;
+        return this.propertyDelegate.get(9) >= 1;
+    }
+
+    public int getNetworkStatus() {
+        return this.propertyDelegate.get(9);
     }
 
     @Override

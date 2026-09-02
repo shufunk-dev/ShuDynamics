@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": { "item": "minecraft:gold_ingot" },
-    "R": { "item": "enchantedwood:enchanted_redstone" },
-    "D": { "item": "minecraft:diamond" }
+    "G": "minecraft:gold_ingot",
+    "R": "enchantedwood:enchanted_redstone",
+    "D": "minecraft:diamond"
   },
   "pattern": [
     "RGR",
