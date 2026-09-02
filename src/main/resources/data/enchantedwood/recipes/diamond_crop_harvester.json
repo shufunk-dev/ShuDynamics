@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "minecraft:diamond",
+    "G": "enchantedwood:diamond_gear",
+    "P": "enchantedwood:steel_crop_harvester"
+  },
+  "pattern": [
+    " D ",
+    "DPD",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:diamond_crop_harvester"
+  }
+}

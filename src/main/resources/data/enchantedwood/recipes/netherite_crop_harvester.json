@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": "minecraft:netherite_ingot",
+    "G": "enchantedwood:netherite_gear",
+    "P": "enchantedwood:diamond_crop_harvester"
+  },
+  "pattern": [
+    " N ",
+    "NPN",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:netherite_crop_harvester"
+  }
+}

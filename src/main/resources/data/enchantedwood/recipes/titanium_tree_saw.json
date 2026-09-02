@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:titanium_gear",
+    "P": "enchantedwood:diamond_tree_saw"
+  },
+  "pattern": [
+    " T ",
+    "TPT",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_tree_saw"
+  }
+}

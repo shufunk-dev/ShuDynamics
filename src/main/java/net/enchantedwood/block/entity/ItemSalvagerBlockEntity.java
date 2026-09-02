@@ -342,6 +342,32 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.MEDIUM_CARGO_TRUNK, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 8), new ItemStack(net.enchantedwood.item.ModItems.SMALL_CARGO_TRUNK, 1));
         registerRecipe(net.enchantedwood.item.ModItems.LARGE_CARGO_TRUNK, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 8), new ItemStack(net.enchantedwood.item.ModItems.MEDIUM_CARGO_TRUNK, 1));
 
+        // ATV Mining Drill Bits
+        registerRecipe(net.enchantedwood.item.ModItems.IRON_DRILL_BIT, 1, 100, new ItemStack(Items.IRON_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.STEEL_DRILL_BIT, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.DIAMOND_DRILL_BIT, 1, 220, new ItemStack(Items.DIAMOND, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_DRILL_BIT, 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_GEAR, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.NETHERITE_DRILL_BIT, 1, 360, new ItemStack(Items.NETHERITE_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_DRILL_BIT, 1), new ItemStack(net.enchantedwood.item.ModItems.NETHERITE_GEAR, 1));
+
+        // ATV Tree Harvester Saws
+        registerRecipe(net.enchantedwood.item.ModItems.IRON_TREE_SAW, 1, 100, new ItemStack(Items.IRON_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 1), new ItemStack(Items.IRON_AXE, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.STEEL_TREE_SAW, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.IRON_TREE_SAW, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.DIAMOND_TREE_SAW, 1, 220, new ItemStack(Items.DIAMOND, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_TREE_SAW, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_TREE_SAW, 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_TREE_SAW, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.NETHERITE_TREE_SAW, 1, 360, new ItemStack(Items.NETHERITE_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.NETHERITE_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_TREE_SAW, 1));
+
+        // ATV Crop Harvesters
+        registerRecipe(net.enchantedwood.item.ModItems.IRON_CROP_HARVESTER, 1, 100, new ItemStack(Items.IRON_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 1), new ItemStack(Items.IRON_HOE, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.STEEL_CROP_HARVESTER, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.IRON_CROP_HARVESTER, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.DIAMOND_CROP_HARVESTER, 1, 220, new ItemStack(Items.DIAMOND, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_CROP_HARVESTER, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_CROP_HARVESTER, 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_CROP_HARVESTER, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.NETHERITE_CROP_HARVESTER, 1, 360, new ItemStack(Items.NETHERITE_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.NETHERITE_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_CROP_HARVESTER, 1));
+
+        // ATV Headlights
+        registerRecipe(net.enchantedwood.item.ModItems.HALOGEN_HEADLIGHTS, 1, 100, new ItemStack(Items.IRON_INGOT, 4), new ItemStack(Items.GLASS_PANE, 2), new ItemStack(Items.GLOWSTONE_DUST, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.LED_FLOODLIGHTS, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.REDSTONE_LAMP, 2), new ItemStack(net.enchantedwood.item.ModItems.HALOGEN_HEADLIGHTS, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.XENON_HIGH_BEAMS, 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS.asItem(), 2), new ItemStack(net.enchantedwood.item.ModItems.LED_FLOODLIGHTS, 1));
+
         registerRecipe(net.enchantedwood.item.ModItems.ATV_ITEM, 1, 260, new ItemStack(net.enchantedwood.item.ModItems.STEEL_ATV_CHASSIS, 1), new ItemStack(net.enchantedwood.item.ModItems.COPPER_ATV_ENGINE, 1), new ItemStack(net.enchantedwood.item.ModItems.ATV_SEAT, 1), new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 4));
     }
 

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "V": "enchantedwood:volcanic_glass",
+    "L": "enchantedwood:led_floodlights"
+  },
+  "pattern": [
+    "TVT",
+    "VLV",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:xenon_high_beams"
+  }
+}

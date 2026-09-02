@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "enchantedwood:steel_gear",
+    "P": "enchantedwood:iron_crop_harvester"
+  },
+  "pattern": [
+    " S ",
+    "SPS",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:steel_crop_harvester"
+  }
+}

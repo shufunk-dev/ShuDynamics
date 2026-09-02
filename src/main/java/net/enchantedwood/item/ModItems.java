@@ -180,6 +180,32 @@ public class ModItems {
             Text.literal("§8Craft with Titanium Ingots around a Medium Cargo Trunk.")
     ));
 
+    // ATV Mining Drill Bits (Replaceable Modules)
+    public static final Item IRON_DRILL_BIT = registerItem("iron_drill_bit", settings -> new net.enchantedwood.item.custom.DrillBitItem(net.enchantedwood.item.custom.DrillBitItem.DrillTier.IRON, settings));
+    public static final Item STEEL_DRILL_BIT = registerItem("steel_drill_bit", settings -> new net.enchantedwood.item.custom.DrillBitItem(net.enchantedwood.item.custom.DrillBitItem.DrillTier.STEEL, settings));
+    public static final Item DIAMOND_DRILL_BIT = registerItem("diamond_drill_bit", settings -> new net.enchantedwood.item.custom.DrillBitItem(net.enchantedwood.item.custom.DrillBitItem.DrillTier.DIAMOND, settings));
+    public static final Item TITANIUM_DRILL_BIT = registerItem("titanium_drill_bit", settings -> new net.enchantedwood.item.custom.DrillBitItem(net.enchantedwood.item.custom.DrillBitItem.DrillTier.TITANIUM, settings));
+    public static final Item NETHERITE_DRILL_BIT = registerItem("netherite_drill_bit", settings -> new net.enchantedwood.item.custom.DrillBitItem(net.enchantedwood.item.custom.DrillBitItem.DrillTier.NETHERITE, settings.fireproof()));
+
+    // ATV Lumberjack Tree Harvesters (Replaceable Modules)
+    public static final Item IRON_TREE_SAW = registerItem("iron_tree_saw", settings -> new net.enchantedwood.item.custom.TreeSawItem(net.enchantedwood.item.custom.TreeSawItem.SawTier.IRON, settings));
+    public static final Item STEEL_TREE_SAW = registerItem("steel_tree_saw", settings -> new net.enchantedwood.item.custom.TreeSawItem(net.enchantedwood.item.custom.TreeSawItem.SawTier.STEEL, settings));
+    public static final Item DIAMOND_TREE_SAW = registerItem("diamond_tree_saw", settings -> new net.enchantedwood.item.custom.TreeSawItem(net.enchantedwood.item.custom.TreeSawItem.SawTier.DIAMOND, settings));
+    public static final Item TITANIUM_TREE_SAW = registerItem("titanium_tree_saw", settings -> new net.enchantedwood.item.custom.TreeSawItem(net.enchantedwood.item.custom.TreeSawItem.SawTier.TITANIUM, settings));
+    public static final Item NETHERITE_TREE_SAW = registerItem("netherite_tree_saw", settings -> new net.enchantedwood.item.custom.TreeSawItem(net.enchantedwood.item.custom.TreeSawItem.SawTier.NETHERITE, settings.fireproof()));
+
+    // ATV Agricultural Crop Harvesters (Replaceable Modules)
+    public static final Item IRON_CROP_HARVESTER = registerItem("iron_crop_harvester", settings -> new net.enchantedwood.item.custom.CropHarvesterItem(net.enchantedwood.item.custom.CropHarvesterItem.HarvesterTier.IRON, settings));
+    public static final Item STEEL_CROP_HARVESTER = registerItem("steel_crop_harvester", settings -> new net.enchantedwood.item.custom.CropHarvesterItem(net.enchantedwood.item.custom.CropHarvesterItem.HarvesterTier.STEEL, settings));
+    public static final Item DIAMOND_CROP_HARVESTER = registerItem("diamond_crop_harvester", settings -> new net.enchantedwood.item.custom.CropHarvesterItem(net.enchantedwood.item.custom.CropHarvesterItem.HarvesterTier.DIAMOND, settings));
+    public static final Item TITANIUM_CROP_HARVESTER = registerItem("titanium_crop_harvester", settings -> new net.enchantedwood.item.custom.CropHarvesterItem(net.enchantedwood.item.custom.CropHarvesterItem.HarvesterTier.TITANIUM, settings));
+    public static final Item NETHERITE_CROP_HARVESTER = registerItem("netherite_crop_harvester", settings -> new net.enchantedwood.item.custom.CropHarvesterItem(net.enchantedwood.item.custom.CropHarvesterItem.HarvesterTier.NETHERITE, settings.fireproof()));
+
+    // ATV Automotive Headlights (Core Required Part)
+    public static final Item HALOGEN_HEADLIGHTS = registerItem("halogen_headlights", settings -> new net.enchantedwood.item.custom.HeadlightsItem(net.enchantedwood.item.custom.HeadlightsItem.LightTier.HALOGEN, settings));
+    public static final Item LED_FLOODLIGHTS = registerItem("led_floodlights", settings -> new net.enchantedwood.item.custom.HeadlightsItem(net.enchantedwood.item.custom.HeadlightsItem.LightTier.LED, settings));
+    public static final Item XENON_HIGH_BEAMS = registerItem("xenon_high_beams", settings -> new net.enchantedwood.item.custom.HeadlightsItem(net.enchantedwood.item.custom.HeadlightsItem.LightTier.XENON, settings));
+
     // Base Gears
     public static final Item IRON_GEAR = registerItem("iron_gear", settings -> new GearItem(GearTier.IRON, false, settings));
     public static final Item COPPER_GEAR = registerItem("copper_gear", settings -> new GearItem(GearTier.COPPER, false, settings));
@@ -1010,6 +1036,27 @@ public class ModItems {
                 entries.add(SMALL_CARGO_TRUNK);
                 entries.add(MEDIUM_CARGO_TRUNK);
                 entries.add(LARGE_CARGO_TRUNK);
+                entries.add(IRON_DRILL_BIT);
+                entries.add(STEEL_DRILL_BIT);
+                entries.add(DIAMOND_DRILL_BIT);
+                entries.add(TITANIUM_DRILL_BIT);
+                entries.add(NETHERITE_DRILL_BIT);
+
+                entries.add(IRON_TREE_SAW);
+                entries.add(STEEL_TREE_SAW);
+                entries.add(DIAMOND_TREE_SAW);
+                entries.add(TITANIUM_TREE_SAW);
+                entries.add(NETHERITE_TREE_SAW);
+
+                entries.add(IRON_CROP_HARVESTER);
+                entries.add(STEEL_CROP_HARVESTER);
+                entries.add(DIAMOND_CROP_HARVESTER);
+                entries.add(TITANIUM_CROP_HARVESTER);
+                entries.add(NETHERITE_CROP_HARVESTER);
+
+                entries.add(HALOGEN_HEADLIGHTS);
+                entries.add(LED_FLOODLIGHTS);
+                entries.add(XENON_HIGH_BEAMS);
 
                 // Enchanted Lighting
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_LAMP);

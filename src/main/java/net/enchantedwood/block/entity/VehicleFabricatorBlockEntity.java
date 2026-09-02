@@ -33,16 +33,17 @@ import net.enchantedwood.screen.VehicleFabricatorScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
-    public static final int INVENTORY_SIZE = 9;
+    public static final int INVENTORY_SIZE = 10;
     public static final int VEHICLE_SLOT = 0;
     public static final int SEAT_SLOT = 1;
     public static final int ENGINE_SLOT = 2;
     public static final int CHASSIS_SLOT = 3;
     public static final int SUSPENSION_SLOT = 4;
     public static final int TIRES_SLOT = 5;
-    public static final int TRUNK_SLOT = 6;
-    public static final int OUTPUT_SLOT = 7;
-    public static final int BATTERY_SLOT = 8;
+    public static final int HEADLIGHT_SLOT = 6;
+    public static final int TRUNK_SLOT = 7;
+    public static final int OUTPUT_SLOT = 8;
+    public static final int BATTERY_SLOT = 9;
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(10000, 200);
@@ -268,9 +269,10 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         boolean hasChassis = isChassis(inventory.get(CHASSIS_SLOT));
         boolean hasSuspension = isSuspension(inventory.get(SUSPENSION_SLOT));
         boolean hasTires = isTires(inventory.get(TIRES_SLOT));
+        boolean hasHeadlights = isHeadlight(inventory.get(HEADLIGHT_SLOT));
         boolean outputEmpty = inventory.get(OUTPUT_SLOT).isEmpty();
 
-        return hasSeat && hasEngine && hasChassis && hasSuspension && hasTires && outputEmpty;
+        return hasSeat && hasEngine && hasChassis && hasSuspension && hasTires && hasHeadlights && outputEmpty;
     }
 
     public boolean startFabrication() {
@@ -303,6 +305,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         ItemStack tires = inventory.get(TIRES_SLOT);
         ItemStack suspension = inventory.get(SUSPENSION_SLOT);
         ItemStack chassis = inventory.get(CHASSIS_SLOT);
+        ItemStack headlights = inventory.get(HEADLIGHT_SLOT);
         ItemStack trunk = inventory.get(TRUNK_SLOT);
 
         tag.putString("Slot_0", Registries.ITEM.getId(engine.getItem()).toString());
@@ -317,9 +320,13 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         tag.putString("Slot_3", Registries.ITEM.getId(chassis.getItem()).toString());
         tag.putInt("Count_3", 1);
 
+        tag.putString("Slot_4", Registries.ITEM.getId(headlights.getItem()).toString());
+        tag.putInt("Count_4", 1);
+        tag.putString("Headlights", Registries.ITEM.getId(headlights.getItem()).toString());
+
         if (!trunk.isEmpty() && isTrunk(trunk)) {
-            tag.putString("Slot_4", Registries.ITEM.getId(trunk.getItem()).toString());
-            tag.putInt("Count_4", 1);
+            tag.putString("Slot_5", Registries.ITEM.getId(trunk.getItem()).toString());
+            tag.putInt("Count_5", 1);
         }
 
         atvResult.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(tag));
@@ -329,6 +336,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         inventory.get(ENGINE_SLOT).decrement(1);
         inventory.get(CHASSIS_SLOT).decrement(1);
         inventory.get(SUSPENSION_SLOT).decrement(1);
+        inventory.get(HEADLIGHT_SLOT).decrement(1);
         inventory.get(TIRES_SLOT).decrement(Math.min(4, inventory.get(TIRES_SLOT).getCount()));
         if (!trunk.isEmpty()) {
             inventory.get(TRUNK_SLOT).decrement(1);
@@ -360,6 +368,10 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
 
     public static boolean isSuspension(ItemStack stack) {
         return stack.isOf(ModItems.STEEL_SUSPENSION) || stack.isOf(ModItems.TITANIUM_SUSPENSION);
+    }
+
+    public static boolean isHeadlight(ItemStack stack) {
+        return stack.getItem() instanceof net.enchantedwood.item.custom.HeadlightsItem;
     }
 
     public static boolean isTrunk(ItemStack stack) {

@@ -37,6 +37,11 @@ public class AtvEntityRenderer extends EntityRenderer<AtvEntity, AtvRenderState>
         state.yaw = entity.getYaw(tickProgress);
         state.pitch = entity.getPitch(tickProgress);
         state.wheelRotation = entity.wheelRotation;
+        state.attachmentType = entity.getAttachmentType();
+        state.toolSpin = entity.toolSpin;
+        state.hasDrill = entity.hasDrillBit();
+        state.drillSpin = entity.drillSpin;
+        state.headlightsActive = entity.areHeadlightsActive();
         state.lightmapCoordinates = 0x00F000F0;
     }
 

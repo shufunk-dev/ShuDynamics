@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": "minecraft:netherite_ingot",
+    "D": "enchantedwood:diamond_drill_bit",
+    "G": "enchantedwood:netherite_gear"
+  },
+  "pattern": [
+    " N ",
+    "NDN",
+    " G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:netherite_drill_bit"
+  }
+}

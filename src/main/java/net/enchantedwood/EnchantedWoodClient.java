@@ -85,9 +85,16 @@ public class EnchantedWoodClient implements ClientModInitializer {
                     client.player.networkHandler.sendChatCommand("equipment");
                 }
             }
+
+            // Pressing inventory key while riding an ATV opens the ATV Dashboard GUI!
+            if (client.player != null && client.player.getVehicle() instanceof net.enchantedwood.entity.custom.AtvEntity && client.currentScreen == null) {
+                while (client.options.inventoryKey.wasPressed()) {
+                    net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.OpenAtvInventoryPayload());
+                }
+            }
         });
 
-        // Add Equipment Button directly to Player Inventory Screen (InventoryScreen)
+        // Add Equipment & ATV Dashboard Buttons directly to Player Inventory Screen (InventoryScreen)
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
             if (screen instanceof InventoryScreen inventoryScreen) {
                 int x = (scaledWidth - 176) / 2 + 65;
@@ -99,6 +106,15 @@ public class EnchantedWoodClient implements ClientModInitializer {
                         }
                     }).dimensions(x, y, 14, 14).build()
                 );
+
+                // If player is mounted on ATV, show Dashboard button
+                if (client.player != null && client.player.getVehicle() instanceof net.enchantedwood.entity.custom.AtvEntity) {
+                    Screens.getButtons(inventoryScreen).add(
+                        ButtonWidget.builder(Text.literal("🏎️"), button -> {
+                            net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.OpenAtvInventoryPayload());
+                        }).dimensions(x + 16, y, 14, 14).build()
+                    );
+                }
             }
         });
     }

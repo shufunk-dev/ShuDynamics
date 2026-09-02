@@ -10,6 +10,11 @@ public class AtvRenderState extends EntityRenderState {
     public float pitch;
     public float yaw;
     public float wheelRotation;
+    public int attachmentType;
+    public float toolSpin;
+    public boolean hasDrill;
+    public float drillSpin;
+    public boolean headlightsActive;
     public int lightmapCoordinates;
     public ModelCommandRenderer.CrumblingOverlayCommand crumblingOverlay;
 }

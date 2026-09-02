@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "L": "minecraft:redstone_lamp",
+    "H": "enchantedwood:halogen_headlights"
+  },
+  "pattern": [
+    "SLS",
+    "LHL",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:led_floodlights"
+  }
+}

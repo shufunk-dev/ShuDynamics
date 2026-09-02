@@ -6,6 +6,13 @@ import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.entity.ModEntities;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.AtvScreenHandler;
+import net.enchantedwood.item.custom.CropHarvesterItem;
+import net.enchantedwood.item.custom.DrillBitItem;
+import net.enchantedwood.item.custom.HeadlightsItem;
+import net.enchantedwood.item.custom.TreeSawItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CropBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -17,12 +24,16 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
@@ -35,17 +46,27 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.*;
+
 public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inventory {
 
-    // 6 Module Slots: 0:Engine, 1:Tires, 2:Suspension, 3:Chassis, 4:Trunk, 5:Fuel/Battery
+    // 8 Core Slots: 0:Engine, 1:Tires, 2:Suspension, 3:Chassis, 4:Headlights, 5:Trunk, 6:Fuel/Battery, 7:Tool (Drill/Saw/Harvester)
     public static final int ENGINE_SLOT = 0;
     public static final int TIRE_SLOT = 1;
     public static final int SUSPENSION_SLOT = 2;
     public static final int CHASSIS_SLOT = 3;
-    public static final int TRUNK_SLOT = 4;
-    public static final int FUEL_SLOT = 5;
+    public static final int HEADLIGHT_SLOT = 4;
+    public static final int TRUNK_SLOT = 5;
+    public static final int FUEL_SLOT = 6;
+    public static final int DRILL_SLOT = 7;
+    public static final int TOOL_SLOT = 7;
 
-    public static final int MODULE_SLOTS_COUNT = 6;
+    public static final int ATTACHMENT_NONE = 0;
+    public static final int ATTACHMENT_DRILL = 1;
+    public static final int ATTACHMENT_TREE_SAW = 2;
+    public static final int ATTACHMENT_CROP_HARVESTER = 3;
+
+    public static final int MODULE_SLOTS_COUNT = 8;
     public static final int MAX_TRUNK_SLOTS = 27;
     public static final int TOTAL_INVENTORY_SIZE = MODULE_SLOTS_COUNT + MAX_TRUNK_SLOTS;
 
@@ -55,12 +76,18 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     private static final TrackedData<Float> SPEED = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.FLOAT);
     private static final TrackedData<Integer> FUEL_LEVEL = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> MAX_FUEL = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> ATTACHMENT_TYPE = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Boolean> HEADLIGHTS_ACTIVE = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     // Movement & Physics
     private float targetSpeed = 0.0f;
     private float currentSpeed = 0.0f;
     public float wheelRotation = 0.0f;
+    public float toolSpin = 0.0f;
+    public float drillSpin = 0.0f;
     private int fuelBurnTime = 0;
+    private int toolCooldown = 0;
+    private BlockPos dynamicLightPos = null;
 
     public AtvEntity(EntityType<? extends Entity> type, World world) {
         super(type, world);
@@ -99,6 +126,8 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         builder.add(SPEED, 0.0f);
         builder.add(FUEL_LEVEL, 0);
         builder.add(MAX_FUEL, 1000);
+        builder.add(ATTACHMENT_TYPE, ATTACHMENT_NONE);
+        builder.add(HEADLIGHTS_ACTIVE, false);
     }
 
     public float getDisplaySpeed() {
@@ -171,16 +200,19 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         World world = this.getEntityWorld();
+        ItemStack held = player.getStackInHand(hand);
+
         if (player.isSneaking()) {
             if (!world.isClient()) {
-                ItemStack held = player.getStackInHand(hand);
-                if (held.isEmpty() || held.isOf(ModItems.COPPER_GEAR) || held.isOf(ModItems.STEEL_GEAR)) {
+                // Only dismantle if holding a Wrench or Gear
+                if (held.isOf(ModItems.WRENCH) || held.isOf(ModItems.COPPER_GEAR) || held.isOf(ModItems.STEEL_GEAR)) {
                     ItemStack atvDrop = new ItemStack(ModItems.ATV_ITEM);
                     writeInventoryToItem(atvDrop);
                     this.dropStack((ServerWorld) world, atvDrop);
                     this.discard();
                     return ActionResult.SUCCESS;
                 }
+                // Shift + Right-Click with empty hand or other items -> Open ATV Dashboard GUI!
                 player.openHandledScreen(this);
             }
             return ActionResult.SUCCESS;
@@ -190,13 +222,22 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             net.enchantedwood.item.custom.AtvItem.triggerAnomaly2Unlock(player, world);
             if (!this.hasPassengers()) {
                 player.startRiding(this);
-                return ActionResult.SUCCESS;
             } else {
                 player.openHandledScreen(this);
-                return ActionResult.SUCCESS;
             }
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void onRemoved() {
+        if (!this.getEntityWorld().isClient() && this.dynamicLightPos != null) {
+            if (this.getEntityWorld().getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
+                this.getEntityWorld().removeBlock(this.dynamicLightPos, false);
+            }
+            this.dynamicLightPos = null;
+        }
+        super.onRemoved();
     }
 
     public void writeInventoryToItem(ItemStack stack) {
@@ -209,6 +250,9 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             if (!s.isEmpty()) {
                 tag.putString("Slot_" + i, Registries.ITEM.getId(s.getItem()).toString());
                 tag.putInt("Count_" + i, s.getCount());
+                if (s.isDamageable() && s.getDamage() > 0) {
+                    tag.putInt("Damage_" + i, s.getDamage());
+                }
             }
         }
 
@@ -231,10 +275,32 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                         net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(itemId);
                         if (Registries.ITEM.containsId(id)) {
                             int count = tag.getInt("Count_" + i).orElse(1);
-                            this.inventory.set(i, new ItemStack(Registries.ITEM.get(id), Math.max(1, count)));
+                            ItemStack restored = new ItemStack(Registries.ITEM.get(id), Math.max(1, count));
+                            if (tag.contains("Damage_" + i)) {
+                                restored.setDamage(tag.getInt("Damage_" + i).orElse(0));
+                            }
+                            this.inventory.set(i, restored);
                         }
                     }
                 }
+            }
+
+            // Fallback / legacy Headlights & Trunk slot migration
+            if (this.inventory.get(HEADLIGHT_SLOT).isEmpty() && tag.contains("Headlights")) {
+                String lightId = tag.getString("Headlights").orElse("");
+                if (!lightId.isEmpty()) {
+                    net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(lightId);
+                    if (Registries.ITEM.containsId(id)) {
+                        this.inventory.set(HEADLIGHT_SLOT, new ItemStack(Registries.ITEM.get(id), 1));
+                    }
+                }
+            }
+
+            // If Slot_4 contained a trunk in an older save, move it to Slot_5 (TRUNK_SLOT)
+            ItemStack slot4 = this.inventory.get(HEADLIGHT_SLOT);
+            if (slot4.isOf(ModItems.SMALL_CARGO_TRUNK) || slot4.isOf(ModItems.MEDIUM_CARGO_TRUNK) || slot4.isOf(ModItems.LARGE_CARGO_TRUNK)) {
+                this.inventory.set(TRUNK_SLOT, slot4);
+                this.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS, 1));
             }
         }
     }
@@ -262,15 +328,63 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         World world = this.getEntityWorld();
         if (world.isClient()) {
             this.wheelRotation += this.currentSpeed * 25.0f;
+            if (getAttachmentType() != ATTACHMENT_NONE) {
+                this.toolSpin += 30.0f;
+                this.drillSpin = this.toolSpin;
+            }
         } else {
-            // Server side fuel, exhaust & gauges
-            processFuel();
-            if (rider != null && Math.abs(this.currentSpeed) > 0.05f) {
-                consumeFuel(1);
-                if (this.random.nextInt(3) == 0) {
-                    Vec3d exhaustPos = this.getEntityPos().subtract(this.getRotationVector().multiply(0.9)).add(0, 0.4, 0);
-                    ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
+            // Server side fuel, exhaust, tool execution, sync & gauges
+            int att = ATTACHMENT_NONE;
+            ItemStack tool = this.inventory.get(TOOL_SLOT);
+            if (tool.getItem() instanceof DrillBitItem) att = ATTACHMENT_DRILL;
+            else if (tool.getItem() instanceof TreeSawItem) att = ATTACHMENT_TREE_SAW;
+            else if (tool.getItem() instanceof CropHarvesterItem) att = ATTACHMENT_CROP_HARVESTER;
+            this.dataTracker.set(ATTACHMENT_TYPE, att);
+
+            ItemStack lightsStack = this.inventory.get(HEADLIGHT_SLOT);
+            boolean hasLights = lightsStack.getItem() instanceof HeadlightsItem;
+            int lightLevel = 15;
+            if (hasLights && lightsStack.getItem() instanceof HeadlightsItem hItem) {
+                lightLevel = hItem.getTier().getLightLevel();
+            }
+            int skyLight = world.getLightLevel(net.minecraft.world.LightType.SKY, this.getBlockPos()) - world.getAmbientDarkness();
+            boolean dark = hasLights && skyLight <= 7;
+            this.dataTracker.set(HEADLIGHTS_ACTIVE, dark);
+
+            if (dark && rider != null) {
+                Vec3d forward = this.getRotationVector().normalize();
+                BlockPos targetLight = BlockPos.ofFloored(this.getEntityPos().add(forward.multiply(2.5)).add(0, 1.0, 0));
+                if (this.dynamicLightPos != null && !this.dynamicLightPos.equals(targetLight)) {
+                    if (world.getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
+                        world.removeBlock(this.dynamicLightPos, false);
+                    }
+                    this.dynamicLightPos = null;
                 }
+                if (world.getBlockState(targetLight).isAir()) {
+                    world.setBlockState(targetLight, net.minecraft.block.Blocks.LIGHT.getDefaultState().with(net.minecraft.block.LightBlock.LEVEL_15, lightLevel), net.minecraft.block.Block.NOTIFY_ALL);
+                    this.dynamicLightPos = targetLight;
+                }
+            } else {
+                if (this.dynamicLightPos != null) {
+                    if (world.getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
+                        world.removeBlock(this.dynamicLightPos, false);
+                    }
+                    this.dynamicLightPos = null;
+                }
+            }
+
+            processFuel();
+            if (rider != null) {
+                if (Math.abs(this.currentSpeed) > 0.05f) {
+                    consumeFuel(1);
+                    if (this.random.nextInt(3) == 0) {
+                        Vec3d exhaustPos = this.getEntityPos().subtract(this.getRotationVector().multiply(0.9)).add(0, 0.4, 0);
+                        ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
+                    }
+                }
+                if (att == ATTACHMENT_DRILL) processDrilling((ServerWorld) world, rider);
+                else if (att == ATTACHMENT_TREE_SAW) processTreeSawing((ServerWorld) world, rider);
+                else if (att == ATTACHMENT_CROP_HARVESTER) processCropHarvesting((ServerWorld) world, rider);
             }
             this.dataTracker.set(SPEED, this.currentSpeed * 72.0f);
         }
@@ -466,6 +580,345 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     private void consumeFuel(int amount) {
         if (++this.fuelBurnTime % 4 == 0) {
             setFuelLevel(getFuelLevel() - amount, getMaxFuel());
+        }
+    }
+
+    public ItemStack getDrillBit() {
+        return this.inventory.get(DRILL_SLOT);
+    }
+
+    public int getAttachmentType() {
+        if (this.getEntityWorld().isClient()) {
+            return this.dataTracker.get(ATTACHMENT_TYPE);
+        }
+        ItemStack tool = this.inventory.get(TOOL_SLOT);
+        if (tool.getItem() instanceof DrillBitItem) return ATTACHMENT_DRILL;
+        if (tool.getItem() instanceof TreeSawItem) return ATTACHMENT_TREE_SAW;
+        if (tool.getItem() instanceof CropHarvesterItem) return ATTACHMENT_CROP_HARVESTER;
+        return ATTACHMENT_NONE;
+    }
+
+    public boolean hasDrillBit() {
+        return getAttachmentType() == ATTACHMENT_DRILL;
+    }
+
+    public boolean areHeadlightsActive() {
+        return this.dataTracker.get(HEADLIGHTS_ACTIVE);
+    }
+
+    public int getTrunkCapacity() {
+        ItemStack trunk = this.inventory.get(TRUNK_SLOT);
+        if (trunk.isOf(ModItems.LARGE_CARGO_TRUNK)) return 27;
+        if (trunk.isOf(ModItems.MEDIUM_CARGO_TRUNK)) return 18;
+        if (trunk.isOf(ModItems.SMALL_CARGO_TRUNK)) return 9;
+        return 0;
+    }
+
+    public ItemStack insertIntoTrunk(ItemStack stack) {
+        int cap = getTrunkCapacity();
+        if (cap <= 0) return stack;
+
+        // Try merge with existing stacks
+        for (int i = 0; i < cap; i++) {
+            int slot = MODULE_SLOTS_COUNT + i;
+            ItemStack current = this.inventory.get(slot);
+            if (ItemStack.areItemsAndComponentsEqual(current, stack)) {
+                int space = current.getMaxCount() - current.getCount();
+                int add = Math.min(space, stack.getCount());
+                current.increment(add);
+                stack.decrement(add);
+                if (stack.isEmpty()) return ItemStack.EMPTY;
+            }
+        }
+
+        // Try empty slots
+        for (int i = 0; i < cap; i++) {
+            int slot = MODULE_SLOTS_COUNT + i;
+            ItemStack current = this.inventory.get(slot);
+            if (current.isEmpty()) {
+                this.inventory.set(slot, stack.copy());
+                return ItemStack.EMPTY;
+            }
+        }
+
+        return stack;
+    }
+
+    private void processDrilling(ServerWorld world, LivingEntity rider) {
+        if (this.toolCooldown > 0) {
+            this.toolCooldown--;
+            return;
+        }
+
+        ItemStack drillStack = this.inventory.get(TOOL_SLOT);
+        if (!(drillStack.getItem() instanceof DrillBitItem drillBit)) {
+            return;
+        }
+
+        if (this.currentSpeed < 0.05f && !getForwardInput(rider)) {
+            return;
+        }
+
+        float yawRad = (float) Math.toRadians(this.getYaw());
+        double dx = -Math.sin(yawRad);
+        double dz = Math.cos(yawRad);
+        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
+
+        Vec3d drillCenter = this.getEntityPos().add(forwardVec.multiply(1.3)).add(0, 0.5, 0);
+        BlockPos basePos = BlockPos.ofFloored(drillCenter);
+
+        Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
+
+        List<BlockPos> targetPositions = new ArrayList<>();
+        int y0 = (int) Math.floor(this.getY());
+        int y1 = y0 + 1;
+
+        BlockPos p1 = basePos.withY(y0);
+        BlockPos p2 = basePos.withY(y1);
+        BlockPos p3 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y0);
+        BlockPos p4 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y1);
+        BlockPos p5 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y0);
+        BlockPos p6 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y1);
+
+        for (BlockPos p : List.of(p1, p2, p3, p4, p5, p6)) {
+            if (!targetPositions.contains(p)) {
+                targetPositions.add(p);
+            }
+        }
+
+        boolean drilledAny = false;
+
+        for (BlockPos targetPos : targetPositions) {
+            BlockState state = world.getBlockState(targetPos);
+            if (state.isAir() || !state.getFluidState().isEmpty()) continue;
+            if (!drillBit.canHarvest(state)) continue;
+
+            List<ItemStack> drops = Block.getDroppedStacks(state, world, targetPos, world.getBlockEntity(targetPos), rider, drillStack);
+
+            world.breakBlock(targetPos, false, rider);
+
+            for (ItemStack drop : drops) {
+                ItemStack remaining = insertIntoTrunk(drop);
+                if (!remaining.isEmpty()) {
+                    Block.dropStack(world, targetPos, remaining);
+                }
+            }
+
+            world.playSound(null, targetPos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
+            world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+                    targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5,
+                    6, 0.2, 0.2, 0.2, 0.05);
+
+            if (rider instanceof PlayerEntity player && !player.isCreative()) {
+                int newDamage = drillStack.getDamage() + 1;
+                if (newDamage >= drillStack.getMaxDamage()) {
+                    this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
+                    world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    player.sendMessage(Text.literal("§c[ATV] Drill bit broke!"), true);
+                    break;
+                } else {
+                    drillStack.setDamage(newDamage);
+                }
+            }
+
+            drilledAny = true;
+            break;
+        }
+
+        if (drilledAny) {
+            int baseDelay = Math.max(1, (int) (6 / drillBit.getTier().getSpeedMultiplier()));
+            this.toolCooldown = baseDelay;
+        }
+    }
+
+    private void processTreeSawing(ServerWorld world, LivingEntity rider) {
+        if (this.toolCooldown > 0) {
+            this.toolCooldown--;
+            return;
+        }
+
+        ItemStack toolStack = this.inventory.get(TOOL_SLOT);
+        if (!(toolStack.getItem() instanceof TreeSawItem treeSaw)) {
+            return;
+        }
+
+        if (this.currentSpeed < 0.05f && !getForwardInput(rider)) {
+            return;
+        }
+
+        float yawRad = (float) Math.toRadians(this.getYaw());
+        double dx = -Math.sin(yawRad);
+        double dz = Math.cos(yawRad);
+        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
+
+        Vec3d sawCenter = this.getEntityPos().add(forwardVec.multiply(1.3)).add(0, 0.5, 0);
+        BlockPos basePos = BlockPos.ofFloored(sawCenter);
+
+        BlockPos startLog = null;
+        for (int dy = 0; dy <= 2; dy++) {
+            BlockPos check = basePos.up(dy);
+            if (treeSaw.canHarvest(world.getBlockState(check))) {
+                startLog = check;
+                break;
+            }
+        }
+
+        if (startLog == null) return;
+
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        Set<BlockPos> visited = new HashSet<>();
+        List<BlockPos> logsToBreak = new ArrayList<>();
+        List<BlockPos> leavesToBreak = new ArrayList<>();
+
+        queue.add(startLog);
+        visited.add(startLog);
+
+        int maxLogs = treeSaw.getTier().getMaxLogsPerTree();
+        int maxCanopy = maxLogs * 4;
+
+        while (!queue.isEmpty() && logsToBreak.size() < maxLogs) {
+            BlockPos current = queue.poll();
+            BlockState st = world.getBlockState(current);
+
+            boolean isLog = st.isIn(BlockTags.LOGS) || st.isOf(net.minecraft.block.Blocks.BAMBOO)
+                    || st.isOf(net.minecraft.block.Blocks.BAMBOO_SAPLING) || st.isOf(net.minecraft.block.Blocks.SUGAR_CANE)
+                    || st.isOf(net.minecraft.block.Blocks.CACTUS);
+
+            if (isLog) {
+                logsToBreak.add(current);
+            } else if (leavesToBreak.size() < maxCanopy) {
+                leavesToBreak.add(current);
+            }
+
+            // Always expand neighbor branches and leaves upward and outward
+            for (int ox = -1; ox <= 1; ox++) {
+                for (int oy = -1; oy <= 3; oy++) {
+                    for (int oz = -1; oz <= 1; oz++) {
+                        BlockPos neighbor = current.add(ox, oy, oz);
+                        if (!visited.contains(neighbor)) {
+                            visited.add(neighbor);
+                            BlockState nState = world.getBlockState(neighbor);
+                            if (treeSaw.canHarvest(nState)) {
+                                queue.add(neighbor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (logsToBreak.isEmpty()) return;
+
+        int chopped = 0;
+        for (BlockPos logPos : logsToBreak) {
+            BlockState state = world.getBlockState(logPos);
+            List<ItemStack> drops = Block.getDroppedStacks(state, world, logPos, world.getBlockEntity(logPos), rider, toolStack);
+            world.breakBlock(logPos, false, rider);
+
+            for (ItemStack drop : drops) {
+                ItemStack rem = insertIntoTrunk(drop);
+                if (!rem.isEmpty()) Block.dropStack(world, logPos, rem);
+            }
+            chopped++;
+        }
+
+        for (BlockPos leafPos : leavesToBreak) {
+            BlockState state = world.getBlockState(leafPos);
+            List<ItemStack> drops = Block.getDroppedStacks(state, world, leafPos, world.getBlockEntity(leafPos), rider, toolStack);
+            world.breakBlock(leafPos, false, rider);
+
+            for (ItemStack drop : drops) {
+                ItemStack rem = insertIntoTrunk(drop);
+                if (!rem.isEmpty()) Block.dropStack(world, leafPos, rem);
+            }
+        }
+
+        world.playSound(null, startLog, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 0.8f, 0.9f);
+
+        if (rider instanceof PlayerEntity player && !player.isCreative()) {
+            int newDamage = toolStack.getDamage() + chopped;
+            if (newDamage >= toolStack.getMaxDamage()) {
+                this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
+                world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
+                player.sendMessage(Text.literal("§c[ATV] Tree saw blade broke!"), true);
+            } else {
+                toolStack.setDamage(newDamage);
+            }
+        }
+
+        this.toolCooldown = Math.max(2, (int) (12 / treeSaw.getTier().getSpeedMultiplier()));
+    }
+
+    private void processCropHarvesting(ServerWorld world, LivingEntity rider) {
+        if (this.toolCooldown > 0) {
+            this.toolCooldown--;
+            return;
+        }
+
+        ItemStack toolStack = this.inventory.get(TOOL_SLOT);
+        if (!(toolStack.getItem() instanceof CropHarvesterItem cropHarvester)) {
+            return;
+        }
+
+        if (this.currentSpeed < 0.05f && !getForwardInput(rider)) {
+            return;
+        }
+
+        float yawRad = (float) Math.toRadians(this.getYaw());
+        double dx = -Math.sin(yawRad);
+        double dz = Math.cos(yawRad);
+        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
+        Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
+
+        Vec3d harvesterPos = this.getEntityPos().add(forwardVec.multiply(1.2));
+        BlockPos centerPos = BlockPos.ofFloored(harvesterPos);
+
+        int radius = cropHarvester.getTier().getRadius();
+        int harvestedCount = 0;
+
+        for (int rx = -radius; rx <= radius; rx++) {
+            for (int rz = -radius; rz <= radius; rz++) {
+                BlockPos targetPos = centerPos.add((int)(rightVec.x * rx + forwardVec.x * rz), 0, (int)(rightVec.z * rx + forwardVec.z * rz));
+                for (int dy = -1; dy <= 1; dy++) {
+                    BlockPos p = targetPos.add(0, dy, 0);
+                    BlockState state = world.getBlockState(p);
+
+                    if (cropHarvester.isMatureCrop(state)) {
+                        List<ItemStack> drops = Block.getDroppedStacks(state, world, p, world.getBlockEntity(p), rider, toolStack);
+
+                        if (state.getBlock() instanceof CropBlock crop) {
+                            world.setBlockState(p, crop.withAge(0), Block.NOTIFY_ALL);
+                        } else {
+                            world.breakBlock(p, false, rider);
+                        }
+
+                        for (ItemStack drop : drops) {
+                            ItemStack rem = insertIntoTrunk(drop);
+                            if (!rem.isEmpty()) Block.dropStack(world, p, rem);
+                        }
+
+                        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+                                p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.05);
+
+                        harvestedCount++;
+                    }
+                }
+            }
+        }
+
+        if (harvestedCount > 0) {
+            world.playSound(null, centerPos, SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 0.6f, 1.1f);
+            if (rider instanceof PlayerEntity player && !player.isCreative()) {
+                int newDamage = toolStack.getDamage() + harvestedCount;
+                if (newDamage >= toolStack.getMaxDamage()) {
+                    this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
+                    world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    player.sendMessage(Text.literal("§c[ATV] Crop harvester reel broke!"), true);
+                } else {
+                    toolStack.setDamage(newDamage);
+                }
+            }
+            this.toolCooldown = Math.max(1, (int) (6 / cropHarvester.getTier().getSpeedMultiplier()));
         }
     }
 

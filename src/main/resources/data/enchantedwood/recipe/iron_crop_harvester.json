@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "H": "minecraft:iron_hoe",
+    "G": "enchantedwood:iron_gear"
+  },
+  "pattern": [
+    " I ",
+    "HGH",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:iron_crop_harvester"
+  }
+}

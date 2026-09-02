@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:titanium_gear"
+  },
+  "pattern": [
+    " T ",
+    "TGT",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:titanium_drill_bit"
+  }
+}

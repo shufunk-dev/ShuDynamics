@@ -78,7 +78,15 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
             }
         });
 
-        // 6: Trunk Slot
+        // 6: Headlights Slot (Required Core Automotive Part)
+        this.addSlot(new Slot(inventory, VehicleFabricatorBlockEntity.HEADLIGHT_SLOT, 70, 86) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return VehicleFabricatorBlockEntity.isHeadlight(stack);
+            }
+        });
+
+        // 7: Trunk Slot (Optional)
         this.addSlot(new Slot(inventory, VehicleFabricatorBlockEntity.TRUNK_SLOT, 106, 86) {
             @Override
             public boolean canInsert(ItemStack stack) {
@@ -86,7 +94,7 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
             }
         });
 
-        // 7: Output Slot
+        // 8: Output Slot
         this.addSlot(new Slot(inventory, VehicleFabricatorBlockEntity.OUTPUT_SLOT, 142, 82) {
             @Override
             public boolean canInsert(ItemStack stack) {
@@ -94,7 +102,7 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
             }
         });
 
-        // 8: Battery Slot
+        // 9: Battery Slot
         this.addSlot(new Slot(inventory, VehicleFabricatorBlockEntity.BATTERY_SLOT, 6, 118) {
             @Override
             public boolean canInsert(ItemStack stack) {
@@ -188,6 +196,8 @@ public class VehicleFabricatorScreenHandler extends ScreenHandler {
                     if (!this.insertItem(originalStack, VehicleFabricatorBlockEntity.SUSPENSION_SLOT, VehicleFabricatorBlockEntity.SUSPENSION_SLOT + 1, false)) return ItemStack.EMPTY;
                 } else if (VehicleFabricatorBlockEntity.isTires(originalStack)) {
                     if (!this.insertItem(originalStack, VehicleFabricatorBlockEntity.TIRES_SLOT, VehicleFabricatorBlockEntity.TIRES_SLOT + 1, false)) return ItemStack.EMPTY;
+                } else if (VehicleFabricatorBlockEntity.isHeadlight(originalStack)) {
+                    if (!this.insertItem(originalStack, VehicleFabricatorBlockEntity.HEADLIGHT_SLOT, VehicleFabricatorBlockEntity.HEADLIGHT_SLOT + 1, false)) return ItemStack.EMPTY;
                 } else if (VehicleFabricatorBlockEntity.isTrunk(originalStack)) {
                     if (!this.insertItem(originalStack, VehicleFabricatorBlockEntity.TRUNK_SLOT, VehicleFabricatorBlockEntity.TRUNK_SLOT + 1, false)) return ItemStack.EMPTY;
                 } else if (originalStack.getItem() instanceof EnergyProvider) {

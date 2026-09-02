@@ -41,6 +41,27 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
             context.drawText(this.textRenderer, Text.literal(speedStr), x + 60, y + 6, 0x00FFFF, false);
             context.drawText(this.textRenderer, Text.literal(fuelStr), x + 120, y + 6, fuelPct > 20 ? 0x55FF55 : 0xFF5555, false);
         }
+
+        // Draw slot boxes for left 2x3 installed parts
+        drawSlotBox(context, x + 9, y + 17);
+        drawSlotBox(context, x + 9, y + 35);
+        drawSlotBox(context, x + 9, y + 53);
+        drawSlotBox(context, x + 27, y + 17);
+        drawSlotBox(context, x + 27, y + 35);
+        drawSlotBox(context, x + 27, y + 53);
+
+        // Draw slot boxes for right column Fuel and Tool
+        drawSlotBox(context, x + 141, y + 17);
+        drawSlotBox(context, x + 141, y + 53);
+    }
+
+    private void drawSlotBox(DrawContext context, int sx, int sy) {
+        context.fill(sx, sy, sx + 18, sy + 18, 0xFF373737);
+        context.fill(sx + 1, sy + 1, sx + 17, sy + 17, 0xFF8B8B8B);
+        context.fill(sx, sy, sx + 17, sy + 1, 0xFF373737);
+        context.fill(sx, sy, sx + 1, sy + 17, 0xFF373737);
+        context.fill(sx + 1, sy + 17, sx + 18, sy + 18, 0xFFFFFFFF);
+        context.fill(sx + 17, sy + 1, sx + 18, sy + 18, 0xFFFFFFFF);
     }
 
     @Override
@@ -49,6 +70,7 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
         context.drawText(this.textRenderer, Text.literal("Installed"), 10, 7, 0x555555, false);
         context.drawText(this.textRenderer, Text.literal("Cargo"), 74, 7, 0x555555, false);
         context.drawText(this.textRenderer, Text.literal("Fuel"), 140, 7, 0x555555, false);
+        context.drawText(this.textRenderer, Text.literal("Tool"), 140, 44, 0x555555, false);
 
         // Player Inventory Title
         context.drawText(this.textRenderer, this.playerInventoryTitle, 8, 73, 0x404040, false);
@@ -70,12 +92,13 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
             int slotId = this.focusedSlot.id;
             Text tooltip = null;
 
-            if (slotId < 5) {
+            if (slotId < 6) {
                 String slotName = switch (slotId) {
                     case AtvEntity.ENGINE_SLOT -> "Engine";
                     case AtvEntity.TIRE_SLOT -> "Tires";
                     case AtvEntity.SUSPENSION_SLOT -> "Suspension";
                     case AtvEntity.CHASSIS_SLOT -> "Chassis";
+                    case AtvEntity.HEADLIGHT_SLOT -> "Headlights";
                     case AtvEntity.TRUNK_SLOT -> "Cargo Trunk";
                     default -> "Part";
                 };
@@ -87,6 +110,8 @@ public class AtvScreen extends HandledScreen<AtvScreenHandler> {
                 }
             } else if (slotId == AtvEntity.FUEL_SLOT && !this.focusedSlot.hasStack()) {
                 tooltip = Text.literal("§6Fuel / Battery Slot§r\n§7Insert Gasoline, Biofuel, High-Octane, Coal, or Charged Battery.");
+            } else if (slotId == AtvEntity.TOOL_SLOT && !this.focusedSlot.hasStack()) {
+                tooltip = Text.literal("§6Attachment Tool Slot§r\n§7Insert Mining Drill Bit, Tree Harvester Saw, or Crop Harvester.\n§8Operates while driving and auto-routes all harvests into cargo trunk.");
             }
 
             if (tooltip != null) {
