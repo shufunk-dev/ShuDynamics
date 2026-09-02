@@ -12,7 +12,9 @@ import net.enchantedwood.item.custom.HeadlightsItem;
 import net.enchantedwood.item.custom.TreeSawItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.CocoaBlock;
 import net.minecraft.block.CropBlock;
+import net.minecraft.block.NetherWartBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -174,7 +176,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
     @Override
     protected Vec3d getPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scale) {
-        return new Vec3d(0.0, 0.45 * scale, 0.0);
+        return new Vec3d(0.0, 0.78 * scale, -0.1 * scale);
     }
 
     @Override
@@ -850,17 +852,12 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     private void processCropHarvesting(ServerWorld world, LivingEntity rider) {
-        if (this.toolCooldown > 0) {
-            this.toolCooldown--;
-            return;
-        }
-
         ItemStack toolStack = this.inventory.get(TOOL_SLOT);
         if (!(toolStack.getItem() instanceof CropHarvesterItem cropHarvester)) {
             return;
         }
 
-        if (this.currentSpeed < 0.05f && !getForwardInput(rider)) {
+        if (Math.abs(this.currentSpeed) < 0.03f && !getForwardInput(rider)) {
             return;
         }
 
@@ -870,44 +867,51 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
         Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
 
-        Vec3d harvesterPos = this.getEntityPos().add(forwardVec.multiply(1.2));
-        BlockPos centerPos = BlockPos.ofFloored(harvesterPos);
-
         int radius = cropHarvester.getTier().getRadius();
+        Set<BlockPos> uniquePositions = new HashSet<>();
+
+        // Sample along front bumper across full swath width in fine 0.5-block steps
+        for (double offset = -radius; offset <= radius; offset += 0.5) {
+            for (double fwd = 0.5; fwd <= 1.8; fwd += 0.6) {
+                Vec3d samplePoint = this.getEntityPos().add(forwardVec.multiply(fwd)).add(rightVec.multiply(offset));
+                BlockPos base = BlockPos.ofFloored(samplePoint);
+                uniquePositions.add(base);
+                uniquePositions.add(base.down());
+                uniquePositions.add(base.up());
+            }
+        }
+
         int harvestedCount = 0;
 
-        for (int rx = -radius; rx <= radius; rx++) {
-            for (int rz = -radius; rz <= radius; rz++) {
-                BlockPos targetPos = centerPos.add((int)(rightVec.x * rx + forwardVec.x * rz), 0, (int)(rightVec.z * rx + forwardVec.z * rz));
-                for (int dy = -1; dy <= 1; dy++) {
-                    BlockPos p = targetPos.add(0, dy, 0);
-                    BlockState state = world.getBlockState(p);
+        for (BlockPos p : uniquePositions) {
+            BlockState state = world.getBlockState(p);
+            if (cropHarvester.isMatureCrop(state)) {
+                List<ItemStack> drops = Block.getDroppedStacks(state, world, p, world.getBlockEntity(p), rider, toolStack);
 
-                    if (cropHarvester.isMatureCrop(state)) {
-                        List<ItemStack> drops = Block.getDroppedStacks(state, world, p, world.getBlockEntity(p), rider, toolStack);
-
-                        if (state.getBlock() instanceof CropBlock crop) {
-                            world.setBlockState(p, crop.withAge(0), Block.NOTIFY_ALL);
-                        } else {
-                            world.breakBlock(p, false, rider);
-                        }
-
-                        for (ItemStack drop : drops) {
-                            ItemStack rem = insertIntoTrunk(drop);
-                            if (!rem.isEmpty()) Block.dropStack(world, p, rem);
-                        }
-
-                        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
-                                p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.05);
-
-                        harvestedCount++;
-                    }
+                if (state.getBlock() instanceof CropBlock crop) {
+                    world.setBlockState(p, crop.withAge(0), Block.NOTIFY_ALL);
+                } else if (state.getBlock() instanceof CocoaBlock) {
+                    world.setBlockState(p, state.with(CocoaBlock.AGE, 0), Block.NOTIFY_ALL);
+                } else if (state.getBlock() instanceof NetherWartBlock) {
+                    world.setBlockState(p, state.with(NetherWartBlock.AGE, 0), Block.NOTIFY_ALL);
+                } else {
+                    world.breakBlock(p, false, rider);
                 }
+
+                for (ItemStack drop : drops) {
+                    ItemStack rem = insertIntoTrunk(drop);
+                    if (!rem.isEmpty()) Block.dropStack(world, p, rem);
+                }
+
+                world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+                        p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.05);
+
+                harvestedCount++;
             }
         }
 
         if (harvestedCount > 0) {
-            world.playSound(null, centerPos, SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 0.6f, 1.1f);
+            world.playSound(null, this.getBlockPos(), SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 0.6f, 1.1f);
             if (rider instanceof PlayerEntity player && !player.isCreative()) {
                 int newDamage = toolStack.getDamage() + harvestedCount;
                 if (newDamage >= toolStack.getMaxDamage()) {
@@ -918,7 +922,6 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                     toolStack.setDamage(newDamage);
                 }
             }
-            this.toolCooldown = Math.max(1, (int) (6 / cropHarvester.getTier().getSpeedMultiplier()));
         }
     }
 
