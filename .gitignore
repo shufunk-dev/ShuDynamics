@@ -26,12 +26,8 @@ server/
 .agents/
 AGENTS.md
 
-# Wiki & Documentation Site Build Output
-wiki/node_modules/
-wiki/.vitepress/cache/
-wiki/.vitepress/dist/
-wiki/docs/.vitepress/cache/
-wiki/docs/.vitepress/dist/
+# Wiki & Documentation Site
+wiki/
 
 # Upload Artifacts
 upload/
