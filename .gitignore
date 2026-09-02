@@ -42,6 +42,8 @@ shumod-development-effort-report.html
 
 # Scratch Generation & Automation Scripts
 scratch/
+tools/
+*.py
 *.js
 *.ps1
 CURSEFORGE_DESCRIPTION.md
