@@ -439,7 +439,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return false;
         }
 
-        // 4. Search RecipeManager for a crafting recipe that produces targetItem
+        // 4. Search RecipeManager for a crafting recipe that produces targetItem from available materials
         activeRecursion.add(targetItem);
         try {
             for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
@@ -450,10 +450,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
                     java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                     List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
-                    java.util.Map<net.minecraft.item.Item, Integer> subMissing = new java.util.LinkedHashMap<>();
                     int backupSteps = plan.totalCraftingSteps;
 
-                    boolean success = true;
                     List<net.minecraft.recipe.Ingredient> ings;
                     try {
                         ings = craftingRecipe.getIngredientPlacement().getIngredients();
@@ -463,11 +461,13 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
                     if (ings.isEmpty()) continue;
 
+                    boolean success = true;
                     for (net.minecraft.recipe.Ingredient ing : ings) {
                         if (ing == null || ing.isEmpty()) continue;
 
-                        if (!resolveIngredientRequirement(world, ing, available, virtualBuffer, plan, subMissing, activeRecursion, depth + 1)) {
+                        if (!resolveIngredientRequirement(world, ing, available, virtualBuffer, plan, activeRecursion, depth + 1)) {
                             success = false;
+                            break; // Stop testing this recipe candidate immediately upon an unsatisfied ingredient
                         }
                     }
 
@@ -478,6 +478,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         }
                         return true;
                     } else {
+                        // Rollback and try the next recipe candidate
                         available.clear();
                         available.putAll(backupAvailable);
                         virtualBuffer.clear();
@@ -485,13 +486,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         plan.rawIngredientsToConsume.clear();
                         plan.rawIngredientsToConsume.addAll(backupPlan);
                         plan.totalCraftingSteps = backupSteps;
-
-                        if (!subMissing.isEmpty()) {
-                            for (java.util.Map.Entry<net.minecraft.item.Item, Integer> me : subMissing.entrySet()) {
-                                missingItems.put(me.getKey(), missingItems.getOrDefault(me.getKey(), 0) + me.getValue());
-                            }
-                            return false;
-                        }
                     }
                 }
             }
@@ -501,6 +495,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             activeRecursion.remove(targetItem);
         }
 
+        // If no recipe could synthesize targetItem from currently available materials, record targetItem as missing
         missingItems.put(targetItem, missingItems.getOrDefault(targetItem, 0) + 1);
         return false;
     }
@@ -509,7 +504,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                                  java.util.Map<net.minecraft.item.Item, Integer> available,
                                                  java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer,
                                                  CraftingPlan plan,
-                                                 java.util.Map<net.minecraft.item.Item, Integer> missingItems,
                                                  java.util.Set<net.minecraft.item.Item> activeRecursion,
                                                  int depth) {
         List<net.minecraft.item.Item> matchingItems;
@@ -542,9 +536,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
         }
 
-        // Priority 3: Try to synthesize one of the matching items recursively
+        // Priority 3: Try to synthesize one of the matching items recursively from available materials
+        java.util.Map<net.minecraft.item.Item, Integer> dummyMissing = new java.util.HashMap<>();
         for (net.minecraft.item.Item opt : matchingItems) {
-            if (resolveItemRequirement(world, opt, available, virtualBuffer, plan, missingItems, activeRecursion, depth)) {
+            if (resolveItemRequirement(world, opt, available, virtualBuffer, plan, dummyMissing, activeRecursion, depth)) {
                 return true;
             }
         }
