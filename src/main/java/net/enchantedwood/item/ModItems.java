@@ -284,7 +284,7 @@ public class ModItems {
     public static final Item ENCHANTED_ALUMINUM_GEAR = registerItem("enchanted_aluminum_gear", settings -> new GearItem(GearTier.ALUMINUM, true, settings));
     public static final Item EMPTY_GAS_CANISTER = registerItem("empty_gas_canister", settings -> new Item(settings.maxCount(16)));
     public static final Item OXYGEN_CANISTER = registerItem("oxygen_canister", settings -> new Item(settings.maxCount(16)));
-    public static final Item HYDROGEN_CANISTER = registerItem("hydrogen_canister", settings -> new Item(settings.maxCount(16)));
+    public static final Item HYDROGEN_CANISTER = registerItem("hydrogen_canister", settings -> new net.enchantedwood.item.custom.HydrogenCanisterItem(settings.maxCount(16)));
     public static final Item HYDROGEN_JETPACK = registerItem("hydrogen_jetpack", settings -> new net.enchantedwood.item.custom.HydrogenJetpackItem(settings.armor(ModArmorMaterials.ALUMINUM, EquipmentType.CHESTPLATE)));
     public static final Item OXY_HYDROGEN_TORCH = registerItem("oxy_hydrogen_torch", settings -> new net.enchantedwood.item.custom.OxyHydrogenTorchItem(settings));
 

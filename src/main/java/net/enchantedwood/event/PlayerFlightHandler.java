@@ -21,24 +21,69 @@ public class PlayerFlightHandler {
         });
     }
 
+    public static boolean isWearingActiveJetpack(ServerPlayerEntity player) {
+        ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
+        return chest.isOf(ModItems.HYDROGEN_JETPACK) && net.enchantedwood.item.custom.HydrogenJetpackItem.getHydrogen(chest) > 0;
+    }
+
     private static void tickPlayerJetpack(ServerPlayerEntity player, ServerWorld world) {
         if (player.isCreative() || player.isSpectator()) return;
         ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
         if (chest.isOf(ModItems.HYDROGEN_JETPACK)) {
             int fuel = net.enchantedwood.item.custom.HydrogenJetpackItem.getHydrogen(chest);
-            if (fuel > 0 && !player.isOnGround()) {
-                Vec3d vel = player.getVelocity();
-                if (vel.y < 0.35) {
-                    player.setVelocity(vel.x, Math.min(vel.y + 0.08, 0.45), vel.z);
-                    player.velocityDirty = true;
+            if (fuel > 0) {
+                // Grant flight!
+                if (!player.getAbilities().allowFlying) {
+                    player.getAbilities().allowFlying = true;
+                    player.sendAbilitiesUpdate();
+                }
+
+                // If actively flying in air:
+                if (player.getAbilities().flying) {
                     player.fallDistance = 0.0f;
 
-                    if (world.getTime() % 4 == 0) {
-                        net.enchantedwood.item.custom.HydrogenJetpackItem.setHydrogen(chest, fuel - 1);
+                    // Rocket thruster particles
+                    if (world.getTime() % 2 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 0.3, player.getZ(), 2, 0.1, 0.05, 0.1, 0.02);
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, player.getX(), player.getY() + 0.2, player.getZ(), 1, 0.1, 0.05, 0.1, 0.01);
                     }
+
+                    // Thruster audio loop every second
+                    if (world.getTime() % 20 == 0) {
+                        world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.ITEM_ELYTRA_FLYING, net.minecraft.sound.SoundCategory.PLAYERS, 0.35f, 1.8f);
+                    }
+
+                    // Consume fuel: 1 mB every 4 ticks (5 mB/s -> 5,000 mB lasts ~16.6 minutes of continuous flight)
+                    if (world.getTime() % 4 == 0) {
+                        net.enchantedwood.item.custom.HydrogenJetpackItem.setHydrogen(chest, fuel - 1);
+                    }
+                } else if (!player.isOnGround()) {
+                    // Safe glide / fall dampening when jumping or falling while wearing fueled jetpack
+                    player.fallDistance = 0.0f;
                 }
+            } else {
+                // Fuel exhausted!
+                if (player.getAbilities().allowFlying && !hasCapeEquipped(player) && !isWearingFullEnchantedNetherite(player)) {
+                    player.getAbilities().allowFlying = false;
+                    player.getAbilities().flying = false;
+                    player.sendAbilitiesUpdate();
+                    player.sendMessage(net.minecraft.text.Text.literal("§c⚠️ Jetpack Fuel Depleted!"), true);
+                    world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.BLOCK_FIRE_EXTINGUISH, net.minecraft.sound.SoundCategory.PLAYERS, 0.8f, 1.5f);
+                }
+                // Emergency parachute descent dampener
+                if (!player.isOnGround() && player.getVelocity().y < -0.3) {
+                    Vec3d vel = player.getVelocity();
+                    player.setVelocity(vel.x, Math.max(vel.y, -0.25), vel.z);
+                    player.velocityDirty = true;
+                    player.fallDistance = 0.0f;
+                }
+            }
+        } else {
+            // Jetpack was unequipped (and player does not have Netherite Cape flight)
+            if (player.getAbilities().allowFlying && !hasCapeEquipped(player) && !isWearingFullEnchantedNetherite(player)) {
+                player.getAbilities().allowFlying = false;
+                player.getAbilities().flying = false;
+                player.sendAbilitiesUpdate();
             }
         }
     }
@@ -47,9 +92,11 @@ public class PlayerFlightHandler {
         if (player.isCreative() || player.isSpectator()) return;
 
         boolean hasCape = hasCapeEquipped(player);
+        boolean hasJetpack = isWearingActiveJetpack(player);
 
         if (!hasCape) {
-            if (player.getAbilities().allowFlying) {
+            // Only disable flight if player is not currently powered by a jetpack
+            if (!hasJetpack && player.getAbilities().allowFlying) {
                 player.getAbilities().allowFlying = false;
                 player.getAbilities().flying = false;
                 player.sendAbilitiesUpdate();
@@ -67,8 +114,8 @@ public class PlayerFlightHandler {
                 player.sendAbilitiesUpdate();
             }
         } else {
-            // Any other armor / incomplete set -> Disable Creative Flying, grant Tiered Downward Float
-            if (player.getAbilities().allowFlying) {
+            // Any other armor / incomplete set -> Disable Creative Flying unless powered by jetpack
+            if (!hasJetpack && player.getAbilities().allowFlying) {
                 player.getAbilities().allowFlying = false;
                 player.getAbilities().flying = false;
                 player.sendAbilitiesUpdate();
