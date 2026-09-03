@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:mystery_keystone",
+    "enchantedwood:storage_crystal_64k",
+    "enchantedwood:tungsten_plate",
+    "enchantedwood:basalt_flux_catalyst"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:dimensional_singularity"
+  }
+}

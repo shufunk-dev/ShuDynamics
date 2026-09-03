@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MMM",
+    "MS ",
+    " S "
+  ],
+  "key": {
+    "M": "enchantedwood:enchanted_diamond",
+    "S": "enchantedwood:infused_heartwood"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:enchanted_diamond_broad_axe"
+  }
+}

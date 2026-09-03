@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "enchantedwood:item/enchanted_netherite_broad_axe"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "C": "enchantedwood:interdimensional_card",
+    "F": "enchantedwood:fire_crystal",
+    "S": "enchantedwood:storage_crystal_64k"
+  },
+  "pattern": [
+    "TCT",
+    "FSF",
+    "TCT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:mystery_keystone"
+  }
+}

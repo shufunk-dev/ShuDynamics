@@ -505,6 +505,15 @@ public class ModBlocks {
                     .resistance(1200.0f)
                     .requiresTool()));
 
+    public static final Block DIMENSIONAL_SINGULARITY = registerBlock("dimensional_singularity",
+            new net.enchantedwood.block.custom.DimensionalSingularityBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dimensional_singularity")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(10.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()
+                    .luminance(state -> 15)));
+
     // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
     public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",
             new Block(AbstractBlock.Settings.create()

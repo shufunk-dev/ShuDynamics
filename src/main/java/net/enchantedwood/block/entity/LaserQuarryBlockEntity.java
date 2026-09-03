@@ -72,6 +72,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     private int scanZ = 0;
     private boolean initializedScan = false;
     private int tickDelay = 0;
+    private boolean anomalyUnearthed = false;
 
     // Active chunk loading
     private final Set<Long> forcedChunks = new HashSet<>();
@@ -207,6 +208,24 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
         if (this.scanY < minY) {
             return false; // Reached bedrock limit
+        }
+
+        // Unearth the Cosmic Singularity Anomaly when striking the deepest bedrock layers
+        if (!this.anomalyUnearthed && this.scanY <= minY + 2) {
+            ItemStack anomaly = new ItemStack(net.enchantedwood.item.ModItems.MYSTERY_KEYSTONE);
+            if (canFitDrops(List.of(anomaly))) {
+                depositDrops(List.of(anomaly));
+                this.anomalyUnearthed = true;
+                markDirty();
+
+                if (world.getServer() != null) {
+                    world.getServer().getPlayerManager().broadcast(
+                            Text.literal("§5[ShuDynamics] §d✦ Cosmic Anomaly Extracted! The Laser Quarry has pierced deep bedrock and unearthed an unstable singularity! Check its tooltip for stabilization methods."),
+                            false
+                    );
+                }
+                world.playSound(null, this.pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1.5f, 0.6f);
+            }
         }
 
         // Fast-scan air/unbreakables up to 48 positions per tick
@@ -689,6 +708,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         this.scanY = view.getInt("ScanY", 0);
         this.scanZ = view.getInt("ScanZ", 0);
         this.initializedScan = view.getBoolean("InitializedScan", false);
+        this.anomalyUnearthed = view.getBoolean("AnomalyUnearthed", false);
         if (view.contains("BoundX")) {
             this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
             this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
@@ -709,6 +729,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         view.putInt("ScanY", this.scanY);
         view.putInt("ScanZ", this.scanZ);
         view.putBoolean("InitializedScan", this.initializedScan);
+        view.putBoolean("AnomalyUnearthed", this.anomalyUnearthed);
         if (this.boundNetworkPos != null) {
             view.putInt("BoundX", this.boundNetworkPos.getX());
             view.putInt("BoundY", this.boundNetworkPos.getY());

@@ -612,6 +612,90 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return Math.max(10, (int) (baseCookTime * multiplier));
     }
 
+    @Nullable
+    public static Item getNuggetForIngot(Item ingot) {
+        if (ingot == Items.IRON_INGOT) return Items.IRON_NUGGET;
+        if (ingot == Items.GOLD_INGOT) return Items.GOLD_NUGGET;
+        if (ingot == Items.COPPER_INGOT) return net.enchantedwood.item.ModItems.COPPER_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.TIN_INGOT) return net.enchantedwood.item.ModItems.TIN_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.BRONZE_INGOT) return net.enchantedwood.item.ModItems.BRONZE_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.ALUMINUM_INGOT) return net.enchantedwood.item.ModItems.ALUMINUM_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.STEEL_INGOT) return net.enchantedwood.item.ModItems.STEEL_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.TITANIUM_INGOT) return net.enchantedwood.item.ModItems.TITANIUM_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.TUNGSTEN_INGOT) return net.enchantedwood.item.ModItems.TUNGSTEN_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.COBALT_INGOT) return net.enchantedwood.item.ModItems.COBALT_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.ARDITE_INGOT) return net.enchantedwood.item.ModItems.ARDITE_NUGGET;
+        if (ingot == net.enchantedwood.item.ModItems.MANYULLYN_INGOT) return net.enchantedwood.item.ModItems.MANYULLYN_NUGGET;
+        return null;
+    }
+
+    public static List<ItemStack> calculateScaledOutputs(SalvageRecipe recipe, int consumeCount, @Nullable net.minecraft.util.math.random.Random random) {
+        if (consumeCount >= recipe.inputCount()) {
+            return recipe.outputs().stream().map(ItemStack::copy).toList();
+        }
+
+        List<ItemStack> result = new ArrayList<>();
+        for (ItemStack out : recipe.outputs()) {
+            Item nuggetItem = getNuggetForIngot(out.getItem());
+            if (nuggetItem != null) {
+                int totalNuggets = out.getCount() * 9;
+                int scaledNuggets = (totalNuggets * consumeCount) / recipe.inputCount();
+                int remainder = (totalNuggets * consumeCount) % recipe.inputCount();
+                if (random != null && remainder > 0 && random.nextInt(recipe.inputCount()) < remainder) {
+                    scaledNuggets++;
+                }
+                int ingots = scaledNuggets / 9;
+                int nuggets = scaledNuggets % 9;
+                if (ingots > 0) {
+                    result.add(new ItemStack(out.getItem(), ingots));
+                }
+                if (nuggets > 0) {
+                    result.add(new ItemStack(nuggetItem, nuggets));
+                }
+            } else {
+                int total = out.getCount() * consumeCount;
+                int count = total / recipe.inputCount();
+                int remainder = total % recipe.inputCount();
+                if (random != null && remainder > 0 && random.nextInt(recipe.inputCount()) < remainder) {
+                    count++;
+                }
+                if (count > 0) {
+                    result.add(out.copyWithCount(count));
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<ItemStack> calculateMaxScaledOutputs(SalvageRecipe recipe, int consumeCount) {
+        if (consumeCount >= recipe.inputCount()) {
+            return recipe.outputs().stream().map(ItemStack::copy).toList();
+        }
+
+        List<ItemStack> result = new ArrayList<>();
+        for (ItemStack out : recipe.outputs()) {
+            Item nuggetItem = getNuggetForIngot(out.getItem());
+            if (nuggetItem != null) {
+                int totalNuggets = out.getCount() * 9;
+                int scaledNuggets = (totalNuggets * consumeCount + recipe.inputCount() - 1) / recipe.inputCount();
+                int ingots = scaledNuggets / 9;
+                int nuggets = scaledNuggets % 9;
+                if (ingots > 0) {
+                    result.add(new ItemStack(out.getItem(), ingots));
+                }
+                if (nuggets > 0) {
+                    result.add(new ItemStack(nuggetItem, nuggets));
+                }
+            } else {
+                int count = (out.getCount() * consumeCount + recipe.inputCount() - 1) / recipe.inputCount();
+                if (count > 0) {
+                    result.add(out.copyWithCount(count));
+                }
+            }
+        }
+        return result;
+    }
+
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, ItemSalvagerBlockEntity salvager) {
         ItemStack input = salvager.inventory.get(INPUT_SLOT);
         SalvageRecipe recipe = getRecipe(input);
@@ -619,20 +703,31 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         boolean originallyWorking = state.get(ItemSalvagerBlock.LIT);
         boolean isWorking = false;
 
-        if (recipe != null && input.getCount() >= recipe.inputCount() && salvager.canFitOutputs(recipe.outputs())) {
-            int targetCookTime = getScaledCookTime(salvager.getActiveGearTier(), recipe.baseCookTime());
-            salvager.totalCookTime = targetCookTime;
+        if (recipe != null && !input.isEmpty()) {
+            int consumeCount = Math.min(input.getCount(), recipe.inputCount());
+            List<ItemStack> maxOutputs = calculateMaxScaledOutputs(recipe, consumeCount);
 
-            if (salvager.energyStorage.getEnergy() >= ENERGY_DRAW) {
-                salvager.energyStorage.extractEnergy(ENERGY_DRAW, false);
-                salvager.cookTime++;
-                isWorking = true;
+            if (!maxOutputs.isEmpty() && salvager.canFitOutputs(maxOutputs)) {
+                int scaledBaseTime = Math.max(20, (recipe.baseCookTime() * consumeCount) / recipe.inputCount());
+                int targetCookTime = getScaledCookTime(salvager.getActiveGearTier(), scaledBaseTime);
+                salvager.totalCookTime = targetCookTime;
 
-                if (salvager.cookTime >= salvager.totalCookTime) {
-                    salvager.cookTime = 0;
-                    salvager.craftSalvage(recipe);
+                if (salvager.energyStorage.getEnergy() >= ENERGY_DRAW) {
+                    salvager.energyStorage.extractEnergy(ENERGY_DRAW, false);
+                    salvager.cookTime++;
+                    isWorking = true;
+
+                    if (salvager.cookTime >= salvager.totalCookTime) {
+                        salvager.cookTime = 0;
+                        salvager.craftSalvage(recipe, consumeCount, world.getRandom());
+                    }
+                    markDirty(world, pos, state);
                 }
-                markDirty(world, pos, state);
+            } else {
+                if (salvager.cookTime > 0) {
+                    salvager.cookTime = 0;
+                    markDirty(world, pos, state);
+                }
             }
         } else {
             if (salvager.cookTime > 0) {
@@ -680,12 +775,13 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return true;
     }
 
-    private void craftSalvage(SalvageRecipe recipe) {
+    private void craftSalvage(SalvageRecipe recipe, int consumeCount, net.minecraft.util.math.random.Random random) {
         ItemStack input = inventory.get(INPUT_SLOT);
-        input.decrement(recipe.inputCount());
+        input.decrement(consumeCount);
 
-        for (ItemStack output : recipe.outputs()) {
-            ItemStack toInsert = output.copy();
+        List<ItemStack> outputs = calculateScaledOutputs(recipe, consumeCount, random);
+
+        for (ItemStack toInsert : outputs) {
             int remaining = toInsert.getCount();
 
             // First merge

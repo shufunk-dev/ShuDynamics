@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "enchantedwood:item/golden_broad_axe"
+  }
+}

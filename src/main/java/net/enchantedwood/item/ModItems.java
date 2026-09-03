@@ -18,6 +18,7 @@ import net.enchantedwood.item.custom.EnchantedArmorItem;
 import net.enchantedwood.item.custom.EnchantedCobblestoneArmorItem;
 import net.enchantedwood.item.custom.EnchantedCobblestonePickaxeItem;
 import net.enchantedwood.item.custom.EnchantedCobblestoneSwordItem;
+import net.enchantedwood.item.custom.BroadAxeItem;
 import net.enchantedwood.item.custom.HammerItem;
 import net.enchantedwood.item.custom.LivingwoodSwordItem;
 
@@ -230,11 +231,15 @@ public class ModItems {
     public static final Item COPPER_LAVA_BUCKET = registerItem("copper_lava_bucket", settings -> new net.enchantedwood.item.custom.CopperBucketItem(net.minecraft.fluid.Fluids.LAVA, settings.maxCount(1).recipeRemainder(COPPER_BUCKET)));
     public static final Item ENCHANTED_LAVA_BUCKET = registerItem("enchanted_lava_bucket", settings -> new net.enchantedwood.item.custom.CopperBucketItem(net.minecraft.fluid.Fluids.LAVA, settings.maxCount(1).recipeRemainder(Items.BUCKET)));
     public static final Item ENCHANTED_COPPER_LAVA_BUCKET = registerItem("enchanted_copper_lava_bucket", settings -> new net.enchantedwood.item.custom.CopperBucketItem(net.minecraft.fluid.Fluids.LAVA, settings.maxCount(1).recipeRemainder(COPPER_BUCKET)));
+    public static final Item COPPER_NUGGET = registerItem("copper_nugget", Item::new);
     public static final Item RAW_TIN = registerItem("raw_tin", Item::new);
     public static final Item TIN_INGOT = registerItem("tin_ingot", Item::new);
+    public static final Item TIN_NUGGET = registerItem("tin_nugget", Item::new);
     public static final Item BRONZE_INGOT = registerItem("bronze_ingot", Item::new);
+    public static final Item BRONZE_NUGGET = registerItem("bronze_nugget", Item::new);
     public static final Item RAW_TITANIUM = registerItem("raw_titanium", Item::new);
     public static final Item TITANIUM_INGOT = registerItem("titanium_ingot", Item::new);
+    public static final Item TITANIUM_NUGGET = registerItem("titanium_nugget", Item::new);
     public static final Item TITANIUM_ROLLER = registerItem("titanium_roller", Item::new);
     public static final Item ENCHANTED_DIAMOND = registerItem("enchanted_diamond", Item::new);
     public static final Item ENCHANTED_NETHERITE_INGOT = registerItem("enchanted_netherite_ingot",
@@ -274,6 +279,7 @@ public class ModItems {
     // Phase 2: Metallurgy & Gas Items
     public static final Item RAW_BAUXITE = registerItem("raw_bauxite", Item::new);
     public static final Item ALUMINUM_INGOT = registerItem("aluminum_ingot", Item::new);
+    public static final Item ALUMINUM_NUGGET = registerItem("aluminum_nugget", Item::new);
     public static final Item ALUMINUM_GEAR = registerItem("aluminum_gear", settings -> new GearItem(GearTier.ALUMINUM, false, settings));
     public static final Item ENCHANTED_ALUMINUM_GEAR = registerItem("enchanted_aluminum_gear", settings -> new GearItem(GearTier.ALUMINUM, true, settings));
     public static final Item EMPTY_GAS_CANISTER = registerItem("empty_gas_canister", settings -> new Item(settings.maxCount(16)));
@@ -285,6 +291,7 @@ public class ModItems {
     // Phase 3: Coke Coal & Steel Metallurgy
     public static final Item COKE_COAL = registerItem("coke_coal", Item::new);
     public static final Item STEEL_INGOT = registerItem("steel_ingot", Item::new);
+    public static final Item STEEL_NUGGET = registerItem("steel_nugget", Item::new);
     public static final Item STEEL_DUST = registerItem("steel_dust", Item::new);
     public static final Item STEEL_GEAR = registerItem("steel_gear", settings -> new GearItem(GearTier.STEEL, false, settings));
     public static final Item ENCHANTED_STEEL_GEAR = registerItem("enchanted_steel_gear", settings -> new GearItem(GearTier.STEEL, true, settings));
@@ -327,6 +334,7 @@ public class ModItems {
     public static final Item STEEL_SHOVEL = registerItem("steel_shovel", settings -> new Item(settings.shovel(ModMaterials.STEEL, 2.0f, -3.0f)));
     public static final Item STEEL_HOE = registerItem("steel_hoe", settings -> new Item(settings.hoe(ModMaterials.STEEL, -2.0f, -1.0f)));
     public static final Item STEEL_HAMMER = registerItem("steel_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.STEEL, 5.0f, -3.0f)));
+    public static final Item STEEL_BROAD_AXE = registerItem("steel_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.STEEL, 7.5f, -3.1f)));
 
     // Steel Armor
     public static final Item STEEL_HELMET = registerItem("steel_helmet", settings -> new Item(settings.armor(ModArmorMaterials.STEEL, EquipmentType.HELMET)));
@@ -341,6 +349,7 @@ public class ModItems {
     public static final Item COBALT_SHOVEL = registerItem("cobalt_shovel", settings -> new Item(settings.shovel(ModMaterials.COBALT, 1.5f, -2.8f)));
     public static final Item COBALT_HOE = registerItem("cobalt_hoe", settings -> new Item(settings.hoe(ModMaterials.COBALT, -2.0f, 0.0f)));
     public static final Item COBALT_HAMMER = registerItem("cobalt_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.COBALT, 4.5f, -2.8f)));
+    public static final Item COBALT_BROAD_AXE = registerItem("cobalt_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.COBALT, 7.0f, -2.9f)));
 
     // Cobalt Armor (Lightweight agility)
     public static final Item COBALT_HELMET = registerItem("cobalt_helmet", settings -> new Item(settings.armor(ModArmorMaterials.COBALT, EquipmentType.HELMET)));
@@ -355,6 +364,7 @@ public class ModItems {
     public static final Item ARDITE_SHOVEL = registerItem("ardite_shovel", settings -> new Item(settings.shovel(ModMaterials.ARDITE, 2.0f, -3.0f)));
     public static final Item ARDITE_HOE = registerItem("ardite_hoe", settings -> new Item(settings.hoe(ModMaterials.ARDITE, -1.0f, -1.0f)));
     public static final Item ARDITE_HAMMER = registerItem("ardite_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.ARDITE, 5.5f, -3.1f)));
+    public static final Item ARDITE_BROAD_AXE = registerItem("ardite_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.ARDITE, 8.0f, -3.2f)));
 
     // Ardite Armor (Heavy fortitude)
     public static final Item ARDITE_HELMET = registerItem("ardite_helmet", settings -> new Item(settings.armor(ModArmorMaterials.ARDITE, EquipmentType.HELMET)));
@@ -369,6 +379,7 @@ public class ModItems {
     public static final Item MANYULLYN_SHOVEL = registerItem("manyullyn_shovel", settings -> new Item(settings.shovel(ModMaterials.MANYULLYN, 2.5f, -2.9f).fireproof()));
     public static final Item MANYULLYN_HOE = registerItem("manyullyn_hoe", settings -> new Item(settings.hoe(ModMaterials.MANYULLYN, -1.0f, 0.0f).fireproof()));
     public static final Item MANYULLYN_HAMMER = registerItem("manyullyn_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.MANYULLYN, 7.0f, -2.9f).fireproof()));
+    public static final Item MANYULLYN_BROAD_AXE = registerItem("manyullyn_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.MANYULLYN, 9.0f, -3.0f).fireproof()));
 
     // Manyullyn Armor (Supreme Nether Masterwork - Fireproof)
     public static final Item MANYULLYN_HELMET = registerItem("manyullyn_helmet", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.HELMET).fireproof()));
@@ -383,6 +394,7 @@ public class ModItems {
     public static final Item ALUMINUM_SHOVEL = registerItem("aluminum_shovel", settings -> new Item(settings.shovel(ModMaterials.ALUMINUM, 1.5f, -3.0f)));
     public static final Item ALUMINUM_HOE = registerItem("aluminum_hoe", settings -> new Item(settings.hoe(ModMaterials.ALUMINUM, -2.0f, -1.0f)));
     public static final Item ALUMINUM_HAMMER = registerItem("aluminum_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.ALUMINUM, 4.0f, -3.0f)));
+    public static final Item ALUMINUM_BROAD_AXE = registerItem("aluminum_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.ALUMINUM, 6.5f, -3.1f)));
 
     // Aluminum Armor
     public static final Item ALUMINUM_HELMET = registerItem("aluminum_helmet", settings -> new Item(settings.armor(ModArmorMaterials.ALUMINUM, EquipmentType.HELMET)));
@@ -506,8 +518,32 @@ public class ModItems {
     public static final Item TITANIUM_HAMMER = registerItem("titanium_hammer",
             settings -> new HammerItem(settings.pickaxe(ModMaterials.TITANIUM, 5.5f, -2.9f)));
 
+    // Base Tree-Felling Broad Axes
+    public static final Item WOODEN_BROAD_AXE = registerItem("wooden_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.WOOD, 4.0f, -3.3f)));
+    public static final Item STONE_BROAD_AXE = registerItem("stone_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.STONE, 5.0f, -3.3f)));
+    public static final Item COPPER_BROAD_AXE = registerItem("copper_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.COPPER, 5.5f, -3.2f)));
+    public static final Item IRON_BROAD_AXE = registerItem("iron_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.IRON, 6.0f, -3.1f)));
+    public static final Item BRONZE_BROAD_AXE = registerItem("bronze_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.BRONZE, 6.5f, -3.1f)));
+    public static final Item GOLDEN_BROAD_AXE = registerItem("golden_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.GOLD, 4.0f, -2.9f)));
+    public static final Item DIAMOND_BROAD_AXE = registerItem("diamond_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.DIAMOND, 7.0f, -3.0f)));
+    public static final Item NETHERITE_BROAD_AXE = registerItem("netherite_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ToolMaterial.NETHERITE, 8.0f, -2.9f).fireproof()));
+    public static final Item TITANIUM_BROAD_AXE = registerItem("titanium_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.TITANIUM, 7.5f, -3.0f)));
+
     public static final Item ENCHANTED_COBBLESTONE_HAMMER = registerItem("enchanted_cobblestone_hammer",
             settings -> new HammerItem(settings.pickaxe(ModMaterials.ENCHANTED_COBBLESTONE, 5.0f, -3.2f)) {
+                @Override public boolean hasGlint(ItemStack stack) { return true; }
+            });
+    public static final Item ENCHANTED_COBBLESTONE_BROAD_AXE = registerItem("enchanted_cobblestone_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.ENCHANTED_COBBLESTONE, 7.0f, -3.2f)) {
                 @Override public boolean hasGlint(ItemStack stack) { return true; }
             });
 
@@ -529,7 +565,10 @@ public class ModItems {
             settings -> new HammerItem(settings.pickaxe(ModMaterials.ENCHANTED_DIAMOND, 6.0f, -3.0f)) {
                 @Override public boolean hasGlint(ItemStack stack) { return true; }
             });
-
+    public static final Item ENCHANTED_DIAMOND_BROAD_AXE = registerItem("enchanted_diamond_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.ENCHANTED_DIAMOND, 8.0f, -3.0f)) {
+                @Override public boolean hasGlint(ItemStack stack) { return true; }
+            });
 
     public static final Item ENCHANTED_DIAMOND_HELMET = registerItem("enchanted_diamond_helmet",
             settings -> new EnchantedArmorItem(settings.armor(ModArmorMaterials.ENCHANTED_DIAMOND, EquipmentType.HELMET)));
@@ -543,6 +582,10 @@ public class ModItems {
     // Enchanted Netherite Equipment (Fireproof!)
     public static final Item ENCHANTED_NETHERITE_HAMMER = registerItem("enchanted_netherite_hammer",
             settings -> new HammerItem(settings.pickaxe(ModMaterials.ENCHANTED_NETHERITE, 8.0f, -2.8f).fireproof()) {
+                @Override public boolean hasGlint(ItemStack stack) { return true; }
+            });
+    public static final Item ENCHANTED_NETHERITE_BROAD_AXE = registerItem("enchanted_netherite_broad_axe",
+            settings -> new BroadAxeItem(settings.axe(ModMaterials.ENCHANTED_NETHERITE, 10.0f, -2.8f).fireproof()) {
                 @Override public boolean hasGlint(ItemStack stack) { return true; }
             });
 
@@ -574,7 +617,7 @@ public class ModItems {
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.LEGGINGS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.LEGGINGS)));
     public static final Item DIVING_FLIPPERS = registerItem("diving_flippers",
             settings -> new net.enchantedwood.item.custom.ScubaArmorItem(EquipmentType.BOOTS.getEquipmentSlot(), settings.armor(ModArmorMaterials.SCUBA, EquipmentType.BOOTS)));
-    public static final Item MYSTERY_KEYSTONE = registerItem("mystery_keystone", Item::new);
+    public static final Item MYSTERY_KEYSTONE = registerItem("mystery_keystone", net.enchantedwood.item.custom.MysteryKeystoneItem::new);
 
     // Portable Handheld Battery Packs (v1.3.0)
     public static final Item COPPER_BATTERY_PACK = registerItem("copper_battery_pack",
@@ -656,7 +699,9 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.RAW_TIN_BLOCK);
                 entries.add(net.enchantedwood.block.ModBlocks.TIN_BLOCK);
                 entries.add(TIN_INGOT);
+                entries.add(TIN_NUGGET);
                 entries.add(BRONZE_INGOT);
+                entries.add(BRONZE_NUGGET);
                 entries.add(net.enchantedwood.block.ModBlocks.BRONZE_BLOCK);
                 entries.add(IRON_GEAR);
                 entries.add(ENCHANTED_IRON_GEAR);
@@ -674,6 +719,7 @@ public class ModItems {
                 entries.add(ENCHANTED_NETHERITE_GEAR);
                 entries.add(IRON_DUST);
                 entries.add(COPPER_DUST);
+                entries.add(COPPER_NUGGET);
                 entries.add(TIN_DUST);
                 entries.add(BRONZE_DUST);
                 entries.add(GOLD_DUST);
@@ -681,6 +727,7 @@ public class ModItems {
                 entries.add(NETHERITE_DUST);
                 entries.add(RAW_TITANIUM);
                 entries.add(TITANIUM_INGOT);
+                entries.add(TITANIUM_NUGGET);
                 entries.add(TITANIUM_DUST);
                 entries.add(TITANIUM_ROLLER);
                 entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_ORE);
@@ -774,17 +821,29 @@ public class ModItems {
                 entries.add(DIAMOND_HAMMER);
                 entries.add(NETHERITE_HAMMER);
                 entries.add(TITANIUM_HAMMER);
+                entries.add(WOODEN_BROAD_AXE);
+                entries.add(STONE_BROAD_AXE);
+                entries.add(COPPER_BROAD_AXE);
+                entries.add(IRON_BROAD_AXE);
+                entries.add(BRONZE_BROAD_AXE);
+                entries.add(GOLDEN_BROAD_AXE);
+                entries.add(DIAMOND_BROAD_AXE);
+                entries.add(NETHERITE_BROAD_AXE);
+                entries.add(TITANIUM_BROAD_AXE);
                 entries.add(ENCHANTED_COBBLESTONE_HAMMER);
+                entries.add(ENCHANTED_COBBLESTONE_BROAD_AXE);
                 entries.add(ENCHANTED_COBBLESTONE_HELMET);
                 entries.add(ENCHANTED_COBBLESTONE_CHESTPLATE);
                 entries.add(ENCHANTED_COBBLESTONE_LEGGINGS);
                 entries.add(ENCHANTED_COBBLESTONE_BOOTS);
                 entries.add(ENCHANTED_DIAMOND_HAMMER);
+                entries.add(ENCHANTED_DIAMOND_BROAD_AXE);
                 entries.add(ENCHANTED_DIAMOND_HELMET);
                 entries.add(ENCHANTED_DIAMOND_CHESTPLATE);
                 entries.add(ENCHANTED_DIAMOND_LEGGINGS);
                 entries.add(ENCHANTED_DIAMOND_BOOTS);
                 entries.add(ENCHANTED_NETHERITE_HAMMER);
+                entries.add(ENCHANTED_NETHERITE_BROAD_AXE);
                 entries.add(ENCHANTED_NETHERITE_HELMET);
                 entries.add(ENCHANTED_NETHERITE_CHESTPLATE);
                 entries.add(ENCHANTED_NETHERITE_LEGGINGS);
@@ -819,6 +878,7 @@ public class ModItems {
                 entries.add(RAW_BAUXITE);
                 entries.add(BAUXITE_DUST);
                 entries.add(ALUMINUM_INGOT);
+                entries.add(ALUMINUM_NUGGET);
                 entries.add(ALUMINUM_GEAR);
                 entries.add(EMPTY_GAS_CANISTER);
                 entries.add(OXYGEN_CANISTER);
@@ -833,6 +893,7 @@ public class ModItems {
                 entries.add(ALUMINUM_SHOVEL);
                 entries.add(ALUMINUM_HOE);
                 entries.add(ALUMINUM_HAMMER);
+                entries.add(ALUMINUM_BROAD_AXE);
                 entries.add(ALUMINUM_HELMET);
                 entries.add(ALUMINUM_CHESTPLATE);
                 entries.add(ALUMINUM_LEGGINGS);
@@ -850,6 +911,7 @@ public class ModItems {
                 entries.add(COKE_COAL);
                 entries.add(net.enchantedwood.block.ModBlocks.COKE_COAL_BLOCK);
                 entries.add(STEEL_INGOT);
+                entries.add(STEEL_NUGGET);
                 entries.add(STEEL_DUST);
                 entries.add(STEEL_GEAR);
                 entries.add(ENCHANTED_STEEL_GEAR);
@@ -860,6 +922,7 @@ public class ModItems {
                 entries.add(STEEL_SHOVEL);
                 entries.add(STEEL_HOE);
                 entries.add(STEEL_HAMMER);
+                entries.add(STEEL_BROAD_AXE);
                 entries.add(STEEL_HELMET);
                 entries.add(STEEL_CHESTPLATE);
                 entries.add(STEEL_LEGGINGS);
@@ -893,6 +956,8 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.THERMAL_ANCHOR);
                 entries.add(net.enchantedwood.block.ModBlocks.METALLURGICAL_ANCHOR);
                 entries.add(net.enchantedwood.block.ModBlocks.PLASMA_ANCHOR);
+                entries.add(net.enchantedwood.block.ModBlocks.DIMENSIONAL_SINGULARITY);
+                entries.add(MYSTERY_KEYSTONE);
 
                 // Nether Metallurgy & Materials
                 entries.add(RAW_TUNGSTEN);
@@ -917,6 +982,7 @@ public class ModItems {
                 entries.add(COBALT_SHOVEL);
                 entries.add(COBALT_HOE);
                 entries.add(COBALT_HAMMER);
+                entries.add(COBALT_BROAD_AXE);
                 entries.add(COBALT_HELMET);
                 entries.add(COBALT_CHESTPLATE);
                 entries.add(COBALT_LEGGINGS);
@@ -936,6 +1002,7 @@ public class ModItems {
                 entries.add(ARDITE_SHOVEL);
                 entries.add(ARDITE_HOE);
                 entries.add(ARDITE_HAMMER);
+                entries.add(ARDITE_BROAD_AXE);
                 entries.add(ARDITE_HELMET);
                 entries.add(ARDITE_CHESTPLATE);
                 entries.add(ARDITE_LEGGINGS);
@@ -954,6 +1021,7 @@ public class ModItems {
                 entries.add(MANYULLYN_SHOVEL);
                 entries.add(MANYULLYN_HOE);
                 entries.add(MANYULLYN_HAMMER);
+                entries.add(MANYULLYN_BROAD_AXE);
                 entries.add(MANYULLYN_HELMET);
                 entries.add(MANYULLYN_CHESTPLATE);
                 entries.add(MANYULLYN_LEGGINGS);

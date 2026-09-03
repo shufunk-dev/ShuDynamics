@@ -1,0 +1,32 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:wooden_broad_axe",
+    "enchantedwood:stone_broad_axe",
+    "enchantedwood:copper_broad_axe",
+    "enchantedwood:iron_broad_axe",
+    "enchantedwood:bronze_broad_axe",
+    "enchantedwood:golden_broad_axe",
+    "enchantedwood:diamond_broad_axe",
+    "enchantedwood:netherite_broad_axe",
+    "enchantedwood:titanium_broad_axe",
+    "enchantedwood:steel_broad_axe",
+    "enchantedwood:aluminum_broad_axe",
+    "enchantedwood:cobalt_broad_axe",
+    "enchantedwood:ardite_broad_axe",
+    "enchantedwood:manyullyn_broad_axe",
+    "enchantedwood:enchanted_cobblestone_broad_axe",
+    "enchantedwood:enchanted_diamond_broad_axe",
+    "enchantedwood:enchanted_netherite_broad_axe",
+    "enchantedwood:bronze_axe",
+    "enchantedwood:tin_axe",
+    "enchantedwood:titanium_axe",
+    "enchantedwood:aluminum_axe",
+    "enchantedwood:steel_axe",
+    "enchantedwood:cobalt_axe",
+    "enchantedwood:ardite_axe",
+    "enchantedwood:manyullyn_axe",
+    "enchantedwood:ironwood_axe",
+    "enchantedwood:enchanted_cobblestone_axe"
+  ]
+}
