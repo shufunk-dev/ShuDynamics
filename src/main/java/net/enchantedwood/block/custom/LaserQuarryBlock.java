@@ -116,6 +116,33 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
     }
 
     @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.entity.LivingEntity placer, net.minecraft.item.ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (!world.isClient()) {
+            net.minecraft.component.type.NbtComponent nbtComponent = itemStack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+            if (nbtComponent != null) {
+                net.minecraft.nbt.NbtCompound nbt = nbtComponent.copyNbt();
+                if (nbt.contains("boundX")) {
+                    int bx = nbt.getInt("boundX").orElse(0);
+                    int by = nbt.getInt("boundY").orElse(0);
+                    int bz = nbt.getInt("boundZ").orElse(0);
+                    String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (be instanceof LaserQuarryBlockEntity quarry) {
+                        quarry.bindNetwork(new BlockPos(bx, by, bz), bDim);
+                        if (placer instanceof PlayerEntity player) {
+                            String dimName = bDim.contains("mining_dimension") ? "Mining Dimension" :
+                                    bDim.contains("nether") ? "Nether" :
+                                    bDim.contains("end") ? "The End" : "Overworld";
+                            player.sendMessage(net.minecraft.text.Text.literal("§6[Quarry] §a✨ Auto-connected to Base Network at (" + bx + ", " + by + ", " + bz + ") in " + dimName + "!"), true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof LaserQuarryBlockEntity quarryEntity) {

@@ -11,6 +11,34 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_custom_data",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "BoundX",
+                  "target": "boundX",
+                  "op": "replace"
+                },
+                {
+                  "source": "BoundY",
+                  "target": "boundY",
+                  "op": "replace"
+                },
+                {
+                  "source": "BoundZ",
+                  "target": "boundZ",
+                  "op": "replace"
+                },
+                {
+                  "source": "BoundDim",
+                  "target": "boundDimension",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
           "name": "enchantedwood:laser_quarry"
         }
       ],

@@ -151,12 +151,14 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
-        // Extraction Socket Tooltip (x + 151 .. 169, y + 53 .. 71)
+        // Utility / Extraction Socket Tooltip (x + 151 .. 169, y + 53 .. 71)
         if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 53 && mouseY <= y + 71) {
             List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§a🔮 Extraction Modifier Socket"));
-            lines.add(Text.literal("§7Accepts: §6Fortune Core §7or §aSilk Touch Core"));
-            lines.add(Text.literal("§8Choose between raw blocks or multiplied drops."));
+            lines.add(Text.literal("§a🔮 Utility & Extraction Socket"));
+            lines.add(Text.literal("§7Accepts: §6Fortune Core§7, §aSilk Touch Core§7,"));
+            lines.add(Text.literal("§5Interdimensional Card§7, or §bChunk Loader Module"));
+            lines.add(Text.literal("§8Provides drop multipliers, auto chunk-loading, or"));
+            lines.add(Text.literal("§8direct cross-dimensional link bridging."));
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
@@ -166,15 +168,23 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             lines.add(Text.literal("§b🌐 Digital Storage Link"));
             int netStatus = this.handler.getNetworkStatus();
             if (netStatus == 2) {
-                lines.add(Text.literal("§b● Linked: Connected to Remote Base Network"));
-                lines.add(Text.literal("§7Mined ores directly teleport to Base Storage."));
-                lines.add(Text.literal("§7Draws operating power wirelessly from Base Battery."));
+                lines.add(Text.literal("§b● Linked: Quantum Interdimensional Link Active"));
+                lines.add(Text.literal("§7Teleporting mined ores directly across dimensions!"));
+                lines.add(Text.literal("§7Draws operating FE wirelessly from Base Grid."));
             } else if (netStatus == 1) {
-                lines.add(Text.literal("§a● Online: Connected to Local Storage Network"));
-                lines.add(Text.literal("§7Mined ores directly deposit into Drive Bay crystals."));
+                lines.add(Text.literal("§a● Online: Connected to Base Storage Network"));
+                lines.add(Text.literal("§7Mined ores directly deposit into connected storage."));
+            } else if (netStatus == 3) {
+                lines.add(Text.literal("§c● Blocked: Missing Interdimensional Card"));
+                lines.add(Text.literal("§eInstall an Interdimensional Card in either the"));
+                lines.add(Text.literal("§eBase Storage Controller or this Quarry's Utility Socket!"));
+            } else if (netStatus == 4) {
+                lines.add(Text.literal("§c● Offline: Base Network Unreachable"));
+                lines.add(Text.literal("§7Base chunk may be unloaded or Controller out of power."));
+                lines.add(Text.literal("§eInstall an Interdimensional Card or Chunk Loader in Controller!"));
             } else {
-                lines.add(Text.literal("§c● Offline: No active Storage Network in range"));
-                lines.add(Text.literal("§7Outputs store in internal buffer or adjacent chests."));
+                lines.add(Text.literal("§7○ Unbound: No Remote Network Linked"));
+                lines.add(Text.literal("§7Mined items store in internal buffer or adjacent chests."));
                 lines.add(Text.literal("§8Sneak + Right-Click Wrench on Base Controller, then Quarry to link."));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);

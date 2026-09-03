@@ -97,7 +97,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                 case 6 -> scanY;
                 case 7 -> totalMinedCount;
                 case 8 -> getRangeChunkRadius();
-                case 9 -> getNetworkTerminal() != null ? (isBoundToRemote() ? 2 : 1) : 0;
+                case 9 -> getNetworkStatusCode();
                 default -> 0;
             };
         }
@@ -424,8 +424,48 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         }
     }
 
+    public boolean hasLocalInterdimensionalCard() {
+        return this.inventory.get(EXTRACTION_SLOT).isOf(ModItems.INTERDIMENSIONAL_CARD);
+    }
+
+    public boolean hasLocalChunkLoader() {
+        return this.inventory.get(EXTRACTION_SLOT).isOf(ModItems.CHUNK_LOADER_MODULE) || hasLocalInterdimensionalCard();
+    }
+
+    public int getNetworkStatusCode() {
+        if (this.world == null) return 0;
+        if (!isBoundToRemote()) {
+            return getNetworkTerminal() != null ? 1 : 0;
+        }
+        boolean isCrossDim = !this.boundDimension.equals(this.world.getRegistryKey().getValue().toString());
+        if (this.world.getServer() == null) return 0;
+        RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+        ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+        if (targetWorld == null) return 4;
+
+        BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+        if (be == null) return 4;
+
+        EnchantedStorageControllerBlockEntity ctrl = null;
+        if (be instanceof EnchantedStorageControllerBlockEntity c) {
+            ctrl = c;
+        } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
+            ctrl = findControllerNear(targetWorld, this.boundNetworkPos);
+        }
+
+        if (isCrossDim && !hasLocalInterdimensionalCard() && (ctrl == null || !ctrl.hasInterdimensionalCard())) {
+            return 3; // Cross-dimension link requires Interdimensional Card
+        }
+
+        if (getNetworkTerminal() != null) {
+            return isCrossDim ? 2 : 1;
+        }
+
+        return 4; // Offline / Unloaded
+    }
+
     public void updateChunkLoading(ServerWorld world) {
-        if (!this.isPaused && this.scanY >= world.getBottomY()) {
+        if ((!this.isPaused && this.scanY >= world.getBottomY()) || hasLocalChunkLoader()) {
             int radius = getRangeChunkRadius();
             ChunkPos originChunk = new ChunkPos(this.pos);
             Set<Long> targetChunks = new HashSet<>();
@@ -504,33 +544,27 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
         // 1. Check bound remote network
         if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            boolean isCrossDim = !this.boundDimension.equals(this.world.getRegistryKey().getValue().toString());
             RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
             ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
-            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+            if (targetWorld != null) {
                 BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
-                if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                EnchantedStorageControllerBlockEntity ctrl = null;
+
+                if (be instanceof EnchantedStorageControllerBlockEntity c) {
+                    ctrl = c;
+                } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
+                    ctrl = findControllerNear(targetWorld, this.boundNetworkPos);
+                }
+
+                if (ctrl != null && ctrl.isOnline()) {
+                    if (isCrossDim && !hasLocalInterdimensionalCard() && !ctrl.hasInterdimensionalCard()) {
+                        return false;
+                    }
                     EnergyStorage storage = ctrl.getEnergyStorage(null);
                     if (storage != null && storage.getEnergy() >= ENERGY_PER_BLOCK) {
                         storage.extractEnergy(ENERGY_PER_BLOCK, false);
                         return true;
-                    }
-                } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
-                    // Search near terminal for controller
-                    BlockPos.Mutable mut = new BlockPos.Mutable();
-                    for (int dx = -16; dx <= 16; dx++) {
-                        for (int dy = -8; dy <= 8; dy++) {
-                            for (int dz = -16; dz <= 16; dz++) {
-                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
-                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
-                                if (candidate instanceof EnchantedStorageControllerBlockEntity ctrl) {
-                                    EnergyStorage storage = ctrl.getEnergyStorage(null);
-                                    if (storage != null && storage.getEnergy() >= ENERGY_PER_BLOCK) {
-                                        storage.extractEnergy(ENERGY_PER_BLOCK, false);
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -561,13 +595,21 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
         // 1. Check bound remote network
         if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            boolean isCrossDim = !this.boundDimension.equals(this.world.getRegistryKey().getValue().toString());
             RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
             ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
-            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+            if (targetWorld != null) {
                 BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
                 if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                    if (isCrossDim && !hasLocalInterdimensionalCard()) {
+                        EnchantedStorageControllerBlockEntity ctrl = findControllerNear(targetWorld, this.boundNetworkPos);
+                        if (ctrl == null || !ctrl.hasInterdimensionalCard()) return null;
+                    }
                     return terminal;
                 } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
+                    if (isCrossDim && !hasLocalInterdimensionalCard() && !ctrl.hasInterdimensionalCard()) {
+                        return null;
+                    }
                     // Search near controller for terminal
                     BlockPos.Mutable mut = new BlockPos.Mutable();
                     for (int dx = -16; dx <= 16; dx++) {
@@ -594,6 +636,22 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
                         return terminal;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private @Nullable EnchantedStorageControllerBlockEntity findControllerNear(ServerWorld world, BlockPos center) {
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+        for (int dx = -16; dx <= 16; dx++) {
+            for (int dy = -8; dy <= 8; dy++) {
+                for (int dz = -16; dz <= 16; dz++) {
+                    mut.set(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
+                    BlockEntity candidate = world.getBlockEntity(mut);
+                    if (candidate instanceof EnchantedStorageControllerBlockEntity c) {
+                        return c;
                     }
                 }
             }

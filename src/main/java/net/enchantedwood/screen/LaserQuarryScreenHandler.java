@@ -73,11 +73,12 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
             }
         });
 
-        // Extraction Socket (Slot 11)
+        // Utility / Extraction Socket (Slot 11)
         this.addSlot(new Slot(inventory, LaserQuarryBlockEntity.EXTRACTION_SLOT, 152, 54) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.FORTUNE_CORE) || stack.isOf(ModItems.SILK_TOUCH_CORE);
+                return stack.isOf(ModItems.FORTUNE_CORE) || stack.isOf(ModItems.SILK_TOUCH_CORE) ||
+                        stack.isOf(ModItems.INTERDIMENSIONAL_CARD) || stack.isOf(ModItems.CHUNK_LOADER_MODULE);
             }
         });
 

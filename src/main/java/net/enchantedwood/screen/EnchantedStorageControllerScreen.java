@@ -134,13 +134,12 @@ public class EnchantedStorageControllerScreen extends HandledScreen<EnchantedSto
             lines.add(Text.literal("§5🌌 Interdimensional Card Slot"));
             if (this.handler.hasInterdimensionalCard()) {
                 lines.add(Text.literal("§5● Status: ACTIVE (Cross-Dimension Link Active)"));
-                lines.add(Text.literal("§7Enables wireless access from the Nether & End!"));
-            } else if (this.handler.hasChunkLoader()) {
+                lines.add(Text.literal("§7Enables remote quarry & wireless access from:"));
+                lines.add(Text.literal("§d✦ Nether, The End & Mining Dimension!"));
+                lines.add(Text.literal("§a✨ Base 3x3 chunk area kept loaded 24/7."));
+            } else {
                 lines.add(Text.literal("§7○ Status: READY"));
                 lines.add(Text.literal("§8Insert Interdimensional Card to access across dimensions."));
-            } else {
-                lines.add(Text.literal("§c❌ PREREQUISITE MISSING:"));
-                lines.add(Text.literal("§8Requires Chunk Loader Module in Slot 1 first!"));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }

@@ -221,7 +221,9 @@ public class WrenchItem extends Item {
             int y = nbt.getInt("boundY").orElse(0);
             int z = nbt.getInt("boundZ").orElse(0);
             String dim = nbt.getString("boundDimension").orElse("minecraft:overworld");
-            String dimName = dim.contains("nether") ? "Nether" : dim.contains("end") ? "The End" : "Overworld";
+            String dimName = dim.contains("mining_dimension") ? "Mining Dimension" :
+                             dim.contains("nether") ? "Nether" :
+                             dim.contains("end") ? "The End" : "Overworld";
             textConsumer.accept(Text.literal("§6✔ Stored Network: §f(" + x + ", " + y + ", " + z + ") in " + dimName));
             textConsumer.accept(Text.literal("§7Sneak + Right-Click Quarry or Converter to link"));
             textConsumer.accept(Text.literal("§8Sneak + Right-Click air to clear stored frequency"));

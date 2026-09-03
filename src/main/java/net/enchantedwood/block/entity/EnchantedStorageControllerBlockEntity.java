@@ -79,11 +79,11 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
     }
 
     public boolean hasChunkLoader() {
-        return inventory.get(1).isOf(ModItems.CHUNK_LOADER_MODULE);
+        return inventory.get(1).isOf(ModItems.CHUNK_LOADER_MODULE) || hasInterdimensionalCard();
     }
 
     public boolean hasInterdimensionalCard() {
-        return hasChunkLoader() && inventory.get(2).isOf(ModItems.INTERDIMENSIONAL_CARD);
+        return inventory.get(2).isOf(ModItems.INTERDIMENSIONAL_CARD);
     }
 
     public boolean isOnline() {
@@ -104,6 +104,21 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
     @Nullable
     public EnergyStorage getEnergyStorage(@Nullable Direction side) {
         return this.energyStorage;
+    }
+
+    @Override
+    public void markRemoved() {
+        if (this.isChunkForceLoaded && this.world instanceof ServerWorld sw) {
+            int centerCx = pos.getX() >> 4;
+            int centerCz = pos.getZ() >> 4;
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    sw.setChunkForced(centerCx + dx, centerCz + dz, false);
+                }
+            }
+            this.isChunkForceLoaded = false;
+        }
+        super.markRemoved();
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, EnchantedStorageControllerBlockEntity entity) {
@@ -147,10 +162,16 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
             }
         }
 
-        // Handle chunk loading
+        // Handle chunk loading (force load 3x3 chunks centered on controller)
         boolean shouldLoadChunk = isOnline && entity.hasChunkLoader();
         if (shouldLoadChunk != entity.isChunkForceLoaded) {
-            world.setChunkForced(pos.getX() >> 4, pos.getZ() >> 4, shouldLoadChunk);
+            int centerCx = pos.getX() >> 4;
+            int centerCz = pos.getZ() >> 4;
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    world.setChunkForced(centerCx + dx, centerCz + dz, shouldLoadChunk);
+                }
+            }
             entity.isChunkForceLoaded = shouldLoadChunk;
         }
 
