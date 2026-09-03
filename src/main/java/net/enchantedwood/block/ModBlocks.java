@@ -936,8 +936,8 @@ public class ModBlocks {
                     .hardness(3.0f)
                     .resistance(1200.0f)
                     .nonOpaque()),
-            Text.literal("§6Basalt-Insulated Super Cable"),
-            Text.literal("§e25,600 E/t Transfer §7• 100% Explosion-Proof & Fireproof."));
+            Text.literal("§6Basalt Super Energy Cable"),
+            Text.literal("§e25,600 FE/t Energy Transfer §7• 100% Explosion-Proof & Fireproof."));
 
     public static final Block REINFORCED_OBSIDIAN = registerBlockWithTooltip("reinforced_obsidian",
             new Block(AbstractBlock.Settings.create()
