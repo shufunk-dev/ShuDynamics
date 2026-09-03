@@ -294,6 +294,25 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND_HAMMER, 1, 280, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND, 5), new ItemStack(Items.STICK, 2));
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_NETHERITE_HAMMER, 1, 400, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND_HAMMER, 1), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_NETHERITE_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.INFERNAL_HAMMER, 1, 360, new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_INGOT, 5), new ItemStack(Items.BLAZE_ROD, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 2));
+
+        // Broad Axes (Timber Harvesting)
+        registerRecipe(net.enchantedwood.item.ModItems.WOODEN_BROAD_AXE, 1, 60, new ItemStack(Items.OAK_PLANKS, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.STONE_BROAD_AXE, 1, 80, new ItemStack(Items.COBBLESTONE, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.COPPER_BROAD_AXE, 1, 100, new ItemStack(Items.COPPER_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.IRON_BROAD_AXE, 1, 140, new ItemStack(Items.IRON_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.GOLDEN_BROAD_AXE, 1, 100, new ItemStack(Items.GOLD_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.DIAMOND_BROAD_AXE, 1, 240, new ItemStack(Items.DIAMOND, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.NETHERITE_BROAD_AXE, 1, 360, new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_BROAD_AXE, 1), new ItemStack(Items.NETHERITE_INGOT, 1), new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.ALUMINUM_BROAD_AXE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.BRONZE_BROAD_AXE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.BRONZE_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.STEEL_BROAD_AXE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_BROAD_AXE, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.COBALT_BROAD_AXE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.COBALT_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ARDITE_BROAD_AXE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.ARDITE_INGOT, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.MANYULLYN_BROAD_AXE, 1, 300, new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_INGOT, 6), new ItemStack(Items.BLAZE_ROD, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_COBBLESTONE_BROAD_AXE, 1, 160, new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE.asItem(), 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND_BROAD_AXE, 1, 280, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND, 6), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_NETHERITE_BROAD_AXE, 1, 400, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DIAMOND_BROAD_AXE, 1), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_NETHERITE_INGOT, 1));
     }
 
     private static void registerModGearRecipes() {

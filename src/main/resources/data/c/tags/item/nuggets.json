@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:iron_nugget",
+    "minecraft:gold_nugget",
+    "enchantedwood:copper_nugget",
+    "enchantedwood:tin_nugget",
+    "enchantedwood:bronze_nugget",
+    "enchantedwood:aluminum_nugget",
+    "enchantedwood:steel_nugget",
+    "enchantedwood:titanium_nugget",
+    "enchantedwood:tungsten_nugget",
+    "enchantedwood:cobalt_nugget",
+    "enchantedwood:ardite_nugget",
+    "enchantedwood:manyullyn_nugget"
+  ]
+}
