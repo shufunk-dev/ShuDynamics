@@ -19,6 +19,8 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
     private int currentPage = 0;
+    private String searchQuery = "";
+    private final java.util.List<Integer> filteredIndices = new java.util.ArrayList<>();
 
     public EnchantedStorageTerminalScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, new SimpleInventory(TOTAL_STORAGE_SLOTS), new ArrayPropertyDelegate(4));
@@ -32,6 +34,7 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
 
         inventory.onOpen(playerInventory.player);
         this.addProperties(propertyDelegate);
+        updateFilteredIndices();
 
         // 54 Dynamic Network Storage Slots (6 rows x 9 columns)
         for (int row = 0; row < 6; ++row) {
@@ -54,19 +57,54 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
         }
     }
 
+    public void setSearchFilter(String query) {
+        this.searchQuery = query == null ? "" : query.trim().toLowerCase(java.util.Locale.ROOT);
+        this.currentPage = 0;
+        updateFilteredIndices();
+        this.sendContentUpdates();
+    }
+
+    public String getSearchQuery() {
+        return this.searchQuery;
+    }
+
+    public void updateFilteredIndices() {
+        this.filteredIndices.clear();
+        if (this.searchQuery.isEmpty()) {
+            for (int i = 0; i < TOTAL_STORAGE_SLOTS; i++) {
+                this.filteredIndices.add(i);
+            }
+        } else {
+            for (int i = 0; i < TOTAL_STORAGE_SLOTS; i++) {
+                ItemStack stack = this.inventory.getStack(i);
+                if (!stack.isEmpty()) {
+                    String name = stack.getName().getString().toLowerCase(java.util.Locale.ROOT);
+                    String path = net.minecraft.registry.Registries.ITEM.getId(stack.getItem()).getPath().toLowerCase(java.util.Locale.ROOT);
+                    if (name.contains(this.searchQuery) || path.contains(this.searchQuery)) {
+                        this.filteredIndices.add(i);
+                    }
+                }
+            }
+        }
+    }
+
     public int getCurrentPage() {
         return this.currentPage;
     }
 
     public void setCurrentPage(int page) {
-        if (page >= 0 && page < TOTAL_PAGES) {
+        if (page >= 0 && page < getTotalPages()) {
             this.currentPage = page;
             this.sendContentUpdates();
         }
     }
 
     public int getTotalPages() {
-        return TOTAL_PAGES;
+        if (this.searchQuery.isEmpty()) {
+            return TOTAL_PAGES;
+        }
+        int count = this.filteredIndices.size();
+        return Math.max(1, (int) Math.ceil((double) count / PAGE_SIZE));
     }
 
     public int getTotalCapacity() {
@@ -92,17 +130,25 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
             }
         } else if (id == 1) {
             // Next page
-            if (this.currentPage < TOTAL_PAGES - 1) {
+            if (this.currentPage < getTotalPages() - 1) {
                 this.currentPage++;
                 this.sendContentUpdates();
                 return true;
             }
         } else if (id >= 10 && id < 10 + TOTAL_PAGES) {
-            this.currentPage = id - 10;
+            this.currentPage = Math.min(id - 10, getTotalPages() - 1);
             this.sendContentUpdates();
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onContentChanged(Inventory inventory) {
+        super.onContentChanged(inventory);
+        if (!this.searchQuery.isEmpty()) {
+            updateFilteredIndices();
+        }
     }
 
     @Override
@@ -120,6 +166,9 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
             newStack = originalStack.copy();
 
             if (slotIndex < PAGE_SIZE) {
+                if (!slot.isEnabled()) {
+                    return ItemStack.EMPTY;
+                }
                 // Move from Terminal to Player Inventory (slots 54..89)
                 if (!this.insertItem(originalStack, PAGE_SIZE, PAGE_SIZE + 36, true)) {
                     return ItemStack.EMPTY;
@@ -176,6 +225,10 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                 if (!inserted) {
                     return ItemStack.EMPTY;
                 }
+
+                if (!this.searchQuery.isEmpty()) {
+                    updateFilteredIndices();
+                }
             }
 
             if (originalStack.isEmpty()) {
@@ -204,7 +257,16 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
 
         @Override
         public int getIndex() {
-            return this.displayIndex + (currentPage * PAGE_SIZE);
+            int targetPos = this.displayIndex + (currentPage * PAGE_SIZE);
+            if (targetPos >= 0 && targetPos < filteredIndices.size()) {
+                return filteredIndices.get(targetPos);
+            }
+            return -1;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return getIndex() >= 0;
         }
 
         @Override
@@ -222,6 +284,9 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
             if (actualIndex >= 0 && actualIndex < inventory.size()) {
                 inventory.setStack(actualIndex, stack);
                 markDirty();
+                if (!searchQuery.isEmpty()) {
+                    updateFilteredIndices();
+                }
             }
         }
 
@@ -229,7 +294,11 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
         public ItemStack takeStack(int amount) {
             int actualIndex = getIndex();
             if (actualIndex >= 0 && actualIndex < inventory.size()) {
-                return inventory.removeStack(actualIndex, amount);
+                ItemStack result = inventory.removeStack(actualIndex, amount);
+                if (!searchQuery.isEmpty()) {
+                    updateFilteredIndices();
+                }
+                return result;
             }
             return ItemStack.EMPTY;
         }

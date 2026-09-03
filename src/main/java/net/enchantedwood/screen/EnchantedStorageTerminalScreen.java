@@ -38,10 +38,18 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
         int y = (this.height - this.backgroundHeight) / 2;
 
         this.searchBox = new TextFieldWidget(this.textRenderer, x + 98, y + 4, 70, 11, Text.literal("Search..."));
-        this.searchBox.setMaxLength(25);
+        this.searchBox.setMaxLength(30);
         this.searchBox.setDrawsBackground(true);
         this.searchBox.setFocusUnlocked(true);
-        this.addSelectableChild(this.searchBox);
+        this.searchBox.setPlaceholder(Text.literal("Search...").formatted(net.minecraft.util.Formatting.DARK_GRAY));
+        this.searchBox.setText(this.handler.getSearchQuery());
+        this.searchBox.setChangedListener(query -> {
+            this.handler.setSearchFilter(query);
+            if (net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.canSend(net.enchantedwood.network.SetStorageTerminalSearchPayload.ID)) {
+                net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.SetStorageTerminalSearchPayload(query));
+            }
+        });
+        this.addDrawableChild(this.searchBox);
 
         // Previous Page Button
         this.prevButton = ButtonWidget.builder(Text.literal("◀"), button -> {
@@ -115,7 +123,6 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
-        this.searchBox.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
 
         int x = (this.width - this.backgroundWidth) / 2;

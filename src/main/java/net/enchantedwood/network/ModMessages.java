@@ -14,6 +14,16 @@ public class ModMessages {
         PayloadTypeRegistry.playS2C().register(SuperComputerStatusPayload.ID, SuperComputerStatusPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LaserQuarryActionPayload.ID, LaserQuarryActionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(OpenAtvInventoryPayload.ID, OpenAtvInventoryPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(SetStorageTerminalSearchPayload.ID, SetStorageTerminalSearchPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(SetStorageTerminalSearchPayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                ScreenHandler handler = context.player().currentScreenHandler;
+                if (handler instanceof net.enchantedwood.screen.EnchantedStorageTerminalScreenHandler terminalHandler) {
+                    terminalHandler.setSearchFilter(payload.query());
+                }
+            });
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(OpenAtvInventoryPayload.ID, (payload, context) -> {
             context.server().execute(() -> {
