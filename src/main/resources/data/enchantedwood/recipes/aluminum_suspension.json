@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A",
+    "I",
+    "A"
+  ],
+  "key": {
+    "A": "enchantedwood:aluminum_ingot",
+    "I": "minecraft:iron_bars"
+  },
+  "result": {
+    "count": 2,
+    "id": "enchantedwood:aluminum_suspension"
+  }
+}

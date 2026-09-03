@@ -114,7 +114,9 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         }
 
         ItemStack suspension = inventory.get(SUSPENSION_SLOT);
-        if (suspension.isOf(ModItems.STEEL_SUSPENSION)) {
+        if (suspension.isOf(ModItems.ALUMINUM_SUSPENSION)) {
+            step += 0.05f;
+        } else if (suspension.isOf(ModItems.STEEL_SUSPENSION)) {
             step += 0.1f;
         } else if (suspension.isOf(ModItems.TITANIUM_SUSPENSION)) {
             step += 0.25f; // Up to 2.0 blocks clearance with Titanium Tires + Suspension

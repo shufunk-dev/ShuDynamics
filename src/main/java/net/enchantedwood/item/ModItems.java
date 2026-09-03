@@ -140,9 +140,14 @@ public class ModItems {
             Text.literal("§dTwin-Turbo Nitro Engine §8(~80 km/h) §7• Fuel: High-Octane Racing Fuel"),
             Text.literal("§8Craft with Titanium Ingots, Steel ATV Engine, and Titanium Gear.")
     ));
+    public static final Item ALUMINUM_SUSPENSION = registerItem("aluminum_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§bSport suspension providing §e0.8-block step-up §b& agile responsive handling."),
+            Text.literal("§8Craft with Aluminum Ingots + Iron Bars.")
+    ));
     public static final Item STEEL_SUSPENSION = registerItem("steel_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings,
-            Text.literal("§7Shock absorbers providing §e1.0-block step-up §7& fall absorption."),
+            Text.literal("§7Heavy suspension providing §e1.0-block step-up §7& fall absorption."),
             Text.literal("§8Craft with Steel Ingots + Iron Bars.")
     ));
     public static final Item TITANIUM_SUSPENSION = registerItem("titanium_suspension", settings -> new net.enchantedwood.item.custom.TooltipItem(
@@ -1111,6 +1116,7 @@ public class ModItems {
                 entries.add(ALUMINUM_ATV_ENGINE);
                 entries.add(STEEL_ATV_ENGINE);
                 entries.add(TITANIUM_ATV_ENGINE);
+                entries.add(ALUMINUM_SUSPENSION);
                 entries.add(STEEL_SUSPENSION);
                 entries.add(TITANIUM_SUSPENSION);
                 entries.add(ALUMINUM_ATV_CHASSIS);

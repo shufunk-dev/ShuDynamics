@@ -251,7 +251,8 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
 
         // Suspension Tier Time
         ItemStack suspension = inventory.get(SUSPENSION_SLOT);
-        if (suspension.isOf(ModItems.STEEL_SUSPENSION)) baseTime += 30;     // +1.5s
+        if (suspension.isOf(ModItems.ALUMINUM_SUSPENSION)) baseTime += 15;   // +0.75s
+        else if (suspension.isOf(ModItems.STEEL_SUSPENSION)) baseTime += 30; // +1.5s
         else if (suspension.isOf(ModItems.TITANIUM_SUSPENSION)) baseTime += 60; // +3.0s
 
         // Cargo Trunk Tier Time
@@ -367,7 +368,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
     }
 
     public static boolean isSuspension(ItemStack stack) {
-        return stack.isOf(ModItems.STEEL_SUSPENSION) || stack.isOf(ModItems.TITANIUM_SUSPENSION);
+        return stack.isOf(ModItems.ALUMINUM_SUSPENSION) || stack.isOf(ModItems.STEEL_SUSPENSION) || stack.isOf(ModItems.TITANIUM_SUSPENSION);
     }
 
     public static boolean isHeadlight(ItemStack stack) {

@@ -365,6 +365,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_ATV_ENGINE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.PISTON, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_REDSTONE, 1));
         registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_ATV_ENGINE, 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_ATV_ENGINE, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_GEAR, 1));
 
+        registerRecipe(net.enchantedwood.item.ModItems.ALUMINUM_SUSPENSION, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_SUSPENSION, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
         registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_SUSPENSION, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
 
