@@ -26,6 +26,14 @@ public class DimensionalSingularityBlock extends Block {
     }
 
     @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.entity.LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (!world.isClient() && placer instanceof net.minecraft.server.network.ServerPlayerEntity serverPlayer) {
+            ResonanceFrameValidator.tryActivateGateway(world, pos, serverPlayer);
+        }
+    }
+
+    @Override
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient() && player != null && !player.isCreative()) {
             ItemStack tool = player.getMainHandStack();

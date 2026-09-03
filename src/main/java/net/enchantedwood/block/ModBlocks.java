@@ -465,6 +465,16 @@ public class ModBlocks {
                     .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
                     .nonOpaque()));
 
+    public static final Block DORMANT_RIFT = registerBlockWithoutItem("dormant_rift",
+            new net.enchantedwood.block.custom.DormantRiftBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dormant_rift")))
+                    .noCollision()
+                    .strength(-1.0F)
+                    .sounds(BlockSoundGroup.GLASS)
+                    .luminance(state -> 12)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
+                    .nonOpaque()));
+
     public static final Block ATMOSPHERIC_ANCHOR = registerBlock("atmospheric_anchor",
             new net.enchantedwood.block.custom.AtmosphericAnchorBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "atmospheric_anchor")))

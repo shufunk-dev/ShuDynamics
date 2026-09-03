@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:dimensional_singularity"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.gateway_of_resonance.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.gateway_of_resonance.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "activated_gateway": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "activated_gateway"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/keystone_6"
+}

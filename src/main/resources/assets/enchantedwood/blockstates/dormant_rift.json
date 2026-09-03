@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "enchantedwood:block/dormant_rift_ns"
+    },
+    "axis=z": {
+      "model": "enchantedwood:block/dormant_rift_ew"
+    }
+  }
+}

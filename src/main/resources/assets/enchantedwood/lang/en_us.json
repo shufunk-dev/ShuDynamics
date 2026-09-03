@@ -487,5 +487,8 @@
   "item.enchantedwood.aluminum_nugget": "Aluminum Nugget",
   "item.enchantedwood.steel_nugget": "Steel Nugget",
   "item.enchantedwood.titanium_nugget": "Titanium Nugget",
-  "block.enchantedwood.dimensional_singularity": "Keystone #6: Dimensional Singularity"
+  "block.enchantedwood.dimensional_singularity": "Keystone #6: Dimensional Singularity",
+  "block.enchantedwood.dormant_rift": "Dormant Anomaly Rift",
+  "advancements.enchantedwood.anomalies.gateway_of_resonance.title": "The Gateway of Resonance",
+  "advancements.enchantedwood.anomalies.gateway_of_resonance.description": "Assemble all 6 Anomaly Keystones with Crying Obsidian to awaken the dormant cosmic gateway."
 }
