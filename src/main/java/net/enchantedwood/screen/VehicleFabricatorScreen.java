@@ -74,6 +74,22 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
     }
 
     @Override
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        super.drawForeground(context, mouseX, mouseY);
+
+        // Render clean slot labels right on the GUI surface
+        context.drawText(this.textRenderer, "Seat", 69, 12, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Engine", 23, 34, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Chassis", 62, 44, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Module", 97, 34, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Tires", 28, 76, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Lights", 65, 76, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Trunk", 101, 76, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "ATV In", 137, 14, 0xFF88AACC, false);
+        context.drawText(this.textRenderer, "Out", 143, 72, 0xFF88AACC, false);
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         // Update assemble button text / active state
         if (this.assembleButton != null) {
@@ -89,6 +105,61 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
+
+        // Empty Slot Tooltip Guides
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack()) {
+            int slotIndex = this.focusedSlot.getIndex();
+            switch (slotIndex) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🚗 Vehicle In / Upgrade Bay"),
+                        Text.literal("§7Place an existing ATV here to modify,"),
+                        Text.literal("§7upgrade parts, or swap work modules.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🪑 Seat Slot"),
+                        Text.literal("§fRequired: §aATV Leather Seat"),
+                        Text.literal("§7Ergonomic driver seating.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e⚙️ Engine Slot"),
+                        Text.literal("§fRequired: §aCopper Engine §7or §bAluminum Engine"),
+                        Text.literal("§7Drives vehicle horsepower & top speed.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🏗️ Chassis Slot"),
+                        Text.literal("§fRequired: §aSteel ATV Chassis"),
+                        Text.literal("§7Heavy tubular steel structural frame.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🚜 Work Module / Suspension Slot"),
+                        Text.literal("§fSupports:"),
+                        Text.literal("§8 • §72x2 Mining Drill Bits (Iron..Netherite)"),
+                        Text.literal("§8 • §7Forestry Tree Saws (Iron..Netherite)"),
+                        Text.literal("§8 • §77-Block Crop Harvesters"),
+                        Text.literal("§8 • §7Or standard suspension")
+                ), mouseX, mouseY);
+                case 5 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🛞 Tires Slot"),
+                        Text.literal("§fRequired: §a4x Tires"),
+                        Text.literal("§7Rubber, Steel Rim, or Studded Tires.")
+                ), mouseX, mouseY);
+                case 6 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e💡 Headlights Slot"),
+                        Text.literal("§fRequired: §aHeadlights Module"),
+                        Text.literal("§7Halogen (12), LED (15), or Xenon High-Beams.")
+                ), mouseX, mouseY);
+                case 7 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📦 Cargo Trunk Slot (Optional)"),
+                        Text.literal("§fOptional: §aSmall, Medium, or Large Trunk"),
+                        Text.literal("§7Mounts 9 to 27 mobile cargo chest slots.")
+                ), mouseX, mouseY);
+                case 8 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Vehicle Output Bay"),
+                        Text.literal("§7Finished or upgraded ATV appears here."),
+                        Text.literal("§7Shift-click or grab when fabrication completes.")
+                ), mouseX, mouseY);
+            }
+        }
 
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;

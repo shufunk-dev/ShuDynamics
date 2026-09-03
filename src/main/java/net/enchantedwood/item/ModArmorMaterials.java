@@ -232,4 +232,21 @@ public class ModArmorMaterials {
             ModTags.Items.REPAIRS_MANYULLYN,
             RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "manyullyn"))
     );
+
+    // Tungsten (Heavy Refractory Armor, 20 total defense + 3.0 toughness + 0.1 knockback resistance)
+    public static final ArmorMaterial TUNGSTEN = new ArmorMaterial(
+            38,
+            Map.of(
+                    EquipmentType.HELMET, 3,
+                    EquipmentType.CHESTPLATE, 8,
+                    EquipmentType.LEGGINGS, 6,
+                    EquipmentType.BOOTS, 3
+            ),
+            18,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.0f,
+            0.1f,
+            ModTags.Items.REPAIRS_TUNGSTEN,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten"))
+    );
 }

@@ -346,8 +346,10 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             ItemStack lightsStack = this.inventory.get(HEADLIGHT_SLOT);
             boolean hasLights = lightsStack.getItem() instanceof HeadlightsItem;
             int lightLevel = 15;
+            HeadlightsItem.LightTier lightTier = HeadlightsItem.LightTier.HALOGEN;
             if (hasLights && lightsStack.getItem() instanceof HeadlightsItem hItem) {
-                lightLevel = hItem.getTier().getLightLevel();
+                lightTier = hItem.getTier();
+                lightLevel = lightTier.getLightLevel();
             }
             int skyLight = world.getLightLevel(net.minecraft.world.LightType.SKY, this.getBlockPos()) - world.getAmbientDarkness();
             boolean dark = hasLights && skyLight <= 7;
@@ -355,7 +357,8 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
             if (dark && rider != null) {
                 Vec3d forward = this.getRotationVector().normalize();
-                BlockPos targetLight = BlockPos.ofFloored(this.getEntityPos().add(forward.multiply(2.5)).add(0, 1.0, 0));
+                double projectionDist = (lightTier == HeadlightsItem.LightTier.XENON) ? 4.5 : (lightTier == HeadlightsItem.LightTier.LED ? 3.2 : 2.0);
+                BlockPos targetLight = BlockPos.ofFloored(this.getEntityPos().add(forward.multiply(projectionDist)).add(0, 1.0, 0));
                 if (this.dynamicLightPos != null && !this.dynamicLightPos.equals(targetLight)) {
                     if (world.getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
                         world.removeBlock(this.dynamicLightPos, false);
@@ -365,6 +368,18 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 if (world.getBlockState(targetLight).isAir()) {
                     world.setBlockState(targetLight, net.minecraft.block.Blocks.LIGHT.getDefaultState().with(net.minecraft.block.LightBlock.LEVEL_15, lightLevel), net.minecraft.block.Block.NOTIFY_ALL);
                     this.dynamicLightPos = targetLight;
+                }
+
+                // Xenon High-Beams: Highlight distant obstacles & mobs in the forward 32m cone
+                if (lightTier == HeadlightsItem.LightTier.XENON && this.age % 10 == 0) {
+                    net.minecraft.util.math.Box highBeamCone = this.getBoundingBox().stretch(forward.multiply(32.0)).expand(6.0, 3.0, 6.0);
+                    List<net.minecraft.entity.mob.HostileEntity> hostiles = world.getEntitiesByClass(net.minecraft.entity.mob.HostileEntity.class, highBeamCone, e -> e.isAlive());
+                    for (var mob : hostiles) {
+                        Vec3d toMob = mob.getEntityPos().subtract(this.getEntityPos()).normalize();
+                        if (forward.dotProduct(toMob) > 0.5) { // In forward view cone
+                            mob.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.GLOWING, 30, 0, false, false, false));
+                        }
+                    }
                 }
             } else {
                 if (this.dynamicLightPos != null) {

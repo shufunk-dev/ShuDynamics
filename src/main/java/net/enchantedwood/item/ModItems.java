@@ -387,6 +387,21 @@ public class ModItems {
     public static final Item MANYULLYN_LEGGINGS = registerItem("manyullyn_leggings", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.LEGGINGS).fireproof()));
     public static final Item MANYULLYN_BOOTS = registerItem("manyullyn_boots", settings -> new Item(settings.armor(ModArmorMaterials.MANYULLYN, EquipmentType.BOOTS).fireproof()));
 
+    // Tungsten Tools & Weapons (Heavy Refractory)
+    public static final Item TUNGSTEN_SWORD = registerItem("tungsten_sword", settings -> new Item(settings.sword(ModMaterials.TUNGSTEN, 4.5f, -2.4f)));
+    public static final Item TUNGSTEN_PICKAXE = registerItem("tungsten_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.TUNGSTEN, 2.0f, -2.8f)));
+    public static final Item TUNGSTEN_AXE = registerItem("tungsten_axe", settings -> new Item(settings.axe(ModMaterials.TUNGSTEN, 7.5f, -3.0f)));
+    public static final Item TUNGSTEN_SHOVEL = registerItem("tungsten_shovel", settings -> new Item(settings.shovel(ModMaterials.TUNGSTEN, 2.0f, -3.0f)));
+    public static final Item TUNGSTEN_HOE = registerItem("tungsten_hoe", settings -> new Item(settings.hoe(ModMaterials.TUNGSTEN, -1.5f, -0.5f)));
+    public static final Item TUNGSTEN_HAMMER = registerItem("tungsten_hammer", settings -> new HammerItem(settings.pickaxe(ModMaterials.TUNGSTEN, 6.0f, -3.0f)));
+    public static final Item TUNGSTEN_BROAD_AXE = registerItem("tungsten_broad_axe", settings -> new BroadAxeItem(settings.axe(ModMaterials.TUNGSTEN, 8.0f, -3.1f)));
+
+    // Tungsten Armor (High Toughness & Knockback Resistance)
+    public static final Item TUNGSTEN_HELMET = registerItem("tungsten_helmet", settings -> new Item(settings.armor(ModArmorMaterials.TUNGSTEN, EquipmentType.HELMET)));
+    public static final Item TUNGSTEN_CHESTPLATE = registerItem("tungsten_chestplate", settings -> new Item(settings.armor(ModArmorMaterials.TUNGSTEN, EquipmentType.CHESTPLATE)));
+    public static final Item TUNGSTEN_LEGGINGS = registerItem("tungsten_leggings", settings -> new Item(settings.armor(ModArmorMaterials.TUNGSTEN, EquipmentType.LEGGINGS)));
+    public static final Item TUNGSTEN_BOOTS = registerItem("tungsten_boots", settings -> new Item(settings.armor(ModArmorMaterials.TUNGSTEN, EquipmentType.BOOTS)));
+
     // Aluminum Tools & Weapons
     public static final Item ALUMINUM_SWORD = registerItem("aluminum_sword", settings -> new Item(settings.sword(ModMaterials.ALUMINUM, 3.0f, -2.4f)));
     public static final Item ALUMINUM_PICKAXE = registerItem("aluminum_pickaxe", settings -> new Item(settings.pickaxe(ModMaterials.ALUMINUM, 1.0f, -2.8f)));

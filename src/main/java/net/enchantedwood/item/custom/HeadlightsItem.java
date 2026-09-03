@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 
 public class HeadlightsItem extends Item {
     public enum LightTier {
-        HALOGEN("Halogen Headlights", "§e", 12, "Standard halogen beam. Activates automatically in darkness."),
-        LED("LED Floodlights", "§b", 15, "High-intensity white LED array. Illuminates broad cave networks."),
-        XENON("Xenon High-Beams", "§d", 15, "Extreme piercing xenon headlights with long-distance beam.");
+        HALOGEN("Halogen Headlights", "§e", 12, "Standard warm beam (12 Light, 8m range)."),
+        LED("LED Floodlights", "§b", 15, "Wide-angle floodlight array (15 Light, 16m broad cone)."),
+        XENON("Xenon High-Beams", "§d", 15, "Piercing long-range high-beams (15 Light, 32m reach). Outlines night hazards in forward beam.");
 
         private final String name;
         private final String colorCode;

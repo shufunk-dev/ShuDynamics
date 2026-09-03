@@ -30,6 +30,13 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(DustSmelterBlockEntity::new, ModBlocks.DUST_SMELTER).build()
             );
 
+    public static final BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "hydraulic_press"),
+                    FabricBlockEntityTypeBuilder.create(HydraulicPressBlockEntity::new, ModBlocks.HYDRAULIC_PRESS).build()
+            );
+
 
     public static final BlockEntityType<EnchantedLavaGeneratorBlockEntity> ENCHANTED_LAVA_GENERATOR_BLOCK_ENTITY =
             Registry.register(

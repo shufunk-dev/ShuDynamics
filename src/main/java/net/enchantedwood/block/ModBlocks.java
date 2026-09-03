@@ -54,6 +54,15 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> state.get(net.enchantedwood.block.custom.DustSmelterBlock.LIT) ? 13 : 0)));
 
+    public static final Block HYDRAULIC_PRESS = registerBlock("hydraulic_press",
+            new net.enchantedwood.block.custom.HydraulicPressBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hydraulic_press")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.HydraulicPressBlock.LIT) ? 13 : 0)));
+
     public static final Block ENCHANTED_CHEST = registerBlock("enchanted_chest",
             new net.enchantedwood.block.custom.EnchantedChestBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_chest")))

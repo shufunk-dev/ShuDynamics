@@ -26,6 +26,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
     public void onInitializeClient() {
         HandledScreens.register(ModScreenHandlers.CRUSHER_SCREEN_HANDLER, CrusherScreen::new);
         HandledScreens.register(ModScreenHandlers.DUST_SMELTER_SCREEN_HANDLER, net.enchantedwood.screen.DustSmelterScreen::new);
+        HandledScreens.register(ModScreenHandlers.HYDRAULIC_PRESS_SCREEN_HANDLER, net.enchantedwood.screen.HydraulicPressScreen::new);
         HandledScreens.register(ModScreenHandlers.ENCHANTED_LAVA_GENERATOR_SCREEN_HANDLER, net.enchantedwood.screen.EnchantedLavaGeneratorScreen::new);
         HandledScreens.register(ModScreenHandlers.ENCHANTED_CHEST_SCREEN_HANDLER, net.enchantedwood.screen.EnchantedChestScreen::new);
         HandledScreens.register(ModScreenHandlers.ENCHANTED_STORAGE_CONTROLLER_SCREEN_HANDLER, net.enchantedwood.screen.EnchantedStorageControllerScreen::new);

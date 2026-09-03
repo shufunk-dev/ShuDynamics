@@ -121,4 +121,13 @@ public class ModMaterials {
             24,
             ModTags.Items.REPAIRS_MANYULLYN
     );
+
+    public static final ToolMaterial TUNGSTEN = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            2800,
+            11.0f,
+            4.5f,
+            18,
+            ModTags.Items.REPAIRS_TUNGSTEN
+    );
 }

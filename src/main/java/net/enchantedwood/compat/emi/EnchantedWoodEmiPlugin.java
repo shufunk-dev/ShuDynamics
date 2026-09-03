@@ -62,6 +62,11 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             EmiStack.of(ModBlocks.MAGMA_CRUCIBLE)
     );
 
+    public static final EmiRecipeCategory HYDRAULIC_PRESS = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "hydraulic_press"),
+            EmiStack.of(ModBlocks.HYDRAULIC_PRESS)
+    );
+
     @Override
     public void register(EmiRegistry registry) {
         // Register Categories
@@ -73,6 +78,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(COKE_OVEN);
         registry.addCategory(FUEL_REFINERY);
         registry.addCategory(MAGMA_CRUCIBLE);
+        registry.addCategory(HYDRAULIC_PRESS);
 
         // Register Workstations (Catalysts)
         registry.addWorkstation(ALLOY_FOUNDRY, EmiStack.of(ModBlocks.ALLOY_FOUNDRY));
@@ -84,6 +90,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(COKE_OVEN, EmiStack.of(ModBlocks.COKE_OVEN));
         registry.addWorkstation(FUEL_REFINERY, EmiStack.of(ModBlocks.FUEL_REFINERY));
         registry.addWorkstation(MAGMA_CRUCIBLE, EmiStack.of(ModBlocks.MAGMA_CRUCIBLE));
+        registry.addWorkstation(HYDRAULIC_PRESS, EmiStack.of(ModBlocks.HYDRAULIC_PRESS));
         registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
 
         // Recipe auto-transfer handler for Super Computer 3x3 Ghost Pattern Matrix
@@ -156,6 +163,26 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         // 8. Magma Crucible Recipes
         registerCrucibleRecipes(registry);
+
+        // 9. Hydraulic Plate Press Recipes
+        registerHydraulicPressRecipes(registry);
+    }
+
+    private static void registerHydraulicPressRecipes(EmiRegistry registry) {
+        int idx = 0;
+        addPress(registry, idx++, EmiStack.of(ModItems.TUNGSTEN_INGOT), EmiStack.of(ModItems.TUNGSTEN_PLATE), "Refractory Plate");
+        addPress(registry, idx++, EmiStack.of(ModItems.COBALT_INGOT), EmiStack.of(ModItems.COBALT_PLATE), "Agile Cobalt Plate");
+        addPress(registry, idx++, EmiStack.of(ModItems.ARDITE_INGOT), EmiStack.of(ModItems.ARDITE_PLATE), "Dense Ardite Plate");
+        addPress(registry, idx++, EmiStack.of(ModItems.MANYULLYN_INGOT), EmiStack.of(ModItems.MANYULLYN_PLATE), "Nether Alloy Plate");
+        addPress(registry, idx++, EmiStack.of(ModBlocks.TUNGSTEN_BLOCK), EmiStack.of(ModItems.TUNGSTEN_PLATE, 9), "Bulk Stamping");
+        addPress(registry, idx++, EmiStack.of(ModBlocks.COBALT_BLOCK), EmiStack.of(ModItems.COBALT_PLATE, 9), "Bulk Stamping");
+        addPress(registry, idx++, EmiStack.of(ModBlocks.ARDITE_BLOCK), EmiStack.of(ModItems.ARDITE_PLATE, 9), "Bulk Stamping");
+        addPress(registry, idx++, EmiStack.of(ModBlocks.MANYULLYN_BLOCK), EmiStack.of(ModItems.MANYULLYN_PLATE, 9), "Bulk Stamping");
+    }
+
+    private static void addPress(EmiRegistry registry, int id, EmiStack input, EmiStack output, String note) {
+        registry.addRecipe(new SimpleOneInputRecipe(HYDRAULIC_PRESS, Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + id),
+                EmiIngredient.of(List.of(input)), output, note));
     }
 
     private static void registerAlloyRecipes(EmiRegistry registry) {

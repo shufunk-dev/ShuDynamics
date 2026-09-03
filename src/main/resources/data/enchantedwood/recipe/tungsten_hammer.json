@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "enchantedwood:tungsten_ingot",
+    "/": "minecraft:stick"
+  },
+  "pattern": [
+    "###",
+    "#/#",
+    " / "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:tungsten_hammer"
+  }
+}

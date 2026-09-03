@@ -129,6 +129,12 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_LEGGINGS, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 7));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_BOOTS, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4));
 
+        // Tungsten Armor
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_HELMET, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 5));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_CHESTPLATE, 1, 240, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 8));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_LEGGINGS, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 7));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_BOOTS, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 4));
+
         // Cobalt Armor
         registerRecipe(net.enchantedwood.item.ModItems.COBALT_HELMET, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.COBALT_INGOT, 5));
         registerRecipe(net.enchantedwood.item.ModItems.COBALT_CHESTPLATE, 1, 180, new ItemStack(net.enchantedwood.item.ModItems.COBALT_INGOT, 8));
@@ -211,6 +217,15 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_SHOVEL, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1), new ItemStack(Items.STICK, 2));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_HOE, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2), new ItemStack(Items.STICK, 2));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_HAMMER, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 5), new ItemStack(Items.STICK, 2));
+
+        // Tungsten Tools
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_SWORD, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 2), new ItemStack(Items.STICK, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_PICKAXE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 3), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_AXE, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 3), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_SHOVEL, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 1), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_HOE, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 2), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_HAMMER, 1, 180, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 5), new ItemStack(Items.STICK, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.TUNGSTEN_BROAD_AXE, 1, 180, new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 6), new ItemStack(Items.STICK, 2));
 
         // Cobalt Tools
         registerRecipe(net.enchantedwood.item.ModItems.COBALT_SWORD, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.COBALT_INGOT, 2), new ItemStack(Items.STICK, 1));
