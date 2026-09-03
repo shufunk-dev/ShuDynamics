@@ -23,7 +23,8 @@ public class OverworldAnomalyEventHandler {
         ALTITUDE,
         GRAVITY,
         CHRONO,
-        BEDROCK
+        BEDROCK,
+        PLASMA_FLARE
     }
 
     private static class ActiveAnomaly {
@@ -41,17 +42,20 @@ public class OverworldAnomalyEventHandler {
     public static void register() {
         ServerTickEvents.START_SERVER_TICK.register(server -> {
             for (ServerWorld world : server.getWorlds()) {
-                if (world.getRegistryKey() != World.OVERWORLD) continue;
+                boolean isOverworld = world.getRegistryKey() == World.OVERWORLD;
+                boolean isNether = world.getRegistryKey() == World.NETHER;
+
+                if (!isOverworld && !isNether) continue;
 
                 for (ServerPlayerEntity player : world.getPlayers()) {
                     if (player.isCreative() || player.isSpectator()) continue;
-                    tickPlayerAnomalies(world, player);
+                    tickPlayerAnomalies(world, player, isOverworld, isNether);
                 }
             }
         });
     }
 
-    private static void tickPlayerAnomalies(ServerWorld world, ServerPlayerEntity player) {
+    private static void tickPlayerAnomalies(ServerWorld world, ServerPlayerEntity player, boolean isOverworld, boolean isNether) {
         UUID uuid = player.getUuid();
 
         // 1. Tick currently running anomaly
@@ -68,41 +72,53 @@ public class OverworldAnomalyEventHandler {
             return;
         }
 
-        // 2. Check triggers only once every second (20 ticks) to be lightweight
+        // 2. Check triggers only once every second (20 ticks)
         if (world.getTime() % 20 != (Math.abs(uuid.hashCode()) % 20)) return;
 
-        // Check Anomaly A: Altitude Collapse (Mountain peak Y >= 180)
-        if (!player.getCommandTags().contains("sd_anomaly_altitude") && player.getY() >= 180 && world.isSkyVisible(player.getBlockPos())) {
-            // 8% chance per check when high up
-            if (world.random.nextFloat() < 0.08f) {
+        // --- NETHER ANOMALY ---
+        if (isNether) {
+            // Solar Plasma Flare: Near lava sea level Y <= 40
+            if (!player.getCommandTags().contains("sd_anomaly_plasma") && player.getY() <= 40) {
+                if (world.random.nextFloat() < 0.08f) {
+                    triggerAnomaly(world, player, AnomalyType.PLASMA_FLARE, 100); // 5 seconds
+                    return;
+                }
+            }
+            return;
+        }
+
+        // --- OVERWORLD ANOMALIES ---
+        // Anomaly A: Altitude Collapse (Mountain peak Y >= 160 under open sky)
+        if (!player.getCommandTags().contains("sd_anomaly_altitude") && player.getY() >= 160 && world.isSkyVisible(player.getBlockPos())) {
+            if (world.random.nextFloat() < 0.10f) {
                 triggerAnomaly(world, player, AnomalyType.ALTITUDE, 100); // 5 seconds
                 return;
             }
         }
 
-        // Check Anomaly B: Zero-G Gravitational Surge (Deep underground Y <= 0 or midnight surface)
+        // Anomaly B: Zero-G Gravitational Surge (Deep underground Y <= 0 or night surface)
         if (!player.getCommandTags().contains("sd_anomaly_gravity")) {
             boolean underground = player.getY() <= 0 && !world.isSkyVisible(player.getBlockPos());
-            boolean midnightSurface = world.isNight() && world.getTimeOfDay() % 24000 > 17000 && world.getTimeOfDay() % 24000 < 19000 && world.isSkyVisible(player.getBlockPos());
-            if ((underground || midnightSurface) && world.random.nextFloat() < 0.04f) {
+            boolean nightSurface = world.isNight() && world.isSkyVisible(player.getBlockPos());
+            if ((underground || nightSurface) && world.random.nextFloat() < 0.08f) {
                 triggerAnomaly(world, player, AnomalyType.GRAVITY, 120); // 6 seconds
                 return;
             }
         }
 
-        // Check Anomaly C: Chrono-Static Pulse (Driving ATV or near tech)
+        // Anomaly C: Chrono-Static Pulse (Driving ATV or near industrial tech)
         if (!player.getCommandTags().contains("sd_anomaly_chrono")) {
             boolean isDriving = player.hasVehicle();
             boolean nearTech = isNearIndustrialTech(world, player.getBlockPos());
-            if ((isDriving || nearTech) && world.random.nextFloat() < 0.05f) {
+            if ((isDriving || nearTech) && world.random.nextFloat() < 0.06f) {
                 triggerAnomaly(world, player, AnomalyType.CHRONO, 80); // 4 seconds
                 return;
             }
         }
 
-        // Check Anomaly D: Subterranean Void Tremor (Near Bedrock Y <= -50)
+        // Anomaly D: Subterranean Void Tremor (Near Bedrock Y <= -50)
         if (!player.getCommandTags().contains("sd_anomaly_bedrock") && player.getY() <= -50) {
-            if (world.random.nextFloat() < 0.05f) {
+            if (world.random.nextFloat() < 0.08f) {
                 triggerAnomaly(world, player, AnomalyType.BEDROCK, 80); // 4 seconds
             }
         }
@@ -131,7 +147,7 @@ public class OverworldAnomalyEventHandler {
                         SoundEvents.ENTITY_WARDEN_HEARTBEAT, SoundCategory.PLAYERS, 1.2f, 1.4f);
                 player.sendMessage(Text.literal("§b❄ The atmosphere suddenly collapses into a vacuum... You struggle to breathe!"), true);
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 0, false, false, false));
-                player.setAir(Math.min(player.getAir(), 40)); // Deplete air meter safely
+                player.setAir(Math.min(player.getAir(), 40));
             }
             case GRAVITY -> {
                 player.addCommandTag("sd_anomaly_gravity");
@@ -153,6 +169,17 @@ public class OverworldAnomalyEventHandler {
                         SoundEvents.ENTITY_WARDEN_ROAR, SoundCategory.PLAYERS, 1.0f, 0.4f);
                 player.sendMessage(Text.literal("§4👁 A colossal resonance echoes beneath the bedrock... Something stirs on the other side."), true);
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 0, false, false, false));
+            }
+            case PLASMA_FLARE -> {
+                player.addCommandTag("sd_anomaly_plasma");
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.2f, 0.6f);
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 1.0f, 0.5f);
+                player.sendMessage(Text.literal("§6🔥 Solar Plasma Wave! Superheated extraterrestrial radiation washes over you..."), true);
+                // Safe temporary fire resistance so player is never harmed
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0, false, false, false));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0, false, false, false));
             }
         }
     }
@@ -186,19 +213,26 @@ public class OverworldAnomalyEventHandler {
                             SoundEvents.BLOCK_RESPAWN_ANCHOR_AMBIENT, SoundCategory.BLOCKS, 1.2f, 0.5f);
                 }
             }
+            case PLASMA_FLARE -> {
+                if (remainingTicks % 8 == 0) {
+                    world.spawnParticles(ParticleTypes.FLAME,
+                            player.getX(), player.getY() + 1.0, player.getZ(), 10, 0.5, 0.5, 0.5, 0.08);
+                    world.spawnParticles(ParticleTypes.LAVA,
+                            player.getX(), player.getY() + 0.5, player.getZ(), 3, 0.3, 0.2, 0.3, 0.02);
+                }
+            }
         }
     }
 
     private static void concludeAnomaly(ServerWorld world, ServerPlayerEntity player, AnomalyType type) {
         switch (type) {
             case ALTITUDE -> {
-                player.setAir(300); // Fully restore air
+                player.setAir(300);
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1.2f, 1.0f);
                 player.sendMessage(Text.literal("§7...The air stabilizes. A temporary tear in the atmospheric layer?"), false);
             }
             case GRAVITY -> {
-                // Apply generous Slow Falling so player drifts safely down with zero fall damage
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 160, 0, false, false, false));
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.6f);
@@ -213,6 +247,11 @@ public class OverworldAnomalyEventHandler {
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.PLAYERS, 0.8f, 0.8f);
                 player.sendMessage(Text.literal("§8...The tremors subside. Whatever it was has receded into the dark abyss."), false);
+            }
+            case PLASMA_FLARE -> {
+                world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1.0f, 1.2f);
+                player.sendMessage(Text.literal("§e...The thermal wave dissipates. A solar flare leaked through a rift from an alien star system."), false);
             }
         }
     }
