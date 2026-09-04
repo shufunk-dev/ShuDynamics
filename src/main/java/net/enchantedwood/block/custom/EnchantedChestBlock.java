@@ -103,8 +103,8 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
                                 player.getInventory().remove(stack -> stack.isOf(ModItems.ENCHANTED_REDSTONE), 1, player.playerScreenHandler.getCraftingInput());
                                 handStack.decrement(1);
                             }
-                            chestEntity.upgradeTier(newTier);
                             world.setBlockState(pos, state.with(GEAR_TIER, newTier), 3);
+                            chestEntity.upgradeTier(newTier);
                             player.sendMessage(Text.translatable("message.enchantedwood.upgraded_chest_tier", newTier.asString().replace("_", " ").toUpperCase()), true);
                             return ActionResult.SUCCESS;
                         } else {

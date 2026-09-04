@@ -27,6 +27,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.util.Nameable;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.EnchantedChestBlock;
 import net.enchantedwood.screen.EnchantedChestScreenHandler;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class EnchantedChestBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LidOpenable {
+public class EnchantedChestBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LidOpenable, Nameable {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(162, ItemStack.EMPTY);
     private GearTier gearTier = GearTier.NONE;
     private int activePage = 0;
@@ -48,7 +49,7 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> gearTier.ordinal();
+                case 0 -> getGearTier().ordinal();
                 case 1 -> activePage;
                 case 2 -> getMaxSlots();
                 default -> 0;
@@ -146,24 +147,37 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
+    public Text getName() {
+        return getDisplayName();
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return getGearTier() != GearTier.NONE;
+    }
+
+    @Override
+    public Text getCustomName() {
+        return hasCustomName() ? getDisplayName() : null;
+    }
+
+    @Override
     public Text getDisplayName() {
-        if (this.gearTier != null && this.gearTier != GearTier.NONE) {
-            String tierName = switch (this.gearTier) {
-                case IRON, ENCHANTED_IRON -> "Iron";
-                case COPPER -> "Copper";
-                case BRONZE -> "Bronze";
-                case ALUMINUM -> "Aluminum";
-                case STEEL -> "Steel";
-                case GOLD -> "Gold";
-                case TITANIUM -> "Titanium";
-                case DIAMOND -> "Diamond";
-                case NETHERITE -> "Netherite";
-                case BLAZE_OVERCLOCK -> "Blaze";
-                default -> "";
+        GearTier tier = getGearTier();
+        if (tier != null && tier != GearTier.NONE) {
+            return switch (tier) {
+                case COPPER -> Text.translatable("item.enchantedwood.copper_enchanted_chest");
+                case BRONZE -> Text.translatable("item.enchantedwood.bronze_enchanted_chest");
+                case IRON -> Text.translatable("item.enchantedwood.iron_enchanted_chest");
+                case ENCHANTED_IRON -> Text.translatable("item.enchantedwood.enchanted_iron_enchanted_chest");
+                case ALUMINUM -> Text.translatable("item.enchantedwood.aluminum_enchanted_chest");
+                case STEEL -> Text.translatable("item.enchantedwood.steel_enchanted_chest");
+                case GOLD -> Text.translatable("item.enchantedwood.gold_enchanted_chest");
+                case TITANIUM -> Text.translatable("item.enchantedwood.titanium_enchanted_chest");
+                case DIAMOND -> Text.translatable("item.enchantedwood.diamond_enchanted_chest");
+                case NETHERITE -> Text.translatable("item.enchantedwood.netherite_enchanted_chest");
+                default -> Text.literal("Enchanted Chest (" + tier.asString() + ")");
             };
-            if (!tierName.isEmpty()) {
-                return Text.literal("Enchanted Chest (" + tierName + ")");
-            }
         }
         return Text.translatable("container.enchantedwood.enchanted_chest");
     }
@@ -181,13 +195,18 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
         }
     }
 
-
     public GearTier getGearTier() {
-        return this.gearTier;
+        if ((this.gearTier == null || this.gearTier == GearTier.NONE) && this.hasWorld() && this.getCachedState().contains(EnchantedChestBlock.GEAR_TIER)) {
+            GearTier stateTier = this.getCachedState().get(EnchantedChestBlock.GEAR_TIER);
+            if (stateTier != null && stateTier != GearTier.NONE) {
+                this.gearTier = stateTier;
+            }
+        }
+        return this.gearTier != null ? this.gearTier : GearTier.NONE;
     }
 
     public int getMaxSlots() {
-        return switch (gearTier) {
+        return switch (getGearTier()) {
             case IRON, ENCHANTED_IRON -> 72;
             case COPPER -> 81;
             case BRONZE -> 90;
@@ -251,8 +270,12 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     protected void readData(ReadView view) {
         super.readData(view);
         Inventories.readData(view, this.inventory);
-        int tierOrdinal = view.getInt("GearTier", 0);
-        this.gearTier = GearTier.values()[Math.min(tierOrdinal, GearTier.values().length - 1)];
+        int tierOrdinal = view.getInt("GearTier", -1);
+        if (tierOrdinal >= 0 && tierOrdinal < GearTier.values().length) {
+            this.gearTier = GearTier.values()[tierOrdinal];
+        } else if (this.getCachedState().contains(EnchantedChestBlock.GEAR_TIER)) {
+            this.gearTier = this.getCachedState().get(EnchantedChestBlock.GEAR_TIER);
+        }
         this.activePage = view.getInt("ActivePage", 0);
     }
 
@@ -260,7 +283,7 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     protected void writeData(WriteView view) {
         super.writeData(view);
         Inventories.writeData(view, this.inventory);
-        view.putInt("GearTier", this.gearTier.ordinal());
+        view.putInt("GearTier", this.getGearTier().ordinal());
         view.putInt("ActivePage", this.activePage);
     }
 
@@ -272,7 +295,7 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     @Override
     public NbtCompound toInitialChunkDataNbt(net.minecraft.registry.RegistryWrapper.WrapperLookup registries) {
         NbtCompound nbt = new NbtCompound();
-        nbt.putInt("GearTier", this.gearTier.ordinal());
+        nbt.putInt("GearTier", this.getGearTier().ordinal());
         nbt.putInt("ActivePage", this.activePage);
         return nbt;
     }
