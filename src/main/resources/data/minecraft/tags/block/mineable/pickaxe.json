@@ -80,6 +80,18 @@
     "enchantedwood:item_inserter",
     "enchantedwood:basalt_cable",
     "enchantedwood:reinforced_obsidian",
-    "enchantedwood:dimensional_singularity"
+    "enchantedwood:dimensional_singularity",
+    "enchantedwood:laser_quarry",
+    "enchantedwood:hydraulic_press",
+    "enchantedwood:super_computer",
+    "enchantedwood:digital_converter",
+    "enchantedwood:item_salvager",
+    "enchantedwood:soil_infuser",
+    "enchantedwood:pozzolanic_asphalt",
+    "enchantedwood:volcanic_bricks",
+    "enchantedwood:volcanic_brick_stairs",
+    "enchantedwood:volcanic_brick_slab",
+    "enchantedwood:concrete_curb",
+    "enchantedwood:volcanic_glass"
   ]
 }

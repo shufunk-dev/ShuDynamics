@@ -136,10 +136,6 @@ public class WrenchItem extends Item {
                         quarry.bindNetwork(new BlockPos(bx, by, bz), bDim);
                         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
                         player.sendMessage(Text.literal("§6[Wrench] §a✨ Laser Quarry linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
-                    } else if (quarry.isBoundToRemote()) {
-                        quarry.unbindNetwork();
-                        world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.PLAYERS, 1.0f, 0.8f);
-                        player.sendMessage(Text.literal("§6[Wrench] §e⚠️ Unlinked Laser Quarry from remote network (reverted to local search)."), true);
                     } else {
                         // Dismantle if no network stored
                         world.breakBlock(pos, true, player);
@@ -150,7 +146,7 @@ public class WrenchItem extends Item {
                 return ActionResult.SUCCESS;
             }
 
-            // C. Shift + Right-Click Digital Converter -> Link or Unlink
+            // C. Shift + Right-Click Digital Converter -> Link or Dismantle
             if (targetBe instanceof DigitalConverterBlockEntity converter) {
                 if (!world.isClient()) {
                     NbtCompound nbt = wrenchStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
@@ -163,10 +159,6 @@ public class WrenchItem extends Item {
                         converter.bindNetwork(new BlockPos(bx, by, bz), bDim);
                         world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
                         player.sendMessage(Text.literal("§6[Wrench] §a✨ Digital Converter linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
-                    } else if (converter.isBoundToRemote()) {
-                        converter.unbindNetwork();
-                        world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_HIT, SoundCategory.PLAYERS, 1.0f, 0.8f);
-                        player.sendMessage(Text.literal("§6[Wrench] §e⚠️ Unlinked Digital Converter from remote network (reverted to local search)."), true);
                     } else {
                         // Dismantle if no network stored
                         world.breakBlock(pos, true, player);
@@ -193,9 +185,20 @@ public class WrenchItem extends Item {
             if (!world.isClient()) {
                 Direction current = state.get(Properties.HORIZONTAL_FACING);
                 Direction next = current.rotateYClockwise();
-                world.setBlockState(pos, state.with(Properties.HORIZONTAL_FACING, next), Block.NOTIFY_ALL);
+                BlockState nextState = state.with(Properties.HORIZONTAL_FACING, next);
+                world.setBlockState(pos, nextState, Block.NOTIFY_ALL);
                 world.playSound(null, pos, SoundEvents.BLOCK_COPPER_GRATE_PLACE, SoundCategory.BLOCKS, 1.0f, 1.2f);
-                player.sendMessage(Text.literal("§6[Wrench] §aRotated " + next.asString().toUpperCase()), true);
+
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof LaserQuarryBlockEntity quarry) {
+                    quarry.resetScanCoordinates(nextState);
+                    if (world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                        quarry.updateChunkLoading(serverWorld);
+                    }
+                    player.sendMessage(Text.literal("§6[Wrench] §aRotated " + next.asString().toUpperCase() + " §7(Corner Layout)"), true);
+                } else {
+                    player.sendMessage(Text.literal("§6[Wrench] §aRotated " + next.asString().toUpperCase()), true);
+                }
             }
             return ActionResult.SUCCESS;
         } else if (state.contains(Properties.FACING)) {

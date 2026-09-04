@@ -28,6 +28,7 @@ import net.minecraft.util.math.Direction;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
+import net.enchantedwood.entity.custom.AtvEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.VehicleFabricatorScreenHandler;
 import org.jetbrains.annotations.Nullable;
@@ -157,7 +158,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
             }
         }
 
-        // 2. Auto-unpack ATV when placed into VEHICLE_SLOT if module slots 1-6 are empty
+        // 2. Auto-unpack ATV when placed into VEHICLE_SLOT if module slots 1-7 are empty
         ItemStack atvStack = entity.inventory.get(VEHICLE_SLOT);
         if (!entity.isFabricating && !atvStack.isEmpty() && atvStack.isOf(ModItems.ATV_ITEM)) {
             boolean modulesEmpty = entity.inventory.get(SEAT_SLOT).isEmpty() &&
@@ -165,6 +166,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                                   entity.inventory.get(CHASSIS_SLOT).isEmpty() &&
                                   entity.inventory.get(SUSPENSION_SLOT).isEmpty() &&
                                   entity.inventory.get(TIRES_SLOT).isEmpty() &&
+                                  entity.inventory.get(HEADLIGHT_SLOT).isEmpty() &&
                                   entity.inventory.get(TRUNK_SLOT).isEmpty();
             if (modulesEmpty) {
                 NbtComponent comp = atvStack.get(DataComponentTypes.CUSTOM_DATA);
@@ -174,8 +176,47 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                     entity.unpackModuleFromTag(tag, "Slot_1", TIRES_SLOT, 4);
                     entity.unpackModuleFromTag(tag, "Slot_2", SUSPENSION_SLOT, 1);
                     entity.unpackModuleFromTag(tag, "Slot_3", CHASSIS_SLOT, 1);
-                    entity.unpackModuleFromTag(tag, "Slot_4", TRUNK_SLOT, 1);
+
+                    // Headlights (Slot_4 in modern saves) vs Trunk (Slot_5 in modern saves)
+                    if (tag.contains("Slot_4")) {
+                        String s4 = tag.getString("Slot_4").orElse("");
+                        if (s4.contains("trunk")) {
+                            // Legacy save: Slot_4 was trunk
+                            entity.unpackModuleFromTag(tag, "Slot_4", TRUNK_SLOT, 1);
+                            entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
+                        } else {
+                            // Modern save: Slot_4 is headlights
+                            entity.unpackModuleFromTag(tag, "Slot_4", HEADLIGHT_SLOT, 1);
+                            entity.unpackModuleFromTag(tag, "Slot_5", TRUNK_SLOT, 1);
+                        }
+                    } else if (tag.contains("Headlights")) {
+                        String lightId = tag.getString("Headlights").orElse("");
+                        if (!lightId.isEmpty() && Registries.ITEM.containsId(Identifier.of(lightId))) {
+                            entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(Registries.ITEM.get(Identifier.of(lightId))));
+                        } else {
+                            entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
+                        }
+                        entity.unpackModuleFromTag(tag, "Slot_5", TRUNK_SLOT, 1);
+                    } else {
+                        entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
+                        entity.unpackModuleFromTag(tag, "Slot_5", TRUNK_SLOT, 1);
+                    }
+
+                    // Fallback for headlights if empty (required core part)
+                    if (entity.inventory.get(HEADLIGHT_SLOT).isEmpty()) {
+                        entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
+                    }
+
                     entity.inventory.set(SEAT_SLOT, new ItemStack(ModItems.ATV_SEAT));
+                    entity.markDirty();
+                } else {
+                    // Default base parts if ATV was crafted from crafting table without custom data
+                    entity.inventory.set(SEAT_SLOT, new ItemStack(ModItems.ATV_SEAT));
+                    entity.inventory.set(ENGINE_SLOT, new ItemStack(ModItems.COPPER_ATV_ENGINE));
+                    entity.inventory.set(CHASSIS_SLOT, new ItemStack(ModItems.STEEL_ATV_CHASSIS));
+                    entity.inventory.set(SUSPENSION_SLOT, new ItemStack(ModItems.STEEL_SUSPENSION));
+                    entity.inventory.set(TIRES_SLOT, new ItemStack(ModItems.RUBBER_TIRE, 4));
+                    entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
                     entity.markDirty();
                 }
             }
@@ -221,7 +262,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                 Identifier id = Identifier.of(itemId);
                 if (Registries.ITEM.containsId(id)) {
                     int c = tag.getInt("Count_" + key.replace("Slot_", "")).orElse(count);
-                    inventory.set(slot, new ItemStack(Registries.ITEM.get(id), Math.max(1, c)));
+                    inventory.set(slot, new ItemStack(Registries.ITEM.get(id), Math.max(count, c)));
                 }
             }
         }
@@ -269,7 +310,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         boolean hasEngine = isEngine(inventory.get(ENGINE_SLOT));
         boolean hasChassis = isChassis(inventory.get(CHASSIS_SLOT));
         boolean hasSuspension = isSuspension(inventory.get(SUSPENSION_SLOT));
-        boolean hasTires = isTires(inventory.get(TIRES_SLOT));
+        boolean hasTires = isTires(inventory.get(TIRES_SLOT)) && inventory.get(TIRES_SLOT).getCount() >= 4;
         boolean hasHeadlights = isHeadlight(inventory.get(HEADLIGHT_SLOT));
         boolean outputEmpty = inventory.get(OUTPUT_SLOT).isEmpty();
 
@@ -290,17 +331,6 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         ItemStack atvResult = new ItemStack(ModItems.ATV_ITEM);
         NbtCompound tag = new NbtCompound();
 
-        // Preserve fuel / cargo if vehicle in slot 0 was being modified
-        ItemStack originalAtv = inventory.get(VEHICLE_SLOT);
-        if (!originalAtv.isEmpty() && originalAtv.isOf(ModItems.ATV_ITEM)) {
-            NbtComponent comp = originalAtv.get(DataComponentTypes.CUSTOM_DATA);
-            if (comp != null) {
-                NbtCompound prev = comp.copyNbt();
-                if (prev.contains("FuelLevel")) tag.putInt("FuelLevel", prev.getInt("FuelLevel").orElse(0));
-                if (prev.contains("MaxFuel")) tag.putInt("MaxFuel", prev.getInt("MaxFuel").orElse(1000));
-            }
-        }
-
         // Write chosen module components
         ItemStack engine = inventory.get(ENGINE_SLOT);
         ItemStack tires = inventory.get(TIRES_SLOT);
@@ -309,11 +339,67 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         ItemStack headlights = inventory.get(HEADLIGHT_SLOT);
         ItemStack trunk = inventory.get(TRUNK_SLOT);
 
+        // Preserve fuel / cargo / attachments if vehicle in slot 0 was being modified
+        ItemStack originalAtv = inventory.get(VEHICLE_SLOT);
+        if (!originalAtv.isEmpty() && originalAtv.isOf(ModItems.ATV_ITEM)) {
+            NbtComponent comp = originalAtv.get(DataComponentTypes.CUSTOM_DATA);
+            if (comp != null) {
+                NbtCompound prev = comp.copyNbt();
+                if (prev.contains("FuelLevel")) tag.putInt("FuelLevel", prev.getInt("FuelLevel").orElse(0));
+                if (prev.contains("MaxFuel")) tag.putInt("MaxFuel", prev.getInt("MaxFuel").orElse(1000));
+
+                // Preserve fuel slot & tool attachment (slots 6 & 7)
+                for (int slotIdx : new int[]{AtvEntity.FUEL_SLOT, AtvEntity.TOOL_SLOT}) {
+                    if (prev.contains("Slot_" + slotIdx)) {
+                        tag.putString("Slot_" + slotIdx, prev.getString("Slot_" + slotIdx).orElse(""));
+                        if (prev.contains("Count_" + slotIdx)) {
+                            tag.putInt("Count_" + slotIdx, prev.getInt("Count_" + slotIdx).orElse(1));
+                        }
+                        if (prev.contains("Damage_" + slotIdx)) {
+                            tag.putInt("Damage_" + slotIdx, prev.getInt("Damage_" + slotIdx).orElse(0));
+                        }
+                    }
+                }
+
+                // If trunk is present on new ATV, preserve stored cargo (slots 8..34)
+                if (!trunk.isEmpty() && isTrunk(trunk)) {
+                    for (int slotIdx = AtvEntity.MODULE_SLOTS_COUNT; slotIdx < AtvEntity.TOTAL_INVENTORY_SIZE; slotIdx++) {
+                        if (prev.contains("Slot_" + slotIdx)) {
+                            tag.putString("Slot_" + slotIdx, prev.getString("Slot_" + slotIdx).orElse(""));
+                            if (prev.contains("Count_" + slotIdx)) {
+                                tag.putInt("Count_" + slotIdx, prev.getInt("Count_" + slotIdx).orElse(1));
+                            }
+                            if (prev.contains("Damage_" + slotIdx)) {
+                                tag.putInt("Damage_" + slotIdx, prev.getInt("Damage_" + slotIdx).orElse(0));
+                            }
+                        }
+                    }
+                } else if (this.world instanceof ServerWorld sw) {
+                    // If trunk removed, safely spill cargo items into world
+                    for (int slotIdx = AtvEntity.MODULE_SLOTS_COUNT; slotIdx < AtvEntity.TOTAL_INVENTORY_SIZE; slotIdx++) {
+                        if (prev.contains("Slot_" + slotIdx)) {
+                            String itemId = prev.getString("Slot_" + slotIdx).orElse("");
+                            if (!itemId.isEmpty() && Registries.ITEM.containsId(Identifier.of(itemId))) {
+                                int c = prev.getInt("Count_" + slotIdx).orElse(1);
+                                ItemStack cargoStack = new ItemStack(Registries.ITEM.get(Identifier.of(itemId)), c);
+                                if (prev.contains("Damage_" + slotIdx)) {
+                                    cargoStack.setDamage(prev.getInt("Damage_" + slotIdx).orElse(0));
+                                }
+                                net.minecraft.entity.ItemEntity entityItem = new net.minecraft.entity.ItemEntity(
+                                    sw, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, cargoStack);
+                                sw.spawnEntity(entityItem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         tag.putString("Slot_0", Registries.ITEM.getId(engine.getItem()).toString());
         tag.putInt("Count_0", 1);
 
         tag.putString("Slot_1", Registries.ITEM.getId(tires.getItem()).toString());
-        tag.putInt("Count_1", 1);
+        tag.putInt("Count_1", 4);
 
         tag.putString("Slot_2", Registries.ITEM.getId(suspension.getItem()).toString());
         tag.putInt("Count_2", 1);
@@ -338,7 +424,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         inventory.get(CHASSIS_SLOT).decrement(1);
         inventory.get(SUSPENSION_SLOT).decrement(1);
         inventory.get(HEADLIGHT_SLOT).decrement(1);
-        inventory.get(TIRES_SLOT).decrement(Math.min(4, inventory.get(TIRES_SLOT).getCount()));
+        inventory.get(TIRES_SLOT).decrement(4);
         if (!trunk.isEmpty()) {
             inventory.get(TRUNK_SLOT).decrement(1);
         }

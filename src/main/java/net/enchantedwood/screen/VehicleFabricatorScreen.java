@@ -81,7 +81,8 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
         context.drawText(this.textRenderer, "Seat", 69, 12, 0xFF88AACC, false);
         context.drawText(this.textRenderer, "Engine", 23, 34, 0xFF88AACC, false);
         context.drawText(this.textRenderer, "Chassis", 62, 44, 0xFF88AACC, false);
-        context.drawText(this.textRenderer, "Module", 97, 34, 0xFF88AACC, false);
+        int suspX = 106 + 9 - this.textRenderer.getWidth("Suspension") / 2;
+        context.drawText(this.textRenderer, "Suspension", suspX, 34, 0xFF88AACC, false);
         context.drawText(this.textRenderer, "Tires", 28, 76, 0xFF88AACC, false);
         context.drawText(this.textRenderer, "Lights", 65, 76, 0xFF88AACC, false);
         context.drawText(this.textRenderer, "Trunk", 101, 76, 0xFF88AACC, false);
@@ -113,7 +114,7 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
                 case 0 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e🚗 Vehicle In / Upgrade Bay"),
                         Text.literal("§7Place an existing ATV here to modify,"),
-                        Text.literal("§7upgrade parts, or swap work modules.")
+                        Text.literal("§7upgrade parts, or swap components.")
                 ), mouseX, mouseY);
                 case 1 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e🪑 Seat Slot"),
@@ -122,21 +123,21 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
                 ), mouseX, mouseY);
                 case 2 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e⚙️ Engine Slot"),
-                        Text.literal("§fRequired: §aCopper Engine §7or §bAluminum Engine"),
+                        Text.literal("§fRequired: §aEngine Module"),
+                        Text.literal("§7Copper, Aluminum, Steel, or Titanium Engine."),
                         Text.literal("§7Drives vehicle horsepower & top speed.")
                 ), mouseX, mouseY);
                 case 3 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e🏗️ Chassis Slot"),
-                        Text.literal("§fRequired: §aSteel ATV Chassis"),
-                        Text.literal("§7Heavy tubular steel structural frame.")
+                        Text.literal("§fRequired: §aATV Chassis"),
+                        Text.literal("§7Aluminum, Steel, or Titanium Chassis."),
+                        Text.literal("§7Heavy structural vehicle frame.")
                 ), mouseX, mouseY);
                 case 4 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e🚜 Work Module / Suspension Slot"),
-                        Text.literal("§fSupports:"),
-                        Text.literal("§8 • §72x2 Mining Drill Bits (Iron..Netherite)"),
-                        Text.literal("§8 • §7Forestry Tree Saws (Iron..Netherite)"),
-                        Text.literal("§8 • §77-Block Crop Harvesters"),
-                        Text.literal("§8 • §7Or standard suspension")
+                        Text.literal("§e🚜 Suspension Slot"),
+                        Text.literal("§fRequired: §aSuspension System"),
+                        Text.literal("§7Aluminum, Steel, or Titanium Suspension."),
+                        Text.literal("§7Improves step clearance & shock absorption.")
                 ), mouseX, mouseY);
                 case 5 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e🛞 Tires Slot"),

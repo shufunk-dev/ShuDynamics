@@ -10,6 +10,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
 
+import java.util.List;
+
 @Environment(EnvType.CLIENT)
 public class EnchantedLavaGeneratorScreen extends HandledScreen<EnchantedLavaGeneratorScreenHandler> {
     private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/lava_generator_gui.png");
@@ -58,7 +60,35 @@ public class EnchantedLavaGeneratorScreen extends HandledScreen<EnchantedLavaGen
         if (mouseX >= x + 140 && mouseX <= x + 156 && mouseY >= y + 17 && mouseY <= y + 69) {
             int lava = this.handler.getLavaAmount();
             int buckets = lava / 1000;
-            context.drawTooltip(this.textRenderer, Text.literal("Lava Gauge: " + lava + " / 10,000 mL (" + buckets + " Bucket" + (buckets == 1 ? "" : "s") + ")"), mouseX, mouseY);
+            context.drawTooltip(this.textRenderer, Text.literal("§c🌋 Lava Gauge: §f" + String.format("%,d", lava) + " / 10,000 mB §7(" + buckets + " Bucket" + (buckets == 1 ? "" : "s") + ")"), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 5) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Cobblestone Input"),
+                        Text.literal("§7Insert cobblestone to melt down into molten lava.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d🔥 Enchanted Fuel Slot"),
+                        Text.literal("§fRequired: §aEnchanted Coal Block"),
+                        Text.literal("§7Provides sustained high-temperature thermal power.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙️ Enchanted Gear Upgrade Slot"),
+                        Text.literal("§7Insert an Enchanted Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Greatly accelerates melting & lava generation speed.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b🪣 Empty Bucket Input"),
+                        Text.literal("§7Insert empty iron or copper buckets to fill.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§c🔥 Lava Bucket Output"),
+                        Text.literal("§7Filled lava buckets appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

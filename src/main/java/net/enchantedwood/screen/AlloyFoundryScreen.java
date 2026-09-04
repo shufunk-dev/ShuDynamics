@@ -66,12 +66,37 @@ public class AlloyFoundryScreen extends HandledScreen<AlloyFoundryScreenHandler>
             ), mouseX, mouseY);
         }
 
-        // Gear Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Tooltip (when gear installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Speed Tier: §f%s", this.handler.getGearTier().name()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Primary Alloy Ingot Slot"),
+                        Text.literal("§7Insert primary base metal:"),
+                        Text.literal("§f• Copper, Tungsten, Iron, Cobalt, etc.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Secondary Alloy Ingot Slot"),
+                        Text.literal("§7Insert flux or secondary alloy metal:"),
+                        Text.literal("§f• Tin (Bronze), Ardite (Manyullyn), Coke/Carbon")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Alloy Output"),
+                        Text.literal("§7Smelted alloy ingots appear here.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Drastically accelerates smelting speed.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

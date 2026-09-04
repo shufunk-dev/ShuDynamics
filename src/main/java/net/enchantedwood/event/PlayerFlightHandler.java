@@ -48,9 +48,9 @@ public class PlayerFlightHandler {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.CLOUD, player.getX(), player.getY() + 0.2, player.getZ(), 1, 0.1, 0.05, 0.1, 0.01);
                     }
 
-                    // Thruster audio loop every second
+                    // Thruster audio loop every second (quiet ambient hum)
                     if (world.getTime() % 20 == 0) {
-                        world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.ITEM_ELYTRA_FLYING, net.minecraft.sound.SoundCategory.PLAYERS, 0.35f, 1.8f);
+                        world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.ITEM_ELYTRA_FLYING, net.minecraft.sound.SoundCategory.PLAYERS, 0.035f, 1.4f);
                     }
 
                     // Consume fuel: 1 mB every 4 ticks (5 mB/s -> 5,000 mB lasts ~16.6 minutes of continuous flight)

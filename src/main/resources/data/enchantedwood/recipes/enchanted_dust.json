@@ -7,7 +7,7 @@
     "LFL"
   ],
   "key": {
-    "W": "#minecraft:logs",
+    "W": "#minecraft:planks",
     "F": "#minecraft:flowers",
     "L": "#minecraft:leaves",
     "A": [
@@ -17,7 +17,11 @@
       "minecraft:bread",
       "minecraft:carrot",
       "minecraft:potato",
-      "minecraft:melon_slice"
+      "minecraft:beetroot",
+      "minecraft:melon_slice",
+      "minecraft:melon",
+      "minecraft:pumpkin",
+      "minecraft:carved_pumpkin"
     ]
   },
   "result": {

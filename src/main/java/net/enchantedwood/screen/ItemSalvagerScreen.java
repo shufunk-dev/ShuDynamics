@@ -66,12 +66,32 @@ public class ItemSalvagerScreen extends HandledScreen<ItemSalvagerScreenHandler>
             ), mouseX, mouseY);
         }
 
-        // Gear Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Tooltip (when gear installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Speed Tier: §f%s", this.handler.getGearTier().name()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 6) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Salvage / Deconstruction Input"),
+                        Text.literal("§7Insert craftable items, tools, or blocks:"),
+                        Text.literal("§f• Reclaims 100% of component ingredients")
+                ), mouseX, mouseY);
+                case 1, 2, 3, 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Salvaged Material Output"),
+                        Text.literal("§7Recovered raw materials and ingredients appear here.")
+                ), mouseX, mouseY);
+                case 5 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Drastically accelerates dismantling speed.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

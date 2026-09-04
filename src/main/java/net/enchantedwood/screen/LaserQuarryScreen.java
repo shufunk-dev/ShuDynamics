@@ -189,5 +189,14 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
+
+        // Empty Extraction Buffer Slots (0..8)
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 9) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§a⛏️ Mined Resource Buffer"),
+                    Text.literal("§7Extracted ores and quarried blocks appear here."),
+                    Text.literal("§8(Automatically piped or teleported to linked storage)")
+            ), mouseX, mouseY);
+        }
     }
 }

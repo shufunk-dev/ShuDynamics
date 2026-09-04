@@ -12,6 +12,12 @@
     "enchantedwood:cobalt_block",
     "enchantedwood:ardite_ore",
     "enchantedwood:raw_ardite_block",
-    "enchantedwood:ardite_block"
+    "enchantedwood:ardite_block",
+    "enchantedwood:laser_quarry",
+    "enchantedwood:hydraulic_press",
+    "enchantedwood:super_computer",
+    "enchantedwood:digital_converter",
+    "enchantedwood:item_salvager",
+    "enchantedwood:soil_infuser"
   ]
 }

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGT",
+    "TBT",
+    "TGT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_ingot",
+    "G": "minecraft:gold_ingot",
+    "B": "enchantedwood:steel_battery_pack"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:tungsten_battery_pack"
+  }
+}

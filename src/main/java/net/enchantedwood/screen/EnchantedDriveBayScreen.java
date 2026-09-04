@@ -132,5 +132,15 @@ public class EnchantedDriveBayScreen extends HandledScreen<EnchantedDriveBayScre
                 }
             }
         }
+
+        // Empty Drive Socket Tooltip
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 6) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§b💾 Storage Crystal Socket (Bay " + (this.focusedSlot.id + 1) + "/6)"),
+                    Text.literal("§7Insert Digital Storage Crystals:"),
+                    Text.literal("§f• 1K, 4K, 16K, or 64K Storage Crystal"),
+                    Text.literal("§8Provides mass quantum item storage to connected network.")
+            ), mouseX, mouseY);
+        }
     }
 }

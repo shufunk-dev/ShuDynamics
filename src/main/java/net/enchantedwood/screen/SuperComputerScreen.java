@@ -161,5 +161,31 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 15) {
+            if (this.focusedSlot.id < 9) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🧩 Auto-Crafting Recipe Grid (Slot " + (this.focusedSlot.id + 1) + "/9)"),
+                        Text.literal("§7Place recipe pattern items here to encode an automated craft.")
+                ), mouseX, mouseY);
+            } else if (this.focusedSlot.id == 9) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d🔥 Overclock Upgrade Socket"),
+                        Text.literal("§7Accepts: §aBlaze Overclock Core"),
+                        Text.literal("§8Boosts computation & rapid synthesis speed.")
+                ), mouseX, mouseY);
+            } else if (this.focusedSlot.id >= 10 && this.focusedSlot.id <= 13) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Synthesized Output Buffer"),
+                        Text.literal("§7Synthesized batch items appear here.")
+                ), mouseX, mouseY);
+            } else if (this.focusedSlot.id == 14) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6🔍 Target Recipe Preview"),
+                        Text.literal("§7Shows the result of the configured 3x3 pattern.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

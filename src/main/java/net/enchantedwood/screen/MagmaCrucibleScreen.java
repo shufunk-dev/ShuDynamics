@@ -81,12 +81,42 @@ public class MagmaCrucibleScreen extends HandledScreen<MagmaCrucibleScreenHandle
             ), mouseX, mouseY);
         }
 
-        // Gear Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Tooltip (when gear installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Speed Tier: §f%s", this.handler.getGearTier().name()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 5) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Geological Melting Input"),
+                        Text.literal("§7Insert volcanic rock or stone:"),
+                        Text.literal("§f• Basalt, Blackstone, Netherrack, Magma Block"),
+                        Text.literal("§7Melts stone into fluid lava.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6💎 Mineral Byproduct Output"),
+                        Text.literal("§7Precious slag, sulfur, or minerals appear here.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b🪣 Empty Bucket Input"),
+                        Text.literal("§7Insert empty buckets to automatically"),
+                        Text.literal("§7bottle melted lava from the internal tank.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§c🔥 Lava Bucket Output"),
+                        Text.literal("§7Filled lava buckets appear here.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Dramatically increases melting temperature & speed.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

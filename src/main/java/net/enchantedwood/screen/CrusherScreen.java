@@ -54,10 +54,32 @@ public class CrusherScreen extends HandledScreen<CrusherScreenHandler> {
         // Energy Tooltip
         if (mouseX >= x + 151 && mouseX <= x + 167 && mouseY >= y + 19 && mouseY <= y + 73) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§eEnergy Buffer"),
+                    Text.literal("§e⚡ Energy Buffer"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Usage: 40 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Ore Input Slot"),
+                        Text.literal("§7Insert raw ores, blocks, or stones:"),
+                        Text.literal("§f• Crushes ores into dust (with yield bonuses!)"),
+                        Text.literal("§f• Recycles Granite/Diorite into Bauxite")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Higher tiers multiply ore dust yields (up to 6x+)"),
+                        Text.literal("§f• Greatly speeds up crushing cycle.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Crushed Dust Output"),
+                        Text.literal("§7Crushed metal dusts and byproducts appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

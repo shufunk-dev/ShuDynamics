@@ -59,5 +59,28 @@ public class FuelRefineryScreen extends HandledScreen<FuelRefineryScreenHandler>
                     Text.literal("§7Consumes 20 FE/t while refining")
             ), mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Feedstock Input"),
+                        Text.literal("§7Insert biological or petroleum base:"),
+                        Text.literal("§f• Crude Oil Sludge, Corn, Wheat, Sugar Cane, Potato")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§7🛢️ Empty Canister Input"),
+                        Text.literal("§7Insert Empty Gas Canisters to bottle refined fuels.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Refined Fuel Output"),
+                        Text.literal("§7Gasoline Canisters or Biofuel appear here.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6🛢️ Mineral Tar Byproduct"),
+                        Text.literal("§7Recovered petroleum tar appears here.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

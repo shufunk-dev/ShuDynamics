@@ -175,58 +175,17 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
 
         if (isOnline) {
             EnchantedStorageTerminalBlockEntity terminal = entity.getNetworkTerminal();
-            if (terminal != null) {
-                int availableCapacity = terminal.getNetworkCapacity() - terminal.getStoredItemCount();
-                if (availableCapacity > 0) {
-                    for (int i = 0; i < BUFFER_SIZE; i++) {
-                        ItemStack bufferStack = entity.buffer.get(i);
-                        if (bufferStack.isEmpty()) continue;
+            if (terminal != null && terminal.isNetworkOnline()) {
+                for (int i = 0; i < BUFFER_SIZE; i++) {
+                    ItemStack bufferStack = entity.buffer.get(i);
+                    if (bufferStack.isEmpty()) continue;
 
-                        int toDigitize = Math.min(bufferStack.getCount(), availableCapacity);
-                        if (toDigitize <= 0) break;
-
-                        // Insert into terminal slots (540 slots)
-                        for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                            ItemStack termStack = terminal.getStack(slot);
-                            if (!termStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(termStack, bufferStack)) {
-                                int space = termStack.getMaxCount() - termStack.getCount();
-                                if (space > 0) {
-                                    int move = Math.min(space, toDigitize);
-                                    termStack.increment(move);
-                                    bufferStack.decrement(move);
-                                    toDigitize -= move;
-                                    availableCapacity -= move;
-                                    terminal.markDirty();
-                                    dirty = true;
-                                    if (bufferStack.isEmpty()) {
-                                        entity.buffer.set(i, ItemStack.EMPTY);
-                                        break;
-                                    }
-                                    if (toDigitize <= 0) break;
-                                }
-                            }
-                        }
-
-                        if (!bufferStack.isEmpty() && toDigitize > 0) {
-                            for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                                ItemStack termStack = terminal.getStack(slot);
-                                if (termStack.isEmpty()) {
-                                    int move = Math.min(bufferStack.getMaxCount(), toDigitize);
-                                    ItemStack split = bufferStack.split(move);
-                                    terminal.setStack(slot, split);
-                                    toDigitize -= move;
-                                    availableCapacity -= move;
-                                    terminal.markDirty();
-                                    dirty = true;
-                                    if (bufferStack.isEmpty()) {
-                                        entity.buffer.set(i, ItemStack.EMPTY);
-                                        break;
-                                    }
-                                    if (toDigitize <= 0) break;
-                                }
-                            }
-                        }
+                    ItemStack remainder = terminal.depositItem(bufferStack);
+                    if (remainder.getCount() != bufferStack.getCount()) {
+                        entity.buffer.set(i, remainder);
+                        dirty = true;
                     }
+                    if (!remainder.isEmpty()) break; // Network capacity reached
                 }
             }
         }

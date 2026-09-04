@@ -511,6 +511,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.block.ModBlocks.SOIL_INFUSER.asItem(), 1, 200, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_WOOD, 6), new ItemStack(net.enchantedwood.item.ModItems.VOLCANIC_FERTILIZER, 2), new ItemStack(net.enchantedwood.item.ModItems.INFUSED_HEARTWOOD, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ROAD_PAVER.asItem(), 1, 240, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 6), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_ROLLER, 2), new ItemStack(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK.asItem(), 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.VEHICLE_FABRICATOR.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 6), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 2), new ItemStack(Items.CRAFTING_TABLE, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.HYDRAULIC_PRESS.asItem(), 1, 240, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.PISTON, 1), new ItemStack(Items.ANVIL, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 2), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_FURNACE.asItem(), 1, 160, new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE.asItem(), 8), new ItemStack(Items.FURNACE, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 3), new ItemStack(net.enchantedwood.block.ModBlocks.CRUSHER.asItem(), 1));
 
@@ -651,7 +652,6 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     public static Item getNuggetForIngot(Item ingot) {
         if (ingot == Items.IRON_INGOT) return Items.IRON_NUGGET;
         if (ingot == Items.GOLD_INGOT) return Items.GOLD_NUGGET;
-        if (ingot == Items.COPPER_INGOT) return net.enchantedwood.item.ModItems.COPPER_NUGGET;
         if (ingot == net.enchantedwood.item.ModItems.TIN_INGOT) return net.enchantedwood.item.ModItems.TIN_NUGGET;
         if (ingot == net.enchantedwood.item.ModItems.BRONZE_INGOT) return net.enchantedwood.item.ModItems.BRONZE_NUGGET;
         if (ingot == net.enchantedwood.item.ModItems.ALUMINUM_INGOT) return net.enchantedwood.item.ModItems.ALUMINUM_NUGGET;

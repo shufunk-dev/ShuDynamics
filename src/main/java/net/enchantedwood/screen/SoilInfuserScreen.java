@@ -66,12 +66,37 @@ public class SoilInfuserScreen extends HandledScreen<SoilInfuserScreenHandler> {
             ), mouseX, mouseY);
         }
 
-        // Gear Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Tooltip (when gear installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Speed Tier: §f%s", this.handler.getGearTier().name()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Soil Substrate Input"),
+                        Text.literal("§7Insert base dirt or ground substrate:"),
+                        Text.literal("§f• Dirt, Coarse Dirt, Sand, Gravel, Mud")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Nutrient / Mineral Input"),
+                        Text.literal("§7Insert biological or mineral fertilizer:"),
+                        Text.literal("§f• Bone Meal, Volcanic Ash, Sulfur Dust")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Enriched Substrate Output"),
+                        Text.literal("§7High-yield enriched soils and crops appear here.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Drastically accelerates soil infusion cycles.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

@@ -48,54 +48,38 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (world instanceof ServerWorld serverWorld && type == ModBlockEntities.LASER_QUARRY_BLOCK_ENTITY) {
-            return (w, pos, st, blockEntity) -> LaserQuarryBlockEntity.tick(serverWorld, pos, st, (LaserQuarryBlockEntity) blockEntity);
+        if (type == ModBlockEntities.LASER_QUARRY_BLOCK_ENTITY) {
+            if (world instanceof ServerWorld serverWorld) {
+                return (w, pos, st, blockEntity) -> LaserQuarryBlockEntity.tick(serverWorld, pos, st, (LaserQuarryBlockEntity) blockEntity);
+            } else {
+                return (w, pos, st, blockEntity) -> LaserQuarryBlockEntity.clientTick(w, pos, st, (LaserQuarryBlockEntity) blockEntity);
+            }
         }
         return null;
     }
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (state.get(LIT)) {
-            double d = pos.getX() + 0.5;
-            double e = pos.getY() + 0.5;
-            double f = pos.getZ() + 0.5;
+        double d = pos.getX() + 0.5;
+        double e = pos.getY() + 0.5;
+        double f = pos.getZ() + 0.5;
 
+        if (state.get(LIT)) {
             // Concentrated scanning core particles on the machine
             world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, d, e + 0.5, f, 0.0, 0.1, 0.0);
             world.addParticleClient(ParticleTypes.PORTAL, d + (random.nextDouble() - 0.5) * 0.4, e + 0.8, f + (random.nextDouble() - 0.5) * 0.4, 0.0, -0.2, 0.0);
-
-            // Glowing neon laser boundary frame at machine level
-            BlockEntity be = world.getBlockEntity(pos);
-            int radius = 0;
-            if (be instanceof LaserQuarryBlockEntity quarry) {
-                radius = quarry.getRangeChunkRadius();
-            }
-
-            net.minecraft.util.math.ChunkPos originChunk = new net.minecraft.util.math.ChunkPos(pos);
-            double minX = (originChunk.x - radius) * 16.0;
-            double maxX = (originChunk.x + radius) * 16.0 + 16.0;
-            double minZ = (originChunk.z - radius) * 16.0;
-            double maxZ = (originChunk.z + radius) * 16.0 + 16.0;
-            double laserY = pos.getY() + 0.5;
-
-            // Spawn laser boundary particles along the 4 chunk edges
-            for (int i = 0; i < 4; i++) {
-                double t = random.nextDouble();
-                // Edge 1 (North: minZ)
-                world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, minX + t * (maxX - minX), laserY, minZ, 0.0, 0.01, 0.0);
-                // Edge 2 (South: maxZ)
-                world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, minX + t * (maxX - minX), laserY, maxZ, 0.0, 0.01, 0.0);
-                // Edge 3 (West: minX)
-                world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, minX, laserY, minZ + t * (maxZ - minZ), 0.0, 0.01, 0.0);
-                // Edge 4 (East: maxX)
-                world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, maxX, laserY, minZ + t * (maxZ - minZ), 0.0, 0.01, 0.0);
-            }
+        } else {
+            // Standby indicator when paused/idle
+            world.addParticleClient(ParticleTypes.ELECTRIC_SPARK, d, e + 0.8, f, 0.0, 0.02, 0.0);
         }
     }
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.getMainHandStack().getItem() instanceof net.enchantedwood.item.custom.WrenchItem ||
+            player.getOffHandStack().getItem() instanceof net.enchantedwood.item.custom.WrenchItem) {
+            return ActionResult.PASS;
+        }
         if (!world.isClient()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof NamedScreenHandlerFactory factory) {
@@ -107,7 +91,7 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
     }
 
     @Override
@@ -138,6 +122,20 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
                         }
                     }
                 }
+            }
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof LaserQuarryBlockEntity quarry) {
+                quarry.resetScanCoordinates(state);
+                if (world instanceof ServerWorld serverWorld) {
+                    quarry.updateChunkLoading(serverWorld);
+                }
+            }
+            if (placer instanceof PlayerEntity player) {
+                net.minecraft.util.math.ChunkPos chunk = new net.minecraft.util.math.ChunkPos(pos);
+                int relX = pos.getX() - (chunk.x * 16);
+                int relZ = pos.getZ() - (chunk.z * 16);
+                Direction facing = state.contains(FACING) ? state.get(FACING) : Direction.NORTH;
+                player.sendMessage(net.minecraft.text.Text.literal("§6[Quarry] §e⚡ Laser Boundary Active! §7(Facing " + facing.asString().toUpperCase() + " • §bCorner Layout§7)"), false);
             }
         }
     }

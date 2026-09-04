@@ -8,11 +8,15 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
 public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStorageTerminalScreenHandler> {
@@ -119,6 +123,42 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
         context.drawText(this.textRenderer, Text.literal(pageStr).formatted(net.minecraft.util.Formatting.DARK_GRAY), 71 - (strWidth / 2), 6, 0x3F3F3F, false);
     }
 
+    public static String formatCount(int count) {
+        if (count <= 1) return "";
+        if (count < 10000) return String.valueOf(count); // Shows exact count (e.g. 1408, 9999)
+        if (count < 1000000) return (count / 1000) + "k";
+        if (count < 10000000) return String.format(Locale.ROOT, "%.1fM", count / 1000000.0);
+        return (count / 1000000) + "M";
+    }
+
+    @Override
+    protected void drawSlot(DrawContext context, Slot slot, int mouseX, int mouseY) {
+        if (slot.id < 54) {
+            ItemStack stack = slot.getStack();
+            if (!stack.isEmpty()) {
+                int x = slot.x;
+                int y = slot.y;
+                context.drawItem(stack, x, y);
+                String countText = formatCount(stack.getCount());
+                context.drawStackOverlay(this.textRenderer, stack, x, y, countText);
+                return;
+            }
+        }
+        super.drawSlot(context, slot, mouseX, mouseY);
+    }
+
+    @Override
+    protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
+        if (this.focusedSlot != null && this.focusedSlot.hasStack() && this.focusedSlot.id < 54) {
+            ItemStack stack = this.focusedSlot.getStack();
+            List<Text> tooltip = new ArrayList<>(getTooltipFromItem(stack));
+            tooltip.add(Text.literal("§6📦 Stored in Network: §e" + String.format(Locale.ROOT, "%,d", stack.getCount())));
+            context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
+            return;
+        }
+        super.drawMouseoverTooltip(context, x, y);
+    }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
@@ -149,7 +189,7 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
             } else {
                 context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§6💾 Digital Storage Network"),
-                        Text.literal("§eItems Stored: §f" + String.format("%,d / %,d", stored, totalCap)),
+                        Text.literal("§eItems Stored: §f" + String.format(Locale.ROOT, "%,d / %,d", stored, totalCap)),
                         Text.literal("§aStatus: ONLINE"),
                         Text.literal("§7Use Mouse Wheel or ◀ ▶ buttons to cycle pages.")
                 ), mouseX, mouseY);

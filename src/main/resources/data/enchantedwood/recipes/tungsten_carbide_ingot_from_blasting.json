@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:tungsten_ingot",
+    "enchantedwood:coke_coal",
+    "enchantedwood:enchanted_dust"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:tungsten_carbide_ingot"
+  }
+}

@@ -42,7 +42,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -236,9 +239,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     @Override
     public void onRemoved() {
         if (!this.getEntityWorld().isClient() && this.dynamicLightPos != null) {
-            if (this.getEntityWorld().getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
-                this.getEntityWorld().removeBlock(this.dynamicLightPos, false);
-            }
+            removeDynamicLight(this.getEntityWorld(), this.dynamicLightPos);
             this.dynamicLightPos = null;
         }
         super.onRemoved();
@@ -358,17 +359,43 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             this.dataTracker.set(HEADLIGHTS_ACTIVE, dark);
 
             if (dark && rider != null) {
+                Vec3d origin = this.getEntityPos().add(0, 0.8, 0);
                 Vec3d forward = this.getRotationVector().normalize();
                 double projectionDist = (lightTier == HeadlightsItem.LightTier.XENON) ? 4.5 : (lightTier == HeadlightsItem.LightTier.LED ? 3.2 : 2.0);
-                BlockPos targetLight = BlockPos.ofFloored(this.getEntityPos().add(forward.multiply(projectionDist)).add(0, 1.0, 0));
-                if (this.dynamicLightPos != null && !this.dynamicLightPos.equals(targetLight)) {
-                    if (world.getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
-                        world.removeBlock(this.dynamicLightPos, false);
+                Vec3d reachVec = origin.add(forward.multiply(projectionDist));
+
+                BlockHitResult hit = world.raycast(new RaycastContext(
+                        origin,
+                        reachVec,
+                        RaycastContext.ShapeType.COLLIDER,
+                        RaycastContext.FluidHandling.NONE,
+                        this
+                ));
+
+                BlockPos targetLight;
+                if (hit.getType() == HitResult.Type.BLOCK) {
+                    targetLight = hit.getBlockPos().offset(hit.getSide());
+                } else {
+                    targetLight = BlockPos.ofFloored(reachVec);
+                }
+
+                // Fallback: If target block cannot hold light, step back towards vehicle
+                if (!canHoldDynamicLight(world, targetLight)) {
+                    targetLight = BlockPos.ofFloored(origin.add(forward.multiply(1.0)));
+                    if (!canHoldDynamicLight(world, targetLight)) {
+                        targetLight = BlockPos.ofFloored(origin);
                     }
+                }
+
+                if (this.dynamicLightPos != null && !this.dynamicLightPos.equals(targetLight)) {
+                    removeDynamicLight(world, this.dynamicLightPos);
                     this.dynamicLightPos = null;
                 }
-                if (world.getBlockState(targetLight).isAir()) {
-                    world.setBlockState(targetLight, net.minecraft.block.Blocks.LIGHT.getDefaultState().with(net.minecraft.block.LightBlock.LEVEL_15, lightLevel), net.minecraft.block.Block.NOTIFY_ALL);
+
+                if (canHoldDynamicLight(world, targetLight)) {
+                    if (!world.getBlockState(targetLight).isOf(net.minecraft.block.Blocks.LIGHT)) {
+                        placeDynamicLight(world, targetLight, lightLevel);
+                    }
                     this.dynamicLightPos = targetLight;
                 }
 
@@ -385,9 +412,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 }
             } else {
                 if (this.dynamicLightPos != null) {
-                    if (world.getBlockState(this.dynamicLightPos).isOf(net.minecraft.block.Blocks.LIGHT)) {
-                        world.removeBlock(this.dynamicLightPos, false);
-                    }
+                    removeDynamicLight(world, this.dynamicLightPos);
                     this.dynamicLightPos = null;
                 }
             }
@@ -1016,5 +1041,30 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     @Override
     public void clear() {
         inventory.clear();
+    }
+
+    private boolean canHoldDynamicLight(World world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        return state.isAir() || state.isOf(net.minecraft.block.Blocks.LIGHT) || state.getFluidState().isIn(net.minecraft.registry.tag.FluidTags.WATER);
+    }
+
+    private void placeDynamicLight(World world, BlockPos pos, int lightLevel) {
+        BlockState state = world.getBlockState(pos);
+        boolean isWater = state.getFluidState().isIn(net.minecraft.registry.tag.FluidTags.WATER);
+        BlockState lightState = net.minecraft.block.Blocks.LIGHT.getDefaultState()
+                .with(net.minecraft.block.LightBlock.LEVEL_15, lightLevel)
+                .with(net.minecraft.state.property.Properties.WATERLOGGED, isWater);
+        world.setBlockState(pos, lightState, net.minecraft.block.Block.NOTIFY_ALL);
+    }
+
+    private void removeDynamicLight(World world, BlockPos pos) {
+        if (pos != null && world.getBlockState(pos).isOf(net.minecraft.block.Blocks.LIGHT)) {
+            BlockState state = world.getBlockState(pos);
+            if (state.contains(net.minecraft.state.property.Properties.WATERLOGGED) && state.get(net.minecraft.state.property.Properties.WATERLOGGED)) {
+                world.setBlockState(pos, net.minecraft.block.Blocks.WATER.getDefaultState(), net.minecraft.block.Block.NOTIFY_ALL);
+            } else {
+                world.removeBlock(pos, false);
+            }
+        }
     }
 }

@@ -90,10 +90,40 @@ public class OxygenGeneratorScreen extends HandledScreen<OxygenGeneratorScreenHa
         // Energy Tooltip
         if (mouseX >= x + 151 && mouseX <= x + 167 && mouseY >= y + 19 && mouseY <= y + 73) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§eEnergy Buffer"),
+                    Text.literal("§e⚡ Energy Buffer"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Usage: 60 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 6) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§9🪣 Water Bucket Input"),
+                        Text.literal("§7Insert Water Buckets to supply water for electrolysis.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§7🪣 Empty Bucket Output"),
+                        Text.literal("§7Emptied water buckets appear here.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b💨 Empty Canister In (Oxygen)"),
+                        Text.literal("§7Insert empty gas canisters to fill with O₂ gas.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b✨ Oxygen Canister Output"),
+                        Text.literal("§7Pressurized Oxygen Canisters (O₂) appear here.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6💨 Empty Canister In (Hydrogen)"),
+                        Text.literal("§7Insert empty gas canisters to fill with H₂ gas.")
+                ), mouseX, mouseY);
+                case 5 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6✨ Hydrogen Canister Output"),
+                        Text.literal("§7Pressurized Hydrogen Canisters (H₂) appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

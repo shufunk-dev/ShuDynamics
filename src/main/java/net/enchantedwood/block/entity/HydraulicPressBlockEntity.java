@@ -163,13 +163,16 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
 
         int bonus = switch (tier) {
             case IRON -> 1;
+            case ENCHANTED_IRON -> 2;
             case COPPER -> 2;
             case BRONZE -> 3;
+            case ALUMINUM -> 3;
             case STEEL -> 4;
             case GOLD -> 5;
             case TITANIUM -> 7;
             case DIAMOND -> 9;
             case NETHERITE -> 14;
+            case BLAZE_OVERCLOCK -> 19;
             default -> 0;
         };
 

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
-    "#": "enchantedwood:copper_nugget"
+    "#": "enchantedwood:tungsten_ingot"
   },
   "pattern": [
     "###",
@@ -11,6 +11,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "minecraft:copper_ingot"
+    "id": "enchantedwood:tungsten_block"
   }
 }

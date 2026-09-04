@@ -401,10 +401,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
             // 1. Digital Storage Terminal crystals
             if (terminal != null && terminal.isNetworkOnline()) {
-                for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                    ItemStack stack = terminal.getStack(slot);
-                    if (!stack.isEmpty()) {
-                        available.put(stack.getItem(), available.getOrDefault(stack.getItem(), 0) + stack.getCount());
+                for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
+                    if (item.getCount() > 0 && !item.getSample().isEmpty()) {
+                        int c = (int) Math.min(item.getCount(), (long) Integer.MAX_VALUE);
+                        available.put(item.getSample().getItem(), available.getOrDefault(item.getSample().getItem(), 0) + c);
                     }
                 }
             }
@@ -623,18 +623,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
             // 1. Deduct from Digital Storage Terminal if online
             if (terminal != null && terminal.isNetworkOnline()) {
-                for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                    ItemStack termStack = terminal.getStack(slot);
-                    if (!termStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(termStack, req)) {
-                        int take = Math.min(needed, termStack.getCount());
-                        termStack.decrement(take);
-                        needed -= take;
-                        if (termStack.isEmpty()) {
-                            terminal.setStack(slot, ItemStack.EMPTY);
-                        }
-                        terminal.markDirty();
-                        if (needed <= 0) break;
-                    }
+                ItemStack extracted = terminal.extractItem(req, needed);
+                if (!extracted.isEmpty()) {
+                    needed -= extracted.getCount();
                 }
             }
 
@@ -708,34 +699,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         // 3. If digital storage network is connected and has space, insert there
-        if (terminal != null && terminal.isNetworkOnline() && terminal.getStoredItemCount() + result.getCount() <= terminal.getNetworkCapacity()) {
-            ItemStack toInsert = result.copy();
-            for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                ItemStack termStack = terminal.getStack(slot);
-                if (!termStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(termStack, toInsert)) {
-                    int space = termStack.getMaxCount() - termStack.getCount();
-                    if (space > 0) {
-                        int move = Math.min(space, toInsert.getCount());
-                        termStack.increment(move);
-                        toInsert.decrement(move);
-                        terminal.markDirty();
-                        if (toInsert.isEmpty()) {
-                            result.setCount(0);
-                            return;
-                        }
-                    }
-                }
-            }
-            if (!toInsert.isEmpty()) {
-                for (int slot = 0; slot < EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS; slot++) {
-                    ItemStack termStack = terminal.getStack(slot);
-                    if (termStack.isEmpty()) {
-                        terminal.setStack(slot, toInsert.copy());
-                        terminal.markDirty();
-                        result.setCount(0);
-                        return;
-                    }
-                }
+        if (terminal != null && terminal.isNetworkOnline()) {
+            ItemStack remainder = terminal.depositItem(result.copy());
+            if (remainder.getCount() != result.getCount()) {
+                result.setCount(remainder.getCount());
+                if (result.isEmpty()) return;
             }
         }
     }

@@ -54,10 +54,31 @@ public class DustSmelterScreen extends HandledScreen<DustSmelterScreenHandler> {
         // Energy Tooltip
         if (mouseX >= x + 151 && mouseX <= x + 167 && mouseY >= y + 19 && mouseY <= y + 73) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§eEnergy Buffer"),
+                    Text.literal("§e⚡ Energy Buffer"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Usage: 50 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Dust Input Slot"),
+                        Text.literal("§7Insert crushed metal dusts:"),
+                        Text.literal("§f• Iron, Copper, Gold, Titanium, Aluminum, etc."),
+                        Text.literal("§7Smelts dusts into pure ingots.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Greatly accelerates smelting speed.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Ingot Output"),
+                        Text.literal("§7Smelted metal ingots appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

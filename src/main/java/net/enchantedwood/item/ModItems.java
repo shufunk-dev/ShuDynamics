@@ -739,7 +739,6 @@ public class ModItems {
                 entries.add(ENCHANTED_NETHERITE_GEAR);
                 entries.add(IRON_DUST);
                 entries.add(COPPER_DUST);
-                entries.add(COPPER_NUGGET);
                 entries.add(TIN_DUST);
                 entries.add(BRONZE_DUST);
                 entries.add(GOLD_DUST);
@@ -986,6 +985,17 @@ public class ModItems {
                 entries.add(TUNGSTEN_DUST);
                 entries.add(TUNGSTEN_PLATE);
                 entries.add(TUNGSTEN_CARBIDE_INGOT);
+                entries.add(TUNGSTEN_SWORD);
+                entries.add(TUNGSTEN_PICKAXE);
+                entries.add(TUNGSTEN_AXE);
+                entries.add(TUNGSTEN_SHOVEL);
+                entries.add(TUNGSTEN_HOE);
+                entries.add(TUNGSTEN_HAMMER);
+                entries.add(TUNGSTEN_BROAD_AXE);
+                entries.add(TUNGSTEN_HELMET);
+                entries.add(TUNGSTEN_CHESTPLATE);
+                entries.add(TUNGSTEN_LEGGINGS);
+                entries.add(TUNGSTEN_BOOTS);
                 entries.add(net.enchantedwood.block.ModBlocks.NETHER_TUNGSTEN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TUNGSTEN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.RAW_TUNGSTEN_BLOCK);
@@ -1059,6 +1069,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.TUNGSTEN_CABLE);
                 entries.add(net.enchantedwood.block.ModBlocks.GEOTHERMAL_GENERATOR);
                 entries.add(net.enchantedwood.block.ModBlocks.ALLOY_FOUNDRY);
+                entries.add(net.enchantedwood.block.ModBlocks.HYDRAULIC_PRESS);
                 entries.add(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER);
                 entries.add(net.enchantedwood.block.ModBlocks.MAGMA_CRUCIBLE);
                 entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);

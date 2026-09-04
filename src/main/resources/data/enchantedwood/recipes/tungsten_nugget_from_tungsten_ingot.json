@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:copper_ingot"
+    "enchantedwood:tungsten_ingot"
   ],
   "result": {
     "count": 9,
-    "id": "enchantedwood:copper_nugget"
+    "id": "enchantedwood:tungsten_nugget"
   }
 }

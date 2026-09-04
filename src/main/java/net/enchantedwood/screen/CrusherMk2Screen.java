@@ -67,12 +67,38 @@ public class CrusherMk2Screen extends HandledScreen<CrusherMk2ScreenHandler> {
             ), mouseX, mouseY);
         }
 
-        // Gear Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Tooltip (when gear is installed or empty)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Grinding Tier: §f%s (%dx Output)", this.handler.getGearTier().name(), this.handler.getTierYield()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Raw Ore Input Slot"),
+                        Text.literal("§7Insert ores, raw blocks, or stone:"),
+                        Text.literal("§f• Advanced double-pass pulverization"),
+                        Text.literal("§f• Extracts rare byproduct minerals")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Primary Output"),
+                        Text.literal("§7Main crushed ore dusts appear here.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6💎 Secondary Byproduct Output"),
+                        Text.literal("§7Bonus rare minerals, gems, and nuggets appear here.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Multiplies ore yield up to 8x+"),
+                        Text.literal("§f• Drastically accelerates pulverization rate.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

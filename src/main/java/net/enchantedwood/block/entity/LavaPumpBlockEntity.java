@@ -102,6 +102,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
             case TITANIUM -> 15;
             case DIAMOND -> 12;
             case NETHERITE -> 5;
+            case BLAZE_OVERCLOCK -> 3;
             default -> 40;
         };
     }

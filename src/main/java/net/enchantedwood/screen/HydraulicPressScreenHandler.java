@@ -29,7 +29,12 @@ public class HydraulicPressScreenHandler extends ScreenHandler {
         this.addProperties(propertyDelegate);
 
         // Machine Slots
-        this.addSlot(new Slot(inventory, 0, 56, 17));
+        this.addSlot(new Slot(inventory, 0, 56, 17) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return !net.enchantedwood.block.entity.HydraulicPressBlockEntity.getPlateResult(stack.getItem()).isEmpty();
+            }
+        });
         this.addSlot(new Slot(inventory, 1, 74, 53) {
             @Override
             public boolean canInsert(ItemStack stack) {
@@ -93,9 +98,15 @@ public class HydraulicPressScreenHandler extends ScreenHandler {
                 if (!this.insertItem(originalStack, 3, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, 1, false)) {
+            } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
+                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!net.enchantedwood.block.entity.HydraulicPressBlockEntity.getPlateResult(originalStack.getItem()).isEmpty()) {
+                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
                 } else {
                     return ItemStack.EMPTY;
                 }

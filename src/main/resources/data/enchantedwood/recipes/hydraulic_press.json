@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "SAS",
+    "CGC"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "P": "minecraft:piston",
+    "A": "minecraft:anvil",
+    "C": "enchantedwood:copper_cable",
+    "G": "enchantedwood:iron_gear"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:hydraulic_press"
+  }
+}

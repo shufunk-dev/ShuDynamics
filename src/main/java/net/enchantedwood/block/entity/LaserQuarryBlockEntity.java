@@ -84,6 +84,9 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     private @Nullable BlockPos boundNetworkPos = null;
     private String boundDimension = "minecraft:overworld";
 
+    // Client-side synced range radius
+    private int clientRangeRadius = 0;
+
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
         public int get(int index) {
@@ -111,6 +114,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                 case 5 -> isPaused = (value == 1);
                 case 6 -> scanY = value;
                 case 7 -> totalMinedCount = value;
+                case 8 -> clientRangeRadius = value;
             }
         }
 
@@ -126,7 +130,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, LaserQuarryBlockEntity quarry) {
         if (!quarry.initializedScan) {
-            quarry.resetScanCoordinates();
+            quarry.resetScanCoordinates(state);
             quarry.initializedScan = true;
         }
 
@@ -158,14 +162,115 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         }
     }
 
-    public void resetScanCoordinates() {
-        int radius = getRangeChunkRadius();
-        ChunkPos originChunk = new ChunkPos(this.pos);
-        int minChunkX = originChunk.x - radius;
-        int minChunkZ = originChunk.z - radius;
+    public static void clientTick(World world, BlockPos pos, BlockState state, LaserQuarryBlockEntity quarry) {
+        if (world.getTime() % 2 != 0) return;
 
-        this.scanX = minChunkX * 16;
-        this.scanZ = minChunkZ * 16;
+        int[] bounds = quarry.getMiningChunkBounds(state);
+        double minX = bounds[0] * 16.0;
+        double maxX = bounds[1] * 16.0 + 16.0;
+        double minZ = bounds[2] * 16.0;
+        double maxZ = bounds[3] * 16.0 + 16.0;
+        double laserY = pos.getY() + 0.2;
+
+        boolean isLit = state.get(LaserQuarryBlock.LIT);
+
+        // Core scanning beam when actively mining
+        if (isLit) {
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.PORTAL, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 0.0, -0.1, 0.0);
+        }
+
+        // Perimeter neon laser boundary lines (step every 3 blocks for high continuous visibility)
+        for (double x = minX; x <= maxX; x += 3.0) {
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, x, laserY, minZ, 0.0, 0.0, 0.0);
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, x, laserY, maxZ, 0.0, 0.0, 0.0);
+        }
+        for (double z = minZ; z <= maxZ; z += 3.0) {
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, minX, laserY, z, 0.0, 0.0, 0.0);
+            world.addParticleClient(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, maxX, laserY, z, 0.0, 0.0, 0.0);
+        }
+
+        // 4 Corner vertical boundary beacons
+        double[][] corners = {{minX, minZ}, {maxX, minZ}, {minX, maxZ}, {maxX, maxZ}};
+        for (double[] corner : corners) {
+            for (double yOff = 0; yOff <= 8.0; yOff += 2.0) {
+                world.addParticleClient(net.minecraft.particle.ParticleTypes.END_ROD, corner[0], laserY + yOff, corner[1], 0.0, 0.01, 0.0);
+            }
+        }
+    }
+
+    public int[] getMiningChunkBounds() {
+        return getMiningChunkBounds(null);
+    }
+
+    public int[] getMiningChunkBounds(@org.jetbrains.annotations.Nullable BlockState state) {
+        ChunkPos originChunk = new ChunkPos(this.pos);
+        int radius = getRangeChunkRadius();
+        if (radius <= 0) {
+            return new int[]{originChunk.x, originChunk.x, originChunk.z, originChunk.z};
+        }
+
+        int span = radius * 2; // 2 for 3x3, 4 for 5x5
+        Direction facing = Direction.NORTH;
+        if (state != null && state.contains(LaserQuarryBlock.FACING)) {
+            facing = state.get(LaserQuarryBlock.FACING);
+        } else if (this.world != null) {
+            BlockState cached = getCachedState();
+            if (cached != null && cached.contains(LaserQuarryBlock.FACING)) {
+                facing = cached.get(LaserQuarryBlock.FACING);
+            }
+        }
+
+        int minChunkX, maxChunkX, minChunkZ, maxChunkZ;
+
+        switch (facing) {
+            case NORTH -> {
+                // Forward is -Z, Right is +X. Quarry chunk is South-West corner
+                minChunkX = originChunk.x;
+                maxChunkX = originChunk.x + span;
+                minChunkZ = originChunk.z - span;
+                maxChunkZ = originChunk.z;
+            }
+            case SOUTH -> {
+                // Forward is +Z, Right is -X. Quarry chunk is North-East corner
+                minChunkX = originChunk.x - span;
+                maxChunkX = originChunk.x;
+                minChunkZ = originChunk.z;
+                maxChunkZ = originChunk.z + span;
+            }
+            case EAST -> {
+                // Forward is +X, Left is -Z. Quarry chunk is South-West corner
+                minChunkX = originChunk.x;
+                maxChunkX = originChunk.x + span;
+                minChunkZ = originChunk.z - span;
+                maxChunkZ = originChunk.z;
+            }
+            case WEST -> {
+                // Copy what South does for Z so it extends positive (+Z) and negative (-X)
+                minChunkX = originChunk.x - span;
+                maxChunkX = originChunk.x;
+                minChunkZ = originChunk.z;
+                maxChunkZ = originChunk.z + span;
+            }
+            default -> {
+                minChunkX = originChunk.x;
+                maxChunkX = originChunk.x + span;
+                minChunkZ = originChunk.z - span;
+                maxChunkZ = originChunk.z;
+            }
+        }
+
+        return new int[]{minChunkX, maxChunkX, minChunkZ, maxChunkZ};
+    }
+
+    public void resetScanCoordinates() {
+        resetScanCoordinates(null);
+    }
+
+    public void resetScanCoordinates(@org.jetbrains.annotations.Nullable BlockState state) {
+        int[] bounds = getMiningChunkBounds(state);
+        this.scanX = bounds[0] * 16;
+        this.scanZ = bounds[2] * 16;
         this.scanY = this.pos.getY() - 1;
         markDirty();
     }
@@ -176,7 +281,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
             if (rangeStack.isOf(ModItems.RANGE_UPGRADE_T2)) return 2; // 5x5 chunks
             if (rangeStack.isOf(ModItems.RANGE_UPGRADE_T1)) return 1; // 3x3 chunks
         }
-        return 0; // 1x1 chunk
+        return this.clientRangeRadius;
     }
 
     public int getMiningDelayTicks() {
@@ -193,17 +298,11 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     private boolean performMiningStep(ServerWorld world) {
-        int radius = getRangeChunkRadius();
-        ChunkPos originChunk = new ChunkPos(this.pos);
-        int minChunkX = originChunk.x - radius;
-        int maxChunkX = originChunk.x + radius;
-        int minChunkZ = originChunk.z - radius;
-        int maxChunkZ = originChunk.z + radius;
-
-        int minX = minChunkX * 16;
-        int maxX = maxChunkX * 16 + 15;
-        int minZ = minChunkZ * 16;
-        int maxZ = maxChunkZ * 16 + 15;
+        int[] bounds = getMiningChunkBounds();
+        int minX = bounds[0] * 16;
+        int maxX = bounds[1] * 16 + 15;
+        int minZ = bounds[2] * 16;
+        int maxZ = bounds[3] * 16 + 15;
         int minY = world.getBottomY();
 
         if (this.scanY < minY) {
@@ -241,6 +340,11 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                     return mineBlockAt(world, targetPos, targetState, true);
                 }
             } else {
+                // Safety: never mine the single block column directly beneath the quarry itself so it never floats on pure air
+                if (targetPos.getX() == this.pos.getX() && targetPos.getZ() == this.pos.getZ()) {
+                    advanceCoordinates(minX, maxX, minZ, maxZ, minY);
+                    continue;
+                }
                 if (isBreakable) {
                     return mineBlockAt(world, targetPos, targetState, false);
                 }
@@ -363,7 +467,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
             // 1. Direct to terminal if network online
             if (terminal != null && terminal.isNetworkOnline()) {
-                remaining = ItemTransportHelper.insertItem(terminal, remaining, null);
+                remaining = terminal.depositItem(remaining);
             }
 
             // 2. Fallback to output buffer
@@ -466,11 +570,10 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
     public void updateChunkLoading(ServerWorld world) {
         if ((!this.isPaused && this.scanY >= world.getBottomY()) || hasLocalChunkLoader()) {
-            int radius = getRangeChunkRadius();
-            ChunkPos originChunk = new ChunkPos(this.pos);
+            int[] bounds = getMiningChunkBounds();
             Set<Long> targetChunks = new HashSet<>();
-            for (int cx = originChunk.x - radius; cx <= originChunk.x + radius; cx++) {
-                for (int cz = originChunk.z - radius; cz <= originChunk.z + radius; cz++) {
+            for (int cx = bounds[0]; cx <= bounds[1]; cx++) {
+                for (int cz = bounds[2]; cz <= bounds[3]; cz++) {
                     targetChunks.add(ChunkPos.toLong(cx, cz));
                 }
             }
@@ -691,14 +794,24 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     @Override
     public ItemStack removeStack(int slot, int amount) {
         ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+        if (!result.isEmpty()) {
+            markDirty();
+            if (this.world != null && !this.world.isClient()) {
+                this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+            }
+        }
         return result;
     }
 
     @Override
     public ItemStack removeStack(int slot) {
         ItemStack result = Inventories.removeStack(this.inventory, slot);
-        if (!result.isEmpty()) markDirty();
+        if (!result.isEmpty()) {
+            markDirty();
+            if (this.world != null && !this.world.isClient()) {
+                this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+            }
+        }
         return result;
     }
 
@@ -706,6 +819,9 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     public void setStack(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
         markDirty();
+        if (this.world != null && !this.world.isClient()) {
+            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        }
     }
 
     @Override
@@ -767,6 +883,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         this.scanZ = view.getInt("ScanZ", 0);
         this.initializedScan = view.getBoolean("InitializedScan", false);
         this.anomalyUnearthed = view.getBoolean("AnomalyUnearthed", false);
+        this.clientRangeRadius = view.getInt("RangeRadius", 0);
         if (view.contains("BoundX")) {
             this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
             this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
@@ -788,11 +905,24 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         view.putInt("ScanZ", this.scanZ);
         view.putBoolean("InitializedScan", this.initializedScan);
         view.putBoolean("AnomalyUnearthed", this.anomalyUnearthed);
+        view.putInt("RangeRadius", getRangeChunkRadius());
         if (this.boundNetworkPos != null) {
             view.putInt("BoundX", this.boundNetworkPos.getX());
             view.putInt("BoundY", this.boundNetworkPos.getY());
             view.putInt("BoundZ", this.boundNetworkPos.getZ());
             view.putString("BoundDim", this.boundDimension);
         }
+    }
+
+    @Override
+    public net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket toUpdatePacket() {
+        return net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public net.minecraft.nbt.NbtCompound toInitialChunkDataNbt(net.minecraft.registry.RegistryWrapper.WrapperLookup registries) {
+        net.minecraft.nbt.NbtCompound nbt = new net.minecraft.nbt.NbtCompound();
+        nbt.putInt("RangeRadius", getRangeChunkRadius());
+        return nbt;
     }
 }

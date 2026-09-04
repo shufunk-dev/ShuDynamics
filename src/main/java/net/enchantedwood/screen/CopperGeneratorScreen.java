@@ -60,5 +60,14 @@ public class CopperGeneratorScreen extends HandledScreen<CopperGeneratorScreenHa
                     Text.literal("§a" + rateText)
             ), mouseX, mouseY);
         }
+
+        // Empty Fuel Slot Tooltip
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id == 0) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§6🔥 Solid Fuel Slot"),
+                    Text.literal("§7Insert combustible fuel:"),
+                    Text.literal("§f• Coal, Charcoal, Coke Coal, Wood, Fire Crystal")
+            ), mouseX, mouseY);
+        }
     }
 }

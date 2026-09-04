@@ -82,12 +82,32 @@ public class GeothermalGeneratorScreen extends HandledScreen<GeothermalGenerator
             ), mouseX, mouseY);
         }
 
-        // Gear Slot Tooltip
-        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+        // Gear Slot Tooltip (when installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§d⚙ Gear Upgrade Slot"),
+                    Text.literal("§d⚙ Installed Gear Upgrade"),
                     Text.literal(String.format("§7Current: §f%s (x%.2f Multiplier)", this.handler.getGearTier().name(), this.handler.getGearMultiplier()))
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Thermal Fuel Input"),
+                        Text.literal("§7Insert thermal power sources:"),
+                        Text.literal("§f• Lava Buckets, Magma Blocks, Fire Crystals")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b🪣 Empty Bucket Output"),
+                        Text.literal("§7Emptied lava containers appear here.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Dramatically boosts geothermal FE/t generation.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

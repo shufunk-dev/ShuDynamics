@@ -80,5 +80,20 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
                     mouseY
             );
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 2) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🪣 Bucket Fill / Drain Input"),
+                        Text.literal("§7Insert empty buckets to drain lava, or"),
+                        Text.literal("§7insert filled lava buckets to fill the reservoir.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Processed Bucket Output"),
+                        Text.literal("§7Filled or emptied buckets appear here.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

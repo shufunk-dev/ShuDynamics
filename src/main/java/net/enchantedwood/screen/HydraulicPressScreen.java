@@ -59,5 +59,25 @@ public class HydraulicPressScreen extends HandledScreen<HydraulicPressScreenHand
                     Text.literal("§7Draws 40 FE/t during plate stamping.")
             ), mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Stamping Input Slot"),
+                        Text.literal("§7Insert metal ingots or blocks to stamp:"),
+                        Text.literal("§f• Tungsten, Cobalt, Ardite, Manyullyn, Iron")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙️ Gear Upgrade Slot"),
+                        Text.literal("§7Insert a Gear or Blaze Overclock Core:"),
+                        Text.literal("§f• Dramatically speeds up plate stamping.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Stamped Plate Output"),
+                        Text.literal("§7Finished metal plates appear here.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

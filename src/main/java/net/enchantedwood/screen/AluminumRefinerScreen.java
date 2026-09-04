@@ -69,10 +69,34 @@ public class AluminumRefinerScreen extends HandledScreen<AluminumRefinerScreenHa
         // Energy Tooltip
         if (mouseX >= x + 151 && mouseX <= x + 167 && mouseY >= y + 19 && mouseY <= y + 73) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§eEnergy Buffer"),
+                    Text.literal("§e⚡ Energy Buffer"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Usage: 100 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Bauxite Ore Input"),
+                        Text.literal("§7Insert Raw Bauxite or Bauxite Dust:"),
+                        Text.literal("§7Smelted using pure pressurized oxygen.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b💨 Oxygen Canister In"),
+                        Text.literal("§fRequired: §aOxygen Canister (O₂)"),
+                        Text.literal("§7Provides pure oxygen for bauxite Bayer reduction.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§7💨 Empty Canister Out"),
+                        Text.literal("§7Depleted canisters appear here for refilling.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ Pure Aluminum Ingot"),
+                        Text.literal("§7Refined aluminum ingots appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

@@ -103,5 +103,27 @@ public class RoadPaverScreen extends HandledScreen<RoadPaverScreenHandler> {
                     Text.literal("§8Accepts Gasoline, Biofuel, High-Octane, or Coal")
             ), mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 11) {
+            if (this.focusedSlot.id < 9) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🛣️ Road Material Hopper (Slot " + (this.focusedSlot.id + 1) + "/9)"),
+                        Text.literal("§7Insert paving materials:"),
+                        Text.literal("§f• Asphalt Blocks, Asphalt Slabs, Concrete Curbs, Clay")
+                ), mouseX, mouseY);
+            } else if (this.focusedSlot.id == 9) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🔋 Battery Charging Slot"),
+                        Text.literal("§7Insert portable batteries to power the electrical guidance system.")
+                ), mouseX, mouseY);
+            } else if (this.focusedSlot.id == 10) {
+                context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⛽ Engine Fuel Slot"),
+                        Text.literal("§7Insert combustible engine fuel:"),
+                        Text.literal("§f• Gasoline Canister, Biofuel Canister, High-Octane, Coal")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

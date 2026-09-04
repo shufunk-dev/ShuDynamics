@@ -60,14 +60,23 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
 
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
-
-        if (mouseX >= x + 141 && mouseX <= x + 159 && mouseY >= y + 34 && mouseY <= y + 52) {
-            context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6Mineral Tar Byproduct"),
-                    Text.literal("§7Recovered condensate from coal pyrolysis.")
-            ), mouseX, mouseY);
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Raw Carbon Input"),
+                        Text.literal("§7Insert Coal, Charcoal, or Logs:"),
+                        Text.literal("§7Bakes carbon in oxygen-free pyrolysis.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§8🔥 Coke Coal Output"),
+                        Text.literal("§7High-efficiency industrial fuel appears here.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6🛢️ Mineral Tar Byproduct"),
+                        Text.literal("§7Recovered condensate from coal pyrolysis.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

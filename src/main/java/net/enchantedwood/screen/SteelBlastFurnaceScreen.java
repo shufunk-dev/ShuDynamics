@@ -70,10 +70,38 @@ public class SteelBlastFurnaceScreen extends HandledScreen<SteelBlastFurnaceScre
         // Energy Tooltip
         if (mouseX >= x + 151 && mouseX <= x + 167 && mouseY >= y + 19 && mouseY <= y + 73) {
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§eEnergy Buffer"),
+                    Text.literal("§e⚡ Energy Buffer"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Usage: 200 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 5) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e📥 Iron Input Slot"),
+                        Text.literal("§7Insert Iron Ingots or Iron Dust.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§8🔥 Coke Coal Fuel Slot"),
+                        Text.literal("§fRequired: §aCoke Coal"),
+                        Text.literal("§7Provides high-carbon blast reduction.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a✨ High-Grade Steel Ingot"),
+                        Text.literal("§7Refined steel ingots appear here.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d💨 Hydrogen Canister In (Optional)"),
+                        Text.literal("§fOptional: §aHydrogen Canister (H₂)"),
+                        Text.literal("§7Accelerates steel reduction reactions.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§7💨 Empty Canister Out"),
+                        Text.literal("§7Depleted hydrogen canisters appear here.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }
