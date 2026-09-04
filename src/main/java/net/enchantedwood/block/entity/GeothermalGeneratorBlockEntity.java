@@ -123,7 +123,7 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.geothermal_generator");
+        return Text.translatable("container.enchantedwood.geothermal_generator");
     }
 
     @Nullable

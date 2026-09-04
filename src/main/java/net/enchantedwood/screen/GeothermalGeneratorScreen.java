@@ -50,8 +50,7 @@ public class GeothermalGeneratorScreen extends HandledScreen<GeothermalGenerator
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        super.drawForeground(context, mouseX, mouseY);
     }
 
     @Override

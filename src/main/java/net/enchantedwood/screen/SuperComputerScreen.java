@@ -83,7 +83,14 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        super.drawForeground(context, mouseX, mouseY);
+        var matrices = context.getMatrices();
+        matrices.pushMatrix();
+        matrices.translate(8.0f, 6.0f);
+        matrices.scale(0.75f, 0.75f);
+        context.drawText(this.textRenderer, this.title, 0, 0, 0x404040, false);
+        matrices.popMatrix();
+
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0x404040, false);
 
         // Digital Storage Network status icon
         if (this.handler.isNetworkOnline()) {

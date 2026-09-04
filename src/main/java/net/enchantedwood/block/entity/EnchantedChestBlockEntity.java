@@ -147,6 +147,24 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
 
     @Override
     public Text getDisplayName() {
+        if (this.gearTier != null && this.gearTier != GearTier.NONE) {
+            String tierName = switch (this.gearTier) {
+                case IRON, ENCHANTED_IRON -> "Iron";
+                case COPPER -> "Copper";
+                case BRONZE -> "Bronze";
+                case ALUMINUM -> "Aluminum";
+                case STEEL -> "Steel";
+                case GOLD -> "Gold";
+                case TITANIUM -> "Titanium";
+                case DIAMOND -> "Diamond";
+                case NETHERITE -> "Netherite";
+                case BLAZE_OVERCLOCK -> "Blaze";
+                default -> "";
+            };
+            if (!tierName.isEmpty()) {
+                return Text.literal("Enchanted Chest (" + tierName + ")");
+            }
+        }
         return Text.translatable("container.enchantedwood.enchanted_chest");
     }
 

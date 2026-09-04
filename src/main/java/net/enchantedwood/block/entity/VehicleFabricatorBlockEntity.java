@@ -104,7 +104,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.vehicle_fabricator");
+        return Text.translatable("container.enchantedwood.vehicle_fabricator");
     }
 
     @Nullable
