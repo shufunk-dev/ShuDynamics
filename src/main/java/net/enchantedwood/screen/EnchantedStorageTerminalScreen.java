@@ -139,8 +139,22 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
                 int x = slot.x;
                 int y = slot.y;
                 context.drawItem(stack, x, y);
+                context.drawStackOverlay(this.textRenderer, stack, x, y, "");
+
                 String countText = formatCount(stack.getCount());
-                context.drawStackOverlay(this.textRenderer, stack, x, y, countText);
+                if (!countText.isEmpty()) {
+                    float scale = 0.75f;
+                    int textWidth = this.textRenderer.getWidth(countText);
+                    float posX = (x + 16.5f) - (textWidth * scale);
+                    float posY = (y + 16.5f) - (8.5f * scale);
+
+                    var matrices = context.getMatrices();
+                    matrices.pushMatrix();
+                    matrices.translate(posX, posY);
+                    matrices.scale(scale);
+                    context.drawText(this.textRenderer, countText, 0, 0, 0xFFFFFF, true);
+                    matrices.popMatrix();
+                }
                 return;
             }
         }
