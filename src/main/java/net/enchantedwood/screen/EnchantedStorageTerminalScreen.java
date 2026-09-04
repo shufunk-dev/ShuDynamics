@@ -92,6 +92,30 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     }
 
     @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyInput input) {
+        if (this.searchBox != null && this.searchBox.isFocused()) {
+            if (input.key() == 256) { // GLFW_KEY_ESCAPE
+                this.close();
+                return true;
+            }
+            if (this.searchBox.keyPressed(input)) {
+                return true;
+            }
+            // Consume key press so inventory key (default 'E') never closes the screen
+            return true;
+        }
+        return super.keyPressed(input);
+    }
+
+    @Override
+    public boolean charTyped(net.minecraft.client.input.CharInput input) {
+        if (this.searchBox != null && this.searchBox.isFocused()) {
+            return this.searchBox.charTyped(input);
+        }
+        return super.charTyped(input);
+    }
+
+    @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
