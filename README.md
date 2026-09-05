@@ -1,12 +1,16 @@
 # ✨ ShuDynamics
 
+> [!WARNING]
+> **Active Development Branch (`main` — v2.0 Experimental)**: This branch contains active, experimental pre-release code for **ShuDynamics 2.0**. For the verified stable release, switch to the [`1.5-stable`](https://github.com/shufunk-dev/ShuDynamics/tree/1.5-stable) branch or download directly from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/shudynamics).
+
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
+[![Development](https://img.shields.io/badge/Branch-2.0--Experimental-orange.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics)
+[![Stable Release](https://img.shields.io/badge/Stable-v1.5.0-green.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/tree/1.5-stable)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
-[![Stable Release](https://img.shields.io/badge/Release-v1.5.0-green.svg?style=flat-square)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
 **ShuDynamics** is an all-in-one tech, magic, energy, modular vehicle, digital storage, recursive autocrafting, chunk excavation, and advanced metallurgy progression mod for **Minecraft Fabric**. Built from the ground up to provide seamless survival progression—from early-game wooden enchantments and metallurgy to high-voltage power grids, multi-slot digital storage networks, modular all-terrain vehicles, geothermal fluid networks, autonomous chunk quarries, and automated road infrastructure.
@@ -137,7 +141,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-1.5.0.jar
+build/libs/shudynamics-2.0.0-experimental.1.jar
 ```
 
 ---
