@@ -356,7 +356,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
 
     private static void registerModVehicleRecipes() {
         registerRecipe(net.enchantedwood.item.ModItems.ATV_SEAT, 1, 80, new ItemStack(Items.LEATHER, 2), new ItemStack(Items.BLACK_WOOL, 2), new ItemStack(Items.IRON_INGOT, 1));
-        registerRecipe(net.enchantedwood.item.ModItems.RUBBER_TIRE, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 4), new ItemStack(Items.IRON_INGOT, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.RUBBER_TIRE, 2, 80, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 4), new ItemStack(Items.IRON_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_RIM_TIRE, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_STUDDED_TIRE, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 1));
 
@@ -365,9 +365,9 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_ATV_ENGINE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.PISTON, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 1), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_REDSTONE, 1));
         registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_ATV_ENGINE, 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_ATV_ENGINE, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_GEAR, 1));
 
-        registerRecipe(net.enchantedwood.item.ModItems.ALUMINUM_SUSPENSION, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
-        registerRecipe(net.enchantedwood.item.ModItems.STEEL_SUSPENSION, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
-        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_SUSPENSION, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(Items.IRON_BARS, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ALUMINUM_SUSPENSION, 2, 80, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 2), new ItemStack(Items.IRON_BARS, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.STEEL_SUSPENSION, 2, 100, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2), new ItemStack(Items.IRON_BARS, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_SUSPENSION, 2, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.STEEL_SUSPENSION, 1));
 
         registerRecipe(net.enchantedwood.item.ModItems.ALUMINUM_ATV_CHASSIS, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 7));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_ATV_CHASSIS, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 7));

@@ -135,8 +135,8 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
                 ), mouseX, mouseY);
                 case 4 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§e🚜 Suspension Slot"),
-                        Text.literal("§fRequired: §aSuspension System"),
-                        Text.literal("§7Aluminum, Steel, or Titanium Suspension."),
+                        Text.literal("§fRequired: §a4x Suspension Units"),
+                        Text.literal("§7Aluminum, Steel, or Titanium Suspension (set of 4)."),
                         Text.literal("§7Improves step clearance & shock absorption.")
                 ), mouseX, mouseY);
                 case 5 -> context.drawTooltip(this.textRenderer, List.of(
@@ -197,7 +197,7 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
             } else {
                 context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§6🛠️ Vehicle Assembly Bay"),
-                        Text.literal("§cRequired: Seat, Engine, Chassis, Suspension, Tires (4)."),
+                        Text.literal("§cRequired: Seat, Engine, Chassis, Suspension (4), Tires (4)."),
                         Text.literal("§7Or place an existing ATV in the top slot to modify.")
                 ), mouseX, mouseY);
             }

@@ -280,6 +280,9 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                         net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(itemId);
                         if (Registries.ITEM.containsId(id)) {
                             int count = tag.getInt("Count_" + i).orElse(1);
+                            if (i == SUSPENSION_SLOT || i == TIRE_SLOT) {
+                                count = Math.max(4, count);
+                            }
                             ItemStack restored = new ItemStack(Registries.ITEM.get(id), Math.max(1, count));
                             if (tag.contains("Damage_" + i)) {
                                 restored.setDamage(tag.getInt("Damage_" + i).orElse(0));

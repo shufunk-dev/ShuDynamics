@@ -174,7 +174,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                     NbtCompound tag = comp.copyNbt();
                     entity.unpackModuleFromTag(tag, "Slot_0", ENGINE_SLOT, 1);
                     entity.unpackModuleFromTag(tag, "Slot_1", TIRES_SLOT, 4);
-                    entity.unpackModuleFromTag(tag, "Slot_2", SUSPENSION_SLOT, 1);
+                    entity.unpackModuleFromTag(tag, "Slot_2", SUSPENSION_SLOT, 4);
                     entity.unpackModuleFromTag(tag, "Slot_3", CHASSIS_SLOT, 1);
 
                     // Headlights (Slot_4 in modern saves) vs Trunk (Slot_5 in modern saves)
@@ -214,7 +214,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
                     entity.inventory.set(SEAT_SLOT, new ItemStack(ModItems.ATV_SEAT));
                     entity.inventory.set(ENGINE_SLOT, new ItemStack(ModItems.COPPER_ATV_ENGINE));
                     entity.inventory.set(CHASSIS_SLOT, new ItemStack(ModItems.STEEL_ATV_CHASSIS));
-                    entity.inventory.set(SUSPENSION_SLOT, new ItemStack(ModItems.STEEL_SUSPENSION));
+                    entity.inventory.set(SUSPENSION_SLOT, new ItemStack(ModItems.STEEL_SUSPENSION, 4));
                     entity.inventory.set(TIRES_SLOT, new ItemStack(ModItems.RUBBER_TIRE, 4));
                     entity.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS));
                     entity.markDirty();
@@ -309,7 +309,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         boolean hasSeat = inventory.get(SEAT_SLOT).isOf(ModItems.ATV_SEAT);
         boolean hasEngine = isEngine(inventory.get(ENGINE_SLOT));
         boolean hasChassis = isChassis(inventory.get(CHASSIS_SLOT));
-        boolean hasSuspension = isSuspension(inventory.get(SUSPENSION_SLOT));
+        boolean hasSuspension = isSuspension(inventory.get(SUSPENSION_SLOT)) && inventory.get(SUSPENSION_SLOT).getCount() >= 4;
         boolean hasTires = isTires(inventory.get(TIRES_SLOT)) && inventory.get(TIRES_SLOT).getCount() >= 4;
         boolean hasHeadlights = isHeadlight(inventory.get(HEADLIGHT_SLOT));
         boolean outputEmpty = inventory.get(OUTPUT_SLOT).isEmpty();
@@ -402,7 +402,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         tag.putInt("Count_1", 4);
 
         tag.putString("Slot_2", Registries.ITEM.getId(suspension.getItem()).toString());
-        tag.putInt("Count_2", 1);
+        tag.putInt("Count_2", 4);
 
         tag.putString("Slot_3", Registries.ITEM.getId(chassis.getItem()).toString());
         tag.putInt("Count_3", 1);
@@ -422,7 +422,7 @@ public class VehicleFabricatorBlockEntity extends BlockEntity implements NamedSc
         inventory.get(SEAT_SLOT).decrement(1);
         inventory.get(ENGINE_SLOT).decrement(1);
         inventory.get(CHASSIS_SLOT).decrement(1);
-        inventory.get(SUSPENSION_SLOT).decrement(1);
+        inventory.get(SUSPENSION_SLOT).decrement(4);
         inventory.get(HEADLIGHT_SLOT).decrement(1);
         inventory.get(TIRES_SLOT).decrement(4);
         if (!trunk.isEmpty()) {
