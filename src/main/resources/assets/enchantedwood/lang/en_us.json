@@ -547,5 +547,7 @@
   "advancements.enchantedwood.anomalies.anomaly_plasma.title": "Solar Plasma Wave",
   "advancements.enchantedwood.anomalies.anomaly_plasma.description": "Endure a superheated extraterrestrial plasma wave in the Nether depths.",
   "advancements.enchantedwood.anomalies.cosmic_echoes.title": "Echoes of the Rift",
-  "advancements.enchantedwood.anomalies.cosmic_echoes.description": "Witness all 5 cosmic anomalies tearing across reality."
+  "advancements.enchantedwood.anomalies.cosmic_echoes.description": "Witness all 5 cosmic anomalies tearing across reality.",
+  "advancements.enchantedwood.anomalies.spatial_ruptures.title": "Spatial Ruptures",
+  "advancements.enchantedwood.anomalies.spatial_ruptures.description": "Cosmic tears fracture the fabric of reality, unleashing localized anomalies."
 }
