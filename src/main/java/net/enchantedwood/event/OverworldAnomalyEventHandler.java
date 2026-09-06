@@ -79,7 +79,7 @@ public class OverworldAnomalyEventHandler {
         // --- NETHER ANOMALY ---
         if (isNether) {
             // Solar Plasma Flare: Near lava sea level Y <= 40
-            boolean needsPlasma = !player.getCommandTags().contains("sd_anomaly_plasma") || !hasAdvancement(player, "anomalies/anomaly_plasma");
+            boolean needsPlasma = !player.getCommandTags().contains("sd_anomaly_plasma") || !hasAdvancement(world, player, "anomalies/anomaly_plasma");
             if (needsPlasma && player.getY() <= 40) {
                 if (world.random.nextFloat() < 0.40f) {
                     triggerAnomaly(world, player, AnomalyType.PLASMA_FLARE, 100); // 5 seconds
@@ -91,7 +91,7 @@ public class OverworldAnomalyEventHandler {
 
         // --- OVERWORLD ANOMALIES ---
         // Anomaly A: Altitude Collapse (Mountain peak Y >= 160 under open sky)
-        boolean needsAltitude = !player.getCommandTags().contains("sd_anomaly_altitude") || !hasAdvancement(player, "anomalies/anomaly_altitude");
+        boolean needsAltitude = !player.getCommandTags().contains("sd_anomaly_altitude") || !hasAdvancement(world, player, "anomalies/anomaly_altitude");
         if (needsAltitude && player.getY() >= 160 && world.isSkyVisible(player.getBlockPos())) {
             if (world.random.nextFloat() < 0.40f) {
                 triggerAnomaly(world, player, AnomalyType.ALTITUDE, 100); // 5 seconds
@@ -100,7 +100,7 @@ public class OverworldAnomalyEventHandler {
         }
 
         // Anomaly B: Zero-G Gravitational Surge (Deep underground Y <= 0 or night surface)
-        boolean needsGravity = !player.getCommandTags().contains("sd_anomaly_gravity") || !hasAdvancement(player, "anomalies/anomaly_gravity");
+        boolean needsGravity = !player.getCommandTags().contains("sd_anomaly_gravity") || !hasAdvancement(world, player, "anomalies/anomaly_gravity");
         if (needsGravity) {
             boolean underground = player.getY() <= 0 && !world.isSkyVisible(player.getBlockPos());
             boolean nightSurface = world.isNight() && world.isSkyVisible(player.getBlockPos());
@@ -111,7 +111,7 @@ public class OverworldAnomalyEventHandler {
         }
 
         // Anomaly C: Chrono-Static Pulse (Driving ATV or near industrial tech)
-        boolean needsChrono = !player.getCommandTags().contains("sd_anomaly_chrono") || !hasAdvancement(player, "anomalies/anomaly_chrono");
+        boolean needsChrono = !player.getCommandTags().contains("sd_anomaly_chrono") || !hasAdvancement(world, player, "anomalies/anomaly_chrono");
         if (needsChrono) {
             boolean isDriving = player.hasVehicle();
             boolean nearTech = isNearIndustrialTech(world, player.getBlockPos());
@@ -122,7 +122,7 @@ public class OverworldAnomalyEventHandler {
         }
 
         // Anomaly D: Subterranean Void Tremor (Near Bedrock Y <= -50)
-        boolean needsBedrock = !player.getCommandTags().contains("sd_anomaly_bedrock") || !hasAdvancement(player, "anomalies/anomaly_bedrock");
+        boolean needsBedrock = !player.getCommandTags().contains("sd_anomaly_bedrock") || !hasAdvancement(world, player, "anomalies/anomaly_bedrock");
         if (needsBedrock && player.getY() <= -50) {
             if (world.random.nextFloat() < 0.40f) {
                 triggerAnomaly(world, player, AnomalyType.BEDROCK, 80); // 4 seconds
@@ -234,9 +234,9 @@ public class OverworldAnomalyEventHandler {
         }
     }
 
-    private static boolean hasAdvancement(ServerPlayerEntity player, String path) {
-        if (player.getServer() == null) return false;
-        var adv = player.getServer().getAdvancementLoader().get(Identifier.of("enchantedwood", path));
+    private static boolean hasAdvancement(ServerWorld world, ServerPlayerEntity player, String path) {
+        if (world.getServer() == null) return false;
+        var adv = world.getServer().getAdvancementLoader().get(Identifier.of("enchantedwood", path));
         if (adv == null) return false;
         return player.getAdvancementTracker().getProgress(adv).isDone();
     }
