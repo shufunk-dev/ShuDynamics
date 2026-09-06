@@ -223,6 +223,11 @@ public class OverworldAnomalyEventHandler {
             default -> { return; }
         }
 
+        var branchAdv = loader.get(Identifier.of("enchantedwood", "anomalies/spatial_ruptures"));
+        if (branchAdv != null) {
+            tracker.grantCriterion(branchAdv, "auto_unlock");
+        }
+
         var indAdv = loader.get(Identifier.of("enchantedwood", anomalyId));
         if (indAdv != null) {
             tracker.grantCriterion(indAdv, "witnessed_anomaly");
