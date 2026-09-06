@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:dormant_rift"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.spatial_ruptures.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.spatial_ruptures.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "auto_unlock": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "auto_unlock"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/root"
+}
