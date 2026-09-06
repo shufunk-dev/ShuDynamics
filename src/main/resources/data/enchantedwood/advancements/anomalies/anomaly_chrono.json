@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.anomaly_chrono.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.anomaly_chrono.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "witnessed_anomaly": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "witnessed_anomaly"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/root"
+}

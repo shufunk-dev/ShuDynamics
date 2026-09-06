@@ -535,5 +535,17 @@
   "emi.category.enchantedwood.coke_oven": "Coke Oven",
   "emi.category.enchantedwood.fuel_refinery": "Fuel Refinery",
   "emi.category.enchantedwood.magma_crucible": "Magma Crucible",
-  "emi.category.enchantedwood.hydraulic_press": "Hydraulic Plate Press"
+  "emi.category.enchantedwood.hydraulic_press": "Hydraulic Plate Press",
+  "advancements.enchantedwood.anomalies.anomaly_altitude.title": "Atmospheric Tear",
+  "advancements.enchantedwood.anomalies.anomaly_altitude.description": "Survive a sudden barometric vacuum collapse atop high mountain peaks.",
+  "advancements.enchantedwood.anomalies.anomaly_gravity.title": "Gravitational Slip",
+  "advancements.enchantedwood.anomalies.anomaly_gravity.description": "Drift into zero-gravity as local spatial curvature collapses.",
+  "advancements.enchantedwood.anomalies.anomaly_chrono.title": "Chrono-Static Pulse",
+  "advancements.enchantedwood.anomalies.anomaly_chrono.description": "Witness high-speed electromagnetic timeline interference.",
+  "advancements.enchantedwood.anomalies.anomaly_bedrock.title": "Subterranean Tremor",
+  "advancements.enchantedwood.anomalies.anomaly_bedrock.description": "Sense the colossal resonance echoing from beneath the bedrock.",
+  "advancements.enchantedwood.anomalies.anomaly_plasma.title": "Solar Plasma Wave",
+  "advancements.enchantedwood.anomalies.anomaly_plasma.description": "Endure a superheated extraterrestrial plasma wave in the Nether depths.",
+  "advancements.enchantedwood.anomalies.cosmic_echoes.title": "Echoes of the Rift",
+  "advancements.enchantedwood.anomalies.cosmic_echoes.description": "Witness all 5 cosmic anomalies tearing across reality."
 }

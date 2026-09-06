@@ -9,6 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.enchantedwood.block.ModBlocks;
@@ -181,6 +182,50 @@ public class OverworldAnomalyEventHandler {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0, false, false, false));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0, false, false, false));
             }
+        }
+
+        grantAnomalyAdvancement(world, player, type);
+    }
+
+    private static void grantAnomalyAdvancement(ServerWorld world, ServerPlayerEntity player, AnomalyType type) {
+        if (world.getServer() == null) return;
+        var loader = world.getServer().getAdvancementLoader();
+        var tracker = player.getAdvancementTracker();
+
+        String anomalyId;
+        String criterionKey;
+        switch (type) {
+            case ALTITUDE -> {
+                anomalyId = "anomalies/anomaly_altitude";
+                criterionKey = "witnessed_altitude";
+            }
+            case GRAVITY -> {
+                anomalyId = "anomalies/anomaly_gravity";
+                criterionKey = "witnessed_gravity";
+            }
+            case CHRONO -> {
+                anomalyId = "anomalies/anomaly_chrono";
+                criterionKey = "witnessed_chrono";
+            }
+            case BEDROCK -> {
+                anomalyId = "anomalies/anomaly_bedrock";
+                criterionKey = "witnessed_bedrock";
+            }
+            case PLASMA_FLARE -> {
+                anomalyId = "anomalies/anomaly_plasma";
+                criterionKey = "witnessed_plasma";
+            }
+            default -> { return; }
+        }
+
+        var indAdv = loader.get(Identifier.of("enchantedwood", anomalyId));
+        if (indAdv != null) {
+            tracker.grantCriterion(indAdv, "witnessed_anomaly");
+        }
+
+        var masterAdv = loader.get(Identifier.of("enchantedwood", "anomalies/cosmic_echoes"));
+        if (masterAdv != null) {
+            tracker.grantCriterion(masterAdv, criterionKey);
         }
     }
 

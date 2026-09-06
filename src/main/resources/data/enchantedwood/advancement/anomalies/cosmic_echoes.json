@@ -1,0 +1,52 @@
+{
+  "display": {
+    "icon": {
+      "id": "enchantedwood:mystery_keystone"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.anomalies.cosmic_echoes.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.anomalies.cosmic_echoes.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "witnessed_altitude": {
+      "trigger": "minecraft:impossible"
+    },
+    "witnessed_gravity": {
+      "trigger": "minecraft:impossible"
+    },
+    "witnessed_chrono": {
+      "trigger": "minecraft:impossible"
+    },
+    "witnessed_bedrock": {
+      "trigger": "minecraft:impossible"
+    },
+    "witnessed_plasma": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "witnessed_altitude"
+    ],
+    [
+      "witnessed_gravity"
+    ],
+    [
+      "witnessed_chrono"
+    ],
+    [
+      "witnessed_bedrock"
+    ],
+    [
+      "witnessed_plasma"
+    ]
+  ],
+  "parent": "enchantedwood:anomalies/dimension_breach"
+}
