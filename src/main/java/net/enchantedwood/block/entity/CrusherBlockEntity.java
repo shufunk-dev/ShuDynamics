@@ -208,6 +208,11 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
             };
         }
 
+        // Fixed yield items
+        if (item == Items.BLAZE_ROD) {
+            return 4;
+        }
+
         // Base multiplier from gear tier (NONE=2x, IRON=2x, COPPER=3x, BRONZE=3x, GOLD=4x, DIAMOND=5x, NETHERITE=6x)
         int multiplier = tier.getBaseOreYield();
         if (isEnchanted) {
@@ -253,6 +258,7 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return 2.0f;
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD || item == Items.EMERALD_BLOCK) return 1.0f;
         if (item == ModItems.ENCHANTED_COAL || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 0.8f;
+        if (item == Items.BLAZE_ROD) return 0.5f;
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 0.1f;
         return 0.7f;
     }
@@ -276,6 +282,7 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return ModItems.NETHERITE_DUST;
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD || item == Items.EMERALD_BLOCK) return ModItems.EMERALD_DUST;
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return ModItems.COAL_DUST;
+        if (item == Items.BLAZE_ROD) return Items.BLAZE_POWDER;
         return null;
     }
 

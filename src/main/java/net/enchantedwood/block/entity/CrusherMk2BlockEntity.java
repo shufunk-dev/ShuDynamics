@@ -297,6 +297,11 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 2, false, ModItems.GOLD_DUST, 2);
         }
 
+        // Blaze Rod
+        if (item == Items.BLAZE_ROD) {
+            return new Mk2CrushRecipe(Items.BLAZE_POWDER, 4, true, ModItems.SULFUR_DUST, 1);
+        }
+
         return null;
     }
 

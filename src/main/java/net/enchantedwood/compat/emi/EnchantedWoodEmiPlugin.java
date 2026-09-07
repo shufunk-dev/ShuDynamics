@@ -259,7 +259,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addCrush(registry, idx++, List.of(EmiStack.of(Items.WHEAT)), EmiStack.of(Items.BREAD, 1), "Flour & Bread Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.SUGAR_CANE)), EmiStack.of(Items.SUGAR, 2), "Sugar Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BONE)), EmiStack.of(Items.BONE_MEAL, 4), "Bone Crushing");
-        addCrush(registry, idx++, List.of(EmiStack.of(Items.BLAZE_ROD)), EmiStack.of(Items.BLAZE_POWDER, 4), "Blaze Crushing");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.BLAZE_ROD)), EmiStack.of(Items.BLAZE_POWDER, 4), "Blaze Crushing (+Sulfur in MK2)");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.COBBLESTONE), EmiStack.of(Items.STONE)), EmiStack.of(Items.GRAVEL, 1), "Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.GRAVEL)), EmiStack.of(Items.SAND, 1), "Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BASALT), EmiStack.of(Items.SMOOTH_BASALT)), EmiStack.of(ModItems.VOLCANIC_ASH, 2), "Ash Extraction");
