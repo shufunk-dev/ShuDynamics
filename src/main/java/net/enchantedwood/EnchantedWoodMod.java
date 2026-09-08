@@ -29,6 +29,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.command.EquipmentCommand.register();
         net.enchantedwood.event.PlayerFlightHandler.register();
         net.enchantedwood.event.PlayerHealthHandler.register();
+        net.enchantedwood.event.ModularSuitHandler.register();
         net.enchantedwood.event.WoodenShearsSheepHandler.register();
         net.enchantedwood.event.WoodenShearsHarvestHandler.register();
         net.enchantedwood.event.CornSeedLootHandler.register();
