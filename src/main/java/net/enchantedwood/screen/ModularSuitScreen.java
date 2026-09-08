@@ -86,29 +86,66 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
 
         // Empty Slot Tooltip Guides
         if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            int tab = this.handler.getActiveTab();
             switch (this.focusedSlot.id) {
                 case 0 -> context.drawTooltip(this.textRenderer, java.util.List.of(
                         Text.literal("§e🔋 Battery / Power Cell Slot"),
                         Text.literal("§7Accepts: §fCopper, Aluminum, Steel, or Tungsten Battery"),
                         Text.literal("§8Provides internal energy capacity to this armor piece.")
                 ), mouseX, mouseY);
-                case 1 -> context.drawTooltip(this.textRenderer, java.util.List.of(
-                        Text.literal("§b💻 Logic Core / CPU Slot"),
-                        Text.literal("§7Accepts: §fBasic Computer Chip, Advanced Processor,"),
-                        Text.literal("§7or §fQuantum Power-Core Chip"),
-                        Text.literal("§8Acts as the onboard controller for piece subroutines.")
-                ), mouseX, mouseY);
-                case 2 -> context.drawTooltip(this.textRenderer, java.util.List.of(
-                        Text.literal("§a⚙️ Module Slot A"),
-                        Text.literal("§7Accepts: §fFlight Modules (Thrusters / Repulsors),"),
-                        Text.literal("§fAdaptive Night Vision HUD, or Nanite Auto-Repair"),
-                        Text.literal("§8Primary hardware upgrade socket.")
-                ), mouseX, mouseY);
-                case 3 -> context.drawTooltip(this.textRenderer, java.util.List.of(
-                        Text.literal("§a⚙️ Module Slot B"),
-                        Text.literal("§7Accepts: §fSecondary Module or Nanite Auto-Repair Matrix"),
-                        Text.literal("§8Allows running multiple suit upgrades simultaneously.")
-                ), mouseX, mouseY);
+                case 1 -> {
+                    java.util.List<Text> chipTooltip = switch (tab) {
+                        case 0 -> java.util.List.of(
+                                Text.literal("§b💻 Logic Core / CPU Slot"),
+                                Text.literal("§7Accepts: §fBasic Chip, Advanced Processor, Quantum Core"),
+                                Text.literal("§8Controls HUD diagnostics and night vision timing.")
+                        );
+                        case 1 -> java.util.List.of(
+                                Text.literal("§b💻 Logic Core / CPU Slot"),
+                                Text.literal("§7Accepts: §fBasic Chip, Advanced Processor, Quantum Core"),
+                                Text.literal("§8Optimizes thruster fuel burn and energy flow.")
+                        );
+                        case 2 -> java.util.List.of(
+                                Text.literal("§b💻 Logic Core / CPU Slot"),
+                                Text.literal("§7Accepts: §fBasic Chip, Advanced Processor, Quantum Core"),
+                                Text.literal("§8Unlocks enhanced sprinting speed multiplier.")
+                        );
+                        default -> java.util.List.of(
+                                Text.literal("§b💻 Logic Core / CPU Slot"),
+                                Text.literal("§7Accepts: §fBasic Chip, Advanced Processor, Quantum Core"),
+                                Text.literal("§8Unlocks automatic step-assist over full blocks.")
+                        );
+                    };
+                    context.drawTooltip(this.textRenderer, chipTooltip, mouseX, mouseY);
+                }
+                case 2, 3 -> {
+                    String slotName = this.focusedSlot.id == 2 ? "A" : "B";
+                    java.util.List<Text> moduleTooltip = switch (tab) {
+                        case 0 -> java.util.List.of(
+                                Text.literal("§a⚙️ Module Slot " + slotName),
+                                Text.literal("§7Accepts: §fAdaptive Night Vision HUD"),
+                                Text.literal("§7or §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket for helmet systems.")
+                        );
+                        case 1 -> java.util.List.of(
+                                Text.literal("§a⚙️ Module Slot " + slotName),
+                                Text.literal("§7Accepts: §fHydrogen Thrusters, Ion Repulsors,"),
+                                Text.literal("§7or §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket for chest & flight systems.")
+                        );
+                        case 2 -> java.util.List.of(
+                                Text.literal("§a⚙️ Module Slot " + slotName),
+                                Text.literal("§7Accepts: §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket (more leg modules coming soon).")
+                        );
+                        default -> java.util.List.of(
+                                Text.literal("§a⚙️ Module Slot " + slotName),
+                                Text.literal("§7Accepts: §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket (more boot modules coming soon).")
+                        );
+                    };
+                    context.drawTooltip(this.textRenderer, moduleTooltip, mouseX, mouseY);
+                }
             }
         }
     }

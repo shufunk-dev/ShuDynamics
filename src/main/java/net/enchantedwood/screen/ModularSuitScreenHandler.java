@@ -103,8 +103,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(suitInventory, 2, 104, 45) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.getItem() instanceof net.enchantedwood.item.custom.NaniteRepairMatrixItem
-                        || stack.getItem() instanceof net.enchantedwood.item.custom.SuitModuleItem;
+                return isModuleAllowed(activeTab, stack);
             }
 
             @Override
@@ -123,8 +122,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(suitInventory, 3, 132, 45) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.getItem() instanceof net.enchantedwood.item.custom.NaniteRepairMatrixItem
-                        || stack.getItem() instanceof net.enchantedwood.item.custom.SuitModuleItem;
+                return isModuleAllowed(activeTab, stack);
             }
 
             @Override
@@ -354,7 +352,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
                     if (!this.insertItem(originalStack, 0, 1, false)) return ItemStack.EMPTY;
                 } else if (originalStack.isOf(ModItems.BASIC_COMPUTER_CHIP) || originalStack.isOf(ModItems.ADVANCED_COMPUTER_CHIP) || originalStack.isOf(ModItems.QUANTUM_COMPUTER_CHIP)) {
                     if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
-                } else if (originalStack.getItem() instanceof net.enchantedwood.item.custom.NaniteRepairMatrixItem || originalStack.getItem() instanceof net.enchantedwood.item.custom.SuitModuleItem) {
+                } else if (isModuleAllowed(this.activeTab, originalStack)) {
                     if (!this.insertItem(originalStack, 2, 4, false)) return ItemStack.EMPTY;
                 } else {
                     return ItemStack.EMPTY;
@@ -368,6 +366,19 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             }
         }
         return newStack;
+    }
+
+    public static boolean isModuleAllowed(int tab, ItemStack stack) {
+        if (stack.getItem() instanceof net.enchantedwood.item.custom.NaniteRepairMatrixItem) {
+            return true; // Nanites work across all suit pieces
+        }
+        if (stack.isOf(ModItems.NIGHT_VISION_MODULE)) {
+            return tab == 0; // Helmet only
+        }
+        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)) {
+            return tab == 1; // Chestplate only
+        }
+        return false;
     }
 
     @Override
