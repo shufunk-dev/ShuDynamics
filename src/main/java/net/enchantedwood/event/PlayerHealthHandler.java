@@ -24,6 +24,10 @@ public class PlayerHealthHandler {
     private static final Map<UUID, Long> LAST_DAMAGE_TIME = new HashMap<>();
     private static final Map<UUID, Integer> RECHARGE_TICKS = new HashMap<>();
 
+    public static long getLastDamageTime(UUID uuid) {
+        return LAST_DAMAGE_TIME.getOrDefault(uuid, 0L);
+    }
+
     public static void register() {
         // Record damage timestamp for out-of-combat auto-recharge timer (10s)
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {

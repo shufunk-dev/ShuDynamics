@@ -129,6 +129,10 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2"),
                     new ScreenHandlerType<>(CrusherMk2ScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<DustSmelterMk2ScreenHandler> DUST_SMELTER_MK2_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "dust_smelter_mk2"),
+                    new ScreenHandlerType<>(DustSmelterMk2ScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static final ScreenHandlerType<SoilInfuserScreenHandler> SOIL_INFUSER_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "soil_infuser"),
                     new ScreenHandlerType<>(SoilInfuserScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
@@ -144,6 +148,14 @@ public class ModScreenHandlers {
     public static final ScreenHandlerType<LaserQuarryScreenHandler> LASER_QUARRY_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "laser_quarry"),
                     new ScreenHandlerType<>(LaserQuarryScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<ModularSuitScreenHandler> MODULAR_SUIT_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "modular_suit"),
+                    new ScreenHandlerType<>(ModularSuitScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<PoweredAnvilScreenHandler> POWERED_ANVIL_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "powered_anvil"),
+                    new ScreenHandlerType<>(PoweredAnvilScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);

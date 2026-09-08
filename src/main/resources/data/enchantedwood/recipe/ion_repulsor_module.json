@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TWT",
+    "GQG",
+    "TWT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "W": "enchantedwood:silicon_wafer",
+    "G": "enchantedwood:steel_gear",
+    "Q": "enchantedwood:quantum_computer_chip"
+  },
+  "result": {
+    "id": "enchantedwood:ion_repulsor_module",
+    "count": 1
+  }
+}

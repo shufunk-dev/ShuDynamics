@@ -217,6 +217,7 @@ public class DustSmelterBlockEntity extends BlockEntity implements NamedScreenHa
         if (item == ModItems.NETHERITE_DUST) return Items.NETHERITE_INGOT;
         if (item == ModItems.EMERALD_DUST) return Items.EMERALD;
         if (item == ModItems.COAL_DUST) return Items.COAL;
+        if (item == ModItems.QUARTZ_DUST) return ModItems.SILICON;
         return null;
     }
 

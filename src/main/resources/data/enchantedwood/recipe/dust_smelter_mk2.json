@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TBT",
+    "BSB",
+    "TMT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_carbide_ingot",
+    "B": "enchantedwood:steel_gear",
+    "S": "enchantedwood:dust_smelter",
+    "M": "enchantedwood:thermal_refractory_plating"
+  },
+  "result": {
+    "id": "enchantedwood:dust_smelter_mk2",
+    "count": 1
+  }
+}

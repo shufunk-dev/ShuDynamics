@@ -280,6 +280,71 @@ public class ModItems {
     public static final Item NETHERITE_DUST = registerItem("netherite_dust", Item::new);
     public static final Item EMERALD_DUST = registerItem("emerald_dust", Item::new);
     public static final Item COAL_DUST = registerItem("coal_dust", Item::new);
+    public static final Item QUARTZ_DUST = registerItem("quartz_dust", Item::new);
+
+    // Microelectronics & Modular Power Suit Components (ShuDynamics 2.0)
+    public static final Item SILICON = registerItem("silicon", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7High-purity semiconductor ingot smelted from Quartz Dust."),
+            Text.literal("§8Press in a Hydraulic Press to manufacture Silicon Wafers.")
+    ));
+    public static final Item SILICON_WAFER = registerItem("silicon_wafer", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Ultra-thin polished semiconductor substrate."),
+            Text.literal("§8Foundation for printing Modular Power Suit micro-circuits.")
+    ));
+    public static final Item BASIC_COMPUTER_CHIP = registerItem("basic_computer_chip", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§eTier 1 Micro-Controller"),
+            Text.literal("§7Essential logic board for Power Suit chassis & battery power routing."),
+            Text.literal("§8Controls internal FE distribution across modular suit pieces.")
+    ));
+    public static final Item ADVANCED_COMPUTER_CHIP = registerItem("advanced_computer_chip", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§bTier 2 Environmental Processor"),
+            Text.literal("§7High-frequency logic processor for active suit anomaly protection:"),
+            Text.literal("§f• Atmospheric filtration (acid rain, vacuum / no air)"),
+            Text.literal("§f• Thermal regulation (extreme heat & extreme cold biomes)")
+    ));
+    public static final Item QUANTUM_COMPUTER_CHIP = registerItem("quantum_computer_chip", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.fireproof(),
+            Text.literal("§dTier 3 Quantum Core"),
+            Text.literal("§7Dimensional computing unit engineered to neutralize severe anomalies:"),
+            Text.literal("§f• Spatial distortion dampening & gravity stabilization"),
+            Text.literal("§8Required for elite deep-dimension Power Suit modules.")
+    ));
+
+    // Modular Power Suit (ShuDynamics 2.0)
+    public static final Item MODULAR_POWER_HELMET = registerItem("modular_power_helmet", settings ->
+            new net.enchantedwood.item.custom.ModularPowerArmorItem(EquipmentType.HELMET, settings.armor(ModArmorMaterials.MODULAR_POWER, EquipmentType.HELMET).fireproof()));
+    public static final Item MODULAR_POWER_CHESTPLATE = registerItem("modular_power_chestplate", settings ->
+            new net.enchantedwood.item.custom.ModularPowerArmorItem(EquipmentType.CHESTPLATE, settings.armor(ModArmorMaterials.MODULAR_POWER, EquipmentType.CHESTPLATE).fireproof()));
+    public static final Item MODULAR_POWER_LEGGINGS = registerItem("modular_power_leggings", settings ->
+            new net.enchantedwood.item.custom.ModularPowerArmorItem(EquipmentType.LEGGINGS, settings.armor(ModArmorMaterials.MODULAR_POWER, EquipmentType.LEGGINGS).fireproof()));
+    public static final Item MODULAR_POWER_BOOTS = registerItem("modular_power_boots", settings ->
+            new net.enchantedwood.item.custom.ModularPowerArmorItem(EquipmentType.BOOTS, settings.armor(ModArmorMaterials.MODULAR_POWER, EquipmentType.BOOTS).fireproof()));
+    public static final Item NANITE_REPAIR_MATRIX = registerItem("nanite_repair_matrix",
+            net.enchantedwood.item.custom.NaniteRepairMatrixItem::new);
+    public static final Item HYDROGEN_THRUSTER_MODULE = registerItem("hydrogen_thruster_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "Hydrogen Thrusters", java.util.List.of(
+                    Text.literal("§b• Chemical Rocket Flight Mode §8(Spacebar to fly)"),
+                    Text.literal("§7• Refuels automatically from Hydrogen Canisters in inventory"),
+                    Text.literal("§e• Safe Glide / Fall Dampening included")
+            )));
+    public static final Item ION_REPULSOR_MODULE = registerItem("ion_repulsor_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "Quantum Ion Repulsors", java.util.List.of(
+                    Text.literal("§d• Iron Man Repulsor Flight §8(Spacebar to fly / hover)"),
+                    Text.literal("§e• Consumes 25 FE / tick (500 FE/s) directly from Battery"),
+                    Text.literal("§a• 100% Electric — Zero Fuel Canisters Required!"),
+                    Text.literal("§7• Complete Fall Damage Negation")
+            )));
+    public static final Item NIGHT_VISION_MODULE = registerItem("night_vision_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "Adaptive Night Vision HUD", java.util.List.of(
+                    Text.literal("§b• Optical HUD Night Vision"),
+                    Text.literal("§7• Automatically engages when ambient light ≤ 6"),
+                    Text.literal("§7• Powers down in illuminated areas (≥ 9 light)"),
+                    Text.literal("§e• Energy Cost: §f2 FE / tick §7(only while active in dark)")
+            )));
 
     // Phase 2: Metallurgy & Gas Items
     public static final Item RAW_BAUXITE = registerItem("raw_bauxite", Item::new);
@@ -755,6 +820,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_BLOCK);
                 entries.add(EMERALD_DUST);
                 entries.add(COAL_DUST);
+                entries.add(QUARTZ_DUST);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_FURNACE);
                 entries.add(net.enchantedwood.block.ModBlocks.CRUSHER);
@@ -766,13 +832,28 @@ public class ModItems {
                 entries.add(COPPER_BATTERY_PACK);
                 entries.add(net.enchantedwood.block.ModBlocks.COPPER_CABLE);
 
-
-
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_CONTROLLER);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_DRIVE_BAY);
                 entries.add(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_TERMINAL);
                 entries.add(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER);
                 entries.add(net.enchantedwood.block.ModBlocks.SUPER_COMPUTER);
+
+                // Microelectronics & Computer Chips (ShuDynamics 2.0)
+                entries.add(SILICON);
+                entries.add(SILICON_WAFER);
+                entries.add(BASIC_COMPUTER_CHIP);
+                entries.add(ADVANCED_COMPUTER_CHIP);
+                entries.add(QUANTUM_COMPUTER_CHIP);
+                entries.add(MODULAR_POWER_HELMET);
+                entries.add(MODULAR_POWER_CHESTPLATE);
+                entries.add(MODULAR_POWER_LEGGINGS);
+                entries.add(MODULAR_POWER_BOOTS);
+                entries.add(NANITE_REPAIR_MATRIX);
+                entries.add(HYDROGEN_THRUSTER_MODULE);
+                entries.add(ION_REPULSOR_MODULE);
+                entries.add(NIGHT_VISION_MODULE);
+                entries.add(net.enchantedwood.block.ModBlocks.POWERED_ANVIL);
+
                 entries.add(net.enchantedwood.block.ModBlocks.LASER_QUARRY);
                 entries.add(RANGE_UPGRADE_T1);
                 entries.add(RANGE_UPGRADE_T2);
@@ -1074,6 +1155,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.MAGMA_CRUCIBLE);
                 entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);
                 entries.add(net.enchantedwood.block.ModBlocks.CRUSHER_MK2);
+                entries.add(net.enchantedwood.block.ModBlocks.DUST_SMELTER_MK2);
                 entries.add(net.enchantedwood.block.ModBlocks.SOIL_INFUSER);
 
                 // 5x5 Multiblock Titanium Lava Reservoir & Titanium Lava Pipes

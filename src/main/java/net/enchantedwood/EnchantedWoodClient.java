@@ -21,6 +21,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class EnchantedWoodClient implements ClientModInitializer {
     private static KeyBinding openEquipmentKey;
+    private static KeyBinding openSuitKey;
 
     @Override
     public void onInitializeClient() {
@@ -56,10 +57,13 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.MAGMA_CRUCIBLE_SCREEN_HANDLER, net.enchantedwood.screen.MagmaCrucibleScreen::new);
         HandledScreens.register(ModScreenHandlers.LAVA_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.LavaPumpScreen::new);
         HandledScreens.register(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.CrusherMk2Screen::new);
+        HandledScreens.register(ModScreenHandlers.DUST_SMELTER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.DustSmelterMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, net.enchantedwood.screen.SoilInfuserScreen::new);
         HandledScreens.register(ModScreenHandlers.TITANIUM_TANK_SCREEN_HANDLER, net.enchantedwood.screen.TitaniumTankScreen::new);
         HandledScreens.register(ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, net.enchantedwood.screen.SuperComputerScreen::new);
         HandledScreens.register(ModScreenHandlers.LASER_QUARRY_SCREEN_HANDLER, net.enchantedwood.screen.LaserQuarryScreen::new);
+        HandledScreens.register(ModScreenHandlers.MODULAR_SUIT_SCREEN_HANDLER, net.enchantedwood.screen.ModularSuitScreen::new);
+        HandledScreens.register(ModScreenHandlers.POWERED_ANVIL_SCREEN_HANDLER, net.enchantedwood.screen.PoweredAnvilScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
@@ -80,10 +84,24 @@ public class EnchantedWoodClient implements ClientModInitializer {
                 KeyBinding.Category.INVENTORY
         ));
 
+        // Register Keybinding 'V' to open Modular Suit Access Panel
+        openSuitKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.enchantedwood.modular_suit_panel",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_V,
+                KeyBinding.Category.INVENTORY
+        ));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openEquipmentKey.wasPressed()) {
                 if (client.player != null && client.currentScreen == null) {
                     client.player.networkHandler.sendChatCommand("equipment");
+                }
+            }
+
+            while (openSuitKey.wasPressed()) {
+                if (client.player != null && client.currentScreen == null) {
+                    net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.OpenModularSuitPanelPayload());
                 }
             }
 
@@ -95,7 +113,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
             }
         });
 
-        // Add Equipment & ATV Dashboard Buttons directly to Player Inventory Screen (InventoryScreen)
+        // Add Equipment & Modular Suit & ATV Dashboard Buttons directly to Player Inventory Screen (InventoryScreen)
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
             if (screen instanceof InventoryScreen inventoryScreen) {
                 int x = (scaledWidth - 176) / 2 + 65;
@@ -108,12 +126,21 @@ public class EnchantedWoodClient implements ClientModInitializer {
                     }).dimensions(x, y, 14, 14).build()
                 );
 
+                // Modular Suit Button
+                Screens.getButtons(inventoryScreen).add(
+                    ButtonWidget.builder(Text.literal("⚡"), button -> {
+                        if (client.player != null) {
+                            net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.OpenModularSuitPanelPayload());
+                        }
+                    }).dimensions(x + 16, y, 14, 14).build()
+                );
+
                 // If player is mounted on ATV, show Dashboard button
                 if (client.player != null && client.player.getVehicle() instanceof net.enchantedwood.entity.custom.AtvEntity) {
                     Screens.getButtons(inventoryScreen).add(
                         ButtonWidget.builder(Text.literal("🏎️"), button -> {
                             net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.OpenAtvInventoryPayload());
-                        }).dimensions(x + 16, y, 14, 14).build()
+                        }).dimensions(x + 32, y, 14, 14).build()
                     );
                 }
             }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_anvil",
+  "textures": {
+    "particle": "enchantedwood:block/powered_anvil_body_on",
+    "body": "enchantedwood:block/powered_anvil_body_on",
+    "top": "enchantedwood:block/powered_anvil_top_on"
+  }
+}

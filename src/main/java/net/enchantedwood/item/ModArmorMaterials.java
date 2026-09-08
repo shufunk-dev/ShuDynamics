@@ -249,4 +249,21 @@ public class ModArmorMaterials {
             ModTags.Items.REPAIRS_TUNGSTEN,
             RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten"))
     );
+
+    // Modular Power Suit Chassis (High durability, 24 total defense, 3.0 toughness, knockback resistance)
+    public static final ArmorMaterial MODULAR_POWER = new ArmorMaterial(
+            50,
+            Map.of(
+                    EquipmentType.HELMET, 4,
+                    EquipmentType.CHESTPLATE, 9,
+                    EquipmentType.LEGGINGS, 7,
+                    EquipmentType.BOOTS, 4
+            ),
+            20,
+            SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE,
+            3.0f,
+            0.15f,
+            ModTags.Items.REPAIRS_MODULAR_POWER,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "modular_power"))
+    );
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LGL",
+    "DBD",
+    "LGL"
+  ],
+  "key": {
+    "L": "minecraft:lapis_lazuli",
+    "G": "minecraft:glowstone_dust",
+    "D": "minecraft:diamond",
+    "B": "enchantedwood:basic_computer_chip"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:advanced_computer_chip"
+  }
+}

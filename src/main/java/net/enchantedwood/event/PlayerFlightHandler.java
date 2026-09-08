@@ -23,7 +23,12 @@ public class PlayerFlightHandler {
 
     public static boolean isWearingActiveJetpack(ServerPlayerEntity player) {
         ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
-        return chest.isOf(ModItems.HYDROGEN_JETPACK) && net.enchantedwood.item.custom.HydrogenJetpackItem.getHydrogen(chest) > 0;
+        if (chest.isOf(ModItems.HYDROGEN_JETPACK) && net.enchantedwood.item.custom.HydrogenJetpackItem.getHydrogen(chest) > 0) return true;
+        if (chest.isOf(ModItems.MODULAR_POWER_CHESTPLATE)) {
+            if (net.enchantedwood.item.custom.ModularPowerArmorItem.hasModule(chest, "enchantedwood:ion_repulsor_module") && net.enchantedwood.item.custom.ModularPowerArmorItem.getStoredEnergy(chest) >= 25) return true;
+            if (net.enchantedwood.item.custom.ModularPowerArmorItem.hasModule(chest, "enchantedwood:hydrogen_thruster_module")) return true;
+        }
+        return false;
     }
 
     private static void tickPlayerJetpack(ServerPlayerEntity player, ServerWorld world) {
@@ -76,6 +81,108 @@ public class PlayerFlightHandler {
                     player.setVelocity(vel.x, Math.max(vel.y, -0.25), vel.z);
                     player.velocityDirty = true;
                     player.fallDistance = 0.0f;
+                }
+            }
+        } else if (chest.isOf(ModItems.MODULAR_POWER_CHESTPLATE)) {
+            boolean hasIonRepulsors = net.enchantedwood.item.custom.ModularPowerArmorItem.hasModule(chest, "enchantedwood:ion_repulsor_module");
+            boolean hasHydrogenThrusters = net.enchantedwood.item.custom.ModularPowerArmorItem.hasModule(chest, "enchantedwood:hydrogen_thruster_module");
+
+            if (hasIonRepulsors) {
+                int energy = net.enchantedwood.item.custom.ModularPowerArmorItem.getStoredEnergy(chest);
+                if (energy >= 25) {
+                    if (!player.getAbilities().allowFlying) {
+                        player.getAbilities().allowFlying = true;
+                        player.sendAbilitiesUpdate();
+                    }
+
+                    if (player.getAbilities().flying) {
+                        player.fallDistance = 0.0f;
+
+                        // Iron Man repulsor particles (electric sparks and end rod ion energy)
+                        if (world.getTime() % 2 == 0) {
+                            world.spawnParticles(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, player.getX(), player.getY() + 0.2, player.getZ(), 3, 0.15, 0.05, 0.15, 0.02);
+                            world.spawnParticles(net.minecraft.particle.ParticleTypes.END_ROD, player.getX(), player.getY() + 0.1, player.getZ(), 1, 0.05, 0.02, 0.05, 0.01);
+                        }
+
+                        // Ambient repulsor sound
+                        if (world.getTime() % 20 == 0) {
+                            world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.BLOCK_BEACON_AMBIENT, net.minecraft.sound.SoundCategory.PLAYERS, 0.15f, 1.8f);
+                        }
+
+                        // Consume FE: 25 FE / tick (500 FE / sec)
+                        net.enchantedwood.item.custom.ModularPowerArmorItem.extractEnergy(chest, 25);
+                    } else if (!player.isOnGround()) {
+                        player.fallDistance = 0.0f;
+                    }
+                } else {
+                    // Battery out of juice!
+                    if (player.getAbilities().allowFlying && !hasCapeEquipped(player) && !isWearingFullEnchantedNetherite(player)) {
+                        player.getAbilities().allowFlying = false;
+                        player.getAbilities().flying = false;
+                        player.sendAbilitiesUpdate();
+                        player.sendMessage(net.minecraft.text.Text.literal("§c⚡ Chestplate Battery Depleted — Repulsors Offline!"), true);
+                    }
+                    if (!player.isOnGround() && player.getVelocity().y < -0.3) {
+                        Vec3d vel = player.getVelocity();
+                        player.setVelocity(vel.x, Math.max(vel.y, -0.25), vel.z);
+                        player.velocityDirty = true;
+                        player.fallDistance = 0.0f;
+                    }
+                }
+            } else if (hasHydrogenThrusters) {
+                int fuel = net.enchantedwood.item.custom.ModularPowerArmorItem.getCustomData(chest).getInt("Hydrogen", 0);
+                if (fuel <= 0) {
+                    for (int i = 0; i < player.getInventory().size(); i++) {
+                        ItemStack invStack = player.getInventory().getStack(i);
+                        if (invStack.isOf(ModItems.HYDROGEN_CANISTER)) {
+                            invStack.decrement(1);
+                            player.getInventory().offerOrDrop(new ItemStack(ModItems.EMPTY_GAS_CANISTER));
+                            fuel += 1000;
+                            var nbt = net.enchantedwood.item.custom.ModularPowerArmorItem.getCustomData(chest);
+                            nbt.putInt("Hydrogen", fuel);
+                            net.enchantedwood.item.custom.ModularPowerArmorItem.setCustomData(chest, nbt);
+                            player.sendMessage(net.minecraft.text.Text.literal("§b⚡ Auto-Refueled 1,000 mB Hydrogen from Canister!"), true);
+                            break;
+                        }
+                    }
+                }
+
+                if (fuel > 0) {
+                    if (!player.getAbilities().allowFlying) {
+                        player.getAbilities().allowFlying = true;
+                        player.sendAbilitiesUpdate();
+                    }
+
+                    if (player.getAbilities().flying) {
+                        player.fallDistance = 0.0f;
+                        if (world.getTime() % 2 == 0) {
+                            world.spawnParticles(net.minecraft.particle.ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY() + 0.3, player.getZ(), 2, 0.1, 0.05, 0.1, 0.02);
+                        }
+                        if (world.getTime() % 20 == 0) {
+                            world.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sound.SoundEvents.ITEM_ELYTRA_FLYING, net.minecraft.sound.SoundCategory.PLAYERS, 0.035f, 1.4f);
+                        }
+                        if (world.getTime() % 4 == 0) {
+                            fuel--;
+                            var nbt = net.enchantedwood.item.custom.ModularPowerArmorItem.getCustomData(chest);
+                            nbt.putInt("Hydrogen", fuel);
+                            net.enchantedwood.item.custom.ModularPowerArmorItem.setCustomData(chest, nbt);
+                        }
+                    } else if (!player.isOnGround()) {
+                        player.fallDistance = 0.0f;
+                    }
+                } else {
+                    if (player.getAbilities().allowFlying && !hasCapeEquipped(player) && !isWearingFullEnchantedNetherite(player)) {
+                        player.getAbilities().allowFlying = false;
+                        player.getAbilities().flying = false;
+                        player.sendAbilitiesUpdate();
+                        player.sendMessage(net.minecraft.text.Text.literal("§c⚠️ Hydrogen Thrusters Out of Fuel!"), true);
+                    }
+                }
+            } else {
+                if (player.getAbilities().allowFlying && !hasCapeEquipped(player) && !isWearingFullEnchantedNetherite(player)) {
+                    player.getAbilities().allowFlying = false;
+                    player.getAbilities().flying = false;
+                    player.sendAbilitiesUpdate();
                 }
             }
         } else {

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enchantedwood:modular_power"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enchantedwood:modular_power"
+      }
+    ]
+  }
+}

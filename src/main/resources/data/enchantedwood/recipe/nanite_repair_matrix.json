@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TRT",
+    "WCW",
+    "TRT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "R": "minecraft:redstone",
+    "W": "enchantedwood:silicon_wafer",
+    "C": "enchantedwood:basic_computer_chip"
+  },
+  "result": {
+    "id": "enchantedwood:nanite_repair_matrix",
+    "count": 1
+  }
+}

@@ -468,6 +468,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.BASALT_FLUX_CATALYST, 1, 160, new ItemStack(Items.BASALT, 4), new ItemStack(net.enchantedwood.item.ModItems.VOLCANIC_ASH, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1));
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_CAPE, 1, 100, new ItemStack(Items.WHITE_WOOL, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 1));
         registerRecipe(net.enchantedwood.item.ModItems.COPPER_BUCKET, 1, 80, new ItemStack(Items.COPPER_INGOT, 3));
+        registerRecipe(Items.MAGMA_BLOCK, 1, 100, new ItemStack(Items.MAGMA_CREAM, 4));
 
         // Heart Lockets
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_HEART, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 4), new ItemStack(net.enchantedwood.item.ModItems.INFUSED_HEARTWOOD, 4), new ItemStack(Items.APPLE, 1));

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "T T",
+    "TJT",
+    " C "
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "J": "enchantedwood:hydrogen_jetpack",
+    "C": "enchantedwood:basic_computer_chip"
+  },
+  "result": {
+    "id": "enchantedwood:hydrogen_thruster_module",
+    "count": 1
+  }
+}

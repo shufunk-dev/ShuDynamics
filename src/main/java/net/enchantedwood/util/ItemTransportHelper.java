@@ -101,12 +101,30 @@ public final class ItemTransportHelper {
         return toInsert;
     }
 
+    public static class ExtractResult {
+        public final ItemStack stack;
+        public final int nextSlotIndex;
+
+        public ExtractResult(ItemStack stack, int nextSlotIndex) {
+            this.stack = stack;
+            this.nextSlotIndex = nextSlotIndex;
+        }
+    }
+
     public static ItemStack extractItem(Inventory inv, @Nullable Direction side, int maxCount) {
-        if (inv == null || maxCount <= 0) return ItemStack.EMPTY;
+        return extractItemRoundRobin(inv, side, maxCount, 0).stack;
+    }
+
+    public static ExtractResult extractItemRoundRobin(Inventory inv, @Nullable Direction side, int maxCount, int startIndex) {
+        if (inv == null || maxCount <= 0) return new ExtractResult(ItemStack.EMPTY, startIndex);
 
         if (inv instanceof SidedInventory sidedInv && side != null) {
             int[] slots = sidedInv.getAvailableSlots(side);
-            for (int slot : slots) {
+            if (slots.length == 0) return new ExtractResult(ItemStack.EMPTY, 0);
+
+            for (int i = 0; i < slots.length; i++) {
+                int slotIdx = (startIndex + i) % slots.length;
+                int slot = slots[slotIdx];
                 ItemStack current = inv.getStack(slot);
                 if (!current.isEmpty() && sidedInv.canExtract(slot, current, side)) {
                     int count = Math.min(maxCount, current.getCount());
@@ -115,23 +133,28 @@ public final class ItemTransportHelper {
                         inv.setStack(slot, ItemStack.EMPTY);
                     }
                     inv.markDirty();
-                    return extracted;
+                    return new ExtractResult(extracted, (slotIdx + 1) % slots.length);
                 }
             }
+            return new ExtractResult(ItemStack.EMPTY, startIndex);
         } else {
-            for (int i = 0; i < inv.size(); i++) {
-                ItemStack current = inv.getStack(i);
+            int size = inv.size();
+            if (size == 0) return new ExtractResult(ItemStack.EMPTY, 0);
+
+            for (int i = 0; i < size; i++) {
+                int slot = (startIndex + i) % size;
+                ItemStack current = inv.getStack(slot);
                 if (!current.isEmpty()) {
                     int count = Math.min(maxCount, current.getCount());
                     ItemStack extracted = current.split(count);
                     if (current.isEmpty()) {
-                        inv.setStack(i, ItemStack.EMPTY);
+                        inv.setStack(slot, ItemStack.EMPTY);
                     }
                     inv.markDirty();
-                    return extracted;
+                    return new ExtractResult(extracted, (slot + 1) % size);
                 }
             }
+            return new ExtractResult(ItemStack.EMPTY, startIndex);
         }
-        return ItemStack.EMPTY;
     }
 }

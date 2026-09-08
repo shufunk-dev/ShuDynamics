@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TTT",
+    " C ",
+    "SBS"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "C": "enchantedwood:basic_computer_chip",
+    "S": "enchantedwood:steel_ingot",
+    "B": "enchantedwood:steel_block"
+  },
+  "result": {
+    "id": "enchantedwood:powered_anvil",
+    "count": 1
+  }
+}

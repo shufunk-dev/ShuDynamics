@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGT",
+    "WCW",
+    "ADA"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "minecraft:golden_carrot",
+    "W": "enchantedwood:silicon_wafer",
+    "C": "enchantedwood:basic_computer_chip",
+    "A": "minecraft:amethyst_shard",
+    "D": "minecraft:daylight_detector"
+  },
+  "result": {
+    "id": "enchantedwood:night_vision_module",
+    "count": 1
+  }
+}

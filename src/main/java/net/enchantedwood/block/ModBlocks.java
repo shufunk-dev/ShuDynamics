@@ -128,6 +128,17 @@ public class ModBlocks {
             Text.literal("§6Digital Laser Quarry"),
             Text.literal("§8Autonomous chunk-based precision ore extraction & excavation rig."));
 
+    public static final Block POWERED_ANVIL = registerBlockWithTooltip("powered_anvil",
+            new net.enchantedwood.block.custom.PoweredAnvilBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "powered_anvil")))
+                    .sounds(BlockSoundGroup.ANVIL)
+                    .hardness(5.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.PoweredAnvilBlock.LIT) ? 7 : 0)),
+            Text.literal("§6Electromagnetic Powered Anvil"),
+            Text.literal("§7Grid-powered anvil repairs (0 XP cost) & Modular Power Suit terminal."));
+
     public static final Block ENCHANTED_COAL_BLOCK = registerBlock("enchanted_coal_block",
             new net.enchantedwood.block.custom.EnchantedCoalBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_coal_block")))
@@ -785,6 +796,17 @@ public class ModBlocks {
                     .luminance(state -> state.get(net.enchantedwood.block.custom.CrusherMk2Block.LIT) ? 13 : 0)),
             Text.literal("§6Industrial Crusher MK2"),
             Text.literal("§83x-6x Ore Yield Multiplier + Secondary Mineral Byproducts."));
+
+    public static final Block DUST_SMELTER_MK2 = registerBlockWithTooltip("dust_smelter_mk2",
+            new net.enchantedwood.block.custom.DustSmelterMk2Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dust_smelter_mk2")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(6.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.DustSmelterMk2Block.LIT) ? 13 : 0)),
+            Text.literal("§6Industrial Dust Smelter MK2"),
+            Text.literal("§8Dual-Chamber Parallel Smelting + Gear Acceleration."));
 
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()

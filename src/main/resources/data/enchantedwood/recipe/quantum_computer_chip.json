@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EBE",
+    "NAN",
+    "EBE"
+  ],
+  "key": {
+    "E": "enchantedwood:enchanted_dust",
+    "B": "minecraft:blaze_powder",
+    "N": "enchantedwood:netherite_dust",
+    "A": "enchantedwood:advanced_computer_chip"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:quantum_computer_chip"
+  }
+}

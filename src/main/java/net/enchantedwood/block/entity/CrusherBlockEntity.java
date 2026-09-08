@@ -212,11 +212,18 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == Items.BLAZE_ROD) {
             return 4;
         }
+        if (item == Items.MAGMA_BLOCK) {
+            return 4;
+        }
 
         // Base multiplier from gear tier (NONE=2x, IRON=2x, COPPER=3x, BRONZE=3x, GOLD=4x, DIAMOND=5x, NETHERITE=6x)
         int multiplier = tier.getBaseOreYield();
         if (isEnchanted) {
             multiplier += 1;
+        }
+
+        if (item == Items.QUARTZ_BLOCK) {
+            return multiplier * 4;
         }
 
         // Compressed raw blocks yield 9x
@@ -260,10 +267,12 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.ENCHANTED_COAL || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 0.8f;
         if (item == Items.BLAZE_ROD) return 0.5f;
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 0.1f;
+        if (item == Items.QUARTZ || item == Items.QUARTZ_BLOCK) return 0.5f;
         return 0.7f;
     }
 
     private Item getOutputDust(Item item) {
+        if (item == Items.QUARTZ || item == Items.QUARTZ_BLOCK) return ModItems.QUARTZ_DUST;
         if (item == ModItems.ENCHANTED_COAL || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return ModItems.ENCHANTED_DUST;
         if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.RED_TERRACOTTA || item == Items.GRANITE) return ModItems.RAW_BAUXITE;
         if (item == ModItems.RAW_BAUXITE || item == ModBlocks.BAUXITE_ORE.asItem() || item == ModBlocks.DEEPSLATE_BAUXITE_ORE.asItem() || item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModItems.ALUMINUM_INGOT || item == ModBlocks.ALUMINUM_BLOCK.asItem()) return ModItems.BAUXITE_DUST;
@@ -283,6 +292,7 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD || item == Items.EMERALD_BLOCK) return ModItems.EMERALD_DUST;
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return ModItems.COAL_DUST;
         if (item == Items.BLAZE_ROD) return Items.BLAZE_POWDER;
+        if (item == Items.MAGMA_BLOCK) return Items.MAGMA_CREAM;
         return null;
     }
 

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "TIT",
+    "TCT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "I": "enchantedwood:steel_ingot",
+    "C": "enchantedwood:basic_computer_chip"
+  },
+  "result": {
+    "id": "enchantedwood:modular_power_helmet",
+    "count": 1
+  }
+}

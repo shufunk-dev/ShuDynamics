@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GRG",
+    "RWR",
+    "CRC"
+  ],
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "R": "minecraft:redstone",
+    "W": "enchantedwood:silicon_wafer",
+    "C": "minecraft:copper_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:basic_computer_chip"
+  }
+}

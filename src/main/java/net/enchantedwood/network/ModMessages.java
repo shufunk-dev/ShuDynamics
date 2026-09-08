@@ -15,6 +15,16 @@ public class ModMessages {
         PayloadTypeRegistry.playC2S().register(LaserQuarryActionPayload.ID, LaserQuarryActionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(OpenAtvInventoryPayload.ID, OpenAtvInventoryPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SetStorageTerminalSearchPayload.ID, SetStorageTerminalSearchPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(OpenModularSuitPanelPayload.ID, OpenModularSuitPanelPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(OpenModularSuitPanelPayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                context.player().openHandledScreen(new net.minecraft.screen.SimpleNamedScreenHandlerFactory(
+                        (syncId, inv, p) -> new net.enchantedwood.screen.ModularSuitScreenHandler(syncId, inv),
+                        net.minecraft.text.Text.literal("Modular Suit Access Panel")
+                ));
+            });
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(SetStorageTerminalSearchPayload.ID, (payload, context) -> {
             context.server().execute(() -> {

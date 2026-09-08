@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "enchantedwood:quartz_dust",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:silicon"
+  },
+  "experience": 0.5,
+  "cookingtime": 100
+}

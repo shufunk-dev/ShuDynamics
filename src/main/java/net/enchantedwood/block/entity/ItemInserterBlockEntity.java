@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
@@ -59,11 +60,24 @@ public class ItemInserterBlockEntity extends BlockEntity {
             BlockPos targetPos = this.pos.offset(facing);
             Inventory targetInv = ItemTransportHelper.getInventoryAt(this.world, targetPos);
             if (targetInv != null) {
-                for (int i = 0; i < targetInv.size(); i++) {
-                    ItemStack invStack = targetInv.getStack(i);
-                    if (invStack.isEmpty()) return true;
-                    if (ItemStack.areItemsAndComponentsEqual(invStack, stack) && invStack.getCount() < invStack.getMaxCount()) {
-                        return true;
+                if (targetInv instanceof SidedInventory sidedInv) {
+                    Direction targetSide = facing.getOpposite();
+                    int[] slots = sidedInv.getAvailableSlots(targetSide);
+                    for (int slot : slots) {
+                        if (!sidedInv.canInsert(slot, stack, targetSide)) continue;
+                        ItemStack invStack = targetInv.getStack(slot);
+                        if (invStack.isEmpty()) return true;
+                        if (ItemStack.areItemsAndComponentsEqual(invStack, stack) && invStack.getCount() < invStack.getMaxCount()) {
+                            return true;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < targetInv.size(); i++) {
+                        ItemStack invStack = targetInv.getStack(i);
+                        if (invStack.isEmpty()) return true;
+                        if (ItemStack.areItemsAndComponentsEqual(invStack, stack) && invStack.getCount() < invStack.getMaxCount()) {
+                            return true;
+                        }
                     }
                 }
             }

@@ -152,6 +152,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         if (item == ModBlocks.COBALT_BLOCK.asItem()) return new ItemStack(ModItems.COBALT_PLATE, 9);
         if (item == ModBlocks.ARDITE_BLOCK.asItem()) return new ItemStack(ModItems.ARDITE_PLATE, 9);
         if (item == ModBlocks.MANYULLYN_BLOCK.asItem()) return new ItemStack(ModItems.MANYULLYN_PLATE, 9);
+        if (item == ModItems.SILICON) return new ItemStack(ModItems.SILICON_WAFER, 2);
         if (item == Items.IRON_INGOT) return new ItemStack(ModItems.TUNGSTEN_PLATE); // Fallback stamping
         return ItemStack.EMPTY;
     }

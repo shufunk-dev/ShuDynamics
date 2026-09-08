@@ -177,7 +177,17 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             return false;
         }
 
-        if (recipe.byproduct != null) {
+        if (inventory.get(INPUT_SLOT).isOf(Items.MAGMA_BLOCK)) {
+            ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
+            if (!currentBy.isEmpty()) {
+                if (!currentBy.isOf(ModItems.SULFUR_DUST) && !currentBy.isOf(Items.BLAZE_POWDER)) {
+                    return false;
+                }
+                if (currentBy.getCount() >= currentBy.getMaxCount()) {
+                    return false;
+                }
+            }
+        } else if (recipe.byproduct != null) {
             ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
             if (!currentBy.isEmpty() && (!currentBy.isOf(recipe.byproduct) || currentBy.getCount() + recipe.byproductCount > currentBy.getMaxCount())) {
                 return false;
@@ -199,7 +209,23 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             currentPri.increment(primaryAmount);
         }
 
-        if (recipe.byproduct != null) {
+        if (input.isOf(Items.MAGMA_BLOCK)) {
+            ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
+            float roll = (this.world != null ? this.world.random.nextFloat() : (float) Math.random());
+            Item chosenByproduct = null;
+            if (roll < 0.40f) {
+                chosenByproduct = ModItems.SULFUR_DUST;
+            } else if (roll < 0.80f) {
+                chosenByproduct = Items.BLAZE_POWDER;
+            }
+            if (chosenByproduct != null) {
+                if (currentBy.isEmpty()) {
+                    inventory.set(BYPRODUCT_OUTPUT_SLOT, new ItemStack(chosenByproduct, 1));
+                } else if (currentBy.isOf(chosenByproduct) && currentBy.getCount() < currentBy.getMaxCount()) {
+                    currentBy.increment(1);
+                }
+            }
+        } else if (recipe.byproduct != null) {
             ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
             if (currentBy.isEmpty()) {
                 inventory.set(BYPRODUCT_OUTPUT_SLOT, new ItemStack(recipe.byproduct, recipe.byproductCount));
@@ -300,6 +326,19 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         // Blaze Rod
         if (item == Items.BLAZE_ROD) {
             return new Mk2CrushRecipe(Items.BLAZE_POWDER, 4, true, ModItems.SULFUR_DUST, 1);
+        }
+
+        // Magma Block
+        if (item == Items.MAGMA_BLOCK) {
+            return new Mk2CrushRecipe(Items.MAGMA_CREAM, 4, true, null, 0);
+        }
+
+        // Quartz
+        if (item == Items.QUARTZ) {
+            return new Mk2CrushRecipe(ModItems.QUARTZ_DUST, 3, false, Items.REDSTONE, 1);
+        }
+        if (item == Items.QUARTZ_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.QUARTZ_DUST, 12, true, Items.REDSTONE, 2);
         }
 
         return null;

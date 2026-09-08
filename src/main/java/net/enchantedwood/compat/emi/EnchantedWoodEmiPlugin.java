@@ -85,6 +85,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(CRUSHER, EmiStack.of(ModBlocks.CRUSHER));
         registry.addWorkstation(CRUSHER, EmiStack.of(ModBlocks.CRUSHER_MK2));
         registry.addWorkstation(DUST_SMELTER, EmiStack.of(ModBlocks.DUST_SMELTER));
+        registry.addWorkstation(DUST_SMELTER, EmiStack.of(ModBlocks.DUST_SMELTER_MK2));
         registry.addWorkstation(STEEL_BLAST_FURNACE, EmiStack.of(ModBlocks.STEEL_BLAST_FURNACE));
         registry.addWorkstation(SOIL_INFUSER, EmiStack.of(ModBlocks.SOIL_INFUSER));
         registry.addWorkstation(COKE_OVEN, EmiStack.of(ModBlocks.COKE_OVEN));
@@ -178,6 +179,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addPress(registry, idx++, EmiStack.of(ModBlocks.COBALT_BLOCK), EmiStack.of(ModItems.COBALT_PLATE, 9), "Bulk Stamping");
         addPress(registry, idx++, EmiStack.of(ModBlocks.ARDITE_BLOCK), EmiStack.of(ModItems.ARDITE_PLATE, 9), "Bulk Stamping");
         addPress(registry, idx++, EmiStack.of(ModBlocks.MANYULLYN_BLOCK), EmiStack.of(ModItems.MANYULLYN_PLATE, 9), "Bulk Stamping");
+        addPress(registry, idx++, EmiStack.of(ModItems.SILICON), EmiStack.of(ModItems.SILICON_WAFER, 2), "Semiconductor Wafer Slicing");
     }
 
     private static void addPress(EmiRegistry registry, int id, EmiStack input, EmiStack output, String note) {
@@ -260,9 +262,12 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addCrush(registry, idx++, List.of(EmiStack.of(Items.SUGAR_CANE)), EmiStack.of(Items.SUGAR, 2), "Sugar Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BONE)), EmiStack.of(Items.BONE_MEAL, 4), "Bone Crushing");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BLAZE_ROD)), EmiStack.of(Items.BLAZE_POWDER, 4), "Blaze Crushing (+Sulfur in MK2)");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.MAGMA_BLOCK)), EmiStack.of(Items.MAGMA_CREAM, 4), "Magma Crushing (40% Sulfur / 40% Blaze in MK2)");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.COBBLESTONE), EmiStack.of(Items.STONE)), EmiStack.of(Items.GRAVEL, 1), "Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.GRAVEL)), EmiStack.of(Items.SAND, 1), "Milling");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BASALT), EmiStack.of(Items.SMOOTH_BASALT)), EmiStack.of(ModItems.VOLCANIC_ASH, 2), "Ash Extraction");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.QUARTZ), EmiStack.of(Items.QUARTZ_BLOCK)), EmiStack.of(ModItems.QUARTZ_DUST, 2), "Quartz Pulverization (+Redstone in MK2)");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.ANCIENT_DEBRIS), EmiStack.of(Items.NETHERITE_SCRAP), EmiStack.of(Items.NETHERITE_INGOT)), EmiStack.of(ModItems.NETHERITE_DUST, 2), "Ancient Debris Pulverization (+Gold in MK2)");
     }
 
     private static void addCrush(EmiRegistry registry, int id, List<EmiStack> inputs, EmiStack output, String note) {
@@ -284,6 +289,8 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addSmelt(registry, idx++, EmiStack.of(ModItems.STEEL_DUST), EmiStack.of(ModItems.STEEL_INGOT));
         addSmelt(registry, idx++, EmiStack.of(ModItems.BRONZE_DUST), EmiStack.of(ModItems.BRONZE_INGOT));
         addSmelt(registry, idx++, EmiStack.of(ModItems.TUNGSTEN_DUST), EmiStack.of(ModItems.TUNGSTEN_INGOT));
+        addSmelt(registry, idx++, EmiStack.of(ModItems.NETHERITE_DUST), EmiStack.of(Items.NETHERITE_INGOT));
+        addSmelt(registry, idx++, EmiStack.of(ModItems.QUARTZ_DUST), EmiStack.of(ModItems.SILICON));
         addSmelt(registry, idx++, EmiStack.of(Items.SAND), EmiStack.of(Items.GLASS));
         addSmelt(registry, idx++, EmiStack.of(Items.RED_SAND), EmiStack.of(Items.GLASS));
         addSmelt(registry, idx++, EmiStack.of(Items.CLAY_BALL), EmiStack.of(Items.BRICK));

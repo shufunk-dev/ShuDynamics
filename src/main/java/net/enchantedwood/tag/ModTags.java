@@ -23,6 +23,7 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_ARDITE = of("repairs_ardite");
         public static final TagKey<Item> REPAIRS_MANYULLYN = of("repairs_manyullyn");
         public static final TagKey<Item> REPAIRS_TUNGSTEN = of("repairs_tungsten");
+        public static final TagKey<Item> REPAIRS_MODULAR_POWER = of("repairs_modular_power");
 
         private static TagKey<Item> of(String id) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, id));

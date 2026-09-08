@@ -285,6 +285,13 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(CrusherMk2BlockEntity::new, ModBlocks.CRUSHER_MK2).build()
             );
 
+    public static final BlockEntityType<DustSmelterMk2BlockEntity> DUST_SMELTER_MK2_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "dust_smelter_mk2"),
+                    FabricBlockEntityTypeBuilder.create(DustSmelterMk2BlockEntity::new, ModBlocks.DUST_SMELTER_MK2).build()
+            );
+
     public static final BlockEntityType<SoilInfuserBlockEntity> SOIL_INFUSER_BE =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
@@ -340,6 +347,13 @@ public class ModBlockEntities {
                     Registries.BLOCK_ENTITY_TYPE,
                     Identifier.of(EnchantedWoodMod.MOD_ID, "laser_quarry"),
                     FabricBlockEntityTypeBuilder.create(LaserQuarryBlockEntity::new, ModBlocks.LASER_QUARRY).build()
+            );
+
+    public static final BlockEntityType<PoweredAnvilBlockEntity> POWERED_ANVIL =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "powered_anvil"),
+                    FabricBlockEntityTypeBuilder.create(PoweredAnvilBlockEntity::new, ModBlocks.POWERED_ANVIL).build()
             );
 
     public static void registerBlockEntities() {

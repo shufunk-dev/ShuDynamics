@@ -24,6 +24,7 @@ public class ItemExtractorBlockEntity extends BlockEntity {
 
     private final DefaultedList<ItemStack> buffer = DefaultedList.ofSize(BUFFER_SIZE, ItemStack.EMPTY);
     private int timer = 0;
+    private int extractSlotIndex = 0;
     private int disconnectedSides = 0;
 
     public ItemExtractorBlockEntity(BlockPos pos, BlockState state) {
@@ -129,23 +130,28 @@ public class ItemExtractorBlockEntity extends BlockEntity {
         if (entity.timer >= EXTRACT_INTERVAL) {
             entity.timer = 0;
 
-            // Check if buffer has space for an extracted item
-            int freeSlot = -1;
-            for (int i = 0; i < BUFFER_SIZE; i++) {
-                if (entity.buffer.get(i).isEmpty()) {
-                    freeSlot = i;
-                    break;
-                }
-            }
+            BlockPos sourcePos = pos.offset(facing);
+            Inventory sourceInv = ItemTransportHelper.getInventoryAt(world, sourcePos);
+            if (sourceInv != null) {
+                // Pull up to 2 batches per cycle if buffer has room (allows pulling both primary and byproduct concurrently)
+                for (int pull = 0; pull < 2; pull++) {
+                    int freeSlot = -1;
+                    for (int i = 0; i < BUFFER_SIZE; i++) {
+                        if (entity.buffer.get(i).isEmpty()) {
+                            freeSlot = i;
+                            break;
+                        }
+                    }
+                    if (freeSlot == -1) break;
 
-            if (freeSlot != -1) {
-                BlockPos sourcePos = pos.offset(facing);
-                Inventory sourceInv = ItemTransportHelper.getInventoryAt(world, sourcePos);
-                if (sourceInv != null) {
-                    ItemStack extracted = ItemTransportHelper.extractItem(sourceInv, facing.getOpposite(), MAX_ITEMS_PER_PULL);
-                    if (!extracted.isEmpty()) {
-                        entity.buffer.set(freeSlot, extracted);
+                    ItemTransportHelper.ExtractResult result = ItemTransportHelper.extractItemRoundRobin(
+                            sourceInv, facing.getOpposite(), MAX_ITEMS_PER_PULL, entity.extractSlotIndex);
+                    entity.extractSlotIndex = result.nextSlotIndex;
+                    if (!result.stack.isEmpty()) {
+                        entity.buffer.set(freeSlot, result.stack);
                         dirty = true;
+                    } else {
+                        break;
                     }
                 }
             }
@@ -162,6 +168,7 @@ public class ItemExtractorBlockEntity extends BlockEntity {
         this.buffer.clear();
         Inventories.readData(view, this.buffer);
         this.timer = view.getInt("Timer", 0);
+        this.extractSlotIndex = view.getInt("ExtractSlotIndex", 0);
         this.disconnectedSides = view.getInt("DisconnectedSides", 0);
     }
 
@@ -170,6 +177,7 @@ public class ItemExtractorBlockEntity extends BlockEntity {
         super.writeData(view);
         Inventories.writeData(view, this.buffer);
         view.putInt("Timer", this.timer);
+        view.putInt("ExtractSlotIndex", this.extractSlotIndex);
         view.putInt("DisconnectedSides", this.disconnectedSides);
     }
 
