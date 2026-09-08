@@ -74,6 +74,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS, net.minecraft.client.render.BlockRenderLayer.TRANSLUCENT);
 
         CustomHeartHudRenderer.register();
+        net.enchantedwood.client.ModularSuitHudRenderer.register();
         net.enchantedwood.network.ModMessages.registerClientReceivers();
 
         // Register Keybinding 'C' to open Equipment GUI
