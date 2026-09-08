@@ -386,6 +386,8 @@
   "advancements.enchantedwood.anomalies.keystone_5.description": "Harness energized Blaze Plasma and forge the 5th Anomaly Keystone.",
   "advancements.enchantedwood.anomalies.keystone_6.title": "Keystone #6: Dimensional Singularity",
   "advancements.enchantedwood.anomalies.keystone_6.description": "Excavate the deepest bedrock with a Digital Laser Quarry or calculate the singularity equation in a Super Computer to stabilize the final keystone.",
+  "advancements.enchantedwood.convergence.root.title": "The Convergence",
+  "advancements.enchantedwood.convergence.root.description": "Breach the Gateway of Resonance and step through into the Convergence Dimension.",
   "item.enchantedwood.raw_tungsten": "Raw Tungsten",
   "item.enchantedwood.tungsten_ingot": "Tungsten Ingot",
   "item.enchantedwood.tungsten_nugget": "Tungsten Nugget",

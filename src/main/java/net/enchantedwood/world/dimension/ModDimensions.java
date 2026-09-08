@@ -16,6 +16,13 @@ public class ModDimensions {
     public static final RegistryKey<DimensionType> MINING_DIMENSION_TYPE_KEY =
             RegistryKey.of(RegistryKeys.DIMENSION_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "mining_dimension"));
 
+    public static final RegistryKey<DimensionOptions> CONVERGENCE_OPTIONS_KEY =
+            RegistryKey.of(RegistryKeys.DIMENSION, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence"));
+    public static final RegistryKey<World> CONVERGENCE_WORLD_KEY =
+            RegistryKey.of(RegistryKeys.WORLD, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence"));
+    public static final RegistryKey<DimensionType> CONVERGENCE_TYPE_KEY =
+            RegistryKey.of(RegistryKeys.DIMENSION_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence"));
+
     public static void registerDimensions() {
         EnchantedWoodMod.LOGGER.info("Registering Custom Dimensions for " + EnchantedWoodMod.MOD_ID);
     }

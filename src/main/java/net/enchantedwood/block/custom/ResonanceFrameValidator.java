@@ -109,7 +109,7 @@ public class ResonanceFrameValidator {
 
                 if (serverWorld.getServer() != null) {
                     serverWorld.getServer().getPlayerManager().broadcast(
-                            Text.literal("§5✦ [Spatial Sensors] §dThe 6 Keystones hum in harmonic resonance... The Gateway stirs, waiting for the celestial rift to align."),
+                            Text.literal("§5✦ [Spatial Sensors] §dThe 6 Keystones achieve critical harmonic resonance! The dimensional barrier ruptures—the Gateway to The Convergence is OPEN!"),
                             false
                     );
 
