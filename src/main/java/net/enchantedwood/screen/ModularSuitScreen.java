@@ -1,5 +1,6 @@
 package net.enchantedwood.screen;
 
+import net.enchantedwood.EnchantedWoodMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gl.RenderPipelines;
@@ -12,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
-    private static final Identifier GENERIC_GUI = Identifier.ofVanilla("textures/gui/container/generic_54.png");
+    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/modular_suit_gui.png");
 
     private ButtonWidget headTab;
     private ButtonWidget chestTab;
@@ -95,9 +96,8 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
             context.fill(x + 87, y - 17, x + 169, y, 0xFF3C3C3C);
         }
 
-        // Base container background
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GENERIC_GUI, x, y, 0.0f, 0.0f, this.backgroundWidth, 71, 256, 256);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GENERIC_GUI, x, y + 71, 0.0f, 125.0f, this.backgroundWidth, 95, 256, 256);
+        // Clean container background
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
 
         // Highlight active tab
         int active = this.handler.getActiveTab();
@@ -105,7 +105,7 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
         int tabX = x + 5 + active * 42;
         context.fill(tabX - 1, y + 13, tabX + tabW + 1, y + 29, 0xFF00E5FF);
 
-        // Draw Energy Meter
+        // Draw Energy Meter inside recess
         int energy = this.handler.getCurrentPieceEnergy();
         int maxEnergy = this.handler.getCurrentPieceMaxEnergy();
         int meterX = x + 44;
@@ -113,31 +113,16 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
         int meterW = 104;
         int meterH = 9;
 
-        context.fill(meterX - 1, meterY - 1, meterX + meterW + 1, meterY + meterH + 1, 0xFF10141A);
-        context.fill(meterX, meterY, meterX + meterW, meterY + meterH, 0xFF1F2937);
-
         if (maxEnergy > 0 && energy > 0) {
             int fillW = Math.min(meterW, (int) ((long) energy * meterW / maxEnergy));
             context.fill(meterX, meterY, meterX + fillW, meterY + meterH, 0xFF00E5FF);
         }
-
-        // Draw Slot Boxes
-        drawSlot(context, x + 43, y + 44);  // Battery
-        drawSlot(context, x + 71, y + 44);  // Logic Core
-        drawSlot(context, x + 103, y + 44); // Module A
-        drawSlot(context, x + 131, y + 44); // Module B
 
         // Show warnings if no suit piece is equipped in this slot
         if (!this.handler.hasPieceEquipped(active)) {
             context.fill(x + 20, y + 64, x + 156, y + 78, 0xCC200000);
             context.drawText(this.textRenderer, Text.literal("⚠ No Modular Piece Equipped"), x + 23, y + 67, 0xFF5555, false);
         }
-    }
-
-    private void drawSlot(DrawContext context, int sx, int sy) {
-        context.fill(sx, sy, sx + 18, sy + 18, 0xFF373737);
-        context.fill(sx + 1, sy + 1, sx + 17, sy + 17, 0xFF8B8B8B);
-        context.fill(sx + 1, sy + 1, sx + 16, sy + 16, 0xFF1E1E1E);
     }
 
     @Override
