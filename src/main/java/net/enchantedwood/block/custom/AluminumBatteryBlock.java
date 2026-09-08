@@ -79,25 +79,34 @@ public class AluminumBatteryBlock extends BlockWithEntity {
                     net.enchantedwood.energy.EnergyStorage blockStorage = provider.getEnergyStorage(null);
                     net.enchantedwood.energy.EnergyStorage itemStorage = batteryItem.getEnergyStorage(held);
                     if (blockStorage != null && itemStorage != null) {
-                        int needed = itemStorage.getMaxEnergy() - itemStorage.getEnergy();
-                        if (needed > 0 && blockStorage.getEnergy() > 0) {
-                            int toTransfer = Math.min(needed, blockStorage.getEnergy());
-                            int extracted = blockStorage.extractEnergy(toTransfer, false);
-                            itemStorage.insertEnergy(extracted, false);
-                            world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.5f);
-                            player.sendMessage(Text.literal("§b⚡ Battery Charged: §f" + itemStorage.getEnergy() + " / " + itemStorage.getMaxEnergy() + " FE"), true);
-                            return ActionResult.SUCCESS;
-                        } else if (needed == 0) {
-                            player.sendMessage(Text.literal("§a✔ Battery is already fully charged!"), true);
-                            return ActionResult.SUCCESS;
+                        if (player.isSneaking()) {
+                            // Sneak + Right Click: Deposit battery power into the energy cell block
+                            int spaceInBlock = blockStorage.getMaxEnergy() - blockStorage.getEnergy();
+                            if (spaceInBlock > 0 && itemStorage.getEnergy() > 0) {
+                                int extracted = itemStorage.extractEnergy(spaceInBlock, false);
+                                blockStorage.insertEnergy(extracted, false);
+                                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.2f);
+                                player.sendMessage(Text.literal("§6⚡ Energy Cell Charged: §f" + blockStorage.getEnergy() + " / " + blockStorage.getMaxEnergy() + " FE"), true);
+                                return ActionResult.SUCCESS;
+                            } else if (spaceInBlock == 0) {
+                                player.sendMessage(Text.literal("§a✔ Energy Cell is already fully charged!"), true);
+                                return ActionResult.SUCCESS;
+                            }
                         } else {
-                            player.sendMessage(Text.literal("§e⚠ Battery Block is depleted."), true);
-                            return ActionResult.SUCCESS;
+                            // Normal Right Click: Charge held battery from energy cell block
+                            int needed = itemStorage.getMaxEnergy() - itemStorage.getEnergy();
+                            if (needed > 0 && blockStorage.getEnergy() > 0) {
+                                int toTransfer = Math.min(needed, blockStorage.getEnergy());
+                                int extracted = blockStorage.extractEnergy(toTransfer, false);
+                                itemStorage.insertEnergy(extracted, false);
+                                world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.5f);
+                                player.sendMessage(Text.literal("§b⚡ Battery Charged: §f" + itemStorage.getEnergy() + " / " + itemStorage.getMaxEnergy() + " FE"), true);
+                                return ActionResult.SUCCESS;
+                            }
                         }
                     }
                 }
             }
-            return ActionResult.SUCCESS;
         }
 
         if (!world.isClient()) {

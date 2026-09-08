@@ -24,6 +24,29 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
         super(ModBlockEntities.TUNGSTEN_CABLE_BE, pos, state);
     }
 
+    public static boolean isGenerator(BlockEntity be) {
+        return be instanceof GeothermalGeneratorBlockEntity ||
+                be instanceof EnchantedLavaGeneratorBlockEntity ||
+                be instanceof SteelGeneratorBlockEntity ||
+                be instanceof AluminumGeneratorBlockEntity ||
+                be instanceof CopperGeneratorBlockEntity;
+    }
+
+    public static boolean isBattery(BlockEntity be) {
+        return be instanceof TungstenBatteryBlockEntity ||
+                be instanceof SteelBatteryBlockEntity ||
+                be instanceof AluminumBatteryBlockEntity ||
+                be instanceof CopperBatteryBlockEntity;
+    }
+
+    public static boolean isCable(BlockEntity be) {
+        return be instanceof TungstenCableBlockEntity ||
+                be instanceof BasaltCableBlockEntity ||
+                be instanceof SteelCableBlockEntity ||
+                be instanceof AluminumCableBlockEntity ||
+                be instanceof CopperCableBlockEntity;
+    }
+
     @Override
     public @Nullable EnergyStorage getEnergyStorage(@Nullable Direction side) {
         return this.energyStorage;
@@ -37,7 +60,7 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
         List<EnergyStorage> batterySources = new ArrayList<>();
         List<EnergyStorage> machineConsumers = new ArrayList<>();
         List<EnergyStorage> batteryConsumers = new ArrayList<>();
-        List<TungstenCableBlockEntity> otherCables = new ArrayList<>();
+        List<EnergyStorage> cableNeighbors = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
             BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
@@ -45,26 +68,19 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
                 EnergyStorage storage = provider.getEnergyStorage(dir.getOpposite());
                 if (storage == null) continue;
 
-                if (neighbor instanceof CopperGeneratorBlockEntity ||
-                        neighbor instanceof AluminumGeneratorBlockEntity ||
-                        neighbor instanceof SteelGeneratorBlockEntity ||
-                        neighbor instanceof GeothermalGeneratorBlockEntity ||
-                        neighbor instanceof EnchantedLavaGeneratorBlockEntity) {
+                if (isGenerator(neighbor)) {
                     if (storage.canExtract() && storage.getEnergy() > 0) {
                         generatorSources.add(storage);
                     }
-                } else if (neighbor instanceof TungstenBatteryBlockEntity ||
-                        neighbor instanceof SteelBatteryBlockEntity ||
-                        neighbor instanceof AluminumBatteryBlockEntity ||
-                        neighbor instanceof CopperBatteryBlockEntity) {
+                } else if (isBattery(neighbor)) {
                     if (storage.canExtract() && storage.getEnergy() > 0) {
                         batterySources.add(storage);
                     }
                     if (storage.canInsert() && storage.getEnergy() < storage.getMaxEnergy()) {
                         batteryConsumers.add(storage);
                     }
-                } else if (neighbor instanceof TungstenCableBlockEntity otherCable) {
-                    otherCables.add(otherCable);
+                } else if (isCable(neighbor)) {
+                    cableNeighbors.add(storage);
                 } else {
                     // Machine consumers (Magma Crucible, Crusher, Lava Pump, Alloy Foundry, etc.)
                     if (storage.canInsert() && storage.getEnergy() < storage.getMaxEnergy()) {
@@ -88,8 +104,9 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
             }
         }
 
-        // 2. If machines need power (or cable has space) and no generator provided enough, pull from Batteries
-        if (entity.energyStorage.getEnergy() < CABLE_TRANSFER_RATE && !batterySources.isEmpty()) {
+        // 2. If machines need power and generators didn't provide enough, pull from Batteries
+        java.util.Set<EnergyStorage> drainedBatteries = new java.util.HashSet<>();
+        if (!machineConsumers.isEmpty() && entity.energyStorage.getEnergy() < CABLE_TRANSFER_RATE && !batterySources.isEmpty()) {
             int needed = CABLE_TRANSFER_RATE - entity.energyStorage.getEnergy();
             for (EnergyStorage bat : batterySources) {
                 if (needed <= 0) break;
@@ -97,12 +114,13 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
                 if (extracted > 0) {
                     entity.energyStorage.insertEnergy(extracted, false);
                     needed -= extracted;
+                    drainedBatteries.add(bat);
                     dirty = true;
                 }
             }
         }
 
-        // 3. Distribute energy: Priority 1 to Machines, Priority 2 to Batteries (with generator surplus), Priority 3 to other cables
+        // 3. Distribute energy: Priority 1 to Machines, Priority 2 to Batteries (surplus), Priority 3 to other cables
         if (entity.energyStorage.getEnergy() > 0) {
             int available = entity.energyStorage.getEnergy();
 
@@ -121,31 +139,39 @@ public class TungstenCableBlockEntity extends BlockEntity implements EnergyProvi
                 }
             }
 
-            // Priority 2: Charge Batteries with surplus (only when supplied by generators)
-            if (available > 0 && !generatorSources.isEmpty() && !batteryConsumers.isEmpty()) {
-                int share = Math.max(1, available / batteryConsumers.size());
-                for (EnergyStorage target : batteryConsumers) {
-                    if (available <= 0) break;
-                    int toSend = Math.min(available, share);
-                    int inserted = target.insertEnergy(toSend, false);
-                    if (inserted > 0) {
-                        entity.energyStorage.extractEnergy(inserted, false);
-                        available -= inserted;
-                        dirty = true;
+            // Priority 2: Charge Batteries with surplus energy (excluding any battery drained this tick)
+            if (available > 0 && !batteryConsumers.isEmpty()) {
+                List<EnergyStorage> validTargets = new ArrayList<>();
+                for (EnergyStorage b : batteryConsumers) {
+                    if (!drainedBatteries.contains(b)) {
+                        validTargets.add(b);
+                    }
+                }
+                if (!validTargets.isEmpty()) {
+                    int share = Math.max(1, available / validTargets.size());
+                    for (EnergyStorage target : validTargets) {
+                        if (available <= 0) break;
+                        int toSend = Math.min(available, share);
+                        int inserted = target.insertEnergy(toSend, false);
+                        if (inserted > 0) {
+                            entity.energyStorage.extractEnergy(inserted, false);
+                            available -= inserted;
+                            dirty = true;
+                        }
                     }
                 }
             }
 
             // Priority 3: Forward / equalize across Cable Network
-            if (available > 0 && !otherCables.isEmpty()) {
-                for (TungstenCableBlockEntity otherCable : otherCables) {
+            if (available > 0 && !cableNeighbors.isEmpty()) {
+                for (EnergyStorage otherCable : cableNeighbors) {
                     if (available <= 0) break;
-                    int otherEnergy = otherCable.energyStorage.getEnergy();
+                    int otherEnergy = otherCable.getEnergy();
                     if (entity.energyStorage.getEnergy() > otherEnergy) {
                         int diff = entity.energyStorage.getEnergy() - otherEnergy;
                         int toSend = Math.min(available, diff / 2);
                         if (toSend > 0) {
-                            int inserted = otherCable.energyStorage.insertEnergy(toSend, false);
+                            int inserted = otherCable.insertEnergy(toSend, false);
                             if (inserted > 0) {
                                 entity.energyStorage.extractEnergy(inserted, false);
                                 available -= inserted;

@@ -43,15 +43,26 @@ public class AluminumCableBlockEntity extends BlockEntity implements EnergyProvi
             BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
             if (neighbor instanceof EnergyProvider provider && neighbor != entity) {
                 // Ignore generators
-                if (neighbor instanceof CopperGeneratorBlockEntity || neighbor instanceof AluminumGeneratorBlockEntity) {
+                if (neighbor instanceof CopperGeneratorBlockEntity ||
+                        neighbor instanceof AluminumGeneratorBlockEntity ||
+                        neighbor instanceof SteelGeneratorBlockEntity ||
+                        neighbor instanceof GeothermalGeneratorBlockEntity ||
+                        neighbor instanceof EnchantedLavaGeneratorBlockEntity) {
                     continue;
                 }
 
                 EnergyStorage storage = provider.getEnergyStorage(dir.getOpposite());
                 if (storage != null && storage.canInsert() && storage.getEnergy() < storage.getMaxEnergy()) {
-                    if (neighbor instanceof AluminumCableBlockEntity || neighbor instanceof CopperCableBlockEntity) {
+                    if (neighbor instanceof TungstenCableBlockEntity ||
+                            neighbor instanceof BasaltCableBlockEntity ||
+                            neighbor instanceof SteelCableBlockEntity ||
+                            neighbor instanceof AluminumCableBlockEntity ||
+                            neighbor instanceof CopperCableBlockEntity) {
                         cableNeighbors.add(storage);
-                    } else if (neighbor instanceof CopperBatteryBlockEntity || neighbor instanceof AluminumBatteryBlockEntity) {
+                    } else if (neighbor instanceof TungstenBatteryBlockEntity ||
+                            neighbor instanceof SteelBatteryBlockEntity ||
+                            neighbor instanceof AluminumBatteryBlockEntity ||
+                            neighbor instanceof CopperBatteryBlockEntity) {
                         batteryNeighbors.add(storage);
                     } else {
                         machineConsumers.add(storage);
