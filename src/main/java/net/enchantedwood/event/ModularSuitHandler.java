@@ -102,10 +102,25 @@ public class ModularSuitHandler {
             ItemStack piece = player.getEquippedStack(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem && piece.isDamaged()) {
                 if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:nanite_repair_matrix")) {
+                    String chipId = ModularPowerArmorItem.getInstalledChipId(piece);
+                    int repairAmount = 2; // Base speed: 2 durability points every 2 seconds
+                    if ("enchantedwood:basic_computer_chip".equals(chipId)) {
+                        repairAmount = 3;
+                    } else if ("enchantedwood:advanced_computer_chip".equals(chipId)) {
+                        repairAmount = 6;
+                    } else if ("enchantedwood:quantum_computer_chip".equals(chipId)) {
+                        repairAmount = 15;
+                    }
+
+                    int energyNeeded = repairAmount * 50;
                     int energy = ModularPowerArmorItem.getStoredEnergy(piece);
-                    if (energy >= 100) {
-                        ModularPowerArmorItem.extractEnergy(piece, 100);
-                        piece.setDamage(Math.max(0, piece.getDamage() - 1));
+                    if (energy >= energyNeeded) {
+                        ModularPowerArmorItem.extractEnergy(piece, energyNeeded);
+                        int currentDmg = piece.getDamage();
+                        piece.setDamage(Math.max(0, currentDmg - repairAmount));
+                        player.equipStack(slot, piece);
+                        player.playerScreenHandler.sendContentUpdates();
+
                         world.spawnParticles(
                                 ParticleTypes.ELECTRIC_SPARK,
                                 player.getX(), player.getY() + 1.0, player.getZ(),

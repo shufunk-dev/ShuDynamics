@@ -49,8 +49,8 @@ public class ModularSuitHudRenderer {
 
         int hudX = 6;
         int hudY = 6;
-        int hudW = 124;
-        int hudH = 58;
+        int hudW = 186;
+        int hudH = 60;
 
         // Calculate total suit power
         int totalEnergy = ModularPowerArmorItem.getStoredEnergy(head)
@@ -64,6 +64,10 @@ public class ModularSuitHudRenderer {
                 + ModularPowerArmorItem.getMaxEnergy(boots);
 
         int totalPct = totalMaxEnergy > 0 ? (int) Math.round((double) totalEnergy * 100.0 / totalMaxEnergy) : 0;
+
+        int totalArmorMax = head.getMaxDamage() + chest.getMaxDamage() + legs.getMaxDamage() + boots.getMaxDamage();
+        int totalArmorDmg = head.getDamage() + chest.getDamage() + legs.getDamage() + boots.getDamage();
+        int armorPct = totalArmorMax > 0 ? Math.max(0, Math.min(100, (int) Math.round((double) (totalArmorMax - totalArmorDmg) * 100.0 / totalArmorMax))) : 100;
 
         // Draw translucent futuristic HUD background frame
         context.fill(hudX, hudY, hudX + hudW, hudY + hudH, 0xAA0A0F16);
@@ -81,9 +85,9 @@ public class ModularSuitHudRenderer {
 
         // Header Title
         context.drawText(client.textRenderer, Text.literal("⚡ SUIT STATUS"), hudX + 5, hudY + 4, 0x00E5FF, false);
-        String totalPctStr = totalMaxEnergy > 0 ? totalPct + "%" : "OFFLINE";
-        int totalColor = totalMaxEnergy > 0 ? (totalPct > 50 ? 0x00E5FF : (totalPct > 20 ? 0xFFD700 : 0xFF4444)) : 0x777777;
-        context.drawText(client.textRenderer, Text.literal(totalPctStr), hudX + hudW - 5 - client.textRenderer.getWidth(totalPctStr), hudY + 4, totalColor, false);
+        String headerRight = String.format("⚡ %d%%  🛡 %d%%", totalPct, armorPct);
+        int rightColor = totalPct > 50 ? 0x00E5FF : (totalPct > 20 ? 0xFFFFD700 : 0xFFFF4444);
+        context.drawText(client.textRenderer, Text.literal(headerRight), hudX + hudW - 5 - client.textRenderer.getWidth(headerRight), hudY + 4, rightColor, false);
 
         // Subtle divider
         context.fill(hudX + 4, hudY + 13, hudX + hudW - 4, hudY + 14, 0x3300E5FF);
@@ -99,16 +103,19 @@ public class ModularSuitHudRenderer {
         // Label
         context.drawText(client.textRenderer, Text.literal(label), rx, ry, 0xAAAAAA, false);
 
+        // --- 1. Battery Power Section ---
         int max = ModularPowerArmorItem.getMaxEnergy(piece);
         int energy = ModularPowerArmorItem.getStoredEnergy(piece);
 
+        context.drawText(client.textRenderer, Text.literal("⚡"), rx + 28, ry, 0x00E5FF, false);
+
         if (max <= 0) {
-            context.drawText(client.textRenderer, Text.literal("§8NO BAT"), rx + 32, ry, 0x666666, false);
+            context.drawText(client.textRenderer, Text.literal("NO BAT"), rx + 36, ry, 0x666666, false);
         } else {
             float pct = Math.max(0.0f, Math.min(1.0f, (float) energy / max));
-            int bx = rx + 32;
+            int bx = rx + 36;
             int by = ry + 2;
-            int bw = 40;
+            int bw = 24;
             int bh = 4;
 
             // Bar recess
@@ -124,10 +131,36 @@ public class ModularSuitHudRenderer {
             // Percentage Text
             int pInt = Math.round(pct * 100.0f);
             String pStr = pInt + "%";
-            context.drawText(client.textRenderer, Text.literal(pStr), rx + 75, ry, barColor, false);
+            context.drawText(client.textRenderer, Text.literal(pStr), rx + 62, ry, barColor, false);
         }
 
-        // Active Status Tag
+        // --- 2. Armor Durability Section ---
+        context.drawText(client.textRenderer, Text.literal("🛡"), rx + 86, ry, 0x55FF55, false);
+
+        int maxDmg = piece.getMaxDamage();
+        int dmg = piece.getDamage();
+        float durPct = maxDmg > 0 ? Math.max(0.0f, Math.min(1.0f, (float) (maxDmg - dmg) / maxDmg)) : 1.0f;
+
+        int dbx = rx + 95;
+        int dby = ry + 2;
+        int dbw = 24;
+        int dbh = 4;
+
+        // Durability Bar recess
+        context.fill(dbx - 1, dby - 1, dbx + dbw + 1, dby + dbh + 1, 0xFF1B232E);
+        context.fill(dbx, dby, dbx + dbw, dby + dbh, 0xFF111822);
+
+        int dFillW = Math.round(durPct * dbw);
+        int dColor = durPct > 0.6f ? 0xFF55FF55 : (durPct > 0.25f ? 0xFFFFD700 : 0xFFFF3333);
+        if (dFillW > 0) {
+            context.fill(dbx, dby, dbx + dFillW, dby + dbh, dColor);
+        }
+
+        int dInt = Math.round(durPct * 100.0f);
+        String dStr = dInt + "%";
+        context.drawText(client.textRenderer, Text.literal(dStr), rx + 121, ry, dColor, false);
+
+        // --- 3. Active Status Tag ---
         String tag = null;
         int tagColor = 0xFFFFFF;
 
@@ -151,11 +184,14 @@ public class ModularSuitHudRenderer {
             if (System.currentTimeMillis() - lastDmg >= 10_000L) {
                 tag = "REP";
                 tagColor = 0x55FF55;
+            } else {
+                tag = "WAIT";
+                tagColor = 0xAAAAAA;
             }
         }
 
         if (tag != null) {
-            context.drawText(client.textRenderer, Text.literal(tag), rx + 98, ry, tagColor, false);
+            context.drawText(client.textRenderer, Text.literal(tag), rx + 148, ry, tagColor, false);
         }
     }
 }
