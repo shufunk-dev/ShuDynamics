@@ -83,6 +83,34 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
         this.suitBayTab.visible = hasAnvil;
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
+
+        // Empty Slot Tooltip Guides
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 4) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§e🔋 Battery / Power Cell Slot"),
+                        Text.literal("§7Accepts: §fCopper, Aluminum, Steel, or Tungsten Battery"),
+                        Text.literal("§8Provides internal energy capacity to this armor piece.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§b💻 Logic Core / CPU Slot"),
+                        Text.literal("§7Accepts: §fBasic Computer Chip, Advanced Processor,"),
+                        Text.literal("§7or §fQuantum Power-Core Chip"),
+                        Text.literal("§8Acts as the onboard controller for piece subroutines.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§a⚙️ Module Slot A"),
+                        Text.literal("§7Accepts: §fFlight Modules (Thrusters / Repulsors),"),
+                        Text.literal("§fAdaptive Night Vision HUD, or Nanite Auto-Repair"),
+                        Text.literal("§8Primary hardware upgrade socket.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§a⚙️ Module Slot B"),
+                        Text.literal("§7Accepts: §fSecondary Module or Nanite Auto-Repair Matrix"),
+                        Text.literal("§8Allows running multiple suit upgrades simultaneously.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 
     @Override

@@ -60,6 +60,27 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
     }
 
     @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
+
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 2) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§e🛠️ Damaged Equipment Slot"),
+                        Text.literal("§7Place damaged tools, weapons, or armor pieces here."),
+                        Text.literal("§8Repairs using electrical power without XP costs.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, java.util.List.of(
+                        Text.literal("§e🔩 Repair Material Slot"),
+                        Text.literal("§7Place §fTitanium Ingots§7 (or matching repair materials) here."),
+                        Text.literal("§8Consumes 1 ingot per repair cycle.")
+                ), mouseX, mouseY);
+            }
+        }
+    }
+
+    @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
