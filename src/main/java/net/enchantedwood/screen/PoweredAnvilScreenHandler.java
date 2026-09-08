@@ -77,7 +77,7 @@ public class PoweredAnvilScreenHandler extends ScreenHandler {
         } else if (id == 1) {
             // Switch to Suit Bay Tab
             player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
-                    (syncId, inv, p) -> new ModularSuitScreenHandler(syncId, inv),
+                    (syncId, inv, p) -> new ModularSuitScreenHandler(syncId, inv, this.blockPos),
                     Text.literal("Modular Suit Access Panel")
             ));
             return true;

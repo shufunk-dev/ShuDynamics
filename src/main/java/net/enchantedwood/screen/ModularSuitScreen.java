@@ -18,6 +18,8 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
     private ButtonWidget chestTab;
     private ButtonWidget legsTab;
     private ButtonWidget bootsTab;
+    private ButtonWidget repairTab;
+    private ButtonWidget suitBayTab;
 
     public ModularSuitScreen(ModularSuitScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -48,10 +50,23 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
         this.bootsTab = ButtonWidget.builder(Text.literal("🥾 Boots"), button -> selectTab(3))
                 .dimensions(x + 131, tabY, tabW, tabH).build();
 
+        // Top Navigation Tabs (Repair & Suit Bay when linked to Powered Anvil)
+        this.repairTab = ButtonWidget.builder(Text.literal("⚡ Repair"), button -> {
+            if (this.client != null && this.client.interactionManager != null) {
+                this.client.interactionManager.clickButton(this.handler.syncId, 4);
+            }
+        }).dimensions(x + 5, y - 16, 80, 16).build();
+
+        this.suitBayTab = ButtonWidget.builder(Text.literal("🛠️ Suit Bay"), button -> {})
+                .dimensions(x + 88, y - 16, 80, 16).build();
+        this.suitBayTab.active = false;
+
         this.addDrawableChild(this.headTab);
         this.addDrawableChild(this.chestTab);
         this.addDrawableChild(this.legsTab);
         this.addDrawableChild(this.bootsTab);
+        this.addDrawableChild(this.repairTab);
+        this.addDrawableChild(this.suitBayTab);
     }
 
     private void selectTab(int tabIndex) {
@@ -61,9 +76,24 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
     }
 
     @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        boolean hasAnvil = this.handler.hasAnvilLinked();
+        this.repairTab.visible = hasAnvil;
+        this.suitBayTab.visible = hasAnvil;
+        super.render(context, mouseX, mouseY, delta);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    }
+
+    @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
+
+        // Draw top tab backdrops when linked to an Anvil
+        if (this.handler.hasAnvilLinked()) {
+            context.fill(x + 4, y - 17, x + 86, y, 0xFF222222);
+            context.fill(x + 87, y - 17, x + 169, y, 0xFF3C3C3C);
+        }
 
         // Base container background
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GENERIC_GUI, x, y, 0.0f, 0.0f, this.backgroundWidth, 71, 256, 256);

@@ -16,7 +16,9 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
     private static final Identifier GENERIC_GUI = Identifier.ofVanilla("textures/gui/container/generic_54.png");
 
     private ButtonWidget repairButton;
+    private ButtonWidget repairTab;
     private ButtonWidget suitBayTab;
+    private ButtonWidget suitBayHeaderTab;
 
     public PoweredAnvilScreen(PoweredAnvilScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -34,8 +36,19 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
 
-        // Switch to Suit Bay Tab Button
+        // Top Navigation Tabs
+        this.repairTab = ButtonWidget.builder(Text.literal("⚡ Repair"), button -> {})
+                .dimensions(x + 5, y - 16, 80, 16).build();
+        this.repairTab.active = false;
+
         this.suitBayTab = ButtonWidget.builder(Text.literal("🛠️ Suit Bay"), button -> {
+            if (this.client != null && this.client.interactionManager != null) {
+                this.client.interactionManager.clickButton(this.handler.syncId, 1);
+            }
+        }).dimensions(x + 88, y - 16, 80, 16).build();
+
+        // In-window Suit Bay Tab Button
+        this.suitBayHeaderTab = ButtonWidget.builder(Text.literal("🛠️ Suit Bay"), button -> {
             if (this.client != null && this.client.interactionManager != null) {
                 this.client.interactionManager.clickButton(this.handler.syncId, 1);
             }
@@ -48,7 +61,9 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
             }
         }).dimensions(x + 104, y + 44, 58, 18).build();
 
+        this.addDrawableChild(this.repairTab);
         this.addDrawableChild(this.suitBayTab);
+        this.addDrawableChild(this.suitBayHeaderTab);
         this.addDrawableChild(this.repairButton);
     }
 
@@ -56,6 +71,10 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
+
+        // Top tab backdrops
+        context.fill(x + 4, y - 17, x + 86, y, 0xFF3C3C3C);
+        context.fill(x + 87, y - 17, x + 169, y, 0xFF222222);
 
         // Base container background
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GENERIC_GUI, x, y, 0.0f, 0.0f, this.backgroundWidth, 71, 256, 256);

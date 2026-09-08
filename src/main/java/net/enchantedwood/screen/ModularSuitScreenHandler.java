@@ -16,25 +16,48 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.enchantedwood.block.entity.PoweredAnvilBlockEntity;
 
 public class ModularSuitScreenHandler extends ScreenHandler {
     private final PlayerInventory playerInventory;
     private final Inventory suitInventory;
     private final PropertyDelegate propertyDelegate;
+    private final BlockPos anvilPos;
 
     private int activeTab = 0; // 0=Head, 1=Chest, 2=Legs, 3=Boots
     private boolean isUpdating = false;
 
     public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(9));
+        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(10), BlockPos.ORIGIN);
+    }
+
+    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos anvilPos) {
+        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(10), anvilPos);
     }
 
     public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, Inventory suitInventory, PropertyDelegate propertyDelegate) {
+        this(syncId, playerInventory, suitInventory, propertyDelegate, BlockPos.ORIGIN);
+    }
+
+    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, Inventory suitInventory, PropertyDelegate propertyDelegate, BlockPos anvilPos) {
         super(ModScreenHandlers.MODULAR_SUIT_SCREEN_HANDLER, syncId);
         this.playerInventory = playerInventory;
         this.suitInventory = suitInventory;
         this.propertyDelegate = propertyDelegate;
         this.addProperties(propertyDelegate);
+
+        BlockPos resolvedPos = anvilPos != null ? anvilPos : BlockPos.ORIGIN;
+        if (resolvedPos.equals(BlockPos.ORIGIN) && playerInventory.player != null && playerInventory.player.getEntityWorld() != null) {
+            BlockPos pPos = playerInventory.player.getBlockPos();
+            for (BlockPos testPos : BlockPos.iterateOutwards(pPos, 4, 3, 4)) {
+                if (playerInventory.player.getEntityWorld().getBlockEntity(testPos) instanceof PoweredAnvilBlockEntity) {
+                    resolvedPos = testPos.toImmutable();
+                    break;
+                }
+            }
+        }
+        this.anvilPos = resolvedPos;
 
         // Slot 0: Battery Slot
         this.addSlot(new Slot(suitInventory, 0, 44, 45) {
@@ -261,6 +284,12 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             boolean hasIt = !p.isEmpty() && p.getItem() instanceof ModularPowerArmorItem;
             this.propertyDelegate.set(5 + t, hasIt ? 1 : 0);
         }
+
+        boolean hasAnvil = this.anvilPos != null && !this.anvilPos.equals(BlockPos.ORIGIN)
+                && this.playerInventory.player != null
+                && this.playerInventory.player.squaredDistanceTo(this.anvilPos.toCenterPos()) <= 36.0
+                && this.playerInventory.player.getEntityWorld().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity;
+        this.propertyDelegate.set(9, hasAnvil ? 1 : 0);
     }
 
     @Override
@@ -269,8 +298,20 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             syncToActivePiece();
             loadTab(id);
             return true;
+        } else if (id == 4) {
+            syncToActivePiece();
+            if (this.anvilPos != null && !this.anvilPos.equals(BlockPos.ORIGIN)
+                    && player.squaredDistanceTo(this.anvilPos.toCenterPos()) <= 36.0
+                    && player.getEntityWorld().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity anvil) {
+                player.openHandledScreen(anvil);
+                return true;
+            }
         }
         return false;
+    }
+
+    public boolean hasAnvilLinked() {
+        return this.propertyDelegate.size() > 9 && this.propertyDelegate.get(9) == 1;
     }
 
     public int getActiveTab() {
