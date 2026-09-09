@@ -43,6 +43,8 @@ public class ResonanceColossusEntity extends HostileEntity {
     private int phase = 1; // 1: 100-65%, 2: 65-30%, 3: <30%
     private boolean isResetting = false;
 
+    private int resetMessageCooldown = 0;
+
     public ResonanceColossusEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         this.bossBar = (ServerBossBar) new ServerBossBar(
@@ -60,11 +62,42 @@ public class ResonanceColossusEntity extends HostileEntity {
                 .add(EntityAttributes.ATTACK_DAMAGE, 9.0)
                 .add(EntityAttributes.ARMOR, 10.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.FOLLOW_RANGE, 96.0);
+                .add(EntityAttributes.FOLLOW_RANGE, 64.0);
     }
 
     public void setAltarPos(BlockPos pos) {
         this.altarPos = pos;
+    }
+
+    public boolean isWithinArena(Entity entity) {
+        if (this.altarPos == null || entity == null) return true;
+        double dx = entity.getX() - (this.altarPos.getX() + 0.5);
+        double dz = entity.getZ() - (this.altarPos.getZ() + 0.5);
+        double dy = Math.abs(entity.getY() - this.altarPos.getY());
+        return (dx * dx + dz * dz <= 64.0 * 64.0) && dy <= 40.0;
+    }
+
+    @Override
+    public void setTarget(@org.jetbrains.annotations.Nullable LivingEntity target) {
+        if (target != null && (this.isResetting || !isWithinArena(target))) {
+            super.setTarget(null);
+            return;
+        }
+        super.setTarget(target);
+    }
+
+    @Override
+    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+        if (this.isResetting) {
+            return false;
+        }
+        if (source.getAttacker() instanceof LivingEntity attacker && !isWithinArena(attacker)) {
+            if (attacker instanceof PlayerEntity player) {
+                player.sendMessage(Text.literal("§c✦ The Resonance Colossus deflects attacks from outside its arena! ✦"), true);
+            }
+            return false;
+        }
+        return super.damage(world, source, amount);
     }
 
     @Override
@@ -124,18 +157,23 @@ public class ResonanceColossusEntity extends HostileEntity {
             this.altarPos = this.getBlockPos();
         }
 
+        if (this.resetMessageCooldown > 0) {
+            this.resetMessageCooldown--;
+        }
+
         // --- Arena Leash & Reset Protocol ---
         double hDistSq = (this.getX() - (this.altarPos.getX() + 0.5)) * (this.getX() - (this.altarPos.getX() + 0.5))
                 + (this.getZ() - (this.altarPos.getZ() + 0.5)) * (this.getZ() - (this.altarPos.getZ() + 0.5));
         boolean outOfBounds = hDistSq > (64.0 * 64.0);
 
-        boolean targetEscaped = false;
         LivingEntity currentTarget = this.getTarget();
+        boolean targetEscaped = false;
+
         if (currentTarget != null) {
-            double targetHDistSq = (currentTarget.getX() - (this.altarPos.getX() + 0.5)) * (currentTarget.getX() - (this.altarPos.getX() + 0.5))
-                    + (currentTarget.getZ() - (this.altarPos.getZ() + 0.5)) * (currentTarget.getZ() - (this.altarPos.getZ() + 0.5));
-            double targetVDist = Math.abs(currentTarget.getY() - this.altarPos.getY());
-            targetEscaped = targetHDistSq > (64.0 * 64.0) || targetVDist > 40.0;
+            if (!isWithinArena(currentTarget) || !currentTarget.isAlive()) {
+                targetEscaped = true;
+                this.setTarget(null);
+            }
         } else if (this.getHealth() < this.getMaxHealth()) {
             // Target lost because player fled beyond reach. Check if any active player is within the arena
             Box arenaBox = new Box(this.altarPos).expand(64.0);
@@ -145,6 +183,7 @@ public class ResonanceColossusEntity extends HostileEntity {
             }
         }
 
+        // Trigger disengage & retreat if out of bounds or all challengers escaped
         if (outOfBounds || targetEscaped) {
             if (!this.isResetting) {
                 this.isResetting = true;
@@ -153,14 +192,20 @@ public class ResonanceColossusEntity extends HostileEntity {
                 sw.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY() + 1.5, this.getZ(), 2, 0, 0, 0, 0);
                 sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.HOSTILE, 1.5f, 0.8f);
 
-                for (ServerPlayerEntity p : sw.getPlayers()) {
-                    if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (160.0 * 160.0)) {
-                        p.sendMessage(Text.literal("§e✦ The Resonance Colossus has disengaged and returned to its altar to regenerate! ✦"), false);
+                if (this.resetMessageCooldown <= 0) {
+                    this.resetMessageCooldown = 200; // 10-second cooldown
+                    for (ServerPlayerEntity p : sw.getPlayers()) {
+                        if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (160.0 * 160.0)) {
+                            p.sendMessage(Text.literal("§e✦ The Resonance Colossus has disengaged and returned to its altar to regenerate! ✦"), false);
+                        }
                     }
                 }
             }
+        }
 
-            // Rapidly regenerate health to full
+        // When in resetting state, continue regenerating until back at full health at the altar
+        if (this.isResetting) {
+            this.setTarget(null);
             if (this.getHealth() < this.getMaxHealth()) {
                 this.heal(15.0f);
                 sw.spawnParticles(ParticleTypes.HEART, this.getX(), this.getY() + 2.0, this.getZ(), 4, 0.5, 0.5, 0.5, 0.05);
@@ -170,8 +215,6 @@ public class ResonanceColossusEntity extends HostileEntity {
                 this.phase = 1;
             }
             return;
-        } else {
-            this.isResetting = false;
         }
 
         // --- Combat Phase Machine ---
