@@ -7,15 +7,9 @@
     "CBC"
   ],
   "key": {
-    "C": {
-      "item": "minecraft:crying_obsidian"
-    },
-    "B": {
-      "item": "minecraft:polished_blackstone_bricks"
-    },
-    "S": {
-      "item": "enchantedwood:dimensional_singularity"
-    }
+    "C": "minecraft:crying_obsidian",
+    "B": "minecraft:polished_blackstone_bricks",
+    "S": "enchantedwood:dimensional_singularity"
   },
   "result": {
     "count": 1,

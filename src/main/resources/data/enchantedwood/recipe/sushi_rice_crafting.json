@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:bowl"
-    },
-    {
-      "item": "enchantedwood:rice"
-    },
-    {
-      "item": "minecraft:potion"
-    }
+    "minecraft:bowl",
+    "enchantedwood:rice",
+    "minecraft:potion"
   ],
   "result": {
     "count": 1,

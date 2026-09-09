@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "food",
   "ingredients": [
-    {
-      "item": "enchantedwood:cucumber"
-    },
-    {
-      "item": "enchantedwood:avocado"
-    },
-    {
-      "item": "enchantedwood:sushi_rice"
-    },
-    {
-      "item": "enchantedwood:nori_sheet"
-    },
-    {
-      "item": "minecraft:honey_bottle"
-    }
+    "enchantedwood:cucumber",
+    "enchantedwood:avocado",
+    "enchantedwood:sushi_rice",
+    "enchantedwood:nori_sheet",
+    "minecraft:honey_bottle"
   ],
   "result": {
     "count": 4,

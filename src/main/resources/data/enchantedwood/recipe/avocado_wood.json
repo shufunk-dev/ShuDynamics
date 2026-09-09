@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "enchantedwood:avocado_log"
-    }
+    "#": "enchantedwood:avocado_log"
   },
   "pattern": [
     "##",

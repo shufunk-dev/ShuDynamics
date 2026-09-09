@@ -7,21 +7,11 @@
     "FBF"
   ],
   "key": {
-    "F": {
-      "item": "enchantedwood:fire_crystal"
-    },
-    "D": {
-      "item": "enchantedwood:dragon_fruit"
-    },
-    "S": {
-      "item": "enchantedwood:sulfur_dust"
-    },
-    "M": {
-      "item": "enchantedwood:dimensional_singularity"
-    },
-    "B": {
-      "item": "enchantedwood:survivalist_bento"
-    }
+    "F": "enchantedwood:fire_crystal",
+    "D": "enchantedwood:dragon_fruit",
+    "S": "enchantedwood:sulfur_dust",
+    "M": "enchantedwood:dimensional_singularity",
+    "B": "enchantedwood:survivalist_bento"
   },
   "result": {
     "count": 1,

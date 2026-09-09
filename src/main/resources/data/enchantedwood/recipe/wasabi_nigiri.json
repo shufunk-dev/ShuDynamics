@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "food",
   "ingredients": [
-    {
-      "item": "enchantedwood:wasabi_root"
-    },
-    {
-      "item": "enchantedwood:sushi_rice"
-    },
-    {
-      "item": "enchantedwood:nori_sheet"
-    }
+    "enchantedwood:wasabi_root",
+    "enchantedwood:sushi_rice",
+    "enchantedwood:nori_sheet"
   ],
   "result": {
     "count": 4,

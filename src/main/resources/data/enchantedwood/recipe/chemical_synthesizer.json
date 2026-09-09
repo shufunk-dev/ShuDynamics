@@ -6,18 +6,10 @@
     "TCT"
   ],
   "key": {
-    "T": {
-      "item": "enchantedwood:titanium_ingot"
-    },
-    "G": {
-      "item": "enchantedwood:reinforced_tank_glass"
-    },
-    "R": {
-      "item": "minecraft:brewing_stand"
-    },
-    "C": {
-      "item": "enchantedwood:tungsten_ingot"
-    }
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:reinforced_tank_glass",
+    "R": "minecraft:brewing_stand",
+    "C": "enchantedwood:tungsten_ingot"
   },
   "result": {
     "id": "enchantedwood:chemical_synthesizer",

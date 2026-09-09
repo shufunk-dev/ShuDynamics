@@ -6,18 +6,10 @@
     "G  "
   ],
   "key": {
-    "T": {
-      "item": "enchantedwood:titanium_ingot"
-    },
-    "A": {
-      "item": "enchantedwood:aluminum_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    }
+    "T": "enchantedwood:titanium_ingot",
+    "A": "enchantedwood:aluminum_ingot",
+    "R": "minecraft:redstone",
+    "G": "minecraft:glass"
   },
   "result": {
     "id": "enchantedwood:hypospray",

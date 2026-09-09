@@ -6,18 +6,10 @@
     "ACA"
   ],
   "key": {
-    "A": {
-      "item": "enchantedwood:aluminum_ingot"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "P": {
-      "item": "minecraft:piston"
-    },
-    "C": {
-      "item": "enchantedwood:steel_ingot"
-    }
+    "A": "enchantedwood:aluminum_ingot",
+    "G": "minecraft:glass",
+    "P": "minecraft:piston",
+    "C": "enchantedwood:steel_ingot"
   },
   "result": {
     "id": "enchantedwood:industrial_centrifuge",

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:cod"
-    },
-    {
-      "item": "enchantedwood:sushi_rice"
-    },
-    {
-      "item": "enchantedwood:nori_sheet"
-    }
+    "minecraft:cod",
+    "enchantedwood:sushi_rice",
+    "enchantedwood:nori_sheet"
   ],
   "result": {
     "count": 3,

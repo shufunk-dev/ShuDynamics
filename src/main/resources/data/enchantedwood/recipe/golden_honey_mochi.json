@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "food",
   "ingredients": [
-    {
-      "item": "enchantedwood:sushi_rice"
-    },
-    {
-      "item": "minecraft:honey_bottle"
-    },
-    {
-      "item": "minecraft:gold_nugget"
-    }
+    "enchantedwood:sushi_rice",
+    "minecraft:honey_bottle",
+    "minecraft:gold_nugget"
   ],
   "result": {
     "count": 4,

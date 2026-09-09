@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "food",
   "ingredients": [
-    {
-      "item": "minecraft:dried_kelp"
-    },
-    {
-      "item": "minecraft:carrot"
-    },
-    {
-      "item": "enchantedwood:avocado"
-    },
-    {
-      "item": "enchantedwood:sushi_rice"
-    },
-    {
-      "item": "enchantedwood:nori_sheet"
-    }
+    "minecraft:dried_kelp",
+    "minecraft:carrot",
+    "enchantedwood:avocado",
+    "enchantedwood:sushi_rice",
+    "enchantedwood:nori_sheet"
   ],
   "result": {
     "count": 4,
