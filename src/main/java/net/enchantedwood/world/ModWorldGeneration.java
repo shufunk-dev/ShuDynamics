@@ -14,6 +14,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.world.gen.ConvergenceVegetationFeature;
+import net.enchantedwood.world.gen.ResonanceArenaFeature;
 
 public class ModWorldGeneration {
     public static final Feature<DefaultFeatureConfig> CONVERGENCE_VEGETATION_FEATURE = Registry.register(
@@ -27,6 +28,18 @@ public class ModWorldGeneration {
 
     public static final RegistryKey<PlacedFeature> CONVERGENCE_VEGETATION_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_vegetation"));
+
+    public static final Feature<DefaultFeatureConfig> RESONANCE_ARENA_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_arena"),
+            new ResonanceArenaFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> RESONANCE_ARENA_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_arena"));
+
+    public static final RegistryKey<PlacedFeature> RESONANCE_ARENA_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_arena"));
 
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
@@ -153,6 +166,15 @@ public class ModWorldGeneration {
                 ),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_VEGETATION_PLACED_KEY
+        );
+
+        // Resonance Sanctum Boss Arena Dais
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(
+                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"))
+                ),
+                GenerationStep.Feature.SURFACE_STRUCTURES,
+                RESONANCE_ARENA_PLACED_KEY
         );
     }
 }

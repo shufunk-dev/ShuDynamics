@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CBC",
+    "BSB",
+    "CBC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "B": {
+      "item": "minecraft:polished_blackstone_bricks"
+    },
+    "S": {
+      "item": "enchantedwood:dimensional_singularity"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:resonance_altar"
+  }
+}
