@@ -54,8 +54,16 @@ public class ResonanceAltarBlock extends Block {
 
         // Check if already active
         if (state.get(ACTIVE)) {
-            player.sendMessage(Text.literal("§eThe Resonance Colossus has already been summoned at this altar!"), true);
-            return ActionResult.FAIL;
+            // Failsafe: check if a living Resonance Colossus actually exists nearby
+            net.minecraft.util.math.Box checkArea = new net.minecraft.util.math.Box(pos).expand(128.0);
+            java.util.List<ResonanceColossusEntity> activeBosses = world.getEntitiesByClass(ResonanceColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+            if (activeBosses.isEmpty()) {
+                // Boss is not present: auto-reset altar to allow re-awakening!
+                world.setBlockState(pos, state.with(ACTIVE, false));
+            } else {
+                player.sendMessage(Text.literal("§eThe Resonance Colossus is currently active on the battlefield!"), true);
+                return ActionResult.FAIL;
+            }
         }
 
         if (world instanceof ServerWorld serverWorld) {

@@ -77,6 +77,23 @@ public class ResonanceColossusEntity extends HostileEntity {
     }
 
     @Override
+    public boolean cannotDespawn() {
+        return true;
+    }
+
+    @Override
+    public boolean canImmediatelyDespawn(double distanceSquared) {
+        return false;
+    }
+
+    @Override
+    public void checkDespawn() {
+        if (this.getEntityWorld().getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            this.discard();
+        }
+    }
+
+    @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
         this.bossBar.addPlayer(player);
@@ -104,11 +121,19 @@ public class ResonanceColossusEntity extends HostileEntity {
 
         // --- Arena Leash & Reset Protocol ---
         if (this.altarPos != null) {
-            double distSqFromAltar = this.squaredDistanceTo(this.altarPos.getX() + 0.5, this.altarPos.getY(), this.altarPos.getZ() + 0.5);
+            double hDistSq = (this.getX() - (this.altarPos.getX() + 0.5)) * (this.getX() - (this.altarPos.getX() + 0.5))
+                    + (this.getZ() - (this.altarPos.getZ() + 0.5)) * (this.getZ() - (this.altarPos.getZ() + 0.5));
+            boolean outOfBounds = hDistSq > (80.0 * 80.0);
 
-            // If Colossus wanders >45 blocks away OR target player is >42 blocks away
-            boolean outOfBounds = distSqFromAltar > (45.0 * 45.0);
-            boolean targetEscaped = this.getTarget() != null && this.getTarget().squaredDistanceTo(this.altarPos.getX() + 0.5, this.altarPos.getY(), this.altarPos.getZ() + 0.5) > (42.0 * 42.0);
+            boolean targetEscaped = false;
+            LivingEntity currentTarget = this.getTarget();
+            if (currentTarget != null) {
+                double targetHDistSq = (currentTarget.getX() - (this.altarPos.getX() + 0.5)) * (currentTarget.getX() - (this.altarPos.getX() + 0.5))
+                        + (currentTarget.getZ() - (this.altarPos.getZ() + 0.5)) * (currentTarget.getZ() - (this.altarPos.getZ() + 0.5));
+                double targetVDist = Math.abs(currentTarget.getY() - this.altarPos.getY());
+                // Player only considered escaped if fleeing > 96 blocks horizontally or > 120 blocks vertically
+                targetEscaped = targetHDistSq > (96.0 * 96.0) || targetVDist > 120.0;
+            }
 
             if (outOfBounds || targetEscaped) {
                 if (!this.isResetting) {
