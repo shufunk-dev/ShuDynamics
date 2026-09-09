@@ -366,7 +366,10 @@ public class ResonanceColossusEntity extends HostileEntity {
             if (damageSource.getAttacker() instanceof PlayerEntity p) {
                 killer = p;
             } else {
-                killer = sw.getClosestPlayer(this, 32.0);
+                killer = sw.getClosestPlayer(this, 128.0);
+                if (killer == null && !sw.getPlayers().isEmpty()) {
+                    killer = sw.getPlayers().get(0);
+                }
             }
 
             ItemStack relicToDrop = chooseSmartRelicDrop(killer);
@@ -409,7 +412,7 @@ public class ResonanceColossusEntity extends HostileEntity {
     }
 
     private boolean hasItemAnywhere(PlayerEntity player, net.minecraft.item.Item item) {
-        if (player.getInventory().contains(new ItemStack(item))) return true;
+        if (player.getInventory().containsAny(stack -> stack.isOf(item))) return true;
         if (player.getEnderChestInventory().containsAny(stack -> stack.isOf(item))) return true;
         return false;
     }
