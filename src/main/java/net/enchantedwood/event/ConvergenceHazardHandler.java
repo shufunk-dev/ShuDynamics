@@ -20,8 +20,12 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.util.Identifier;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class ConvergenceHazardHandler {
@@ -29,6 +33,37 @@ public class ConvergenceHazardHandler {
     private static final Map<UUID, Long> LAST_ACID_WARN = new HashMap<>();
     private static final Map<UUID, Long> LAST_THERMAL_WARN = new HashMap<>();
     private static final Map<UUID, Long> LAST_ATMOSPHERIC_WARN = new HashMap<>();
+    public static final Set<BlockPos> SANCTUARY_CENTERS = new HashSet<>();
+
+    public static void registerSanctuary(BlockPos pos) {
+        SANCTUARY_CENTERS.add(pos);
+    }
+
+    public static boolean isInsideSanctuary(ServerWorld world, BlockPos pos) {
+        // 1. Biome Check: Riftwood Haven is an inherently 100% hazard-free safe zone
+        var biomeKey = world.getBiome(pos).getKey();
+        if (biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "riftwood_haven"))) {
+            return true;
+        }
+
+        // 2. Gateway Sanctuary Outpost radius (within 32 blocks of active gateway)
+        for (BlockPos center : SANCTUARY_CENTERS) {
+            if (center.isWithinDistance(pos, 32.0)) {
+                return true;
+            }
+        }
+
+        // 3. Fallback: Quick scan within 6 blocks for dormant rift or atmospheric anchor
+        for (BlockPos check : BlockPos.iterate(pos.add(-6, -3, -6), pos.add(6, 3, 6))) {
+            var state = world.getBlockState(check);
+            if (state.isOf(ModBlocks.DORMANT_RIFT) || state.isOf(ModBlocks.ATMOSPHERIC_ANCHOR)) {
+                SANCTUARY_CENTERS.add(check.toImmutable());
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public static void register() {
         ServerTickEvents.START_SERVER_TICK.register(server -> {
@@ -51,6 +86,11 @@ public class ConvergenceHazardHandler {
             return;
         }
 
+        // Sanctuary Protection: All hazards are neutralized inside the Sanctuary and Riftwood Haven
+        if (isInsideSanctuary(world, player.getBlockPos())) {
+            return;
+        }
+
         tickAcidHazard(world, player);
         tickThermalHazard(world, player);
         tickAtmosphericHazard(world, player);
@@ -59,6 +99,13 @@ public class ConvergenceHazardHandler {
     // --- 1. CAUSTIC ACID PRECIPITATION & ACID WATERS ---
     private static void tickAcidHazard(ServerWorld world, ServerPlayerEntity player) {
         BlockPos pos = player.getBlockPos();
+
+        // Biome Scoping: Acid rain and caustic water hazard ONLY exist in the Caustic Mire biome!
+        var biomeKey = world.getBiome(pos).getKey();
+        boolean isCausticBiome = biomeKey.isPresent() &&
+                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        if (!isCausticBiome) return;
+
         boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
         boolean inAcidRain = world.isRaining() && world.isSkyVisible(pos);
 
@@ -102,7 +149,12 @@ public class ConvergenceHazardHandler {
     // --- 2. VOLCANIC CALDERA HYPERTHERMIA ---
     private static void tickThermalHazard(ServerWorld world, ServerPlayerEntity player) {
         BlockPos pos = player.getBlockPos();
-        boolean isDeepCaldera = player.getY() <= 25;
+
+        var biomeKey = world.getBiome(pos).getKey();
+        boolean isCalderaBiome = biomeKey.isPresent() &&
+                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+
+        boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
         boolean nearHeatSource = isNearThermalSource(world, pos);
 
         if (!isDeepCaldera && !nearHeatSource) return;
@@ -139,8 +191,7 @@ public class ConvergenceHazardHandler {
     private static boolean isNearThermalSource(ServerWorld world, BlockPos pos) {
         for (BlockPos check : BlockPos.iterate(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
             var state = world.getBlockState(check);
-            if (state.isOf(Blocks.MAGMA_BLOCK) || state.isOf(Blocks.LAVA) ||
-                state.isOf(ModBlocks.VOLCANIC_SOIL) || state.isOf(ModBlocks.POZZOLANIC_ASPHALT)) {
+            if (state.isOf(Blocks.MAGMA_BLOCK) || state.isOf(Blocks.LAVA)) {
                 return true;
             }
         }

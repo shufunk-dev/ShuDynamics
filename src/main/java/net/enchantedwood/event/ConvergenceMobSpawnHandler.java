@@ -29,6 +29,16 @@ public class ConvergenceMobSpawnHandler {
             }
             entity.addCommandTag(CONVERGENCE_CONVERTED_TAG);
 
+            // Discard any hostile mobs attempting to spawn within the 48-block Sanctuary Outpost protection zone
+            if (entity instanceof net.minecraft.entity.mob.HostileEntity) {
+                for (net.minecraft.util.math.BlockPos center : ConvergenceHazardHandler.SANCTUARY_CENTERS) {
+                    if (center.isWithinDistance(entity.getBlockPos(), 48.0)) {
+                        entity.discard();
+                        return;
+                    }
+                }
+            }
+
             // 40% chance to convert vanilla mob into its Convergence Variant (60% remain vanilla)
             if (world.getRandom().nextFloat() > 0.40f) {
                 return;

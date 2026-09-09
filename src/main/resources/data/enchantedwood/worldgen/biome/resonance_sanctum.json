@@ -1,0 +1,78 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.5,
+  "downfall": 0.2,
+  "attributes": {
+    "minecraft:visual/sky_color": "#080214",
+    "minecraft:visual/fog_color": "#19072e",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:reverse_portal"
+        },
+        "probability": 0.02
+      }
+    ]
+  },
+  "effects": {
+    "water_color": "#6a2ca8",
+    "water_fog_color": "#2d0e4d",
+    "grass_color": "#2d223b",
+    "foliage_color": "#513a70"
+  },
+  "carvers": [
+    "minecraft:cave"
+  ],
+  "features": [
+    [],
+    [],
+    [
+      "minecraft:amethyst_geode"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:glow_lichen"
+    ],
+    []
+  ],
+  "spawn_costs": {
+    "minecraft:enderman": {
+      "charge": 1.0,
+      "energy_budget": 0.15
+    }
+  },
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:enderman",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 50
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 20
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 20
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

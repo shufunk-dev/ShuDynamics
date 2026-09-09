@@ -1,0 +1,73 @@
+{
+  "has_precipitation": false,
+  "temperature": 2.0,
+  "downfall": 0.0,
+  "attributes": {
+    "minecraft:visual/sky_color": "#240a04",
+    "minecraft:visual/fog_color": "#3b1407",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.015
+      }
+    ]
+  },
+  "effects": {
+    "water_color": "#4a2c20",
+    "water_fog_color": "#26130b",
+    "grass_color": "#3d332d",
+    "foliage_color": "#4a382e"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:lake_lava_surface"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_lava"
+    ],
+    [
+      "minecraft:glowstone_extra"
+    ],
+    []
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:magma_cube",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 50
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

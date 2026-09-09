@@ -670,5 +670,9 @@
   "advancements.enchantedwood.convergence.resonance_conqueror.title": "The Resonance Conqueror",
   "advancements.enchantedwood.convergence.resonance_conqueror.description": "Vanquish The Resonance Colossus and claim a divine relic from the collapsed monolith",
   "advancements.enchantedwood.convergence.relic_master.title": "Master of the Triad",
-  "advancements.enchantedwood.convergence.relic_master.description": "Possess all three legendary Colossus Relics: Resonance Cleaver, Singularity Staff, and Eternal Bento Box"
+  "advancements.enchantedwood.convergence.relic_master.description": "Possess all three legendary Colossus Relics: Resonance Cleaver, Singularity Staff, and Eternal Bento Box",
+  "biome.enchantedwood.riftwood_haven": "Riftwood Haven",
+  "biome.enchantedwood.caustic_mire": "Caustic Mire",
+  "biome.enchantedwood.scorched_caldera": "Scorched Caldera",
+  "biome.enchantedwood.resonance_sanctum": "Resonance Sanctum"
 }

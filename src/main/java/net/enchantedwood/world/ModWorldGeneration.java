@@ -147,7 +147,10 @@ public class ModWorldGeneration {
 
         // Convergence Dimension Vegetation (Wild Rice, Wild Cucumbers, Avocado Trees)
         BiomeModifications.addFeature(
-                BiomeSelectors.foundInOverworld(),
+                BiomeSelectors.includeByKey(
+                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_haven")),
+                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "caustic_mire"))
+                ),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_VEGETATION_PLACED_KEY
         );

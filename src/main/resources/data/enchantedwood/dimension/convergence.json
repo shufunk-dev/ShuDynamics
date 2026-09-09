@@ -5,7 +5,176 @@
     "settings": "minecraft:overworld",
     "biome_source": {
       "type": "minecraft:multi_noise",
-      "preset": "minecraft:overworld"
+      "biomes": [
+        {
+          "biome": "enchantedwood:riftwood_haven",
+          "parameters": {
+            "temperature": [-0.5, 0.4],
+            "humidity": [-0.4, 0.4],
+            "continentalness": [-0.4, 0.5],
+            "erosion": [-0.6, 0.4],
+            "weirdness": [-0.5, 0.4],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "enchantedwood:riftwood_haven",
+          "parameters": {
+            "temperature": [-0.4, 0.3],
+            "humidity": [0.0, 0.6],
+            "continentalness": [0.1, 0.7],
+            "erosion": [-0.4, 0.6],
+            "weirdness": [-0.4, 0.3],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "enchantedwood:riftwood_haven",
+          "parameters": {
+            "temperature": [-0.3, 0.3],
+            "humidity": [-0.3, 0.3],
+            "continentalness": [-0.2, 0.4],
+            "erosion": [-0.3, 0.3],
+            "weirdness": [-0.3, 0.3],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:cherry_grove",
+          "parameters": {
+            "temperature": [-0.3, 0.2],
+            "humidity": [0.2, 0.6],
+            "continentalness": [0.5, 1.0],
+            "erosion": [-1.0, -0.3],
+            "weirdness": [-0.3, 0.2],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:jungle",
+          "parameters": {
+            "temperature": [0.4, 0.9],
+            "humidity": [0.4, 0.9],
+            "continentalness": [0.0, 0.6],
+            "erosion": [-0.4, 0.3],
+            "weirdness": [-0.3, 0.3],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:windswept_gravelly_hills",
+          "parameters": {
+            "temperature": [-0.6, 0.0],
+            "humidity": [-0.5, 0.0],
+            "continentalness": [0.6, 1.1],
+            "erosion": [0.4, 1.0],
+            "weirdness": [-0.3, 0.3],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:lush_caves",
+          "parameters": {
+            "temperature": [-0.1, 0.5],
+            "humidity": [0.2, 0.8],
+            "continentalness": [-0.4, 0.5],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-0.4, 0.4],
+            "depth": [0.2, 1.0],
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "enchantedwood:caustic_mire",
+          "parameters": {
+            "temperature": [0.2, 0.9],
+            "humidity": [0.4, 1.2],
+            "continentalness": [-1.4, -0.4],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-0.4, 0.4],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "enchantedwood:scorched_caldera",
+          "parameters": {
+            "temperature": [0.9, 2.0],
+            "humidity": [-1.5, -0.4],
+            "continentalness": [-0.4, 0.8],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-0.4, 0.4],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "enchantedwood:resonance_sanctum",
+          "parameters": {
+            "temperature": [-0.5, 0.5],
+            "humidity": [-0.5, 0.5],
+            "continentalness": [0.4, 1.1],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [0.8, 1.8],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:crimson_forest",
+          "parameters": {
+            "temperature": [0.3, 1.0],
+            "humidity": [-0.6, 0.2],
+            "continentalness": [-0.5, 0.5],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-1.8, -0.7],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:warped_forest",
+          "parameters": {
+            "temperature": [-0.8, -0.1],
+            "humidity": [0.2, 0.9],
+            "continentalness": [-0.5, 0.5],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-1.8, -0.7],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:basalt_deltas",
+          "parameters": {
+            "temperature": [0.7, 1.6],
+            "humidity": [-0.3, 0.3],
+            "continentalness": [0.2, 0.8],
+            "erosion": [0.2, 0.8],
+            "weirdness": [-1.8, -0.7],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "minecraft:soul_sand_valley",
+          "parameters": {
+            "temperature": [-1.2, -0.4],
+            "humidity": [-1.2, -0.3],
+            "continentalness": [-0.5, 0.5],
+            "erosion": [-0.5, 0.5],
+            "weirdness": [-1.8, -0.7],
+            "depth": 0.0,
+            "offset": 0.0
+          }
+        }
+      ]
     }
   }
 }

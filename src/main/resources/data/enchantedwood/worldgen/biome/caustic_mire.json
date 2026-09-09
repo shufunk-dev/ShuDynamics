@@ -1,0 +1,77 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.9,
+  "downfall": 0.9,
+  "attributes": {
+    "minecraft:visual/sky_color": "#132212",
+    "minecraft:visual/fog_color": "#24361e"
+  },
+  "effects": {
+    "water_color": "#2de6a5",
+    "water_fog_color": "#0c4028",
+    "grass_color": "#5c633a",
+    "foliage_color": "#425232"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_water"
+    ],
+    [
+      "minecraft:brown_mushroom_normal",
+      "minecraft:red_mushroom_normal"
+    ],
+    []
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "enchantedwood:convergence_spider",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 50
+      },
+      {
+        "type": "enchantedwood:convergence_creeper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 40
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "minecraft:slime",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

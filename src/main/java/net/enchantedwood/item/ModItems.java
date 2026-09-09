@@ -1287,14 +1287,6 @@ public class ModItems {
                 entries.add(BASIC_COMPUTER_CHIP);
                 entries.add(ADVANCED_COMPUTER_CHIP);
                 entries.add(QUANTUM_COMPUTER_CHIP);
-                entries.add(MODULAR_POWER_HELMET);
-                entries.add(MODULAR_POWER_CHESTPLATE);
-                entries.add(MODULAR_POWER_LEGGINGS);
-                entries.add(MODULAR_POWER_BOOTS);
-                entries.add(NANITE_REPAIR_MATRIX);
-                entries.add(HYDROGEN_THRUSTER_MODULE);
-                entries.add(ION_REPULSOR_MODULE);
-                entries.add(NIGHT_VISION_MODULE);
                 entries.add(net.enchantedwood.block.ModBlocks.POWERED_ANVIL);
 
                 entries.add(net.enchantedwood.block.ModBlocks.LASER_QUARRY);
