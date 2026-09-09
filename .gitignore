@@ -11,6 +11,8 @@ run/
 runs/
 server/
 .fabric/
+mappings/
+*.tiny
 
 # IDE & Editor Files
 .vscode/
