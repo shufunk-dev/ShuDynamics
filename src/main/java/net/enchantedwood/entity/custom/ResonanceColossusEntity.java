@@ -60,7 +60,7 @@ public class ResonanceColossusEntity extends HostileEntity {
                 .add(EntityAttributes.ATTACK_DAMAGE, 9.0)
                 .add(EntityAttributes.ARMOR, 10.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.FOLLOW_RANGE, 48.0);
+                .add(EntityAttributes.FOLLOW_RANGE, 96.0);
     }
 
     public void setAltarPos(BlockPos pos) {
@@ -119,48 +119,59 @@ public class ResonanceColossusEntity extends HostileEntity {
             return;
         }
 
+        // Fallback altarPos if spawned via egg or uninitialized
+        if (this.altarPos == null) {
+            this.altarPos = this.getBlockPos();
+        }
+
         // --- Arena Leash & Reset Protocol ---
-        if (this.altarPos != null) {
-            double hDistSq = (this.getX() - (this.altarPos.getX() + 0.5)) * (this.getX() - (this.altarPos.getX() + 0.5))
-                    + (this.getZ() - (this.altarPos.getZ() + 0.5)) * (this.getZ() - (this.altarPos.getZ() + 0.5));
-            boolean outOfBounds = hDistSq > (80.0 * 80.0);
+        double hDistSq = (this.getX() - (this.altarPos.getX() + 0.5)) * (this.getX() - (this.altarPos.getX() + 0.5))
+                + (this.getZ() - (this.altarPos.getZ() + 0.5)) * (this.getZ() - (this.altarPos.getZ() + 0.5));
+        boolean outOfBounds = hDistSq > (64.0 * 64.0);
 
-            boolean targetEscaped = false;
-            LivingEntity currentTarget = this.getTarget();
-            if (currentTarget != null) {
-                double targetHDistSq = (currentTarget.getX() - (this.altarPos.getX() + 0.5)) * (currentTarget.getX() - (this.altarPos.getX() + 0.5))
-                        + (currentTarget.getZ() - (this.altarPos.getZ() + 0.5)) * (currentTarget.getZ() - (this.altarPos.getZ() + 0.5));
-                double targetVDist = Math.abs(currentTarget.getY() - this.altarPos.getY());
-                // Player only considered escaped if fleeing > 96 blocks horizontally or > 120 blocks vertically
-                targetEscaped = targetHDistSq > (96.0 * 96.0) || targetVDist > 120.0;
+        boolean targetEscaped = false;
+        LivingEntity currentTarget = this.getTarget();
+        if (currentTarget != null) {
+            double targetHDistSq = (currentTarget.getX() - (this.altarPos.getX() + 0.5)) * (currentTarget.getX() - (this.altarPos.getX() + 0.5))
+                    + (currentTarget.getZ() - (this.altarPos.getZ() + 0.5)) * (currentTarget.getZ() - (this.altarPos.getZ() + 0.5));
+            double targetVDist = Math.abs(currentTarget.getY() - this.altarPos.getY());
+            targetEscaped = targetHDistSq > (64.0 * 64.0) || targetVDist > 40.0;
+        } else if (this.getHealth() < this.getMaxHealth()) {
+            // Target lost because player fled beyond reach. Check if any active player is within the arena
+            Box arenaBox = new Box(this.altarPos).expand(64.0);
+            List<PlayerEntity> nearby = sw.getEntitiesByClass(PlayerEntity.class, arenaBox, p -> !p.isCreative() && !p.isSpectator());
+            if (nearby.isEmpty()) {
+                targetEscaped = true;
             }
+        }
 
-            if (outOfBounds || targetEscaped) {
-                if (!this.isResetting) {
-                    this.isResetting = true;
-                    this.setTarget(null);
-                    this.teleport(this.altarPos.getX() + 0.5, this.altarPos.getY() + 1.0, this.altarPos.getZ() + 0.5, true);
-                    sw.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY() + 1.5, this.getZ(), 2, 0, 0, 0, 0);
-                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.HOSTILE, 1.5f, 0.8f);
+        if (outOfBounds || targetEscaped) {
+            if (!this.isResetting) {
+                this.isResetting = true;
+                this.setTarget(null);
+                this.teleport(this.altarPos.getX() + 0.5, this.altarPos.getY() + 1.0, this.altarPos.getZ() + 0.5, true);
+                sw.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY() + 1.5, this.getZ(), 2, 0, 0, 0, 0);
+                sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.HOSTILE, 1.5f, 0.8f);
 
-                    for (ServerPlayerEntity p : sw.getPlayers()) {
-                        if (p.squaredDistanceTo(this.getEntityPos()) < (64.0 * 64.0)) {
-                            p.sendMessage(Text.literal("§e✦ The Resonance Colossus has disengaged and returned to its altar to regenerate! ✦"), true);
-                        }
+                for (ServerPlayerEntity p : sw.getPlayers()) {
+                    if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (160.0 * 160.0)) {
+                        p.sendMessage(Text.literal("§e✦ The Resonance Colossus has disengaged and returned to its altar to regenerate! ✦"), false);
                     }
                 }
+            }
 
-                // Rapidly regenerate health to full
-                if (this.getHealth() < this.getMaxHealth()) {
-                    this.heal(3.0f);
-                    sw.spawnParticles(ParticleTypes.HEART, this.getX(), this.getY() + 2.0, this.getZ(), 4, 0.5, 0.5, 0.5, 0.05);
-                } else {
-                    this.isResetting = false;
-                }
-                return;
+            // Rapidly regenerate health to full
+            if (this.getHealth() < this.getMaxHealth()) {
+                this.heal(15.0f);
+                sw.spawnParticles(ParticleTypes.HEART, this.getX(), this.getY() + 2.0, this.getZ(), 4, 0.5, 0.5, 0.5, 0.05);
             } else {
                 this.isResetting = false;
+                this.minionsSpawned = false;
+                this.phase = 1;
             }
+            return;
+        } else {
+            this.isResetting = false;
         }
 
         // --- Combat Phase Machine ---
