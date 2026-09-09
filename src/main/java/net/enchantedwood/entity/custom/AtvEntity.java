@@ -154,6 +154,21 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         this.dataTracker.set(MAX_FUEL, Math.max(1, max));
     }
 
+    public boolean isEnvironmentalCockpitSealed() {
+        ItemStack chassis = this.inventory.get(CHASSIS_SLOT);
+        // Steel or Titanium Chassis provides a sealed cabin frame
+        if (!chassis.isEmpty() && (chassis.isOf(ModItems.TITANIUM_ATV_CHASSIS) || chassis.isOf(ModItems.STEEL_ATV_CHASSIS))) {
+            return true;
+        }
+        // Check if a dedicated Sealed Hazard Canopy is installed in ATV inventory
+        for (int i = 0; i < TOTAL_INVENTORY_SIZE; i++) {
+            if (this.inventory.get(i).isOf(ModItems.SEALED_HAZARD_CANOPY)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean isAttackable() {
         return true;

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:salmon"
+    },
+    {
+      "item": "minecraft:cod"
+    },
+    {
+      "item": "enchantedwood:avocado"
+    },
+    {
+      "item": "enchantedwood:cucumber"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "enchantedwood:nori_sheet"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:master_rainbow_roll"
+  }
+}

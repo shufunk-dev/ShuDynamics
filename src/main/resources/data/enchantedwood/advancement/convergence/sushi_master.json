@@ -1,0 +1,42 @@
+{
+  "parent": "enchantedwood:convergence/root",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:master_rainbow_roll"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.sushi_master.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.sushi_master.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "craft_sushi": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:salmon_roll",
+              "enchantedwood:cod_roll",
+              "enchantedwood:avocado_cucumber_roll",
+              "enchantedwood:california_roll",
+              "enchantedwood:garden_roll",
+              "enchantedwood:master_rainbow_roll"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "craft_sushi"
+    ]
+  ]
+}

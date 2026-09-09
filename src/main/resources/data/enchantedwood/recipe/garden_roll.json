@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "enchantedwood:cucumber"
+    },
+    {
+      "item": "enchantedwood:avocado"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "enchantedwood:nori_sheet"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "enchantedwood:garden_roll"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "enchantedwood:convergence/root",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:dragon_fruit"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.exotic_forager.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.exotic_forager.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "harvest_foraged": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:wasabi_root",
+              "enchantedwood:dragon_fruit",
+              "enchantedwood:starfruit",
+              "enchantedwood:avocado",
+              "enchantedwood:rice"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "harvest_foraged"
+    ]
+  ]
+}

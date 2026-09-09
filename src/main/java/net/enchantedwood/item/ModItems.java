@@ -27,6 +27,11 @@ import net.enchantedwood.item.custom.EnchantedRedstoneItem;
 import net.enchantedwood.item.custom.GearItem;
 
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.ConsumableComponents;
+import net.minecraft.component.type.ConsumableComponent;
+import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import java.util.function.Function;
 
 public class ModItems {
@@ -58,6 +63,410 @@ public class ModItems {
             Text.literal("§7Plant on tilled farmland to grow 8-stage Sweet Corn."),
             Text.literal("§8Obtained by breaking wild grass or crafting with Enchanted Dust.")
     ));
+
+    // Convergence Cuisine & Ingredients
+    public static final Item RICE_SEEDS = registerItem("rice_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.RICE_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland or Volcanic Soil to cultivate Rice."),
+            Text.literal("§8Native crop of §dThe Convergence§8. Essential ingredient for Sushi.")
+    ));
+    public static final Item RICE = registerItem("rice", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Grown grain from The Convergence."),
+            Text.literal("§8Cook in a Smoker/Furnace or combine with water to prepare §fSushi Rice§8.")
+    ));
+    public static final Item SUSHI_RICE = registerItem("sushi_rice", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            Text.literal("§fSeasoned Steamed Sushi Rice."),
+            Text.literal("§8The essential base for rolling authentic Sushi.")
+    ));
+    public static final Item CUCUMBER_SEEDS = registerItem("cucumber_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.CUCUMBER_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland or Volcanic Soil to grow Crisp Cucumbers."),
+            Text.literal("§8Native crop of §dThe Convergence§8.")
+    ));
+    public static final Item CUCUMBER = registerItem("cucumber", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.5f).build()),
+            Text.literal("§aFresh, crisp green cucumber."),
+            Text.literal("§8Restores 3 food points. Key ingredient in vegetarian and California rolls.")
+    ));
+    public static final Item AVOCADO = registerItem("avocado", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.7f).build()),
+            Text.literal("§2Creamy, nutrient-rich avocado fruit."),
+            Text.literal("§8Harvested from Avocado Trees in §dThe Convergence§8.")
+    ));
+    public static final Item NORI_SHEET = registerItem("nori_sheet", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(1).saturationModifier(0.3f).build()),
+            Text.literal("§8Thin roasted seaweed sheet pressed from Dried Kelp."),
+            Text.literal("§8Used to wrap sushi rolls.")
+    ));
+
+    // Sushi Rolls
+    public static final Item SALMON_ROLL = registerItem("salmon_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(7).saturationModifier(0.8f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 20 * 20, 0)))
+                            .build()
+            ),
+            Text.literal("§6Fresh Pacific Salmon wrapped in Nori and seasoned Sushi Rice."),
+            Text.literal("§bGrants Dolphin's Grace I (20s). Restores 7 hunger points.")
+    ));
+
+    public static final Item COD_ROLL = registerItem("cod_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(6).saturationModifier(0.7f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.HASTE, 20 * 30, 0)))
+                            .build()
+            ),
+            Text.literal("§eTender Cod Roll wrapped in crispy Nori."),
+            Text.literal("§eGrants Haste I (30s). Restores 6 hunger points.")
+    ));
+
+    public static final Item AVOCADO_CUCUMBER_ROLL = registerItem("avocado_cucumber_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(6).saturationModifier(0.8f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 35, 0)))
+                            .build()
+            ),
+            Text.literal("§aRefreshing Vegetarian Maki with creamy avocado & cucumber."),
+            Text.literal("§aGrants Speed I (35s). Restores 6 hunger points.")
+    ));
+
+    public static final Item CALIFORNIA_ROLL = registerItem("california_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(9).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 8, 0)))
+                            .build()
+            ),
+            Text.literal("§dClassic California Roll with fish, avocado, and cucumber."),
+            Text.literal("§dGrants Regeneration I (8s). Restores 9 hunger points.")
+    ));
+
+    public static final Item GARDEN_ROLL = registerItem("garden_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.8f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§6Garden Delight Roll made with sweet carrots, cucumber & avocado."),
+            Text.literal("§9Grants Night Vision (45s). Restores 8 hunger points.")
+    ));
+
+    public static final Item MASTER_RAINBOW_ROLL = registerItem("master_rainbow_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(12).saturationModifier(1.0f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 12, 1),
+                                    new StatusEffectInstance(StatusEffects.SPEED, 20 * 45, 1),
+                                    new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 20 * 45, 0)
+                            )))
+                            .build()
+            ),
+            Text.literal("§5✦ Master Rainbow Sushi Platter ✦"),
+            Text.literal("§7The ultimate culinary synthesis: Salmon, Cod, Avocado, Cucumber, and Carrots!"),
+            Text.literal("§dGrants Regeneration II, Speed II, and Dolphin's Grace.")
+    ));
+
+    // Protective Survival Foods (Organic Hypospray Alternatives)
+    public static final Item ALKALINE_DETOX_ROLL = registerItem("alkaline_detox_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120, 1)
+                            )))
+                            .build()
+            ),
+            Text.literal("§a✦ Alkaline Acid-Shield Roll ✦"),
+            Text.literal("§7Infused with crisp cucumber & creamy alkalizing avocado."),
+            Text.literal("§e✦ Buff: §aAcid Protection §f(5:00)"),
+            Text.literal("§8 • 100% Immunity to Poison, Wither & Acid damage"),
+            Text.literal("§8 • Continuous negative status effect cleansing"),
+            Text.literal("§e✦ Buff: §6Absorption II §f(2:00) §8(+4 Golden Hearts)"),
+            Text.literal("§b✦ Organic alternative to chemical Hyposprays.")
+    ));
+
+    public static final Item VOLCANIC_DRAGON_ROLL = registerItem("volcanic_dragon_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 300, 0)
+                            )))
+                            .build()
+            ),
+            Text.literal("§6✦ Volcanic Dragon Roll ✦"),
+            Text.literal("§7Spicy magma-infused thermal sushi roll."),
+            Text.literal("§e✦ Buff: §6Thermal Protection §f(5:00)"),
+            Text.literal("§8 • 100% Immunity to Fire, Lava, Magma & Freezing"),
+            Text.literal("§8 • Grants Molten Lava Buoyancy & Auto-Extinguish"),
+            Text.literal("§e✦ Buff: §cFire Resistance §f(5:00)"),
+            Text.literal("§b✦ Organic alternative to chemical Hyposprays.")
+    ));
+
+    public static final Item HIGH_ALTITUDE_KELP_ROLL = registerItem("high_altitude_kelp_roll", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.WATER_BREATHING, 20 * 300, 0)
+                            )))
+                            .build()
+            ),
+            Text.literal("§b✦ High-Altitude Kelp Roll ✦"),
+            Text.literal("§7Deep-sea kelp pressed with oxygen-dense mountain vegetables."),
+            Text.literal("§e✦ Buff: §bAtmospheric Protection §f(5:00)"),
+            Text.literal("§8 • Infinite Oxygen: Immunity to Drowning & Suffocation"),
+            Text.literal("§8 • Shields against high-altitude vacuum collapse"),
+            Text.literal("§e✦ Buff: §9Water Breathing §f(5:00)"),
+            Text.literal("§b✦ Organic alternative to chemical Hyposprays.")
+    ));
+
+    public static final Item SURVIVALIST_BENTO = registerItem("survivalist_bento", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16).food(
+                    new FoodComponent.Builder().nutrition(14).saturationModifier(1.0f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION, 20 * 480, 0),
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION, 20 * 480, 0),
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION, 20 * 480, 0),
+                                    new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 20 * 480, 0),
+                                    new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 30, 1),
+                                    new StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 180, 2)
+                            )))
+                            .build()
+            ),
+            Text.literal("§5✦ Master Survivalist Bento Box ✦"),
+            Text.literal("§dThe pinnacle of environmental hazard culinary defense."),
+            Text.literal("§e✦ Active Tri-Shield Protection §f(8:00):"),
+            Text.literal("§a  ✔ Acid Protection §8(Poison, Wither & Corrosive Immunity)"),
+            Text.literal("§6  ✔ Thermal Protection §8(Fire, Lava & Freeze Immunity)"),
+            Text.literal("§b  ✔ Atmospheric Protection §8(Infinite Air & Vacuum Immunity)"),
+            Text.literal("§e✦ Buffs: §dRegeneration II §f(0:30) §7+ §eAbsorption III §f(3:00)"),
+            Text.literal("§f✦ The ultimate organic alternative to all chemical Hyposprays!")
+    ));
+
+    // Convergence Exotic Ingredients & Boss Combat Culinary Dishes
+    public static final Item WASABI_ROOT = registerItem("wasabi_root", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(2).saturationModifier(0.3f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.HASTE, 20 * 10, 0)))
+                            .build()
+            ),
+            Text.literal("§aConvergence Wasabi Root"),
+            Text.literal("§7Pungent wild rhizome harvested along convergence riverbanks."),
+            Text.literal("§8Essential spice for crafting Fresh Wasabi Nigiri.")
+    ));
+
+    public static final Item DRAGON_FRUIT = registerItem("dragon_fruit", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(4).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 5, 0)))
+                            .build()
+            ),
+            Text.literal("§dExotic Dragon Fruit"),
+            Text.literal("§7Vibrant magenta fruit rich in cellular life-essence."),
+            Text.literal("§8Essential ingredient in Dragon Fruit Pitaya Bowls.")
+    ));
+
+    public static final Item STARFRUIT = registerItem("starfruit", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(4).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 10, 0)))
+                            .build()
+            ),
+            Text.literal("§eResonance Starfruit"),
+            Text.literal("§7Luminescent star-shaped fruit charged with anti-gravitational energy."),
+            Text.literal("§8Essential ingredient in Resonance Starfruit Tarts.")
+    ));
+
+    public static final Item PITAYA_BOWL = registerItem("pitaya_bowl", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16).food(
+                    new FoodComponent.Builder().nutrition(10).saturationModifier(1.0f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.VAMPIRIC_VITALITY, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.STRENGTH, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 20, 1)
+                            )))
+                            .build()
+            ),
+            Text.literal("§d✦ Dragon Fruit Pitaya Bowl ✦"),
+            Text.literal("§7Thick, nutrient-dense smoothie bowl crowned with dragon fruit & avocado."),
+            Text.literal("§e✦ Buff: §cVampiric Vitality §f(5:00)"),
+            Text.literal("§8 • 15% Melee Lifesteal: heals attacker for 15% of physical damage dealt"),
+            Text.literal("§8 • Critical organic sustain during drawn-out boss encounters"),
+            Text.literal("§e✦ Buffs: §cStrength I §f(5:00) §7+ §dRegeneration II §f(0:20)"),
+            Text.literal("§b✦ Organic combat meal for warrior builds.")
+    ));
+
+    public static final Item WASABI_NIGIRI = registerItem("wasabi_nigiri", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.ADRENALINE_RUSH, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.HASTE, 20 * 300, 1)
+                            )))
+                            .build()
+            ),
+            Text.literal("§a✦ Fresh Wasabi Nigiri ✦"),
+            Text.literal("§7Premium sushi rice topped with freshly grated convergence wasabi root."),
+            Text.literal("§e✦ Buff: §aAdrenaline Rush §f(5:00)"),
+            Text.literal("§8 • +25% Attack Speed & +20% Movement Speed"),
+            Text.literal("§8 • Cleanses & immunizes against Slowness, Mining Fatigue & Weakness"),
+            Text.literal("§e✦ Buff: §eHaste II §f(5:00)"),
+            Text.literal("§b✦ High-velocity rush for aggressive combat.")
+    ));
+
+    public static final Item GOLDEN_HONEY_MOCHI = registerItem("golden_honey_mochi", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(1.0f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.KINETIC_DAMPENING, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 180, 1)
+                            )))
+                            .build()
+            ),
+            Text.literal("§6✦ Golden Honey Mochi ✦"),
+            Text.literal("§7Chewy pounded rice mochi infused with sweet honey & golden dust."),
+            Text.literal("§e✦ Buff: §6Kinetic Dampening §f(5:00)"),
+            Text.literal("§8 • 100% Knockback Resistance & Impact Shock Absorption"),
+            Text.literal("§8 • Eliminates boss slam recoil and zero kinetic crash damage"),
+            Text.literal("§e✦ Buffs: §9Resistance I §f(5:00) §7+ §eAbsorption II §f(3:00)"),
+            Text.literal("§b✦ Indispensable frontline defense against boss slams.")
+    ));
+
+    public static final Item STARFRUIT_TART = registerItem("starfruit_tart", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(java.util.List.of(
+                                    new StatusEffectInstance(net.enchantedwood.effect.ModStatusEffects.CELESTIAL_LEAP, 20 * 300, 0),
+                                    new StatusEffectInstance(StatusEffects.SPEED, 20 * 300, 0)
+                            )))
+                            .build()
+            ),
+            Text.literal("§e✦ Resonance Starfruit Tart ✦"),
+            Text.literal("§7Baked celestial tart glazed with crystalline starfruit essence."),
+            Text.literal("§e✦ Buff: §eCelestial Leap §f(5:00)"),
+            Text.literal("§8 • 3-Block High Jump & Featherweight Slow-Fall Gliding"),
+            Text.literal("§8 • Complete immunity to all fall damage"),
+            Text.literal("§8 • Perfect for leaping over boss ground slams & shockwaves"),
+            Text.literal("§e✦ Buff: §bSpeed I §f(5:00)"),
+            Text.literal("§b✦ Aerial tactical mobility in boss arenas.")
+    ));
+
+    // Convergence Mob Variant Spawn Eggs
+    public static final Item CONVERGENCE_ZOMBIE_SPAWN_EGG = registerItem("convergence_zombie_spawn_egg",
+            settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_ZOMBIE, settings));
+
+    public static final Item CONVERGENCE_SKELETON_SPAWN_EGG = registerItem("convergence_skeleton_spawn_egg",
+            settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_SKELETON, settings));
+
+    public static final Item CONVERGENCE_CREEPER_SPAWN_EGG = registerItem("convergence_creeper_spawn_egg",
+            settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_CREEPER, settings));
+
+    public static final Item CONVERGENCE_SPIDER_SPAWN_EGG = registerItem("convergence_spider_spawn_egg",
+            settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_SPIDER, settings));
+
+    // The Resonance Colossus: Summoning Key & Boss Relics
+    public static final Item CORE_OF_AWAKENING = registerItem("core_of_awakening", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§5✦ Core of Awakening ✦"),
+            Text.literal("§dCrystalline relic charged with primordial resonance energy."),
+            Text.literal("§7Right-click on the §eResonance Altar §7in §dThe Convergence §7to awaken"),
+            Text.literal("§7or revive §5The Resonance Colossus§7."),
+            Text.literal("§8 • Protected by Arena Leash & Retreat Protocol")
+    ));
+
+    public static final Item RESONANCE_CLEAVER = registerItem("resonance_cleaver",
+            settings -> new net.enchantedwood.item.custom.ResonanceCleaverItem(settings.sword(ModMaterials.MANYULLYN, 6.0f, -3.0f).maxDamage(2500)));
+
+    public static final Item SINGULARITY_STAFF = registerItem("singularity_staff",
+            settings -> new net.enchantedwood.item.custom.SingularityStaffItem(settings.maxDamage(1500)));
+
+    public static final Item ETERNAL_BENTO_BOX = registerItem("eternal_bento_box",
+            settings -> new net.enchantedwood.item.custom.EternalBentoBoxItem(settings.maxCount(1)));
+
+    // Starfleet Medical Technology: Hypospray, Essences & Cartridges
+    public static final Item HYPOSPRAY = registerItem("hypospray",
+            settings -> new net.enchantedwood.item.custom.HyposprayItem(settings.maxCount(1)));
+
+    public static final Item EMPTY_CARTRIDGE = registerItem("empty_cartridge", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§9Empty Hypospray Cartridge"),
+            Text.literal("§7Sterile titanium & reinforced glass ampoule."),
+            Text.literal("§8Used in the §eChemical Synthesizer §8to compound medical inoculants.")
+    ));
+
+    // Centrifuged Chemical Essences
+    public static final Item ALKALINE_BASE_EXTRACT = registerItem("alkaline_base_extract", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§aAlkaline Base Extract"),
+            Text.literal("§7Concentrated alkalizing solution extracted in the §eIndustrial Centrifuge§7."),
+            Text.literal("§8Synthesizes Acid-Neutralizing Cartridges.")
+    ));
+
+    public static final Item CRYO_THERMAL_EXTRACT = registerItem("cryo_thermal_extract", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§6Cryo-Thermal Extract"),
+            Text.literal("§7Endothermic compound separated from volcanic matter in the §eIndustrial Centrifuge§7."),
+            Text.literal("§8Synthesizes Endothermic Heat-Buffer Cartridges.")
+    ));
+
+    public static final Item OXYGENATED_EXTRACT = registerItem("oxygenated_extract", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§bOxygenated Extract"),
+            Text.literal("§7Purified oxygen-binding hemoglobin essence from the §eIndustrial Centrifuge§7."),
+            Text.literal("§8Synthesizes Hyper-Oxygenation Cartridges.")
+    ));
+
+    public static final Item CELLULAR_NANITE_EXTRACT = registerItem("cellular_nanite_extract", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§dCellular Nanite Extract"),
+            Text.literal("§7Bio-regenerative stem essence extracted from rare flora in the §eIndustrial Centrifuge§7."),
+            Text.literal("§8Synthesizes Nanite Trauma Inoculants.")
+    ));
+
+    public static final Item ADRENAL_ESSENCE = registerItem("adrenal_essence", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§eAdrenal Essence"),
+            Text.literal("§7Hyper-metabolic stimulant concentrate from the §eIndustrial Centrifuge§7."),
+            Text.literal("§8Synthesizes Adrenaline Combat Stims.")
+    ));
+
+    // Medical Hypospray Cartridges
+    public static final Item ACID_NEUTRALIZING_CARTRIDGE = registerItem("acid_neutralizing_cartridge",
+            settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.ACID_NEUTRALIZING));
+
+    public static final Item HEAT_BUFFER_CARTRIDGE = registerItem("heat_buffer_cartridge",
+            settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.HEAT_BUFFER));
+
+    public static final Item HYPER_OXYGENATION_CARTRIDGE = registerItem("hyper_oxygenation_cartridge",
+            settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.HYPER_OXYGENATION));
+
+    public static final Item NANITE_TRAUMA_CARTRIDGE = registerItem("nanite_trauma_cartridge",
+            settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.NANITE_TRAUMA));
+
+    public static final Item ADRENALINE_STIM_CARTRIDGE = registerItem("adrenaline_stim_cartridge",
+            settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.ADRENALINE_STIM));
 
     // Petrochemicals & Fuels
     public static final Item CRUDE_OIL_SLUDGE = registerItem("crude_oil_sludge", settings -> new net.enchantedwood.item.custom.TooltipItem(
@@ -169,6 +578,15 @@ public class ModItems {
             settings,
             Text.literal("§dHeavy hazard-shielded chassis built for dimensional exploration."),
             Text.literal("§8Craft with 7 Titanium Ingots in an H-shape.")
+    ));
+    public static final Item SEALED_HAZARD_CANOPY = registerItem("sealed_hazard_canopy", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(1).fireproof(),
+            Text.literal("§b✦ Pressurized Environmental Cockpit Canopy"),
+            Text.literal("§7Reinforced composite canopy with hermetic seals and air scrubbers:"),
+            Text.literal("§f• 100% Protection from Acid Rain & Corrosive Waters"),
+            Text.literal("§f• 100% Protection from Volcanic Heat & Caldera Scalds"),
+            Text.literal("§f• 100% Protection from Atmospheric Hypoxia & Anoxic Caves"),
+            Text.literal("§8Install into ATV trunk or cargo slot to seal the cabin.")
     ));
     public static final Item SMALL_CARGO_TRUNK = registerItem("small_cargo_trunk", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings,
@@ -343,8 +761,33 @@ public class ModItems {
                     Text.literal("§b• Optical HUD Night Vision"),
                     Text.literal("§7• Automatically engages when ambient light ≤ 6"),
                     Text.literal("§7• Powers down in illuminated areas (≥ 9 light)"),
-                    Text.literal("§e• Energy Cost: §f2 FE / tick §7(only while active in dark)")
+                    Text.literal("§e• Energy Cost: §f2 FE / tick §7(only while active in dark)"),
+                    Text.literal("§8• Compatible with: §fModular Power Helmet")
             )));
+    public static final Item SPEED_SERVO_MODULE = registerItem("speed_servo_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "Speed Servos", java.util.List.of(
+                    Text.literal("§b• Overclocks leg hydraulics for high-speed sprint locomotion"),
+                    Text.literal("§f• Grants §bSpeed II §fwhile moving"),
+                    Text.literal("§e• Energy Cost: §f2 FE / tick §7while sprinting/moving"),
+                    Text.literal("§8• Compatible with: §fModular Power Leggings")
+            )));
+    public static final Item STEP_ASSIST_MODULE = registerItem("step_assist_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "Hydraulic Step-Assist", java.util.List.of(
+                    Text.literal("§b• Pneumatic servos allow seamless 1.0-block auto-stepping"),
+                    Text.literal("§f• Walk up full blocks smoothly without jumping"),
+                    Text.literal("§e• Energy Cost: §f1 FE / sec §7while walking"),
+                    Text.literal("§8• Compatible with: §fModular Power Boots")
+            )));
+    public static final Item HIGH_JUMP_MODULE = registerItem("high_jump_module", settings ->
+            new net.enchantedwood.item.custom.SuitModuleItem(settings, "High-Jump Actuators", java.util.List.of(
+                    Text.literal("§b• Neo-Titanium pneumatic coils propel user upwards"),
+                    Text.literal("§f• Grants §bJump Boost II §f(jump over 2.5 blocks)"),
+                    Text.literal("§a• 100% Fall Damage Negation §7upon landing"),
+                    Text.literal("§e• Energy Cost: §f1 FE / tick §7(while jumping or falling)"),
+                    Text.literal("§8• Compatible with: §fModular Power Boots")
+            )));
+    public static final Item ACID_PROOF_PLATING = registerItem("acid_proof_plating",
+            settings -> new net.enchantedwood.item.custom.AcidProofPlatingItem(settings.maxCount(1).fireproof()));
 
     // Phase 2: Metallurgy & Gas Items
     public static final Item RAW_BAUXITE = registerItem("raw_bauxite", Item::new);
@@ -1182,6 +1625,35 @@ public class ModItems {
                 entries.add(ROASTED_CORN);
                 entries.add(CORN_SEEDS);
 
+                // Convergence Cuisine & Ingredients
+                entries.add(RICE);
+                entries.add(RICE_SEEDS);
+                entries.add(SUSHI_RICE);
+                entries.add(CUCUMBER);
+                entries.add(CUCUMBER_SEEDS);
+                entries.add(AVOCADO);
+                entries.add(net.enchantedwood.block.ModBlocks.AVOCADO_SAPLING);
+                entries.add(net.enchantedwood.block.ModBlocks.AVOCADO_LOG);
+                entries.add(net.enchantedwood.block.ModBlocks.AVOCADO_WOOD);
+                entries.add(net.enchantedwood.block.ModBlocks.AVOCADO_LEAVES);
+                entries.add(net.enchantedwood.block.ModBlocks.WILD_RICE);
+                entries.add(net.enchantedwood.block.ModBlocks.WILD_CUCUMBER);
+                entries.add(NORI_SHEET);
+
+                // Gourmet Sushi Rolls
+                entries.add(SALMON_ROLL);
+                entries.add(COD_ROLL);
+                entries.add(AVOCADO_CUCUMBER_ROLL);
+                entries.add(CALIFORNIA_ROLL);
+                entries.add(GARDEN_ROLL);
+                entries.add(MASTER_RAINBOW_ROLL);
+
+                // Protective Hazard-Shield Foods (Hypospray Alternatives)
+                entries.add(ALKALINE_DETOX_ROLL);
+                entries.add(VOLCANIC_DRAGON_ROLL);
+                entries.add(HIGH_ALTITUDE_KELP_ROLL);
+                entries.add(SURVIVALIST_BENTO);
+
                 // Petrochemicals & Fuels
                 entries.add(net.enchantedwood.block.ModBlocks.OIL_SAND);
                 entries.add(CRUDE_OIL_SLUDGE);
@@ -1215,6 +1687,7 @@ public class ModItems {
                 entries.add(ALUMINUM_ATV_CHASSIS);
                 entries.add(STEEL_ATV_CHASSIS);
                 entries.add(TITANIUM_ATV_CHASSIS);
+                entries.add(SEALED_HAZARD_CANOPY);
                 entries.add(SMALL_CARGO_TRUNK);
                 entries.add(MEDIUM_CARGO_TRUNK);
                 entries.add(LARGE_CARGO_TRUNK);
@@ -1252,6 +1725,63 @@ public class ModItems {
                 entries.add(BLAZE_OVERCLOCK_CORE);
                 entries.add(INFERNAL_HAMMER);
                 entries.add(PLASMA_FLAMETHROWER);
+
+                // Boss Combat Culinary Dishes & Convergence Botanicals
+                entries.add(WASABI_ROOT);
+                entries.add(DRAGON_FRUIT);
+                entries.add(STARFRUIT);
+
+                entries.add(net.enchantedwood.block.ModBlocks.WILD_WASABI);
+                entries.add(net.enchantedwood.block.ModBlocks.WILD_DRAGON_FRUIT);
+                entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_LEAVES);
+
+                entries.add(PITAYA_BOWL);
+                entries.add(WASABI_NIGIRI);
+                entries.add(GOLDEN_HONEY_MOCHI);
+                entries.add(STARFRUIT_TART);
+
+                // Convergence Mob Variant Spawn Eggs
+                entries.add(CONVERGENCE_ZOMBIE_SPAWN_EGG);
+                entries.add(CONVERGENCE_SKELETON_SPAWN_EGG);
+                entries.add(CONVERGENCE_CREEPER_SPAWN_EGG);
+                entries.add(CONVERGENCE_SPIDER_SPAWN_EGG);
+
+                // The Resonance Colossus: Altar, Awakening Core & Relics
+                entries.add(net.enchantedwood.block.ModBlocks.RESONANCE_ALTAR);
+                entries.add(CORE_OF_AWAKENING);
+                entries.add(RESONANCE_CLEAVER);
+                entries.add(SINGULARITY_STAFF);
+                entries.add(ETERNAL_BENTO_BOX);
+
+                // Starfleet Medical Laboratory Suite
+                entries.add(net.enchantedwood.block.ModBlocks.INDUSTRIAL_CENTRIFUGE);
+                entries.add(net.enchantedwood.block.ModBlocks.CHEMICAL_SYNTHESIZER);
+                entries.add(HYPOSPRAY);
+                entries.add(EMPTY_CARTRIDGE);
+                entries.add(ALKALINE_BASE_EXTRACT);
+                entries.add(CRYO_THERMAL_EXTRACT);
+                entries.add(OXYGENATED_EXTRACT);
+                entries.add(CELLULAR_NANITE_EXTRACT);
+                entries.add(ADRENAL_ESSENCE);
+                entries.add(ACID_NEUTRALIZING_CARTRIDGE);
+                entries.add(HEAT_BUFFER_CARTRIDGE);
+                entries.add(HYPER_OXYGENATION_CARTRIDGE);
+                entries.add(NANITE_TRAUMA_CARTRIDGE);
+                entries.add(ADRENALINE_STIM_CARTRIDGE);
+
+                // Modular Power Suit & Exosuit Modules
+                entries.add(MODULAR_POWER_HELMET);
+                entries.add(MODULAR_POWER_CHESTPLATE);
+                entries.add(MODULAR_POWER_LEGGINGS);
+                entries.add(MODULAR_POWER_BOOTS);
+                entries.add(NANITE_REPAIR_MATRIX);
+                entries.add(HYDROGEN_THRUSTER_MODULE);
+                entries.add(ION_REPULSOR_MODULE);
+                entries.add(NIGHT_VISION_MODULE);
+                entries.add(SPEED_SERVO_MODULE);
+                entries.add(STEP_ASSIST_MODULE);
+                entries.add(HIGH_JUMP_MODULE);
+                entries.add(ACID_PROOF_PLATING);
             })
             .build();
 

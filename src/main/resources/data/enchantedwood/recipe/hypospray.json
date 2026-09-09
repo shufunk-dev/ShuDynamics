@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " TR",
+    "TAT",
+    "G  "
+  ],
+  "key": {
+    "T": {
+      "item": "enchantedwood:titanium_ingot"
+    },
+    "A": {
+      "item": "enchantedwood:aluminum_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "id": "enchantedwood:hypospray",
+    "count": 1
+  }
+}

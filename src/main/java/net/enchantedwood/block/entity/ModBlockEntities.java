@@ -356,6 +356,20 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(PoweredAnvilBlockEntity::new, ModBlocks.POWERED_ANVIL).build()
             );
 
+    public static final BlockEntityType<IndustrialCentrifugeBlockEntity> INDUSTRIAL_CENTRIFUGE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge"),
+                    FabricBlockEntityTypeBuilder.create(IndustrialCentrifugeBlockEntity::new, ModBlocks.INDUSTRIAL_CENTRIFUGE).build()
+            );
+
+    public static final BlockEntityType<ChemicalSynthesizerBlockEntity> CHEMICAL_SYNTHESIZER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer"),
+                    FabricBlockEntityTypeBuilder.create(ChemicalSynthesizerBlockEntity::new, ModBlocks.CHEMICAL_SYNTHESIZER).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

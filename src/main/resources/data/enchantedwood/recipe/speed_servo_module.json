@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SGS",
+    "PCP",
+    "SGS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "enchantedwood:aluminum_gear",
+    "P": "minecraft:piston",
+    "C": "enchantedwood:basic_computer_chip"
+  },
+  "result": {
+    "id": "enchantedwood:speed_servo_module",
+    "count": 1
+  }
+}

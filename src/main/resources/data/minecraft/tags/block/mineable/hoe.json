@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
-    "enchantedwood:rubber_leaves"
+    "enchantedwood:rubber_leaves",
+    "enchantedwood:avocado_leaves",
+    "enchantedwood:rice_crop",
+    "enchantedwood:cucumber_crop",
+    "enchantedwood:wild_rice",
+    "enchantedwood:wild_cucumber",
+    "enchantedwood:starfruit_leaves",
+    "enchantedwood:wild_wasabi",
+    "enchantedwood:wild_dragon_fruit"
   ]
 }

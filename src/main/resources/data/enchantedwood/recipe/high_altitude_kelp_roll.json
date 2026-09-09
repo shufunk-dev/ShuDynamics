@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "minecraft:dried_kelp"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "enchantedwood:avocado"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "enchantedwood:nori_sheet"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:high_altitude_kelp_roll"
+  }
+}

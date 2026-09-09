@@ -10,4 +10,11 @@ public class ModSaplingGenerators {
             Optional.of(ModWorldGeneration.RUBBER_TREE_KEY),
             Optional.empty()
     );
+
+    public static final SaplingGenerator AVOCADO = new SaplingGenerator(
+            "avocado",
+            Optional.empty(),
+            Optional.of(ModWorldGeneration.AVOCADO_TREE_KEY),
+            Optional.empty()
+    );
 }

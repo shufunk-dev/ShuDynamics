@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:cod"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "enchantedwood:nori_sheet"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "enchantedwood:cod_roll"
+  }
+}

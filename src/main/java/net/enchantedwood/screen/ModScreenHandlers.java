@@ -157,6 +157,14 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "powered_anvil"),
                     new ScreenHandlerType<>(PoweredAnvilScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<IndustrialCentrifugeScreenHandler> INDUSTRIAL_CENTRIFUGE_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge"),
+                    new ScreenHandlerType<>(IndustrialCentrifugeScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<ChemicalSynthesizerScreenHandler> CHEMICAL_SYNTHESIZER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer"),
+                    new ScreenHandlerType<>(ChemicalSynthesizerScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }

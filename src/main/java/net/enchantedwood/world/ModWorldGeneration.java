@@ -2,15 +2,34 @@ package net.enchantedwood.world;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.enchantedwood.EnchantedWoodMod;
+import net.enchantedwood.world.gen.ConvergenceVegetationFeature;
 
 public class ModWorldGeneration {
+    public static final Feature<DefaultFeatureConfig> CONVERGENCE_VEGETATION_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_vegetation"),
+            new ConvergenceVegetationFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> CONVERGENCE_VEGETATION_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_vegetation"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_VEGETATION_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_vegetation"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> TIN_ORE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "tin_ore"));
 
@@ -124,6 +143,13 @@ public class ModWorldGeneration {
                 BiomeSelectors.foundInTheNether(),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 NETHER_TUNGSTEN_ORE_PLACED_KEY
+        );
+
+        // Convergence Dimension Vegetation (Wild Rice, Wild Cucumbers, Avocado Trees)
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                CONVERGENCE_VEGETATION_PLACED_KEY
         );
     }
 }

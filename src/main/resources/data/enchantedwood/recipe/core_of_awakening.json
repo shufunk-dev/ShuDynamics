@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FDF",
+    "SMS",
+    "FBF"
+  ],
+  "key": {
+    "F": {
+      "item": "enchantedwood:fire_crystal"
+    },
+    "D": {
+      "item": "enchantedwood:dragon_fruit"
+    },
+    "S": {
+      "item": "enchantedwood:sulfur_dust"
+    },
+    "M": {
+      "item": "enchantedwood:dimensional_singularity"
+    },
+    "B": {
+      "item": "enchantedwood:survivalist_bento"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:core_of_awakening"
+  }
+}

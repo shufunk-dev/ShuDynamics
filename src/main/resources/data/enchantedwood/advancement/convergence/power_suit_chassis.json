@@ -1,0 +1,40 @@
+{
+  "parent": "enchantedwood:convergence/root",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:modular_power_chestplate"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.power_suit_chassis.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.power_suit_chassis.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "craft_suit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:modular_power_helmet",
+              "enchantedwood:modular_power_chestplate",
+              "enchantedwood:modular_power_leggings",
+              "enchantedwood:modular_power_boots"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "craft_suit"
+    ]
+  ]
+}

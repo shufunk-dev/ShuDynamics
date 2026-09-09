@@ -1,0 +1,43 @@
+{
+  "parent": "enchantedwood:convergence/power_suit_chassis",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:speed_servo_module"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.modular_operative.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.modular_operative.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "acquire_module": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:night_vision_module",
+              "enchantedwood:speed_servo_module",
+              "enchantedwood:step_assist_module",
+              "enchantedwood:high_jump_module",
+              "enchantedwood:ion_repulsor_module",
+              "enchantedwood:hydrogen_thruster_module",
+              "enchantedwood:acid_proof_plating"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "acquire_module"
+    ]
+  ]
+}

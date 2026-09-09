@@ -1,0 +1,37 @@
+{
+  "parent": "enchantedwood:convergence/field_medic",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:hypospray"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.hypospray_inoculation.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.hypospray_inoculation.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_hypospray": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:hypospray"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "use_hypospray"
+    ]
+  ]
+}

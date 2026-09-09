@@ -375,8 +375,15 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         if (stack.isOf(ModItems.NIGHT_VISION_MODULE)) {
             return tab == 0; // Helmet only
         }
-        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)) {
+        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)
+                || stack.isOf(ModItems.ACID_PROOF_PLATING) || stack.isOf(ModItems.THERMAL_REFRACTORY_PLATING)) {
             return tab == 1; // Chestplate only
+        }
+        if (stack.isOf(ModItems.SPEED_SERVO_MODULE)) {
+            return tab == 2; // Leggings only
+        }
+        if (stack.isOf(ModItems.STEP_ASSIST_MODULE) || stack.isOf(ModItems.HIGH_JUMP_MODULE)) {
+            return tab == 3; // Boots only
         }
         return false;
     }

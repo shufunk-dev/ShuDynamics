@@ -818,6 +818,147 @@ public class ModBlocks {
                     .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
                     .nonOpaque()));
 
+    // Convergence Agriculture & Flora
+    public static final Block RICE_CROP = registerBlockWithoutItem("rice_crop",
+            new net.enchantedwood.block.custom.RiceCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rice_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque()));
+
+    public static final Block CUCUMBER_CROP = registerBlockWithoutItem("cucumber_crop",
+            new net.enchantedwood.block.custom.CucumberCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cucumber_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque()));
+
+    public static final Block WILD_RICE = registerBlockWithTooltip("wild_rice",
+            new net.enchantedwood.block.custom.WildRiceBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_rice")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()
+                    .nonOpaque()),
+            Text.literal("§aWild Rice Plant"),
+            Text.literal("§7Native flora of §dThe Convergence§7. Harvest for Rice & Seeds."));
+
+    public static final Block WILD_CUCUMBER = registerBlockWithTooltip("wild_cucumber",
+            new net.enchantedwood.block.custom.WildCucumberBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_cucumber")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()
+                    .nonOpaque()),
+            Text.literal("§aWild Cucumber Shrub"),
+            Text.literal("§7Native flora of §dThe Convergence§7. Harvest for Cucumbers & Seeds."));
+
+    public static final Block AVOCADO_LOG = registerBlock("avocado_log",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_log")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block AVOCADO_WOOD = registerBlock("avocado_wood",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_wood")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block AVOCADO_LEAVES = registerBlock("avocado_leaves",
+            new net.enchantedwood.block.custom.AvocadoLeavesBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_leaves")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .hardness(0.2f)
+                    .resistance(0.2f)
+                    .nonOpaque()
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)));
+
+    public static final Block AVOCADO_SAPLING = registerBlockWithTooltip("avocado_sapling",
+            new net.minecraft.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.AVOCADO, AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_sapling")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()),
+            Text.literal("§aAvocado Sapling"),
+            Text.literal("§7Grows into a fruit-bearing Avocado Tree. Found in §dThe Convergence§7."));
+
+    public static final Block WILD_WASABI = registerBlockWithTooltip("wild_wasabi",
+            new net.enchantedwood.block.custom.WildWasabiBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_wasabi")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()
+                    .nonOpaque()),
+            Text.literal("§aWild Wasabi Plant"),
+            Text.literal("§7Grows along water banks in §dThe Convergence§7. Harvest for Wasabi Root."));
+
+    public static final Block WILD_DRAGON_FRUIT = registerBlockWithTooltip("wild_dragon_fruit",
+            new net.enchantedwood.block.custom.WildDragonFruitBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_dragon_fruit")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()
+                    .nonOpaque()),
+            Text.literal("§dWild Dragon Fruit Cactus"),
+            Text.literal("§7Exotic flora of §dThe Convergence§7. Harvest for Dragon Fruit."));
+
+    public static final Block STARFRUIT_LEAVES = registerBlock("starfruit_leaves",
+            new net.enchantedwood.block.custom.StarfruitLeavesBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_leaves")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .hardness(0.2f)
+                    .resistance(0.2f)
+                    .nonOpaque()
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)));
+
+    public static final Block RESONANCE_ALTAR = registerBlockWithTooltip("resonance_altar",
+            new net.enchantedwood.block.custom.ResonanceAltarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_altar")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(50.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()),
+            Text.literal("§5✦ Resonance Altar ✦"),
+            Text.literal("§dSacred dais at the heart of The Convergence Boss Arena."),
+            Text.literal("§7Right-click with a §eCore of Awakening §7inside The Convergence to summon"),
+            Text.literal("§7or revive §5The Resonance Colossus§7."),
+            Text.literal("§8 • Protected by Arena Leash & Retreat Safety Protocol"));
+
+    public static final Block INDUSTRIAL_CENTRIFUGE = registerBlockWithTooltip("industrial_centrifuge",
+            new net.enchantedwood.block.custom.IndustrialCentrifugeBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.5f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.IndustrialCentrifugeBlock.LIT) ? 10 : 0)),
+            Text.literal("§bIndustrial Centrifuge"),
+            Text.literal("§7High-speed separation chamber for biological & mineral matter."),
+            Text.literal("§8Extracts concentrated chemical essences for Hypospray compounding."));
+
+    public static final Block CHEMICAL_SYNTHESIZER = registerBlockWithTooltip("chemical_synthesizer",
+            new net.enchantedwood.block.custom.ChemicalSynthesizerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.5f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.ChemicalSynthesizerBlock.LIT) ? 12 : 0)),
+            Text.literal("§dChemical Synthesizer"),
+            Text.literal("§7Pressurized medical compounding workstation."),
+            Text.literal("§8Combines Empty Cartridges, Essences, and Catalysts into Hypospray Inoculants."));
+
     public static final Block VOLCANIC_SOIL = registerBlockWithTooltip("volcanic_soil",
             new net.enchantedwood.block.custom.VolcanicSoilBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_soil")))

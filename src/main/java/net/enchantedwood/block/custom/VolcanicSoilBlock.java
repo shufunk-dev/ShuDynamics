@@ -43,6 +43,8 @@ public class VolcanicSoilBlock extends Block {
                 else if (item == Items.POTATO) toPlant = Blocks.POTATOES.getDefaultState();
                 else if (item == Items.BEETROOT_SEEDS) toPlant = Blocks.BEETROOTS.getDefaultState();
                 else if (item == ModItems.CORN_SEEDS) toPlant = ModBlocks.CORN_CROP.getDefaultState();
+                else if (item == ModItems.RICE_SEEDS) toPlant = ModBlocks.RICE_CROP.getDefaultState();
+                else if (item == ModItems.CUCUMBER_SEEDS) toPlant = ModBlocks.CUCUMBER_CROP.getDefaultState();
                 else if (item == Items.PUMPKIN_SEEDS) toPlant = Blocks.PUMPKIN_STEM.getDefaultState();
                 else if (item == Items.MELON_SEEDS) toPlant = Blocks.MELON_STEM.getDefaultState();
                 else if (item == Items.TORCHFLOWER_SEEDS) toPlant = Blocks.TORCHFLOWER_CROP.getDefaultState();

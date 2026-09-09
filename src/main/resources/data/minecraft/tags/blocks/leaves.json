@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "enchantedwood:rubber_leaves"
+    "enchantedwood:rubber_leaves",
+    "enchantedwood:avocado_leaves",
+    "enchantedwood:starfruit_leaves"
   ]
 }

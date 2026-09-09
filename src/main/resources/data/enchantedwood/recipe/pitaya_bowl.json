@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "enchantedwood:dragon_fruit"
+    },
+    {
+      "item": "enchantedwood:avocado"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:pitaya_bowl"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "enchantedwood:alkaline_detox_roll"
+    },
+    {
+      "item": "enchantedwood:volcanic_dragon_roll"
+    },
+    {
+      "item": "enchantedwood:high_altitude_kelp_roll"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:survivalist_bento"
+  }
+}

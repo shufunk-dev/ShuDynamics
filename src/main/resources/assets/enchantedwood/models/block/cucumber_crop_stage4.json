@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "enchantedwood:block/cucumber_crop_stage4"
+  }
+}

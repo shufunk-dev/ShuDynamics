@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "enchantedwood:cucumber"
+    },
+    {
+      "item": "enchantedwood:avocado"
+    },
+    {
+      "item": "enchantedwood:sushi_rice"
+    },
+    {
+      "item": "enchantedwood:nori_sheet"
+    },
+    {
+      "item": "minecraft:honey_bottle"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:alkaline_detox_roll"
+  }
+}

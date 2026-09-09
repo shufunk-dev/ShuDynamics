@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "enchantedwood:block/resonance_altar_top",
+    "side": "enchantedwood:block/resonance_altar_side"
+  }
+}

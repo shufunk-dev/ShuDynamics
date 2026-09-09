@@ -68,13 +68,15 @@ public class PoweredAnvilScreen extends HandledScreen<PoweredAnvilScreenHandler>
             switch (this.focusedSlot.id) {
                 case 0 -> context.drawTooltip(this.textRenderer, java.util.List.of(
                         Text.literal("§e🛠️ Damaged Equipment Slot"),
-                        Text.literal("§7Place damaged tools, weapons, or armor pieces here."),
-                        Text.literal("§8Repairs using electrical power without XP costs.")
+                        Text.literal("§7Place damaged tools, weapons, or Modular Power Armor here."),
+                        Text.literal("§8Repairs using 2,500 FE without any XP prior-work penalty.")
                 ), mouseX, mouseY);
                 case 1 -> context.drawTooltip(this.textRenderer, java.util.List.of(
                         Text.literal("§e🔩 Repair Material Slot"),
-                        Text.literal("§7Place §fTitanium Ingots§7 (or matching repair materials) here."),
-                        Text.literal("§8Consumes 1 ingot per repair cycle.")
+                        Text.literal("§7Place matching repair material or duplicate item:"),
+                        Text.literal("§f• Titanium Ingots §7(for Modular Power Armor)"),
+                        Text.literal("§f• Iron, Steel, Diamonds, Netherite §7(for tools/armor)"),
+                        Text.literal("§8Consumes 1 unit per repair cycle (+25% durability restored).")
                 ), mouseX, mouseY);
             }
         }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " T ",
+    "GGG",
+    "RSR"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "G": "enchantedwood:reinforced_tank_glass",
+    "R": "enchantedwood:rubber_tire",
+    "S": "enchantedwood:steel_atv_chassis"
+  },
+  "result": {
+    "id": "enchantedwood:sealed_hazard_canopy",
+    "count": 1
+  }
+}

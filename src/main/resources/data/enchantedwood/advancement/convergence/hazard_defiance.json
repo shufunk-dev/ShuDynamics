@@ -1,0 +1,41 @@
+{
+  "parent": "enchantedwood:convergence/root",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:acid_proof_plating"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.hazard_defiance.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.hazard_defiance.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "have_protection": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:acid_proof_plating",
+              "enchantedwood:thermal_refractory_plating",
+              "enchantedwood:alkaline_detox_roll",
+              "enchantedwood:volcanic_dragon_roll",
+              "enchantedwood:high_altitude_kelp_roll"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "have_protection"
+    ]
+  ]
+}

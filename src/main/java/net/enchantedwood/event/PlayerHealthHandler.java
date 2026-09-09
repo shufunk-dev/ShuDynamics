@@ -29,9 +29,47 @@ public class PlayerHealthHandler {
     }
 
     public static void register() {
-        // Record damage timestamp for out-of-combat auto-recharge timer (10s)
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+            // Melee Lifesteal: When attacker is a player with VAMPIRIC_VITALITY
+            if (source.getAttacker() instanceof ServerPlayerEntity attacker) {
+                if (attacker.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.VAMPIRIC_VITALITY)) {
+                    float healAmount = Math.max(0.5f, amount * 0.15f);
+                    attacker.heal(healAmount);
+                    if (attacker.getEntityWorld() instanceof ServerWorld sw) {
+                        sw.spawnParticles(net.minecraft.particle.ParticleTypes.HEART, attacker.getX(), attacker.getY() + 1.0, attacker.getZ(), 2, 0.3, 0.3, 0.3, 0.02);
+                    }
+                }
+            }
+
             if (entity instanceof ServerPlayerEntity player) {
+                // 1. Acid Protection: Negates magic, poison, wither, and corrosive damage
+                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION)) {
+                    if (source.isOf(net.minecraft.entity.damage.DamageTypes.MAGIC) ||
+                        source.isOf(net.minecraft.entity.damage.DamageTypes.INDIRECT_MAGIC) ||
+                        source.isOf(net.minecraft.entity.damage.DamageTypes.WITHER)) {
+                        return false;
+                    }
+                }
+
+                // 2. Thermal Protection: Negates all fire, lava, hot floor, and freeze damage
+                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
+                    if (source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_FIRE) ||
+                        source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_FREEZING) ||
+                        source.isOf(net.minecraft.entity.damage.DamageTypes.HOT_FLOOR)) {
+                        player.extinguish();
+                        return false;
+                    }
+                }
+
+                // 3. Atmospheric Protection: Negates drowning, wall suffocation, and vacuum collapse
+                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION)) {
+                    if (source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_DROWNING) ||
+                        source.isOf(net.minecraft.entity.damage.DamageTypes.IN_WALL)) {
+                        player.setAir(player.getMaxAir());
+                        return false;
+                    }
+                }
+
                 LAST_DAMAGE_TIME.put(player.getUuid(), System.currentTimeMillis());
             }
             return true;

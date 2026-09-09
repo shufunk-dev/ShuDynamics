@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " T ",
+    "PCP",
+    "TGT"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "P": "minecraft:piston",
+    "C": "enchantedwood:basic_computer_chip",
+    "G": "enchantedwood:steel_gear"
+  },
+  "result": {
+    "id": "enchantedwood:step_assist_module",
+    "count": 1
+  }
+}

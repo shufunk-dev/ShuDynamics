@@ -1,0 +1,38 @@
+{
+  "parent": "enchantedwood:convergence/hazard_defiance",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:sealed_hazard_canopy"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.sealed_expedition.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.sealed_expedition.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "acquire_canopy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:sealed_hazard_canopy",
+              "enchantedwood:titanium_atv_chassis"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "acquire_canopy"
+    ]
+  ]
+}

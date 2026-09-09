@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "enchantedwood:block/avocado_log_top",
+    "side": "enchantedwood:block/avocado_log"
+  }
+}

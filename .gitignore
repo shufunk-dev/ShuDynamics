@@ -35,6 +35,7 @@ upload/
 # Generated Development Reports & Checklists
 *.html
 *.pdf
+SHUDYNAMICS_2.0_MASTER_CHECKLIST.*
 ShuMod_Development_Report.html
 ShuMod_Item_Checklist.html
 shumod-v1.0.0-release-report.html

@@ -151,9 +151,13 @@ public class OverworldAnomalyEventHandler {
                 player.addCommandTag("sd_anomaly_altitude");
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.ENTITY_WARDEN_HEARTBEAT, SoundCategory.PLAYERS, 1.2f, 1.4f);
-                player.sendMessage(Text.literal("§b❄ The atmosphere suddenly collapses into a vacuum... You struggle to breathe!"), true);
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 0, false, false, false));
-                player.setAir(Math.min(player.getAir(), 40));
+                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION)) {
+                    player.sendMessage(Text.literal("§b✦ Atmospheric Protection Shield: Vacuum collapse filtered! Air supply 100% stable."), true);
+                } else {
+                    player.sendMessage(Text.literal("§b❄ The atmosphere suddenly collapses into a vacuum... You struggle to breathe!"), true);
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 0, false, false, false));
+                    player.setAir(Math.min(player.getAir(), 40));
+                }
             }
             case GRAVITY -> {
                 player.addCommandTag("sd_anomaly_gravity");
@@ -182,7 +186,11 @@ public class OverworldAnomalyEventHandler {
                         SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1.2f, 0.6f);
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 1.0f, 0.5f);
-                player.sendMessage(Text.literal("§6🔥 Solar Plasma Wave! Superheated extraterrestrial radiation washes over you..."), true);
+                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
+                    player.sendMessage(Text.literal("§6✦ Thermal Protection Shield: Deflected solar plasma radiation wave effortlessly!"), true);
+                } else {
+                    player.sendMessage(Text.literal("§6🔥 Solar Plasma Wave! Superheated extraterrestrial radiation washes over you..."), true);
+                }
                 // Safe temporary fire resistance so player is never harmed
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0, false, false, false));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 100, 0, false, false, false));

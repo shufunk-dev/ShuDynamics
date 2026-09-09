@@ -125,23 +125,26 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
                                 Text.literal("§a⚙️ Module Slot " + slotName),
                                 Text.literal("§7Accepts: §fAdaptive Night Vision HUD"),
                                 Text.literal("§7or §fNanite Auto-Repair Matrix"),
-                                Text.literal("§8Hardware upgrade socket for helmet systems.")
+                                Text.literal("§8Hardware upgrade socket for helmet sensory & auto-repair systems.")
                         );
                         case 1 -> java.util.List.of(
                                 Text.literal("§a⚙️ Module Slot " + slotName),
-                                Text.literal("§7Accepts: §fHydrogen Thrusters, Ion Repulsors,"),
+                                Text.literal("§7Accepts: §fHydrogen Thrusters§7, §fIon Repulsors§7,"),
+                                Text.literal("§fFluoropolymer Acid Plating§7, §fThermal Refractory Plating§7,"),
                                 Text.literal("§7or §fNanite Auto-Repair Matrix"),
-                                Text.literal("§8Hardware upgrade socket for chest & flight systems.")
+                                Text.literal("§8Hardware socket for flight, propulsion & environmental shields.")
                         );
                         case 2 -> java.util.List.of(
                                 Text.literal("§a⚙️ Module Slot " + slotName),
-                                Text.literal("§7Accepts: §fNanite Auto-Repair Matrix"),
-                                Text.literal("§8Hardware upgrade socket (more leg modules coming soon).")
+                                Text.literal("§7Accepts: §fSpeed Servo Leg Module"),
+                                Text.literal("§7or §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket for locomotive kinetic enhancement.")
                         );
                         default -> java.util.List.of(
                                 Text.literal("§a⚙️ Module Slot " + slotName),
-                                Text.literal("§7Accepts: §fNanite Auto-Repair Matrix"),
-                                Text.literal("§8Hardware upgrade socket (more boot modules coming soon).")
+                                Text.literal("§7Accepts: §fHydraulic Step-Assist§7, §fHigh-Jump Actuators§7,"),
+                                Text.literal("§7or §fNanite Auto-Repair Matrix"),
+                                Text.literal("§8Hardware upgrade socket for vertical mobility & terrain clearance.")
                         );
                     };
                     context.drawTooltip(this.textRenderer, moduleTooltip, mouseX, mouseY);

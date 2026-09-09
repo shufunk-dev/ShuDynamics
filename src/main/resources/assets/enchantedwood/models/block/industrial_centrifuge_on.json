@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/industrial_centrifuge_top",
+    "front": "enchantedwood:block/industrial_centrifuge_front_on",
+    "side": "enchantedwood:block/industrial_centrifuge_side"
+  }
+}

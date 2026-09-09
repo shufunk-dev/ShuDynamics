@@ -64,12 +64,29 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.LASER_QUARRY_SCREEN_HANDLER, net.enchantedwood.screen.LaserQuarryScreen::new);
         HandledScreens.register(ModScreenHandlers.MODULAR_SUIT_SCREEN_HANDLER, net.enchantedwood.screen.ModularSuitScreen::new);
         HandledScreens.register(ModScreenHandlers.POWERED_ANVIL_SCREEN_HANDLER, net.enchantedwood.screen.PoweredAnvilScreen::new);
+        HandledScreens.register(ModScreenHandlers.INDUSTRIAL_CENTRIFUGE_SCREEN_HANDLER, net.enchantedwood.screen.IndustrialCentrifugeScreen::new);
+        HandledScreens.register(ModScreenHandlers.CHEMICAL_SYNTHESIZER_SCREEN_HANDLER, net.enchantedwood.screen.ChemicalSynthesizerScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_ZOMBIE, net.enchantedwood.client.renderer.ConvergenceZombieRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_SKELETON, net.enchantedwood.client.renderer.ConvergenceSkeletonRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_CREEPER, net.enchantedwood.client.renderer.ConvergenceCreeperRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.ResonanceColossusModel.MODEL_LAYER, net.enchantedwood.client.renderer.ResonanceColossusModel::getTexturedModelData);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_SPIDER, net.enchantedwood.client.renderer.ConvergenceSpiderRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.RESONANCE_COLOSSUS, net.enchantedwood.client.renderer.ResonanceColossusRenderer::new);
 
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.RICE_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CUCUMBER_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_RICE, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_CUCUMBER, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.AVOCADO_SAPLING, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.AVOCADO_LEAVES, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_WASABI, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_DRAGON_FRUIT, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.STARFRUIT_LEAVES, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS, net.minecraft.client.render.BlockRenderLayer.TRANSLUCENT);
 

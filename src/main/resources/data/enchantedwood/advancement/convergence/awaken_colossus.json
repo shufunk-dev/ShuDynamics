@@ -1,0 +1,37 @@
+{
+  "parent": "enchantedwood:convergence/root",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:core_of_awakening"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.awaken_colossus.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.awaken_colossus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "obtain_core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:core_of_awakening"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtain_core"
+    ]
+  ]
+}

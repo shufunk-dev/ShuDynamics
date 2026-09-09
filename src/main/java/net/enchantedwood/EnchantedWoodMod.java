@@ -16,6 +16,7 @@ public class EnchantedWoodMod implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Enchanted Wood Mod!");
+        net.enchantedwood.effect.ModStatusEffects.registerModEffects();
         ModBlocks.registerModBlocks();
         ModItems.registerModItems();
         net.enchantedwood.entity.ModEntities.registerModEntities();
@@ -33,8 +34,11 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.event.WoodenShearsSheepHandler.register();
         net.enchantedwood.event.WoodenShearsHarvestHandler.register();
         net.enchantedwood.event.CornSeedLootHandler.register();
+        net.enchantedwood.event.ConvergenceFloraLootHandler.register();
         net.enchantedwood.event.OverworldAnomalyEventHandler.register();
         net.enchantedwood.event.ResonanceFrameHandler.register();
+        net.enchantedwood.event.ConvergenceMobSpawnHandler.register();
+        net.enchantedwood.event.ConvergenceHazardHandler.register();
 
         // Strippable Rubber Wood
         net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_LOG, ModBlocks.STRIPPED_RUBBER_LOG);

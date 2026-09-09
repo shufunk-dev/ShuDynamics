@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RER",
+    "ETE",
+    "RER"
+  ],
+  "key": {
+    "R": "enchantedwood:rubber_tire",
+    "E": "enchantedwood:alkaline_base_extract",
+    "T": "enchantedwood:titanium_ingot"
+  },
+  "result": {
+    "id": "enchantedwood:acid_proof_plating",
+    "count": 1
+  }
+}

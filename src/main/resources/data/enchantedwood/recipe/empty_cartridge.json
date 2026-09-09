@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    " G ",
+    " T "
+  ],
+  "key": {
+    "T": {
+      "item": "enchantedwood:titanium_nugget"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "id": "enchantedwood:empty_cartridge",
+    "count": 4
+  }
+}

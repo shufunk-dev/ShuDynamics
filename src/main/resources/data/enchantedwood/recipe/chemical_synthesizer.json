@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TGT",
+    "TRT",
+    "TCT"
+  ],
+  "key": {
+    "T": {
+      "item": "enchantedwood:titanium_ingot"
+    },
+    "G": {
+      "item": "enchantedwood:reinforced_tank_glass"
+    },
+    "R": {
+      "item": "minecraft:brewing_stand"
+    },
+    "C": {
+      "item": "enchantedwood:tungsten_ingot"
+    }
+  },
+  "result": {
+    "id": "enchantedwood:chemical_synthesizer",
+    "count": 1
+  }
+}

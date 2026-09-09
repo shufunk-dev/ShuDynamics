@@ -1,0 +1,67 @@
+{
+  "parent": "enchantedwood:convergence/resonance_conqueror",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:singularity_staff"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.relic_master.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.relic_master.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_cleaver": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:resonance_cleaver"
+            ]
+          }
+        ]
+      }
+    },
+    "has_staff": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:singularity_staff"
+            ]
+          }
+        ]
+      }
+    },
+    "has_bento": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "enchantedwood:eternal_bento_box"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cleaver"
+    ],
+    [
+      "has_staff"
+    ],
+    [
+      "has_bento"
+    ]
+  ]
+}
