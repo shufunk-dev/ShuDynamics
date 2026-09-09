@@ -1,6 +1,7 @@
 package net.enchantedwood.event;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -82,6 +83,12 @@ public class PlayerHealthHandler {
                 }
             }
         });
+
+        // Instant Heart Container Resync on Respawn (fixes keepInventory modifier persistence)
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            LAST_HEART_HEALTH_BONUS.remove(newPlayer.getUuid());
+            tickPlayerHeartLocket(newPlayer);
+        });
     }
 
     private static void tickPlayerHeartLocket(ServerPlayerEntity player) {
@@ -91,8 +98,11 @@ public class PlayerHealthHandler {
         float targetBonus = getEquippedHeartHealthBonus(player);
         Float lastBonus = LAST_HEART_HEALTH_BONUS.getOrDefault(uuid, -1.0f);
 
-        // Update EntityAttributeModifier for MAX_HEALTH whenever equipped Heart Locket changes
-        if (targetBonus != lastBonus) {
+        EntityAttributeInstance attribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        boolean hasModifier = attribute != null && attribute.getModifier(HEART_HEALTH_MODIFIER_ID) != null;
+
+        // Update EntityAttributeModifier for MAX_HEALTH whenever equipped Heart Locket changes OR is missing after respawn
+        if (targetBonus != lastBonus || (targetBonus > 0.0f && !hasModifier)) {
             updateMaxHealthAttribute(player, targetBonus, lastBonus);
             LAST_HEART_HEALTH_BONUS.put(uuid, targetBonus);
         }
