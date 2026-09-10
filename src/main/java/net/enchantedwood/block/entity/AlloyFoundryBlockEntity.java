@@ -211,7 +211,36 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
         if (isGlass(itemA) && isVolcanicOrFire(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS.asItem(), 2);
         if (isVolcanicOrFire(itemA) && isGlass(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS.asItem(), 2);
 
+        // Convergence Superalloys & Advanced Composites
+        if (isTantalum(itemA) && isTitanium(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.TAN_TI_INGOT, 2);
+        if (isTitanium(itemA) && isTantalum(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.TAN_TI_INGOT, 2);
+
+        if (isHafnium(itemA) && isTungsten(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.HAFNIUM_TUNGSTEN_CARBIDE_INGOT, 2);
+        if (isTungsten(itemA) && isHafnium(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.HAFNIUM_TUNGSTEN_CARBIDE_INGOT, 2);
+
+        if (isNeodymium(itemA) && isTitanium(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.NEO_TITANIUM_INGOT, 2);
+        if (isTitanium(itemA) && isNeodymium(itemB)) return new AlloyRecipe(itemA, itemB, ModItems.NEO_TITANIUM_INGOT, 2);
+
+        if (isAerogel(itemA) && isGlass(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.AEROGEL_GLASS.asItem(), 2);
+        if (isGlass(itemA) && isAerogel(itemB)) return new AlloyRecipe(itemA, itemB, net.enchantedwood.block.ModBlocks.AEROGEL_GLASS.asItem(), 2);
+
         return null;
+    }
+
+    private static boolean isTantalum(Item item) {
+        return item == ModItems.TANTALUM_INGOT || item == ModItems.TANTALUM_DUST || item == ModItems.RAW_TANTALUM;
+    }
+
+    private static boolean isHafnium(Item item) {
+        return item == ModItems.HAFNIUM_INGOT || item == ModItems.HAFNIUM_DUST || item == ModItems.RAW_HAFNIUM;
+    }
+
+    private static boolean isNeodymium(Item item) {
+        return item == ModItems.NEODYMIUM_MAGNET || item == ModItems.NEODYMIUM_DUST || item == ModItems.RAW_NEODYMIUM;
+    }
+
+    private static boolean isAerogel(Item item) {
+        return item == ModItems.AEROGEL_SHARD || item == ModItems.RAW_AEROGEL;
     }
 
     private static boolean isCobalt(Item item) {

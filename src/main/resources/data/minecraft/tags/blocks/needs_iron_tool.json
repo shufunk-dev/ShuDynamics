@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "enchantedwood:asphalt_block",
-    "enchantedwood:asphalt_slab"
+    "enchantedwood:asphalt_slab",
+    "enchantedwood:tantalum_ore",
+    "enchantedwood:deepslate_tantalum_ore",
+    "enchantedwood:neodymium_ore",
+    "enchantedwood:deepslate_neodymium_ore"
   ]
 }

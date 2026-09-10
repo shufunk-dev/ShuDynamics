@@ -333,7 +333,8 @@ public class DormantRiftBlock extends Block {
         }
         return id.equals(Identifier.of("enchantedwood", "caustic_mire")) ||
                 id.equals(Identifier.of("enchantedwood", "scorched_caldera")) ||
-                id.equals(Identifier.of("enchantedwood", "resonance_sanctum"));
+                id.equals(Identifier.of("enchantedwood", "resonance_sanctum")) ||
+                id.equals(Identifier.of("enchantedwood", "anoxic_barrens"));
     }
 
     private void buildSafeResonanceGateway(ServerWorld world, BlockPos basePos, Direction.Axis axis) {

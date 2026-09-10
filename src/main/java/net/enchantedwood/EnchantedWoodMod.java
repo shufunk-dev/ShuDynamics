@@ -39,6 +39,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.event.ResonanceFrameHandler.register();
         net.enchantedwood.event.ConvergenceMobSpawnHandler.register();
         net.enchantedwood.event.ConvergenceHazardHandler.register();
+        net.enchantedwood.item.custom.HyposprayItem.registerEntityInteraction();
 
         // Strippable Rubber Wood
         net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_LOG, ModBlocks.STRIPPED_RUBBER_LOG);

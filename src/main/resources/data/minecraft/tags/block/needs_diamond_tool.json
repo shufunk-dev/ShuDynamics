@@ -8,6 +8,10 @@
     "enchantedwood:plasma_anchor",
     "enchantedwood:tungsten_battery",
     "enchantedwood:alloy_foundry",
-    "enchantedwood:crusher_mk2"
+    "enchantedwood:crusher_mk2",
+    "enchantedwood:hafnium_ore",
+    "enchantedwood:deepslate_hafnium_ore",
+    "enchantedwood:aerogel_ore",
+    "enchantedwood:deepslate_aerogel_ore"
   ]
 }

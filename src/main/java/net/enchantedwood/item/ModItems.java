@@ -405,7 +405,7 @@ public class ModItems {
     public static final Item ETERNAL_BENTO_BOX = registerItem("eternal_bento_box",
             settings -> new net.enchantedwood.item.custom.EternalBentoBoxItem(settings.maxCount(1)));
 
-    // Starfleet Medical Technology: Hypospray, Essences & Cartridges
+    // Advanced Medical Technology: Hypospray, Essences & Cartridges
     public static final Item HYPOSPRAY = registerItem("hypospray",
             settings -> new net.enchantedwood.item.custom.HyposprayItem(settings.maxCount(1)));
 
@@ -839,6 +839,33 @@ public class ModItems {
     public static final Item VOLCANIC_ASH = registerItem("volcanic_ash", Item::new);
     public static final Item VOLCANIC_FERTILIZER = registerItem("volcanic_fertilizer", net.enchantedwood.item.custom.VolcanicFertilizerItem::new);
     public static final Item FIRE_CRYSTAL = registerItem("fire_crystal", settings -> new Item(settings.fireproof()));
+
+    // Convergence Minerals, Crystals & Ores
+    public static final Item RAW_FLUORITE = registerItem("raw_fluorite", Item::new);
+    public static final Item FLUORITE_CRYSTAL = registerItem("fluorite_crystal", Item::new);
+
+    public static final Item RAW_ZIRCONIA = registerItem("raw_zirconia", Item::new);
+    public static final Item ZIRCONIA_NODULE = registerItem("zirconia_nodule", settings -> new Item(settings.fireproof()));
+
+    public static final Item RAW_TANTALUM = registerItem("raw_tantalum", Item::new);
+    public static final Item TANTALUM_INGOT = registerItem("tantalum_ingot", Item::new);
+    public static final Item TANTALUM_DUST = registerItem("tantalum_dust", Item::new);
+
+    public static final Item RAW_HAFNIUM = registerItem("raw_hafnium", Item::new);
+    public static final Item HAFNIUM_INGOT = registerItem("hafnium_ingot", settings -> new Item(settings.fireproof()));
+    public static final Item HAFNIUM_DUST = registerItem("hafnium_dust", settings -> new Item(settings.fireproof()));
+
+    public static final Item RAW_NEODYMIUM = registerItem("raw_neodymium", Item::new);
+    public static final Item NEODYMIUM_MAGNET = registerItem("neodymium_magnet", Item::new);
+    public static final Item NEODYMIUM_DUST = registerItem("neodymium_dust", Item::new);
+
+    public static final Item RAW_AEROGEL = registerItem("raw_aerogel", Item::new);
+    public static final Item AEROGEL_SHARD = registerItem("aerogel_shard", Item::new);
+
+    // Convergence Superalloys
+    public static final Item TAN_TI_INGOT = registerItem("tan_ti_ingot", Item::new);
+    public static final Item HAFNIUM_TUNGSTEN_CARBIDE_INGOT = registerItem("hafnium_tungsten_carbide_ingot", settings -> new Item(settings.fireproof()));
+    public static final Item NEO_TITANIUM_INGOT = registerItem("neo_titanium_ingot", Item::new);
 
     // Steel Tools & Weapons
     public static final Item STEEL_SWORD = registerItem("steel_sword", settings -> new Item(settings.sword(ModMaterials.STEEL, 3.5f, -2.4f)));
@@ -1745,7 +1772,7 @@ public class ModItems {
                 entries.add(SINGULARITY_STAFF);
                 entries.add(ETERNAL_BENTO_BOX);
 
-                // Starfleet Medical Laboratory Suite
+                // Advanced Medical Laboratory Suite
                 entries.add(net.enchantedwood.block.ModBlocks.INDUSTRIAL_CENTRIFUGE);
                 entries.add(net.enchantedwood.block.ModBlocks.CHEMICAL_SYNTHESIZER);
                 entries.add(HYPOSPRAY);
@@ -1774,6 +1801,45 @@ public class ModItems {
                 entries.add(STEP_ASSIST_MODULE);
                 entries.add(HIGH_JUMP_MODULE);
                 entries.add(ACID_PROOF_PLATING);
+
+                // Convergence Cave Ores, Minerals & Superalloys
+                entries.add(net.enchantedwood.block.ModBlocks.FLUORITE_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_FLUORITE_ORE);
+                entries.add(RAW_FLUORITE);
+                entries.add(FLUORITE_CRYSTAL);
+
+                entries.add(net.enchantedwood.block.ModBlocks.ZIRCONIA_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_ZIRCONIA_ORE);
+                entries.add(RAW_ZIRCONIA);
+                entries.add(ZIRCONIA_NODULE);
+
+                entries.add(net.enchantedwood.block.ModBlocks.TANTALUM_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TANTALUM_ORE);
+                entries.add(RAW_TANTALUM);
+                entries.add(TANTALUM_INGOT);
+                entries.add(TANTALUM_DUST);
+
+                entries.add(net.enchantedwood.block.ModBlocks.HAFNIUM_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_HAFNIUM_ORE);
+                entries.add(RAW_HAFNIUM);
+                entries.add(HAFNIUM_INGOT);
+                entries.add(HAFNIUM_DUST);
+
+                entries.add(net.enchantedwood.block.ModBlocks.NEODYMIUM_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_NEODYMIUM_ORE);
+                entries.add(RAW_NEODYMIUM);
+                entries.add(NEODYMIUM_MAGNET);
+                entries.add(NEODYMIUM_DUST);
+
+                entries.add(net.enchantedwood.block.ModBlocks.AEROGEL_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_AEROGEL_ORE);
+                entries.add(RAW_AEROGEL);
+                entries.add(AEROGEL_SHARD);
+                entries.add(net.enchantedwood.block.ModBlocks.AEROGEL_GLASS);
+
+                entries.add(TAN_TI_INGOT);
+                entries.add(HAFNIUM_TUNGSTEN_CARBIDE_INGOT);
+                entries.add(NEO_TITANIUM_INGOT);
             })
             .build();
 

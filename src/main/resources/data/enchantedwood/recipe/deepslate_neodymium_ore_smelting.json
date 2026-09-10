@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 200,
+  "ingredient": "enchantedwood:deepslate_neodymium_ore",
+  "result": {
+    "id": "enchantedwood:neodymium_magnet",
+    "count": 1
+  }
+}

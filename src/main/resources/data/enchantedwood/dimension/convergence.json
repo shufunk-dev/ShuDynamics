@@ -67,13 +67,13 @@
           }
         },
         {
-          "biome": "minecraft:windswept_gravelly_hills",
+          "biome": "enchantedwood:anoxic_barrens",
           "parameters": {
-            "temperature": [-0.6, 0.0],
-            "humidity": [-0.5, 0.0],
-            "continentalness": [0.6, 1.1],
-            "erosion": [0.4, 1.0],
-            "weirdness": [-0.3, 0.3],
+            "temperature": [-0.8, 0.0],
+            "humidity": [-0.8, 0.0],
+            "continentalness": [0.5, 1.2],
+            "erosion": [0.3, 1.0],
+            "weirdness": [-0.4, 0.4],
             "depth": 0.0,
             "offset": 0.0
           }

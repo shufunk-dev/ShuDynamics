@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 100,
+  "ingredient": "enchantedwood:raw_fluorite",
+  "result": {
+    "id": "enchantedwood:fluorite_crystal",
+    "count": 1
+  }
+}

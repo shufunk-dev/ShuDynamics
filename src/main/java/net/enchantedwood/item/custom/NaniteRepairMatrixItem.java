@@ -17,9 +17,10 @@ public class NaniteRepairMatrixItem extends Item {
     public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
         textConsumer.accept(Text.literal("§6⚡ Suit Upgrade Module"));
         textConsumer.accept(Text.literal("§7Microscopic autonomous nanites engineered for rapid chassis regeneration."));
-        textConsumer.accept(Text.literal("§a• Out-of-Combat Auto-Repair §8(activates after 10s of safety)"));
-        textConsumer.accept(Text.literal("§e• Drains 100 FE / durability point §7from piece's installed battery"));
-        textConsumer.accept(Text.literal("§8Install into any Modular Power Armor piece via Suit Access Panel (V) or Powered Anvil"));
+        textConsumer.accept(Text.literal("§b• Global Suit Network: §7Auto-repairs ALL equipped modular armor pieces"));
+        textConsumer.accept(Text.literal("§a• Out-of-Combat Protocol §8(activates after 10s of safety)"));
+        textConsumer.accept(Text.literal("§e• Drains 50 FE / durability point §7(accelerated by Logic Chips)"));
+        textConsumer.accept(Text.literal("§8Install into ANY Modular Power Armor piece via Suit Access Panel (V)"));
         super.appendTooltip(stack, context, displayComponent, textConsumer, type);
     }
 }

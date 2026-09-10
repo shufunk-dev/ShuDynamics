@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 100,
+  "ingredient": "enchantedwood:deepslate_aerogel_ore",
+  "result": {
+    "id": "enchantedwood:aerogel_shard",
+    "count": 1
+  }
+}

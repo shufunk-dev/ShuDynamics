@@ -44,6 +44,42 @@ public class HyposprayCartridgeItem extends Item {
         return this.type;
     }
 
+    @Override
+    public net.minecraft.util.ActionResult use(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity user, net.minecraft.util.Hand hand) {
+        ItemStack cartridgeStack = user.getStackInHand(hand);
+
+        // Look for an empty Hypospray: check offhand first, then player inventory
+        ItemStack offhand = user.getOffHandStack();
+        ItemStack hyposprayStack = ItemStack.EMPTY;
+        if (!offhand.isEmpty() && offhand.getItem() instanceof HyposprayItem && !HyposprayItem.isLoaded(offhand)) {
+            hyposprayStack = offhand;
+        } else {
+            for (int i = 0; i < user.getInventory().size(); i++) {
+                ItemStack candidate = user.getInventory().getStack(i);
+                if (!candidate.isEmpty() && candidate.getItem() instanceof HyposprayItem && !HyposprayItem.isLoaded(candidate)) {
+                    hyposprayStack = candidate;
+                    break;
+                }
+            }
+        }
+
+        if (!hyposprayStack.isEmpty()) {
+            if (!world.isClient()) {
+                HyposprayItem.setLoadedCartridge(hyposprayStack, this.type);
+                cartridgeStack.decrement(1);
+                world.playSound(null, user.getX(), user.getY(), user.getZ(), net.minecraft.sound.SoundEvents.ITEM_CROSSBOW_LOADING_END.value(), net.minecraft.sound.SoundCategory.PLAYERS, 0.9f, 1.7f);
+                user.sendMessage(Text.literal("§e✦ Loaded into Hypospray: " + this.type.title + " ✦"), true);
+            }
+            user.swingHand(hand);
+            return net.minecraft.util.ActionResult.SUCCESS;
+        }
+
+        if (!world.isClient()) {
+            user.sendMessage(Text.literal("§e[Ampoule] No empty Hypospray in inventory to load into."), true);
+        }
+        return net.minecraft.util.ActionResult.FAIL;
+    }
+
     /**
      * Applies this cartridge's effects to the target living entity.
      * @param target The entity being injected.
@@ -91,8 +127,8 @@ public class HyposprayCartridgeItem extends Item {
         textConsumer.accept(Text.literal("§9✦ Hypospray Medical Ampoule ✦"));
         textConsumer.accept(Text.literal(this.type.title));
         textConsumer.accept(Text.literal(this.type.description));
-        textConsumer.accept(Text.literal("§8 • Load into Hypospray (or place in offhand) to inject."));
-        textConsumer.accept(Text.literal("§c • Pacing: §7Wait 5s between injections to prevent overdose sickness."));
+        textConsumer.accept(Text.literal("§e • Right-Click: §7Snap-load directly into an empty Hypospray"));
+        textConsumer.accept(Text.literal("§b • Offhand: §7Hold in offhand & Right-Click with Hypospray to load"));
         super.appendTooltip(stack, context, displayComponent, textConsumer, type);
     }
 }

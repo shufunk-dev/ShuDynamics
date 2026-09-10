@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 100,
+  "ingredient": "enchantedwood:neodymium_ore",
+  "result": {
+    "id": "enchantedwood:neodymium_magnet",
+    "count": 1
+  }
+}

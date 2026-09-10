@@ -73,6 +73,7 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
     private void selectTab(int tabIndex) {
         if (this.client != null && this.client.interactionManager != null) {
             this.client.interactionManager.clickButton(this.handler.syncId, tabIndex);
+            this.handler.loadTab(tabIndex);
         }
     }
 
@@ -136,9 +137,10 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
                         );
                         case 2 -> java.util.List.of(
                                 Text.literal("§a⚙️ Module Slot " + slotName),
-                                Text.literal("§7Accepts: §fSpeed Servo Leg Module"),
+                                Text.literal("§7Accepts: §fSpeed Servo Leg Module§7,"),
+                                Text.literal("§fFluoropolymer Acid Plating§7, §fThermal Refractory Plating§7,"),
                                 Text.literal("§7or §fNanite Auto-Repair Matrix"),
-                                Text.literal("§8Hardware upgrade socket for locomotive kinetic enhancement.")
+                                Text.literal("§8Hardware upgrade socket for locomotive kinetic enhancement & hazard plating.")
                         );
                         default -> java.util.List.of(
                                 Text.literal("§a⚙️ Module Slot " + slotName),

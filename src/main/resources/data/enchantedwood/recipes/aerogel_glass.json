@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SGS",
+    "GTG",
+    "SGS"
+  ],
+  "key": {
+    "S": "enchantedwood:aerogel_shard",
+    "G": "minecraft:glass",
+    "T": "enchantedwood:titanium_ingot"
+  },
+  "result": {
+    "id": "enchantedwood:aerogel_glass",
+    "count": 4
+  }
+}

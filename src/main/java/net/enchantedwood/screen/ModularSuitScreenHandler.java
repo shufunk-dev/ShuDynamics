@@ -103,7 +103,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(suitInventory, 2, 104, 45) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return isModuleAllowed(activeTab, stack);
+                return isModuleAllowed(getActiveTab(), stack);
             }
 
             @Override
@@ -122,7 +122,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(suitInventory, 3, 132, 45) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return isModuleAllowed(activeTab, stack);
+                return isModuleAllowed(getActiveTab(), stack);
             }
 
             @Override
@@ -352,7 +352,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
                     if (!this.insertItem(originalStack, 0, 1, false)) return ItemStack.EMPTY;
                 } else if (originalStack.isOf(ModItems.BASIC_COMPUTER_CHIP) || originalStack.isOf(ModItems.ADVANCED_COMPUTER_CHIP) || originalStack.isOf(ModItems.QUANTUM_COMPUTER_CHIP)) {
                     if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
-                } else if (isModuleAllowed(this.activeTab, originalStack)) {
+                } else if (isModuleAllowed(getActiveTab(), originalStack)) {
                     if (!this.insertItem(originalStack, 2, 4, false)) return ItemStack.EMPTY;
                 } else {
                     return ItemStack.EMPTY;
@@ -375,9 +375,11 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         if (stack.isOf(ModItems.NIGHT_VISION_MODULE)) {
             return tab == 0; // Helmet only
         }
-        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)
-                || stack.isOf(ModItems.ACID_PROOF_PLATING) || stack.isOf(ModItems.THERMAL_REFRACTORY_PLATING)) {
+        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)) {
             return tab == 1; // Chestplate only
+        }
+        if (stack.isOf(ModItems.ACID_PROOF_PLATING) || stack.isOf(ModItems.THERMAL_REFRACTORY_PLATING)) {
+            return tab == 1 || tab == 2; // Chestplate or Leggings
         }
         if (stack.isOf(ModItems.SPEED_SERVO_MODULE)) {
             return tab == 2; // Leggings only

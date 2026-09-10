@@ -139,11 +139,13 @@ public class ConvergenceHazardHandler {
     }
 
     private static boolean hasAcidProofPlating(ServerPlayerEntity player) {
-        ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chest.isOf(ModItems.MODULAR_POWER_CHESTPLATE) && ModularPowerArmorItem.hasModule(chest, "enchantedwood:acid_proof_plating")) {
-            return true;
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET}) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, "enchantedwood:acid_proof_plating")) {
+                return ModularSuitHandler.getSuitStoredEnergy(player) > 0;
+            }
         }
-        return player.getInventory().contains(new ItemStack(ModItems.ACID_PROOF_PLATING));
+        return false;
     }
 
     // --- 2. VOLCANIC CALDERA HYPERTHERMIA ---
@@ -188,7 +190,38 @@ public class ConvergenceHazardHandler {
         }
     }
 
-    private static boolean isNearThermalSource(ServerWorld world, BlockPos pos) {
+    public static boolean isInCausticHazard(ServerWorld world, ServerPlayerEntity player) {
+        if (world.getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) return false;
+        if (isInsideSanctuary(world, player.getBlockPos())) return false;
+        if (player.getVehicle() instanceof AtvEntity atv && atv.isEnvironmentalCockpitSealed()) return false;
+
+        BlockPos pos = player.getBlockPos();
+        var biomeKey = world.getBiome(pos).getKey();
+        boolean isCausticBiome = biomeKey.isPresent() &&
+                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        if (!isCausticBiome) return false;
+
+        boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
+        boolean inAcidRain = world.isRaining() && world.isSkyVisible(pos);
+        return inWater || inAcidRain;
+    }
+
+    public static boolean isInThermalHazard(ServerWorld world, ServerPlayerEntity player) {
+        if (world.getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) return false;
+        if (isInsideSanctuary(world, player.getBlockPos())) return false;
+        if (player.getVehicle() instanceof AtvEntity atv && atv.isEnvironmentalCockpitSealed()) return false;
+
+        BlockPos pos = player.getBlockPos();
+        var biomeKey = world.getBiome(pos).getKey();
+        boolean isCalderaBiome = biomeKey.isPresent() &&
+                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+
+        boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
+        boolean nearHeatSource = isNearThermalSource(world, pos);
+        return isDeepCaldera || nearHeatSource;
+    }
+
+    public static boolean isNearThermalSource(ServerWorld world, BlockPos pos) {
         for (BlockPos check : BlockPos.iterate(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
             var state = world.getBlockState(check);
             if (state.isOf(Blocks.MAGMA_BLOCK) || state.isOf(Blocks.LAVA)) {
@@ -199,21 +232,28 @@ public class ConvergenceHazardHandler {
     }
 
     private static boolean hasThermalRefractoryPlating(ServerPlayerEntity player) {
-        ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (chest.isOf(ModItems.MODULAR_POWER_CHESTPLATE) && ModularPowerArmorItem.hasModule(chest, "enchantedwood:thermal_refractory_plating")) {
-            return true;
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET}) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, "enchantedwood:thermal_refractory_plating")) {
+                return ModularSuitHandler.getSuitStoredEnergy(player) > 0;
+            }
         }
-        return player.getInventory().contains(new ItemStack(ModItems.THERMAL_REFRACTORY_PLATING));
+        return false;
     }
 
     // --- 3. ATMOSPHERIC HYPOXIA, VACUUM RIFTS & ANOXIC CAVES ---
     private static void tickAtmosphericHazard(ServerWorld world, ServerPlayerEntity player) {
         BlockPos pos = player.getBlockPos();
+
+        var biomeKey = world.getBiome(pos).getKey();
+        boolean isAnoxicBiome = biomeKey.isPresent() &&
+                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "anoxic_barrens"));
+
         boolean isHighAltitude = player.getY() >= 180 && world.isSkyVisible(pos);
         boolean isAnoxicCave = player.getY() <= 35 && !world.isSkyVisible(pos) && world.getLightLevel(pos) <= 7;
         boolean isNearAltarRift = isNearSingularityRift(world, pos);
 
-        if (!isHighAltitude && !isAnoxicCave && !isNearAltarRift) return;
+        if (!isAnoxicBiome && !isHighAltitude && !isAnoxicCave && !isNearAltarRift) return;
 
         // Check Immunities / Active Life Support
         if (player.hasStatusEffect(ModStatusEffects.ATMOSPHERIC_PROTECTION)) return;
@@ -240,7 +280,9 @@ public class ConvergenceHazardHandler {
         // Warning Alert (Throttled to once every 8 seconds)
         if (now - LAST_ATMOSPHERIC_WARN.getOrDefault(uuid, 0L) >= 160) {
             LAST_ATMOSPHERIC_WARN.put(uuid, now);
-            if (isAnoxicCave) {
+            if (isAnoxicBiome) {
+                player.sendMessage(Text.literal("§b⚠ ANOXIC BARRENS: Zero atmospheric oxygen detected! Life-support or Hyper-Oxygenation required! ⚠"), true);
+            } else if (isAnoxicCave) {
                 player.sendMessage(Text.literal("§b⚠ ANOXIC CAVERN: Severe hypoxia! Cavern air depleted. Hyper-Oxygenation or life-support required! ⚠"), true);
             } else {
                 player.sendMessage(Text.literal("§b⚠ ATMOSPHERIC VACUUM: Severe hypoxia detected! Hyper-Oxygenation or life-support required! ⚠"), true);

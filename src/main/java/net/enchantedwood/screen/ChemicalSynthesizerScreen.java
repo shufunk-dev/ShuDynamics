@@ -14,7 +14,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class ChemicalSynthesizerScreen extends HandledScreen<ChemicalSynthesizerScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/alloy_foundry_gui.png");
+    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/chemical_synthesizer_gui.png");
 
     public ChemicalSynthesizerScreen(ChemicalSynthesizerScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -35,10 +35,10 @@ public class ChemicalSynthesizerScreen extends HandledScreen<ChemicalSynthesizer
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
 
-        // Cook Progress Arrow at x + 74, y + 34
+        // Cook Progress Arrow at x + 76, y + 35 (width 24, height 17)
         int cookWidth = this.handler.getScaledCookProgress(24);
         if (cookWidth > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 74, y + 34, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 76, y + 35, 176.0f, 14.0f, cookWidth, 17, 256, 256);
         }
     }
 
@@ -58,11 +58,20 @@ public class ChemicalSynthesizerScreen extends HandledScreen<ChemicalSynthesizer
         int y = (this.height - this.backgroundHeight) / 2;
 
         // Energy Bar Tooltip
-        if (mouseX >= x + 18 && mouseX <= x + 34 && mouseY >= y + 20 && mouseY <= y + 70) {
+        if (mouseX >= x + 17 && mouseX <= x + 35 && mouseY >= y + 19 && mouseY <= y + 71) {
             context.drawTooltip(this.textRenderer, List.of(
                     Text.literal("§e⚡ Energy Storage"),
                     Text.literal(String.format("§6%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
                     Text.literal("§7Draw: §a40 FE/t §7(Active Synthesis)")
+            ), mouseX, mouseY);
+        }
+
+        // Gear Tooltip (when gear is installed)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25 && this.handler.getGearTier() != net.enchantedwood.block.custom.GearTier.NONE) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§d⚙ Installed Synthesizer Gear"),
+                    Text.literal(String.format("§7Overclock Tier: §f%s", this.handler.getGearTier().name())),
+                    Text.literal(String.format("§aCompounding Speed: §e%d ticks/item", net.enchantedwood.block.entity.ChemicalSynthesizerBlockEntity.getTierCookTime(this.handler.getGearTier())))
             ), mouseX, mouseY);
         }
 

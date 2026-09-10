@@ -31,7 +31,7 @@ public class ChemicalSynthesizerScreenHandler extends ScreenHandler {
         inventory.onOpen(playerInventory.player);
 
         // Slot 0: Empty Cartridge
-        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_CARTRIDGE, 38, 17) {
+        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_CARTRIDGE, 44, 17) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.getItem() == ModItems.EMPTY_CARTRIDGE;
@@ -39,13 +39,23 @@ public class ChemicalSynthesizerScreenHandler extends ScreenHandler {
         });
 
         // Slot 1: Primary Essence
-        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_ESSENCE, 38, 35));
+        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_ESSENCE, 44, 35) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return ChemicalSynthesizerBlockEntity.isEssence(stack);
+            }
+        });
 
         // Slot 2: Catalyst / Stabilizer
-        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_CATALYST, 38, 53));
+        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_CATALYST, 44, 53) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return ChemicalSynthesizerBlockEntity.isCatalyst(stack);
+            }
+        });
 
         // Slot 3: Finished Output Cartridge
-        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_OUTPUT, 116, 35) {
+        this.addSlot(new Slot(inventory, ChemicalSynthesizerBlockEntity.SLOT_OUTPUT, 120, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
@@ -110,8 +120,32 @@ public class ChemicalSynthesizerScreenHandler extends ScreenHandler {
                 if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, ChemicalSynthesizerBlockEntity.SLOT_OUTPUT, false)) {
-                return ItemStack.EMPTY;
+            } else {
+                if (originalStack.getItem() == ModItems.EMPTY_CARTRIDGE) {
+                    if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.SLOT_CARTRIDGE, ChemicalSynthesizerBlockEntity.SLOT_CARTRIDGE + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (ChemicalSynthesizerBlockEntity.isEssence(originalStack)) {
+                    if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.SLOT_ESSENCE, ChemicalSynthesizerBlockEntity.SLOT_ESSENCE + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (ChemicalSynthesizerBlockEntity.isCatalyst(originalStack)) {
+                    if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.SLOT_CATALYST, ChemicalSynthesizerBlockEntity.SLOT_CATALYST + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (originalStack.getItem() instanceof GearItem) {
+                    if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.GEAR_SLOT, ChemicalSynthesizerBlockEntity.GEAR_SLOT + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (invSlot < ChemicalSynthesizerBlockEntity.INVENTORY_SIZE + 27) {
+                        if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    } else if (!this.insertItem(originalStack, ChemicalSynthesizerBlockEntity.INVENTORY_SIZE, ChemicalSynthesizerBlockEntity.INVENTORY_SIZE + 27, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
 
             if (originalStack.isEmpty()) {

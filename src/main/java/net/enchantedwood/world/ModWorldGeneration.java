@@ -97,6 +97,37 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> DEEPSLATE_TUNGSTEN_ORE_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tungsten_ore"));
 
+    // Convergence Cave Ores
+    public static final RegistryKey<ConfiguredFeature<?, ?>> FLUORITE_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "fluorite_ore"));
+    public static final RegistryKey<PlacedFeature> FLUORITE_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "fluorite_ore"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> ZIRCONIA_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "zirconia_ore"));
+    public static final RegistryKey<PlacedFeature> ZIRCONIA_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "zirconia_ore"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> TANTALUM_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "tantalum_ore"));
+    public static final RegistryKey<PlacedFeature> TANTALUM_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "tantalum_ore"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> HAFNIUM_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "hafnium_ore"));
+    public static final RegistryKey<PlacedFeature> HAFNIUM_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "hafnium_ore"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> NEODYMIUM_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "neodymium_ore"));
+    public static final RegistryKey<PlacedFeature> NEODYMIUM_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "neodymium_ore"));
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> AEROGEL_ORE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_ore"));
+    public static final RegistryKey<PlacedFeature> AEROGEL_ORE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_ore"));
+
     public static void generateOres() {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
@@ -158,21 +189,64 @@ public class ModWorldGeneration {
                 NETHER_TUNGSTEN_ORE_PLACED_KEY
         );
 
+        // Convergence Dimension Ore Generations
+        RegistryKey<net.minecraft.world.biome.Biome> riftwoodHaven =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_haven"));
+        RegistryKey<net.minecraft.world.biome.Biome> causticMire =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "caustic_mire"));
+        RegistryKey<net.minecraft.world.biome.Biome> scorchedCaldera =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "scorched_caldera"));
+        RegistryKey<net.minecraft.world.biome.Biome> anoxicBarrens =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "anoxic_barrens"));
+        RegistryKey<net.minecraft.world.biome.Biome> resonanceSanctum =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"));
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                FLUORITE_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                TANTALUM_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(scorchedCaldera),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                ZIRCONIA_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(scorchedCaldera),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                HAFNIUM_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(anoxicBarrens, riftwoodHaven, resonanceSanctum),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                NEODYMIUM_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(anoxicBarrens, causticMire, scorchedCaldera),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                AEROGEL_ORE_PLACED_KEY
+        );
+
         // Convergence Dimension Vegetation (Wild Rice, Wild Cucumbers, Avocado Trees)
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(
-                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_haven")),
-                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "caustic_mire"))
-                ),
+                BiomeSelectors.includeByKey(riftwoodHaven, causticMire),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_VEGETATION_PLACED_KEY
         );
 
         // Resonance Sanctum Boss Arena Dais
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(
-                        RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"))
-                ),
+                BiomeSelectors.includeByKey(resonanceSanctum),
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 RESONANCE_ARENA_PLACED_KEY
         );

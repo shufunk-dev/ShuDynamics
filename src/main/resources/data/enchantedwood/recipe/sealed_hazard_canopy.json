@@ -2,14 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    " T ",
-    "GGG",
-    "RSR"
+    "AAA",
+    "ATA",
+    " S "
   ],
   "key": {
+    "A": "enchantedwood:aerogel_glass",
     "T": "enchantedwood:titanium_ingot",
-    "G": "enchantedwood:reinforced_tank_glass",
-    "R": "enchantedwood:rubber_tire",
     "S": "enchantedwood:steel_atv_chassis"
   },
   "result": {

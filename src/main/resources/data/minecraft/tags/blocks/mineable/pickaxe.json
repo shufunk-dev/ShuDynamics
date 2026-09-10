@@ -68,6 +68,19 @@
     "enchantedwood:titanium_tank_casing",
     "enchantedwood:reinforced_tank_glass",
     "enchantedwood:titanium_tank_inbound_port",
-    "enchantedwood:dimensional_singularity"
+    "enchantedwood:dimensional_singularity",
+    "enchantedwood:fluorite_ore",
+    "enchantedwood:deepslate_fluorite_ore",
+    "enchantedwood:zirconia_ore",
+    "enchantedwood:deepslate_zirconia_ore",
+    "enchantedwood:tantalum_ore",
+    "enchantedwood:deepslate_tantalum_ore",
+    "enchantedwood:hafnium_ore",
+    "enchantedwood:deepslate_hafnium_ore",
+    "enchantedwood:neodymium_ore",
+    "enchantedwood:deepslate_neodymium_ore",
+    "enchantedwood:aerogel_ore",
+    "enchantedwood:deepslate_aerogel_ore",
+    "enchantedwood:aerogel_glass"
   ]
 }

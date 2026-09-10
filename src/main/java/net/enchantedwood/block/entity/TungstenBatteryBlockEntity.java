@@ -34,17 +34,7 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
     public static final int CHARGE_SLOT = 1;
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
-    private boolean receivedEnergyThisTick = false;
-    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0) {
-        @Override
-        public int insertEnergy(int amount, boolean simulate) {
-            int inserted = super.insertEnergy(amount, simulate);
-            if (!simulate && inserted > 0) {
-                receivedEnergyThisTick = true;
-            }
-            return inserted;
-        }
-    };
+    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0);
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -146,13 +136,14 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
             }
         }
 
-        // Push energy out only if NOT receiving charge this tick!
-        if (!entity.receivedEnergyThisTick && entity.energyStorage.getEnergy() > 0) {
+        // Push energy out directly to adjacent consumers (machines only, never cables/batteries/generators)
+        if (entity.energyStorage.getEnergy() > 0) {
             int available = Math.min(entity.energyStorage.getEnergy(), MAX_TRANSFER);
             for (Direction dir : Direction.values()) {
                 if (available <= 0) break;
                 BlockEntity targetBe = world.getBlockEntity(pos.offset(dir));
                 if (targetBe instanceof EnergyProvider provider &&
+                        !(targetBe instanceof BaseCableBlockEntity) &&
                         !(targetBe instanceof CopperBatteryBlockEntity) &&
                         !(targetBe instanceof AluminumBatteryBlockEntity) &&
                         !(targetBe instanceof SteelBatteryBlockEntity) &&
@@ -175,7 +166,6 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
                 }
             }
         }
-        entity.receivedEnergyThisTick = false;
 
         if (dirty) {
             entity.markDirty();

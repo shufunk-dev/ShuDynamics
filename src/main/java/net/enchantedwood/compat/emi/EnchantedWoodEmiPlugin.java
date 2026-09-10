@@ -21,6 +21,13 @@ import java.util.List;
 
 public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
+    // GUI Textures for authentic machine screen integration
+    public static final Identifier CRUSHER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/crusher_gui.png");
+    public static final Identifier ALLOY_FOUNDRY_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/alloy_foundry_gui.png");
+    public static final Identifier CENTRIFUGE_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/industrial_centrifuge_gui.png");
+    public static final Identifier COKE_OVEN_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/coke_oven_gui.png");
+    public static final Identifier CHEMICAL_SYNTHESIZER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/chemical_synthesizer_gui.png");
+
     // Categories
     public static final EmiRecipeCategory ALLOY_FOUNDRY = new EmiRecipeCategory(
             Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
@@ -67,6 +74,16 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             EmiStack.of(ModBlocks.HYDRAULIC_PRESS)
     );
 
+    public static final EmiRecipeCategory INDUSTRIAL_CENTRIFUGE = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge"),
+            EmiStack.of(ModBlocks.INDUSTRIAL_CENTRIFUGE)
+    );
+
+    public static final EmiRecipeCategory CHEMICAL_SYNTHESIZER = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer"),
+            EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER)
+    );
+
     @Override
     public void register(EmiRegistry registry) {
         // Register Categories
@@ -79,6 +96,8 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(FUEL_REFINERY);
         registry.addCategory(MAGMA_CRUCIBLE);
         registry.addCategory(HYDRAULIC_PRESS);
+        registry.addCategory(INDUSTRIAL_CENTRIFUGE);
+        registry.addCategory(CHEMICAL_SYNTHESIZER);
 
         // Register Workstations (Catalysts)
         registry.addWorkstation(ALLOY_FOUNDRY, EmiStack.of(ModBlocks.ALLOY_FOUNDRY));
@@ -92,6 +111,8 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(FUEL_REFINERY, EmiStack.of(ModBlocks.FUEL_REFINERY));
         registry.addWorkstation(MAGMA_CRUCIBLE, EmiStack.of(ModBlocks.MAGMA_CRUCIBLE));
         registry.addWorkstation(HYDRAULIC_PRESS, EmiStack.of(ModBlocks.HYDRAULIC_PRESS));
+        registry.addWorkstation(INDUSTRIAL_CENTRIFUGE, EmiStack.of(ModBlocks.INDUSTRIAL_CENTRIFUGE));
+        registry.addWorkstation(CHEMICAL_SYNTHESIZER, EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER));
         registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
 
         // Recipe auto-transfer handler for Super Computer 3x3 Ghost Pattern Matrix
@@ -167,6 +188,12 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         // 9. Hydraulic Plate Press Recipes
         registerHydraulicPressRecipes(registry);
+
+        // 10. Industrial Centrifuge Recipes
+        registerCentrifugeRecipes(registry);
+
+        // 11. Chemical Synthesizer Recipes
+        registerSynthesizerRecipes(registry);
     }
 
     private static void registerHydraulicPressRecipes(EmiRegistry registry) {
@@ -230,6 +257,27 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
                 EmiIngredient.of(List.of(EmiStack.of(Items.GLASS), EmiStack.of(Items.GLASS_PANE))),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(ModItems.VOLCANIC_ASH), EmiStack.of(ModItems.SULFUR_DUST))),
                 EmiStack.of(ModBlocks.VOLCANIC_GLASS, 2), "High-Temperature Silicate"));
+
+        // Convergence Superalloys & Advanced Composites
+        registry.addRecipe(new SimpleTwoInputRecipe(ALLOY_FOUNDRY, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TANTALUM_INGOT), EmiStack.of(ModItems.TANTALUM_DUST), EmiStack.of(ModItems.RAW_TANTALUM))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.TITANIUM_DUST))),
+                EmiStack.of(ModItems.TAN_TI_INGOT, 2), "Corrosion-Proof Superalloy"));
+
+        registry.addRecipe(new SimpleTwoInputRecipe(ALLOY_FOUNDRY, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.HAFNIUM_INGOT), EmiStack.of(ModItems.HAFNIUM_DUST), EmiStack.of(ModItems.RAW_HAFNIUM))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TUNGSTEN_INGOT), EmiStack.of(ModItems.TUNGSTEN_DUST))),
+                EmiStack.of(ModItems.HAFNIUM_TUNGSTEN_CARBIDE_INGOT, 2), "Refractory Thermal Carbide"));
+
+        registry.addRecipe(new SimpleTwoInputRecipe(ALLOY_FOUNDRY, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.NEODYMIUM_MAGNET), EmiStack.of(ModItems.NEODYMIUM_DUST), EmiStack.of(ModItems.RAW_NEODYMIUM))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.TITANIUM_DUST))),
+                EmiStack.of(ModItems.NEO_TITANIUM_INGOT, 2), "High-Elasticity Spring-Steel"));
+
+        registry.addRecipe(new SimpleTwoInputRecipe(ALLOY_FOUNDRY, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.AEROGEL_SHARD), EmiStack.of(ModItems.RAW_AEROGEL))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GLASS), EmiStack.of(ModBlocks.VOLCANIC_GLASS))),
+                EmiStack.of(ModBlocks.AEROGEL_GLASS, 2), "Thermal Vacuum Insulation"));
     }
 
     private static void registerCrusherRecipes(EmiRegistry registry) {
@@ -243,6 +291,9 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_COBALT), EmiStack.of(ModBlocks.COBALT_ORE)), EmiStack.of(ModItems.COBALT_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_ARDITE), EmiStack.of(ModBlocks.ARDITE_ORE)), EmiStack.of(ModItems.ARDITE_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_TUNGSTEN), EmiStack.of(ModBlocks.NETHER_TUNGSTEN_ORE), EmiStack.of(ModBlocks.DEEPSLATE_TUNGSTEN_ORE)), EmiStack.of(ModItems.TUNGSTEN_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_TANTALUM), EmiStack.of(ModBlocks.TANTALUM_ORE), EmiStack.of(ModBlocks.DEEPSLATE_TANTALUM_ORE)), EmiStack.of(ModItems.TANTALUM_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_HAFNIUM), EmiStack.of(ModBlocks.HAFNIUM_ORE), EmiStack.of(ModBlocks.DEEPSLATE_HAFNIUM_ORE)), EmiStack.of(ModItems.HAFNIUM_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_NEODYMIUM), EmiStack.of(ModBlocks.NEODYMIUM_ORE), EmiStack.of(ModBlocks.DEEPSLATE_NEODYMIUM_ORE)), EmiStack.of(ModItems.NEODYMIUM_DUST, 2), "Up to 8× with Blaze Core");
 
         addCrush(registry, idx++, List.of(EmiStack.of(Items.IRON_INGOT)), EmiStack.of(ModItems.IRON_DUST, 1), "Ingot Pulverization");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.COPPER_INGOT)), EmiStack.of(ModItems.COPPER_DUST, 1), "Ingot Pulverization");
@@ -256,6 +307,9 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.STEEL_INGOT)), EmiStack.of(ModItems.STEEL_DUST, 1), "Ingot Pulverization");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.BRONZE_INGOT)), EmiStack.of(ModItems.BRONZE_DUST, 1), "Ingot Pulverization");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.TUNGSTEN_INGOT)), EmiStack.of(ModItems.TUNGSTEN_DUST, 1), "Ingot Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.TANTALUM_INGOT)), EmiStack.of(ModItems.TANTALUM_DUST, 1), "Ingot Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.HAFNIUM_INGOT)), EmiStack.of(ModItems.HAFNIUM_DUST, 1), "Ingot Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.NEODYMIUM_MAGNET)), EmiStack.of(ModItems.NEODYMIUM_DUST, 1), "Magnet Pulverization");
 
         addCrush(registry, idx++, List.of(EmiStack.of(Items.COAL), EmiStack.of(Items.CHARCOAL), EmiStack.of(ModItems.COKE_COAL)), EmiStack.of(ModItems.COAL_DUST, 2), "Carbon Pulverization");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.WHEAT)), EmiStack.of(Items.BREAD, 1), "Flour & Bread Milling");
@@ -268,6 +322,12 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addCrush(registry, idx++, List.of(EmiStack.of(Items.BASALT), EmiStack.of(Items.SMOOTH_BASALT)), EmiStack.of(ModItems.VOLCANIC_ASH, 2), "Ash Extraction");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.QUARTZ), EmiStack.of(Items.QUARTZ_BLOCK)), EmiStack.of(ModItems.QUARTZ_DUST, 2), "Quartz Pulverization (+Redstone in MK2)");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.ANCIENT_DEBRIS), EmiStack.of(Items.NETHERITE_SCRAP), EmiStack.of(Items.NETHERITE_INGOT)), EmiStack.of(ModItems.NETHERITE_DUST, 2), "Ancient Debris Pulverization (+Gold in MK2)");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.DIAMOND_ORE), EmiStack.of(Items.DEEPSLATE_DIAMOND_ORE)), EmiStack.of(ModItems.DIAMOND_DUST, 2), "Up to 8× with Blaze Core (+Emerald in MK2)");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.DIAMOND)), EmiStack.of(ModItems.DIAMOND_DUST, 1), "Diamond Gem Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.DIAMOND_BLOCK)), EmiStack.of(ModItems.DIAMOND_DUST, 9), "Bulk Diamond Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.EMERALD_ORE), EmiStack.of(Items.DEEPSLATE_EMERALD_ORE)), EmiStack.of(ModItems.EMERALD_DUST, 2), "Up to 8× with Blaze Core (+Diamond in MK2)");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.EMERALD)), EmiStack.of(ModItems.EMERALD_DUST, 1), "Emerald Gem Pulverization");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.EMERALD_BLOCK)), EmiStack.of(ModItems.EMERALD_DUST, 9), "Bulk Emerald Pulverization");
     }
 
     private static void addCrush(EmiRegistry registry, int id, List<EmiStack> inputs, EmiStack output, String note) {
@@ -289,6 +349,9 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         addSmelt(registry, idx++, EmiStack.of(ModItems.STEEL_DUST), EmiStack.of(ModItems.STEEL_INGOT));
         addSmelt(registry, idx++, EmiStack.of(ModItems.BRONZE_DUST), EmiStack.of(ModItems.BRONZE_INGOT));
         addSmelt(registry, idx++, EmiStack.of(ModItems.TUNGSTEN_DUST), EmiStack.of(ModItems.TUNGSTEN_INGOT));
+        addSmelt(registry, idx++, EmiStack.of(ModItems.TANTALUM_DUST), EmiStack.of(ModItems.TANTALUM_INGOT));
+        addSmelt(registry, idx++, EmiStack.of(ModItems.HAFNIUM_DUST), EmiStack.of(ModItems.HAFNIUM_INGOT));
+        addSmelt(registry, idx++, EmiStack.of(ModItems.NEODYMIUM_DUST), EmiStack.of(ModItems.NEODYMIUM_MAGNET));
         addSmelt(registry, idx++, EmiStack.of(ModItems.NETHERITE_DUST), EmiStack.of(Items.NETHERITE_INGOT));
         addSmelt(registry, idx++, EmiStack.of(ModItems.QUARTZ_DUST), EmiStack.of(ModItems.SILICON));
         addSmelt(registry, idx++, EmiStack.of(Items.SAND), EmiStack.of(Items.GLASS));
@@ -402,16 +465,22 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         @Override public List<EmiIngredient> getInputs() { return List.of(inputA, inputB); }
         @Override public List<EmiStack> getOutputs() { return List.of(output); }
         @Override public int getDisplayWidth() { return 130; }
-        @Override public int getDisplayHeight() { return 36; }
+        @Override public int getDisplayHeight() { return 56; }
 
         @Override
         public void addWidgets(WidgetHolder widgets) {
-            widgets.addSlot(inputA, 10, 8);
-            widgets.addSlot(inputB, 34, 8);
-            widgets.addFillingArrow(62, 8, 2000);
-            widgets.addSlot(output, 96, 8).recipeContext(this);
+            // Machine Background panel (Alloy Foundry)
+            widgets.addTexture(ALLOY_FOUNDRY_GUI, 0, 0, 130, 56, 15, 17);
+            // Energy Storage Bar (illuminated)
+            widgets.addTexture(ALLOY_FOUNDRY_GUI, 3, 3, 16, 50, 192, 0);
+            // Animated smelting arrow
+            widgets.addAnimatedTexture(ALLOY_FOUNDRY_GUI, 71, 17, 24, 17, 176, 14, 2000, true, false, false);
+            // Slots aligned to authentic GUI
+            widgets.addSlot(inputA, 28, 17).drawBack(false);
+            widgets.addSlot(inputB, 48, 17).drawBack(false);
+            widgets.addSlot(output, 104, 17).recipeContext(this).drawBack(false);
             if (note != null && !note.isEmpty()) {
-                widgets.addText(Text.literal("§8" + note), 10, 26, 0x555555, false);
+                widgets.addText(Text.literal("§8" + note), 26, 43, 0x555555, false);
             }
         }
     }
@@ -435,16 +504,22 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         @Override public Identifier getId() { return id; }
         @Override public List<EmiIngredient> getInputs() { return List.of(input); }
         @Override public List<EmiStack> getOutputs() { return List.of(output); }
-        @Override public int getDisplayWidth() { return 130; }
-        @Override public int getDisplayHeight() { return 36; }
+        @Override public int getDisplayWidth() { return 126; }
+        @Override public int getDisplayHeight() { return 56; }
 
         @Override
         public void addWidgets(WidgetHolder widgets) {
-            widgets.addSlot(input, 18, 8);
-            widgets.addFillingArrow(52, 8, 1500);
-            widgets.addSlot(output, 88, 8).recipeContext(this);
+            // Machine Background panel (Crusher)
+            widgets.addTexture(CRUSHER_GUI, 0, 0, 126, 56, 46, 17);
+            // Energy bar (illuminated)
+            widgets.addTexture(CRUSHER_GUI, 106, 3, 14, 52, 190, 0);
+            // Animated crushing progress arrow
+            widgets.addAnimatedTexture(CRUSHER_GUI, 33, 17, 24, 17, 176, 14, 2000, true, false, false);
+            // Slots aligned to GUI
+            widgets.addSlot(input, 9, 17).drawBack(false);
+            widgets.addSlot(output, 69, 17).recipeContext(this).drawBack(false);
             if (note != null && !note.isEmpty()) {
-                widgets.addText(Text.literal("§8" + note), 10, 26, 0x555555, false);
+                widgets.addText(Text.literal("§8" + note), 8, 43, 0x555555, false);
             }
         }
     }
@@ -468,17 +543,186 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         @Override public Identifier getId() { return id; }
         @Override public List<EmiIngredient> getInputs() { return List.of(input); }
         @Override public List<EmiStack> getOutputs() { return List.of(output, byproduct); }
-        @Override public int getDisplayWidth() { return 140; }
-        @Override public int getDisplayHeight() { return 36; }
+        @Override public int getDisplayWidth() { return 126; }
+        @Override public int getDisplayHeight() { return 56; }
 
         @Override
         public void addWidgets(WidgetHolder widgets) {
-            widgets.addSlot(input, 12, 8);
-            widgets.addFillingArrow(42, 8, 3000);
-            widgets.addSlot(output, 78, 8).recipeContext(this);
-            widgets.addSlot(byproduct, 102, 8).recipeContext(this);
+            // Machine Background panel
+            widgets.addTexture(COKE_OVEN_GUI, 0, 0, 126, 56, 46, 17);
+            // Animated cook progress arrow
+            widgets.addAnimatedTexture(COKE_OVEN_GUI, 33, 17, 24, 17, 176, 14, 2500, true, false, false);
+            // Slots aligned to GUI
+            widgets.addSlot(input, 9, 17).drawBack(false);
+            widgets.addSlot(output, 69, 17).recipeContext(this).drawBack(false);
+            widgets.addSlot(byproduct, 95, 17).recipeContext(this);
             if (note != null && !note.isEmpty()) {
-                widgets.addText(Text.literal("§8" + note), 10, 26, 0x555555, false);
+                widgets.addText(Text.literal("§8" + note), 8, 43, 0x555555, false);
+            }
+        }
+    }
+
+    private static void registerCentrifugeRecipes(EmiRegistry registry) {
+        int idx = 0;
+        // 1. Slime Ball -> Alkaline Base Extract + Sulfur Dust
+        registry.addRecipe(new CentrifugeEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "centrifuge_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.SLIME_BALL))),
+                EmiStack.of(ModItems.ALKALINE_BASE_EXTRACT),
+                EmiStack.of(ModItems.SULFUR_DUST),
+                "Alkaline Neutralizer Separation"));
+
+        // 2. Magma Cream / Crimson Fungus -> Cryo-Thermal Extract + Volcanic Ash
+        registry.addRecipe(new CentrifugeEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "centrifuge_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MAGMA_CREAM), EmiStack.of(Items.CRIMSON_FUNGUS))),
+                EmiStack.of(ModItems.CRYO_THERMAL_EXTRACT),
+                EmiStack.of(ModItems.VOLCANIC_ASH),
+                "Endothermic Extract Separation"));
+
+        // 3. Kelp / Seagrass / Cucumber -> Oxygenated Extract + Bone Meal
+        registry.addRecipe(new CentrifugeEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "centrifuge_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.KELP), EmiStack.of(Items.SEAGRASS), EmiStack.of(ModItems.CUCUMBER))),
+                EmiStack.of(ModItems.OXYGENATED_EXTRACT),
+                EmiStack.of(Items.BONE_MEAL),
+                "Oxygenated Hemoglobin Separation"));
+
+        // 4. Dragon Fruit / Nether Wart -> Cellular Nanite Extract + Sugar
+        registry.addRecipe(new CentrifugeEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "centrifuge_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.DRAGON_FRUIT), EmiStack.of(Items.NETHER_WART))),
+                EmiStack.of(ModItems.CELLULAR_NANITE_EXTRACT),
+                EmiStack.of(Items.SUGAR),
+                "Cellular Nanite Matrix Separation"));
+
+        // 5. Glow Berries / Wasabi Root -> Adrenal Essence + Glowstone Dust
+        registry.addRecipe(new CentrifugeEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "centrifuge_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GLOW_BERRIES), EmiStack.of(ModItems.WASABI_ROOT))),
+                EmiStack.of(ModItems.ADRENAL_ESSENCE),
+                EmiStack.of(Items.GLOWSTONE_DUST),
+                "Adrenal Neuro-Stimulant Separation"));
+    }
+
+    private static void registerSynthesizerRecipes(EmiRegistry registry) {
+        int idx = 0;
+        // 1. Acid-Neutralizing Cartridge
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.ALKALINE_BASE_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.REDSTONE), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(ModItems.SULFUR_DUST))),
+                EmiStack.of(ModItems.ACID_NEUTRALIZING_CARTRIDGE),
+                "Acid & Environmental Toxin Immunity (6m)"));
+
+        // 2. Endothermic Heat-Buffer Cartridge
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.CRYO_THERMAL_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.BLAZE_POWDER), EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(Items.MAGMA_CREAM))),
+                EmiStack.of(ModItems.HEAT_BUFFER_CARTRIDGE),
+                "Lava & Caldera Thermal Protection (6m)"));
+
+        // 3. Hyper-Oxygenation Cartridge
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.OXYGENATED_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.ALUMINUM_INGOT), EmiStack.of(Items.IRON_INGOT))),
+                EmiStack.of(ModItems.HYPER_OXYGENATION_CARTRIDGE),
+                "Atmospheric & Vacuum Breathing (6m)"));
+
+        // 4. Nanite Trauma Cartridge
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.CELLULAR_NANITE_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GOLDEN_APPLE), EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(Items.GHAST_TEAR))),
+                EmiStack.of(ModItems.NANITE_TRAUMA_CARTRIDGE),
+                "Critical Trauma: +8 HP & Regen II & Cleansing"));
+
+        // 5. Adrenaline Combat Stim Cartridge
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.ADRENAL_ESSENCE))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.SUGAR), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(Items.QUARTZ))),
+                EmiStack.of(ModItems.ADRENALINE_STIM_CARTRIDGE),
+                "Combat Stim: Speed II, Haste II, Resistance I (3m)"));
+    }
+
+    public static class CentrifugeEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient input;
+        private final EmiStack output;
+        private final EmiStack byproduct;
+        private final String note;
+
+        public CentrifugeEmiRecipe(Identifier id, EmiIngredient input, EmiStack output, EmiStack byproduct, String note) {
+            this.id = id;
+            this.input = input;
+            this.output = output;
+            this.byproduct = byproduct;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return INDUSTRIAL_CENTRIFUGE; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(input); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output, byproduct); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 56; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Authentic Machine Background panel (Industrial Centrifuge)
+            widgets.addTexture(CENTRIFUGE_GUI, 0, 0, 142, 56, 15, 17);
+            // Energy Storage Bar (illuminated)
+            widgets.addTexture(CENTRIFUGE_GUI, 3, 3, 16, 50, 192, 0);
+            // Animated centrifugal separation arrow
+            widgets.addAnimatedTexture(CENTRIFUGE_GUI, 57, 17, 24, 17, 176, 14, 2500, true, false, false);
+            // Slots aligned to authentic machine frame
+            widgets.addSlot(input, 32, 17).drawBack(false);
+            widgets.addSlot(output, 90, 17).recipeContext(this).drawBack(false);
+            widgets.addSlot(byproduct, 118, 17).recipeContext(this).drawBack(false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§8" + note), 28, 43, 0x555555, false);
+            }
+        }
+    }
+
+    public static class SynthesizerEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient cartridge;
+        private final EmiIngredient essence;
+        private final EmiIngredient catalyst;
+        private final EmiStack output;
+        private final String note;
+
+        public SynthesizerEmiRecipe(Identifier id, EmiIngredient cartridge, EmiIngredient essence, EmiIngredient catalyst, EmiStack output, String note) {
+            this.id = id;
+            this.cartridge = cartridge;
+            this.essence = essence;
+            this.catalyst = catalyst;
+            this.output = output;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return CHEMICAL_SYNTHESIZER; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(cartridge, essence, catalyst); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 64; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Authentic Chemical Synthesizer machine background panel (crop from u=15, v=14)
+            widgets.addTexture(CHEMICAL_SYNTHESIZER_GUI, 0, 0, 142, 64, 15, 14);
+            // Energy Storage Bar (illuminated at x=18-15=3, y=20-14=6)
+            widgets.addTexture(CHEMICAL_SYNTHESIZER_GUI, 3, 6, 16, 50, 192, 0);
+            // Animated compounding arrow: x=76-15=61, y=35-14=21
+            widgets.addAnimatedTexture(CHEMICAL_SYNTHESIZER_GUI, 61, 21, 24, 17, 176, 14, 3000, true, false, false);
+            // 3 stacked input chambers (align with beveled slots on texture: x=44-15=29)
+            widgets.addSlot(cartridge, 29, 3).drawBack(false);
+            widgets.addSlot(essence, 29, 21).drawBack(false);
+            widgets.addSlot(catalyst, 29, 39).drawBack(false);
+            // Output slot (align with large 26x26 output box on texture: item at x=120-15=105, y=35-14=21)
+            widgets.addSlot(output, 105, 21).recipeContext(this).drawBack(false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§8" + note), 26, 56, 0x555555, false);
             }
         }
     }

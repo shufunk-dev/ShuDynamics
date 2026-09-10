@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 200,
+  "ingredient": "enchantedwood:fluorite_ore",
+  "result": {
+    "id": "enchantedwood:fluorite_crystal",
+    "count": 1
+  }
+}

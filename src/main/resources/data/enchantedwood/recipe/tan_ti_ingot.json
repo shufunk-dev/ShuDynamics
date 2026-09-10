@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:tantalum_ingot",
+    "enchantedwood:titanium_ingot"
+  ],
+  "result": {
+    "id": "enchantedwood:tan_ti_ingot",
+    "count": 2
+  }
+}

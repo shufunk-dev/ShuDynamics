@@ -33,7 +33,7 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.INPUT_SLOT, 48, 35));
 
         // Slot 1: Output Essence
-        this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_1, 108, 25) {
+        this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_1, 106, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
@@ -41,7 +41,7 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
         });
 
         // Slot 2: Output Byproduct
-        this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_2, 108, 45) {
+        this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_2, 134, 35) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
@@ -106,8 +106,22 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
                 if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.insertItem(originalStack, 0, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
-                return ItemStack.EMPTY;
+            } else {
+                if (originalStack.getItem() instanceof GearItem) {
+                    if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.GEAR_SLOT, IndustrialCentrifugeBlockEntity.GEAR_SLOT + 1, false)) {
+                        if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                } else if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
+                    if (invSlot < IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27) {
+                        if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    } else if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
             }
 
             if (originalStack.isEmpty()) {

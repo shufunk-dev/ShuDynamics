@@ -222,12 +222,43 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         return new int[]{SLOT_CARTRIDGE, SLOT_ESSENCE, SLOT_CATALYST, SLOT_OUTPUT};
     }
 
+    public static boolean isEssence(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        Item item = stack.getItem();
+        return item == ModItems.ALKALINE_BASE_EXTRACT ||
+               item == ModItems.CRYO_THERMAL_EXTRACT ||
+               item == ModItems.OXYGENATED_EXTRACT ||
+               item == ModItems.CELLULAR_NANITE_EXTRACT ||
+               item == ModItems.ADRENAL_ESSENCE;
+    }
+
+    public static boolean isCatalyst(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        Item item = stack.getItem();
+        return item == Items.REDSTONE ||
+               item == Items.GLOWSTONE_DUST ||
+               item == ModItems.SULFUR_DUST ||
+               item == Items.BLAZE_POWDER ||
+               item == ModItems.FIRE_CRYSTAL ||
+               item == Items.MAGMA_CREAM ||
+               item == ModItems.TITANIUM_INGOT ||
+               item == ModItems.ALUMINUM_INGOT ||
+               item == Items.IRON_INGOT ||
+               item == Items.GOLDEN_APPLE ||
+               item == Items.ENCHANTED_GOLDEN_APPLE ||
+               item == Items.GHAST_TEAR ||
+               item == Items.SUGAR ||
+               item == Items.QUARTZ;
+    }
+
     @Override
     public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == SLOT_OUTPUT) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         if (slot == SLOT_CARTRIDGE) return stack.getItem() == ModItems.EMPTY_CARTRIDGE;
-        return slot == SLOT_ESSENCE || slot == SLOT_CATALYST;
+        if (slot == SLOT_ESSENCE) return isEssence(stack);
+        if (slot == SLOT_CATALYST) return isCatalyst(stack);
+        return false;
     }
 
     @Override

@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "RER",
+    "FEF",
     "ETE",
-    "RER"
+    "FEF"
   ],
   "key": {
-    "R": "enchantedwood:rubber_tire",
+    "F": "enchantedwood:fluorite_crystal",
     "E": "enchantedwood:alkaline_base_extract",
     "T": "enchantedwood:titanium_ingot"
   },

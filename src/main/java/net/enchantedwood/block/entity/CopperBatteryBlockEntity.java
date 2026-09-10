@@ -34,17 +34,7 @@ public class CopperBatteryBlockEntity extends BlockEntity implements NamedScreen
     public static final int CHARGE_SLOT = 1;
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
-    private boolean receivedEnergyThisTick = false;
-    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(BATTERY_CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0) {
-        @Override
-        public int insertEnergy(int amount, boolean simulate) {
-            int inserted = super.insertEnergy(amount, simulate);
-            if (!simulate && inserted > 0) {
-                receivedEnergyThisTick = true;
-            }
-            return inserted;
-        }
-    };
+    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(BATTERY_CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0);
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -150,14 +140,15 @@ public class CopperBatteryBlockEntity extends BlockEntity implements NamedScreen
             }
         }
 
-        // 3. Cable / grid output (only if NOT receiving charge this tick!)
-        if (!entity.receivedEnergyThisTick && entity.energyStorage.getEnergy() > 0) {
+        // 3. Direct output to adjacent machine consumers (never cables/batteries/generators)
+        if (entity.energyStorage.getEnergy() > 0) {
             int availableToOutput = Math.min(entity.energyStorage.getEnergy(), MAX_TRANSFER);
 
             for (Direction dir : Direction.values()) {
                 if (availableToOutput <= 0) break;
                 BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
                 if (neighbor instanceof EnergyProvider provider &&
+                        !(neighbor instanceof BaseCableBlockEntity) &&
                         !(neighbor instanceof CopperBatteryBlockEntity) &&
                         !(neighbor instanceof AluminumBatteryBlockEntity) &&
                         !(neighbor instanceof SteelBatteryBlockEntity) &&
@@ -179,7 +170,6 @@ public class CopperBatteryBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         }
-        entity.receivedEnergyThisTick = false;
 
         if (stateChanged) {
             markDirty(world, pos, state);

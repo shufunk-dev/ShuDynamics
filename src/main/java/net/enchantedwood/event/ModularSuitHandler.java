@@ -17,6 +17,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ModularSuitHandler {
@@ -99,58 +100,147 @@ public class ModularSuitHandler {
         }
     }
 
-    private static void tickChestplateModules(ServerPlayerEntity player, ServerWorld world) {
-        ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
-        if (!chest.isOf(ModItems.MODULAR_POWER_CHESTPLATE)) return;
+    public static boolean hasSuitModule(ServerPlayerEntity player, String moduleId) {
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, moduleId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        // Fluoropolymer Acid-Proof Plating Module
-        if (ModularPowerArmorItem.hasModule(chest, "enchantedwood:acid_proof_plating")) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    ModStatusEffects.ACID_PROTECTION,
-                    60,
-                    0,
-                    true,
-                    false,
-                    true
-            ));
-            if (player.hasStatusEffect(StatusEffects.POISON)) {
-                player.removeStatusEffect(StatusEffects.POISON);
+    public static int getSuitStoredEnergy(ServerPlayerEntity player) {
+        int total = 0;
+        EquipmentSlot[] slots = new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET};
+        for (EquipmentSlot slot : slots) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem) {
+                total += ModularPowerArmorItem.getStoredEnergy(piece);
             }
-            if (player.hasStatusEffect(StatusEffects.WITHER)) {
-                player.removeStatusEffect(StatusEffects.WITHER);
+        }
+        return total;
+    }
+
+    public static boolean extractSuitEnergy(ServerPlayerEntity player, String moduleId, int amount) {
+        EquipmentSlot[] slots = new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET};
+        // 1. Try host piece first
+        for (EquipmentSlot slot : slots) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, moduleId)) {
+                if (ModularPowerArmorItem.getStoredEnergy(piece) >= amount) {
+                    ModularPowerArmorItem.extractEnergy(piece, amount);
+                    return true;
+                }
             }
-            if (player.hasStatusEffect(StatusEffects.NAUSEA)) {
-                player.removeStatusEffect(StatusEffects.NAUSEA);
+        }
+        // 2. Siphon from any other suit piece
+        for (EquipmentSlot slot : slots) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem) {
+                if (ModularPowerArmorItem.getStoredEnergy(piece) >= amount) {
+                    ModularPowerArmorItem.extractEnergy(piece, amount);
+                    return true;
+                }
             }
-            if (world.getTime() % 20 == 0) {
-                world.spawnParticles(
-                        ParticleTypes.HAPPY_VILLAGER,
-                        player.getX(), player.getY() + 0.8, player.getZ(),
-                        1, 0.2, 0.3, 0.2, 0.01
-                );
+        }
+        return false;
+    }
+
+    private static void tickChestplateModules(ServerPlayerEntity player, ServerWorld world) {
+        // Fluoropolymer Acid-Proof Plating Module (Installed in Chestplate, Leggings, etc.)
+        if (hasSuitModule(player, "enchantedwood:acid_proof_plating")) {
+            boolean hasToxin = player.hasStatusEffect(StatusEffects.POISON)
+                    || player.hasStatusEffect(StatusEffects.WITHER)
+                    || player.hasStatusEffect(StatusEffects.NAUSEA);
+            boolean inAcid = ConvergenceHazardHandler.isInCausticHazard(world, player);
+            boolean activeLoad = hasToxin || inAcid;
+
+            boolean hasEnergy;
+            if (activeLoad) {
+                // Drain 4 FE/t (~80 FE/s) while under active caustic stress
+                hasEnergy = extractSuitEnergy(player, "enchantedwood:acid_proof_plating", 4);
+            } else {
+                hasEnergy = getSuitStoredEnergy(player) > 0;
+            }
+
+            if (hasEnergy) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        ModStatusEffects.ACID_PROTECTION,
+                        60,
+                        0,
+                        true,
+                        false,
+                        true
+                ));
+                if (player.hasStatusEffect(StatusEffects.POISON)) {
+                    player.removeStatusEffect(StatusEffects.POISON);
+                }
+                if (player.hasStatusEffect(StatusEffects.WITHER)) {
+                    player.removeStatusEffect(StatusEffects.WITHER);
+                }
+                if (player.hasStatusEffect(StatusEffects.NAUSEA)) {
+                    player.removeStatusEffect(StatusEffects.NAUSEA);
+                }
+                if (activeLoad && world.getTime() % 10 == 0) {
+                    world.spawnParticles(
+                            ParticleTypes.HAPPY_VILLAGER,
+                            player.getX(), player.getY() + 0.8, player.getZ(),
+                            2, 0.2, 0.3, 0.2, 0.01
+                    );
+                }
+            } else {
+                if (player.hasStatusEffect(ModStatusEffects.ACID_PROTECTION)) {
+                    player.removeStatusEffect(ModStatusEffects.ACID_PROTECTION);
+                }
+                if (activeLoad && world.getTime() % 40 == 0) {
+                    player.sendMessage(Text.literal("§c⚠ ACID SHIELD COLLAPSED: 0 FE! Corrosive acid burning suit! ⚠"), true);
+                }
             }
         }
 
-        // Thermal Refractory Plating Module
-        if (ModularPowerArmorItem.hasModule(chest, "enchantedwood:thermal_refractory_plating")) {
-            player.addStatusEffect(new StatusEffectInstance(
-                    StatusEffects.FIRE_RESISTANCE,
-                    60,
-                    0,
-                    true,
-                    false,
-                    true
-            ));
-            player.extinguish();
-            if (player.isInLava()) {
-                player.setVelocity(player.getVelocity().x * 1.15, Math.max(player.getVelocity().y, 0.1), player.getVelocity().z * 1.15);
-                player.fallDistance = 0.0f;
-                if (world.getTime() % 10 == 0) {
-                    world.spawnParticles(
-                            ParticleTypes.FLAME,
-                            player.getX(), player.getY() + 0.1, player.getZ(),
-                            2, 0.2, 0.0, 0.2, 0.01
-                    );
+        // Thermal Refractory Plating Module (Installed in Chestplate, Leggings, etc.)
+        if (hasSuitModule(player, "enchantedwood:thermal_refractory_plating")) {
+            boolean inLava = player.isInLava();
+            boolean onFire = player.isOnFire();
+            boolean inCaldera = ConvergenceHazardHandler.isInThermalHazard(world, player);
+            boolean activeLoad = inLava || onFire || inCaldera;
+
+            boolean hasEnergy;
+            if (activeLoad) {
+                // Drain 5 FE/t (~100 FE/s) while under active thermal stress
+                hasEnergy = extractSuitEnergy(player, "enchantedwood:thermal_refractory_plating", 5);
+            } else {
+                hasEnergy = getSuitStoredEnergy(player) > 0;
+            }
+
+            if (hasEnergy) {
+                player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE,
+                        60,
+                        0,
+                        true,
+                        false,
+                        true
+                ));
+                player.extinguish();
+                if (inLava) {
+                    player.setVelocity(player.getVelocity().x * 1.15, Math.max(player.getVelocity().y, 0.1), player.getVelocity().z * 1.15);
+                    player.fallDistance = 0.0f;
+                    if (world.getTime() % 10 == 0) {
+                        world.spawnParticles(
+                                ParticleTypes.FLAME,
+                                player.getX(), player.getY() + 0.1, player.getZ(),
+                                2, 0.2, 0.0, 0.2, 0.01
+                        );
+                    }
+                }
+            } else {
+                if (player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                    player.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
+                }
+                if (activeLoad && world.getTime() % 40 == 0) {
+                    player.sendMessage(Text.literal("§c⚠ THERMAL SHIELD OVERHEATED: 0 FE! Heatsinks offline! ⚠"), true);
                 }
             }
         }
@@ -257,37 +347,74 @@ public class ModularSuitHandler {
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
         };
 
+        // Check if ANY equipped piece has a Nanite Repair Matrix installed!
+        boolean hasNaniteNetwork = false;
+        String bestChipId = "";
+        ItemStack primaryNanitePiece = ItemStack.EMPTY;
+
+        for (EquipmentSlot slot : armorSlots) {
+            ItemStack piece = player.getEquippedStack(slot);
+            if (piece.getItem() instanceof ModularPowerArmorItem &&
+                    ModularPowerArmorItem.hasModule(piece, "enchantedwood:nanite_repair_matrix")) {
+                hasNaniteNetwork = true;
+                if (primaryNanitePiece.isEmpty()) {
+                    primaryNanitePiece = piece;
+                }
+                String chipId = ModularPowerArmorItem.getInstalledChipId(piece);
+                if ("enchantedwood:quantum_computer_chip".equals(chipId)) {
+                    bestChipId = chipId;
+                } else if ("enchantedwood:advanced_computer_chip".equals(chipId) && !"enchantedwood:quantum_computer_chip".equals(bestChipId)) {
+                    bestChipId = chipId;
+                } else if ("enchantedwood:basic_computer_chip".equals(chipId) && bestChipId.isEmpty()) {
+                    bestChipId = chipId;
+                }
+            }
+        }
+
+        if (!hasNaniteNetwork) return;
+
+        int repairAmount = 2; // Base speed: 2 durability points every 2 seconds
+        if ("enchantedwood:basic_computer_chip".equals(bestChipId)) {
+            repairAmount = 3;
+        } else if ("enchantedwood:advanced_computer_chip".equals(bestChipId)) {
+            repairAmount = 6;
+        } else if ("enchantedwood:quantum_computer_chip".equals(bestChipId)) {
+            repairAmount = 15;
+        }
+
+        int energyNeeded = repairAmount * 50;
+        boolean repairedAny = false;
+
         for (EquipmentSlot slot : armorSlots) {
             ItemStack piece = player.getEquippedStack(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem && piece.isDamaged()) {
-                if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:nanite_repair_matrix")) {
-                    String chipId = ModularPowerArmorItem.getInstalledChipId(piece);
-                    int repairAmount = 2; // Base speed: 2 durability points every 2 seconds
-                    if ("enchantedwood:basic_computer_chip".equals(chipId)) {
-                        repairAmount = 3;
-                    } else if ("enchantedwood:advanced_computer_chip".equals(chipId)) {
-                        repairAmount = 6;
-                    } else if ("enchantedwood:quantum_computer_chip".equals(chipId)) {
-                        repairAmount = 15;
-                    }
+                // Check energy: draw from piece first, then from primary nanite piece if needed
+                int energyAvailable = ModularPowerArmorItem.getStoredEnergy(piece);
+                boolean canDrawFromPiece = energyAvailable >= energyNeeded;
+                boolean canDrawFromHost = !canDrawFromPiece && !primaryNanitePiece.isEmpty() && ModularPowerArmorItem.getStoredEnergy(primaryNanitePiece) >= energyNeeded;
 
-                    int energyNeeded = repairAmount * 50;
-                    int energy = ModularPowerArmorItem.getStoredEnergy(piece);
-                    if (energy >= energyNeeded) {
-                        ModularPowerArmorItem.extractEnergy(piece, energyNeeded);
-                        int currentDmg = piece.getDamage();
-                        piece.setDamage(Math.max(0, currentDmg - repairAmount));
-                        player.equipStack(slot, piece);
-                        player.playerScreenHandler.sendContentUpdates();
-
-                        world.spawnParticles(
-                                ParticleTypes.ELECTRIC_SPARK,
-                                player.getX(), player.getY() + 1.0, player.getZ(),
-                                2, 0.2, 0.3, 0.2, 0.05
-                        );
-                    }
+                if (canDrawFromPiece) {
+                    ModularPowerArmorItem.extractEnergy(piece, energyNeeded);
+                } else if (canDrawFromHost) {
+                    ModularPowerArmorItem.extractEnergy(primaryNanitePiece, energyNeeded);
+                } else {
+                    continue; // Not enough energy to repair this piece
                 }
+
+                int currentDmg = piece.getDamage();
+                piece.setDamage(Math.max(0, currentDmg - repairAmount));
+                player.equipStack(slot, piece);
+                repairedAny = true;
             }
+        }
+
+        if (repairedAny) {
+            player.playerScreenHandler.sendContentUpdates();
+            world.spawnParticles(
+                    ParticleTypes.ELECTRIC_SPARK,
+                    player.getX(), player.getY() + 1.0, player.getZ(),
+                    3, 0.2, 0.3, 0.2, 0.05
+            );
         }
     }
 }

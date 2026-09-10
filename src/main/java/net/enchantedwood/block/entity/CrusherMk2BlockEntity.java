@@ -281,12 +281,39 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             return new Mk2CrushRecipe(ModItems.MANYULLYN_DUST, 9, true, null, 0);
         }
 
+        // Tantalum
+        if (item == ModItems.RAW_TANTALUM || item == ModBlocks.TANTALUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TANTALUM_ORE.asItem()) {
+            return new Mk2CrushRecipe(ModItems.TANTALUM_DUST, 3, false, ModItems.TITANIUM_DUST, 1);
+        }
+        if (item == ModItems.TANTALUM_INGOT) {
+            return new Mk2CrushRecipe(ModItems.TANTALUM_DUST, 1, true, null, 0);
+        }
+
+        // Hafnium
+        if (item == ModItems.RAW_HAFNIUM || item == ModBlocks.HAFNIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_HAFNIUM_ORE.asItem()) {
+            return new Mk2CrushRecipe(ModItems.HAFNIUM_DUST, 3, false, ModItems.FIRE_CRYSTAL, 1);
+        }
+        if (item == ModItems.HAFNIUM_INGOT) {
+            return new Mk2CrushRecipe(ModItems.HAFNIUM_DUST, 1, true, null, 0);
+        }
+
+        // Neodymium
+        if (item == ModItems.RAW_NEODYMIUM || item == ModBlocks.NEODYMIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_NEODYMIUM_ORE.asItem()) {
+            return new Mk2CrushRecipe(ModItems.NEODYMIUM_DUST, 3, false, Items.REDSTONE, 2);
+        }
+        if (item == ModItems.NEODYMIUM_MAGNET) {
+            return new Mk2CrushRecipe(ModItems.NEODYMIUM_DUST, 1, true, null, 0);
+        }
+
         // Iron
         if (item == Items.RAW_IRON || item == Items.IRON_ORE || item == Items.DEEPSLATE_IRON_ORE) {
             return new Mk2CrushRecipe(ModItems.IRON_DUST, 3, false, ModItems.TIN_DUST, 1);
         }
         if (item == Items.RAW_IRON_BLOCK || item == Items.IRON_BLOCK) {
             return new Mk2CrushRecipe(ModItems.IRON_DUST, 27, true, ModItems.TIN_DUST, 3);
+        }
+        if (item == Items.IRON_INGOT) {
+            return new Mk2CrushRecipe(ModItems.IRON_DUST, 1, true, null, 0);
         }
 
         // Copper
@@ -296,39 +323,132 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         if (item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_BLOCK) {
             return new Mk2CrushRecipe(ModItems.COPPER_DUST, 36, true, ModItems.GOLD_DUST, 3);
         }
+        if (item == Items.COPPER_INGOT) {
+            return new Mk2CrushRecipe(ModItems.COPPER_DUST, 1, true, null, 0);
+        }
 
         // Gold
         if (item == Items.RAW_GOLD || item == Items.GOLD_ORE || item == Items.DEEPSLATE_GOLD_ORE || item == Items.NETHER_GOLD_ORE) {
             return new Mk2CrushRecipe(ModItems.GOLD_DUST, 3, false, ModItems.COPPER_DUST, 1);
+        }
+        if (item == Items.RAW_GOLD_BLOCK || item == Items.GOLD_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.GOLD_DUST, 27, true, ModItems.COPPER_DUST, 3);
+        }
+        if (item == Items.GOLD_INGOT) {
+            return new Mk2CrushRecipe(ModItems.GOLD_DUST, 1, true, null, 0);
         }
 
         // Tin & Titanium
         if (item == ModItems.RAW_TIN || item == ModBlocks.TIN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TIN_ORE.asItem()) {
             return new Mk2CrushRecipe(ModItems.TIN_DUST, 3, false, ModItems.IRON_DUST, 1);
         }
+        if (item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModBlocks.TIN_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.TIN_DUST, 27, true, ModItems.IRON_DUST, 3);
+        }
+        if (item == ModItems.TIN_INGOT) {
+            return new Mk2CrushRecipe(ModItems.TIN_DUST, 1, true, null, 0);
+        }
+
         if (item == ModItems.RAW_TITANIUM || item == ModBlocks.TITANIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TITANIUM_ORE.asItem()) {
             return new Mk2CrushRecipe(ModItems.TITANIUM_DUST, 3, false, ModItems.VOLCANIC_ASH, 1);
+        }
+        if (item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModBlocks.TITANIUM_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.TITANIUM_DUST, 27, true, ModItems.VOLCANIC_ASH, 3);
+        }
+        if (item == ModItems.TITANIUM_INGOT) {
+            return new Mk2CrushRecipe(ModItems.TITANIUM_DUST, 1, true, null, 0);
+        }
+
+        // Bauxite & Aluminum
+        if (item == ModItems.RAW_BAUXITE || item == ModBlocks.BAUXITE_ORE.asItem() || item == ModBlocks.DEEPSLATE_BAUXITE_ORE.asItem()) {
+            return new Mk2CrushRecipe(ModItems.BAUXITE_DUST, 3, false, ModItems.TITANIUM_DUST, 1);
+        }
+        if (item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModBlocks.ALUMINUM_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.BAUXITE_DUST, 27, true, ModItems.TITANIUM_DUST, 3);
+        }
+        if (item == ModItems.ALUMINUM_INGOT) {
+            return new Mk2CrushRecipe(ModItems.BAUXITE_DUST, 1, true, null, 0);
+        }
+
+        // Steel & Bronze
+        if (item == ModItems.STEEL_INGOT) {
+            return new Mk2CrushRecipe(ModItems.STEEL_DUST, 1, true, null, 0);
+        }
+        if (item == ModBlocks.STEEL_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.STEEL_DUST, 9, true, null, 0);
+        }
+        if (item == ModItems.BRONZE_INGOT) {
+            return new Mk2CrushRecipe(ModItems.BRONZE_DUST, 1, true, null, 0);
+        }
+        if (item == ModBlocks.BRONZE_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.BRONZE_DUST, 9, true, null, 0);
         }
 
         // Diamonds & Emeralds
         if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE) {
             return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 3, false, ModItems.EMERALD_DUST, 1);
         }
+        if (item == Items.DIAMOND) {
+            return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 1, true, null, 0);
+        }
+        if (item == Items.DIAMOND_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 9, true, null, 0);
+        }
+
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE) {
             return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 3, false, ModItems.DIAMOND_DUST, 1);
         }
+        if (item == Items.EMERALD) {
+            return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 1, true, null, 0);
+        }
+        if (item == Items.EMERALD_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 9, true, null, 0);
+        }
 
-        // Netherite Debris
+        // Netherite Debris, Scraps & Ingots
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP) {
             return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 2, false, ModItems.GOLD_DUST, 2);
         }
+        if (item == Items.NETHERITE_INGOT) {
+            return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 1, true, null, 0);
+        }
+        if (item == Items.NETHERITE_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 9, true, null, 0);
+        }
+        if (item == ModItems.ENCHANTED_NETHERITE_INGOT) {
+            return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 2, true, null, 0);
+        }
+        if (item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.NETHERITE_DUST, 18, true, null, 0);
+        }
 
-        // Blaze Rod
+        // Coal, Coke Coal, Enchanted Coal
+        if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE) {
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 3, false, ModItems.SULFUR_DUST, 1);
+        }
+        if (item == Items.COAL || item == Items.CHARCOAL) {
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 1, true, null, 0);
+        }
+        if (item == Items.COAL_BLOCK) {
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 9, true, null, 0);
+        }
+        if (item == ModItems.COKE_COAL) {
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 2, true, null, 0);
+        }
+        if (item == ModBlocks.COKE_COAL_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 18, true, null, 0);
+        }
+        if (item == ModItems.ENCHANTED_COAL) {
+            return new Mk2CrushRecipe(ModItems.ENCHANTED_DUST, 1, true, null, 0);
+        }
+        if (item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) {
+            return new Mk2CrushRecipe(ModItems.ENCHANTED_DUST, 9, true, null, 0);
+        }
+
+        // Blaze Rod & Magma Block
         if (item == Items.BLAZE_ROD) {
             return new Mk2CrushRecipe(Items.BLAZE_POWDER, 4, true, ModItems.SULFUR_DUST, 1);
         }
-
-        // Magma Block
         if (item == Items.MAGMA_BLOCK) {
             return new Mk2CrushRecipe(Items.MAGMA_CREAM, 4, true, null, 0);
         }
@@ -339,6 +459,29 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
         if (item == Items.QUARTZ_BLOCK) {
             return new Mk2CrushRecipe(ModItems.QUARTZ_DUST, 12, true, Items.REDSTONE, 2);
+        }
+
+        // Stone Recycling & Milling
+        if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.RED_TERRACOTTA || item == Items.GRANITE) {
+            return new Mk2CrushRecipe(ModItems.RAW_BAUXITE, 1, false, Items.SAND, 1);
+        }
+        if (item == Items.COBBLESTONE || item == Items.STONE) {
+            return new Mk2CrushRecipe(Items.GRAVEL, 1, true, null, 0);
+        }
+        if (item == Items.GRAVEL) {
+            return new Mk2CrushRecipe(Items.SAND, 1, true, null, 0);
+        }
+        if (item == Items.BASALT || item == Items.SMOOTH_BASALT) {
+            return new Mk2CrushRecipe(ModItems.VOLCANIC_ASH, 2, true, null, 0);
+        }
+        if (item == Items.WHEAT) {
+            return new Mk2CrushRecipe(Items.BREAD, 1, true, null, 0);
+        }
+        if (item == Items.SUGAR_CANE) {
+            return new Mk2CrushRecipe(Items.SUGAR, 2, true, null, 0);
+        }
+        if (item == Items.BONE) {
+            return new Mk2CrushRecipe(Items.BONE_MEAL, 4, true, null, 0);
         }
 
         return null;

@@ -12,6 +12,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class ModularSuitHudRenderer {
@@ -83,8 +84,28 @@ public class ModularSuitHudRenderer {
         context.fill(hudX, hudY + hudH - 2, hudX + 3, hudY + hudH, 0xFF00E5FF);
         context.fill(hudX + hudW - 3, hudY + hudH - 2, hudX + hudW, hudY + hudH, 0xFF00E5FF);
 
-        // Header Title
-        context.drawText(client.textRenderer, Text.literal("⚡ SUIT STATUS"), hudX + 5, hudY + 4, 0x00E5FF, false);
+        // Dynamic Header Title & Hazard Alert
+        boolean inAcid = isClientInAcidHazard(player) || player.hasStatusEffect(StatusEffects.POISON) || player.hasStatusEffect(StatusEffects.WITHER);
+        boolean inHeat = isClientInThermalHazard(player);
+        boolean inAtmosphere = isClientInAtmosphericHazard(player);
+
+        String titleText = "⚡ SUIT STATUS";
+        int titleColor = 0x00E5FF;
+        if (inAcid && inHeat) {
+            titleText = "⚡ HAZARD SHIELD";
+            titleColor = 0xFF55FF;
+        } else if (inAcid) {
+            titleText = "⚡ ACID DEFENSE";
+            titleColor = 0x55FF55;
+        } else if (inHeat) {
+            titleText = "⚡ HEAT SHIELD";
+            titleColor = 0xFFAA00;
+        } else if (inAtmosphere) {
+            titleText = "⚡ LIFE SUPPORT";
+            titleColor = 0x55FFFF;
+        }
+
+        context.drawText(client.textRenderer, Text.literal(titleText), hudX + 5, hudY + 4, titleColor, false);
         String headerRight = String.format("⚡ %d%%  🛡 %d%%", totalPct, armorPct);
         int rightColor = totalPct > 50 ? 0x00E5FF : (totalPct > 20 ? 0xFFFFD700 : 0xFFFF4444);
         context.drawText(client.textRenderer, Text.literal(headerRight), hudX + hudW - 5 - client.textRenderer.getWidth(headerRight), hudY + 4, rightColor, false);
@@ -97,6 +118,37 @@ public class ModularSuitHudRenderer {
         drawPieceRow(context, client, player, chest, "CHEST", hudX + 4, hudY + 26, EquipmentSlot.CHEST);
         drawPieceRow(context, client, player, legs, "LEGS", hudX + 4, hudY + 36, EquipmentSlot.LEGS);
         drawPieceRow(context, client, player, boots, "BOOTS", hudX + 4, hudY + 46, EquipmentSlot.FEET);
+    }
+
+    private static boolean isClientInAcidHazard(PlayerEntity player) {
+        if (player.getEntityWorld() == null) return false;
+        var pos = player.getBlockPos();
+        var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
+        boolean isCaustic = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        if (!isCaustic) return false;
+        boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
+        boolean inRain = player.getEntityWorld().isRaining() && player.getEntityWorld().isSkyVisible(pos);
+        return inWater || inRain;
+    }
+
+    private static boolean isClientInThermalHazard(PlayerEntity player) {
+        if (player.getEntityWorld() == null) return false;
+        if (player.isInLava() || player.isOnFire()) return true;
+        var pos = player.getBlockPos();
+        var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
+        boolean isCaldera = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+        return isCaldera && player.getY() <= 25;
+    }
+
+    private static boolean isClientInAtmosphericHazard(PlayerEntity player) {
+        if (player.getEntityWorld() == null) return false;
+        var pos = player.getBlockPos();
+        var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
+        boolean isAnoxic = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "anoxic_barrens"));
+        if (isAnoxic) return true;
+        boolean isHighAltitude = player.getY() >= 180 && player.getEntityWorld().isSkyVisible(pos);
+        boolean isAnoxicCave = player.getY() <= 35 && !player.getEntityWorld().isSkyVisible(pos) && player.getEntityWorld().getLightLevel(pos) <= 7;
+        return isHighAltitude || isAnoxicCave;
     }
 
     private static void drawPieceRow(DrawContext context, MinecraftClient client, PlayerEntity player, ItemStack piece, String label, int rx, int ry, EquipmentSlot slot) {
@@ -164,29 +216,96 @@ public class ModularSuitHudRenderer {
         String tag = null;
         int tagColor = 0xFFFFFF;
 
-        if (slot == EquipmentSlot.HEAD) {
-            if (player.hasStatusEffect(StatusEffects.NIGHT_VISION) && ModularPowerArmorItem.hasModule(piece, "enchantedwood:night_vision_module")) {
-                tag = "NVG";
-                tagColor = 0x00FF66;
+        int pieceEnergy = ModularPowerArmorItem.getStoredEnergy(piece);
+
+        // Environmental Hazard Plating Overrides (High Priority)
+        if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:acid_proof_plating")) {
+            boolean inAcidHazard = isClientInAcidHazard(player);
+            boolean hasToxin = player.hasStatusEffect(StatusEffects.POISON) || player.hasStatusEffect(StatusEffects.WITHER) || player.hasStatusEffect(StatusEffects.NAUSEA);
+            if (inAcidHazard || hasToxin) {
+                if (pieceEnergy > 0) {
+                    tag = "ACID";
+                    tagColor = 0x55FF55;
+                } else {
+                    tag = "DEP!";
+                    tagColor = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFF2222 : 0x880000;
+                }
+            } else {
+                tag = "SHLD";
+                tagColor = 0x33AA88;
             }
-        } else if (slot == EquipmentSlot.CHEST) {
-            if (player.getAbilities().flying && ModularPowerArmorItem.hasModule(piece, "enchantedwood:ion_repulsor_module")) {
-                tag = "ION";
-                tagColor = 0x00E5FF;
-            } else if (player.getAbilities().flying && ModularPowerArmorItem.hasModule(piece, "enchantedwood:hydrogen_thruster_module")) {
-                tag = "JET";
-                tagColor = 0xFFAA00;
+        } else if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:thermal_refractory_plating")) {
+            boolean inThermalHazard = isClientInThermalHazard(player);
+            if (inThermalHazard) {
+                if (pieceEnergy > 0) {
+                    tag = "HEAT";
+                    tagColor = 0xFFAA00;
+                } else {
+                    tag = "DEP!";
+                    tagColor = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFF2222 : 0x880000;
+                }
+            } else {
+                tag = "THERM";
+                tagColor = 0xAA7733;
             }
         }
 
-        if (tag == null && piece.isDamaged() && ModularPowerArmorItem.hasModule(piece, "enchantedwood:nanite_repair_matrix")) {
-            long lastDmg = net.enchantedwood.event.PlayerHealthHandler.getLastDamageTime(player.getUuid());
-            if (System.currentTimeMillis() - lastDmg >= 10_000L) {
-                tag = "REP";
-                tagColor = 0x55FF55;
-            } else {
-                tag = "WAIT";
-                tagColor = 0xAAAAAA;
+        // Standard piece modules
+        if (tag == null) {
+            if (slot == EquipmentSlot.HEAD) {
+                if (isClientInAtmosphericHazard(player)) {
+                    if (pieceEnergy > 0) {
+                        tag = "O2";
+                        tagColor = 0x55FFFF;
+                    } else {
+                        tag = "DEP!";
+                        tagColor = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFF2222 : 0x880000;
+                    }
+                } else if (player.hasStatusEffect(StatusEffects.NIGHT_VISION) && ModularPowerArmorItem.hasModule(piece, "enchantedwood:night_vision_module")) {
+                    tag = "NVG";
+                    tagColor = 0x00FF66;
+                }
+            } else if (slot == EquipmentSlot.CHEST) {
+                if (player.getAbilities().flying && ModularPowerArmorItem.hasModule(piece, "enchantedwood:ion_repulsor_module")) {
+                    tag = "ION";
+                    tagColor = 0x00E5FF;
+                } else if (player.getAbilities().flying && ModularPowerArmorItem.hasModule(piece, "enchantedwood:hydrogen_thruster_module")) {
+                    tag = "JET";
+                    tagColor = 0xFFAA00;
+                }
+            } else if (slot == EquipmentSlot.FEET) {
+                if (!player.isOnGround() && ModularPowerArmorItem.hasModule(piece, "enchantedwood:high_jump_module")) {
+                    tag = "JUMP";
+                    tagColor = 0x00E5FF;
+                } else if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:step_assist_module") && player.getVelocity().horizontalLengthSquared() > 0.005) {
+                    tag = "STEP";
+                    tagColor = 0xAAAAAA;
+                }
+            } else if (slot == EquipmentSlot.LEGS) {
+                if (ModularPowerArmorItem.hasModule(piece, "enchantedwood:speed_servo_module") && (player.isSprinting() || player.getVelocity().horizontalLengthSquared() > 0.005)) {
+                    tag = "SPD";
+                    tagColor = 0x00E5FF;
+                }
+            }
+        }
+
+        // Nanite Auto-Repair across suit
+        if (tag == null && piece.isDamaged()) {
+            boolean suitHasNanites = isWearingFullModularSet(player) && (
+                    ModularPowerArmorItem.hasModule(player.getEquippedStack(EquipmentSlot.HEAD), "enchantedwood:nanite_repair_matrix") ||
+                    ModularPowerArmorItem.hasModule(player.getEquippedStack(EquipmentSlot.CHEST), "enchantedwood:nanite_repair_matrix") ||
+                    ModularPowerArmorItem.hasModule(player.getEquippedStack(EquipmentSlot.LEGS), "enchantedwood:nanite_repair_matrix") ||
+                    ModularPowerArmorItem.hasModule(player.getEquippedStack(EquipmentSlot.FEET), "enchantedwood:nanite_repair_matrix")
+            );
+            if (suitHasNanites) {
+                long lastDmg = net.enchantedwood.event.PlayerHealthHandler.getLastDamageTime(player.getUuid());
+                if (System.currentTimeMillis() - lastDmg >= 10_000L) {
+                    tag = "REP";
+                    tagColor = 0x55FF55;
+                } else {
+                    tag = "WAIT";
+                    tagColor = 0xAAAAAA;
+                }
             }
         }
 

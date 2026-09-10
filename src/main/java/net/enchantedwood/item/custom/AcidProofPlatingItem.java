@@ -23,37 +23,13 @@ public class AcidProofPlatingItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        if (entity instanceof PlayerEntity player) {
-            // Grants continuous Acid Protection & cleanses corrosive debuffs while carried in inventory or installed
-            player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.ACID_PROTECTION, 60, 0, true, false, true));
-            if (player.hasStatusEffect(StatusEffects.POISON)) {
-                player.removeStatusEffect(StatusEffects.POISON);
-            }
-            if (player.hasStatusEffect(StatusEffects.WITHER)) {
-                player.removeStatusEffect(StatusEffects.WITHER);
-            }
-            if (player.hasStatusEffect(StatusEffects.NAUSEA)) {
-                player.removeStatusEffect(StatusEffects.NAUSEA);
-            }
-
-            if (world.getTime() % 20 == 0) {
-                world.spawnParticles(
-                        ParticleTypes.HAPPY_VILLAGER,
-                        player.getX(), player.getY() + 0.5, player.getZ(),
-                        1, 0.2, 0.3, 0.2, 0.01
-                );
-            }
-        }
-        super.inventoryTick(stack, world, entity, slot);
-    }
-
-    @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        textConsumer.accept(Text.literal("§6⚡ Suit Upgrade Module"));
         textConsumer.accept(Text.literal("§a✦ Fluoropolymer Acid-Proof Matrix"));
-        textConsumer.accept(Text.literal("§7Grants §ePermanent Acid & Toxin Immunity §7while in inventory or suit."));
-        textConsumer.accept(Text.literal("§8 • 100% Immunity to Poison, Wither, and Caustic Acid pools"));
-        textConsumer.accept(Text.literal("§8 • Installable into Modular Power Suit via Access Panel (V)"));
+        textConsumer.accept(Text.literal("§7Active chemical neutralizer for Modular Power Exosuit."));
+        textConsumer.accept(Text.literal("§b• 100% Acid, Poison, Wither & Nausea Immunity §8(when installed)"));
+        textConsumer.accept(Text.literal("§e• Active Drain: §f4 FE / tick §7under caustic exposure (0 FE idle)"));
+        textConsumer.accept(Text.literal("§8Install into Chestplate or Leggings via Access Panel (V)"));
         super.appendTooltip(stack, context, displayComponent, textConsumer, type);
     }
 }

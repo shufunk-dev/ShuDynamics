@@ -1126,6 +1126,117 @@ public class ModBlocks {
             Text.literal("§6Tough Volcanic Glass"),
             Text.literal("§8Blast-resistant crystal glass. Drops itself when mined."));
 
+    // Convergence Cave Ores & Minerals
+    public static final Block FLUORITE_ORE = registerBlock("fluorite_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fluorite_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_FLUORITE_ORE = registerBlock("deepslate_fluorite_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_fluorite_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(4.5f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block ZIRCONIA_ORE = registerBlock("zirconia_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "zirconia_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.5f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_ZIRCONIA_ORE = registerBlock("deepslate_zirconia_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_zirconia_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(5.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block TANTALUM_ORE = registerBlock("tantalum_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tantalum_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(4.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_TANTALUM_ORE = registerBlock("deepslate_tantalum_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tantalum_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(5.5f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block HAFNIUM_ORE = registerBlock("hafnium_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hafnium_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(4.5f)
+                    .resistance(5.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_HAFNIUM_ORE = registerBlock("deepslate_hafnium_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_hafnium_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(6.0f)
+                    .resistance(5.0f)
+                    .requiresTool()));
+
+    public static final Block NEODYMIUM_ORE = registerBlock("neodymium_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "neodymium_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.5f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_NEODYMIUM_ORE = registerBlock("deepslate_neodymium_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_neodymium_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(5.0f)
+                    .resistance(4.0f)
+                    .requiresTool()));
+
+    public static final Block AEROGEL_ORE = registerBlock("aerogel_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_ore")))
+                    .sounds(BlockSoundGroup.GLASS)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block DEEPSLATE_AEROGEL_ORE = registerBlock("deepslate_aerogel_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_aerogel_ore")))
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+                    .hardness(4.5f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block AEROGEL_GLASS = registerBlockWithTooltip("aerogel_glass",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_glass")))
+                    .sounds(BlockSoundGroup.GLASS)
+                    .hardness(2.5f)
+                    .resistance(30.0f)
+                    .nonOpaque()
+                    .allowsSpawning((state, world, pos, type) -> false)
+                    .solidBlock((state, world, pos) -> false)
+                    .suffocates((state, world, pos) -> false)
+                    .blockVision((state, world, pos) -> false)),
+            Text.literal("§bReinforced Aerogel Glass"),
+            Text.literal("§7Nanostructured insulating composite glass."));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);

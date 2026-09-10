@@ -18,6 +18,10 @@
     "enchantedwood:super_computer",
     "enchantedwood:digital_converter",
     "enchantedwood:item_salvager",
-    "enchantedwood:soil_infuser"
+    "enchantedwood:soil_infuser",
+    "enchantedwood:tantalum_ore",
+    "enchantedwood:deepslate_tantalum_ore",
+    "enchantedwood:neodymium_ore",
+    "enchantedwood:deepslate_neodymium_ore"
   ]
 }

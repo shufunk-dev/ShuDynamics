@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 0.7,
+  "cookingtime": 200,
+  "ingredient": "enchantedwood:deepslate_tantalum_ore",
+  "result": {
+    "id": "enchantedwood:tantalum_ingot",
+    "count": 1
+  }
+}
