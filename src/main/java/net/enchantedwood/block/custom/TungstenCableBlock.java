@@ -100,6 +100,7 @@ public class TungstenCableBlock extends BlockWithEntity {
         BlockPos neighborPos = pos.offset(direction);
         BlockState neighborState = world.getBlockState(neighborPos);
         if (neighborState.getBlock() instanceof TungstenCableBlock ||
+                neighborState.getBlock() instanceof BasaltCableBlock ||
                 neighborState.getBlock() instanceof SteelCableBlock ||
                 neighborState.getBlock() instanceof AluminumCableBlock ||
                 neighborState.getBlock() instanceof CopperCableBlock ||

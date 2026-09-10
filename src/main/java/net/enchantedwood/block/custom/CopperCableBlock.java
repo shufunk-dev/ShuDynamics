@@ -100,6 +100,8 @@ public class CopperCableBlock extends BlockWithEntity {
         if (neighborState.getBlock() instanceof CopperCableBlock ||
                 neighborState.getBlock() instanceof AluminumCableBlock ||
                 neighborState.getBlock() instanceof SteelCableBlock ||
+                neighborState.getBlock() instanceof TungstenCableBlock ||
+                neighborState.getBlock() instanceof BasaltCableBlock ||
                 neighborState.isOf(net.enchantedwood.block.ModBlocks.CRUSHER) ||
                 neighborState.isOf(net.enchantedwood.block.ModBlocks.DUST_SMELTER)) {
             return true;

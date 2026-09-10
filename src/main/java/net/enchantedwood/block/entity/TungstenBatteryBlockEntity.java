@@ -34,7 +34,17 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
     public static final int CHARGE_SLOT = 1;
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
-    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0);
+    private boolean receivedEnergyThisTick = false;
+    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_TRANSFER, MAX_TRANSFER, 0) {
+        @Override
+        public int insertEnergy(int amount, boolean simulate) {
+            int inserted = super.insertEnergy(amount, simulate);
+            if (!simulate && inserted > 0) {
+                receivedEnergyThisTick = true;
+            }
+            return inserted;
+        }
+    };
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -136,8 +146,8 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
             }
         }
 
-        // Push energy directly to adjacent machine consumers (excluding cables/batteries/generators)
-        if (entity.energyStorage.getEnergy() > 0) {
+        // Push energy out only if NOT receiving charge this tick!
+        if (!entity.receivedEnergyThisTick && entity.energyStorage.getEnergy() > 0) {
             int available = Math.min(entity.energyStorage.getEnergy(), MAX_TRANSFER);
             for (Direction dir : Direction.values()) {
                 if (available <= 0) break;
@@ -151,10 +161,7 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
                         !(targetBe instanceof AluminumGeneratorBlockEntity) &&
                         !(targetBe instanceof SteelGeneratorBlockEntity) &&
                         !(targetBe instanceof GeothermalGeneratorBlockEntity) &&
-                        !(targetBe instanceof TungstenCableBlockEntity) &&
-                        !(targetBe instanceof SteelCableBlockEntity) &&
-                        !(targetBe instanceof AluminumCableBlockEntity) &&
-                        !(targetBe instanceof CopperCableBlockEntity)) {
+                        !(targetBe instanceof EnchantedLavaGeneratorBlockEntity)) {
 
                     EnergyStorage targetStorage = provider.getEnergyStorage(dir.getOpposite());
                     if (targetStorage != null && targetStorage.canInsert() && targetStorage.getEnergy() < targetStorage.getMaxEnergy()) {
@@ -168,6 +175,7 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
                 }
             }
         }
+        entity.receivedEnergyThisTick = false;
 
         if (dirty) {
             entity.markDirty();
