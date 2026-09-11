@@ -613,8 +613,8 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         // 0. Sterile Empty Cartridge Assembly
         registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
                 EmiIngredient.of(List.of(EmiStack.of(Items.GLASS_PANE), EmiStack.of(Items.GLASS))),
-                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_NUGGET), EmiStack.of(ModItems.TITANIUM_INGOT))),
-                EmiIngredient.of(List.of(EmiStack.of(Items.REDSTONE), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(Items.QUARTZ))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TIN_INGOT), EmiStack.of(ModItems.TITANIUM_INGOT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.QUARTZ), EmiStack.of(Items.REDSTONE))),
                 EmiStack.of(ModItems.EMPTY_CARTRIDGE, 4),
                 "Sterile Hermetic Ampoule Assembly"));
 

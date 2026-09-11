@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:glass_pane",
+    "enchantedwood:tin_ingot",
+    "minecraft:quartz"
+  ],
+  "result": {
+    "id": "enchantedwood:empty_cartridge",
+    "count": 4
+  }
+}

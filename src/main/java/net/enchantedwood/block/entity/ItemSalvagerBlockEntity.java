@@ -490,7 +490,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
 
         // Medical Hypospray Technology
         registerRecipe(net.enchantedwood.item.ModItems.HYPOSPRAY, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 1), new ItemStack(Items.REDSTONE, 1), new ItemStack(Items.GLASS, 1));
-        registerRecipe(net.enchantedwood.item.ModItems.EMPTY_CARTRIDGE, 4, 80, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_NUGGET, 2), new ItemStack(Items.GLASS_PANE, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.EMPTY_CARTRIDGE, 4, 80, new ItemStack(Items.GLASS_PANE, 1), new ItemStack(net.enchantedwood.item.ModItems.TIN_INGOT, 1), new ItemStack(Items.QUARTZ, 1));
         registerRecipe(net.enchantedwood.item.ModItems.BASALT_FLUX_CATALYST, 1, 160, new ItemStack(Items.BASALT, 4), new ItemStack(net.enchantedwood.item.ModItems.VOLCANIC_ASH, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1));
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_CAPE, 1, 100, new ItemStack(Items.WHITE_WOOL, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 1));
         registerRecipe(net.enchantedwood.item.ModItems.COPPER_BUCKET, 1, 80, new ItemStack(Items.COPPER_INGOT, 3));

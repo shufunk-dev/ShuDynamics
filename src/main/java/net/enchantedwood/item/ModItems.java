@@ -412,9 +412,9 @@ public class ModItems {
     public static final Item EMPTY_CARTRIDGE = registerItem("empty_cartridge", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings.maxCount(64),
             Text.literal("§9Empty Hypospray Cartridge"),
-            Text.literal("§7Sterile titanium & high-purity glass ampoule."),
-            Text.literal("§8Manufactured in the §eChemical Synthesizer§8."),
-            Text.literal("§8Used to compound medical inoculants.")
+            Text.literal("§7Sterile quartz-reinforced glass ampoule with tin cap."),
+            Text.literal("§8Crafted with §fGlass Pane + Tin Ingot + Quartz§8."),
+            Text.literal("§8Used in the §eChemical Synthesizer §8to compound medical inoculants.")
     ));
 
     // Centrifuged Chemical Essences

@@ -144,10 +144,10 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
 
         if (cartridge.isEmpty() || essence.isEmpty() || catalyst.isEmpty()) return ItemStack.EMPTY;
 
-        // 0. Sterile Empty Cartridge Assembly: Glass + Titanium + Flux/Sterilizing Agent (Redstone / Glowstone / Quartz)
+        // 0. Sterile Empty Cartridge Assembly: Glass Pane + Tin Ingot (or Titanium) + Quartz (or Redstone / Glowstone)
         if ((cartridge.isOf(Items.GLASS_PANE) || cartridge.isOf(Items.GLASS)) &&
-            (essence.isOf(ModItems.TITANIUM_NUGGET) || essence.isOf(ModItems.TITANIUM_INGOT)) &&
-            (catalyst.isOf(Items.REDSTONE) || catalyst.isOf(Items.GLOWSTONE_DUST) || catalyst.isOf(Items.QUARTZ))) {
+            (essence.isOf(ModItems.TIN_INGOT) || essence.isOf(ModItems.TITANIUM_NUGGET) || essence.isOf(ModItems.TITANIUM_INGOT)) &&
+            (catalyst.isOf(Items.QUARTZ) || catalyst.isOf(Items.REDSTONE) || catalyst.isOf(Items.GLOWSTONE_DUST))) {
             return new ItemStack(ModItems.EMPTY_CARTRIDGE, essence.isOf(ModItems.TITANIUM_INGOT) ? 8 : 4);
         }
 
@@ -274,7 +274,7 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         if (slot == SLOT_OUTPUT) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         if (slot == SLOT_CARTRIDGE) return stack.getItem() == ModItems.EMPTY_CARTRIDGE || stack.isOf(Items.GLASS_PANE) || stack.isOf(Items.GLASS);
-        if (slot == SLOT_ESSENCE) return isEssence(stack) || stack.isOf(ModItems.TITANIUM_NUGGET) || stack.isOf(ModItems.TITANIUM_INGOT);
+        if (slot == SLOT_ESSENCE) return isEssence(stack) || stack.isOf(ModItems.TIN_INGOT) || stack.isOf(ModItems.TITANIUM_NUGGET) || stack.isOf(ModItems.TITANIUM_INGOT);
         if (slot == SLOT_CATALYST) return isCatalyst(stack);
         return false;
     }
