@@ -207,6 +207,12 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.SCUBA_CHESTPLATE, 1, 160, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 6), new ItemStack(net.enchantedwood.item.ModItems.EMPTY_GAS_CANISTER, 2));
         registerRecipe(net.enchantedwood.item.ModItems.WETSUIT_LEGGINGS, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 7));
         registerRecipe(net.enchantedwood.item.ModItems.DIVING_FLIPPERS, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 4));
+
+        // Modular Power Armor
+        registerRecipe(net.enchantedwood.item.ModItems.MODULAR_POWER_HELMET, 1, 240, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.MODULAR_POWER_CHESTPLATE, 1, 300, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 5), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.MODULAR_POWER_LEGGINGS, 1, 280, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.MODULAR_POWER_BOOTS, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 2));
     }
 
     private static void registerModToolRecipes() {
@@ -470,6 +476,21 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.HIGH_JUMP_MODULE, 1, 240, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_SUSPENSION, 2), new ItemStack(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1));
         registerRecipe(net.enchantedwood.item.ModItems.ACID_PROOF_PLATING, 1, 240, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 2), new ItemStack(net.enchantedwood.item.ModItems.ALKALINE_BASE_EXTRACT, 2));
         registerRecipe(net.enchantedwood.item.ModItems.SEALED_HAZARD_CANOPY, 1, 240, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 1), new ItemStack(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS, 2), new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 2));
+
+        // Microelectronics & Computer Chips
+        registerRecipe(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1, 140, new ItemStack(Items.COPPER_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.SILICON_WAFER, 1), new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.GOLD_NUGGET, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1), new ItemStack(Items.DIAMOND, 2), new ItemStack(Items.GLOWSTONE_DUST, 2), new ItemStack(Items.LAPIS_LAZULI, 4));
+        registerRecipe(net.enchantedwood.item.ModItems.QUANTUM_COMPUTER_CHIP, 1, 280, new ItemStack(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1), new ItemStack(net.enchantedwood.item.ModItems.NETHERITE_DUST, 2), new ItemStack(Items.BLAZE_POWDER, 2), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 4));
+
+        // Modular Power Suit Upgrades & Matrices
+        registerRecipe(net.enchantedwood.item.ModItems.HYDROGEN_THRUSTER_MODULE, 1, 220, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.HYDROGEN_JETPACK, 1), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.ION_REPULSOR_MODULE, 1, 280, new ItemStack(net.enchantedwood.item.ModItems.QUANTUM_COMPUTER_CHIP, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STEEL_GEAR, 2), new ItemStack(net.enchantedwood.item.ModItems.SILICON_WAFER, 2));
+        registerRecipe(net.enchantedwood.item.ModItems.NIGHT_VISION_MODULE, 1, 200, new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.SILICON_WAFER, 2), new ItemStack(Items.GOLDEN_CARROT, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.NANITE_REPAIR_MATRIX, 1, 220, new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.SILICON_WAFER, 2), new ItemStack(Items.REDSTONE, 2));
+
+        // Medical Hypospray Technology
+        registerRecipe(net.enchantedwood.item.ModItems.HYPOSPRAY, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 1), new ItemStack(Items.REDSTONE, 1), new ItemStack(Items.GLASS, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.EMPTY_CARTRIDGE, 4, 80, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_NUGGET, 2), new ItemStack(Items.GLASS_PANE, 1));
         registerRecipe(net.enchantedwood.item.ModItems.BASALT_FLUX_CATALYST, 1, 160, new ItemStack(Items.BASALT, 4), new ItemStack(net.enchantedwood.item.ModItems.VOLCANIC_ASH, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1));
         registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_CAPE, 1, 100, new ItemStack(Items.WHITE_WOOL, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 1));
         registerRecipe(net.enchantedwood.item.ModItems.COPPER_BUCKET, 1, 80, new ItemStack(Items.COPPER_INGOT, 3));
@@ -520,6 +541,9 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.block.ModBlocks.HYDRAULIC_PRESS.asItem(), 1, 240, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.PISTON, 1), new ItemStack(Items.ANVIL, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 2), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_FURNACE.asItem(), 1, 160, new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_COBBLESTONE.asItem(), 8), new ItemStack(Items.FURNACE, 1));
         registerRecipe(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 1), new ItemStack(net.enchantedwood.block.ModBlocks.COPPER_CABLE.asItem(), 3), new ItemStack(net.enchantedwood.block.ModBlocks.CRUSHER.asItem(), 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.POWERED_ANVIL.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 3), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2), new ItemStack(net.enchantedwood.block.ModBlocks.STEEL_BLOCK.asItem(), 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.CHEMICAL_SYNTHESIZER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS.asItem(), 1), new ItemStack(Items.BREWING_STAND, 1), new ItemStack(net.enchantedwood.item.ModItems.TUNGSTEN_INGOT, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.INDUSTRIAL_CENTRIFUGE.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 6), new ItemStack(Items.GLASS, 1), new ItemStack(Items.PISTON, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1));
 
         // Digital Storage Blocks & Automation
         registerRecipe(net.enchantedwood.block.ModBlocks.ENCHANTED_STORAGE_CONTROLLER.asItem(), 1, 260, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 6), new ItemStack(net.enchantedwood.item.ModItems.DIAMOND_GEAR, 2), new ItemStack(net.enchantedwood.block.ModBlocks.ENCHANTED_CHEST.asItem(), 1));
