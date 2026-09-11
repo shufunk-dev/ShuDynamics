@@ -602,6 +602,14 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
     private static void registerSynthesizerRecipes(EmiRegistry registry) {
         int idx = 0;
+        // 0. Sterile Empty Cartridge Assembly
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GLASS_PANE), EmiStack.of(Items.GLASS))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_NUGGET), EmiStack.of(ModItems.TITANIUM_INGOT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.REDSTONE), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(Items.QUARTZ))),
+                EmiStack.of(ModItems.EMPTY_CARTRIDGE, 4),
+                "Sterile Hermetic Ampoule Assembly"));
+
         // 1. Acid-Neutralizing Cartridge
         registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
