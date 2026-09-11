@@ -43,6 +43,8 @@ public class ModWorldGeneration {
 
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
+    public static final RegistryKey<ConfiguredFeature<?, ?>> STARFRUIT_TREE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> TIN_ORE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "tin_ore"));
 

@@ -912,6 +912,41 @@ public class ModBlocks {
             Text.literal("§dWild Dragon Fruit Cactus"),
             Text.literal("§7Exotic flora of §dThe Convergence§7. Harvest for Dragon Fruit."));
 
+    public static final Block STARFRUIT_LOG = registerBlock("starfruit_log",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_log")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block STARFRUIT_WOOD = registerBlock("starfruit_wood",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_wood")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block STRIPPED_STARFRUIT_LOG = registerBlock("stripped_starfruit_log",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_starfruit_log")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block STRIPPED_STARFRUIT_WOOD = registerBlock("stripped_starfruit_wood",
+            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_starfruit_wood")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(2.0f)));
+
+    public static final Block STARFRUIT_PLANKS = registerBlock("starfruit_planks",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_planks")))
+                    .sounds(BlockSoundGroup.WOOD)
+                    .hardness(2.0f)
+                    .resistance(3.0f)));
+
     public static final Block STARFRUIT_LEAVES = registerBlock("starfruit_leaves",
             new net.enchantedwood.block.custom.StarfruitLeavesBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_leaves")))
@@ -921,6 +956,15 @@ public class ModBlocks {
                     .nonOpaque()
                     .suffocates((state, world, pos) -> false)
                     .blockVision((state, world, pos) -> false)));
+
+    public static final Block STARFRUIT_SAPLING = registerBlockWithTooltip("starfruit_sapling",
+            new net.minecraft.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.STARFRUIT, AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_sapling")))
+                    .sounds(BlockSoundGroup.GRASS)
+                    .noCollision()
+                    .breakInstantly()),
+            Text.literal("§eStarfruit Sapling"),
+            Text.literal("§7Grows into a fruit-bearing Starfruit Tree. Found in §dThe Convergence§7."));
 
     public static final Block RESONANCE_ALTAR = registerBlockWithTooltip("resonance_altar",
             new net.enchantedwood.block.custom.ResonanceAltarBlock(AbstractBlock.Settings.create()

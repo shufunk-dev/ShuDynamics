@@ -111,7 +111,7 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
         for (int y = 0; y < height; y++) {
             BlockPos logPos = trunkBase.up(y);
             if (world.isAir(logPos) || world.getBlockState(logPos).isOf(ModBlocks.STARFRUIT_LEAVES)) {
-                world.setBlockState(logPos, ModBlocks.AVOCADO_LOG.getDefaultState(), 2);
+                world.setBlockState(logPos, ModBlocks.STARFRUIT_LOG.getDefaultState(), 2);
             }
         }
 

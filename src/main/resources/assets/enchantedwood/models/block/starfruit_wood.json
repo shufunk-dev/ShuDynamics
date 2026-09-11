@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "enchantedwood:block/starfruit_log",
+    "side": "enchantedwood:block/starfruit_log"
+  }
+}

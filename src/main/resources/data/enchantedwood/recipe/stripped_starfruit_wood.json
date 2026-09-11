@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "enchantedwood:stripped_starfruit_log"
+  },
+  "result": {
+    "id": "enchantedwood:stripped_starfruit_wood",
+    "count": 3
+  }
+}

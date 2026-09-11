@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "enchantedwood:block/starfruit_wood"
+    },
+    "axis=z": {
+      "model": "enchantedwood:block/starfruit_wood",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "enchantedwood:block/starfruit_wood",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

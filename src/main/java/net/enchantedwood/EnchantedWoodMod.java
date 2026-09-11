@@ -41,9 +41,11 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.event.ConvergenceHazardHandler.register();
         net.enchantedwood.item.custom.HyposprayItem.registerEntityInteraction();
 
-        // Strippable Rubber Wood
+        // Strippable Wood
         net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_LOG, ModBlocks.STRIPPED_RUBBER_LOG);
         net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_WOOD, ModBlocks.STRIPPED_RUBBER_WOOD);
+        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.STARFRUIT_LOG, ModBlocks.STRIPPED_STARFRUIT_LOG);
+        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.STARFRUIT_WOOD, ModBlocks.STRIPPED_STARFRUIT_WOOD);
 
         // 5x-6x Longer Burn Time Fuels + Copper Lava Bucket (1000s = 20000 ticks)
         FuelRegistryEvents.BUILD.register((builder, context) -> {

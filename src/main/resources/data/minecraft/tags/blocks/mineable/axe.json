@@ -8,6 +8,11 @@
     "enchantedwood:rubber_planks",
     "enchantedwood:enchanted_chest",
     "enchantedwood:avocado_log",
-    "enchantedwood:avocado_wood"
+    "enchantedwood:avocado_wood",
+    "enchantedwood:starfruit_log",
+    "enchantedwood:starfruit_wood",
+    "enchantedwood:stripped_starfruit_log",
+    "enchantedwood:stripped_starfruit_wood",
+    "enchantedwood:starfruit_planks"
   ]
 }

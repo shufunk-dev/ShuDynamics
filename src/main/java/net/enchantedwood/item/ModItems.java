@@ -1789,6 +1789,12 @@ public class ModItems {
 
                 entries.add(net.enchantedwood.block.ModBlocks.WILD_WASABI);
                 entries.add(net.enchantedwood.block.ModBlocks.WILD_DRAGON_FRUIT);
+                entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_SAPLING);
+                entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_LOG);
+                entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_WOOD);
+                entries.add(net.enchantedwood.block.ModBlocks.STRIPPED_STARFRUIT_LOG);
+                entries.add(net.enchantedwood.block.ModBlocks.STRIPPED_STARFRUIT_WOOD);
+                entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_PLANKS);
                 entries.add(net.enchantedwood.block.ModBlocks.STARFRUIT_LEAVES);
 
                 entries.add(PITAYA_BOWL);

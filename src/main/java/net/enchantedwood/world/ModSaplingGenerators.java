@@ -17,4 +17,11 @@ public class ModSaplingGenerators {
             Optional.of(ModWorldGeneration.AVOCADO_TREE_KEY),
             Optional.empty()
     );
+
+    public static final SaplingGenerator STARFRUIT = new SaplingGenerator(
+            "starfruit",
+            Optional.empty(),
+            Optional.of(ModWorldGeneration.STARFRUIT_TREE_KEY),
+            Optional.empty()
+    );
 }
