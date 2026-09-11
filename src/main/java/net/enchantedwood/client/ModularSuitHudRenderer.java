@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 @Environment(EnvType.CLIENT)
 public class ModularSuitHudRenderer {
@@ -34,14 +35,64 @@ public class ModularSuitHudRenderer {
                 && feet.getItem() instanceof ModularPowerArmorItem;
     }
 
+    public static boolean isWearingAnyModularPiece(PlayerEntity player) {
+        return player.getEquippedStack(EquipmentSlot.HEAD).getItem() instanceof ModularPowerArmorItem
+                || player.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ModularPowerArmorItem
+                || player.getEquippedStack(EquipmentSlot.LEGS).getItem() instanceof ModularPowerArmorItem
+                || player.getEquippedStack(EquipmentSlot.FEET).getItem() instanceof ModularPowerArmorItem;
+    }
+
     private static void onRenderHud(DrawContext context, RenderTickCounter renderTickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.options.hudHidden || !hudVisible) return;
         PlayerEntity player = client.player;
         if (player == null || player.isSpectator()) return;
 
-        // Only display HUD when wearing a full set of modular power armor
-        if (!isWearingFullModularSet(player)) return;
+        boolean inSanctuary = isClientInsideSanctuary(player);
+        boolean inAcid = !inSanctuary && (isClientInAcidHazard(player) || player.hasStatusEffect(StatusEffects.POISON) || player.hasStatusEffect(StatusEffects.WITHER));
+        boolean inHeat = !inSanctuary && isClientInThermalHazard(player);
+        boolean inAtmosphere = !inSanctuary && isClientInAtmosphericHazard(player);
+
+        String titleText;
+        int titleColor;
+        if (inSanctuary) {
+            titleText = "[SAFE] SANCTUARY";
+            titleColor = 0xFF55FF55; // Bright green safe zone
+        } else if (inAcid && inHeat) {
+            titleText = "[!] MULTI-HAZARD";
+            titleColor = 0xFFFF3333; // Red alert
+        } else if (inAcid) {
+            titleText = "[!] ACID HAZARD";
+            titleColor = 0xFFFF55FF; // Magenta acid alert
+        } else if (inHeat) {
+            titleText = "[!] THERMAL HEAT";
+            titleColor = 0xFFFFAA00; // Orange heat alert
+        } else if (inAtmosphere) {
+            titleText = "[!] HYPOXIA";
+            titleColor = 0xFF55FFFF; // Cyan hypoxia alert
+        } else {
+            titleText = "[SAFE] NORMAL";
+            titleColor = 0xFF00E5FF; // Sky cyan nominal clear
+        }
+
+        boolean hasSuitPiece = isWearingAnyModularPiece(player);
+
+        // If the player is NOT wearing any modular suit armor:
+        // Render a compact, clean Environmental Scanner badge in the top-left corner!
+        if (!hasSuitPiece) {
+            int textW = client.textRenderer.getWidth(titleText);
+            int badgeW = textW + 16;
+            int badgeH = 15;
+            int bx = 6;
+            int by = 6;
+            context.fill(bx, by, bx + badgeW, by + badgeH, 0xDD0A0F16);
+            context.fill(bx, by, bx + badgeW, by + 1, titleColor);
+            context.fill(bx, by + badgeH - 1, bx + badgeW, by + badgeH, titleColor);
+            context.fill(bx, by, bx + 1, by + badgeH, titleColor);
+            context.fill(bx + badgeW - 1, by, bx + badgeW, by + badgeH, titleColor);
+            context.drawText(client.textRenderer, Text.literal(titleText), bx + 8, by + 4, titleColor, true);
+            return;
+        }
 
         ItemStack head = player.getEquippedStack(EquipmentSlot.HEAD);
         ItemStack chest = player.getEquippedStack(EquipmentSlot.CHEST);
@@ -50,7 +101,7 @@ public class ModularSuitHudRenderer {
 
         int hudX = 6;
         int hudY = 6;
-        int hudW = 186;
+        int hudW = 224;
         int hudH = 60;
 
         // Calculate total suit power
@@ -70,6 +121,12 @@ public class ModularSuitHudRenderer {
         int totalArmorDmg = head.getDamage() + chest.getDamage() + legs.getDamage() + boots.getDamage();
         int armorPct = totalArmorMax > 0 ? Math.max(0, Math.min(100, (int) Math.round((double) (totalArmorMax - totalArmorDmg) * 100.0 / totalArmorMax))) : 100;
 
+        // Calculate O2 / Life Support metrics
+        int air = player.getAir();
+        int maxAir = player.getMaxAir();
+        int airPct = maxAir > 0 ? Math.max(0, Math.min(100, (int) Math.round((double) air * 100.0 / maxAir))) : 100;
+        int headEnergy = ModularPowerArmorItem.getStoredEnergy(head);
+
         // Draw translucent futuristic HUD background frame
         context.fill(hudX, hudY, hudX + hudW, hudY + hudH, 0xAA0A0F16);
         // Subtle cybernetic cyan borders
@@ -84,31 +141,42 @@ public class ModularSuitHudRenderer {
         context.fill(hudX, hudY + hudH - 2, hudX + 3, hudY + hudH, 0xFF00E5FF);
         context.fill(hudX + hudW - 3, hudY + hudH - 2, hudX + hudW, hudY + hudH, 0xFF00E5FF);
 
-        // Dynamic Header Title & Hazard Alert
-        boolean inAcid = isClientInAcidHazard(player) || player.hasStatusEffect(StatusEffects.POISON) || player.hasStatusEffect(StatusEffects.WITHER);
-        boolean inHeat = isClientInThermalHazard(player);
-        boolean inAtmosphere = isClientInAtmosphericHazard(player);
+        context.drawText(client.textRenderer, Text.literal(titleText), hudX + 5, hudY + 4, titleColor, true);
 
-        String titleText = "⚡ SUIT STATUS";
-        int titleColor = 0x00E5FF;
-        if (inAcid && inHeat) {
-            titleText = "⚡ HAZARD SHIELD";
-            titleColor = 0xFF55FF;
-        } else if (inAcid) {
-            titleText = "⚡ ACID DEFENSE";
-            titleColor = 0x55FF55;
-        } else if (inHeat) {
-            titleText = "⚡ HEAT SHIELD";
-            titleColor = 0xFFAA00;
+        // Header Badges: Battery, Armor Durability, and Life Support (O2)
+        String pwrStr = "⚡ " + totalPct + "%";
+        int pwrColor = totalPct > 50 ? 0xFF00E5FF : (totalPct > 20 ? 0xFFFFD700 : 0xFFFF4444);
+
+        String armStr = "🛡 " + armorPct + "%";
+        int armColor = armorPct > 60 ? 0xFF55FF55 : (armorPct > 25 ? 0xFFFFD700 : 0xFFFF3333);
+
+        String o2Str;
+        int o2Color;
+        if (headEnergy <= 0 && (airPct < 100 || inAtmosphere)) {
+            o2Str = "O2 DEP!";
+            o2Color = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFFFF2222 : 0xFF880000;
         } else if (inAtmosphere) {
-            titleText = "⚡ LIFE SUPPORT";
-            titleColor = 0x55FFFF;
+            o2Str = "O2 " + airPct + "%";
+            o2Color = 0xFF55FFFF; // Active life support bright cyan
+        } else {
+            o2Str = "O2 " + airPct + "%";
+            o2Color = airPct > 75 ? 0xFF00E5FF : (airPct > 35 ? 0xFFFFD700 : 0xFFFF3333);
         }
 
-        context.drawText(client.textRenderer, Text.literal(titleText), hudX + 5, hudY + 4, titleColor, false);
-        String headerRight = String.format("⚡ %d%%  🛡 %d%%", totalPct, armorPct);
-        int rightColor = totalPct > 50 ? 0x00E5FF : (totalPct > 20 ? 0xFFFFD700 : 0xFFFF4444);
-        context.drawText(client.textRenderer, Text.literal(headerRight), hudX + hudW - 5 - client.textRenderer.getWidth(headerRight), hudY + 4, rightColor, false);
+        int o2W = client.textRenderer.getWidth(o2Str);
+        int armW = client.textRenderer.getWidth(armStr);
+        int pwrW = client.textRenderer.getWidth(pwrStr);
+        int badgeGap = 6;
+
+        int curX = hudX + hudW - 5;
+        curX -= o2W;
+        context.drawText(client.textRenderer, Text.literal(o2Str), curX, hudY + 4, o2Color, true);
+
+        curX -= (armW + badgeGap);
+        context.drawText(client.textRenderer, Text.literal(armStr), curX, hudY + 4, armColor, true);
+
+        curX -= (pwrW + badgeGap);
+        context.drawText(client.textRenderer, Text.literal(pwrStr), curX, hudY + 4, pwrColor, true);
 
         // Subtle divider
         context.fill(hudX + 4, hudY + 13, hudX + hudW - 4, hudY + 14, 0x3300E5FF);
@@ -118,6 +186,22 @@ public class ModularSuitHudRenderer {
         drawPieceRow(context, client, player, chest, "CHEST", hudX + 4, hudY + 26, EquipmentSlot.CHEST);
         drawPieceRow(context, client, player, legs, "LEGS", hudX + 4, hudY + 36, EquipmentSlot.LEGS);
         drawPieceRow(context, client, player, boots, "BOOTS", hudX + 4, hudY + 46, EquipmentSlot.FEET);
+    }
+
+    private static boolean isClientInsideSanctuary(PlayerEntity player) {
+        if (player.getEntityWorld() == null) return false;
+        var pos = player.getBlockPos();
+        var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
+        if (biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "riftwood_haven"))) {
+            return true;
+        }
+        for (BlockPos check : BlockPos.iterate(pos.add(-8, -4, -8), pos.add(8, 4, 8))) {
+            var state = player.getEntityWorld().getBlockState(check);
+            if (state.isOf(net.enchantedwood.block.ModBlocks.DORMANT_RIFT) || state.isOf(net.enchantedwood.block.ModBlocks.ATMOSPHERIC_ANCHOR)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isClientInAcidHazard(PlayerEntity player) {
@@ -137,7 +221,19 @@ public class ModularSuitHudRenderer {
         var pos = player.getBlockPos();
         var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
         boolean isCaldera = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
-        return isCaldera && player.getY() <= 25;
+        boolean isDeepCaldera = isCaldera && player.getY() <= 25;
+        boolean nearHeatSource = isClientNearThermalSource(player, pos);
+        return isDeepCaldera || nearHeatSource;
+    }
+
+    private static boolean isClientNearThermalSource(PlayerEntity player, BlockPos pos) {
+        for (BlockPos check : BlockPos.iterate(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+            var state = player.getEntityWorld().getBlockState(check);
+            if (state.isOf(net.minecraft.block.Blocks.MAGMA_BLOCK) || state.isOf(net.minecraft.block.Blocks.LAVA)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isClientInAtmosphericHazard(PlayerEntity player) {
@@ -147,13 +243,18 @@ public class ModularSuitHudRenderer {
         boolean isAnoxic = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "anoxic_barrens"));
         if (isAnoxic) return true;
         boolean isHighAltitude = player.getY() >= 180 && player.getEntityWorld().isSkyVisible(pos);
-        boolean isAnoxicCave = player.getY() <= 35 && !player.getEntityWorld().isSkyVisible(pos) && player.getEntityWorld().getLightLevel(pos) <= 7;
+        boolean isAnoxicCave = player.getY() <= 35 && !player.getEntityWorld().isSkyVisible(pos);
         return isHighAltitude || isAnoxicCave;
     }
 
     private static void drawPieceRow(DrawContext context, MinecraftClient client, PlayerEntity player, ItemStack piece, String label, int rx, int ry, EquipmentSlot slot) {
         // Label
         context.drawText(client.textRenderer, Text.literal(label), rx, ry, 0xAAAAAA, false);
+
+        if (!(piece.getItem() instanceof ModularPowerArmorItem)) {
+            context.drawText(client.textRenderer, Text.literal("---"), rx + 28, ry, 0x555555, false);
+            return;
+        }
 
         // --- 1. Battery Power Section ---
         int max = ModularPowerArmorItem.getMaxEnergy(piece);
@@ -230,7 +331,7 @@ public class ModularSuitHudRenderer {
                     tag = "DEP!";
                     tagColor = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFF2222 : 0x880000;
                 }
-            } else {
+            } else if (slot != EquipmentSlot.HEAD || !isClientInAtmosphericHazard(player)) {
                 tag = "SHLD";
                 tagColor = 0x33AA88;
             }
@@ -244,7 +345,7 @@ public class ModularSuitHudRenderer {
                     tag = "DEP!";
                     tagColor = (player.getEntityWorld() != null && player.getEntityWorld().getTime() % 10 < 5) ? 0xFF2222 : 0x880000;
                 }
-            } else {
+            } else if (slot != EquipmentSlot.HEAD || !isClientInAtmosphericHazard(player)) {
                 tag = "THERM";
                 tagColor = 0xAA7733;
             }
@@ -255,7 +356,7 @@ public class ModularSuitHudRenderer {
             if (slot == EquipmentSlot.HEAD) {
                 if (isClientInAtmosphericHazard(player)) {
                     if (pieceEnergy > 0) {
-                        tag = "O2";
+                        tag = "O2:ACT";
                         tagColor = 0x55FFFF;
                     } else {
                         tag = "DEP!";
@@ -264,6 +365,9 @@ public class ModularSuitHudRenderer {
                 } else if (player.hasStatusEffect(StatusEffects.NIGHT_VISION) && ModularPowerArmorItem.hasModule(piece, "enchantedwood:night_vision_module")) {
                     tag = "NVG";
                     tagColor = 0x00FF66;
+                } else if (pieceEnergy > 0) {
+                    tag = "O2:OK";
+                    tagColor = 0x00E5FF;
                 }
             } else if (slot == EquipmentSlot.CHEST) {
                 if (player.getAbilities().flying && ModularPowerArmorItem.hasModule(piece, "enchantedwood:ion_repulsor_module")) {
@@ -310,7 +414,7 @@ public class ModularSuitHudRenderer {
         }
 
         if (tag != null) {
-            context.drawText(client.textRenderer, Text.literal(tag), rx + 148, ry, tagColor, false);
+            context.drawText(client.textRenderer, Text.literal(tag), rx + 158, ry, tagColor, false);
         }
     }
 }

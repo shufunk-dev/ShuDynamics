@@ -22,7 +22,8 @@ import java.util.List;
 
 public class ConvergenceCreeperEntity extends CreeperEntity {
 
-    private boolean cloudSpawned = false;
+    private int customFuse = 0;
+    private boolean burstDetonated = false;
 
     public ConvergenceCreeperEntity(EntityType<? extends CreeperEntity> entityType, World world) {
         super(entityType, world);
@@ -41,6 +42,8 @@ public class ConvergenceCreeperEntity extends CreeperEntity {
         if (!this.getEntityWorld().isClient()) {
             int fuse = this.getFuseSpeed();
             if (fuse > 0) {
+                this.customFuse++;
+
                 // Gravitational Pull: While hissing/priming, pulls nearby players inwards
                 if (this.getEntityWorld() instanceof ServerWorld sw) {
                     Box pullBox = this.getBoundingBox().expand(5.5);
@@ -58,27 +61,56 @@ public class ConvergenceCreeperEntity extends CreeperEntity {
                     sw.spawnParticles(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY() + 0.8, this.getZ(), 4, 0.3, 0.3, 0.3, 0.02);
                 }
 
-                // If about to detonate, prepare lingering corrosive acid cloud
-                if (this.getLerpedFuseTime(1.0f) >= 0.90f && !this.cloudSpawned) {
-                    this.cloudSpawned = true;
-                    spawnCorrosiveAcidCloud();
-                }
             }
         }
     }
 
-    private void spawnCorrosiveAcidCloud() {
+    @Override
+    public void remove(net.minecraft.entity.Entity.RemovalReason reason) {
+        if (!this.getEntityWorld().isClient() && !this.burstDetonated) {
+            detonateCorrosiveBurst();
+        }
+        super.remove(reason);
+    }
+
+    private void detonateCorrosiveBurst() {
+        if (this.burstDetonated) return;
+        this.burstDetonated = true;
+
         if (this.getEntityWorld() instanceof ServerWorld sw) {
-            AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(sw, this.getX(), this.getY(), this.getZ());
-            cloud.setRadius(3.5f);
+            Vec3d center = this.getEntityPos();
+
+            // 1. Direct Blast Affliction: Guarantees players within 7 blocks of the blast get poisoned & withered
+            List<net.minecraft.server.network.ServerPlayerEntity> players = sw.getPlayers(p -> p.squaredDistanceTo(center) <= 49.0 && !p.isCreative() && !p.isSpectator());
+            for (net.minecraft.server.network.ServerPlayerEntity p : players) {
+                p.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 160, 1)); // Poison II for 8s
+                p.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0)); // Wither I for 5s
+            }
+
+            // Also afflict other nearby living entities
+            Box blastBox = Box.of(center, 14.0, 10.0, 14.0);
+            List<net.minecraft.entity.LivingEntity> targets = sw.getEntitiesByClass(net.minecraft.entity.LivingEntity.class, blastBox, e -> e != this && e.isAlive() && !(e instanceof PlayerEntity));
+            for (net.minecraft.entity.LivingEntity target : targets) {
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 160, 1));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0));
+            }
+
+            // 2. Lingering Acid Cloud with zero wait time
+            AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(sw, center.x, center.y, center.z);
+            cloud.setRadius(5.0f);
             cloud.setRadiusOnUse(-0.5f);
-            cloud.setWaitTime(10);
-            cloud.setDuration(160); // 8 seconds
+            cloud.setWaitTime(0); // Affects instantly
+            cloud.setDuration(240); // 12 seconds
             cloud.setRadiusGrowth(-cloud.getRadius() / (float) cloud.getDuration());
-            cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 1));
-            cloud.addEffect(new StatusEffectInstance(StatusEffects.WITHER, 80, 0));
+            cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 160, 1));
+            cloud.addEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 0));
             cloud.setParticleType(ParticleTypes.WITCH);
             sw.spawnEntity(cloud);
+
+            // 3. Acidic burst particles & sound
+            sw.spawnParticles(ParticleTypes.WITCH, center.x, center.y + 0.5, center.z, 50, 1.5, 0.8, 1.5, 0.08);
+            sw.spawnParticles(ParticleTypes.REVERSE_PORTAL, center.x, center.y + 0.5, center.z, 30, 1.0, 0.5, 1.0, 0.05);
+            sw.playSound(null, center.x, center.y, center.z, net.minecraft.sound.SoundEvents.ENTITY_SPLASH_POTION_BREAK, net.minecraft.sound.SoundCategory.HOSTILE, 1.0f, 0.6f);
         }
     }
 
