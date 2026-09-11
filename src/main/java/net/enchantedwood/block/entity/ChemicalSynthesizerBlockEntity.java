@@ -162,18 +162,18 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
             result = new ItemStack(ModItems.ACID_NEUTRALIZING_CARTRIDGE);
         }
 
-        // 2. Endothermic Heat-Buffer: Cryo-Thermal Essence + Blaze Powder (or Fire Crystal)
-        else if (essItem == ModItems.CRYO_THERMAL_EXTRACT && (catItem == Items.BLAZE_POWDER || catItem == ModItems.FIRE_CRYSTAL || catItem == Items.MAGMA_CREAM)) {
+        // 2. Endothermic Heat-Buffer: Cryo-Thermal Essence + Blaze Powder (or Fire Crystal, Magma Cream, Volcanic Ash)
+        else if (essItem == ModItems.CRYO_THERMAL_EXTRACT && (catItem == Items.BLAZE_POWDER || catItem == ModItems.FIRE_CRYSTAL || catItem == Items.MAGMA_CREAM || catItem == ModItems.VOLCANIC_ASH)) {
             result = new ItemStack(ModItems.HEAT_BUFFER_CARTRIDGE);
         }
 
-        // 3. Hyper-Oxygenation: Oxygenated Essence + Titanium / Aluminum
-        else if (essItem == ModItems.OXYGENATED_EXTRACT && (catItem == ModItems.TITANIUM_INGOT || catItem == ModItems.ALUMINUM_INGOT || catItem == Items.IRON_INGOT)) {
+        // 3. Hyper-Oxygenation: Oxygenated Essence + Titanium / Aluminum / Iron / Bone Meal
+        else if (essItem == ModItems.OXYGENATED_EXTRACT && (catItem == ModItems.TITANIUM_INGOT || catItem == ModItems.ALUMINUM_INGOT || catItem == Items.IRON_INGOT || catItem == Items.BONE_MEAL)) {
             result = new ItemStack(ModItems.HYPER_OXYGENATION_CARTRIDGE);
         }
 
-        // 4. Nanite Trauma: Cellular Nanite Essence + Golden Apple / Titanium Ingot / Ghast Tear
-        else if (essItem == ModItems.CELLULAR_NANITE_EXTRACT && (catItem == Items.GOLDEN_APPLE || catItem == ModItems.TITANIUM_INGOT || catItem == Items.GHAST_TEAR)) {
+        // 4. Nanite Trauma: Cellular Nanite Essence + Golden Apple / Titanium Ingot / Ghast Tear / Bone Meal
+        else if (essItem == ModItems.CELLULAR_NANITE_EXTRACT && (catItem == Items.GOLDEN_APPLE || catItem == ModItems.TITANIUM_INGOT || catItem == Items.GHAST_TEAR || catItem == Items.BONE_MEAL)) {
             result = new ItemStack(ModItems.NANITE_TRAUMA_CARTRIDGE);
         }
 
@@ -259,6 +259,8 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
                item == Items.BLAZE_POWDER ||
                item == ModItems.FIRE_CRYSTAL ||
                item == Items.MAGMA_CREAM ||
+               item == ModItems.VOLCANIC_ASH ||
+               item == Items.BONE_MEAL ||
                item == ModItems.TITANIUM_INGOT ||
                item == ModItems.ALUMINUM_INGOT ||
                item == Items.IRON_INGOT ||

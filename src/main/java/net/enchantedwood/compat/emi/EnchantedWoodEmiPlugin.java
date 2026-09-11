@@ -630,7 +630,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.CRYO_THERMAL_EXTRACT))),
-                EmiIngredient.of(List.of(EmiStack.of(Items.BLAZE_POWDER), EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(Items.MAGMA_CREAM))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.BLAZE_POWDER), EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(Items.MAGMA_CREAM), EmiStack.of(ModItems.VOLCANIC_ASH))),
                 EmiStack.of(ModItems.HEAT_BUFFER_CARTRIDGE),
                 "Lava & Caldera Thermal Protection (6m)"));
 
@@ -638,7 +638,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.OXYGENATED_EXTRACT))),
-                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.ALUMINUM_INGOT), EmiStack.of(Items.IRON_INGOT))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.ALUMINUM_INGOT), EmiStack.of(Items.IRON_INGOT), EmiStack.of(Items.BONE_MEAL))),
                 EmiStack.of(ModItems.HYPER_OXYGENATION_CARTRIDGE),
                 "Atmospheric & Vacuum Breathing (6m)"));
 
@@ -646,7 +646,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_" + idx++),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
                 EmiIngredient.of(List.of(EmiStack.of(ModItems.CELLULAR_NANITE_EXTRACT))),
-                EmiIngredient.of(List.of(EmiStack.of(Items.GOLDEN_APPLE), EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(Items.GHAST_TEAR))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GOLDEN_APPLE), EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(Items.GHAST_TEAR), EmiStack.of(Items.BONE_MEAL))),
                 EmiStack.of(ModItems.NANITE_TRAUMA_CARTRIDGE),
                 "Critical Trauma: +8 HP & Regen II & Cleansing"));
 

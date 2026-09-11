@@ -62,43 +62,46 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
         Item item = stack.getItem();
 
         return switch (slot) {
-            // Row 1: Fabrication & Injectors
+            // Row 1: Cartridge Fabrication & Injectors
             case 0 -> item == ModItems.HYPOSPRAY;
             case 1 -> item == ModItems.EMPTY_CARTRIDGE;
             case 2 -> stack.isOf(Items.GLASS_PANE);
             case 3 -> stack.isOf(Items.GLASS);
-            case 4 -> item == ModItems.TITANIUM_INGOT;
-            case 5 -> item == ModItems.TITANIUM_NUGGET;
+            case 4 -> item == ModItems.TIN_INGOT;
+            case 5 -> item == ModItems.TITANIUM_INGOT || item == ModItems.TITANIUM_NUGGET;
             case 6 -> stack.isOf(Items.QUARTZ);
             case 7 -> stack.isOf(Items.REDSTONE);
             case 8 -> stack.isOf(Items.GLOWSTONE_DUST);
 
-            // Row 2: Extracted Essences
+            // Row 2: Synthesized Essences & Recycled Byproducts
             case 9 -> item == ModItems.ALKALINE_BASE_EXTRACT;
             case 10 -> item == ModItems.CRYO_THERMAL_EXTRACT;
             case 11 -> item == ModItems.OXYGENATED_EXTRACT;
             case 12 -> item == ModItems.CELLULAR_NANITE_EXTRACT;
             case 13 -> item == ModItems.ADRENAL_ESSENCE;
-            case 14, 15, 16, 17 -> isEssence(stack);
+            case 14 -> item == ModItems.VOLCANIC_ASH;
+            case 15 -> stack.isOf(Items.BONE_MEAL);
+            case 16 -> item == ModItems.SULFUR_DUST;
+            case 17 -> stack.isOf(Items.SUGAR);
 
-            // Row 3: Biological Feeds & Catalysts
+            // Row 3: Biological Feedstocks, Catalysts & Cleanroom Textiles
             case 18 -> stack.isOf(Items.SLIME_BALL);
             case 19 -> stack.isOf(Items.MAGMA_CREAM) || stack.isOf(Items.CRIMSON_FUNGUS);
             case 20 -> stack.isOf(Items.KELP) || stack.isOf(Items.SEAGRASS) || item == ModItems.CUCUMBER;
             case 21 -> item == ModItems.DRAGON_FRUIT || stack.isOf(Items.NETHER_WART);
             case 22 -> stack.isOf(Items.GLOW_BERRIES) || item == ModItems.WASABI_ROOT;
-            case 23 -> item == ModItems.SULFUR_DUST;
-            case 24 -> stack.isOf(Items.BLAZE_POWDER) || item == ModItems.FIRE_CRYSTAL;
-            case 25 -> stack.isOf(Items.GOLDEN_APPLE) || stack.isOf(Items.GHAST_TEAR);
-            case 26 -> stack.isOf(Items.SUGAR);
+            case 23 -> stack.isOf(Items.BLAZE_POWDER) || item == ModItems.FIRE_CRYSTAL;
+            case 24 -> stack.isOf(Items.GOLDEN_APPLE) || stack.isOf(Items.ENCHANTED_GOLDEN_APPLE) || stack.isOf(Items.GHAST_TEAR);
+            case 25 -> item == ModItems.ALUMINUM_INGOT || stack.isOf(Items.IRON_INGOT);
+            case 26 -> item == ModItems.STERILE_POLYMER_FABRIC;
 
-            // Row 4: Finished & Pure Hypospray Cartridges
+            // Row 4: Finished Cartridges (Standard & ✦ Pure) & Dispensary Buffer
             case 27 -> item == ModItems.ACID_NEUTRALIZING_CARTRIDGE;
             case 28 -> item == ModItems.HEAT_BUFFER_CARTRIDGE;
             case 29 -> item == ModItems.HYPER_OXYGENATION_CARTRIDGE;
             case 30 -> item == ModItems.NANITE_TRAUMA_CARTRIDGE;
             case 31 -> item == ModItems.ADRENALINE_STIM_CARTRIDGE;
-            case 32, 33, 34, 35 -> isCartridge(stack);
+            case 32, 33, 34, 35 -> isCartridge(stack) || item == ModItems.HYPOSPRAY;
 
             default -> false;
         };

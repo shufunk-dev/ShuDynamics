@@ -61,8 +61,8 @@ public class SterileMedicalCabinetScreen extends HandledScreen<SterileMedicalCab
             case 1 -> List.of(Text.literal("§9🧪 Empty Hypospray Cartridges"), Text.literal("§7Sterile ampoules ready for filling."));
             case 2 -> List.of(Text.literal("§f🪟 Glass Panes"), Text.literal("§7Raw cartridge wall material."));
             case 3 -> List.of(Text.literal("§f🧊 Glass Blocks"), Text.literal("§7Raw cartridge wall material."));
-            case 4 -> List.of(Text.literal("§b⚙ Titanium Ingots"), Text.literal("§7Sterile metal framing."));
-            case 5 -> List.of(Text.literal("§b🔩 Titanium Nuggets"), Text.literal("§7Sterile cartridge tips."));
+            case 4 -> List.of(Text.literal("§7⚙ Tin Ingots"), Text.literal("§7Sterile cartridge sealing caps."));
+            case 5 -> List.of(Text.literal("§b⚙ Titanium Ingots / Nuggets"), Text.literal("§7Heavy framing & medical reinforcement."));
             case 6 -> List.of(Text.literal("§f💎 Nether Quartz"), Text.literal("§7Cartridge sterilizing flux & catalysts."));
             case 7 -> List.of(Text.literal("§c🔴 Redstone Dust"), Text.literal("§7Cartridge catalytic flux."));
             case 8 -> List.of(Text.literal("§e✨ Glowstone Dust"), Text.literal("§7Cartridge catalytic flux."));
@@ -72,24 +72,27 @@ public class SterileMedicalCabinetScreen extends HandledScreen<SterileMedicalCab
             case 11 -> List.of(Text.literal("§b🧪 Oxygenated Extract"), Text.literal("§7Compounding Hyper-Oxygenation Cartridges."));
             case 12 -> List.of(Text.literal("§d🧪 Cellular Nanite Extract"), Text.literal("§7Compounding Nanite Trauma Cartridges."));
             case 13 -> List.of(Text.literal("§e🧪 Adrenal Essence"), Text.literal("§7Compounding Adrenaline Stim Cartridges."));
-            case 14, 15, 16, 17 -> List.of(Text.literal("§5🧪 Auxiliary Essence Buffer"), Text.literal("§7Accepts any of the 5 chemical extracts."));
+            case 14 -> List.of(Text.literal("§8🌋 Volcanic Ash"), Text.literal("§7Centrifuge byproduct → Heat-buffer thermal catalyst."));
+            case 15 -> List.of(Text.literal("§f🦴 Bone Meal"), Text.literal("§7Centrifuge byproduct → Nanite tissue/bone repair matrix."));
+            case 16 -> List.of(Text.literal("§e🟡 Sulfur Dust"), Text.literal("§7Centrifuge byproduct → Acid-neutralizing catalyst."));
+            case 17 -> List.of(Text.literal("§f🧂 Sugar"), Text.literal("§7Centrifuge byproduct → Adrenaline combat stim catalyst."));
 
             case 18 -> List.of(Text.literal("§a🟢 Slimeballs"), Text.literal("§7Feedstock for Alkaline Extract."));
             case 19 -> List.of(Text.literal("§6🟠 Magma Cream / Crimson Fungus"), Text.literal("§7Feedstock for Cryo-Thermal Extract."));
             case 20 -> List.of(Text.literal("§2🌿 Kelp / Seagrass / Cucumber"), Text.literal("§7Feedstock for Oxygenated Extract."));
             case 21 -> List.of(Text.literal("§d🐉 Dragon Fruit / Nether Wart"), Text.literal("§7Feedstock for Cellular Nanite Extract."));
             case 22 -> List.of(Text.literal("§e🟡 Glow Berries / Wasabi Root"), Text.literal("§7Feedstock for Adrenal Essence."));
-            case 23 -> List.of(Text.literal("§e🟡 Sulfur Dust"), Text.literal("§7Acid-neutralizing catalyst."));
-            case 24 -> List.of(Text.literal("§6🔥 Blaze Powder / Fire Crystal"), Text.literal("§7Endothermic heat-buffer catalyst."));
-            case 25 -> List.of(Text.literal("§e🍏 Golden Apple / Ghast Tear"), Text.literal("§7Nanite trauma synthesis catalyst."));
-            case 26 -> List.of(Text.literal("§f🧂 Sugar"), Text.literal("§7Adrenaline combat stim catalyst."));
+            case 23 -> List.of(Text.literal("§6🔥 Blaze Powder / Fire Crystal"), Text.literal("§7Endothermic heat-buffer catalyst."));
+            case 24 -> List.of(Text.literal("§e🍏 Golden Apple / Ghast Tear"), Text.literal("§7Nanite trauma synthesis catalyst."));
+            case 25 -> List.of(Text.literal("§f⚙ Aluminum / Iron Ingots"), Text.literal("§7Oxygenation carrier catalyst."));
+            case 26 -> List.of(Text.literal("§b🧵 Sterile Polymer Fabric"), Text.literal("§7Cleanroom filtration & Bunny Suit textile."));
 
             case 27 -> List.of(Text.literal("§a💉 Acid-Neutralizing Cartridge"), Text.literal("§7Standard or ✦ Pure variant."));
             case 28 -> List.of(Text.literal("§6💉 Endothermic Heat-Buffer Cartridge"), Text.literal("§7Standard or ✦ Pure variant."));
             case 29 -> List.of(Text.literal("§b💉 Hyper-Oxygenation Cartridge"), Text.literal("§7Standard or ✦ Pure variant."));
             case 30 -> List.of(Text.literal("§d💉 Nanite Trauma Cartridge"), Text.literal("§7Standard or ✦ Pure variant."));
             case 31 -> List.of(Text.literal("§e💉 Adrenaline Stim Cartridge"), Text.literal("§7Standard or ✦ Pure variant."));
-            case 32, 33, 34, 35 -> List.of(Text.literal("§5💉 Medical Ampoule Dispensary Buffer"), Text.literal("§7Accepts any compounded Hypospray Cartridge."));
+            case 32, 33, 34, 35 -> List.of(Text.literal("§5💉 Dispensary & Loaded Hyposprays"), Text.literal("§7Accepts any Hypospray Injector or filled Cartridges."));
 
             default -> null;
         };
