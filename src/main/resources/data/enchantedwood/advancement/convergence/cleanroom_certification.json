@@ -1,0 +1,113 @@
+{
+  "parent": "enchantedwood:convergence/field_medic",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:cleanroom_air_scrubber"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.cleanroom_certification.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.cleanroom_certification.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "polymer_loom": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:polymer_loom"
+          }
+        ]
+      }
+    },
+    "air_scrubber": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cleanroom_air_scrubber"
+          }
+        ]
+      }
+    },
+    "medical_cabinet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:sterile_medical_cabinet"
+          }
+        ]
+      }
+    },
+    "cleanroom_hood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cleanroom_hood"
+          }
+        ]
+      }
+    },
+    "cleanroom_smock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cleanroom_smock"
+          }
+        ]
+      }
+    },
+    "cleanroom_trousers": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cleanroom_trousers"
+          }
+        ]
+      }
+    },
+    "cleanroom_booties": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "enchantedwood:cleanroom_booties"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "polymer_loom"
+    ],
+    [
+      "air_scrubber"
+    ],
+    [
+      "medical_cabinet"
+    ],
+    [
+      "cleanroom_hood"
+    ],
+    [
+      "cleanroom_smock"
+    ],
+    [
+      "cleanroom_trousers"
+    ],
+    [
+      "cleanroom_booties"
+    ]
+  ]
+}
