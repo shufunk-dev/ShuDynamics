@@ -4,16 +4,17 @@
   "pattern": [
     "SGS",
     "SCS",
-    "SRS"
+    "SOS"
   ],
   "key": {
     "S": "enchantedwood:steel_ingot",
     "G": "minecraft:glass",
     "C": "enchantedwood:cleanroom_casing",
-    "R": "minecraft:redstone"
+    "O": "minecraft:observer"
   },
   "result": {
     "id": "enchantedwood:gowning_airlock_door",
     "count": 1
   }
 }
+

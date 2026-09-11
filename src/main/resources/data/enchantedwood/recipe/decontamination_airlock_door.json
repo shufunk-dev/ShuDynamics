@@ -4,16 +4,17 @@
   "pattern": [
     "SGS",
     "SCS",
-    "SRS"
+    "SPS"
   ],
   "key": {
     "S": "enchantedwood:steel_ingot",
     "G": "minecraft:glass",
     "C": "enchantedwood:cleanroom_casing",
-    "R": "minecraft:redstone"
+    "P": "enchantedwood:advanced_computer_chip"
   },
   "result": {
     "id": "enchantedwood:decontamination_airlock_door",
     "count": 1
   }
 }
+
