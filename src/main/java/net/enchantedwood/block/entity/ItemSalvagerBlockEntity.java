@@ -587,18 +587,57 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.ACID_PROOF_PLATING, 1, 180, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 2), new ItemStack(net.enchantedwood.item.ModItems.BASIC_COMPUTER_CHIP, 1));
 
         // Cleanroom Bunny Suit & Industrial Suite
-        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_HOOD, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 5));
-        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_SMOCK, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 8));
-        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_TROUSERS, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 7));
-        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_BOOTIES, 1, 80, new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 4));
-        registerRecipe(net.enchantedwood.block.ModBlocks.POLYMER_LOOM.asItem(), 1, 240, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 2), new ItemStack(Items.DISPENSER, 1), new ItemStack(Items.REDSTONE, 2));
-        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 4, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 2));
-        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_FILTER_CASING.asItem(), 4, 180, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 2), new ItemStack(Items.IRON_BARS, 2));
-        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_AIR_SCRUBBER.asItem(), 1, 280, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_FILTER_CASING.asItem(), 2), new ItemStack(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1));
-        registerRecipe(net.enchantedwood.block.ModBlocks.DECONTAMINATION_AIRLOCK_DOOR.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.GLASS, 2), new ItemStack(Items.REDSTONE, 2), new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 1));
-        registerRecipe(net.enchantedwood.block.ModBlocks.GOWNING_AIRLOCK_DOOR.asItem(), 1, 220, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.GLASS, 2), new ItemStack(Items.REDSTONE, 2), new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 1));
-        registerRecipe(net.enchantedwood.block.ModBlocks.STERILE_CLEANROOM_LAMP.asItem(), 2, 160, new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4), new ItemStack(Items.GLASS, 2), new ItemStack(Items.QUARTZ, 2), new ItemStack(Items.GLOWSTONE, 1));
-        registerRecipe(net.enchantedwood.block.ModBlocks.STERILE_MEDICAL_CABINET.asItem(), 1, 200, new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 3), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2), new ItemStack(Items.CHEST, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_HOOD, 1, 100,
+                new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 1),
+                new ItemStack(Items.GLASS_PANE, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.TIN_INGOT, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_SMOCK, 1, 140,
+                new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_TROUSERS, 1, 120,
+                new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.CLEANROOM_BOOTIES, 1, 80,
+                new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 1),
+                new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.POLYMER_LOOM.asItem(), 1, 240,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4),
+                new ItemStack(net.enchantedwood.item.ModItems.IRON_GEAR, 2),
+                new ItemStack(Items.DISPENSER, 1),
+                new ItemStack(Items.REDSTONE, 2));
+        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 4, 160,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4),
+                new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 2));
+        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_FILTER_CASING.asItem(), 4, 180,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4),
+                new ItemStack(net.enchantedwood.item.ModItems.STERILE_POLYMER_FABRIC, 2),
+                new ItemStack(Items.IRON_BARS, 2));
+        registerRecipe(net.enchantedwood.block.ModBlocks.CLEANROOM_AIR_SCRUBBER.asItem(), 1, 280,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4),
+                new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_FILTER_CASING.asItem(), 2),
+                new ItemStack(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.DECONTAMINATION_AIRLOCK_DOOR.asItem(), 1, 220,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 6),
+                new ItemStack(Items.GLASS, 1),
+                new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 1),
+                new ItemStack(net.enchantedwood.item.ModItems.ADVANCED_COMPUTER_CHIP, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.GOWNING_AIRLOCK_DOOR.asItem(), 1, 220,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 6),
+                new ItemStack(Items.GLASS, 1),
+                new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 1),
+                new ItemStack(Items.OBSERVER, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.STERILE_CLEANROOM_LAMP.asItem(), 2, 160,
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 4),
+                new ItemStack(Items.GLASS, 2),
+                new ItemStack(Items.QUARTZ, 2),
+                new ItemStack(Items.GLOWSTONE, 1));
+        registerRecipe(net.enchantedwood.block.ModBlocks.STERILE_MEDICAL_CABINET.asItem(), 1, 200,
+                new ItemStack(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING.asItem(), 3),
+                new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 2),
+                new ItemStack(Items.CHEST, 1));
     }
 
     public static boolean isSalvageable(ItemStack stack) {
