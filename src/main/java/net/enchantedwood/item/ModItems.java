@@ -469,6 +469,42 @@ public class ModItems {
     public static final Item ADRENALINE_STIM_CARTRIDGE = registerItem("adrenaline_stim_cartridge",
             settings -> new net.enchantedwood.item.custom.HyposprayCartridgeItem(settings.maxCount(16), net.enchantedwood.item.custom.HyposprayCartridgeItem.Type.ADRENALINE_STIM));
 
+    // Cleanroom Industrial Suite & Bunny Suit
+    public static final Item STERILE_POLYMER_FABRIC = registerItem("sterile_polymer_fabric", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§fSterile Polymer Fabric"),
+            Text.literal("§7Non-linting, anti-static electrostatic microfiber."),
+            Text.literal("§8Tailored in the Polymer Loom for cleanroom bunny suits.")
+    ));
+
+    public static final Item CLEANROOM_HOOD = registerItem("cleanroom_hood", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.armor(ModArmorMaterials.CLEANROOM_SUIT, EquipmentType.HELMET),
+            Text.literal("§fCleanroom Sanitary Hood"),
+            Text.literal("§7Zero-shedding particulate-barrier head covering."),
+            Text.literal("§bPart of the Cleanroom Bunny Suit.")
+    ));
+
+    public static final Item CLEANROOM_SMOCK = registerItem("cleanroom_smock", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.armor(ModArmorMaterials.CLEANROOM_SUIT, EquipmentType.CHESTPLATE),
+            Text.literal("§fCleanroom Sanitary Smock"),
+            Text.literal("§7Sealed-cuff anti-static torso smock."),
+            Text.literal("§bPart of the Cleanroom Bunny Suit.")
+    ));
+
+    public static final Item CLEANROOM_TROUSERS = registerItem("cleanroom_trousers", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.armor(ModArmorMaterials.CLEANROOM_SUIT, EquipmentType.LEGGINGS),
+            Text.literal("§fCleanroom Sanitary Trousers"),
+            Text.literal("§7Lint-free electro-dissipative sterile trousers."),
+            Text.literal("§bPart of the Cleanroom Bunny Suit.")
+    ));
+
+    public static final Item CLEANROOM_BOOTIES = registerItem("cleanroom_booties", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.armor(ModArmorMaterials.CLEANROOM_SUIT, EquipmentType.BOOTS),
+            Text.literal("§fCleanroom Sanitary Booties"),
+            Text.literal("§7Anti-slip ESD non-marking floor boot covers."),
+            Text.literal("§bPart of the Cleanroom Bunny Suit.")
+    ));
+
     // Petrochemicals & Fuels
     public static final Item CRUDE_OIL_SLUDGE = registerItem("crude_oil_sludge", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings,
@@ -1788,6 +1824,21 @@ public class ModItems {
                 entries.add(HYPER_OXYGENATION_CARTRIDGE);
                 entries.add(NANITE_TRAUMA_CARTRIDGE);
                 entries.add(ADRENALINE_STIM_CARTRIDGE);
+
+                // Cleanroom Industrial Suite & Bunny Suit
+                entries.add(net.enchantedwood.block.ModBlocks.POLYMER_LOOM);
+                entries.add(STERILE_POLYMER_FABRIC);
+                entries.add(CLEANROOM_HOOD);
+                entries.add(CLEANROOM_SMOCK);
+                entries.add(CLEANROOM_TROUSERS);
+                entries.add(CLEANROOM_BOOTIES);
+                entries.add(net.enchantedwood.block.ModBlocks.CLEANROOM_CASING);
+                entries.add(net.enchantedwood.block.ModBlocks.CLEANROOM_FILTER_CASING);
+                entries.add(net.enchantedwood.block.ModBlocks.CLEANROOM_AIR_SCRUBBER);
+                entries.add(net.enchantedwood.block.ModBlocks.GOWNING_AIRLOCK_DOOR);
+                entries.add(net.enchantedwood.block.ModBlocks.DECONTAMINATION_AIRLOCK_DOOR);
+                entries.add(net.enchantedwood.block.ModBlocks.STERILE_CLEANROOM_LAMP);
+                entries.add(net.enchantedwood.block.ModBlocks.STERILE_MEDICAL_CABINET);
 
                 // Modular Power Suit & Exosuit Modules
                 entries.add(MODULAR_POWER_HELMET);

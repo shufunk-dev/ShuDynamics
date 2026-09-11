@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,sterile=false": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber"
+    },
+    "facing=south,sterile=false": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber",
+      "y": 180
+    },
+    "facing=west,sterile=false": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber",
+      "y": 270
+    },
+    "facing=east,sterile=false": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber",
+      "y": 90
+    },
+    "facing=north,sterile=true": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber_on"
+    },
+    "facing=south,sterile=true": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber_on",
+      "y": 180
+    },
+    "facing=west,sterile=true": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber_on",
+      "y": 270
+    },
+    "facing=east,sterile=true": {
+      "model": "enchantedwood:block/cleanroom_air_scrubber_on",
+      "y": 90
+    }
+  }
+}

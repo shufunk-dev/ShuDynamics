@@ -27,6 +27,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier CENTRIFUGE_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/industrial_centrifuge_gui.png");
     public static final Identifier COKE_OVEN_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/coke_oven_gui.png");
     public static final Identifier CHEMICAL_SYNTHESIZER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/chemical_synthesizer_gui.png");
+    public static final Identifier POLYMER_LOOM_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/polymer_loom_gui.png");
 
     // Categories
     public static final EmiRecipeCategory ALLOY_FOUNDRY = new EmiRecipeCategory(
@@ -84,6 +85,11 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER)
     );
 
+    public static final EmiRecipeCategory POLYMER_LOOM = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "polymer_loom"),
+            EmiStack.of(ModBlocks.POLYMER_LOOM)
+    );
+
     @Override
     public void register(EmiRegistry registry) {
         // Register Categories
@@ -98,6 +104,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(HYDRAULIC_PRESS);
         registry.addCategory(INDUSTRIAL_CENTRIFUGE);
         registry.addCategory(CHEMICAL_SYNTHESIZER);
+        registry.addCategory(POLYMER_LOOM);
 
         // Register Workstations (Catalysts)
         registry.addWorkstation(ALLOY_FOUNDRY, EmiStack.of(ModBlocks.ALLOY_FOUNDRY));
@@ -113,6 +120,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(HYDRAULIC_PRESS, EmiStack.of(ModBlocks.HYDRAULIC_PRESS));
         registry.addWorkstation(INDUSTRIAL_CENTRIFUGE, EmiStack.of(ModBlocks.INDUSTRIAL_CENTRIFUGE));
         registry.addWorkstation(CHEMICAL_SYNTHESIZER, EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER));
+        registry.addWorkstation(POLYMER_LOOM, EmiStack.of(ModBlocks.POLYMER_LOOM));
         registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
 
         // Recipe auto-transfer handler for Super Computer 3x3 Ghost Pattern Matrix
@@ -649,6 +657,85 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
                 EmiIngredient.of(List.of(EmiStack.of(Items.SUGAR), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(Items.QUARTZ))),
                 EmiStack.of(ModItems.ADRENALINE_STIM_CARTRIDGE),
                 "Combat Stim: Speed II, Haste II, Resistance I (3m)"));
+
+        // Grade-A Pure Cleanroom Hypospray Synthesis Recipes
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_pure_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.ALKALINE_BASE_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.REDSTONE), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(ModItems.SULFUR_DUST))),
+                EmiStack.of(createPureCartridge(ModItems.ACID_NEUTRALIZING_CARTRIDGE)),
+                "✦ Cleanroom Only: 12m Duration + Saturation Buff"));
+
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_pure_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.CRYO_THERMAL_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.BLAZE_POWDER), EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(Items.MAGMA_CREAM))),
+                EmiStack.of(createPureCartridge(ModItems.HEAT_BUFFER_CARTRIDGE)),
+                "✦ Cleanroom Only: 12m Duration + Fire Resistance"));
+
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_pure_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.OXYGENATED_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(ModItems.ALUMINUM_INGOT), EmiStack.of(Items.IRON_INGOT))),
+                EmiStack.of(createPureCartridge(ModItems.HYPER_OXYGENATION_CARTRIDGE)),
+                "✦ Cleanroom Only: 12m Duration + Dolphin's Grace"));
+
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_pure_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.CELLULAR_NANITE_EXTRACT))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GOLDEN_APPLE), EmiStack.of(ModItems.TITANIUM_INGOT), EmiStack.of(Items.GHAST_TEAR))),
+                EmiStack.of(createPureCartridge(ModItems.NANITE_TRAUMA_CARTRIDGE)),
+                "✦ Cleanroom Only: +20 HP, Regen III, Absorption II (4 hearts)"));
+
+        registry.addRecipe(new SynthesizerEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "synth_pure_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.EMPTY_CARTRIDGE))),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.ADRENAL_ESSENCE))),
+                EmiIngredient.of(List.of(EmiStack.of(Items.SUGAR), EmiStack.of(Items.GLOWSTONE_DUST), EmiStack.of(Items.QUARTZ))),
+                EmiStack.of(createPureCartridge(ModItems.ADRENALINE_STIM_CARTRIDGE)),
+                "✦ Cleanroom Only: Speed III, Haste II, Resistance II, Strength (6m)"));
+
+        // Polymer Loom Recipes
+        int loomIdx = 0;
+        registry.addRecipe(new PolymerLoomEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "loom_" + loomIdx++),
+                EmiStack.of(ModItems.RUBBER),
+                EmiStack.of(Items.STRING),
+                EmiStack.of(ModItems.SILICON),
+                EmiStack.of(ModItems.STERILE_POLYMER_FABRIC, 4),
+                "ESD Microfiber Textile Weaving"));
+
+        registry.addRecipe(new PolymerLoomEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "loom_" + loomIdx++),
+                EmiStack.of(ModItems.STERILE_POLYMER_FABRIC),
+                EmiStack.of(Items.GLASS_PANE),
+                EmiStack.of(ModItems.TIN_INGOT),
+                EmiStack.of(ModItems.CLEANROOM_HOOD),
+                "Zero-Shedding Cleanroom Sanitary Hood"));
+
+        registry.addRecipe(new PolymerLoomEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "loom_" + loomIdx++),
+                EmiStack.of(ModItems.STERILE_POLYMER_FABRIC),
+                EmiStack.of(ModItems.TITANIUM_INGOT),
+                EmiStack.of(ModItems.STEEL_INGOT),
+                EmiStack.of(ModItems.CLEANROOM_SMOCK),
+                "Sealed-Cuff Anti-Static Torso Smock"));
+
+        registry.addRecipe(new PolymerLoomEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "loom_" + loomIdx++),
+                EmiStack.of(ModItems.STERILE_POLYMER_FABRIC),
+                EmiStack.of(ModItems.ALUMINUM_INGOT),
+                EmiStack.of(ModItems.RUBBER),
+                EmiStack.of(ModItems.CLEANROOM_TROUSERS),
+                "Lint-Free Electro-Dissipative Trousers"));
+
+        registry.addRecipe(new PolymerLoomEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "loom_" + loomIdx++),
+                EmiStack.of(ModItems.STERILE_POLYMER_FABRIC),
+                EmiStack.of(ModItems.RUBBER),
+                EmiStack.of(ModItems.TITANIUM_INGOT),
+                EmiStack.of(ModItems.CLEANROOM_BOOTIES),
+                "Anti-Slip ESD Floor Boot Covers"));
+    }
+
+    private static ItemStack createPureCartridge(net.minecraft.item.Item item) {
+        ItemStack stack = new ItemStack(item);
+        net.enchantedwood.item.custom.HyposprayCartridgeItem.setPure(stack, true);
+        return stack;
     }
 
     public static class CentrifugeEmiRecipe implements EmiRecipe {
@@ -728,6 +815,50 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             widgets.addSlot(essence, 29, 21).drawBack(false);
             widgets.addSlot(catalyst, 29, 39).drawBack(false);
             // Output slot (align with large 26x26 output box on texture: item at x=120-15=105, y=35-14=21)
+            widgets.addSlot(output, 105, 21).recipeContext(this).drawBack(false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§8" + note), 26, 56, 0x555555, false);
+            }
+        }
+    }
+
+    public static class PolymerLoomEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient polymer;
+        private final EmiIngredient fiber;
+        private final EmiIngredient additive;
+        private final EmiStack output;
+        private final String note;
+
+        public PolymerLoomEmiRecipe(Identifier id, EmiIngredient polymer, EmiIngredient fiber, EmiIngredient additive, EmiStack output, String note) {
+            this.id = id;
+            this.polymer = polymer;
+            this.fiber = fiber;
+            this.additive = additive;
+            this.output = output;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return POLYMER_LOOM; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(polymer, fiber, additive); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 64; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Authentic Polymer Loom machine background panel
+            widgets.addTexture(POLYMER_LOOM_GUI, 0, 0, 142, 64, 15, 14);
+            // Energy Storage Bar (illuminated at x=3, y=6)
+            widgets.addTexture(POLYMER_LOOM_GUI, 3, 6, 16, 50, 192, 0);
+            // Animated weaving arrow at x=61, y=21
+            widgets.addAnimatedTexture(POLYMER_LOOM_GUI, 61, 21, 24, 17, 176, 14, 3000, true, false, false);
+            // 3 stacked input chambers
+            widgets.addSlot(polymer, 29, 3).drawBack(false);
+            widgets.addSlot(fiber, 29, 21).drawBack(false);
+            widgets.addSlot(additive, 29, 39).drawBack(false);
+            // Output slot
             widgets.addSlot(output, 105, 21).recipeContext(this).drawBack(false);
             if (note != null && !note.isEmpty()) {
                 widgets.addText(Text.literal("§8" + note), 26, 56, 0x555555, false);

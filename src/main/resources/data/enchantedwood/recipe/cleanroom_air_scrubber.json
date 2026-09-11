@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SFS",
+    "FCF",
+    "SRS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "F": "enchantedwood:cleanroom_filter_casing",
+    "C": "enchantedwood:advanced_computer_chip",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "enchantedwood:cleanroom_air_scrubber",
+    "count": 1
+  }
+}

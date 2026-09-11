@@ -266,4 +266,21 @@ public class ModArmorMaterials {
             ModTags.Items.REPAIRS_MODULAR_POWER,
             RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "modular_power"))
     );
+
+    // Cleanroom Bunny Suit (Sterile, anti-static, zero particulate emission)
+    public static final ArmorMaterial CLEANROOM_SUIT = new ArmorMaterial(
+            20,
+            Map.of(
+                    EquipmentType.HELMET, 1,
+                    EquipmentType.CHESTPLATE, 3,
+                    EquipmentType.LEGGINGS, 2,
+                    EquipmentType.BOOTS, 1
+            ),
+            15,
+            SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+            0.0f,
+            0.0f,
+            ModTags.Items.REPAIRS_SCUBA,
+            RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_suit"))
+    );
 }

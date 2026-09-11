@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "SGS",
+    "SCS",
+    "SRS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "minecraft:glass",
+    "C": "enchantedwood:cleanroom_casing",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "enchantedwood:decontamination_airlock_door",
+    "count": 1
+  }
+}

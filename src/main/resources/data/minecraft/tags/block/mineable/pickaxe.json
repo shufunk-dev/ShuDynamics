@@ -105,6 +105,13 @@
     "enchantedwood:deepslate_neodymium_ore",
     "enchantedwood:aerogel_ore",
     "enchantedwood:deepslate_aerogel_ore",
-    "enchantedwood:aerogel_glass"
+    "enchantedwood:aerogel_glass",
+    "enchantedwood:cleanroom_casing",
+    "enchantedwood:cleanroom_filter_casing",
+    "enchantedwood:cleanroom_air_scrubber",
+    "enchantedwood:gowning_airlock_door",
+    "enchantedwood:decontamination_airlock_door",
+    "enchantedwood:sterile_cleanroom_lamp",
+    "enchantedwood:sterile_medical_cabinet"
   ]
 }

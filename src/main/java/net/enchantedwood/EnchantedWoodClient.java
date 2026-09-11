@@ -66,6 +66,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.POWERED_ANVIL_SCREEN_HANDLER, net.enchantedwood.screen.PoweredAnvilScreen::new);
         HandledScreens.register(ModScreenHandlers.INDUSTRIAL_CENTRIFUGE_SCREEN_HANDLER, net.enchantedwood.screen.IndustrialCentrifugeScreen::new);
         HandledScreens.register(ModScreenHandlers.CHEMICAL_SYNTHESIZER_SCREEN_HANDLER, net.enchantedwood.screen.ChemicalSynthesizerScreen::new);
+        HandledScreens.register(ModScreenHandlers.POLYMER_LOOM_SCREEN_HANDLER, net.enchantedwood.screen.PolymerLoomScreen::new);
+        HandledScreens.register(ModScreenHandlers.STERILE_MEDICAL_CABINET_SCREEN_HANDLER, net.enchantedwood.screen.SterileMedicalCabinetScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
@@ -88,6 +90,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_DRAGON_FRUIT, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.STARFRUIT_LEAVES, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.REINFORCED_TANK_GLASS, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.DECONTAMINATION_AIRLOCK_DOOR, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.GOWNING_AIRLOCK_DOOR, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.VOLCANIC_GLASS, net.minecraft.client.render.BlockRenderLayer.TRANSLUCENT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.AEROGEL_GLASS, net.minecraft.client.render.BlockRenderLayer.TRANSLUCENT);
 

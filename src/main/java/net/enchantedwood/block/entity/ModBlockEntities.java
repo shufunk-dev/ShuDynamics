@@ -370,6 +370,41 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(ChemicalSynthesizerBlockEntity::new, ModBlocks.CHEMICAL_SYNTHESIZER).build()
             );
 
+    public static final BlockEntityType<PolymerLoomBlockEntity> POLYMER_LOOM_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "polymer_loom"),
+                    FabricBlockEntityTypeBuilder.create(PolymerLoomBlockEntity::new, ModBlocks.POLYMER_LOOM).build()
+            );
+
+    public static final BlockEntityType<CleanroomAirScrubberBlockEntity> CLEANROOM_AIR_SCRUBBER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_air_scrubber"),
+                    FabricBlockEntityTypeBuilder.create(CleanroomAirScrubberBlockEntity::new, ModBlocks.CLEANROOM_AIR_SCRUBBER).build()
+            );
+
+    public static final BlockEntityType<DecontaminationAirlockDoorBlockEntity> DECONTAMINATION_AIRLOCK_DOOR_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "decontamination_airlock_door"),
+                    FabricBlockEntityTypeBuilder.create(DecontaminationAirlockDoorBlockEntity::new, ModBlocks.DECONTAMINATION_AIRLOCK_DOOR).build()
+            );
+
+    public static final BlockEntityType<GowningAirlockDoorBlockEntity> GOWNING_AIRLOCK_DOOR_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "gowning_airlock_door"),
+                    FabricBlockEntityTypeBuilder.create(GowningAirlockDoorBlockEntity::new, ModBlocks.GOWNING_AIRLOCK_DOOR).build()
+            );
+
+    public static final BlockEntityType<SterileMedicalCabinetBlockEntity> STERILE_MEDICAL_CABINET_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet"),
+                    FabricBlockEntityTypeBuilder.create(SterileMedicalCabinetBlockEntity::new, ModBlocks.STERILE_MEDICAL_CABINET).build()
+            );
+
     public static void registerBlockEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Block Entities for " + EnchantedWoodMod.MOD_ID);
     }

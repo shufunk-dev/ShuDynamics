@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SGS",
+    "QLQ",
+    "SGS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "minecraft:glass",
+    "Q": "minecraft:quartz",
+    "L": "minecraft:glowstone"
+  },
+  "result": {
+    "id": "enchantedwood:sterile_cleanroom_lamp",
+    "count": 2
+  }
+}

@@ -1237,9 +1237,129 @@ public class ModBlocks {
             Text.literal("§bReinforced Aerogel Glass"),
             Text.literal("§7Nanostructured insulating composite glass."));
 
+    // Cleanroom Industrial Suite & Polymer Loom
+    public static final Block POLYMER_LOOM = registerBlock("polymer_loom",
+            new net.enchantedwood.block.custom.PolymerLoomBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "polymer_loom")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.PolymerLoomBlock.LIT) ? 13 : 0)));
+
+    public static final Block CLEANROOM_CASING = registerBlockWithTooltip("cleanroom_casing",
+            new net.enchantedwood.block.custom.CleanroomCasingBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_casing")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(3.5f)
+                    .resistance(12.0f)
+                    .requiresTool()),
+            Text.literal("§fCleanroom Sanitary Casing"),
+            Text.literal("§7Airtight non-porous composite wall & floor panel."),
+            Text.literal("§8Used to construct sterile cleanroom enclosures."));
+
+    public static final Block CLEANROOM_FILTER_CASING = registerBlockWithTooltip("cleanroom_filter_casing",
+            new net.enchantedwood.block.custom.CleanroomFilterCasingBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_filter_casing")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(3.5f)
+                    .resistance(12.0f)
+                    .requiresTool()),
+            Text.literal("§bCleanroom HEPA Filter Casing"),
+            Text.literal("§7High-efficiency particulate air intake grille."),
+            Text.literal("§8Removes 99.97% of airborne contaminants."));
+
+    public static final Block CLEANROOM_AIR_SCRUBBER = registerBlockWithTooltip("cleanroom_air_scrubber",
+            new net.enchantedwood.block.custom.CleanroomAirScrubberBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_air_scrubber")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.CleanroomAirScrubberBlock.STERILE) ? 14 : 4)),
+            Text.literal("§a✦ Cleanroom Air Scrubber & Controller ✦"),
+            Text.literal("§7Draws 20 FE/t to maintain positive sterile air pressure."),
+            Text.literal("§7Scans room boundary for leaks up to 2,500 blocks."),
+            Text.literal("§e⚡ Wireless Power Grid: Broadcasts external FE to all interior machines!"),
+            Text.literal("§b• Right-click to inspect sterility status, machines, or leak coordinates."),
+            Text.literal("§d• Upgrades Chemical Synthesizer output to GRADE-A PURE!"));
+
+    public static final Block DECONTAMINATION_AIRLOCK_DOOR = registerDoorWithTooltip("decontamination_airlock_door",
+            new net.enchantedwood.block.custom.DecontaminationAirlockDoorBlock(net.minecraft.block.BlockSetType.IRON, AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "decontamination_airlock_door")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(5.0f)
+                    .resistance(20.0f)
+                    .nonOpaque()
+                    .requiresTool()),
+            Text.literal("§b✦ Decontamination Airlock Door ✦"),
+            Text.literal("§7Motorized hermetic cleanroom security door."),
+            Text.literal("§e• Proximity Scanner: §fDetects full Cleanroom Bunny Suit"),
+            Text.literal("§a• Decontaminates with steam mist & auto-slides open"),
+            Text.literal("§c• Rejects unsuited personnel to prevent contamination"),
+            Text.literal("§d• Shift-Right-Click: §fToggle Cleanroom (Suit) vs Anteroom (Open)"),
+            Text.literal("§7• Click interior face to open for exit."));
+
+    public static final Block GOWNING_AIRLOCK_DOOR = registerDoorWithTooltip("gowning_airlock_door",
+            new net.enchantedwood.block.custom.GowningAirlockDoorBlock(net.minecraft.block.BlockSetType.IRON, AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "gowning_airlock_door")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(5.0f)
+                    .resistance(20.0f)
+                    .nonOpaque()
+                    .requiresTool()),
+            Text.literal("§6✦ Gowning Airlock Door ✦"),
+            Text.literal("§7Motorized anteroom personnel access door."),
+            Text.literal("§e• Proximity Sensor: §fAuto-slides open for all approaching personnel"),
+            Text.literal("§b• Ideal for outer entry into suit-up & gowning anterooms"),
+            Text.literal("§a• Certified Airtight: Seals cleanroom walls and anterooms"),
+            Text.literal("§7• Click interior face to open for exit."));
+
+    public static final Block STERILE_CLEANROOM_LAMP = registerBlockWithTooltip("sterile_cleanroom_lamp",
+            new net.enchantedwood.block.custom.SterileCleanroomLampBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_cleanroom_lamp")))
+                    .sounds(BlockSoundGroup.GLASS)
+                    .hardness(2.5f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.SterileCleanroomLampBlock.MODE).luminance)),
+            Text.literal("§e✦ Sterile Cleanroom Lamp ✦"),
+            Text.literal("§7Flush-mount hermetic LED cleanroom light."),
+            Text.literal("§b• Right-click to toggle:"),
+            Text.literal("§f  [1] Daylight White LED (Luminance 15)"),
+            Text.literal("§d  [2] UV-C Germicidal Sterilization Mode (Luminance 11)"),
+            Text.literal("§8  [3] Standby (Off)"),
+            Text.literal("§a• Certified Airtight: Seals cleanroom walls and ceilings!"));
+
+    public static final Block STERILE_MEDICAL_CABINET = registerBlockWithTooltip("sterile_medical_cabinet",
+            new net.enchantedwood.block.custom.SterileMedicalCabinetBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(3.5f)
+                    .resistance(12.0f)
+                    .requiresTool()),
+            Text.literal("§b✦ Sterile Medical Cabinet ✦"),
+            Text.literal("§7Hermetic cleanroom dispensary & supply storage."),
+            Text.literal("§e• 36 Controlled Storage Compartments:"),
+            Text.literal("§f  - Hypospray & Cartridge Fabrication"),
+            Text.literal("§d  - Extracted Chemical Essences"),
+            Text.literal("§a  - Catalysts & Biological Feedstocks"),
+            Text.literal("§b  - Finished Standard & ✦ Pure Hypospray Cartridges"),
+            Text.literal("§c• Strictly rejects non-medical items"));
+
     private static Block registerBlockWithoutItem(String name, Block block) {
         RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
         return Registry.register(Registries.BLOCK, blockKey, block);
+    }
+
+    private static Block registerDoorWithTooltip(String name, Block block, Text... tooltips) {
+        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+
+        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
+        Registry.register(Registries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipTallBlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey(), tooltips));
+
+        return registeredBlock;
     }
 
     private static Block registerBlock(String name, Block block) {

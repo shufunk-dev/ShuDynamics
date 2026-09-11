@@ -165,6 +165,14 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer"),
                     new ScreenHandlerType<>(ChemicalSynthesizerScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<PolymerLoomScreenHandler> POLYMER_LOOM_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "polymer_loom"),
+                    new ScreenHandlerType<>(PolymerLoomScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<SterileMedicalCabinetScreenHandler> STERILE_MEDICAL_CABINET_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet"),
+                    new ScreenHandlerType<>(SterileMedicalCabinetScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }

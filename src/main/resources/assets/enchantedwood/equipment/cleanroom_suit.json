@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enchantedwood:cleanroom_suit"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enchantedwood:cleanroom_suit"
+      }
+    ]
+  }
+}

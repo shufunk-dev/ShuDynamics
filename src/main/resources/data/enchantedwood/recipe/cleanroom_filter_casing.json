@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " S ",
+    "SFS",
+    " B "
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "F": "enchantedwood:sterile_polymer_fabric",
+    "B": "minecraft:iron_bars"
+  },
+  "result": {
+    "id": "enchantedwood:cleanroom_filter_casing",
+    "count": 4
+  }
+}

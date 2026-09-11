@@ -156,32 +156,37 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         Item essItem = essence.getItem();
         Item catItem = catalyst.getItem();
 
+        ItemStack result = ItemStack.EMPTY;
         // 1. Acid-Neutralizing: Alkaline Essence + Redstone (or Glowstone)
         if (essItem == ModItems.ALKALINE_BASE_EXTRACT && (catItem == Items.REDSTONE || catItem == Items.GLOWSTONE_DUST || catItem == ModItems.SULFUR_DUST)) {
-            return new ItemStack(ModItems.ACID_NEUTRALIZING_CARTRIDGE);
+            result = new ItemStack(ModItems.ACID_NEUTRALIZING_CARTRIDGE);
         }
 
         // 2. Endothermic Heat-Buffer: Cryo-Thermal Essence + Blaze Powder (or Fire Crystal)
-        if (essItem == ModItems.CRYO_THERMAL_EXTRACT && (catItem == Items.BLAZE_POWDER || catItem == ModItems.FIRE_CRYSTAL || catItem == Items.MAGMA_CREAM)) {
-            return new ItemStack(ModItems.HEAT_BUFFER_CARTRIDGE);
+        else if (essItem == ModItems.CRYO_THERMAL_EXTRACT && (catItem == Items.BLAZE_POWDER || catItem == ModItems.FIRE_CRYSTAL || catItem == Items.MAGMA_CREAM)) {
+            result = new ItemStack(ModItems.HEAT_BUFFER_CARTRIDGE);
         }
 
         // 3. Hyper-Oxygenation: Oxygenated Essence + Titanium / Aluminum
-        if (essItem == ModItems.OXYGENATED_EXTRACT && (catItem == ModItems.TITANIUM_INGOT || catItem == ModItems.ALUMINUM_INGOT || catItem == Items.IRON_INGOT)) {
-            return new ItemStack(ModItems.HYPER_OXYGENATION_CARTRIDGE);
+        else if (essItem == ModItems.OXYGENATED_EXTRACT && (catItem == ModItems.TITANIUM_INGOT || catItem == ModItems.ALUMINUM_INGOT || catItem == Items.IRON_INGOT)) {
+            result = new ItemStack(ModItems.HYPER_OXYGENATION_CARTRIDGE);
         }
 
         // 4. Nanite Trauma: Cellular Nanite Essence + Golden Apple / Titanium Ingot / Ghast Tear
-        if (essItem == ModItems.CELLULAR_NANITE_EXTRACT && (catItem == Items.GOLDEN_APPLE || catItem == ModItems.TITANIUM_INGOT || catItem == Items.GHAST_TEAR)) {
-            return new ItemStack(ModItems.NANITE_TRAUMA_CARTRIDGE);
+        else if (essItem == ModItems.CELLULAR_NANITE_EXTRACT && (catItem == Items.GOLDEN_APPLE || catItem == ModItems.TITANIUM_INGOT || catItem == Items.GHAST_TEAR)) {
+            result = new ItemStack(ModItems.NANITE_TRAUMA_CARTRIDGE);
         }
 
         // 5. Adrenaline Combat Stim: Adrenal Essence + Sugar / Glowstone / Quartz
-        if (essItem == ModItems.ADRENAL_ESSENCE && (catItem == Items.SUGAR || catItem == Items.GLOWSTONE_DUST || catItem == Items.QUARTZ)) {
-            return new ItemStack(ModItems.ADRENALINE_STIM_CARTRIDGE);
+        else if (essItem == ModItems.ADRENAL_ESSENCE && (catItem == Items.SUGAR || catItem == Items.GLOWSTONE_DUST || catItem == Items.QUARTZ)) {
+            result = new ItemStack(ModItems.ADRENALINE_STIM_CARTRIDGE);
         }
 
-        return ItemStack.EMPTY;
+        if (!result.isEmpty() && this.world != null && net.enchantedwood.block.entity.CleanroomManager.isInsideSterileCleanroom(this.world, this.pos)) {
+            net.enchantedwood.item.custom.HyposprayCartridgeItem.setPure(result, true);
+        }
+
+        return result;
     }
 
     private boolean canOutput(ItemStack output) {
@@ -201,6 +206,11 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
             inventory.set(SLOT_OUTPUT, output.copy());
         } else {
             currentOut.increment(output.getCount());
+        }
+
+        if (this.world instanceof ServerWorld serverWorld && net.enchantedwood.item.custom.HyposprayCartridgeItem.isPure(output)) {
+            serverWorld.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.BLOCKS, 0.9f, 1.8f);
+            serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.03);
         }
     }
 

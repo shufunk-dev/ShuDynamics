@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/cleanroom_filter_casing",
+    "front": "enchantedwood:block/cleanroom_air_scrubber_front_on",
+    "side": "enchantedwood:block/cleanroom_casing",
+    "bottom": "enchantedwood:block/cleanroom_casing"
+  }
+}

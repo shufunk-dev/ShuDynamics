@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SGS",
+    "CHC",
+    "SCS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "G": "minecraft:glass_pane",
+    "H": "minecraft:chest",
+    "C": "enchantedwood:cleanroom_casing"
+  },
+  "result": {
+    "id": "enchantedwood:sterile_medical_cabinet",
+    "count": 1
+  }
+}

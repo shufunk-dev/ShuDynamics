@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SIS",
+    "GDG",
+    "SRS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "I": "minecraft:iron_ingot",
+    "G": "enchantedwood:iron_gear",
+    "D": "minecraft:dispenser",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "enchantedwood:polymer_loom",
+    "count": 1
+  }
+}

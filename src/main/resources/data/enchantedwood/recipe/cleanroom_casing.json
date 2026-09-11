@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "SAS",
+    "SSS"
+  ],
+  "key": {
+    "S": "enchantedwood:steel_ingot",
+    "A": "enchantedwood:aluminum_ingot"
+  },
+  "result": {
+    "id": "enchantedwood:cleanroom_casing",
+    "count": 8
+  }
+}

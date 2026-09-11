@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "enchantedwood:block/gowning_airlock_door_bottom",
+    "top": "enchantedwood:block/gowning_airlock_door_top"
+  }
+}

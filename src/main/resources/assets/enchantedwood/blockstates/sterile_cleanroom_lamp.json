@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "mode=white": {
+      "model": "enchantedwood:block/sterile_cleanroom_lamp_white"
+    },
+    "mode=uv": {
+      "model": "enchantedwood:block/sterile_cleanroom_lamp_uv"
+    },
+    "mode=off": {
+      "model": "enchantedwood:block/sterile_cleanroom_lamp_off"
+    }
+  }
+}
