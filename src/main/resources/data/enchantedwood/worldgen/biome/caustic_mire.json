@@ -33,8 +33,13 @@
       "minecraft:spring_water"
     ],
     [
+      "minecraft:trees_swamp",
+      "minecraft:patch_waterlily",
+      "minecraft:patch_sugar_cane_swamp",
       "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal"
+      "minecraft:red_mushroom_normal",
+      "minecraft:vines",
+      "enchantedwood:convergence_vegetation"
     ],
     []
   ],
