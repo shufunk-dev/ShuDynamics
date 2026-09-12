@@ -78,11 +78,10 @@ public class DormantRiftBlock extends Block {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1.0f, 1.8f);
         if (!world.isClient()) {
             player.sendMessage(
-                    Text.literal("§5✦ Gateway of Resonance: §aDimensional Alignment Synchronized. §7Step through the threshold to enter §dThe Convergence§7."),
-                    false
+                    Text.literal("§5✦ Gateway of Resonance: §aSynchronized §7— Step through to enter §dThe Convergence§7."),
+                    true
             );
         }
         return ActionResult.SUCCESS;

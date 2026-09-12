@@ -93,6 +93,18 @@ public class ResonanceFrameValidator {
 
         // Must contain all 6 distinct keystones and at least 4 crying obsidian
         if (foundKeystones.size() >= 6 && cryingObsidianCount >= 4) {
+            // Check if already fully activated to prevent duplicate sound/message spam
+            boolean alreadyIgnited = true;
+            for (BlockPos pos : interiorPositions) {
+                if (!world.getBlockState(pos).isOf(ModBlocks.DORMANT_RIFT)) {
+                    alreadyIgnited = false;
+                    break;
+                }
+            }
+            if (alreadyIgnited) {
+                return false;
+            }
+
             // Fill interior with Dormant Rift blocks
             for (BlockPos pos : interiorPositions) {
                 world.setBlockState(pos, ModBlocks.DORMANT_RIFT.getDefaultState().with(DormantRiftBlock.AXIS, axis));
