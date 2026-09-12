@@ -5,7 +5,8 @@
   "mixins": [
     "CropBlockMixin",
     "StemBlockMixin",
-    "AttachedStemBlockMixin"
+    "AttachedStemBlockMixin",
+    "TopologicalSortsMixin"
   ],
   "client": [],
   "injectors": {
