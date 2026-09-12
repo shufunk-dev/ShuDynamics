@@ -787,7 +787,7 @@
           }
         },
         {
-          "biome": "minecraft:deep_dark",
+          "biome": "enchantedwood:deep_dark",
           "parameters": {
             "temperature": [
               -0.4,
