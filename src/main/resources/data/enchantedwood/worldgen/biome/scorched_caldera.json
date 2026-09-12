@@ -37,13 +37,13 @@
     [],
     [],
     [],
-    [],
-    [
-      "minecraft:spring_lava"
-    ],
     [
       "minecraft:glowstone_extra"
     ],
+    [
+      "minecraft:spring_lava"
+    ],
+    [],
     []
   ],
   "spawn_costs": {},
