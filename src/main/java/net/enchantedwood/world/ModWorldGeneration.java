@@ -65,6 +65,18 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> NETHER_INCURSION_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_incursion"));
 
+    public static final Feature<DefaultFeatureConfig> RIFT_CHASM_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "rift_chasm"),
+            new net.enchantedwood.world.gen.RiftChasmFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> RIFT_CHASM_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "rift_chasm"));
+
+    public static final RegistryKey<PlacedFeature> RIFT_CHASM_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "rift_chasm"));
+
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> STARFRUIT_TREE_KEY =
@@ -227,6 +239,46 @@ public class ModWorldGeneration {
         RegistryKey<net.minecraft.world.biome.Biome> resonanceSanctum =
                 RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"));
 
+        // Standard Vanilla Ores for Convergence Custom Biomes (Coal, Iron, Copper, Gold, Redstone, Diamond, Lapis, Stone Pockets)
+        String[] vanillaOreIds = {
+                "ore_coal_upper", "ore_coal_lower",
+                "ore_iron_upper", "ore_iron_middle", "ore_iron_small",
+                "ore_copper", "ore_copper_large",
+                "ore_gold", "ore_gold_lower",
+                "ore_redstone", "ore_redstone_lower",
+                "ore_diamond", "ore_diamond_large", "ore_diamond_buried",
+                "ore_lapis", "ore_lapis_buried",
+                "ore_dirt", "ore_gravel",
+                "ore_diorite_upper", "ore_diorite_lower",
+                "ore_granite_upper", "ore_granite_lower",
+                "ore_andesite_upper", "ore_andesite_lower",
+                "ore_tuff"
+        };
+
+        for (String oreId : vanillaOreIds) {
+            RegistryKey<PlacedFeature> placedKey = RegistryKey.of(
+                    RegistryKeys.PLACED_FEATURE,
+                    Identifier.of("minecraft", oreId)
+            );
+            BiomeModifications.addFeature(
+                    BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera, resonanceSanctum),
+                    GenerationStep.Feature.UNDERGROUND_ORES,
+                    placedKey
+            );
+        }
+
+        // Add Tin Ore to Overworld and Convergence Custom Biomes
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                TIN_ORE_PLACED_KEY
+        );
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera, resonanceSanctum),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                TIN_ORE_PLACED_KEY
+        );
+
         BiomeModifications.addFeature(
                 BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
                 GenerationStep.Feature.UNDERGROUND_ORES,
@@ -322,6 +374,31 @@ public class ModWorldGeneration {
                 ),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 NETHER_INCURSION_PLACED_KEY
+        );
+
+        // Surface Rift Chasms & Subterranean Entrances in The Convergence
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(
+                        riftwoodHaven,
+                        anoxicBarrens,
+                        causticMire,
+                        scorchedCaldera,
+                        net.minecraft.world.biome.BiomeKeys.PLAINS,
+                        net.minecraft.world.biome.BiomeKeys.DESERT,
+                        net.minecraft.world.biome.BiomeKeys.SAVANNA,
+                        net.minecraft.world.biome.BiomeKeys.TAIGA,
+                        net.minecraft.world.biome.BiomeKeys.BADLANDS,
+                        net.minecraft.world.biome.BiomeKeys.ERODED_BADLANDS,
+                        net.minecraft.world.biome.BiomeKeys.DARK_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.OLD_GROWTH_PINE_TAIGA,
+                        net.minecraft.world.biome.BiomeKeys.WINDSWEPT_HILLS,
+                        net.minecraft.world.biome.BiomeKeys.WINDSWEPT_GRAVELLY_HILLS,
+                        net.minecraft.world.biome.BiomeKeys.STONY_PEAKS,
+                        net.minecraft.world.biome.BiomeKeys.MEADOW,
+                        net.minecraft.world.biome.BiomeKeys.JAGGED_PEAKS
+                ),
+                GenerationStep.Feature.LOCAL_MODIFICATIONS,
+                RIFT_CHASM_PLACED_KEY
         );
     }
 }

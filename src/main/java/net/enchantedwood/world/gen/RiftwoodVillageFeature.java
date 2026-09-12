@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.StairShape;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.EntityType;
@@ -153,6 +155,17 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         world.setBlockState(c.add(2, 0, 0), Blocks.BELL.getDefaultState(), 2);
     }
 
+    private void placeDoor(StructureWorldAccess world, BlockPos pos, Direction facing) {
+        BlockState lower = Blocks.SPRUCE_DOOR.getDefaultState()
+                .with(DoorBlock.HALF, DoubleBlockHalf.LOWER)
+                .with(DoorBlock.FACING, facing);
+        BlockState upper = Blocks.SPRUCE_DOOR.getDefaultState()
+                .with(DoorBlock.HALF, DoubleBlockHalf.UPPER)
+                .with(DoorBlock.FACING, facing);
+        world.setBlockState(pos, lower, 2);
+        world.setBlockState(pos.up(), upper, 2);
+    }
+
     private void buildChieftainsHall(StructureWorldAccess world, BlockPos pos, Random random) {
         int width = 9;
         int length = 7;
@@ -161,11 +174,11 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         int baseY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + width / 2, pos.getZ() + length / 2) - 1;
         BlockPos start = new BlockPos(pos.getX(), baseY, pos.getZ());
 
-        // Foundation & Floor
+        // Deep Foundation & Floor (down to -7 to prevent floating on hills)
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < length; z++) {
                 BlockPos p = start.add(x, 0, z);
-                for (int dy = -3; dy <= 0; dy++) {
+                for (int dy = -7; dy <= 0; dy++) {
                     world.setBlockState(p.up(dy), Blocks.STONE_BRICKS.getDefaultState(), 2);
                 }
             }
@@ -182,10 +195,12 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
                     if (isCorner) {
                         world.setBlockState(p, ModBlocks.STARFRUIT_LOG.getDefaultState(), 2);
                     } else if (isEdge) {
-                        // Windows & Door
+                        // Doorway at front center
                         if (z == length - 1 && x == width / 2 && y <= 2) {
-                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2); // Entrance door
+                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2);
                         } else if (y == 2 && ((x == 2 || x == width - 3) && (z == 0 || z == length - 1))) {
+                            world.setBlockState(p, Blocks.GLASS_PANE.getDefaultState(), 2);
+                        } else if (y == 2 && ((z == 2 || z == length - 3) && (x == 0 || x == width - 1))) {
                             world.setBlockState(p, Blocks.GLASS_PANE.getDefaultState(), 2);
                         } else if (y == height) {
                             world.setBlockState(p, ModBlocks.AVOCADO_WOOD.getDefaultState(), 2);
@@ -199,7 +214,7 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
             }
         }
 
-        // Pitched Roof
+        // Fully Enclosed Pitched Roof (Stairs + Ridge)
         for (int z = -1; z <= length; z++) {
             for (int r = 0; r <= 3; r++) {
                 BlockPos left = start.add(r, height + r, z);
@@ -210,10 +225,23 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
             world.setBlockState(start.add(width / 2, height + 4, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
         }
 
-        // Interior: Door, Lanterns, Crafting Table, Beds, and Loot Chest
-        BlockPos doorPos = start.add(width / 2, 1, length - 1);
-        world.setBlockState(doorPos, Blocks.SPRUCE_DOOR.getDefaultState(), 2);
+        // Fully Enclose the Gable Walls (Front & Back triangular ends)
+        for (int r = 0; r <= 3; r++) {
+            int y = height + r;
+            for (int x = r + 1; x <= width - 2 - r; x++) {
+                world.setBlockState(start.add(x, y, length - 1), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+                world.setBlockState(start.add(x, y, 0), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            }
+        }
+        // Attic windows on front and back
+        world.setBlockState(start.add(width / 2, height + 2, length - 1), Blocks.GLASS_PANE.getDefaultState(), 2);
+        world.setBlockState(start.add(width / 2, height + 2, 0), Blocks.GLASS_PANE.getDefaultState(), 2);
 
+        // Place full 2-block spruce entrance door
+        BlockPos doorPos = start.add(width / 2, 1, length - 1);
+        placeDoor(world, doorPos, Direction.SOUTH);
+
+        // Interior: Furniture & Loot
         world.setBlockState(start.add(1, 1, 1), Blocks.RED_BED.getDefaultState(), 2);
         world.setBlockState(start.add(2, 1, 1), Blocks.CRAFTING_TABLE.getDefaultState(), 2);
         world.setBlockState(start.add(width - 2, 1, 1), Blocks.PURPLE_BED.getDefaultState(), 2);
@@ -236,17 +264,17 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
 
     private void buildAvocadoCottage(StructureWorldAccess world, BlockPos pos, Random random) {
         int width = 6;
-        int length = 5;
+        int length = 6;
         int height = 4;
 
         int baseY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + width / 2, pos.getZ() + length / 2) - 1;
         BlockPos start = new BlockPos(pos.getX(), baseY, pos.getZ());
 
-        // Foundation & Floor
+        // Deep Foundation & Floor (down to -7)
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < length; z++) {
                 BlockPos p = start.add(x, 0, z);
-                for (int dy = -3; dy <= 0; dy++) {
+                for (int dy = -7; dy <= 0; dy++) {
                     world.setBlockState(p.up(dy), Blocks.COBBLESTONE.getDefaultState(), 2);
                 }
             }
@@ -263,10 +291,13 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
                     if (isCorner) {
                         world.setBlockState(p, ModBlocks.AVOCADO_LOG.getDefaultState(), 2);
                     } else if (isEdge) {
+                        // Doorway at west side center
                         if (x == 0 && z == length / 2 && y <= 2) {
-                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2); // Door
-                        } else if (y == 2 && ((x == width - 1) || (z == 0 && x == 2))) {
+                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2);
+                        } else if (y == 2 && ((x == width - 1 && z == length / 2) || (z == 0 && x == 3) || (z == length - 1 && x == 3))) {
                             world.setBlockState(p, Blocks.GLASS_PANE.getDefaultState(), 2);
+                        } else if (y == height) {
+                            world.setBlockState(p, ModBlocks.AVOCADO_WOOD.getDefaultState(), 2);
                         } else {
                             world.setBlockState(p, ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
                         }
@@ -277,17 +308,30 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
             }
         }
 
-        // Roof
-        for (int x = -1; x <= width; x++) {
-            world.setBlockState(start.add(x, height + 1, 0), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.SOUTH), 2);
-            world.setBlockState(start.add(x, height + 1, length - 1), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.NORTH), 2);
-            for (int z = 1; z < length - 1; z++) {
-                world.setBlockState(start.add(x, height + 1, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
-            }
+        // Pitched Roof over cottage (Slopes East-West)
+        for (int z = -1; z <= length; z++) {
+            // Eaves / slopes
+            world.setBlockState(start.add(0, height + 1, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.EAST), 2);
+            world.setBlockState(start.add(1, height + 2, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.EAST), 2);
+            world.setBlockState(start.add(width - 1, height + 1, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.WEST), 2);
+            world.setBlockState(start.add(width - 2, height + 2, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.WEST), 2);
+            // Ridge
+            world.setBlockState(start.add(2, height + 2, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
+            world.setBlockState(start.add(3, height + 2, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
         }
 
+        // Fully Enclosed Gable Walls (Front and Back)
+        for (int z : new int[]{ 0, length - 1 }) {
+            world.setBlockState(start.add(1, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(2, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(3, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(4, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+        }
+
+        // Full 2-block Spruce Door
+        placeDoor(world, start.add(0, 1, length / 2), Direction.WEST);
+
         // Interior
-        world.setBlockState(start.add(0, 1, length / 2), Blocks.SPRUCE_DOOR.getDefaultState(), 2);
         world.setBlockState(start.add(width - 2, 1, 1), Blocks.WHITE_BED.getDefaultState(), 2);
         world.setBlockState(start.add(width - 2, 1, length - 2), Blocks.CRAFTING_TABLE.getDefaultState(), 2);
         world.setBlockState(start.add(width / 2, height, length / 2), Blocks.LANTERN.getDefaultState().with(net.minecraft.block.LanternBlock.HANGING, true), 2);
@@ -295,17 +339,17 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
 
     private void buildStarfruitCottage(StructureWorldAccess world, BlockPos pos, Random random) {
         int width = 6;
-        int length = 5;
+        int length = 6;
         int height = 4;
 
         int baseY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + width / 2, pos.getZ() + length / 2) - 1;
         BlockPos start = new BlockPos(pos.getX(), baseY, pos.getZ());
 
-        // Foundation & Floor
+        // Deep Foundation & Floor (down to -7)
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < length; z++) {
                 BlockPos p = start.add(x, 0, z);
-                for (int dy = -3; dy <= 0; dy++) {
+                for (int dy = -7; dy <= 0; dy++) {
                     world.setBlockState(p.up(dy), Blocks.STONE_BRICKS.getDefaultState(), 2);
                 }
             }
@@ -322,10 +366,13 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
                     if (isCorner) {
                         world.setBlockState(p, ModBlocks.STARFRUIT_LOG.getDefaultState(), 2);
                     } else if (isEdge) {
+                        // Doorway at east side center
                         if (x == width - 1 && z == length / 2 && y <= 2) {
-                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2); // Door
-                        } else if (y == 2 && ((x == 0) || (z == length - 1 && x == 2))) {
+                            world.setBlockState(p, Blocks.AIR.getDefaultState(), 2);
+                        } else if (y == 2 && ((x == 0 && z == length / 2) || (z == 0 && x == 3) || (z == length - 1 && x == 3))) {
                             world.setBlockState(p, Blocks.GLASS_PANE.getDefaultState(), 2);
+                        } else if (y == height) {
+                            world.setBlockState(p, ModBlocks.STARFRUIT_WOOD.getDefaultState(), 2);
                         } else {
                             world.setBlockState(p, ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
                         }
@@ -336,17 +383,30 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
             }
         }
 
-        // Roof
-        for (int x = -1; x <= width; x++) {
-            world.setBlockState(start.add(x, height + 1, 0), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.SOUTH), 2);
-            world.setBlockState(start.add(x, height + 1, length - 1), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.NORTH), 2);
-            for (int z = 1; z < length - 1; z++) {
-                world.setBlockState(start.add(x, height + 1, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
-            }
+        // Pitched Roof over cottage (Slopes East-West)
+        for (int z = -1; z <= length; z++) {
+            // Eaves / slopes
+            world.setBlockState(start.add(0, height + 1, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.EAST), 2);
+            world.setBlockState(start.add(1, height + 2, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.EAST), 2);
+            world.setBlockState(start.add(width - 1, height + 1, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.WEST), 2);
+            world.setBlockState(start.add(width - 2, height + 2, z), Blocks.SPRUCE_STAIRS.getDefaultState().with(StairsBlock.FACING, Direction.WEST), 2);
+            // Ridge
+            world.setBlockState(start.add(2, height + 2, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
+            world.setBlockState(start.add(3, height + 2, z), Blocks.SPRUCE_SLAB.getDefaultState(), 2);
         }
 
+        // Fully Enclosed Gable Walls (Front and Back)
+        for (int z : new int[]{ 0, length - 1 }) {
+            world.setBlockState(start.add(1, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(2, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(3, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+            world.setBlockState(start.add(4, height + 1, z), ModBlocks.STARFRUIT_PLANKS.getDefaultState(), 2);
+        }
+
+        // Full 2-block Spruce Door
+        placeDoor(world, start.add(width - 1, 1, length / 2), Direction.EAST);
+
         // Interior
-        world.setBlockState(start.add(width - 1, 1, length / 2), Blocks.SPRUCE_DOOR.getDefaultState(), 2);
         world.setBlockState(start.add(1, 1, 1), Blocks.YELLOW_BED.getDefaultState(), 2);
         world.setBlockState(start.add(1, 1, length - 2), Blocks.FURNACE.getDefaultState(), 2);
         world.setBlockState(start.add(width / 2, height, length / 2), Blocks.LANTERN.getDefaultState().with(net.minecraft.block.LanternBlock.HANGING, true), 2);
@@ -388,11 +448,11 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         int baseY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, pos.getX() + 3, pos.getZ() + 3) - 1;
         BlockPos start = new BlockPos(pos.getX(), baseY, pos.getZ());
 
-        // Foundation
+        // Foundation (down to -7)
         for (int x = 0; x < 6; x++) {
             for (int z = 0; z < 5; z++) {
                 BlockPos p = start.add(x, 0, z);
-                for (int dy = -2; dy <= 0; dy++) {
+                for (int dy = -7; dy <= 0; dy++) {
                     world.setBlockState(p.up(dy), Blocks.POLISHED_ANDESITE.getDefaultState(), 2);
                 }
             }
