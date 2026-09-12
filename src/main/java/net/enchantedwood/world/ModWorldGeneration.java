@@ -41,6 +41,30 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> RESONANCE_ARENA_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_arena"));
 
+    public static final Feature<DefaultFeatureConfig> RIFTWOOD_VILLAGE_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_village"),
+            new net.enchantedwood.world.gen.RiftwoodVillageFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> RIFTWOOD_VILLAGE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_village"));
+
+    public static final RegistryKey<PlacedFeature> RIFTWOOD_VILLAGE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "riftwood_village"));
+
+    public static final Feature<DefaultFeatureConfig> NETHER_INCURSION_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "nether_incursion"),
+            new net.enchantedwood.world.gen.NetherIncursionFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> NETHER_INCURSION_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_incursion"));
+
+    public static final RegistryKey<PlacedFeature> NETHER_INCURSION_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_incursion"));
+
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> STARFRUIT_TREE_KEY =
@@ -251,6 +275,53 @@ public class ModWorldGeneration {
                 BiomeSelectors.includeByKey(resonanceSanctum),
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 RESONANCE_ARENA_PLACED_KEY
+        );
+
+        // Riftwood Haven Custom Villages (Avocado & Starfruit Architecture)
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(riftwoodHaven),
+                GenerationStep.Feature.SURFACE_STRUCTURES,
+                RIFTWOOD_VILLAGE_PLACED_KEY
+        );
+
+        // Fractured Nether Incursions in Convergence: Overworld Cave Carvers & Nether Terrain/Ores
+        BiomeModifications.addCarver(
+                BiomeSelectors.includeByKey(
+                        net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                ),
+                net.minecraft.world.gen.carver.ConfiguredCarvers.CAVE
+        );
+        BiomeModifications.addCarver(
+                BiomeSelectors.includeByKey(
+                        net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                ),
+                net.minecraft.world.gen.carver.ConfiguredCarvers.CANYON
+        );
+        BiomeModifications.addCarver(
+                BiomeSelectors.includeByKey(
+                        net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                ),
+                net.minecraft.world.gen.carver.ConfiguredCarvers.CAVE_EXTRA_UNDERGROUND
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(
+                        net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
+                        net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                ),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                NETHER_INCURSION_PLACED_KEY
         );
     }
 }

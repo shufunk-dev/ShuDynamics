@@ -544,6 +544,65 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> 15)));
 
+    // Fractured Incursion Nether Overworld Ores
+    public static final Block NETHER_IRON_ORE = registerBlock("nether_iron_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_iron_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block NETHER_COAL_ORE = registerBlock("nether_coal_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_coal_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block NETHER_COPPER_ORE = registerBlock("nether_copper_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_copper_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block NETHER_TIN_ORE = registerBlock("nether_tin_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_tin_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block NETHER_REDSTONE_ORE = registerBlock("nether_redstone_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_redstone_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()
+                    .luminance(state -> 9)));
+
+    public static final Block NETHER_LAPIS_ORE = registerBlock("nether_lapis_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_lapis_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(3.0f)
+                    .resistance(3.0f)
+                    .requiresTool()));
+
+    public static final Block NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_diamond_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(4.0f)
+                    .resistance(4.0f)
+                    .requiresTool()
+                    .luminance(state -> 4)));
+
     // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
     public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",
             new Block(AbstractBlock.Settings.create()

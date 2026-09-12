@@ -1,0 +1,11 @@
+﻿{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "enchantedwood:nether_diamond_ore",
+  "result": {
+    "count": 1,
+    "id": "minecraft:diamond"
+  },
+  "experience": 1,
+  "cookingtime": 100
+}

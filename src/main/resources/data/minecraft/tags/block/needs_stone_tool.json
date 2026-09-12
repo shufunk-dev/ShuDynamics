@@ -2,6 +2,11 @@
   "replace": false,
   "values": [
     "enchantedwood:enchanted_cobblestone",
+    "enchantedwood:nether_iron_ore",
+    "enchantedwood:nether_coal_ore",
+    "enchantedwood:nether_copper_ore",
+    "enchantedwood:nether_tin_ore",
+    "enchantedwood:nether_lapis_ore",
     "enchantedwood:enchanted_furnace",
     "enchantedwood:crusher",
     "enchantedwood:dust_smelter",

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "enchantedwood:asphalt_block",
+    "enchantedwood:nether_diamond_ore",
+    "enchantedwood:nether_redstone_ore",
     "enchantedwood:asphalt_slab",
     "enchantedwood:nether_tungsten_ore",
     "enchantedwood:deepslate_tungsten_ore",

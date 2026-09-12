@@ -250,9 +250,9 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
     private float getExperienceForInput(Item item) {
         if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.RED_TERRACOTTA || item == Items.GRANITE) return 0.2f;
         if (item == ModItems.RAW_BAUXITE || item == ModBlocks.BAUXITE_ORE.asItem() || item == ModBlocks.DEEPSLATE_BAUXITE_ORE.asItem() || item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModItems.ALUMINUM_INGOT || item == ModBlocks.ALUMINUM_BLOCK.asItem()) return 0.7f;
-        if (item == Items.RAW_IRON || item == Items.IRON_ORE || item == Items.DEEPSLATE_IRON_ORE || item == Items.RAW_IRON_BLOCK || item == Items.IRON_INGOT || item == Items.IRON_BLOCK) return 0.7f;
-        if (item == Items.RAW_COPPER || item == Items.COPPER_ORE || item == Items.DEEPSLATE_COPPER_ORE || item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_INGOT || item == Items.COPPER_BLOCK) return 0.7f;
-        if (item == ModItems.RAW_TIN || item == ModBlocks.TIN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TIN_ORE.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModItems.TIN_INGOT || item == ModBlocks.TIN_BLOCK.asItem()) return 0.7f;
+        if (item == Items.RAW_IRON || item == Items.IRON_ORE || item == Items.DEEPSLATE_IRON_ORE || item == ModBlocks.NETHER_IRON_ORE.asItem() || item == Items.RAW_IRON_BLOCK || item == Items.IRON_INGOT || item == Items.IRON_BLOCK) return 0.7f;
+        if (item == Items.RAW_COPPER || item == Items.COPPER_ORE || item == Items.DEEPSLATE_COPPER_ORE || item == ModBlocks.NETHER_COPPER_ORE.asItem() || item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_INGOT || item == Items.COPPER_BLOCK) return 0.7f;
+        if (item == ModItems.RAW_TIN || item == ModBlocks.TIN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TIN_ORE.asItem() || item == ModBlocks.NETHER_TIN_ORE.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModItems.TIN_INGOT || item == ModBlocks.TIN_BLOCK.asItem()) return 0.7f;
         if (item == ModItems.BRONZE_INGOT || item == ModBlocks.BRONZE_BLOCK.asItem()) return 0.8f;
         if (item == ModItems.STEEL_INGOT || item == ModBlocks.STEEL_BLOCK.asItem()) return 0.8f;
         if (item == ModItems.RAW_TITANIUM || item == ModBlocks.TITANIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TITANIUM_ORE.asItem() || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModItems.TITANIUM_INGOT || item == ModBlocks.TITANIUM_BLOCK.asItem()) return 0.8f;
@@ -261,12 +261,13 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.RAW_ARDITE || item == ModBlocks.ARDITE_ORE.asItem() || item == ModBlocks.RAW_ARDITE_BLOCK.asItem() || item == ModItems.ARDITE_INGOT || item == ModBlocks.ARDITE_BLOCK.asItem()) return 1.0f;
         if (item == ModItems.MANYULLYN_INGOT || item == ModBlocks.MANYULLYN_BLOCK.asItem()) return 1.5f;
         if (item == Items.RAW_GOLD || item == Items.GOLD_ORE || item == Items.DEEPSLATE_GOLD_ORE || item == Items.NETHER_GOLD_ORE || item == Items.RAW_GOLD_BLOCK || item == Items.GOLD_INGOT || item == Items.GOLD_BLOCK) return 1.0f;
-        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return 1.0f;
+        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == ModBlocks.NETHER_DIAMOND_ORE.asItem() || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return 1.0f;
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return 2.0f;
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD || item == Items.EMERALD_BLOCK) return 1.0f;
+        if (item == ModBlocks.NETHER_REDSTONE_ORE.asItem() || item == ModBlocks.NETHER_LAPIS_ORE.asItem()) return 0.7f;
         if (item == ModItems.ENCHANTED_COAL || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 0.8f;
         if (item == Items.BLAZE_ROD) return 0.5f;
-        if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 0.1f;
+        if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == ModBlocks.NETHER_COAL_ORE.asItem() || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return 0.1f;
         if (item == Items.QUARTZ || item == Items.QUARTZ_BLOCK) return 0.5f;
         return 0.7f;
     }
@@ -276,9 +277,12 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.ENCHANTED_COAL || item == ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return ModItems.ENCHANTED_DUST;
         if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.RED_TERRACOTTA || item == Items.GRANITE) return ModItems.RAW_BAUXITE;
         if (item == ModItems.RAW_BAUXITE || item == ModBlocks.BAUXITE_ORE.asItem() || item == ModBlocks.DEEPSLATE_BAUXITE_ORE.asItem() || item == ModBlocks.RAW_BAUXITE_BLOCK.asItem() || item == ModItems.ALUMINUM_INGOT || item == ModBlocks.ALUMINUM_BLOCK.asItem()) return ModItems.BAUXITE_DUST;
-        if (item == Items.RAW_IRON || item == Items.IRON_ORE || item == Items.DEEPSLATE_IRON_ORE || item == Items.RAW_IRON_BLOCK || item == Items.IRON_INGOT || item == Items.IRON_BLOCK) return ModItems.IRON_DUST;
-        if (item == Items.RAW_COPPER || item == Items.COPPER_ORE || item == Items.DEEPSLATE_COPPER_ORE || item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_INGOT || item == Items.COPPER_BLOCK) return ModItems.COPPER_DUST;
-        if (item == ModItems.RAW_TIN || item == ModBlocks.TIN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TIN_ORE.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModItems.TIN_INGOT || item == ModBlocks.TIN_BLOCK.asItem()) return ModItems.TIN_DUST;
+        if (item == Items.RAW_IRON || item == Items.IRON_ORE || item == Items.DEEPSLATE_IRON_ORE || item == ModBlocks.NETHER_IRON_ORE.asItem() || item == Items.RAW_IRON_BLOCK || item == Items.IRON_INGOT || item == Items.IRON_BLOCK) return ModItems.IRON_DUST;
+        if (item == Items.RAW_COPPER || item == Items.COPPER_ORE || item == Items.DEEPSLATE_COPPER_ORE || item == ModBlocks.NETHER_COPPER_ORE.asItem() || item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_INGOT || item == Items.COPPER_BLOCK) return ModItems.COPPER_DUST;
+        if (item == ModItems.RAW_TIN || item == ModBlocks.TIN_ORE.asItem() || item == ModBlocks.DEEPSLATE_TIN_ORE.asItem() || item == ModBlocks.NETHER_TIN_ORE.asItem() || item == ModBlocks.RAW_TIN_BLOCK.asItem() || item == ModItems.TIN_INGOT || item == ModBlocks.TIN_BLOCK.asItem()) return ModItems.TIN_DUST;
+        if (item == ModBlocks.NETHER_COAL_ORE.asItem()) return Items.COAL;
+        if (item == ModBlocks.NETHER_REDSTONE_ORE.asItem()) return Items.REDSTONE;
+        if (item == ModBlocks.NETHER_LAPIS_ORE.asItem()) return Items.LAPIS_LAZULI;
         if (item == ModItems.BRONZE_INGOT || item == ModBlocks.BRONZE_BLOCK.asItem()) return ModItems.BRONZE_DUST;
         if (item == ModItems.STEEL_INGOT || item == ModBlocks.STEEL_BLOCK.asItem()) return ModItems.STEEL_DUST;
         if (item == ModItems.RAW_TITANIUM || item == ModBlocks.TITANIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_TITANIUM_ORE.asItem() || item == ModBlocks.RAW_TITANIUM_BLOCK.asItem() || item == ModItems.TITANIUM_INGOT || item == ModBlocks.TITANIUM_BLOCK.asItem()) return ModItems.TITANIUM_DUST;
@@ -290,7 +294,7 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == ModItems.RAW_NEODYMIUM || item == ModBlocks.NEODYMIUM_ORE.asItem() || item == ModBlocks.DEEPSLATE_NEODYMIUM_ORE.asItem() || item == ModItems.NEODYMIUM_MAGNET) return ModItems.NEODYMIUM_DUST;
         if (item == ModItems.MANYULLYN_INGOT || item == ModBlocks.MANYULLYN_BLOCK.asItem()) return ModItems.MANYULLYN_DUST;
         if (item == Items.RAW_GOLD || item == Items.GOLD_ORE || item == Items.DEEPSLATE_GOLD_ORE || item == Items.NETHER_GOLD_ORE || item == Items.RAW_GOLD_BLOCK || item == Items.GOLD_INGOT || item == Items.GOLD_BLOCK) return ModItems.GOLD_DUST;
-        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return ModItems.DIAMOND_DUST;
+        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == ModBlocks.NETHER_DIAMOND_ORE.asItem() || item == Items.DIAMOND || item == Items.DIAMOND_BLOCK) return ModItems.DIAMOND_DUST;
         if (item == Items.ANCIENT_DEBRIS || item == Items.NETHERITE_SCRAP || item == Items.NETHERITE_INGOT || item == Items.NETHERITE_BLOCK || item == ModItems.ENCHANTED_NETHERITE_INGOT || item == ModBlocks.ENCHANTED_NETHERITE_BLOCK.asItem()) return ModItems.NETHERITE_DUST;
         if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD || item == Items.EMERALD_BLOCK) return ModItems.EMERALD_DUST;
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return ModItems.COAL_DUST;

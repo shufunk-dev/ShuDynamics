@@ -290,11 +290,11 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
     private static void registerCrusherRecipes(EmiRegistry registry) {
         int idx = 0;
-        addCrush(registry, idx++, List.of(EmiStack.of(Items.RAW_IRON), EmiStack.of(Items.IRON_ORE), EmiStack.of(Items.DEEPSLATE_IRON_ORE)), EmiStack.of(ModItems.IRON_DUST, 2), "Up to 8× with Blaze Core");
-        addCrush(registry, idx++, List.of(EmiStack.of(Items.RAW_COPPER), EmiStack.of(Items.COPPER_ORE), EmiStack.of(Items.DEEPSLATE_COPPER_ORE)), EmiStack.of(ModItems.COPPER_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.RAW_IRON), EmiStack.of(Items.IRON_ORE), EmiStack.of(Items.DEEPSLATE_IRON_ORE), EmiStack.of(ModBlocks.NETHER_IRON_ORE)), EmiStack.of(ModItems.IRON_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(Items.RAW_COPPER), EmiStack.of(Items.COPPER_ORE), EmiStack.of(Items.DEEPSLATE_COPPER_ORE), EmiStack.of(ModBlocks.NETHER_COPPER_ORE)), EmiStack.of(ModItems.COPPER_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(Items.RAW_GOLD), EmiStack.of(Items.GOLD_ORE), EmiStack.of(Items.DEEPSLATE_GOLD_ORE), EmiStack.of(Items.NETHER_GOLD_ORE)), EmiStack.of(ModItems.GOLD_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_BAUXITE), EmiStack.of(ModBlocks.BAUXITE_ORE), EmiStack.of(ModBlocks.DEEPSLATE_BAUXITE_ORE)), EmiStack.of(ModItems.BAUXITE_DUST, 2), "Up to 8× with Blaze Core");
-        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_TIN), EmiStack.of(ModBlocks.TIN_ORE), EmiStack.of(ModBlocks.DEEPSLATE_TIN_ORE)), EmiStack.of(ModItems.TIN_DUST, 2), "Up to 8× with Blaze Core");
+        addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_TIN), EmiStack.of(ModBlocks.TIN_ORE), EmiStack.of(ModBlocks.DEEPSLATE_TIN_ORE), EmiStack.of(ModBlocks.NETHER_TIN_ORE)), EmiStack.of(ModItems.TIN_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_TITANIUM), EmiStack.of(ModBlocks.TITANIUM_ORE), EmiStack.of(ModBlocks.DEEPSLATE_TITANIUM_ORE)), EmiStack.of(ModItems.TITANIUM_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_COBALT), EmiStack.of(ModBlocks.COBALT_ORE)), EmiStack.of(ModItems.COBALT_DUST, 2), "Up to 8× with Blaze Core");
         addCrush(registry, idx++, List.of(EmiStack.of(ModItems.RAW_ARDITE), EmiStack.of(ModBlocks.ARDITE_ORE)), EmiStack.of(ModItems.ARDITE_DUST, 2), "Up to 8× with Blaze Core");

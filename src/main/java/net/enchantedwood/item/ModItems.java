@@ -1576,6 +1576,13 @@ public class ModItems {
                 entries.add(TUNGSTEN_CHESTPLATE);
                 entries.add(TUNGSTEN_LEGGINGS);
                 entries.add(TUNGSTEN_BOOTS);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_IRON_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_COAL_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_COPPER_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_TIN_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_REDSTONE_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_LAPIS_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHER_DIAMOND_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.NETHER_TUNGSTEN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TUNGSTEN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.RAW_TUNGSTEN_BLOCK);
