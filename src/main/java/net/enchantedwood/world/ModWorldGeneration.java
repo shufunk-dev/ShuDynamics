@@ -239,20 +239,33 @@ public class ModWorldGeneration {
         RegistryKey<net.minecraft.world.biome.Biome> resonanceSanctum =
                 RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"));
 
-        // Standard Vanilla Ores for Convergence Custom Biomes (Coal, Iron, Copper, Gold, Redstone, Diamond, Lapis, Stone Pockets)
+        // Standard Vanilla Ores for Convergence Custom Biomes in exact canonical vanilla order to prevent topological cycle
         String[] vanillaOreIds = {
-                "ore_coal_upper", "ore_coal_lower",
-                "ore_iron_upper", "ore_iron_middle", "ore_iron_small",
-                "ore_copper", "ore_copper_large",
-                "ore_gold", "ore_gold_lower",
-                "ore_redstone", "ore_redstone_lower",
-                "ore_diamond", "ore_diamond_large", "ore_diamond_buried",
-                "ore_lapis", "ore_lapis_buried",
-                "ore_dirt", "ore_gravel",
-                "ore_diorite_upper", "ore_diorite_lower",
-                "ore_granite_upper", "ore_granite_lower",
-                "ore_andesite_upper", "ore_andesite_lower",
-                "ore_tuff"
+                "ore_dirt",
+                "ore_gravel",
+                "ore_diorite_lower",
+                "ore_diorite_upper",
+                "ore_granite_lower",
+                "ore_granite_upper",
+                "ore_andesite_lower",
+                "ore_andesite_upper",
+                "ore_tuff",
+                "ore_coal_upper",
+                "ore_coal_lower",
+                "ore_iron_upper",
+                "ore_iron_middle",
+                "ore_iron_small",
+                "ore_copper_large",
+                "ore_copper",
+                "ore_gold",
+                "ore_gold_lower",
+                "ore_redstone",
+                "ore_redstone_lower",
+                "ore_diamond",
+                "ore_diamond_large",
+                "ore_diamond_buried",
+                "ore_lapis",
+                "ore_lapis_buried"
         };
 
         for (String oreId : vanillaOreIds) {
@@ -261,7 +274,7 @@ public class ModWorldGeneration {
                     Identifier.of("minecraft", oreId)
             );
             BiomeModifications.addFeature(
-                    BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera, resonanceSanctum),
+                    BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera),
                     GenerationStep.Feature.UNDERGROUND_ORES,
                     placedKey
             );
@@ -274,7 +287,7 @@ public class ModWorldGeneration {
                 TIN_ORE_PLACED_KEY
         );
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera, resonanceSanctum),
+                BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 TIN_ORE_PLACED_KEY
         );
