@@ -58,44 +58,46 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
             return false;
         }
 
-        // Deterministic Grid Spacing: 1 village per 384x384 block cell
-        int cellX = Math.floorDiv(origin.getX(), 384);
-        int cellZ = Math.floorDiv(origin.getZ(), 384);
-        int targetX = cellX * 384 + 192;
-        int targetZ = cellZ * 384 + 192;
-
-        if (Math.abs(origin.getX() - targetX) > 16 || Math.abs(origin.getZ() - targetZ) > 16) {
+        // Deterministic Grid Spacing: exactly 1 village per 24x24 chunk cell (384x384 blocks)
+        int chunkX = origin.getX() >> 4;
+        int chunkZ = origin.getZ() >> 4;
+        if (Math.floorMod(chunkX, 24) != 12 || Math.floorMod(chunkZ, 24) != 12) {
             return false;
         }
 
-        int surfaceY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, targetX, targetZ) - 1;
+        // Center precisely at the middle of the generating chunk (dx=8, dz=8)
+        // This guarantees all buildings fit completely within the safe ChunkRegion (±23 blocks)
+        int centerX = (chunkX << 4) + 8;
+        int centerZ = (chunkZ << 4) + 8;
+
+        int surfaceY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, centerX, centerZ) - 1;
         if (surfaceY <= world.getBottomY() + 10 || surfaceY >= world.getTopYInclusive() - 30) {
             return false;
         }
 
-        BlockPos center = new BlockPos(targetX, surfaceY, targetZ);
+        BlockPos center = new BlockPos(centerX, surfaceY, centerZ);
         BlockState centerGround = world.getBlockState(center);
         if (!centerGround.isOf(Blocks.GRASS_BLOCK) && !centerGround.isOf(Blocks.DIRT)) {
             return false;
         }
 
-        // 1. Central Plaza & Town Well
+        // 1. Central Plaza & Town Well (7x7: -3 to +3)
         buildTownSquareAndWell(world, center, random);
 
-        // 2. Chieftain's Hall (North of well, offset z - 14)
-        buildChieftainsHall(world, center.add(-4, 0, -18), random);
+        // 2. Chieftain's Hall (North of well, offset z - 15)
+        buildChieftainsHall(world, center.add(-4, 0, -15), random);
 
-        // 3. Avocado Timber Cottage (East of well, offset x + 14)
-        buildAvocadoCottage(world, center.add(14, 0, -3), random);
+        // 3. Avocado Timber Cottage (East of well, offset x + 9)
+        buildAvocadoCottage(world, center.add(9, 0, -3), random);
 
-        // 4. Starfruit Timber Cottage (West of well, offset x - 18)
-        buildStarfruitCottage(world, center.add(-18, 0, -3), random);
+        // 4. Starfruit Timber Cottage (West of well, offset x - 15)
+        buildStarfruitCottage(world, center.add(-15, 0, -3), random);
 
-        // 5. Farmland Plot (South-West of well, offset x - 14, z + 12)
-        buildFarmlandPlot(world, center.add(-14, 0, 12), random);
+        // 5. Farmland Plot (South-West of well, offset x - 12, z + 7)
+        buildFarmlandPlot(world, center.add(-12, 0, 7), random);
 
-        // 6. Blacksmith Workshop (South of well, offset z + 14)
-        buildBlacksmithWorkshop(world, center.add(-3, 0, 14), random);
+        // 6. Blacksmith Workshop (South of well, offset z + 8)
+        buildBlacksmithWorkshop(world, center.add(-3, 0, 8), random);
 
         // 7. Dirt Path Network connecting all buildings to central square
         buildPathNetwork(world, center);
@@ -496,10 +498,10 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
     private void buildPathNetwork(StructureWorldAccess world, BlockPos center) {
         // Connect center to North (hall), East (cottage), West (cottage), South (blacksmith)
         int[][] targetDeltas = {
-                { 0, -14 },
-                { 10, 0 },
-                { -12, 0 },
-                { 0, 10 }
+                { 0, -11 },
+                { 9, 0 },
+                { -10, 0 },
+                { 0, 8 }
         };
 
         for (int[] delta : targetDeltas) {
