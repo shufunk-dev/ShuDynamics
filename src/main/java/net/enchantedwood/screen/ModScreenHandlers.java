@@ -173,6 +173,18 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet"),
                     new ScreenHandlerType<>(SterileMedicalCabinetScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<CircuitFabricatorScreenHandler> CIRCUIT_FABRICATOR_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator"),
+                    new ScreenHandlerType<>(CircuitFabricatorScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<InductionSmelterScreenHandler> INDUCTION_SMELTER_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "induction_smelter"),
+                    new ScreenHandlerType<>(InductionSmelterScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+    public static final ScreenHandlerType<CastingPortScreenHandler> CASTING_PORT_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "casting_port"),
+                    new ScreenHandlerType<>(CastingPortScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static void registerScreenHandlers() {
         EnchantedWoodMod.LOGGER.info("Registering Screen Handlers for " + EnchantedWoodMod.MOD_ID);
     }

@@ -5,6 +5,9 @@ import net.enchantedwood.block.custom.ReinforcedTankGlassBlock;
 import net.enchantedwood.block.custom.TitaniumTankCasingBlock;
 import net.enchantedwood.block.custom.TitaniumTankInboundPortBlock;
 import net.enchantedwood.fluid.LavaProvider;
+import net.enchantedwood.fluid.MoltenMetal;
+import net.enchantedwood.fluid.MoltenMetalProvider;
+import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.TitaniumTankScreenHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,7 +35,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class TitaniumTankControllerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider {
+import java.util.List;
+
+public class TitaniumTankControllerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider, MoltenMetalProvider {
     public static final int CAPACITY = 500_000; // 500,000 mB = 500 buckets
     public static final int BUCKET_IN_SLOT = 0;
     public static final int BUCKET_OUT_SLOT = 1;
@@ -40,6 +45,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int lavaAmount = 0;
+    private MoltenMetal currentFluid = MoltenMetal.LAVA;
     private boolean isFormed = false;
     private BlockPos minPos = null; // Corner (minX, minY, minZ)
 
@@ -52,6 +58,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                 case 2 -> CAPACITY & 0xFFFF;
                 case 3 -> (CAPACITY >> 16) & 0xFFFF;
                 case 4 -> isFormed ? 1 : 0;
+                case 5 -> currentFluid.ordinal();
                 default -> 0;
             };
         }
@@ -62,12 +69,16 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                 case 0 -> lavaAmount = (lavaAmount & 0xFFFF0000) | (value & 0xFFFF);
                 case 1 -> lavaAmount = (lavaAmount & 0x0000FFFF) | ((value & 0xFFFF) << 16);
                 case 4 -> isFormed = (value == 1);
+                case 5 -> {
+                    MoltenMetal[] metals = MoltenMetal.values();
+                    if (value >= 0 && value < metals.length) currentFluid = metals[value];
+                }
             }
         }
 
         @Override
         public int size() {
-            return 5;
+            return 6;
         }
     };
 
@@ -318,24 +329,26 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     // ==========================================
-    // LAVA PROVIDER IMPLEMENTATION
+    // LAVA & MOLTEN METAL PROVIDER IMPLEMENTATIONS
     // ==========================================
     @Override
     public int getLavaAmount() {
-        return this.isFormed ? this.lavaAmount : 0;
+        return (this.isFormed && this.currentFluid == MoltenMetal.LAVA) ? this.lavaAmount : 0;
     }
 
     @Override
     public int getMaxLava() {
-        return this.isFormed ? CAPACITY : 0;
+        return (this.isFormed && (this.currentFluid == MoltenMetal.LAVA || this.lavaAmount == 0)) ? CAPACITY : 0;
     }
 
     @Override
     public int insertLava(int amount, boolean simulate) {
         if (!this.isFormed || amount <= 0) return 0;
+        if (this.currentFluid != MoltenMetal.NONE && this.currentFluid != MoltenMetal.LAVA && this.lavaAmount > 0) return 0;
         int space = CAPACITY - this.lavaAmount;
         int inserted = Math.min(space, amount);
         if (!simulate && inserted > 0) {
+            this.currentFluid = MoltenMetal.LAVA;
             this.lavaAmount += inserted;
             updateInteriorLavaBlocks();
             markDirty();
@@ -345,14 +358,67 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     @Override
     public int extractLava(int amount, boolean simulate) {
-        if (!this.isFormed || amount <= 0) return 0;
+        if (!this.isFormed || this.currentFluid != MoltenMetal.LAVA || amount <= 0) return 0;
         int extracted = Math.min(this.lavaAmount, amount);
         if (!simulate && extracted > 0) {
             this.lavaAmount -= extracted;
+            if (this.lavaAmount <= 0) {
+                this.currentFluid = MoltenMetal.NONE;
+            }
             updateInteriorLavaBlocks();
             markDirty();
         }
         return extracted;
+    }
+
+    @Override
+    public MoltenMetal getFluidType() {
+        return this.currentFluid;
+    }
+
+    @Override
+    public int getFluidAmount(MoltenMetal metal) {
+        return (this.isFormed && metal == this.currentFluid) ? this.lavaAmount : 0;
+    }
+
+    @Override
+    public int getMaxFluid() {
+        return this.isFormed ? CAPACITY : 0;
+    }
+
+    @Override
+    public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
+        if (!this.isFormed || metal == MoltenMetal.NONE || amount <= 0) return 0;
+        if (this.currentFluid != MoltenMetal.NONE && this.currentFluid != metal && this.lavaAmount > 0) return 0;
+        int space = CAPACITY - this.lavaAmount;
+        int inserted = Math.min(space, amount);
+        if (!simulate && inserted > 0) {
+            this.currentFluid = metal;
+            this.lavaAmount += inserted;
+            updateInteriorLavaBlocks();
+            markDirty();
+        }
+        return inserted;
+    }
+
+    @Override
+    public int extractFluid(MoltenMetal metal, int amount, boolean simulate) {
+        if (!this.isFormed || metal == MoltenMetal.NONE || metal != this.currentFluid || amount <= 0) return 0;
+        int extracted = Math.min(this.lavaAmount, amount);
+        if (!simulate && extracted > 0) {
+            this.lavaAmount -= extracted;
+            if (this.lavaAmount <= 0) {
+                this.currentFluid = MoltenMetal.NONE;
+            }
+            updateInteriorLavaBlocks();
+            markDirty();
+        }
+        return extracted;
+    }
+
+    @Override
+    public List<MoltenMetal> getContainedFluids() {
+        return (this.isFormed && this.currentFluid != MoltenMetal.NONE && this.lavaAmount > 0) ? List.of(this.currentFluid) : List.of();
     }
 
     // ==========================================
@@ -434,6 +500,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     protected void writeData(WriteView view) {
         super.writeData(view);
         view.putInt("LavaAmount", this.lavaAmount);
+        view.putString("FluidType", this.currentFluid.getId());
         view.putBoolean("IsFormed", this.isFormed);
         if (this.minPos != null) {
             view.putInt("MinX", this.minPos.getX());
@@ -447,6 +514,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     protected void readData(ReadView view) {
         super.readData(view);
         this.lavaAmount = view.getInt("LavaAmount", 0);
+        this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "lava"));
         this.isFormed = view.getBoolean("IsFormed", false);
         if (view.contains("MinX") && view.contains("MinY") && view.contains("MinZ")) {
             this.minPos = new BlockPos(view.getInt("MinX", 0), view.getInt("MinY", 0), view.getInt("MinZ", 0));

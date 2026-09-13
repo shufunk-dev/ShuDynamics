@@ -5,6 +5,7 @@ import net.enchantedwood.screen.SuperComputerScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
@@ -16,6 +17,30 @@ public class ModMessages {
         PayloadTypeRegistry.playC2S().register(OpenAtvInventoryPayload.ID, OpenAtvInventoryPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(SetStorageTerminalSearchPayload.ID, SetStorageTerminalSearchPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(OpenModularSuitPanelPayload.ID, OpenModularSuitPanelPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ToggleInductionSmelterAlloyPayload.ID, ToggleInductionSmelterAlloyPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ToggleCastingPortModePayload.ID, ToggleCastingPortModePayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(ToggleInductionSmelterAlloyPayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                if (context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
+                    BlockEntity be = context.player().getEntityWorld().getBlockEntity(payload.pos());
+                    if (be instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelter) {
+                        smelter.setAlloyingEnabled(!smelter.isAlloyingEnabled());
+                    }
+                }
+            });
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(ToggleCastingPortModePayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                if (context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
+                    BlockEntity be = context.player().getEntityWorld().getBlockEntity(payload.pos());
+                    if (be instanceof net.enchantedwood.block.entity.CastingPortBlockEntity port) {
+                        port.cycleMode();
+                    }
+                }
+            });
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(OpenModularSuitPanelPayload.ID, (payload, context) -> {
             context.server().execute(() -> {

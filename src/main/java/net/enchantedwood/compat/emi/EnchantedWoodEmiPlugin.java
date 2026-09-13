@@ -28,8 +28,26 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier COKE_OVEN_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/coke_oven_gui.png");
     public static final Identifier CHEMICAL_SYNTHESIZER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/chemical_synthesizer_gui.png");
     public static final Identifier POLYMER_LOOM_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/polymer_loom_gui.png");
+    public static final Identifier CIRCUIT_FABRICATOR_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/circuit_fabricator_gui.png");
+    public static final Identifier INDUCTION_SMELTER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/induction_smelter_gui.png");
+    public static final Identifier CASTING_PORT_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/casting_port_gui.png");
 
     // Categories
+    public static final EmiRecipeCategory CIRCUIT_FABRICATOR = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator"),
+            EmiStack.of(ModBlocks.CIRCUIT_FABRICATOR)
+    );
+
+    public static final EmiRecipeCategory INDUCTION_SMELTER = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "induction_smelter"),
+            EmiStack.of(ModBlocks.INDUCTION_SMELTER)
+    );
+
+    public static final EmiRecipeCategory CASTING_PORT = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "casting_port"),
+            EmiStack.of(ModBlocks.CASTING_PORT)
+    );
+
     public static final EmiRecipeCategory ALLOY_FOUNDRY = new EmiRecipeCategory(
             Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry"),
             EmiStack.of(ModBlocks.ALLOY_FOUNDRY)
@@ -105,8 +123,14 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(INDUSTRIAL_CENTRIFUGE);
         registry.addCategory(CHEMICAL_SYNTHESIZER);
         registry.addCategory(POLYMER_LOOM);
+        registry.addCategory(CIRCUIT_FABRICATOR);
+        registry.addCategory(INDUCTION_SMELTER);
+        registry.addCategory(CASTING_PORT);
 
         // Register Workstations (Catalysts)
+        registry.addWorkstation(CIRCUIT_FABRICATOR, EmiStack.of(ModBlocks.CIRCUIT_FABRICATOR));
+        registry.addWorkstation(INDUCTION_SMELTER, EmiStack.of(ModBlocks.INDUCTION_SMELTER));
+        registry.addWorkstation(CASTING_PORT, EmiStack.of(ModBlocks.CASTING_PORT));
         registry.addWorkstation(ALLOY_FOUNDRY, EmiStack.of(ModBlocks.ALLOY_FOUNDRY));
         registry.addWorkstation(CRUSHER, EmiStack.of(ModBlocks.CRUSHER));
         registry.addWorkstation(CRUSHER, EmiStack.of(ModBlocks.CRUSHER_MK2));
@@ -202,6 +226,15 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         // 11. Chemical Synthesizer Recipes
         registerSynthesizerRecipes(registry);
+
+        // 12. Circuit Fabricator Recipes
+        registerCircuitFabricatorRecipes(registry);
+
+        // 13. Induction Smelter Recipes
+        registerInductionSmelterRecipes(registry);
+
+        // 14. Casting Port Recipes
+        registerCastingPortRecipes(registry);
     }
 
     private static void registerHydraulicPressRecipes(EmiRegistry registry) {
@@ -865,4 +898,229 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             }
         }
     }
+
+    public static class CircuitFabricatorEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient substrate;
+        private final EmiIngredient comp1;
+        private final EmiIngredient comp2;
+        private final EmiIngredient comp3;
+        private final EmiStack output;
+        private final String note;
+
+        public CircuitFabricatorEmiRecipe(Identifier id, EmiIngredient substrate, EmiIngredient comp1, EmiIngredient comp2, EmiIngredient comp3, EmiStack output, String note) {
+            this.id = id;
+            this.substrate = substrate;
+            this.comp1 = comp1;
+            this.comp2 = comp2;
+            this.comp3 = comp3;
+            this.output = output;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return CIRCUIT_FABRICATOR; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(substrate, comp1, comp2, comp3); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 64; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Authentic Circuit Fabricator background panel
+            widgets.addTexture(CIRCUIT_FABRICATOR_GUI, 0, 0, 142, 64, 8, 12);
+            // Energy Storage Bar (illuminated)
+            widgets.addTexture(CIRCUIT_FABRICATOR_GUI, 2, 6, 12, 50, 176, 0);
+            // Animated fabrication laser
+            widgets.addAnimatedTexture(CIRCUIT_FABRICATOR_GUI, 80, 22, 24, 17, 188, 0, 2500, true, false, false);
+            // Substrate slot at x=34-8=26, y=35-12=23
+            widgets.addSlot(substrate, 26, 23).drawBack(false);
+            // 3 component slots at x=64-8=56, y=17-12=5, 23, 41
+            widgets.addSlot(comp1, 56, 5).drawBack(false);
+            widgets.addSlot(comp2, 56, 23).drawBack(false);
+            widgets.addSlot(comp3, 56, 41).drawBack(false);
+            // Output slot at x=124-8=116, y=35-12=23
+            widgets.addSlot(output, 116, 23).recipeContext(this).drawBack(false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§8" + note), 24, 56, 0x555555, false);
+            }
+        }
+    }
+
+    private static void registerCircuitFabricatorRecipes(EmiRegistry registry) {
+        int idx = 0;
+        // 1. Basic Computer Chip
+        registry.addRecipe(new CircuitFabricatorEmiRecipe(
+                Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fab_" + idx++),
+                EmiStack.of(ModItems.SILICON_WAFER),
+                EmiStack.of(Items.COPPER_INGOT),
+                EmiStack.of(Items.GOLD_NUGGET),
+                EmiStack.of(Items.REDSTONE),
+                EmiStack.of(ModItems.BASIC_COMPUTER_CHIP),
+                "Tier 1 Micro-Controller"
+        ));
+        // 2. Advanced Computer Chip
+        registry.addRecipe(new CircuitFabricatorEmiRecipe(
+                Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fab_" + idx++),
+                EmiStack.of(ModItems.BASIC_COMPUTER_CHIP),
+                EmiStack.of(Items.DIAMOND),
+                EmiStack.of(Items.GLOWSTONE_DUST),
+                EmiStack.of(Items.LAPIS_LAZULI),
+                EmiStack.of(ModItems.ADVANCED_COMPUTER_CHIP),
+                "Tier 2 Environmental Processor"
+        ));
+        // 3. Quantum Computer Chip
+        registry.addRecipe(new CircuitFabricatorEmiRecipe(
+                Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fab_" + idx++),
+                EmiStack.of(ModItems.ADVANCED_COMPUTER_CHIP),
+                EmiStack.of(ModItems.NETHERITE_DUST),
+                EmiStack.of(Items.BLAZE_POWDER),
+                EmiStack.of(ModItems.ENCHANTED_DUST),
+                EmiStack.of(ModItems.QUANTUM_COMPUTER_CHIP),
+                "Tier 3 Quantum Core"
+        ));
+        // 4. Metallurgy Controller Chip
+        registry.addRecipe(new CircuitFabricatorEmiRecipe(
+                Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fab_" + idx++),
+                EmiStack.of(ModItems.SILICON_WAFER),
+                EmiStack.of(Items.GOLD_INGOT),
+                EmiStack.of(Items.REDSTONE),
+                EmiStack.of(ModItems.ZIRCONIA_NODULE),
+                EmiStack.of(ModItems.METALLURGY_CONTROLLER_CHIP),
+                "Industrial Alloying Logic Module"
+        ));
+    }
+
+    public static class InductionSmelterEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient input;
+        private final EmiStack outputStack;
+        private final String fluidYield;
+        private final String note;
+
+        public InductionSmelterEmiRecipe(Identifier id, EmiIngredient input, EmiStack outputStack, String fluidYield, String note) {
+            this.id = id;
+            this.input = input;
+            this.outputStack = outputStack;
+            this.fluidYield = fluidYield;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return INDUCTION_SMELTER; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(input); }
+        @Override public List<EmiStack> getOutputs() { return List.of(outputStack); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 64; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            widgets.addTexture(INDUCTION_SMELTER_GUI, 0, 0, 142, 64, 15, 14);
+            // Energy bar (illuminated)
+            widgets.addTexture(INDUCTION_SMELTER_GUI, 10, 4, 12, 50, 188, 0);
+            // Flame animation
+            widgets.addAnimatedTexture(INDUCTION_SMELTER_GUI, 61, 28, 24, 17, 200, 0, 2000, true, false, false);
+            // Input slot
+            widgets.addSlot(input, 36, 12).drawBack(false);
+            // Output stack / fluid proxy
+            widgets.addSlot(outputStack, 95, 20).recipeContext(this).drawBack(false);
+            widgets.addText(Text.literal("§6" + fluidYield), 36, 42, 0xFFAA00, false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§8" + note), 20, 54, 0x555555, false);
+            }
+        }
+    }
+
+    private static void registerInductionSmelterRecipes(EmiRegistry registry) {
+        int idx = 0;
+        // Armor & Loot Reclaim
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.IRON_CHESTPLATE))), EmiStack.of(Items.IRON_INGOT, 8), "720 mB Molten Iron", "100% Dungeon Gear Reclaim"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GOLDEN_CHESTPLATE))), EmiStack.of(Items.GOLD_INGOT, 8), "720 mB Molten Gold", "100% Dungeon Gear Reclaim"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.IRON_HORSE_ARMOR), EmiStack.of(Items.GOLDEN_HORSE_ARMOR))), EmiStack.of(Items.IRON_INGOT, 7), "630 mB Metal", "Horse Armor Reclaim"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.ANVIL), EmiStack.of(Items.CHIPPED_ANVIL), EmiStack.of(Items.DAMAGED_ANVIL))), EmiStack.of(Items.IRON_BLOCK, 3), "2,790 mB Iron", "Full 31 Ingot Reclaim"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.IRON_SWORD), EmiStack.of(Items.GOLDEN_SWORD))), EmiStack.of(Items.IRON_INGOT, 2), "180 mB Metal", "Weapon Melting"));
+        // Primary Ingots
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.IRON_INGOT))), EmiStack.of(Items.IRON_INGOT), "90 mB Molten Iron", "Standard Ingot Smelt"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.GOLD_INGOT))), EmiStack.of(Items.GOLD_INGOT), "90 mB Molten Gold", "Standard Ingot Smelt"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.COPPER_INGOT))), EmiStack.of(Items.COPPER_INGOT), "90 mB Molten Copper", "Standard Ingot Smelt"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TIN_INGOT))), EmiStack.of(ModItems.TIN_INGOT), "90 mB Molten Tin", "Standard Ingot Smelt"));
+        registry.addRecipe(new InductionSmelterEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "smelt_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.TITANIUM_INGOT))), EmiStack.of(ModItems.TITANIUM_INGOT), "90 mB Molten Titanium", "Standard Ingot Smelt"));
+    }
+
+    public static class CastingPortEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient fluidInput;
+        private final EmiStack output;
+        private final String cost;
+
+        public CastingPortEmiRecipe(Identifier id, EmiIngredient fluidInput, EmiStack output, String cost) {
+            this.id = id;
+            this.fluidInput = fluidInput;
+            this.output = output;
+            this.cost = cost;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return CASTING_PORT; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(fluidInput); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 142; }
+        @Override public int getDisplayHeight() { return 56; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            widgets.addTexture(CASTING_PORT_GUI, 0, 0, 142, 56, 25, 14);
+            // Solidify progress
+            widgets.addAnimatedTexture(CASTING_PORT_GUI, 47, 20, 24, 17, 176, 0, 1000, true, false, false);
+            widgets.addSlot(fluidInput, 11, 20).drawBack(false);
+            widgets.addSlot(output, 90, 20).recipeContext(this).drawBack(false);
+            widgets.addText(Text.literal("§b" + cost), 40, 42, 0x00BCD4, false);
+        }
+    }
+
+    private static void registerCastingPortRecipes(EmiRegistry registry) {
+        int idx = 0;
+        // Nuggets (10 mB)
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.IRON_INGOT), EmiStack.of(Items.IRON_NUGGET), "10 mB Molten Iron -> Nugget"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.GOLD_INGOT), EmiStack.of(Items.GOLD_NUGGET), "10 mB Molten Gold -> Nugget"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.COPPER_INGOT), EmiStack.of(ModItems.COPPER_NUGGET), "10 mB Molten Copper -> Nugget"));
+        // Ingots (90 mB)
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.IRON_NUGGET), EmiStack.of(Items.IRON_INGOT), "90 mB Molten Iron -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.GOLD_NUGGET), EmiStack.of(Items.GOLD_INGOT), "90 mB Molten Gold -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.COPPER_NUGGET), EmiStack.of(Items.COPPER_INGOT), "90 mB Molten Copper -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.TIN_NUGGET), EmiStack.of(ModItems.TIN_INGOT), "90 mB Molten Tin -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.BRONZE_NUGGET), EmiStack.of(ModItems.BRONZE_INGOT), "90 mB Molten Bronze -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.STEEL_NUGGET), EmiStack.of(ModItems.STEEL_INGOT), "90 mB Molten Steel -> Ingot"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.TITANIUM_NUGGET), EmiStack.of(ModItems.TITANIUM_INGOT), "90 mB Molten Titanium -> Ingot"));
+        // Blocks (810 mB)
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.IRON_INGOT), EmiStack.of(Items.IRON_BLOCK), "810 mB Molten Iron -> Block"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.GOLD_INGOT), EmiStack.of(Items.GOLD_BLOCK), "810 mB Molten Gold -> Block"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(Items.COPPER_INGOT), EmiStack.of(Items.COPPER_BLOCK), "810 mB Molten Copper -> Block"));
+        registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
+                EmiStack.of(ModItems.BRONZE_INGOT), EmiStack.of(ModBlocks.BRONZE_BLOCK), "810 mB Molten Bronze -> Block"));
+    }
 }
+

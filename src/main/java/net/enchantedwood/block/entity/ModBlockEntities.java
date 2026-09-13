@@ -292,6 +292,27 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(DustSmelterMk2BlockEntity::new, ModBlocks.DUST_SMELTER_MK2).build()
             );
 
+    public static final BlockEntityType<CircuitFabricatorBlockEntity> CIRCUIT_FABRICATOR_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator"),
+                    FabricBlockEntityTypeBuilder.create(CircuitFabricatorBlockEntity::new, ModBlocks.CIRCUIT_FABRICATOR).build()
+            );
+
+    public static final BlockEntityType<InductionSmelterBlockEntity> INDUCTION_SMELTER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "induction_smelter"),
+                    FabricBlockEntityTypeBuilder.create(InductionSmelterBlockEntity::new, ModBlocks.INDUCTION_SMELTER).build()
+            );
+
+    public static final BlockEntityType<CastingPortBlockEntity> CASTING_PORT_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "casting_port"),
+                    FabricBlockEntityTypeBuilder.create(CastingPortBlockEntity::new, ModBlocks.CASTING_PORT).build()
+            );
+
     public static final BlockEntityType<SoilInfuserBlockEntity> SOIL_INFUSER_BE =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "P": "minecraft:piston",
+    "H": "minecraft:hopper",
+    "S": "enchantedwood:steel_ingot"
+  },
+  "pattern": [
+    "TST",
+    "TPT",
+    " H "
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:casting_port"
+  }
+}

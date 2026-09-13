@@ -768,6 +768,13 @@ public class ModItems {
             Text.literal("§f• Spatial distortion dampening & gravity stabilization"),
             Text.literal("§8Required for elite deep-dimension Power Suit modules.")
     ));
+    public static final Item METALLURGY_CONTROLLER_CHIP = registerItem("metallurgy_controller_chip", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.fireproof(),
+            Text.literal("§6⚡ Industrial Metallurgy Logic Chip"),
+            Text.literal("§7Installs into the Induction Smelter to unlock thermal alloying:"),
+            Text.literal("§f• Enables high-precision stoichiometric synthesis of Bronze, Steel & Manyullyn"),
+            Text.literal("§8Fabricated in the Circuit Fabricator.")
+    ));
 
     // Modular Power Suit (ShuDynamics 2.0)
     public static final Item MODULAR_POWER_HELMET = registerItem("modular_power_helmet", settings ->
@@ -1345,12 +1352,16 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.DIGITAL_CONVERTER);
                 entries.add(net.enchantedwood.block.ModBlocks.SUPER_COMPUTER);
 
-                // Microelectronics & Computer Chips (ShuDynamics 2.0)
+                // Microelectronics & Industrial Metallurgy (ShuDynamics 2.0)
                 entries.add(SILICON);
                 entries.add(SILICON_WAFER);
                 entries.add(BASIC_COMPUTER_CHIP);
                 entries.add(ADVANCED_COMPUTER_CHIP);
                 entries.add(QUANTUM_COMPUTER_CHIP);
+                entries.add(METALLURGY_CONTROLLER_CHIP);
+                entries.add(net.enchantedwood.block.ModBlocks.CIRCUIT_FABRICATOR);
+                entries.add(net.enchantedwood.block.ModBlocks.INDUCTION_SMELTER);
+                entries.add(net.enchantedwood.block.ModBlocks.CASTING_PORT);
                 entries.add(net.enchantedwood.block.ModBlocks.POWERED_ANVIL);
 
                 entries.add(net.enchantedwood.block.ModBlocks.LASER_QUARRY);
@@ -1852,6 +1863,14 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.DECONTAMINATION_AIRLOCK_DOOR);
                 entries.add(net.enchantedwood.block.ModBlocks.STERILE_CLEANROOM_LAMP);
                 entries.add(net.enchantedwood.block.ModBlocks.STERILE_MEDICAL_CABINET);
+
+                // Microelectronics & Semiconductor Fabrication
+                entries.add(SILICON);
+                entries.add(SILICON_WAFER);
+                entries.add(BASIC_COMPUTER_CHIP);
+                entries.add(ADVANCED_COMPUTER_CHIP);
+                entries.add(QUANTUM_COMPUTER_CHIP);
+                entries.add(METALLURGY_CONTROLLER_CHIP);
 
                 // Modular Power Suit & Exosuit Modules
                 entries.add(MODULAR_POWER_HELMET);

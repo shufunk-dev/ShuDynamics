@@ -103,23 +103,59 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(Items.CROSSBOW, 1, 140, new ItemStack(Items.STICK, 3), new ItemStack(Items.STRING, 2), new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Items.TRIPWIRE_HOOK, 1));
         registerRecipe(Items.TRIPWIRE_HOOK, 2, 80, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Items.STICK, 1), new ItemStack(Items.OAK_PLANKS, 1));
 
-        // 6. Mod Armors
+        // 6. Vanilla Gold & Iron Armors, Weapons & Dungeon Loot (Partial Reclaim)
+        registerVanillaMetalRecipes();
+
+        // 7. Mod Armors
         registerModArmorRecipes();
 
-        // 7. Mod Tools, Weapons & Sledgehammers
+        // 8. Mod Tools, Weapons & Sledgehammers
         registerModToolRecipes();
 
-        // 8. Gears (Standard & Enchanted)
+        // 9. Gears (Standard & Enchanted)
         registerModGearRecipes();
 
-        // 9. Vehicles, ATV Components & Trunks
+        // 10. Vehicles, ATV Components & Trunks
         registerModVehicleRecipes();
 
-        // 10. Batteries, Logistics, Crystals & Tech Equipment
+        // 11. Batteries, Logistics, Crystals & Tech Equipment
         registerModTechAndLogisticsRecipes();
 
-        // 11. Machinery, Generators, Tanks & Anchors
+        // 12. Machinery, Generators, Tanks & Anchors
         registerModMachineAndAnchorRecipes();
+    }
+
+    private static void registerVanillaMetalRecipes() {
+        // Golden Armor (Partial Reclaim: ~60-70% return)
+        registerRecipe(Items.GOLDEN_HELMET, 1, 100, new ItemStack(Items.GOLD_INGOT, 3), new ItemStack(Items.GOLD_NUGGET, 4));
+        registerRecipe(Items.GOLDEN_CHESTPLATE, 1, 160, new ItemStack(Items.GOLD_INGOT, 5), new ItemStack(Items.GOLD_NUGGET, 6));
+        registerRecipe(Items.GOLDEN_LEGGINGS, 1, 140, new ItemStack(Items.GOLD_INGOT, 4), new ItemStack(Items.GOLD_NUGGET, 5));
+        registerRecipe(Items.GOLDEN_BOOTS, 1, 80, new ItemStack(Items.GOLD_INGOT, 2), new ItemStack(Items.GOLD_NUGGET, 4));
+
+        // Golden Weapons & Tools
+        registerRecipe(Items.GOLDEN_SWORD, 1, 80, new ItemStack(Items.GOLD_INGOT, 1), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.GOLDEN_PICKAXE, 1, 100, new ItemStack(Items.GOLD_INGOT, 2), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.GOLDEN_AXE, 1, 100, new ItemStack(Items.GOLD_INGOT, 2), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.GOLDEN_SHOVEL, 1, 60, new ItemStack(Items.GOLD_INGOT, 1));
+        registerRecipe(Items.GOLDEN_HOE, 1, 80, new ItemStack(Items.GOLD_INGOT, 1), new ItemStack(Items.STICK, 1));
+
+        // Golden Miscellaneous Loot
+        registerRecipe(Items.CLOCK, 1, 80, new ItemStack(Items.GOLD_INGOT, 3), new ItemStack(Items.REDSTONE, 1));
+        registerRecipe(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 1, 60, new ItemStack(Items.GOLD_INGOT, 1), new ItemStack(Items.GOLD_NUGGET, 5));
+        registerRecipe(Items.BELL, 1, 140, new ItemStack(Items.GOLD_INGOT, 3), new ItemStack(Items.STONE, 1));
+
+        // Iron Armor (Partial Reclaim: ~60-70% return)
+        registerRecipe(Items.IRON_HELMET, 1, 100, new ItemStack(Items.IRON_INGOT, 3), new ItemStack(Items.IRON_NUGGET, 4));
+        registerRecipe(Items.IRON_CHESTPLATE, 1, 160, new ItemStack(Items.IRON_INGOT, 5), new ItemStack(Items.IRON_NUGGET, 6));
+        registerRecipe(Items.IRON_LEGGINGS, 1, 140, new ItemStack(Items.IRON_INGOT, 4), new ItemStack(Items.IRON_NUGGET, 5));
+        registerRecipe(Items.IRON_BOOTS, 1, 80, new ItemStack(Items.IRON_INGOT, 2), new ItemStack(Items.IRON_NUGGET, 4));
+
+        // Iron Weapons & Tools
+        registerRecipe(Items.IRON_SWORD, 1, 80, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.IRON_PICKAXE, 1, 100, new ItemStack(Items.IRON_INGOT, 2), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.IRON_AXE, 1, 100, new ItemStack(Items.IRON_INGOT, 2), new ItemStack(Items.STICK, 1));
+        registerRecipe(Items.IRON_SHOVEL, 1, 60, new ItemStack(Items.IRON_INGOT, 1));
+        registerRecipe(Items.IRON_HOE, 1, 80, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Items.STICK, 1));
     }
 
     private static void registerModArmorRecipes() {

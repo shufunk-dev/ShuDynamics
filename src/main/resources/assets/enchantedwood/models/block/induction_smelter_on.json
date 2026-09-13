@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "enchantedwood:block/induction_smelter_top",
+    "bottom": "enchantedwood:block/induction_smelter_bottom",
+    "front": "enchantedwood:block/induction_smelter_front_on",
+    "side": "enchantedwood:block/induction_smelter_side"
+  }
+}

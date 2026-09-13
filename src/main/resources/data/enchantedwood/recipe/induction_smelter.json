@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "F": "enchantedwood:fire_crystal",
+    "B": "minecraft:blast_furnace",
+    "C": "enchantedwood:copper_cable",
+    "S": "enchantedwood:steel_ingot"
+  },
+  "pattern": [
+    "TST",
+    "CBC",
+    "TFT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:induction_smelter"
+  }
+}

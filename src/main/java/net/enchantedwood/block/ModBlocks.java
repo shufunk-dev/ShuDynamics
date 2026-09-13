@@ -864,8 +864,42 @@ public class ModBlocks {
                     .resistance(12.0f)
                     .requiresTool()
                     .luminance(state -> state.get(net.enchantedwood.block.custom.DustSmelterMk2Block.LIT) ? 13 : 0)),
-            Text.literal("§6Industrial Dust Smelter MK2"),
-            Text.literal("§8Dual-Chamber Parallel Smelting + Gear Acceleration."));
+            Text.literal("§6Automated Dust Smelter MK2"),
+            Text.literal("§8Dual high-speed smelting chambers for mineral dusts and raw metal chunks."));
+
+    public static final Block CIRCUIT_FABRICATOR = registerBlockWithTooltip("circuit_fabricator",
+            new net.enchantedwood.block.custom.CircuitFabricatorBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.CircuitFabricatorBlock.LIT) ? 13 : 0)),
+            Text.literal("§6Precision Circuit Fabricator"),
+            Text.literal("§8High-precision workstation for assembling microchips, logic cores & controller modules."));
+
+    public static final Block INDUCTION_SMELTER = registerBlockWithTooltip("induction_smelter",
+            new net.enchantedwood.block.custom.InductionSmelterBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "induction_smelter")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(5.0f)
+                    .resistance(12.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.InductionSmelterBlock.LIT) ? 14 : 0)),
+            Text.literal("§6Dual-Powered Induction Smeltery"),
+            Text.literal("§7Heated by Lava + FE Induction coils. Melts scrap, armor & tools with 100% metal value return."),
+            Text.literal("§8Sockets Metallurgy Controller Chip to unlock precise thermal alloy synthesis."));
+
+    public static final Block CASTING_PORT = registerBlockWithTooltip("casting_port",
+            new net.enchantedwood.block.custom.CastingPortBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "casting_port")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()),
+            Text.literal("§6Automated Casting Access Port"),
+            Text.literal("§7Solidifies molten metals into clean stackable Nuggets (10 mB), Ingots (90 mB), or Blocks (810 mB)."),
+            Text.literal("§8Sneak-click with empty hand to cycle mold modes. Auto-ejects into adjacent containers."));
 
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()

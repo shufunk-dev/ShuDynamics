@@ -1,6 +1,8 @@
 package net.enchantedwood.block.entity;
 
 import net.enchantedwood.fluid.LavaProvider;
+import net.enchantedwood.fluid.MoltenMetal;
+import net.enchantedwood.fluid.MoltenMetalProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +16,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaProvider, NamedScreenHandlerFactory {
+import java.util.List;
+
+public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaProvider, MoltenMetalProvider, NamedScreenHandlerFactory {
     private BlockPos masterPos = null;
 
     public TitaniumTankCasingBlockEntity(BlockPos pos, BlockState state) {
@@ -91,6 +95,43 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
     @Override
     public boolean canExtractLava() {
         return isValidOutboundPort() && getMaster() != null && getMaster().canExtractLava();
+    }
+
+    // Molten Metal Provider logic: delegates to master controller
+    @Override
+    public MoltenMetal getFluidType() {
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.getFluidType() : MoltenMetal.NONE;
+    }
+
+    @Override
+    public int getFluidAmount(MoltenMetal metal) {
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.getFluidAmount(metal) : 0;
+    }
+
+    @Override
+    public int getMaxFluid() {
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.getMaxFluid() : 0;
+    }
+
+    @Override
+    public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
+        return 0; // Casings are outbound only
+    }
+
+    @Override
+    public int extractFluid(MoltenMetal metal, int amount, boolean simulate) {
+        if (!isValidOutboundPort()) return 0;
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.extractFluid(metal, amount, simulate) : 0;
+    }
+
+    @Override
+    public List<MoltenMetal> getContainedFluids() {
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.getContainedFluids() : List.of();
     }
 
     @Override

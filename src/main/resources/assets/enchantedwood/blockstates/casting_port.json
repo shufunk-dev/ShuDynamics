@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "enchantedwood:block/casting_port" },
+    "facing=east":  { "model": "enchantedwood:block/casting_port", "y": 90 },
+    "facing=south": { "model": "enchantedwood:block/casting_port", "y": 180 },
+    "facing=west":  { "model": "enchantedwood:block/casting_port", "y": 270 }
+  }
+}

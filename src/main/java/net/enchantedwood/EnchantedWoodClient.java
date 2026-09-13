@@ -68,6 +68,9 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.CHEMICAL_SYNTHESIZER_SCREEN_HANDLER, net.enchantedwood.screen.ChemicalSynthesizerScreen::new);
         HandledScreens.register(ModScreenHandlers.POLYMER_LOOM_SCREEN_HANDLER, net.enchantedwood.screen.PolymerLoomScreen::new);
         HandledScreens.register(ModScreenHandlers.STERILE_MEDICAL_CABINET_SCREEN_HANDLER, net.enchantedwood.screen.SterileMedicalCabinetScreen::new);
+        HandledScreens.register(ModScreenHandlers.CIRCUIT_FABRICATOR_SCREEN_HANDLER, net.enchantedwood.screen.CircuitFabricatorScreen::new);
+        HandledScreens.register(ModScreenHandlers.INDUCTION_SMELTER_SCREEN_HANDLER, net.enchantedwood.screen.InductionSmelterScreen::new);
+        HandledScreens.register(ModScreenHandlers.CASTING_PORT_SCREEN_HANDLER, net.enchantedwood.screen.CastingPortScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);

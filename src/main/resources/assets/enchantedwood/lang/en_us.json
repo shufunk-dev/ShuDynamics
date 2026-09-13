@@ -743,5 +743,19 @@
   "item.enchantedwood.sterile_cleanroom_lamp": "Sterile Cleanroom Lamp",
   "block.enchantedwood.sterile_medical_cabinet": "Sterile Medical Cabinet",
   "item.enchantedwood.sterile_medical_cabinet": "Sterile Medical Cabinet",
-  "container.enchantedwood.sterile_medical_cabinet": "Sterile Medical Cabinet"
+  "container.enchantedwood.sterile_medical_cabinet": "Sterile Medical Cabinet",
+  "block.enchantedwood.circuit_fabricator": "Precision Circuit Fabricator",
+  "item.enchantedwood.circuit_fabricator": "Precision Circuit Fabricator",
+  "container.enchantedwood.circuit_fabricator": "Precision Circuit Fabricator",
+  "item.enchantedwood.metallurgy_controller_chip": "Metallurgy Controller Chip",
+  "block.enchantedwood.induction_smelter": "Dual-Powered Induction Smeltery",
+  "item.enchantedwood.induction_smelter": "Dual-Powered Induction Smeltery",
+  "container.enchantedwood.induction_smelter": "Dual-Powered Induction Smeltery",
+  "block.enchantedwood.casting_port": "Automated Casting Access Port",
+  "item.enchantedwood.casting_port": "Automated Casting Access Port",
+  "container.enchantedwood.casting_port": "Automated Casting Access Port",
+  "item.enchantedwood.copper_nugget": "Copper Nugget",
+  "item.enchantedwood.tin_nugget": "Tin Nugget",
+  "item.enchantedwood.bronze_nugget": "Bronze Nugget",
+  "item.enchantedwood.titanium_nugget": "Titanium Nugget"
 }

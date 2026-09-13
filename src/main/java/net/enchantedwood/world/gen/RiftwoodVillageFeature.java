@@ -5,6 +5,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.enums.StairShape;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.enums.BedPart;
+import net.minecraft.block.Block;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.block.entity.BlockEntity;
@@ -168,6 +171,16 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         world.setBlockState(pos.up(), upper, 2);
     }
 
+    private void placeBed(StructureWorldAccess world, BlockPos footPos, Direction facing, Block bedBlock) {
+        BlockPos headPos = footPos.offset(facing);
+        world.setBlockState(footPos, bedBlock.getDefaultState()
+                .with(BedBlock.PART, BedPart.FOOT)
+                .with(BedBlock.FACING, facing), 2);
+        world.setBlockState(headPos, bedBlock.getDefaultState()
+                .with(BedBlock.PART, BedPart.HEAD)
+                .with(BedBlock.FACING, facing), 2);
+    }
+
     private void buildChieftainsHall(StructureWorldAccess world, BlockPos pos, Random random) {
         int width = 9;
         int length = 7;
@@ -243,10 +256,10 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         BlockPos doorPos = start.add(width / 2, 1, length - 1);
         placeDoor(world, doorPos, Direction.SOUTH);
 
-        // Interior: Furniture & Loot
-        world.setBlockState(start.add(1, 1, 1), Blocks.RED_BED.getDefaultState(), 2);
+        // Interior: Furniture & Loot (Full 2-block beds with Head against back wall)
+        placeBed(world, start.add(1, 1, 2), Direction.NORTH, Blocks.RED_BED);
         world.setBlockState(start.add(2, 1, 1), Blocks.CRAFTING_TABLE.getDefaultState(), 2);
-        world.setBlockState(start.add(width - 2, 1, 1), Blocks.PURPLE_BED.getDefaultState(), 2);
+        placeBed(world, start.add(width - 2, 1, 2), Direction.NORTH, Blocks.PURPLE_BED);
 
         // Chieftain's Loot Chest
         BlockPos chestPos = start.add(width - 3, 1, 1);
@@ -333,8 +346,8 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         // Full 2-block Spruce Door
         placeDoor(world, start.add(0, 1, length / 2), Direction.WEST);
 
-        // Interior
-        world.setBlockState(start.add(width - 2, 1, 1), Blocks.WHITE_BED.getDefaultState(), 2);
+        // Interior (Full 2-block White Bed)
+        placeBed(world, start.add(width - 2, 1, 2), Direction.NORTH, Blocks.WHITE_BED);
         world.setBlockState(start.add(width - 2, 1, length - 2), Blocks.CRAFTING_TABLE.getDefaultState(), 2);
         world.setBlockState(start.add(width / 2, height, length / 2), Blocks.LANTERN.getDefaultState().with(net.minecraft.block.LanternBlock.HANGING, true), 2);
     }
@@ -408,8 +421,8 @@ public class RiftwoodVillageFeature extends Feature<DefaultFeatureConfig> {
         // Full 2-block Spruce Door
         placeDoor(world, start.add(width - 1, 1, length / 2), Direction.EAST);
 
-        // Interior
-        world.setBlockState(start.add(1, 1, 1), Blocks.YELLOW_BED.getDefaultState(), 2);
+        // Interior (Full 2-block Yellow Bed)
+        placeBed(world, start.add(1, 1, 2), Direction.NORTH, Blocks.YELLOW_BED);
         world.setBlockState(start.add(1, 1, length - 2), Blocks.FURNACE.getDefaultState(), 2);
         world.setBlockState(start.add(width / 2, height, length / 2), Blocks.LANTERN.getDefaultState().with(net.minecraft.block.LanternBlock.HANGING, true), 2);
     }
