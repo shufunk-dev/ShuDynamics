@@ -39,6 +39,24 @@
         "state": {
           "Name": "enchantedwood:hafnium_ore"
         }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:smooth_basalt"
+        },
+        "state": {
+          "Name": "enchantedwood:hafnium_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:magma_block"
+        },
+        "state": {
+          "Name": "enchantedwood:hafnium_ore"
+        }
       }
     ]
   }

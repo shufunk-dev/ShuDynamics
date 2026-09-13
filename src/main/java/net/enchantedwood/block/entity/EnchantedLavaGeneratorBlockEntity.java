@@ -23,12 +23,13 @@ import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock;
+import net.enchantedwood.fluid.LavaProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.EnchantedLavaGeneratorScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
-public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
+public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
 
     private int cookTime = 0;
@@ -291,5 +292,40 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
     @Override
     public void clear() {
         inventory.clear();
+    }
+
+    @Override
+    public int getLavaAmount() {
+        return this.lavaAmount;
+    }
+
+    @Override
+    public int getMaxLava() {
+        return MAX_LAVA;
+    }
+
+    @Override
+    public int insertLava(int amount, boolean simulate) {
+        return 0; // Only exports lava
+    }
+
+    @Override
+    public boolean canInsertLava() {
+        return false;
+    }
+
+    @Override
+    public int extractLava(int amount, boolean simulate) {
+        int extracted = Math.min(this.lavaAmount, amount);
+        if (!simulate && extracted > 0) {
+            this.lavaAmount -= extracted;
+            markDirty();
+        }
+        return extracted;
+    }
+
+    @Override
+    public boolean canExtractLava() {
+        return this.lavaAmount > 0;
     }
 }

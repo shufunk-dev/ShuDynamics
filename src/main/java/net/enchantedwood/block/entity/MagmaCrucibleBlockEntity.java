@@ -234,6 +234,19 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreen
         if (item == ModItems.FIRE_CRYSTAL) {
             return new CrucibleResult(1000, ModItems.SULFUR_DUST, 4);
         }
+        if (item == Items.COBBLESTONE || item == Items.STONE || item == Items.STONE_BRICKS ||
+                item == Items.MOSSY_COBBLESTONE || item == Items.MOSSY_STONE_BRICKS ||
+                item == Items.DEEPSLATE || item == Items.COBBLED_DEEPSLATE || item == Items.POLISHED_DEEPSLATE ||
+                item == Items.DEEPSLATE_BRICKS || item == Items.DEEPSLATE_TILES ||
+                item == Items.ANDESITE || item == Items.POLISHED_ANDESITE ||
+                item == Items.DIORITE || item == Items.POLISHED_DIORITE ||
+                item == Items.GRANITE || item == Items.POLISHED_GRANITE ||
+                item == Items.TUFF || item == Items.POLISHED_TUFF ||
+                item == Items.CALCITE || item == Items.DRIPSTONE_BLOCK ||
+                item == Items.SANDSTONE || item == Items.RED_SANDSTONE ||
+                item == Items.TERRACOTTA) {
+            return new CrucibleResult(100, ModItems.VOLCANIC_ASH, 1);
+        }
         return null;
     }
 

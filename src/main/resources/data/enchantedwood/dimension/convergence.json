@@ -78,8 +78,8 @@
               1.2
             ],
             "continentalness": [
-              -0.2,
-              0.3
+              0.0,
+              0.4
             ],
             "erosion": [
               -0.3,
@@ -100,20 +100,20 @@
           "biome": "enchantedwood:scorched_caldera",
           "parameters": {
             "temperature": [
-              0.9,
-              1.8
+              0.4,
+              1.2
             ],
             "humidity": [
-              -1.2,
-              -0.3
+              -1.0,
+              -0.2
             ],
             "continentalness": [
-              -0.3,
-              0.6
+              0.3,
+              0.9
             ],
             "erosion": [
-              -0.4,
-              0.4
+              -0.8,
+              -0.1
             ],
             "weirdness": [
               -0.3,
