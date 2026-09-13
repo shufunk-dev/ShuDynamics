@@ -111,6 +111,7 @@ public class ResonanceFrameValidator {
             }
 
             if (!world.isClient() && world instanceof ServerWorld serverWorld) {
+                net.enchantedwood.world.dimension.ConvergencePortalManager.registerGateway(serverWorld, bottomLeft);
                 for (BlockPos pos : interiorPositions) {
                     serverWorld.spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 12, 0.3, 0.4, 0.3, 0.05);
                     serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 15, 0.4, 0.5, 0.4, 0.1);

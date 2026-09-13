@@ -28,6 +28,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.enchantedwood.block.ModBlocks;
+import net.enchantedwood.world.dimension.ConvergencePortalManager;
 import net.enchantedwood.world.dimension.ModDimensions;
 
 import java.util.Map;
@@ -39,7 +40,6 @@ public class DormantRiftBlock extends Block {
     public static final MapCodec<DormantRiftBlock> CODEC = createCodec(DormantRiftBlock::new);
     public static final EnumProperty<Direction.Axis> AXIS = Properties.HORIZONTAL_AXIS;
 
-    private static final Map<UUID, BlockPos> OVERWORLD_RETURN_POINTS = new ConcurrentHashMap<>();
     private static final Identifier RIFTWOOD_HAVEN_ID = Identifier.of("enchantedwood", "riftwood_haven");
     private static final Identifier CHERRY_GROVE_ID = Identifier.of("minecraft", "cherry_grove");
 
@@ -88,6 +88,12 @@ public class DormantRiftBlock extends Block {
     }
 
     @Override
+    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+        ConvergencePortalManager.unregisterGateway(world, pos);
+        super.onStateReplaced(state, world, pos, moved);
+    }
+
+    @Override
     protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean isInside) {
         if (world.isClient() || entity.hasVehicle() || entity.hasPassengers() || !entity.canUsePortals(false)) {
             return;
@@ -123,11 +129,11 @@ public class DormantRiftBlock extends Block {
         int targetY = Math.max(targetWorld.getBottomY() + 10, Math.min(targetWorld.getTopYInclusive() - 20, portalPos.getY()));
 
         if (toConvergence) {
-            // Save the exact Overworld entry portal so the player returns home cleanly
-            OVERWORLD_RETURN_POINTS.put(player.getUuid(), portalPos);
+            // Save the exact Overworld entry portal to persistent storage so the player returns home cleanly
+            ConvergencePortalManager.setPlayerReturnPoint(targetWorld.getServer(), player.getUuid(), portalPos);
 
-            // Check if there is already an existing active sanctuary in Convergence
-            BlockPos existingSanctuary = findExistingConvergencePortal(targetWorld);
+            // Check if there is already an existing active gateway in Convergence
+            BlockPos existingSanctuary = ConvergencePortalManager.findExistingPortal(targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUuid(), false);
             if (existingSanctuary != null) {
                 targetX = existingSanctuary.getX();
                 targetZ = existingSanctuary.getZ();
@@ -138,8 +144,8 @@ public class DormantRiftBlock extends Block {
                 targetZ = safeSpot.getZ();
             }
         } else {
-            // Returning to Overworld: retrieve saved return portal if available
-            BlockPos savedReturn = OVERWORLD_RETURN_POINTS.get(player.getUuid());
+            // Returning to Overworld: retrieve saved return portal from persistent storage
+            BlockPos savedReturn = ConvergencePortalManager.getPlayerReturnPoint(targetWorld.getServer(), player.getUuid());
             if (savedReturn != null) {
                 targetX = savedReturn.getX();
                 targetZ = savedReturn.getZ();
@@ -147,23 +153,9 @@ public class DormantRiftBlock extends Block {
             }
         }
 
-        // 1. Search for existing portal in target world within 24 blocks of target
-        BlockPos existingPortalPos = null;
-        for (int dx = -24; dx <= 24; dx++) {
-            for (int dz = -24; dz <= 24; dz++) {
-                for (int dy = -16; dy <= 16; dy++) {
-                    BlockPos check = new BlockPos(targetX + dx, targetY + dy, targetZ + dz);
-                    if (targetWorld.isChunkLoaded(check.getX() >> 4, check.getZ() >> 4)) {
-                        if (targetWorld.getBlockState(check).isOf(this)) {
-                            existingPortalPos = check;
-                            break;
-                        }
-                    }
-                }
-                if (existingPortalPos != null) break;
-            }
-            if (existingPortalPos != null) break;
-        }
+        // Search for existing portal in target world (persistent registry + 128-block radius)
+        BlockPos existingPortalPos = ConvergencePortalManager.findExistingPortal(
+                targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUuid(), !toConvergence);
 
         double spawnX;
         double spawnY;
@@ -213,17 +205,6 @@ public class DormantRiftBlock extends Block {
         }
 
         targetWorld.playSound(null, spawnX, spawnY, spawnZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.8f, 1.2f);
-    }
-
-    private BlockPos findExistingConvergencePortal(ServerWorld convergenceWorld) {
-        for (BlockPos pos : net.enchantedwood.event.ConvergenceHazardHandler.SANCTUARY_CENTERS) {
-            if (convergenceWorld.getBlockState(pos).isOf(this) ||
-                    convergenceWorld.getBlockState(pos.up()).isOf(this) ||
-                    convergenceWorld.getBlockState(pos.down()).isOf(this)) {
-                return pos;
-            }
-        }
-        return null;
     }
 
     private BlockPos findSafeConvergenceSpawn(ServerWorld world, int originX, int originZ) {
@@ -416,8 +397,9 @@ public class DormantRiftBlock extends Block {
         BlockPos lightPos2 = basePos.offset(widthDir, 3).offset(depthDir, 2).up(0);
         world.setBlockState(lightPos2, Blocks.LANTERN.getDefaultState());
 
-        // Register sanctuary center
+        // Register sanctuary center and gateway
         net.enchantedwood.event.ConvergenceHazardHandler.registerSanctuary(basePos);
+        ConvergencePortalManager.registerGateway(world, basePos);
     }
 
     @Override
