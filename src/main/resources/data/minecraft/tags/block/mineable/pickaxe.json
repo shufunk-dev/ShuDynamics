@@ -119,6 +119,10 @@
     "enchantedwood:gowning_airlock_door",
     "enchantedwood:decontamination_airlock_door",
     "enchantedwood:sterile_cleanroom_lamp",
-    "enchantedwood:sterile_medical_cabinet"
+    "enchantedwood:sterile_medical_cabinet",
+    "enchantedwood:circuit_fabricator",
+    "enchantedwood:induction_smelter",
+    "enchantedwood:casting_port",
+    "enchantedwood:polymer_loom"
   ]
 }

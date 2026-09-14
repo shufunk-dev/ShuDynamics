@@ -118,5 +118,17 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
                     Text.literal(String.format("§7Progress: §f%d%%", progress))
             ), mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id == 0) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§b❄ Solidified Cast Product"),
+                    Text.literal("§7Outputs solidified metal items:"),
+                    Text.literal("§f• Nuggets (10 mB)"),
+                    Text.literal("§f• Ingots (90 mB)"),
+                    Text.literal("§f• Blocks (810 mB)"),
+                    Text.literal("§8Automatically pushes into adjacent chests, hoppers, or pipes.")
+            ), mouseX, mouseY);
+        }
     }
 }

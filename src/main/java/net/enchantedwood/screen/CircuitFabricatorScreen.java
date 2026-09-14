@@ -71,8 +71,49 @@ public class CircuitFabricatorScreen extends HandledScreen<CircuitFabricatorScre
             int cookProgress = this.handler.getScaledCookProgress(100);
             context.drawTooltip(this.textRenderer, List.of(
                     Text.literal("§b⚡ Circuit Fabrication Laser"),
-                    Text.literal(String.format("§7Progress: §f%d%%", cookProgress))
+                    Text.literal(String.format("§7Progress: §f%d%%", cookProgress)),
+                    Text.literal("§8Aligns components and sinters microscopic silicon traces.")
             ), mouseX, mouseY);
+        }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 6) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§b💿 Semiconductor Substrate"),
+                        Text.literal("§7Insert: §fSilicon Wafer §7(Basic/Metallurgy),"),
+                        Text.literal("§7        §fBasic Chip §7(for Advanced),"),
+                        Text.literal("§7        §fAdvanced Chip §7(for Quantum)"),
+                        Text.literal("§8Foundation silicon wafer etched by the precision laser.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e⚡ Conductor Component"),
+                        Text.literal("§7Insert: §fCopper Ingot, Diamond, Netherite Dust, or Gold Ingot"),
+                        Text.literal("§8Conductive trace element for circuit pathways.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6✨ Logic & Semiconductor Gate"),
+                        Text.literal("§7Insert: §fGold Nugget, Glowstone Dust, Blaze Powder, or Redstone"),
+                        Text.literal("§8Transistor gate and logic frequency modulator.")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§a🔮 Signal & Dielectric Enhancer"),
+                        Text.literal("§7Insert: §fRedstone, Lapis Lazuli, Enchanted Dust, or Zirconia Nodule"),
+                        Text.literal("§8Stabilizing dielectric flux for micro-architecture.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§d💾 Fabricated Microchip / Processor"),
+                        Text.literal("§7Outputs finished microcontrollers:"),
+                        Text.literal("§f• Basic, Advanced, Quantum Computer Chips"),
+                        Text.literal("§6• Metallurgy Controller Chip"),
+                        Text.literal("§8Laser-sintered integrated circuits.")
+                ), mouseX, mouseY);
+                case 5 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙ Overclock & Gear Socket"),
+                        Text.literal("§7Accepts: §fCopper..Diamond Gears §7or §6Blaze Overclock Core"),
+                        Text.literal("§8Accelerates laser fabrication speed up to 4.0×.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

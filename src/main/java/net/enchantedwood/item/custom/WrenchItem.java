@@ -138,7 +138,11 @@ public class WrenchItem extends Item {
                         player.sendMessage(Text.literal("§6[Wrench] §a✨ Laser Quarry linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
                     } else {
                         // Dismantle if no network stored
-                        world.breakBlock(pos, true, player);
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
                         world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
                         player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
                     }
@@ -161,7 +165,11 @@ public class WrenchItem extends Item {
                         player.sendMessage(Text.literal("§6[Wrench] §a✨ Digital Converter linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
                     } else {
                         // Dismantle if no network stored
-                        world.breakBlock(pos, true, player);
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
                         world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
                         player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
                     }
@@ -172,7 +180,11 @@ public class WrenchItem extends Item {
             // 3. General Shift + Right-Click Dismantle on mod blocks
             if (state.getBlock().asItem() != null && state.getHardness(world, pos) >= 0) {
                 if (!world.isClient()) {
-                    world.breakBlock(pos, true, player);
+                    ItemStack dropStack = new ItemStack(block.asItem());
+                    if (!player.getInventory().insertStack(dropStack)) {
+                        Block.dropStack(world, pos, dropStack);
+                    }
+                    world.breakBlock(pos, false, player);
                     world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
                 }

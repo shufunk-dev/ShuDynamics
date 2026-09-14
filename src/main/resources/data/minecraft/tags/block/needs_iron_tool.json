@@ -24,6 +24,10 @@
     "enchantedwood:tantalum_ore",
     "enchantedwood:deepslate_tantalum_ore",
     "enchantedwood:neodymium_ore",
-    "enchantedwood:deepslate_neodymium_ore"
+    "enchantedwood:deepslate_neodymium_ore",
+    "enchantedwood:circuit_fabricator",
+    "enchantedwood:induction_smelter",
+    "enchantedwood:casting_port",
+    "enchantedwood:polymer_loom"
   ]
 }

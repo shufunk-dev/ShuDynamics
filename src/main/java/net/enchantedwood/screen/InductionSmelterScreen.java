@@ -157,5 +157,49 @@ public class InductionSmelterScreen extends HandledScreen<InductionSmelterScreen
                     Text.literal("§8Click to toggle automatic alloy synthesis.")
             ), mouseX, mouseY);
         }
+
+        // Empty Machine Slot Tooltips
+        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 6) {
+            switch (this.focusedSlot.id) {
+                case 0 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§c🔥 Metal Liquefaction Chamber (Primary)"),
+                        Text.literal("§7Accepts: §fOres, Raw Chunks, Ingots, Nuggets, Blocks,"),
+                        Text.literal("§7         §fSwords, Tools, Armor, Horse Armor, Anvils, Chains"),
+                        Text.literal("§a• 100% Zero-Loss Metal Value Reclaim:"),
+                        Text.literal("§f  Nugget = 10 mB | Ingot = 90 mB | Block = 810 mB"),
+                        Text.literal("§8Melts directly into internal multi-fluid reservoir.")
+                ), mouseX, mouseY);
+                case 1 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§e🔥 Secondary Metal Feed / Alloying Flux"),
+                        Text.literal("§7Accepts: §fSecondary metal stream for continuous melting"),
+                        Text.literal("§7         §for stoichiometric alloying (e.g. Tin to pair with Copper)"),
+                        Text.literal("§8Liquefies simultaneously without chamber clogging.")
+                ), mouseX, mouseY);
+                case 2 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚡ Metallurgy Controller Socket"),
+                        Text.literal("§7Insert: §eMetallurgy Controller Chip"),
+                        Text.literal("§f• Unlocks the interactive §a[ALLOY: ON / OFF] §fbutton"),
+                        Text.literal("§f• Enables stoichiometric thermal alloying reactions:"),
+                        Text.literal("§7  30 mB Cu + 10 mB Sn -> 40 mB Bronze"),
+                        Text.literal("§7  10 mB Co + 10 mB Ar -> 20 mB Manyullyn")
+                ), mouseX, mouseY);
+                case 3 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§6⚙ Smelter Induction Overclock Socket"),
+                        Text.literal("§7Accepts: §fCopper..Diamond Gears §7or §6Blaze Overclock Core"),
+                        Text.literal("§8Overclocks thermal coils up to 4.0× smelting speed.")
+                ), mouseX, mouseY);
+                case 4 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§c🔥 Thermal Fuel Intake"),
+                        Text.literal("§7Insert: §fLava Bucket §7(Iron, Copper, or Enchanted)"),
+                        Text.literal("§7Fills internal 10,000 mB thermal lava reservoir."),
+                        Text.literal("§8(Consumes 5 mB per smelting cycle)")
+                ), mouseX, mouseY);
+                case 5 -> context.drawTooltip(this.textRenderer, List.of(
+                        Text.literal("§7🪣 Empty Fuel Bucket Return"),
+                        Text.literal("§7Outputs emptied buckets after thermal refueling."),
+                        Text.literal("§8Can be extracted automatically with pipes or hoppers.")
+                ), mouseX, mouseY);
+            }
+        }
     }
 }

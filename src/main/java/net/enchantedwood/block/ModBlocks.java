@@ -875,8 +875,13 @@ public class ModBlocks {
                     .resistance(10.0f)
                     .requiresTool()
                     .luminance(state -> state.get(net.enchantedwood.block.custom.CircuitFabricatorBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Precision Circuit Fabricator"),
-            Text.literal("§8High-precision workstation for assembling microchips, logic cores & controller modules."));
+            Text.literal("§b✦ Precision Circuit Fabricator ✦"),
+            Text.literal("§7Semiconductor laser sintering & microchip workstation."),
+            Text.literal("§e• Energy: §f50,000 FE buffer (35 FE/t draw)"),
+            Text.literal("§6• Gear Socket: §fAccepts Copper..Diamond Gears & Blaze Overclock (up to 4.0×)"),
+            Text.literal("§a• Slot Layout: §fSubstrate (Wafer/Chip) + 3 Components ➔ Output Chip"),
+            Text.literal("§d• Works independently in or outside Cleanroom facilities."),
+            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block INDUCTION_SMELTER = registerBlockWithTooltip("induction_smelter",
             new net.enchantedwood.block.custom.InductionSmelterBlock(AbstractBlock.Settings.create()
@@ -886,9 +891,13 @@ public class ModBlocks {
                     .resistance(12.0f)
                     .requiresTool()
                     .luminance(state -> state.get(net.enchantedwood.block.custom.InductionSmelterBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Dual-Powered Induction Smeltery"),
-            Text.literal("§7Heated by Lava + FE Induction coils. Melts scrap, armor & tools with 100% metal value return."),
-            Text.literal("§8Sockets Metallurgy Controller Chip to unlock precise thermal alloy synthesis."));
+            Text.literal("§c✦ Dual-Powered Induction Smeltery ✦"),
+            Text.literal("§7100% Zero-loss metal liquefaction & metallurgical alloyer."),
+            Text.literal("§c• Dual-Power: §f10,000 mB Lava (5 mB/cycle) + 50,000 FE (45 FE/t)"),
+            Text.literal("§e• 100% Reclaim: §fNugget=10 mB | Ingot=90 mB | Block=810 mB"),
+            Text.literal("§d• Multi-Fluid Reservoir: §fHolds 32,400 mB molten metals simultaneously"),
+            Text.literal("§6• Chip Socket: §fInstall Metallurgy Controller Chip for [ALLOY: ON/OFF]"),
+            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block CASTING_PORT = registerBlockWithTooltip("casting_port",
             new net.enchantedwood.block.custom.CastingPortBlock(AbstractBlock.Settings.create()
@@ -897,9 +906,12 @@ public class ModBlocks {
                     .hardness(4.0f)
                     .resistance(8.0f)
                     .requiresTool()),
-            Text.literal("§6Automated Casting Access Port"),
-            Text.literal("§7Solidifies molten metals into clean stackable Nuggets (10 mB), Ingots (90 mB), or Blocks (810 mB)."),
-            Text.literal("§8Sneak-click with empty hand to cycle mold modes. Auto-ejects into adjacent containers."));
+            Text.literal("§6✦ Automated Casting Access Port ✦"),
+            Text.literal("§7Direct-attach mold solidifier for Smelters, Tanks & Pipes."),
+            Text.literal("§b• Fluid Intake: §f2,000 mB molten metal buffer"),
+            Text.literal("§e• Mold Selector: §fCycle Ingot (90 mB), Block (810 mB), or Nugget (10 mB)"),
+            Text.literal("§a• Auto-Extraction: §fPassively pushes products into adjacent containers"),
+            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
             new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
