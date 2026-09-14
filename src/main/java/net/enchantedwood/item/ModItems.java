@@ -1864,14 +1864,6 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.STERILE_CLEANROOM_LAMP);
                 entries.add(net.enchantedwood.block.ModBlocks.STERILE_MEDICAL_CABINET);
 
-                // Microelectronics & Semiconductor Fabrication
-                entries.add(SILICON);
-                entries.add(SILICON_WAFER);
-                entries.add(BASIC_COMPUTER_CHIP);
-                entries.add(ADVANCED_COMPUTER_CHIP);
-                entries.add(QUANTUM_COMPUTER_CHIP);
-                entries.add(METALLURGY_CONTROLLER_CHIP);
-
                 // Modular Power Suit & Exosuit Modules
                 entries.add(MODULAR_POWER_HELMET);
                 entries.add(MODULAR_POWER_CHESTPLATE);
