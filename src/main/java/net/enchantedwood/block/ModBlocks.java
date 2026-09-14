@@ -875,7 +875,7 @@ public class ModBlocks {
                     .resistance(10.0f)
                     .requiresTool()
                     .luminance(state -> state.get(net.enchantedwood.block.custom.CircuitFabricatorBlock.LIT) ? 13 : 0)),
-            Text.literal("§b✦ Precision Circuit Fabricator ✦"),
+            Text.literal("§b✦ Circuit Fabricator ✦"),
             Text.literal("§7Semiconductor laser sintering & microchip workstation."),
             Text.literal("§e• Energy: §f50,000 FE buffer (35 FE/t draw)"),
             Text.literal("§6• Gear Socket: §fAccepts Copper..Diamond Gears & Blaze Overclock (up to 4.0×)"),
