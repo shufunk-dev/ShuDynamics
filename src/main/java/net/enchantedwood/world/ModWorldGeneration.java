@@ -77,6 +77,18 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> RIFT_CHASM_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "rift_chasm"));
 
+    public static final Feature<DefaultFeatureConfig> VOLCANIC_CALDERA_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_caldera"),
+            new net.enchantedwood.world.gen.VolcanicCalderaFeature(DefaultFeatureConfig.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> VOLCANIC_CALDERA_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_caldera"));
+
+    public static final RegistryKey<PlacedFeature> VOLCANIC_CALDERA_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_caldera"));
+
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> STARFRUIT_TREE_KEY =
@@ -351,6 +363,13 @@ public class ModWorldGeneration {
                 BiomeSelectors.includeByKey(riftwoodHaven),
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 RIFTWOOD_VILLAGE_PLACED_KEY
+        );
+
+        // Scorched Caldera Volcanic Strata, Peaks & Active Lava Craters
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(scorchedCaldera),
+                GenerationStep.Feature.SURFACE_STRUCTURES,
+                VOLCANIC_CALDERA_PLACED_KEY
         );
 
         // Fractured Nether Incursions in Convergence: Overworld Cave Carvers & Nether Terrain/Ores
