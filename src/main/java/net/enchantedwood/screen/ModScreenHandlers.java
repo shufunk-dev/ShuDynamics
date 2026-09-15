@@ -92,6 +92,10 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver"),
                     new ScreenHandlerType<>(RoadPaverScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<RoadPaverMk2ScreenHandler> ROAD_PAVER_MK2_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver_mk2"),
+                    new ScreenHandlerType<>(RoadPaverMk2ScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
     public static final ScreenHandlerType<AtvScreenHandler> ATV_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "atv"),
                     new ScreenHandlerType<>(AtvScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));

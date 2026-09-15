@@ -1737,6 +1737,7 @@ public class ModItems {
                 entries.add(HIGH_OCTANE_FUEL_CANISTER);
                 entries.add(net.enchantedwood.block.ModBlocks.FUEL_REFINERY);
                 entries.add(net.enchantedwood.block.ModBlocks.ROAD_PAVER);
+                entries.add(net.enchantedwood.block.ModBlocks.ROAD_PAVER_MK2);
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK);
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
                 entries.add(net.enchantedwood.block.ModBlocks.CONCRETE_CURB);

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TPT",
+    "SRS",
+    "PBP"
+  ],
+  "key": {
+    "T": "enchantedwood:titanium_ingot",
+    "P": "minecraft:piston",
+    "S": "enchantedwood:steel_gear",
+    "R": "enchantedwood:road_paver",
+    "B": "minecraft:stone_bricks"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:road_paver_mk2"
+  }
+}

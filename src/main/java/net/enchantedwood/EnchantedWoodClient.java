@@ -46,6 +46,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.STEEL_BATTERY_SCREEN_HANDLER, net.enchantedwood.screen.SteelBatteryScreen::new);
         HandledScreens.register(ModScreenHandlers.FUEL_REFINERY_SCREEN_HANDLER, net.enchantedwood.screen.FuelRefineryScreen::new);
         HandledScreens.register(ModScreenHandlers.ROAD_PAVER_SCREEN_HANDLER, net.enchantedwood.screen.RoadPaverScreen::new);
+        HandledScreens.register(ModScreenHandlers.ROAD_PAVER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.RoadPaverMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.ATV_SCREEN_HANDLER, net.enchantedwood.screen.AtvScreen::new);
         HandledScreens.register(ModScreenHandlers.VEHICLE_FABRICATOR_SCREEN_HANDLER, net.enchantedwood.screen.VehicleFabricatorScreen::new);
 

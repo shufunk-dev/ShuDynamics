@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,paving=false": {
+      "model": "enchantedwood:block/road_paver_mk2"
+    },
+    "facing=east,paving=false": {
+      "model": "enchantedwood:block/road_paver_mk2",
+      "y": 90
+    },
+    "facing=south,paving=false": {
+      "model": "enchantedwood:block/road_paver_mk2",
+      "y": 180
+    },
+    "facing=west,paving=false": {
+      "model": "enchantedwood:block/road_paver_mk2",
+      "y": 270
+    },
+    "facing=north,paving=true": {
+      "model": "enchantedwood:block/road_paver_mk2_on"
+    },
+    "facing=east,paving=true": {
+      "model": "enchantedwood:block/road_paver_mk2_on",
+      "y": 90
+    },
+    "facing=south,paving=true": {
+      "model": "enchantedwood:block/road_paver_mk2_on",
+      "y": 180
+    },
+    "facing=west,paving=true": {
+      "model": "enchantedwood:block/road_paver_mk2_on",
+      "y": 270
+    }
+  }
+}

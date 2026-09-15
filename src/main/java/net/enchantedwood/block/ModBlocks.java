@@ -758,6 +758,17 @@ public class ModBlocks {
             Text.literal("§7Autonomous highway construction crawler. Consumes §e50 FE/step§7."),
             Text.literal("§8Clears a 3-wide path, lays Asphalt foundation, and advances forward."));
 
+    public static final Block ROAD_PAVER_MK2 = registerBlockWithTooltip("road_paver_mk2",
+            new net.enchantedwood.block.custom.RoadPaverMk2Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver_mk2")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(5.0f)
+                    .resistance(10.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverMk2Block.PAVING) ? 12 : 0)),
+            Text.literal("§bHeavy Bridge & Viaduct Paver. Consumes §e80 FE/step §7+ §6Gasoline§7."),
+            Text.literal("§8Paves a 5-wide roadway and casts automatic support pillars over chasms & water."));
+
     public static final Block VEHICLE_FABRICATOR = registerBlockWithTooltip("vehicle_fabricator",
             new net.enchantedwood.block.custom.VehicleFabricatorBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "vehicle_fabricator")))

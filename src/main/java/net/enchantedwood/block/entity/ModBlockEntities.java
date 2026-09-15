@@ -214,6 +214,13 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(RoadPaverBlockEntity::new, ModBlocks.ROAD_PAVER).build()
             );
 
+    public static final BlockEntityType<RoadPaverMk2BlockEntity> ROAD_PAVER_MK2_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver_mk2"),
+                    FabricBlockEntityTypeBuilder.create(RoadPaverMk2BlockEntity::new, ModBlocks.ROAD_PAVER_MK2).build()
+            );
+
     public static final BlockEntityType<VehicleFabricatorBlockEntity> VEHICLE_FABRICATOR_BLOCK_ENTITY =
             Registry.register(
                     Registries.BLOCK_ENTITY_TYPE,
