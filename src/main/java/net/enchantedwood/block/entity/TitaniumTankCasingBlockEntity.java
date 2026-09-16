@@ -63,7 +63,8 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     public boolean isValidOutboundPort() {
         TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null && master.isFormed();
+        if (master == null || !master.isFormed()) return false;
+        return this.pos.getY() < master.getPos().getY();
     }
 
     // Outbound Lava Provider logic: delegates to master controller

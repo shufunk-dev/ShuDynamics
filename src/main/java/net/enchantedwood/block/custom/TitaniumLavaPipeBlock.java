@@ -129,10 +129,16 @@ public class TitaniumLavaPipeBlock extends BlockWithEntity {
             return true;
         }
 
-        // 6. Titanium Tank Casing: connect if formed
+        // 6. Titanium Tank Casing: only allow connections to formed side or bottom casings (never roof)
         BlockEntity be = world.getBlockEntity(neighborPos);
         if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
-            return casingBE.getMaster() != null;
+            net.enchantedwood.block.entity.TitaniumTankControllerBlockEntity master = casingBE.getMaster();
+            if (master == null || !master.isFormed()) return false;
+            // Roof casings are at master's Y-level: never connect to roof casings
+            if (neighborPos.getY() >= master.getPos().getY()) {
+                return false;
+            }
+            return true;
         }
 
         // 7. Any other block entity implementing LavaProvider or MoltenMetalProvider (Lava Pump, Magma Crucible)
