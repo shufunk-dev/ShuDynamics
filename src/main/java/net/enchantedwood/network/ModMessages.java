@@ -18,6 +18,7 @@ public class ModMessages {
         PayloadTypeRegistry.playC2S().register(SetStorageTerminalSearchPayload.ID, SetStorageTerminalSearchPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(OpenModularSuitPanelPayload.ID, OpenModularSuitPanelPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleInductionSmelterAlloyPayload.ID, ToggleInductionSmelterAlloyPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(InductionSmelterActionPayload.ID, InductionSmelterActionPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleCastingPortModePayload.ID, ToggleCastingPortModePayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(ToggleInductionSmelterAlloyPayload.ID, (payload, context) -> {
@@ -34,6 +35,28 @@ public class ModMessages {
                 }
                 if (smelter != null) {
                     smelter.setAlloyingEnabled(!smelter.isAlloyingEnabled());
+                }
+            });
+        });
+
+        ServerPlayNetworking.registerGlobalReceiver(InductionSmelterActionPayload.ID, (payload, context) -> {
+            context.server().execute(() -> {
+                net.enchantedwood.block.entity.InductionSmelterBlockEntity smelter = null;
+                if (context.player().currentScreenHandler instanceof net.enchantedwood.screen.InductionSmelterScreenHandler handler
+                        && handler.getInventory() instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelterBe) {
+                    smelter = smelterBe;
+                } else if (payload.pos() != null && context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
+                    BlockEntity be = context.player().getEntityWorld().getBlockEntity(payload.pos());
+                    if (be instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelterBe) {
+                        smelter = smelterBe;
+                    }
+                }
+                if (smelter != null) {
+                    switch (payload.action()) {
+                        case 0 -> smelter.setAlloyingEnabled(!smelter.isAlloyingEnabled());
+                        case 1 -> smelter.purgeHoldingTanks();
+                        case 2 -> smelter.toggleEjectHoldingTanks();
+                    }
                 }
             });
         });

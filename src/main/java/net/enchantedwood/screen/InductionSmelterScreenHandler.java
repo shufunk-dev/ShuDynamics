@@ -20,7 +20,7 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public InductionSmelterScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(InductionSmelterBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(18));
+        this(syncId, playerInventory, new SimpleInventory(InductionSmelterBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(27));
     }
 
     public InductionSmelterScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -93,14 +93,33 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
     }
 
     public boolean isSmelting() {
+        return isSmeltingSlot1() || isSmeltingSlot2();
+    }
+
+    public boolean isSmeltingSlot1() {
         return propertyDelegate.get(0) > 0;
     }
 
-    public int getScaledCookProgress(int pixels) {
+    public boolean isSmeltingSlot2() {
+        return propertyDelegate.get(18) > 0;
+    }
+
+    public int getScaledCookProgress1(int pixels) {
         int cookTime = propertyDelegate.get(0);
         int totalCookTime = propertyDelegate.get(1);
         if (totalCookTime <= 0) return 0;
         return (int) (((long) cookTime * pixels) / totalCookTime);
+    }
+
+    public int getScaledCookProgress2(int pixels) {
+        int cookTime = propertyDelegate.get(18);
+        int totalCookTime = propertyDelegate.get(19);
+        if (totalCookTime <= 0) return 0;
+        return (int) (((long) cookTime * pixels) / totalCookTime);
+    }
+
+    public int getScaledCookProgress(int pixels) {
+        return Math.max(getScaledCookProgress1(pixels), getScaledCookProgress2(pixels));
     }
 
     public int getEnergy() {
@@ -164,6 +183,48 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
             return metals[ord];
         }
         return MoltenMetal.NONE;
+    }
+
+    public MoltenMetal getTank1Metal() {
+        int ord = this.propertyDelegate.get(20);
+        MoltenMetal[] metals = MoltenMetal.values();
+        if (ord >= 0 && ord < metals.length) {
+            return metals[ord];
+        }
+        return MoltenMetal.NONE;
+    }
+
+    public int getTank1Amount() {
+        return (this.propertyDelegate.get(21) & 0xFFFF) | ((this.propertyDelegate.get(22) & 0xFFFF) << 16);
+    }
+
+    public int getScaledTank1(int pixels) {
+        int amt = getTank1Amount();
+        if (amt <= 0) return 0;
+        return Math.min(pixels, (int) (((long) amt * pixels) / InductionSmelterBlockEntity.HOLDING_TANK_CAPACITY));
+    }
+
+    public MoltenMetal getTank2Metal() {
+        int ord = this.propertyDelegate.get(23);
+        MoltenMetal[] metals = MoltenMetal.values();
+        if (ord >= 0 && ord < metals.length) {
+            return metals[ord];
+        }
+        return MoltenMetal.NONE;
+    }
+
+    public int getTank2Amount() {
+        return (this.propertyDelegate.get(24) & 0xFFFF) | ((this.propertyDelegate.get(25) & 0xFFFF) << 16);
+    }
+
+    public int getScaledTank2(int pixels) {
+        int amt = getTank2Amount();
+        if (amt <= 0) return 0;
+        return Math.min(pixels, (int) (((long) amt * pixels) / InductionSmelterBlockEntity.HOLDING_TANK_CAPACITY));
+    }
+
+    public boolean isEjectingHoldingTanks() {
+        return this.propertyDelegate.get(26) == 1;
     }
 
     @Override

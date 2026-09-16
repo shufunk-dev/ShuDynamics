@@ -54,6 +54,8 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     public static final int LAVA_OUT_SLOT = 5;
     public static final int INVENTORY_SIZE = 6;
 
+    public static final int HOLDING_TANK_CAPACITY = 10_800; // 120 ingots per holding tank
+
     public record SmeltYield(MoltenMetal metal, int amountMb, int cookTime) {}
 
     private static final Map<Item, SmeltYield> SMELT_RECIPES = new HashMap<>();
@@ -284,9 +286,18 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     private final Map<MoltenMetal, Integer> moltenFluids = new EnumMap<>(MoltenMetal.class);
 
     private int lavaAmount = 0;
-    private int cookTime = 0;
-    private int totalCookTime = 100;
+    private int cookTime1 = 0;
+    private int totalCookTime1 = 100;
+    private int cookTime2 = 0;
+    private int totalCookTime2 = 100;
     private boolean alloyingEnabled = false;
+
+    // Dedicated Holding Tanks (Input 1 & Input 2)
+    private MoltenMetal tank1Metal = MoltenMetal.NONE;
+    private int tank1Amount = 0;
+    private MoltenMetal tank2Metal = MoltenMetal.NONE;
+    private int tank2Amount = 0;
+    private boolean isEjectingHoldingTanks = false;
 
     public GearTier getActiveGearTier() {
         ItemStack gearStack = inventory.get(GEAR_SLOT);
@@ -324,6 +335,44 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         markDirty();
     }
 
+    public MoltenMetal getTank1Metal() {
+        return this.tank1Metal;
+    }
+
+    public int getTank1Amount() {
+        return this.tank1Amount;
+    }
+
+    public MoltenMetal getTank2Metal() {
+        return this.tank2Metal;
+    }
+
+    public int getTank2Amount() {
+        return this.tank2Amount;
+    }
+
+    public boolean isEjectingHoldingTanks() {
+        return this.isEjectingHoldingTanks;
+    }
+
+    public void purgeHoldingTanks() {
+        this.tank1Amount = 0;
+        this.tank1Metal = MoltenMetal.NONE;
+        this.tank2Amount = 0;
+        this.tank2Metal = MoltenMetal.NONE;
+        this.isEjectingHoldingTanks = false;
+        markDirty();
+    }
+
+    public void toggleEjectHoldingTanks() {
+        if (this.tank1Amount > 0 || this.tank2Amount > 0) {
+            this.isEjectingHoldingTanks = !this.isEjectingHoldingTanks;
+            markDirty();
+        } else {
+            this.isEjectingHoldingTanks = false;
+        }
+    }
+
     public int getTotalMoltenVolume() {
         int total = 0;
         for (int amount : moltenFluids.values()) {
@@ -348,8 +397,8 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> cookTime;
-                case 1 -> totalCookTime;
+                case 0 -> cookTime1;
+                case 1 -> totalCookTime1;
                 case 2 -> energyStorage.getEnergy() & 0xFFFF;
                 case 3 -> (energyStorage.getEnergy() >> 16) & 0xFFFF;
                 case 4 -> energyStorage.getMaxEnergy() & 0xFFFF;
@@ -366,6 +415,15 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
                 case 15 -> getFluidAmount(getMostAbundantFluid()) & 0xFFFF;
                 case 16 -> (getFluidAmount(getMostAbundantFluid()) >> 16) & 0xFFFF;
                 case 17 -> getActiveGearTier().ordinal();
+                case 18 -> cookTime2;
+                case 19 -> totalCookTime2;
+                case 20 -> tank1Metal.ordinal();
+                case 21 -> tank1Amount & 0xFFFF;
+                case 22 -> (tank1Amount >> 16) & 0xFFFF;
+                case 23 -> tank2Metal.ordinal();
+                case 24 -> tank2Amount & 0xFFFF;
+                case 25 -> (tank2Amount >> 16) & 0xFFFF;
+                case 26 -> isEjectingHoldingTanks ? 1 : 0;
                 default -> 0;
             };
         }
@@ -373,15 +431,18 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case 0 -> cookTime = value;
-                case 1 -> totalCookTime = value;
+                case 0 -> cookTime1 = value;
+                case 1 -> totalCookTime1 = value;
                 case 11 -> alloyingEnabled = (value == 1);
+                case 18 -> cookTime2 = value;
+                case 19 -> totalCookTime2 = value;
+                case 26 -> isEjectingHoldingTanks = (value == 1);
             }
         }
 
         @Override
         public int size() {
-            return 18;
+            return 27;
         }
     };
 
@@ -411,82 +472,127 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         }
 
         // 2. Perform Alloying Reaction (if Chip installed & switch ON)
+        // Synthesizes from Tank 1 and Tank 2 into internal Tank 3 (moltenFluids)
         if (entity.isAlloyingEnabled()) {
             // Bronze synthesis: 30 mB Copper + 10 mB Tin -> 40 mB Bronze
-            int cu = entity.getFluidAmount(MoltenMetal.COPPER);
-            int sn = entity.getFluidAmount(MoltenMetal.TIN);
-            if (cu >= 30 && sn >= 10 && entity.getTotalMoltenVolume() <= CHAMBER_CAPACITY) {
-                entity.moltenFluids.put(MoltenMetal.COPPER, cu - 30);
-                entity.moltenFluids.put(MoltenMetal.TIN, sn - 10);
-                entity.moltenFluids.put(MoltenMetal.BRONZE, entity.getFluidAmount(MoltenMetal.BRONZE) + 40);
-                dirty = true;
+            boolean t1Cu = entity.tank1Metal == MoltenMetal.COPPER && entity.tank1Amount >= 30;
+            boolean t2Sn = entity.tank2Metal == MoltenMetal.TIN && entity.tank2Amount >= 10;
+            boolean t2Cu = entity.tank2Metal == MoltenMetal.COPPER && entity.tank2Amount >= 30;
+            boolean t1Sn = entity.tank1Metal == MoltenMetal.TIN && entity.tank1Amount >= 10;
+
+            if ((t1Cu && t2Sn) || (t1Sn && t2Cu)) {
+                if (entity.getTotalMoltenVolume() + 40 <= CHAMBER_CAPACITY) {
+                    if (t1Cu) {
+                        entity.tank1Amount -= 30;
+                        entity.tank2Amount -= 10;
+                    } else {
+                        entity.tank2Amount -= 30;
+                        entity.tank1Amount -= 10;
+                    }
+                    if (entity.tank1Amount <= 0) { entity.tank1Amount = 0; entity.tank1Metal = MoltenMetal.NONE; }
+                    if (entity.tank2Amount <= 0) { entity.tank2Amount = 0; entity.tank2Metal = MoltenMetal.NONE; }
+                    entity.moltenFluids.put(MoltenMetal.BRONZE, entity.getFluidAmount(MoltenMetal.BRONZE) + 40);
+                    dirty = true;
+                }
             }
 
             // Manyullyn synthesis: 10 mB Cobalt + 10 mB Ardite -> 20 mB Manyullyn
-            int co = entity.getFluidAmount(MoltenMetal.COBALT);
-            int ar = entity.getFluidAmount(MoltenMetal.ARDITE);
-            if (co >= 10 && ar >= 10 && entity.getTotalMoltenVolume() <= CHAMBER_CAPACITY) {
-                entity.moltenFluids.put(MoltenMetal.COBALT, co - 10);
-                entity.moltenFluids.put(MoltenMetal.ARDITE, ar - 10);
-                entity.moltenFluids.put(MoltenMetal.MANYULLYN, entity.getFluidAmount(MoltenMetal.MANYULLYN) + 20);
-                dirty = true;
+            boolean t1Co = entity.tank1Metal == MoltenMetal.COBALT && entity.tank1Amount >= 10;
+            boolean t2Ar = entity.tank2Metal == MoltenMetal.ARDITE && entity.tank2Amount >= 10;
+            boolean t2Co = entity.tank2Metal == MoltenMetal.COBALT && entity.tank2Amount >= 10;
+            boolean t1Ar = entity.tank1Metal == MoltenMetal.ARDITE && entity.tank1Amount >= 10;
+
+            if ((t1Co && t2Ar) || (t1Ar && t2Co)) {
+                if (entity.getTotalMoltenVolume() + 20 <= CHAMBER_CAPACITY) {
+                    if (t1Co) {
+                        entity.tank1Amount -= 10;
+                        entity.tank2Amount -= 10;
+                    } else {
+                        entity.tank2Amount -= 10;
+                        entity.tank1Amount -= 10;
+                    }
+                    if (entity.tank1Amount <= 0) { entity.tank1Amount = 0; entity.tank1Metal = MoltenMetal.NONE; }
+                    if (entity.tank2Amount <= 0) { entity.tank2Amount = 0; entity.tank2Metal = MoltenMetal.NONE; }
+                    entity.moltenFluids.put(MoltenMetal.MANYULLYN, entity.getFluidAmount(MoltenMetal.MANYULLYN) + 20);
+                    dirty = true;
+                }
             }
         }
 
-        // 3. Melting Logic from Input Slots
-        int activeSlot = -1;
-        SmeltYield activeYield = null;
+        // 3. Dual Simultaneous Melting Logic from Input Slots
+        boolean hasChip = entity.hasMetallurgyChip();
+        float speedMultiplier = entity.getSpeedMultiplier();
+        boolean isSmelting1 = false;
+        boolean isSmelting2 = false;
 
+        // --- Slot 1 Melting ---
         ItemStack in1 = entity.inventory.get(INPUT_SLOT_1);
         SmeltYield y1 = getYield(in1);
-        if (y1 != null && entity.canAcceptYield(y1)) {
-            activeSlot = INPUT_SLOT_1;
-            activeYield = y1;
-        } else {
-            ItemStack in2 = entity.inventory.get(INPUT_SLOT_2);
-            SmeltYield y2 = getYield(in2);
-            if (y2 != null && entity.canAcceptYield(y2)) {
-                activeSlot = INPUT_SLOT_2;
-                activeYield = y2;
-            }
-        }
-
-        boolean isSmelting = false;
-        if (activeYield != null && activeSlot != -1) {
-            float speedMultiplier = entity.getSpeedMultiplier();
-            entity.totalCookTime = Math.max(10, (int) (activeYield.cookTime() / speedMultiplier));
-
-            boolean hasEnergy = entity.energyStorage.getEnergy() >= ENERGY_DRAW;
-            boolean hasLava = entity.lavaAmount >= LAVA_PER_SMELT;
-
-            if (hasEnergy && hasLava) {
+        if (y1 != null && entity.canAcceptYieldSlot1(y1, hasChip)) {
+            entity.totalCookTime1 = Math.max(10, (int) (y1.cookTime() / speedMultiplier));
+            if (entity.energyStorage.getEnergy() >= ENERGY_DRAW && entity.lavaAmount >= LAVA_PER_SMELT) {
                 entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
-                entity.cookTime++;
-                isSmelting = true;
+                entity.cookTime1++;
+                isSmelting1 = true;
                 dirty = true;
 
-                if (entity.cookTime >= entity.totalCookTime) {
-                    entity.cookTime = 0;
+                if (entity.cookTime1 >= entity.totalCookTime1) {
+                    entity.cookTime1 = 0;
                     entity.lavaAmount -= LAVA_PER_SMELT;
-                    entity.inventory.get(activeSlot).decrement(1);
-                    entity.insertMoltenMetal(activeYield.metal(), activeYield.amountMb(), false);
+                    in1.decrement(1);
+                    if (hasChip) {
+                        entity.insertHoldingTank1(y1.metal(), y1.amountMb());
+                    } else {
+                        entity.insertMoltenMetal(y1.metal(), y1.amountMb(), false);
+                    }
                     dirty = true;
                 }
             }
         } else {
-            if (entity.cookTime > 0) {
-                entity.cookTime = 0;
+            if (entity.cookTime1 > 0) {
+                entity.cookTime1 = 0;
+                dirty = true;
+            }
+        }
+
+        // --- Slot 2 Melting ---
+        ItemStack in2 = entity.inventory.get(INPUT_SLOT_2);
+        SmeltYield y2 = getYield(in2);
+        if (y2 != null && entity.canAcceptYieldSlot2(y2, hasChip)) {
+            entity.totalCookTime2 = Math.max(10, (int) (y2.cookTime() / speedMultiplier));
+            if (entity.energyStorage.getEnergy() >= ENERGY_DRAW && entity.lavaAmount >= LAVA_PER_SMELT) {
+                entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
+                entity.cookTime2++;
+                isSmelting2 = true;
+                dirty = true;
+
+                if (entity.cookTime2 >= entity.totalCookTime2) {
+                    entity.cookTime2 = 0;
+                    entity.lavaAmount -= LAVA_PER_SMELT;
+                    in2.decrement(1);
+                    if (hasChip) {
+                        entity.insertHoldingTank2(y2.metal(), y2.amountMb());
+                    } else {
+                        entity.insertMoltenMetal(y2.metal(), y2.amountMb(), false);
+                    }
+                    dirty = true;
+                }
+            }
+        } else {
+            if (entity.cookTime2 > 0) {
+                entity.cookTime2 = 0;
                 dirty = true;
             }
         }
 
         // Update block LIT state
+        boolean isSmelting = isSmelting1 || isSmelting2;
         boolean isLit = state.get(InductionSmelterBlock.LIT);
         if (isLit != isSmelting) {
             world.setBlockState(pos, state.with(InductionSmelterBlock.LIT, isSmelting), 3);
         }
 
-        // 4. Auto-Eject Fluid into Connected Pipes or Tanks
+        // 4. Auto-Eject Fluid into Connected Pipes or Tanks (ONLY Internal Tank 3!)
         if (world.getTime() % 2 == 0 && entity.getTotalMoltenVolume() > 0) {
             for (Direction dir : Direction.values()) {
                 BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
@@ -507,13 +613,84 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
             }
         }
 
+        // 5. Active Ejection of Holding Tanks 1 and 2 into connected pipes
+        if (entity.isEjectingHoldingTanks) {
+            boolean hasFluid = entity.tank1Amount > 0 || entity.tank2Amount > 0;
+            if (!hasFluid) {
+                entity.isEjectingHoldingTanks = false;
+                dirty = true;
+            } else {
+                for (Direction dir : Direction.values()) {
+                    BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                    if (neighbor instanceof MoltenMetalProvider targetProvider && !(neighbor instanceof InductionSmelterBlockEntity)) {
+                        // Eject from Tank 1
+                        if (entity.tank1Amount > 0 && entity.tank1Metal != MoltenMetal.NONE && targetProvider.canInsertFluid(entity.tank1Metal)) {
+                            int toPush = Math.min(entity.tank1Amount, 100);
+                            int accepted = targetProvider.insertFluid(entity.tank1Metal, toPush, false);
+                            if (accepted > 0) {
+                                entity.tank1Amount -= accepted;
+                                if (entity.tank1Amount <= 0) {
+                                    entity.tank1Amount = 0;
+                                    entity.tank1Metal = MoltenMetal.NONE;
+                                }
+                                dirty = true;
+                            }
+                        }
+                        // Eject from Tank 2
+                        if (entity.tank2Amount > 0 && entity.tank2Metal != MoltenMetal.NONE && targetProvider.canInsertFluid(entity.tank2Metal)) {
+                            int toPush = Math.min(entity.tank2Amount, 100);
+                            int accepted = targetProvider.insertFluid(entity.tank2Metal, toPush, false);
+                            if (accepted > 0) {
+                                entity.tank2Amount -= accepted;
+                                if (entity.tank2Amount <= 0) {
+                                    entity.tank2Amount = 0;
+                                    entity.tank2Metal = MoltenMetal.NONE;
+                                }
+                                dirty = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (dirty) {
             entity.markDirty();
         }
     }
 
-    private boolean canAcceptYield(SmeltYield yield) {
-        return getTotalMoltenVolume() + yield.amountMb() <= CHAMBER_CAPACITY;
+    public boolean canAcceptYieldSlot1(SmeltYield yield, boolean hasChip) {
+        if (hasChip) {
+            if (tank1Amount == 0 || tank1Metal == MoltenMetal.NONE) {
+                return yield.amountMb() <= HOLDING_TANK_CAPACITY;
+            }
+            return tank1Metal == yield.metal() && (tank1Amount + yield.amountMb() <= HOLDING_TANK_CAPACITY);
+        } else {
+            return getTotalMoltenVolume() + yield.amountMb() <= CHAMBER_CAPACITY;
+        }
+    }
+
+    public boolean canAcceptYieldSlot2(SmeltYield yield, boolean hasChip) {
+        if (hasChip) {
+            if (tank2Amount == 0 || tank2Metal == MoltenMetal.NONE) {
+                return yield.amountMb() <= HOLDING_TANK_CAPACITY;
+            }
+            return tank2Metal == yield.metal() && (tank2Amount + yield.amountMb() <= HOLDING_TANK_CAPACITY);
+        } else {
+            return getTotalMoltenVolume() + yield.amountMb() <= CHAMBER_CAPACITY;
+        }
+    }
+
+    public void insertHoldingTank1(MoltenMetal metal, int amount) {
+        this.tank1Metal = metal;
+        this.tank1Amount = Math.min(HOLDING_TANK_CAPACITY, this.tank1Amount + amount);
+        markDirty();
+    }
+
+    public void insertHoldingTank2(MoltenMetal metal, int amount) {
+        this.tank2Metal = metal;
+        this.tank2Amount = Math.min(HOLDING_TANK_CAPACITY, this.tank2Amount + amount);
+        markDirty();
     }
 
     // ==========================================
@@ -732,9 +909,20 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         Inventories.readData(view, this.inventory);
         this.energyStorage.readData(view);
         this.lavaAmount = view.getInt("LavaAmount", 0);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 100);
+        this.cookTime1 = view.getInt("CookTime1", view.getInt("CookTime", 0));
+        this.totalCookTime1 = view.getInt("TotalCookTime1", view.getInt("TotalCookTime", 100));
+        this.cookTime2 = view.getInt("CookTime2", 0);
+        this.totalCookTime2 = view.getInt("TotalCookTime2", 100);
         this.alloyingEnabled = view.getBoolean("AlloyingEnabled", false);
+        this.isEjectingHoldingTanks = view.getBoolean("IsEjectingHoldingTanks", false);
+
+        this.tank1Metal = MoltenMetal.fromId(view.getString("Tank1Metal", "none"));
+        this.tank1Amount = view.getInt("Tank1Amount", 0);
+        if (this.tank1Amount <= 0) this.tank1Metal = MoltenMetal.NONE;
+
+        this.tank2Metal = MoltenMetal.fromId(view.getString("Tank2Metal", "none"));
+        this.tank2Amount = view.getInt("Tank2Amount", 0);
+        if (this.tank2Amount <= 0) this.tank2Metal = MoltenMetal.NONE;
 
         this.moltenFluids.clear();
         for (MoltenMetal metal : MoltenMetal.values()) {
@@ -757,9 +945,19 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         Inventories.writeData(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("LavaAmount", this.lavaAmount);
-        view.putInt("CookTime", this.cookTime);
-        view.putInt("TotalCookTime", this.totalCookTime);
+        view.putInt("CookTime1", this.cookTime1);
+        view.putInt("TotalCookTime1", this.totalCookTime1);
+        view.putInt("CookTime2", this.cookTime2);
+        view.putInt("TotalCookTime2", this.totalCookTime2);
+        view.putInt("CookTime", Math.max(this.cookTime1, this.cookTime2));
+        view.putInt("TotalCookTime", Math.max(this.totalCookTime1, this.totalCookTime2));
         view.putBoolean("AlloyingEnabled", this.alloyingEnabled);
+        view.putBoolean("IsEjectingHoldingTanks", this.isEjectingHoldingTanks);
+
+        view.putString("Tank1Metal", this.tank1Metal.getId());
+        view.putInt("Tank1Amount", this.tank1Amount);
+        view.putString("Tank2Metal", this.tank2Metal.getId());
+        view.putInt("Tank2Amount", this.tank2Amount);
 
         for (Map.Entry<MoltenMetal, Integer> entry : this.moltenFluids.entrySet()) {
             if (entry.getValue() > 0) {
