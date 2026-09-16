@@ -17,7 +17,7 @@ public class TitaniumTankScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public TitaniumTankScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(TitaniumTankControllerBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(5));
+        this(syncId, playerInventory, new SimpleInventory(TitaniumTankControllerBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(6));
     }
 
     public TitaniumTankScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -67,6 +67,17 @@ public class TitaniumTankScreenHandler extends ScreenHandler {
 
     public boolean isFormed() {
         return propertyDelegate.get(4) == 1;
+    }
+
+    public net.enchantedwood.fluid.MoltenMetal getFluidType() {
+        if (propertyDelegate.size() > 5) {
+            int index = propertyDelegate.get(5);
+            net.enchantedwood.fluid.MoltenMetal[] metals = net.enchantedwood.fluid.MoltenMetal.values();
+            if (index >= 0 && index < metals.length) {
+                return metals[index];
+            }
+        }
+        return net.enchantedwood.fluid.MoltenMetal.LAVA;
     }
 
     @Override

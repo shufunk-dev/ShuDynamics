@@ -67,10 +67,14 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
             int max = this.handler.getMaxLava();
             int buckets = current / 1000;
             int maxBuckets = max / 1000;
+            net.enchantedwood.fluid.MoltenMetal fluid = this.handler.getFluidType();
+            String title = (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE)
+                    ? "§6" + fluid.getDisplayName() + " Reservoir"
+                    : "§6Molten Lava Reservoir";
             context.drawTooltip(
                     this.textRenderer,
                     List.of(
-                            Text.literal("§6Molten Lava Reservoir"),
+                            Text.literal(title),
                             Text.literal(String.format("§e%,d / %,d mB", current, max)),
                             Text.literal(String.format("§7(%d / %d Buckets)", buckets, maxBuckets)),
                             Text.literal("§8Inbound: Top Center Valve"),
