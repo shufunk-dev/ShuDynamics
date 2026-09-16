@@ -7,6 +7,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.block.ModBlocks;
@@ -146,6 +147,15 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(CHEMICAL_SYNTHESIZER, EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER));
         registry.addWorkstation(POLYMER_LOOM, EmiStack.of(ModBlocks.POLYMER_LOOM));
         registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
+
+        // Exclusion area for Induction Smelter Mixing Bay side panel
+        registry.addExclusionArea(net.enchantedwood.screen.InductionSmelterScreen.class, (screen, consumer) -> {
+            if (screen.getScreenHandler().hasChip()) {
+                int x = (screen.width - 176) / 2 + 176;
+                int y = (screen.height - 166) / 2 + 16;
+                consumer.accept(new Bounds(x, y, 66, 126));
+            }
+        });
 
         // Recipe auto-transfer handler for Super Computer 3x3 Ghost Pattern Matrix
         registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.EmiRecipeHandler<net.enchantedwood.screen.SuperComputerScreenHandler>() {
