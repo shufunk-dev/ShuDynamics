@@ -90,6 +90,14 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         return GearTier.NONE;
     }
 
+    public boolean isGearEnchanted() {
+        ItemStack gearStack = inventory.get(GEAR_SLOT);
+        if (gearStack.getItem() instanceof GearItem gearItem) {
+            return gearItem.isEnchanted();
+        }
+        return false;
+    }
+
     public static int getTierCookTime(GearTier tier) {
         return switch (tier) {
             case IRON -> 80;
@@ -104,14 +112,14 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     public int getTierYield() {
+        int bonus = isGearEnchanted() ? 1 : 0;
         return switch (getActiveGearTier()) {
-            case IRON -> 3;
-            case COPPER -> 3;
-            case BRONZE -> 4;
-            case GOLD -> 4;
-            case DIAMOND -> 5;
-            case NETHERITE -> 6;
-            case BLAZE_OVERCLOCK -> 8;
+            case IRON, COPPER -> 3 + bonus;
+            case BRONZE, GOLD -> 4 + bonus;
+            case ALUMINUM, STEEL -> 5 + bonus;
+            case TITANIUM, DIAMOND -> 6 + bonus;
+            case NETHERITE -> 8 + bonus;
+            case BLAZE_OVERCLOCK -> 10 + bonus;
             default -> 3;
         };
     }
@@ -385,7 +393,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
 
         // Diamonds & Emeralds
-        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE) {
+        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == ModBlocks.NETHER_DIAMOND_ORE.asItem()) {
             return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 3, false, ModItems.EMERALD_DUST, 1);
         }
         if (item == Items.DIAMOND) {

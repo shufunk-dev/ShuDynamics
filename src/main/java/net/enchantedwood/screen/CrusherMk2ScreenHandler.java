@@ -105,13 +105,12 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
 
     public int getTierYield() {
         return switch (getGearTier()) {
-            case IRON -> 3;
-            case COPPER -> 3;
-            case BRONZE -> 4;
-            case GOLD -> 4;
-            case TITANIUM -> 5;
-            case DIAMOND -> 5;
-            case NETHERITE -> 6;
+            case IRON, COPPER -> 3;
+            case BRONZE, GOLD -> 4;
+            case ALUMINUM, STEEL -> 5;
+            case TITANIUM, DIAMOND -> 6;
+            case NETHERITE -> 8;
+            case BLAZE_OVERCLOCK -> 10;
             default -> 3;
         };
     }
