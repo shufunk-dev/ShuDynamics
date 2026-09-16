@@ -67,9 +67,9 @@ public class TitaniumTankInboundPortBlock extends BlockWithEntity {
                     return ActionResult.SUCCESS;
                 } else {
                     if (controller.tryFormStructure()) {
-                        player.sendMessage(Text.literal("§a✔ 5x5 Titanium Lava Reservoir formed!"), true);
+                        player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
                     } else {
-                        player.sendMessage(Text.literal("§e[Titanium Reservoir] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."), true);
+                        player.sendMessage(Text.literal("§e[Titanium Tank] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."), true);
                     }
                     return ActionResult.SUCCESS;
                 }

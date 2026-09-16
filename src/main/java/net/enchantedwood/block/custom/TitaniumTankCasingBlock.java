@@ -67,7 +67,7 @@ public class TitaniumTankCasingBlock extends BlockWithEntity {
                         BlockEntity targetBE = world.getBlockEntity(checkPos);
                         if (targetBE instanceof TitaniumTankControllerBlockEntity controller) {
                             if (controller.tryFormStructure()) {
-                                player.sendMessage(Text.literal("§a✔ 5x5 Titanium Lava Reservoir formed!"), true);
+                                player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
                                 return ActionResult.SUCCESS;
                             }
                         }

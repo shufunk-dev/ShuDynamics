@@ -238,6 +238,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
         this.isFormed = false;
         this.lavaAmount = 0; // Voided safely by the steam purge
+        this.currentFluid = MoltenMetal.NONE;
         this.minPos = null;
         markDirty();
     }
@@ -295,7 +296,8 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             ItemStack output = entity.inventory.get(BUCKET_OUT_SLOT);
 
             if (!input.isEmpty() && input.isOf(Items.LAVA_BUCKET)) {
-                if (entity.lavaAmount + 1000 <= CAPACITY && (output.isEmpty() || (output.isOf(Items.BUCKET) && output.getCount() < output.getMaxCount()))) {
+                if (entity.lavaAmount + 1000 <= CAPACITY && (entity.currentFluid == MoltenMetal.LAVA || entity.lavaAmount == 0) && (output.isEmpty() || (output.isOf(Items.BUCKET) && output.getCount() < output.getMaxCount()))) {
+                    entity.currentFluid = MoltenMetal.LAVA;
                     entity.lavaAmount += 1000;
                     input.decrement(1);
                     if (output.isEmpty()) {
@@ -307,10 +309,13 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                     dirty = true;
                 }
             }
-            // 2. Manual Bucket Out (Drain tank into Empty Bucket)
+            // 2. Manual Bucket Out (Drain tank into Empty Bucket - Lava only)
             else if (!input.isEmpty() && input.isOf(Items.BUCKET)) {
-                if (entity.lavaAmount >= 1000 && (output.isEmpty() || (output.isOf(Items.LAVA_BUCKET) && output.getCount() < output.getMaxCount()))) {
+                if (entity.lavaAmount >= 1000 && entity.currentFluid == MoltenMetal.LAVA && (output.isEmpty() || (output.isOf(Items.LAVA_BUCKET) && output.getCount() < output.getMaxCount()))) {
                     entity.lavaAmount -= 1000;
+                    if (entity.lavaAmount <= 0) {
+                        entity.currentFluid = MoltenMetal.NONE;
+                    }
                     input.decrement(1);
                     if (output.isEmpty()) {
                         entity.inventory.set(BUCKET_OUT_SLOT, new ItemStack(Items.LAVA_BUCKET));
@@ -375,7 +380,16 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     @Override
+    public boolean canExtractLava() {
+        return false; // Inbound Port is strictly inbound; extract from outer casings
+    }
+
+    @Override
     public int extractLava(int amount, boolean simulate) {
+        return 0; // Inbound Port is strictly inbound; extract from outer casings
+    }
+
+    public int extractLavaInternal(int amount, boolean simulate) {
         if (!this.isFormed || this.currentFluid != MoltenMetal.LAVA || amount <= 0) return 0;
         int extracted = Math.min(this.lavaAmount, amount);
         if (!simulate && extracted > 0) {
@@ -420,7 +434,16 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     @Override
+    public boolean canExtractFluid(MoltenMetal metal) {
+        return false; // Inbound Port is strictly inbound; extract from outer casings
+    }
+
+    @Override
     public int extractFluid(MoltenMetal metal, int amount, boolean simulate) {
+        return 0; // Inbound Port is strictly inbound; extract from outer casings
+    }
+
+    public int extractFluidInternal(MoltenMetal metal, int amount, boolean simulate) {
         if (!this.isFormed || metal == MoltenMetal.NONE || metal != this.currentFluid || amount <= 0) return 0;
         int extracted = Math.min(this.lavaAmount, amount);
         if (!simulate && extracted > 0) {
@@ -535,7 +558,11 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     protected void readData(ReadView view) {
         super.readData(view);
         this.lavaAmount = view.getInt("LavaAmount", 0);
-        this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "none"));
+        if (view.contains("FluidType")) {
+            this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "none"));
+        } else {
+            this.currentFluid = (this.lavaAmount > 0) ? MoltenMetal.LAVA : MoltenMetal.NONE;
+        }
         if (this.lavaAmount <= 0) {
             this.currentFluid = MoltenMetal.NONE;
         }

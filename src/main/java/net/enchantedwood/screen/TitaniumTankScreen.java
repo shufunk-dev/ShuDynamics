@@ -30,14 +30,20 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
         // Base GUI background
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
 
-        // Massive Lava Reservoir Gauge (width = 36, height = 52, at x + 70, y + 20)
+        // Massive Multi-Fluid Reservoir Gauge (width = 36, height = 52, at x + 70, y + 20)
         int currentLava = this.handler.getLavaAmount();
         int maxLava = this.handler.getMaxLava();
         if (maxLava > 0 && currentLava > 0) {
             int fluidHeight = (int) ((long) currentLava * 52 / maxLava);
             if (fluidHeight > 0) {
-                // UV for fluid texture at (176, 52 - fluidHeight) with width 36
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 70, y + 72 - fluidHeight, 176.0f, 52.0f - fluidHeight, 36, fluidHeight, 256, 256);
+                net.enchantedwood.fluid.MoltenMetal fluid = this.handler.getFluidType();
+                if (fluid == net.enchantedwood.fluid.MoltenMetal.LAVA || fluid == net.enchantedwood.fluid.MoltenMetal.NONE) {
+                    // UV for fluid texture at (176, 52 - fluidHeight) with width 36
+                    context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 70, y + 72 - fluidHeight, 176.0f, 52.0f - fluidHeight, 36, fluidHeight, 256, 256);
+                } else {
+                    int color = fluid.getColor() | 0xFF000000;
+                    context.fill(x + 70, y + 72 - fluidHeight, x + 70 + 36, y + 72, color);
+                }
             }
         }
     }
@@ -61,7 +67,7 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
 
-        // Tooltip for Lava Reservoir (x + 70 to x + 106, y + 20 to y + 72)
+        // Tooltip for Reservoir (x + 70 to x + 106, y + 20 to y + 72)
         if (mouseX >= x + 70 && mouseX <= x + 106 && mouseY >= y + 20 && mouseY <= y + 72) {
             int current = this.handler.getLavaAmount();
             int max = this.handler.getMaxLava();
@@ -70,28 +76,29 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
             net.enchantedwood.fluid.MoltenMetal fluid = this.handler.getFluidType();
             String title = (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE)
                     ? "§6" + fluid.getDisplayName() + " Reservoir"
-                    : "§6Molten Lava Reservoir";
-            context.drawTooltip(
-                    this.textRenderer,
-                    List.of(
-                            Text.literal(title),
-                            Text.literal(String.format("§e%,d / %,d mB", current, max)),
-                            Text.literal(String.format("§7(%d / %d Buckets)", buckets, maxBuckets)),
-                            Text.literal("§8Inbound: Top Center Valve"),
-                            Text.literal("§8Outbound: All Outer Casings")
-                    ),
-                    mouseX,
-                    mouseY
-            );
+                    : "§6Titanium Multi-Fluid Reservoir (Empty)";
+            List<Text> tooltip = new java.util.ArrayList<>();
+            tooltip.add(Text.literal(title));
+            tooltip.add(Text.literal(String.format("§e%,d / %,d mB", current, max)));
+            tooltip.add(Text.literal(String.format("§7(%d / %d Buckets)", buckets, maxBuckets)));
+            if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE) {
+                tooltip.add(Text.literal("§dFluid Stored: §f" + fluid.getDisplayName()));
+            } else {
+                tooltip.add(Text.literal("§7Accepts Lava or any of 14 Molten Metals"));
+            }
+            tooltip.add(Text.literal("§8Inbound: Top Center Valve"));
+            tooltip.add(Text.literal("§8Outbound: All Outer Casings"));
+            context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
         }
 
         // Empty Machine Slot Tooltips
         if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 2) {
             switch (this.focusedSlot.id) {
                 case 0 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e🪣 Bucket Fill / Drain Input"),
+                        Text.literal("§e🪣 Lava Bucket Fill / Drain Input"),
                         Text.literal("§7Insert empty buckets to drain lava, or"),
-                        Text.literal("§7insert filled lava buckets to fill the reservoir.")
+                        Text.literal("§7insert filled lava buckets to fill the reservoir."),
+                        Text.literal("§8(Molten metals are piped in/out via Titanium Pipes)")
                 ), mouseX, mouseY);
                 case 1 -> context.drawTooltip(this.textRenderer, List.of(
                         Text.literal("§a✨ Processed Bucket Output"),

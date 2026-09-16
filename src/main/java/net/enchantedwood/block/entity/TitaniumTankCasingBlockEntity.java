@@ -46,19 +46,7 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     public boolean isValidOutboundPort() {
         TitaniumTankControllerBlockEntity master = getMaster();
-        if (master == null || !master.isFormed()) return false;
-        BlockPos min = master.getMinPos();
-        if (min == null) return false;
-
-        int rx = this.pos.getX() - min.getX();
-        int ry = this.pos.getY() - min.getY();
-        int rz = this.pos.getZ() - min.getZ();
-
-        // Only bottom layer (ry == 0) and not the 4 corners
-        if (ry != 0) return false;
-        boolean isCornerX = (rx == 0 || rx == 4);
-        boolean isCornerZ = (rz == 0 || rz == 4);
-        return !(isCornerX && isCornerZ);
+        return master != null && master.isFormed();
     }
 
     // Outbound Lava Provider logic: delegates to master controller
@@ -76,26 +64,24 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     @Override
     public int insertLava(int amount, boolean simulate) {
-        TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null ? master.insertLava(amount, simulate) : 0;
+        return 0; // Casings are outbound only; use Top Center Valve
     }
 
     @Override
     public int extractLava(int amount, boolean simulate) {
         if (!isValidOutboundPort()) return 0;
         TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null ? master.extractLava(amount, simulate) : 0;
+        return master != null ? master.extractLavaInternal(amount, simulate) : 0;
     }
 
     @Override
     public boolean canInsertLava() {
-        TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null && master.canInsertLava();
+        return false; // Casings are outbound only; use Top Center Valve
     }
 
     @Override
     public boolean canExtractLava() {
-        return isValidOutboundPort() && getMaster() != null && getMaster().canExtractLava();
+        return isValidOutboundPort() && getMaster() != null && getMaster().getLavaAmount() > 0 && getMaster().getFluidType() == MoltenMetal.LAVA;
     }
 
     // Molten Metal Provider logic: delegates to master controller
@@ -119,21 +105,24 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     @Override
     public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
-        TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null ? master.insertFluid(metal, amount, simulate) : 0;
+        return 0; // Casings are outbound only; use Top Center Valve
     }
 
     @Override
     public boolean canInsertFluid(MoltenMetal metal) {
-        TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null && master.canInsertFluid(metal);
+        return false; // Casings are outbound only; use Top Center Valve
     }
 
     @Override
     public int extractFluid(MoltenMetal metal, int amount, boolean simulate) {
         if (!isValidOutboundPort()) return 0;
         TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null ? master.extractFluid(metal, amount, simulate) : 0;
+        return master != null ? master.extractFluidInternal(metal, amount, simulate) : 0;
+    }
+
+    @Override
+    public boolean canExtractFluid(MoltenMetal metal) {
+        return isValidOutboundPort() && getMaster() != null && getMaster().getFluidAmount(metal) > 0;
     }
 
     @Override

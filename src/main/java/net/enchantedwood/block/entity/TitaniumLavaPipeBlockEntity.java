@@ -121,6 +121,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                         }
                     } else {
                         // Empty pipe: adopt first available fluid
+                        entity.fluidType = MoltenMetal.NONE;
                         for (MoltenMetal metal : metalProvider.getContainedFluids()) {
                             if (metalProvider.getFluidAmount(metal) > 0) {
                                 int extracted = metalProvider.extractFluid(metal, needed, false);
@@ -218,6 +219,9 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                         int accepted = otherPipe.insertFluid(entity.fluidType, toEqualize, false);
                         if (accepted > 0) {
                             entity.lavaAmount -= accepted;
+                            if (entity.lavaAmount <= 0) {
+                                entity.fluidType = MoltenMetal.NONE;
+                            }
                             dirty = true;
                         }
                     }

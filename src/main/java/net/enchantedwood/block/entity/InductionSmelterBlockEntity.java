@@ -469,7 +469,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
                     entity.cookTime = 0;
                     entity.lavaAmount -= LAVA_PER_SMELT;
                     entity.inventory.get(activeSlot).decrement(1);
-                    entity.insertFluid(activeYield.metal(), activeYield.amountMb(), false);
+                    entity.insertMoltenMetal(activeYield.metal(), activeYield.amountMb(), false);
                     dirty = true;
                 }
             }
@@ -532,6 +532,19 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     @Override
     public int getMaxFluid() {
         return CHAMBER_CAPACITY;
+    }
+
+    public int insertMoltenMetal(MoltenMetal metal, int amount, boolean simulate) {
+        if (metal == MoltenMetal.NONE || metal == MoltenMetal.LAVA || amount <= 0) return 0;
+        int currentTotal = getTotalMoltenVolume();
+        int space = CHAMBER_CAPACITY - currentTotal;
+        int insertable = Math.min(space, amount);
+        if (!simulate && insertable > 0) {
+            int current = moltenFluids.getOrDefault(metal, 0);
+            moltenFluids.put(metal, current + insertable);
+            markDirty();
+        }
+        return insertable;
     }
 
     @Override
