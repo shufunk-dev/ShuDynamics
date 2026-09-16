@@ -736,6 +736,25 @@ public class ModBlocks {
                     .requiresTool()),
             Text.literal("§7Smooth 0-to-8px slope connecting terrain to asphalt pavement."));
 
+    public static final Block ASPHALT_RAMP = registerBlockWithTooltip("asphalt_ramp",
+            new net.enchantedwood.block.custom.AsphaltRampBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_ramp")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§7Full 1-block high smooth slope for highway off-ramps."),
+            Text.literal("§8Grants continuous speed boost when traversed."));
+
+    public static final Block CONCRETE_CURB_RAMP = registerBlockWithTooltip("concrete_curb_ramp",
+            new net.enchantedwood.block.custom.ConcreteCurbRampBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "concrete_curb_ramp")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§7Full 1-block high smooth curb barrier for highway off-ramps."));
+
     public static final Block FUEL_REFINERY = registerBlockWithTooltip("fuel_refinery",
             new net.enchantedwood.block.custom.FuelRefineryBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery")))

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "C  ",
+    "CC ",
+    "CCC"
+  ],
+  "key": {
+    "C": "enchantedwood:concrete_curb"
+  },
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:concrete_curb_ramp"
+  }
+}

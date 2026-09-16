@@ -778,5 +778,9 @@
   "container.enchantedwood.road_paver": "Road Paver",
   "block.enchantedwood.road_paver_mk2": "Road Paver Mk2",
   "item.enchantedwood.road_paver_mk2": "Road Paver Mk2",
-  "container.enchantedwood.road_paver_mk2": "Road Paver Mk2"
+  "container.enchantedwood.road_paver_mk2": "Road Paver Mk2",
+  "block.enchantedwood.asphalt_ramp": "Asphalt Ramp",
+  "item.enchantedwood.asphalt_ramp": "Asphalt Ramp",
+  "block.enchantedwood.concrete_curb_ramp": "Concrete Curb Ramp",
+  "item.enchantedwood.concrete_curb_ramp": "Concrete Curb Ramp"
 }

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "enchantedwood:concrete_curb",
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:concrete_curb_ramp"
+  }
+}

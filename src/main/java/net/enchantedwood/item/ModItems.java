@@ -1742,6 +1742,8 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
                 entries.add(net.enchantedwood.block.ModBlocks.CONCRETE_CURB);
                 entries.add(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP);
+                entries.add(net.enchantedwood.block.ModBlocks.ASPHALT_RAMP);
+                entries.add(net.enchantedwood.block.ModBlocks.CONCRETE_CURB_RAMP);
                 entries.add(UNFIRED_CONCRETE_CURB);
                 entries.add(UNFIRED_ROAD_TRANSITION_RAMP);
 
