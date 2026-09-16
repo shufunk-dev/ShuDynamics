@@ -10,16 +10,16 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProvider, MoltenMetalProvider {
     public static final int BUFFER_CAPACITY = 1000; // 1000 mB (1 bucket)
     public static final int TRANSFER_RATE = 500;   // 500 mB/t (10 buckets/sec)
 
     private int lavaAmount = 0;
-    private MoltenMetal fluidType = MoltenMetal.LAVA;
+    private MoltenMetal fluidType = MoltenMetal.NONE;
 
     public TitaniumLavaPipeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TITANIUM_LAVA_PIPE_BLOCK_ENTITY, pos, state);
@@ -36,6 +36,16 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
     @Override
     public int getMaxLava() {
         return (this.fluidType == MoltenMetal.LAVA || this.lavaAmount == 0) ? BUFFER_CAPACITY : 0;
+    }
+
+    @Override
+    public boolean canInsertLava() {
+        return this.lavaAmount < BUFFER_CAPACITY && (this.fluidType == MoltenMetal.LAVA || this.lavaAmount == 0);
+    }
+
+    @Override
+    public boolean canExtractLava() {
+        return this.fluidType == MoltenMetal.LAVA && this.lavaAmount > 0;
     }
 
     @Override
@@ -67,6 +77,19 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
     }
 
     @Override
+    public boolean canInsertFluid(MoltenMetal metal) {
+        if (metal == MoltenMetal.NONE) return false;
+        if (this.lavaAmount <= 0 || this.fluidType == MoltenMetal.NONE) return true;
+        return this.fluidType == metal && this.lavaAmount < BUFFER_CAPACITY;
+    }
+
+    @Override
+    public boolean canExtractFluid(MoltenMetal metal) {
+        if (metal == MoltenMetal.NONE) return false;
+        return this.fluidType == metal && this.lavaAmount > 0;
+    }
+
+    @Override
     public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
         if (metal == MoltenMetal.NONE || amount <= 0) return 0;
         if (this.fluidType != MoltenMetal.NONE && this.fluidType != metal && this.lavaAmount > 0) return 0;
@@ -88,6 +111,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         if (!simulate && extractable > 0) {
             this.lavaAmount -= extractable;
             if (this.lavaAmount <= 0) {
+                this.lavaAmount = 0;
                 this.fluidType = MoltenMetal.NONE;
             }
             markDirty();
@@ -103,7 +127,16 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, TitaniumLavaPipeBlockEntity entity) {
         boolean dirty = false;
 
-        // 1. Pull fluid from adjacent producers (Pumps, Smelters, Tank Outbounds) if pipe has space
+        // Auto-sanitize empty state
+        if (entity.lavaAmount <= 0) {
+            if (entity.fluidType != MoltenMetal.NONE || entity.lavaAmount != 0) {
+                entity.lavaAmount = 0;
+                entity.fluidType = MoltenMetal.NONE;
+                dirty = true;
+            }
+        }
+
+        // 1. Pull fluid from adjacent producers (Smelters, Lava Pumps, Tank Outbound Casings) if pipe has space
         if (entity.lavaAmount < BUFFER_CAPACITY) {
             int needed = Math.min(TRANSFER_RATE, BUFFER_CAPACITY - entity.lavaAmount);
             for (Direction dir : Direction.values()) {
@@ -120,8 +153,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                             dirty = true;
                         }
                     } else {
-                        // Empty pipe: adopt first available fluid
-                        entity.fluidType = MoltenMetal.NONE;
+                        // Empty pipe: adopt first available fluid from producer
                         for (MoltenMetal metal : metalProvider.getContainedFluids()) {
                             if (metalProvider.getFluidAmount(metal) > 0) {
                                 int extracted = metalProvider.extractFluid(metal, needed, false);
@@ -151,78 +183,84 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
             }
         }
 
-        // 2. Push fluid to adjacent consumers (Generators, Inbound Ports, Tanks, Casting Ports) and adjacent pipes
+        // 2. Push fluid to directly adjacent consumers (Tank Inbound Ports, Casting Ports, Generators)
         if (entity.lavaAmount > 0 && entity.fluidType != MoltenMetal.NONE) {
-            List<MoltenMetalProvider> metalConsumers = new ArrayList<>();
-            List<LavaProvider> pureLavaConsumers = new ArrayList<>();
-            List<TitaniumLavaPipeBlockEntity> pipeNeighbors = new ArrayList<>();
-
             for (Direction dir : Direction.values()) {
+                if (entity.lavaAmount <= 0) break;
                 BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
-                if (neighbor instanceof TitaniumLavaPipeBlockEntity otherPipe) {
-                    if (otherPipe.lavaAmount < entity.lavaAmount && (otherPipe.lavaAmount == 0 || otherPipe.fluidType == entity.fluidType)) {
-                        pipeNeighbors.add(otherPipe);
-                    }
-                } else if (entity.fluidType == MoltenMetal.LAVA && neighbor instanceof LavaProvider lavaProvider) {
-                    if (neighbor instanceof GeothermalGeneratorBlockEntity) {
-                        if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
-                            pureLavaConsumers.add(lavaProvider);
+                if (neighbor == null || neighbor instanceof TitaniumLavaPipeBlockEntity) continue;
+
+                if (neighbor instanceof MoltenMetalProvider consumer) {
+                    if (consumer.canInsertFluid(entity.fluidType)) {
+                        int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
+                        int accepted = consumer.insertFluid(entity.fluidType, toSend, false);
+                        if (accepted > 0) {
+                            entity.lavaAmount -= accepted;
+                            dirty = true;
                         }
-                    } else if (lavaProvider.canInsertLava()) {
-                        pureLavaConsumers.add(lavaProvider);
                     }
-                } else if (neighbor instanceof MoltenMetalProvider metalProvider) {
-                    if (metalProvider.canInsertFluid(entity.fluidType)) {
-                        metalConsumers.add(metalProvider);
+                } else if (entity.fluidType == MoltenMetal.LAVA && neighbor instanceof LavaProvider lavaConsumer) {
+                    if (neighbor instanceof GeothermalGeneratorBlockEntity && dir != Direction.DOWN) {
+                        continue;
                     }
-                }
-            }
-
-            // Prioritize machine consumers (Tanks, Casting Ports, Generators)
-            if (!metalConsumers.isEmpty()) {
-                int perConsumer = Math.max(1, Math.min(TRANSFER_RATE, entity.lavaAmount) / metalConsumers.size());
-                for (MoltenMetalProvider consumer : metalConsumers) {
-                    if (entity.lavaAmount <= 0) break;
-                    int toSend = Math.min(perConsumer, entity.lavaAmount);
-                    int accepted = consumer.insertFluid(entity.fluidType, toSend, false);
-                    if (accepted > 0) {
-                        entity.lavaAmount -= accepted;
-                        dirty = true;
-                    }
-                }
-            } else if (!pureLavaConsumers.isEmpty()) {
-                int perConsumer = Math.max(1, Math.min(TRANSFER_RATE, entity.lavaAmount) / pureLavaConsumers.size());
-                for (LavaProvider consumer : pureLavaConsumers) {
-                    if (entity.lavaAmount <= 0) break;
-                    int toSend = Math.min(perConsumer, entity.lavaAmount);
-                    int accepted = consumer.insertLava(toSend, false);
-                    if (accepted > 0) {
-                        entity.lavaAmount -= accepted;
-                        dirty = true;
+                    if (lavaConsumer.canInsertLava()) {
+                        int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
+                        int accepted = lavaConsumer.insertLava(toSend, false);
+                        if (accepted > 0) {
+                            entity.lavaAmount -= accepted;
+                            dirty = true;
+                        }
                     }
                 }
             }
 
-            // Reset fluid type if pipe became empty
             if (entity.lavaAmount <= 0) {
+                entity.lavaAmount = 0;
                 entity.fluidType = MoltenMetal.NONE;
                 dirty = true;
             }
+        }
 
-            // Distribute remaining fluid evenly among pipe network
-            if (entity.lavaAmount > 0 && !pipeNeighbors.isEmpty()) {
-                for (TitaniumLavaPipeBlockEntity otherPipe : pipeNeighbors) {
-                    if (entity.lavaAmount <= otherPipe.lavaAmount) continue;
-                    int diff = entity.lavaAmount - otherPipe.lavaAmount;
-                    int toEqualize = Math.min(TRANSFER_RATE, diff / 2);
-                    if (toEqualize > 0) {
-                        int accepted = otherPipe.insertFluid(entity.fluidType, toEqualize, false);
-                        if (accepted > 0) {
-                            entity.lavaAmount -= accepted;
-                            if (entity.lavaAmount <= 0) {
-                                entity.fluidType = MoltenMetal.NONE;
+        // 3. Intelligent Network Routing: BFS towards a destination that can accept this specific fluid
+        if (entity.lavaAmount > 0 && entity.fluidType != MoltenMetal.NONE) {
+            Direction targetDir = findDirectionToConsumer(world, pos, entity.fluidType);
+            if (targetDir != null) {
+                BlockEntity nextBe = world.getBlockEntity(pos.offset(targetDir));
+                if (nextBe instanceof TitaniumLavaPipeBlockEntity nextPipe) {
+                    if (nextPipe.canInsertFluid(entity.fluidType)) {
+                        int space = BUFFER_CAPACITY - nextPipe.lavaAmount;
+                        int toSend = Math.min(TRANSFER_RATE, Math.min(entity.lavaAmount, space));
+                        if (toSend > 0) {
+                            int accepted = nextPipe.insertFluid(entity.fluidType, toSend, false);
+                            if (accepted > 0) {
+                                entity.lavaAmount -= accepted;
+                                if (entity.lavaAmount <= 0) {
+                                    entity.lavaAmount = 0;
+                                    entity.fluidType = MoltenMetal.NONE;
+                                }
+                                dirty = true;
                             }
-                            dirty = true;
+                        }
+                    }
+                }
+            } else {
+                // Fallback: push to any neighboring pipe that has space and matching/empty fluid
+                for (Direction dir : Direction.values()) {
+                    if (entity.lavaAmount <= 0) break;
+                    BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                    if (neighbor instanceof TitaniumLavaPipeBlockEntity otherPipe) {
+                        if (otherPipe.canInsertFluid(entity.fluidType) && otherPipe.lavaAmount < entity.lavaAmount) {
+                            int diff = entity.lavaAmount - otherPipe.lavaAmount;
+                            int toSend = Math.min(TRANSFER_RATE, Math.max(1, diff / 2));
+                            int accepted = otherPipe.insertFluid(entity.fluidType, toSend, false);
+                            if (accepted > 0) {
+                                entity.lavaAmount -= accepted;
+                                if (entity.lavaAmount <= 0) {
+                                    entity.lavaAmount = 0;
+                                    entity.fluidType = MoltenMetal.NONE;
+                                }
+                                dirty = true;
+                            }
                         }
                     }
                 }
@@ -232,6 +270,77 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         if (dirty) {
             entity.markDirty();
         }
+    }
+
+    /**
+     * Breadth-First Search through connected pipes to find the step direction leading to a consumer
+     * that can accept fluidType. This ensures metals naturally branch to their respective holding tanks!
+     */
+    public static @Nullable Direction findDirectionToConsumer(ServerWorld world, BlockPos startPos, MoltenMetal fluidType) {
+        if (fluidType == MoltenMetal.NONE) return null;
+
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        Map<BlockPos, Direction> firstStepMap = new HashMap<>();
+        Set<BlockPos> visited = new HashSet<>();
+
+        visited.add(startPos);
+
+        for (Direction dir : Direction.values()) {
+            BlockPos neighborPos = startPos.offset(dir);
+            BlockEntity be = world.getBlockEntity(neighborPos);
+            if (be instanceof TitaniumLavaPipeBlockEntity pipe) {
+                if (pipe.lavaAmount == 0 || pipe.fluidType == fluidType) {
+                    visited.add(neighborPos);
+                    firstStepMap.put(neighborPos, dir);
+                    queue.add(neighborPos);
+                }
+            }
+        }
+
+        int maxNodes = 128;
+        int inspected = 0;
+
+        while (!queue.isEmpty() && inspected < maxNodes) {
+            BlockPos current = queue.poll();
+            inspected++;
+            Direction firstStep = firstStepMap.get(current);
+
+            for (Direction dir : Direction.values()) {
+                BlockPos targetPos = current.offset(dir);
+                if (targetPos.equals(startPos)) continue;
+                BlockEntity target = world.getBlockEntity(targetPos);
+                if (target == null || target instanceof TitaniumLavaPipeBlockEntity) continue;
+
+                if (target instanceof MoltenMetalProvider metalConsumer) {
+                    if (metalConsumer.canInsertFluid(fluidType)) {
+                        return firstStep;
+                    }
+                } else if (fluidType == MoltenMetal.LAVA && target instanceof LavaProvider lavaConsumer) {
+                    if (target instanceof GeothermalGeneratorBlockEntity && dir != Direction.DOWN) {
+                        continue;
+                    }
+                    if (lavaConsumer.canInsertLava()) {
+                        return firstStep;
+                    }
+                }
+            }
+
+            for (Direction dir : Direction.values()) {
+                BlockPos nextPos = current.offset(dir);
+                if (!visited.contains(nextPos)) {
+                    visited.add(nextPos);
+                    BlockEntity nextBe = world.getBlockEntity(nextPos);
+                    if (nextBe instanceof TitaniumLavaPipeBlockEntity nextPipe) {
+                        if (nextPipe.lavaAmount == 0 || nextPipe.fluidType == fluidType) {
+                            firstStepMap.put(nextPos, firstStep);
+                            queue.add(nextPos);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -245,6 +354,11 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
     protected void readData(ReadView view) {
         super.readData(view);
         this.lavaAmount = view.getInt("LavaAmount", 0);
-        this.fluidType = MoltenMetal.fromId(view.getString("FluidType", "lava"));
+        if (this.lavaAmount <= 0) {
+            this.lavaAmount = 0;
+            this.fluidType = MoltenMetal.NONE;
+        } else {
+            this.fluidType = MoltenMetal.fromId(view.getString("FluidType", "none"));
+        }
     }
 }
