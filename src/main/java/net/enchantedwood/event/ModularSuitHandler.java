@@ -62,11 +62,13 @@ public class ModularSuitHandler {
                     }
 
                     StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
-                    // Only refresh if missing or expiring soon (< 5 seconds) to avoid spamming effect packets to GUI
-                    if (currentEffect == null || currentEffect.getDuration() <= 100) {
+                    // Vanilla Minecraft begins warning flicker at <= 200 ticks (10s).
+                    // By maintaining duration at 320 ticks (16s) and refreshing at <= 240 ticks (12s),
+                    // it never reaches 200 ticks, completely eliminating any flickering!
+                    if (currentEffect == null || currentEffect.getDuration() <= 240) {
                         player.addStatusEffect(new StatusEffectInstance(
                                 StatusEffects.NIGHT_VISION,
-                                240,
+                                320,
                                 0,
                                 false,
                                 false,
@@ -76,14 +78,14 @@ public class ModularSuitHandler {
                 } else {
                     // Out of power: shut off HUD quietly without spamming audio
                     StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
-                    if (currentEffect != null && currentEffect.getDuration() <= 260) {
+                    if (currentEffect != null && currentEffect.getDuration() <= 340) {
                         player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                     }
                 }
             } else if (lightLevel >= 9) {
                 // Bright area: power down HUD to conserve power quietly
                 StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
-                if (currentEffect != null && currentEffect.getDuration() <= 260) {
+                if (currentEffect != null && currentEffect.getDuration() <= 340) {
                     player.removeStatusEffect(StatusEffects.NIGHT_VISION);
                 }
             }
