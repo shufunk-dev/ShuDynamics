@@ -535,20 +535,32 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     }
 
     @Override
-    public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
-        if (metal == MoltenMetal.NONE || amount <= 0) return 0;
-        int space = CHAMBER_CAPACITY - getTotalMoltenVolume();
-        int insertable = Math.min(space, amount);
-        if (!simulate && insertable > 0) {
-            moltenFluids.put(metal, getFluidAmount(metal) + insertable);
-            markDirty();
+    public boolean canInsertFluid(MoltenMetal metal) {
+        if (metal == MoltenMetal.LAVA) {
+            return canInsertLava();
         }
-        return insertable;
+        return false; // Smelter produces molten metal from items, does not import molten metal
+    }
+
+    @Override
+    public boolean canExtractFluid(MoltenMetal metal) {
+        if (metal == MoltenMetal.LAVA) {
+            return false; // Lava is thermal fuel, not extractable
+        }
+        return getFluidAmount(metal) > 0;
+    }
+
+    @Override
+    public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
+        if (metal == MoltenMetal.LAVA) {
+            return insertLava(amount, simulate);
+        }
+        return 0; // Smelter does not take molten metal inputs
     }
 
     @Override
     public int extractFluid(MoltenMetal metal, int amount, boolean simulate) {
-        if (metal == MoltenMetal.NONE || amount <= 0) return 0;
+        if (metal == MoltenMetal.NONE || metal == MoltenMetal.LAVA || amount <= 0) return 0;
         int current = getFluidAmount(metal);
         int extractable = Math.min(current, amount);
         if (!simulate && extractable > 0) {
@@ -567,7 +579,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     public List<MoltenMetal> getContainedFluids() {
         List<MoltenMetal> list = new ArrayList<>();
         for (Map.Entry<MoltenMetal, Integer> entry : moltenFluids.entrySet()) {
-            if (entry.getValue() > 0) {
+            if (entry.getKey() != MoltenMetal.LAVA && entry.getValue() > 0) {
                 list.add(entry.getKey());
             }
         }
@@ -716,7 +728,11 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
             if (metal != MoltenMetal.NONE) {
                 int amt = view.getInt("Fluid_" + metal.getId(), 0);
                 if (amt > 0) {
-                    this.moltenFluids.put(metal, amt);
+                    if (metal == MoltenMetal.LAVA) {
+                        this.lavaAmount = Math.min(LAVA_CAPACITY, this.lavaAmount + amt);
+                    } else {
+                        this.moltenFluids.put(metal, amt);
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@ import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.block.entity.TitaniumLavaPipeBlockEntity;
 import net.enchantedwood.block.entity.TitaniumTankCasingBlockEntity;
 import net.enchantedwood.fluid.LavaProvider;
+import net.enchantedwood.fluid.MoltenMetalProvider;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -118,14 +119,24 @@ public class TitaniumLavaPipeBlock extends BlockWithEntity {
             return direction == Direction.DOWN;
         }
 
-        // 4. Titanium Tank Casing: only connect if it is a valid formed outbound port (lower non-corner blocks)
+        // 4. Induction Smelter accepts lava and exports molten metals from any face
+        if (block instanceof InductionSmelterBlock) {
+            return true;
+        }
+
+        // 5. Casting Port accepts molten metals from any face
+        if (block instanceof CastingPortBlock) {
+            return true;
+        }
+
+        // 6. Titanium Tank Casing: only connect if it is a valid formed outbound port (lower non-corner blocks)
         BlockEntity be = world.getBlockEntity(neighborPos);
         if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
             return casingBE.isValidOutboundPort();
         }
 
-        // 5. Any other block entity implementing LavaProvider (Lava Pump, Magma Crucible)
-        if (be instanceof LavaProvider) {
+        // 7. Any other block entity implementing LavaProvider or MoltenMetalProvider (Lava Pump, Magma Crucible)
+        if (be instanceof LavaProvider || be instanceof MoltenMetalProvider) {
             return true;
         }
 

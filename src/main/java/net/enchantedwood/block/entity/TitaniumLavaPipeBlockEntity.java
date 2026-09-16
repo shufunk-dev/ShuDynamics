@@ -162,6 +162,18 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                     if (otherPipe.lavaAmount < entity.lavaAmount && (otherPipe.lavaAmount == 0 || otherPipe.fluidType == entity.fluidType)) {
                         pipeNeighbors.add(otherPipe);
                     }
+                } else if (entity.fluidType == MoltenMetal.LAVA && neighbor instanceof LavaProvider lavaProvider) {
+                    if (neighbor instanceof GeothermalGeneratorBlockEntity) {
+                        if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
+                            pureLavaConsumers.add(lavaProvider);
+                        }
+                    } else if (neighbor instanceof TitaniumTankControllerBlockEntity) {
+                        if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
+                            pureLavaConsumers.add(lavaProvider);
+                        }
+                    } else if (lavaProvider.canInsertLava()) {
+                        pureLavaConsumers.add(lavaProvider);
+                    }
                 } else if (neighbor instanceof MoltenMetalProvider metalProvider) {
                     if (neighbor instanceof TitaniumTankControllerBlockEntity) {
                         // Only insert into Tank Inbound Port from above
@@ -170,14 +182,6 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                         }
                     } else if (metalProvider.canInsertFluid(entity.fluidType)) {
                         metalConsumers.add(metalProvider);
-                    }
-                } else if (entity.fluidType == MoltenMetal.LAVA && neighbor instanceof LavaProvider lavaProvider) {
-                    if (neighbor instanceof GeothermalGeneratorBlockEntity) {
-                        if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
-                            pureLavaConsumers.add(lavaProvider);
-                        }
-                    } else if (lavaProvider.canInsertLava()) {
-                        pureLavaConsumers.add(lavaProvider);
                     }
                 }
             }

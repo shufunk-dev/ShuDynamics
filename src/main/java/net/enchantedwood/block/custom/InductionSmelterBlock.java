@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -74,9 +75,21 @@ public class InductionSmelterBlock extends BlockWithEntity {
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
-            NamedScreenHandlerFactory screenHandlerFactory = (NamedScreenHandlerFactory) world.getBlockEntity(pos);
-            if (screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+            ItemStack held = player.getStackInHand(player.getActiveHand());
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof InductionSmelterBlockEntity smelter) {
+                if (held.isOf(net.minecraft.item.Items.LAVA_BUCKET) || held.isOf(net.enchantedwood.item.ModItems.COPPER_LAVA_BUCKET) || held.isOf(net.enchantedwood.item.ModItems.ENCHANTED_LAVA_BUCKET)) {
+                    if (smelter.getLavaAmount() + 1000 <= InductionSmelterBlockEntity.LAVA_CAPACITY) {
+                        smelter.insertLava(1000, false);
+                        if (!player.isCreative()) {
+                            held.decrement(1);
+                            player.getInventory().offerOrDrop(new ItemStack(net.minecraft.item.Items.BUCKET));
+                        }
+                        world.playSound(null, pos, net.minecraft.sound.SoundEvents.ITEM_BUCKET_EMPTY_LAVA, net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                player.openHandledScreen(smelter);
             }
         }
         return ActionResult.SUCCESS;
