@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": "enchantedwood:asphalt_slab"
+  },
+  "pattern": [
+    "SSS"
+  ],
+  "result": {
+    "count": 3,
+    "id": "enchantedwood:asphalt_transition_ramp"
+  }
+}

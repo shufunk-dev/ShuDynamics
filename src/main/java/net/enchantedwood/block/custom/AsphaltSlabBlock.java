@@ -51,6 +51,20 @@ public class AsphaltSlabBlock extends SlabBlock {
             }
             return ActionResult.SUCCESS;
         }
+        if (stack.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.asItem())) {
+            if (!world.isClient()) {
+                Direction facing = player.getHorizontalFacing().getOpposite();
+                BlockState rampState = net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.getDefaultState()
+                        .with(RoadTransitionRampBlock.FACING, facing)
+                        .with(RoadTransitionRampBlock.RAMP_TYPE, RoadTransitionRampBlock.RampType.ROAD);
+                world.setBlockState(pos, rampState, 3);
+                world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
         return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
     }
 

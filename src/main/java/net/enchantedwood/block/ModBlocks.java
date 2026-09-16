@@ -734,7 +734,17 @@ public class ModBlocks {
                     .hardness(2.0f)
                     .resistance(6.0f)
                     .requiresTool()),
-            Text.literal("§7Smooth 0-to-8px slope connecting terrain to asphalt pavement."));
+            Text.literal("§7Smooth 0-to-8px concrete curb slope connecting terrain to roadway."));
+
+    public static final Block ASPHALT_TRANSITION_RAMP = registerBlockWithTooltip("asphalt_transition_ramp",
+            new net.enchantedwood.block.custom.AsphaltTransitionRampBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_transition_ramp")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(2.0f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§7Smooth 0-to-8px asphalt slope connecting terrain to asphalt pavement."),
+            Text.literal("§8Grants continuous speed boost when traversed."));
 
     public static final Block ASPHALT_RAMP = registerBlockWithTooltip("asphalt_ramp",
             new net.enchantedwood.block.custom.AsphaltRampBlock(AbstractBlock.Settings.create()

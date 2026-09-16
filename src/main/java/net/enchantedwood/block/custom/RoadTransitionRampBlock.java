@@ -137,13 +137,30 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
         BlockState belowState = ctx.getWorld().getBlockState(pos.down());
         boolean onAsphalt = belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB)
                 || belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK)
+                || belowState.isOf(this)
                 || ctx.getWorld().getBlockState(pos).isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
 
         RampType type = onAsphalt ? RampType.ROAD : RampType.GROUND;
+        if (ctx.getPlayer() != null && ctx.getPlayer().isSneaking()) {
+            type = (type == RampType.ROAD) ? RampType.GROUND : RampType.ROAD;
+        }
 
         return this.getDefaultState()
                 .with(FACING, playerFacing)
                 .with(RAMP_TYPE, type);
+    }
+
+    @Override
+    protected net.minecraft.util.ActionResult onUse(BlockState state, net.minecraft.world.World world, BlockPos pos, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.hit.BlockHitResult hit) {
+        if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+            if (!world.isClient()) {
+                RampType newType = state.get(RAMP_TYPE) == RampType.GROUND ? RampType.ROAD : RampType.GROUND;
+                world.setBlockState(pos, state.with(RAMP_TYPE, newType), 3);
+                world.playSound(null, pos, net.minecraft.sound.BlockSoundGroup.STONE.getPlaceSound(), net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.2f);
+            }
+            return net.minecraft.util.ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hit);
     }
 
     @Override
