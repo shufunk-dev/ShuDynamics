@@ -59,23 +59,18 @@ public class TitaniumTankCasingBlock extends BlockWithEntity {
                 }
             }
 
-            // If not formed, search in a 5x5x5 cube above for the controller/inbound port to trigger formation
-            for (int dy = 0; dy <= 4; dy++) {
-                for (int dx = -4; dx <= 4; dx++) {
-                    for (int dz = -4; dz <= 4; dz++) {
-                        BlockPos checkPos = pos.add(dx, dy, dz);
-                        BlockEntity targetBE = world.getBlockEntity(checkPos);
-                        if (targetBE instanceof TitaniumTankControllerBlockEntity controller) {
-                            if (controller.tryFormStructure()) {
-                                player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
-                                return ActionResult.SUCCESS;
-                            }
-                        }
-                    }
+            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+            if (controller != null) {
+                if (controller.isFormed()) {
+                    player.openHandledScreen(controller);
+                    return ActionResult.SUCCESS;
+                } else if (controller.tryFormStructure()) {
+                    player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
+                    return ActionResult.SUCCESS;
                 }
             }
 
-            player.sendMessage(Text.literal("§e[Titanium Reservoir] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."), true);
+            player.sendMessage(Text.literal("§e[Titanium Tank] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."), true);
         }
         return ActionResult.SUCCESS;
     }
@@ -88,6 +83,11 @@ public class TitaniumTankCasingBlock extends BlockWithEntity {
                 TitaniumTankControllerBlockEntity master = casingBE.getMaster();
                 if (master != null) {
                     master.dismantleStructure();
+                } else {
+                    TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+                    if (controller != null && controller.isFormed()) {
+                        controller.dismantleStructure();
+                    }
                 }
             }
         }

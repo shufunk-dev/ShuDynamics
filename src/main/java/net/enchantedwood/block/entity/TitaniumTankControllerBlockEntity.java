@@ -33,6 +33,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -97,8 +98,35 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     // ==========================================
     // MULTIBLOCK VALIDATION & FORMATION
     // ==========================================
+    public static @Nullable TitaniumTankControllerBlockEntity findControllerForBlock(World world, BlockPos pos) {
+        if (world == null) return null;
+        for (int dy = 0; dy <= 4; dy++) {
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    BlockPos checkPos = pos.add(dx, dy, dz);
+                    BlockEntity be = world.getBlockEntity(checkPos);
+                    if (be instanceof TitaniumTankControllerBlockEntity controller) {
+                        BlockPos min = controller.isFormed() && controller.getMinPos() != null
+                                ? controller.getMinPos()
+                                : checkPos.add(-2, -4, -2);
+                        int rx = pos.getX() - min.getX();
+                        int ry = pos.getY() - min.getY();
+                        int rz = pos.getZ() - min.getZ();
+                        if (rx >= 0 && rx < 5 && ry >= 0 && ry < 5 && rz >= 0 && rz < 5) {
+                            return controller;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean tryFormStructure() {
         if (this.world == null || this.world.isClient()) return false;
+        if (this.isFormed && this.minPos != null && validateStructureAt(this.minPos)) {
+            return true;
+        }
 
         // Controller is at top center: pos is (minX + 2, minY + 4, minZ + 2)
         BlockPos origin = this.pos.add(-2, -4, -2);

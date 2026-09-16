@@ -37,22 +37,14 @@ public class ReinforcedTankGlassBlock extends TransparentBlock {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
-            // Search in a 5x5x5 box for controller to open menu or try forming
-            for (int dy = -4; dy <= 4; dy++) {
-                for (int dx = -4; dx <= 4; dx++) {
-                    for (int dz = -4; dz <= 4; dz++) {
-                        BlockPos checkPos = pos.add(dx, dy, dz);
-                        BlockEntity targetBE = world.getBlockEntity(checkPos);
-                        if (targetBE instanceof TitaniumTankControllerBlockEntity controller) {
-                            if (controller.isFormed()) {
-                                player.openHandledScreen(controller);
-                                return ActionResult.SUCCESS;
-                            } else if (controller.tryFormStructure()) {
-                                player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
-                                return ActionResult.SUCCESS;
-                            }
-                        }
-                    }
+            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+            if (controller != null) {
+                if (controller.isFormed()) {
+                    player.openHandledScreen(controller);
+                    return ActionResult.SUCCESS;
+                } else if (controller.tryFormStructure()) {
+                    player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
+                    return ActionResult.SUCCESS;
                 }
             }
         }
@@ -62,18 +54,9 @@ public class ReinforcedTankGlassBlock extends TransparentBlock {
     @Override
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient()) {
-            // If broken, find controller and dismantle safely
-            for (int dy = -4; dy <= 4; dy++) {
-                for (int dx = -4; dx <= 4; dx++) {
-                    for (int dz = -4; dz <= 4; dz++) {
-                        BlockPos checkPos = pos.add(dx, dy, dz);
-                        BlockEntity targetBE = world.getBlockEntity(checkPos);
-                        if (targetBE instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
-                            controller.dismantleStructure();
-                            break;
-                        }
-                    }
-                }
+            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+            if (controller != null && controller.isFormed()) {
+                controller.dismantleStructure();
             }
         }
         return super.onBreak(world, pos, state, player);

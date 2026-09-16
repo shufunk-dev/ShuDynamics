@@ -38,6 +38,23 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
         if (this.masterPos != null && this.world != null) {
             BlockEntity be = this.world.getBlockEntity(this.masterPos);
             if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
+                BlockPos min = controller.getMinPos();
+                if (min != null) {
+                    int rx = this.pos.getX() - min.getX();
+                    int ry = this.pos.getY() - min.getY();
+                    int rz = this.pos.getZ() - min.getZ();
+                    if (rx >= 0 && rx < 5 && ry >= 0 && ry < 5 && rz >= 0 && rz < 5) {
+                        return controller;
+                    }
+                }
+            }
+        }
+        // Self-healing: locate the true controller governing this casing's coordinates
+        if (this.world != null) {
+            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(this.world, this.pos);
+            if (controller != null && controller.isFormed()) {
+                this.masterPos = controller.getPos();
+                markDirty();
                 return controller;
             }
         }
