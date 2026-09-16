@@ -82,6 +82,10 @@ public class CastingPortScreenHandler extends ScreenHandler {
         return (int) (((long) progress * pixels) / total);
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;

@@ -22,22 +22,36 @@ public class ModMessages {
 
         ServerPlayNetworking.registerGlobalReceiver(ToggleInductionSmelterAlloyPayload.ID, (payload, context) -> {
             context.server().execute(() -> {
-                if (context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
+                net.enchantedwood.block.entity.InductionSmelterBlockEntity smelter = null;
+                if (context.player().currentScreenHandler instanceof net.enchantedwood.screen.InductionSmelterScreenHandler handler
+                        && handler.getInventory() instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelterBe) {
+                    smelter = smelterBe;
+                } else if (payload.pos() != null && context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
                     BlockEntity be = context.player().getEntityWorld().getBlockEntity(payload.pos());
-                    if (be instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelter) {
-                        smelter.setAlloyingEnabled(!smelter.isAlloyingEnabled());
+                    if (be instanceof net.enchantedwood.block.entity.InductionSmelterBlockEntity smelterBe) {
+                        smelter = smelterBe;
                     }
+                }
+                if (smelter != null) {
+                    smelter.setAlloyingEnabled(!smelter.isAlloyingEnabled());
                 }
             });
         });
 
         ServerPlayNetworking.registerGlobalReceiver(ToggleCastingPortModePayload.ID, (payload, context) -> {
             context.server().execute(() -> {
-                if (context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
+                net.enchantedwood.block.entity.CastingPortBlockEntity port = null;
+                if (context.player().currentScreenHandler instanceof net.enchantedwood.screen.CastingPortScreenHandler handler
+                        && handler.getInventory() instanceof net.enchantedwood.block.entity.CastingPortBlockEntity portBe) {
+                    port = portBe;
+                } else if (payload.pos() != null && context.player().squaredDistanceTo(payload.pos().toCenterPos()) <= 64.0) {
                     BlockEntity be = context.player().getEntityWorld().getBlockEntity(payload.pos());
-                    if (be instanceof net.enchantedwood.block.entity.CastingPortBlockEntity port) {
-                        port.cycleMode();
+                    if (be instanceof net.enchantedwood.block.entity.CastingPortBlockEntity portBe) {
+                        port = portBe;
                     }
+                }
+                if (port != null) {
+                    port.cycleMode();
                 }
             });
         });

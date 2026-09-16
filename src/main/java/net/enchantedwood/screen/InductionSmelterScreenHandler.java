@@ -139,6 +139,10 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
         return this.propertyDelegate.get(10) == 1;
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
     public boolean isAlloyingEnabled() {
         return this.propertyDelegate.get(11) == 1;
     }

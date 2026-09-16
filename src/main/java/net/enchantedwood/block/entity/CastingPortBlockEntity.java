@@ -82,11 +82,13 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
 
     public void cycleMode() {
         this.mode = this.mode.next();
+        this.castProgress = 0;
         markDirty();
     }
 
     public void setMode(CastingMode newMode) {
         this.mode = newMode;
+        this.castProgress = 0;
         markDirty();
     }
 
@@ -137,43 +139,59 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
             };
 
             if (castItem != null) {
-                entity.castProgress++;
-                dirty = true;
+                boolean canDeposit = canDepositAnywhere(world, pos, entity, castItem);
 
+                // Only progress casting if output can accept the finished item
+                if (canDeposit && entity.castProgress < CAST_TIME) {
+                    entity.castProgress++;
+                    dirty = true;
+                }
+
+                // If progress reached completion, attempt to deposit and strictly only consume fluid on success
                 if (entity.castProgress >= CAST_TIME) {
-                    entity.castProgress = 0;
-                    entity.fluidAmount -= cost;
-                    if (entity.fluidAmount <= 0) {
-                        entity.currentFluid = MoltenMetal.NONE;
-                    }
-
-                    ItemStack produced = new ItemStack(castItem);
-                    // Try to auto-deposit into inventory beneath or behind
-                    boolean deposited = false;
-                    for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
-                        BlockEntity target = world.getBlockEntity(pos.offset(dir));
-                        if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
-                            produced = insertIntoInventory(targetInv, produced);
-                            if (produced.isEmpty()) {
-                                deposited = true;
-                                break;
+                    if (canDeposit) {
+                        ItemStack produced = new ItemStack(castItem);
+                        // Try to auto-deposit into inventory beneath or behind/sides
+                        for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
+                            BlockEntity target = world.getBlockEntity(pos.offset(dir));
+                            if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
+                                produced = insertIntoInventory(targetInv, produced, dir.getOpposite());
+                                if (produced.isEmpty()) {
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    // If not completely deposited into adjacent container, store in local output slot
-                    if (!produced.isEmpty()) {
-                        ItemStack current = entity.inventory.get(OUTPUT_SLOT);
-                        if (current.isEmpty()) {
-                            entity.inventory.set(OUTPUT_SLOT, produced);
-                        } else if (ItemStack.areItemsAndComponentsEqual(current, produced)) {
-                            int space = current.getMaxCount() - current.getCount();
-                            int toAdd = Math.min(space, produced.getCount());
-                            current.increment(toAdd);
+                        // If not completely deposited into adjacent container, store in local output slot
+                        if (!produced.isEmpty()) {
+                            ItemStack current = entity.inventory.get(OUTPUT_SLOT);
+                            if (current.isEmpty()) {
+                                entity.inventory.set(OUTPUT_SLOT, produced);
+                                produced = ItemStack.EMPTY;
+                            } else if (ItemStack.areItemsAndComponentsEqual(current, produced)) {
+                                int space = current.getMaxCount() - current.getCount();
+                                int toAdd = Math.min(space, produced.getCount());
+                                current.increment(toAdd);
+                                produced.decrement(toAdd);
+                            }
                         }
-                    }
 
-                    dirty = true;
+                        // ONLY deduct fluid and reset progress if item was completely and successfully stored!
+                        if (produced.isEmpty()) {
+                            entity.fluidAmount -= cost;
+                            if (entity.fluidAmount <= 0) {
+                                entity.currentFluid = MoltenMetal.NONE;
+                            }
+                            entity.castProgress = 0;
+                            dirty = true;
+                        } else {
+                            // Output became blocked at the last moment: hold at CAST_TIME without losing fluid
+                            entity.castProgress = CAST_TIME;
+                        }
+                    } else {
+                        // Obstructed: hold progress at 100% until output is freed
+                        entity.castProgress = CAST_TIME;
+                    }
                 }
             } else {
                 entity.castProgress = 0;
@@ -190,24 +208,93 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
         }
     }
 
-    private static ItemStack insertIntoInventory(Inventory inv, ItemStack stack) {
-        ItemStack remainder = stack.copy();
-        for (int i = 0; i < inv.size(); i++) {
-            if (remainder.isEmpty()) break;
-            if (!inv.isValid(i, remainder)) continue;
+    private static boolean canDepositAnywhere(ServerWorld world, BlockPos pos, CastingPortBlockEntity entity, Item castItem) {
+        ItemStack testStack = new ItemStack(castItem);
+        // 1. Check adjacent containers
+        for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
+            BlockEntity target = world.getBlockEntity(pos.offset(dir));
+            if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
+                if (canInsertIntoInventory(targetInv, testStack, dir.getOpposite())) {
+                    return true;
+                }
+            }
+        }
 
-            ItemStack existing = inv.getStack(i);
-            if (existing.isEmpty()) {
-                inv.setStack(i, remainder.copy());
-                inv.markDirty();
-                return ItemStack.EMPTY;
-            } else if (ItemStack.areItemsAndComponentsEqual(existing, remainder)) {
-                int space = existing.getMaxCount() - existing.getCount();
-                if (space > 0) {
-                    int toAdd = Math.min(space, remainder.getCount());
-                    existing.increment(toAdd);
-                    remainder.decrement(toAdd);
+        // 2. Check local output slot
+        ItemStack current = entity.inventory.get(OUTPUT_SLOT);
+        if (current.isEmpty()) {
+            return true;
+        }
+        if (ItemStack.areItemsAndComponentsEqual(current, testStack)) {
+            return current.getCount() < current.getMaxCount();
+        }
+        return false;
+    }
+
+    private static boolean canInsertIntoInventory(Inventory inv, ItemStack stack, Direction side) {
+        if (inv instanceof SidedInventory sided) {
+            int[] slots = sided.getAvailableSlots(side);
+            for (int slot : slots) {
+                if (!sided.canInsert(slot, stack, side)) continue;
+                ItemStack existing = sided.getStack(slot);
+                if (existing.isEmpty()) return true;
+                if (ItemStack.areItemsAndComponentsEqual(existing, stack) && existing.getCount() < existing.getMaxCount()) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = 0; i < inv.size(); i++) {
+                if (!inv.isValid(i, stack)) continue;
+                ItemStack existing = inv.getStack(i);
+                if (existing.isEmpty()) return true;
+                if (ItemStack.areItemsAndComponentsEqual(existing, stack) && existing.getCount() < existing.getMaxCount()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static ItemStack insertIntoInventory(Inventory inv, ItemStack stack, Direction side) {
+        ItemStack remainder = stack.copy();
+        if (inv instanceof SidedInventory sided) {
+            int[] slots = sided.getAvailableSlots(side);
+            for (int slot : slots) {
+                if (remainder.isEmpty()) break;
+                if (!sided.canInsert(slot, remainder, side)) continue;
+                ItemStack existing = sided.getStack(slot);
+                if (existing.isEmpty()) {
+                    sided.setStack(slot, remainder.copy());
+                    sided.markDirty();
+                    return ItemStack.EMPTY;
+                } else if (ItemStack.areItemsAndComponentsEqual(existing, remainder)) {
+                    int space = existing.getMaxCount() - existing.getCount();
+                    if (space > 0) {
+                        int toAdd = Math.min(space, remainder.getCount());
+                        existing.increment(toAdd);
+                        remainder.decrement(toAdd);
+                        sided.markDirty();
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < inv.size(); i++) {
+                if (remainder.isEmpty()) break;
+                if (!inv.isValid(i, remainder)) continue;
+
+                ItemStack existing = inv.getStack(i);
+                if (existing.isEmpty()) {
+                    inv.setStack(i, remainder.copy());
                     inv.markDirty();
+                    return ItemStack.EMPTY;
+                } else if (ItemStack.areItemsAndComponentsEqual(existing, remainder)) {
+                    int space = existing.getMaxCount() - existing.getCount();
+                    if (space > 0) {
+                        int toAdd = Math.min(space, remainder.getCount());
+                        existing.increment(toAdd);
+                        remainder.decrement(toAdd);
+                        inv.markDirty();
+                    }
                 }
             }
         }
