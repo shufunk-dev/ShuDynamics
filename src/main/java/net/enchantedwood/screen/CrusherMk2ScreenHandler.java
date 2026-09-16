@@ -18,7 +18,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public CrusherMk2ScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(CrusherMk2BlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+        this(syncId, playerInventory, new SimpleInventory(CrusherMk2BlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8));
     }
 
     public CrusherMk2ScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -103,14 +103,19 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
         return GearTier.NONE;
     }
 
+    public boolean isGearEnchanted() {
+        return propertyDelegate.size() > 7 && propertyDelegate.get(7) == 1;
+    }
+
     public int getTierYield() {
+        int bonus = isGearEnchanted() ? 1 : 0;
         return switch (getGearTier()) {
-            case IRON, COPPER -> 3;
-            case BRONZE, GOLD -> 4;
-            case ALUMINUM, STEEL -> 5;
-            case TITANIUM, DIAMOND -> 6;
-            case NETHERITE -> 8;
-            case BLAZE_OVERCLOCK -> 10;
+            case IRON, COPPER -> 3 + bonus;
+            case BRONZE, GOLD -> 4 + bonus;
+            case ALUMINUM, STEEL -> 5 + bonus;
+            case TITANIUM, DIAMOND -> 6 + bonus;
+            case NETHERITE -> 8 + bonus;
+            case BLAZE_OVERCLOCK -> 10 + bonus;
             default -> 3;
         };
     }

@@ -60,6 +60,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
                 case 4 -> energyStorage.getMaxEnergy() & 0xFFFF;
                 case 5 -> (energyStorage.getMaxEnergy() >> 16) & 0xFFFF;
                 case 6 -> getActiveGearTier().ordinal();
+                case 7 -> isGearEnchanted() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -74,7 +75,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
 
         @Override
         public int size() {
-            return 7;
+            return 8;
         }
     };
 
@@ -393,24 +394,18 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
 
         // Diamonds & Emeralds
-        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == ModBlocks.NETHER_DIAMOND_ORE.asItem()) {
+        if (item == Items.DIAMOND_ORE || item == Items.DEEPSLATE_DIAMOND_ORE || item == ModBlocks.NETHER_DIAMOND_ORE.asItem() || item == Items.DIAMOND) {
             return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 3, false, ModItems.EMERALD_DUST, 1);
         }
-        if (item == Items.DIAMOND) {
-            return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 1, true, null, 0);
-        }
         if (item == Items.DIAMOND_BLOCK) {
-            return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 9, true, null, 0);
+            return new Mk2CrushRecipe(ModItems.DIAMOND_DUST, 27, true, ModItems.EMERALD_DUST, 3);
         }
 
-        if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE) {
+        if (item == Items.EMERALD_ORE || item == Items.DEEPSLATE_EMERALD_ORE || item == Items.EMERALD) {
             return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 3, false, ModItems.DIAMOND_DUST, 1);
         }
-        if (item == Items.EMERALD) {
-            return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 1, true, null, 0);
-        }
         if (item == Items.EMERALD_BLOCK) {
-            return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 9, true, null, 0);
+            return new Mk2CrushRecipe(ModItems.EMERALD_DUST, 27, true, ModItems.DIAMOND_DUST, 3);
         }
 
         // Netherite Debris, Scraps & Ingots
@@ -431,14 +426,14 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
 
         // Coal, Coke Coal, Enchanted Coal
-        if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE) {
+        if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL) {
             return new Mk2CrushRecipe(ModItems.COAL_DUST, 3, false, ModItems.SULFUR_DUST, 1);
         }
-        if (item == Items.COAL || item == Items.CHARCOAL) {
+        if (item == Items.CHARCOAL) {
             return new Mk2CrushRecipe(ModItems.COAL_DUST, 1, true, null, 0);
         }
         if (item == Items.COAL_BLOCK) {
-            return new Mk2CrushRecipe(ModItems.COAL_DUST, 9, true, null, 0);
+            return new Mk2CrushRecipe(ModItems.COAL_DUST, 27, true, ModItems.SULFUR_DUST, 3);
         }
         if (item == ModItems.COKE_COAL) {
             return new Mk2CrushRecipe(ModItems.COAL_DUST, 2, true, null, 0);
