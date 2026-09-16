@@ -52,49 +52,39 @@ public class ModularSuitHandler {
         if (ModularPowerArmorItem.hasModule(helmet, "enchantedwood:night_vision_module")) {
             int lightLevel = world.getLightLevel(player.getBlockPos());
             if (lightLevel <= 6) {
-                // In dark area: check battery power
-                int storedEnergy = ModularPowerArmorItem.getStoredEnergy(helmet);
-                if (storedEnergy >= 2) {
-                    // Drain 2 FE every tick (40 FE / sec) continuously while active in dark
-                    ModularPowerArmorItem.extractEnergy(helmet, 2);
+                // In dark area: check suit battery power (siphons from helmet or chestplate/suit)
+                boolean hasPower = getSuitStoredEnergy(player) >= 2;
+                if (hasPower) {
+                    // Drain 40 FE / sec (throttled to 20 FE every 10 ticks).
+                    // Throttling prevents modifying the itemstack NBT every tick, which thrashed GUI slot sync and caused audio artifacts!
+                    if (world.getTime() % 10 == 0) {
+                        extractSuitEnergy(player, "enchantedwood:night_vision_module", 20);
+                    }
 
-                    boolean hadNightVision = player.hasStatusEffect(StatusEffects.NIGHT_VISION);
-                    // Refresh with 240 ticks (12 seconds) so it never flickers
-                    player.addStatusEffect(new StatusEffectInstance(
-                            StatusEffects.NIGHT_VISION,
-                            240,
-                            0,
-                            false,
-                            false,
-                            true
-                    ));
-
-                    if (!hadNightVision) {
-                        world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                                SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE,
-                                SoundCategory.PLAYERS,
-                                0.4f, 1.8f);
+                    StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+                    // Only refresh if missing or expiring soon (< 5 seconds) to avoid spamming effect packets to GUI
+                    if (currentEffect == null || currentEffect.getDuration() <= 100) {
+                        player.addStatusEffect(new StatusEffectInstance(
+                                StatusEffects.NIGHT_VISION,
+                                240,
+                                0,
+                                false,
+                                false,
+                                true
+                        ));
                     }
                 } else {
-                    // Out of power: shut off HUD
+                    // Out of power: shut off HUD quietly without spamming audio
                     StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
                     if (currentEffect != null && currentEffect.getDuration() <= 260) {
                         player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-                        world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                                SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE,
-                                SoundCategory.PLAYERS,
-                                0.3f, 2.0f);
                     }
                 }
             } else if (lightLevel >= 9) {
-                // Bright area: power down HUD to conserve power
+                // Bright area: power down HUD to conserve power quietly
                 StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
                 if (currentEffect != null && currentEffect.getDuration() <= 260) {
                     player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-                    world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                            SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE,
-                            SoundCategory.PLAYERS,
-                            0.3f, 2.0f);
                 }
             }
         }
