@@ -74,6 +74,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.CASTING_PORT_SCREEN_HANDLER, net.enchantedwood.screen.CastingPortScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY, net.enchantedwood.client.renderer.TitaniumTankControllerBlockEntityRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.AtvEntityModel.MODEL_LAYER, net.enchantedwood.client.renderer.AtvEntityModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ATV, net.enchantedwood.client.renderer.AtvEntityRenderer::new);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_ZOMBIE, net.enchantedwood.client.renderer.ConvergenceZombieRenderer::new);

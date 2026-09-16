@@ -36,6 +36,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper;
 import java.util.List;
 
 public class TitaniumTankControllerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider, MoltenMetalProvider {
@@ -269,39 +272,31 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         this.currentFluid = MoltenMetal.NONE;
         this.minPos = null;
         markDirty();
+        if (this.world != null) {
+            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        }
     }
 
     // ==========================================
-    // INTERIOR LAVA LEVEL RENDERING
+    // INTERIOR FLUID LEVEL & CLIENT SYNC
     // ==========================================
     public void updateInteriorLavaBlocks() {
         if (!this.isFormed || this.world == null || this.minPos == null || this.world.isClient()) return;
 
-        // 3 Vertical layers in 3x3x3 interior:
-        // Layer 1 (y=1): > 0 mB
-        // Layer 2 (y=2): > 166,666 mB
-        // Layer 3 (y=3): > 333,333 mB
-        boolean fillL1 = this.lavaAmount > 0;
-        boolean fillL2 = this.lavaAmount >= 166_666;
-        boolean fillL3 = this.lavaAmount >= 333_333;
-
-        setInteriorLayer(1, fillL1);
-        setInteriorLayer(2, fillL2);
-        setInteriorLayer(3, fillL3);
-    }
-
-    private void setInteriorLayer(int relY, boolean fillWithLava) {
-        for (int x = 1; x <= 3; x++) {
-            for (int z = 1; z <= 3; z++) {
-                BlockPos p = this.minPos.add(x, relY, z);
-                BlockState current = this.world.getBlockState(p);
-                if (fillWithLava && current.isAir()) {
-                    this.world.setBlockState(p, Blocks.LAVA.getDefaultState(), Block.NOTIFY_ALL);
-                } else if (!fillWithLava && current.getBlock() == Blocks.LAVA) {
-                    this.world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+        // Safely clear any legacy physical lava blocks to air so fluid is smoothly rendered by BER
+        for (int y = 1; y <= 3; y++) {
+            for (int x = 1; x <= 3; x++) {
+                for (int z = 1; z <= 3; z++) {
+                    BlockPos p = this.minPos.add(x, y, z);
+                    BlockState current = this.world.getBlockState(p);
+                    if (current.getBlock() == Blocks.LAVA) {
+                        this.world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+                    }
                 }
             }
         }
+
+        this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 
     // ==========================================
@@ -601,5 +596,19 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             this.minPos = null;
         }
         Inventories.readData(view, this.inventory);
+    }
+
+    public int getStoredFluidAmount() {
+        return this.lavaAmount;
+    }
+
+    @Override
+    public BlockEntityUpdateS2CPacket toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
+        return createNbt(registries);
     }
 }
