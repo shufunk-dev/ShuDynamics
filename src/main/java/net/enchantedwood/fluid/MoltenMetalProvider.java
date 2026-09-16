@@ -18,6 +18,13 @@ public interface MoltenMetalProvider {
     }
 
     /**
+     * Checks if this provider is specifically dedicated to this metal (e.g. already contains it or has a filter).
+     */
+    default boolean isDedicatedTo(MoltenMetal metal) {
+        return getFluidAmount(metal) > 0;
+    }
+
+    /**
      * For multi-fluid chambers like the Induction Smelter, returns all currently present molten metals.
      */
     default List<MoltenMetal> getContainedFluids() {

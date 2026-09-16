@@ -185,31 +185,39 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
 
         // 2. Push fluid to directly adjacent consumers (Tank Inbound Ports, Casting Ports, Generators)
         if (entity.lavaAmount > 0 && entity.fluidType != MoltenMetal.NONE) {
+            boolean hasDedicatedAdjacent = hasDedicatedNeighbor(world, pos, entity.fluidType);
+            boolean dedicatedExistsElsewhere = hasDedicatedAdjacent || findDirectionToConsumer(world, pos, entity.fluidType, true) != null;
+
             for (Direction dir : Direction.values()) {
                 if (entity.lavaAmount <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockPos neighborPos = pos.offset(dir);
+                BlockEntity neighbor = world.getBlockEntity(neighborPos);
                 if (neighbor == null || neighbor instanceof TitaniumLavaPipeBlockEntity) continue;
 
+                boolean isDedicated = isDedicatedConsumer(neighbor, entity.fluidType, dir);
+                boolean canConsume = isDedicated || canConsumeFluid(neighbor, entity.fluidType, dir);
+
+                if (!canConsume) continue;
+
+                // If this neighbor is NOT dedicated (e.g. an empty unreserved tank), but a dedicated tank exists elsewhere,
+                // do not push into this empty tank; let the fluid route through pipes to the dedicated tank!
+                if (!isDedicated && dedicatedExistsElsewhere) {
+                    continue;
+                }
+
                 if (neighbor instanceof MoltenMetalProvider consumer) {
-                    if (consumer.canInsertFluid(entity.fluidType)) {
-                        int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
-                        int accepted = consumer.insertFluid(entity.fluidType, toSend, false);
-                        if (accepted > 0) {
-                            entity.lavaAmount -= accepted;
-                            dirty = true;
-                        }
+                    int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
+                    int accepted = consumer.insertFluid(entity.fluidType, toSend, false);
+                    if (accepted > 0) {
+                        entity.lavaAmount -= accepted;
+                        dirty = true;
                     }
                 } else if (entity.fluidType == MoltenMetal.LAVA && neighbor instanceof LavaProvider lavaConsumer) {
-                    if (neighbor instanceof GeothermalGeneratorBlockEntity && dir != Direction.DOWN) {
-                        continue;
-                    }
-                    if (lavaConsumer.canInsertLava()) {
-                        int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
-                        int accepted = lavaConsumer.insertLava(toSend, false);
-                        if (accepted > 0) {
-                            entity.lavaAmount -= accepted;
-                            dirty = true;
-                        }
+                    int toSend = Math.min(TRANSFER_RATE, entity.lavaAmount);
+                    int accepted = lavaConsumer.insertLava(toSend, false);
+                    if (accepted > 0) {
+                        entity.lavaAmount -= accepted;
+                        dirty = true;
                     }
                 }
             }
@@ -223,7 +231,13 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
 
         // 3. Intelligent Network Routing: BFS towards a destination that can accept this specific fluid
         if (entity.lavaAmount > 0 && entity.fluidType != MoltenMetal.NONE) {
-            Direction targetDir = findDirectionToConsumer(world, pos, entity.fluidType);
+            // First priority: seek dedicated consumer (tank that already has this fluid or is filtered to it)
+            Direction targetDir = findDirectionToConsumer(world, pos, entity.fluidType, true);
+            if (targetDir == null) {
+                // Second priority: seek any consumer that can accept this fluid (e.g. empty tanks)
+                targetDir = findDirectionToConsumer(world, pos, entity.fluidType, false);
+            }
+
             if (targetDir != null) {
                 BlockEntity nextBe = world.getBlockEntity(pos.offset(targetDir));
                 if (nextBe instanceof TitaniumLavaPipeBlockEntity nextPipe) {
@@ -272,11 +286,53 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         }
     }
 
-    /**
-     * Breadth-First Search through connected pipes to find the step direction leading to a consumer
-     * that can accept fluidType. This ensures metals naturally branch to their respective holding tanks!
-     */
+    public static boolean hasDedicatedNeighbor(ServerWorld world, BlockPos pos, MoltenMetal fluidType) {
+        for (Direction dir : Direction.values()) {
+            BlockEntity be = world.getBlockEntity(pos.offset(dir));
+            if (isDedicatedConsumer(be, fluidType, dir)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isDedicatedConsumer(@Nullable BlockEntity be, MoltenMetal fluidType, @Nullable Direction fromDir) {
+        if (be == null || be instanceof TitaniumLavaPipeBlockEntity) return false;
+        if (be instanceof MoltenMetalProvider metalConsumer) {
+            return metalConsumer.canInsertFluid(fluidType) && metalConsumer.isDedicatedTo(fluidType);
+        } else if (fluidType == MoltenMetal.LAVA && be instanceof LavaProvider lavaConsumer) {
+            if (be instanceof GeothermalGeneratorBlockEntity && fromDir != null && fromDir != Direction.DOWN) {
+                return false;
+            }
+            return lavaConsumer.canInsertLava() && lavaConsumer.getLavaAmount() > 0;
+        }
+        return false;
+    }
+
+    public static boolean canConsumeFluid(@Nullable BlockEntity be, MoltenMetal fluidType, @Nullable Direction fromDir) {
+        if (be == null || be instanceof TitaniumLavaPipeBlockEntity) return false;
+        if (be instanceof MoltenMetalProvider metalConsumer) {
+            return metalConsumer.canInsertFluid(fluidType);
+        } else if (fluidType == MoltenMetal.LAVA && be instanceof LavaProvider lavaConsumer) {
+            if (be instanceof GeothermalGeneratorBlockEntity && fromDir != null && fromDir != Direction.DOWN) {
+                return false;
+            }
+            return lavaConsumer.canInsertLava();
+        }
+        return false;
+    }
+
     public static @Nullable Direction findDirectionToConsumer(ServerWorld world, BlockPos startPos, MoltenMetal fluidType) {
+        Direction dedicated = findDirectionToConsumer(world, startPos, fluidType, true);
+        if (dedicated != null) return dedicated;
+        return findDirectionToConsumer(world, startPos, fluidType, false);
+    }
+
+    /**
+     * Breadth-First Search through connected pipes to find the step direction leading to a consumer.
+     * @param dedicatedOnly if true, only considers consumers that already hold this fluid or are filtered to it.
+     */
+    public static @Nullable Direction findDirectionToConsumer(ServerWorld world, BlockPos startPos, MoltenMetal fluidType, boolean dedicatedOnly) {
         if (fluidType == MoltenMetal.NONE) return null;
 
         Queue<BlockPos> queue = new ArrayDeque<>();
@@ -311,15 +367,12 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                 BlockEntity target = world.getBlockEntity(targetPos);
                 if (target == null || target instanceof TitaniumLavaPipeBlockEntity) continue;
 
-                if (target instanceof MoltenMetalProvider metalConsumer) {
-                    if (metalConsumer.canInsertFluid(fluidType)) {
+                if (dedicatedOnly) {
+                    if (isDedicatedConsumer(target, fluidType, dir)) {
                         return firstStep;
                     }
-                } else if (fluidType == MoltenMetal.LAVA && target instanceof LavaProvider lavaConsumer) {
-                    if (target instanceof GeothermalGeneratorBlockEntity && dir != Direction.DOWN) {
-                        continue;
-                    }
-                    if (lavaConsumer.canInsertLava()) {
+                } else {
+                    if (canConsumeFluid(target, fluidType, dir)) {
                         return firstStep;
                     }
                 }

@@ -82,4 +82,21 @@ public enum MoltenMetal implements StringIdentifiable {
         }
         return NONE;
     }
+
+    public static @Nullable MoltenMetal fromItem(net.minecraft.item.ItemStack stack) {
+        if (stack.isEmpty()) return null;
+        if (stack.isOf(Items.LAVA_BUCKET)) return LAVA;
+        if (stack.isOf(Items.RAW_IRON) || stack.isOf(Items.RAW_IRON_BLOCK)) return IRON;
+        if (stack.isOf(Items.RAW_GOLD) || stack.isOf(Items.RAW_GOLD_BLOCK)) return GOLD;
+        if (stack.isOf(Items.RAW_COPPER) || stack.isOf(Items.RAW_COPPER_BLOCK)) return COPPER;
+
+        Item item = stack.getItem();
+        for (MoltenMetal metal : values()) {
+            if (metal == NONE || metal == LAVA) continue;
+            if (metal.getIngotItem() != null && item == metal.getIngotItem()) return metal;
+            if (metal.getNuggetItem() != null && item == metal.getNuggetItem()) return metal;
+            if (metal.getBlockItem() != null && item == metal.getBlockItem()) return metal;
+        }
+        return null;
+    }
 }

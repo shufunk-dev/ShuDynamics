@@ -50,6 +50,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int lavaAmount = 0;
     private MoltenMetal currentFluid = MoltenMetal.NONE;
+    private MoltenMetal filterFluid = MoltenMetal.NONE;
     private boolean isFormed = false;
     private BlockPos minPos = null; // Corner (minX, minY, minZ)
 
@@ -372,6 +373,9 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     @Override
     public boolean canInsertLava() {
         if (!this.isFormed) return false;
+        if (this.filterFluid != MoltenMetal.NONE && this.filterFluid != MoltenMetal.LAVA) {
+            return false;
+        }
         if (this.lavaAmount > 0 && this.currentFluid != MoltenMetal.NONE && this.currentFluid != MoltenMetal.LAVA) {
             return false;
         }
@@ -381,6 +385,9 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     @Override
     public boolean canInsertFluid(MoltenMetal metal) {
         if (!this.isFormed || metal == MoltenMetal.NONE) return false;
+        if (this.filterFluid != MoltenMetal.NONE && metal != this.filterFluid) {
+            return false;
+        }
         if (this.lavaAmount > 0 && this.currentFluid != MoltenMetal.NONE && this.currentFluid != metal) {
             return false;
         }
@@ -388,8 +395,16 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     @Override
+    public boolean isDedicatedTo(MoltenMetal metal) {
+        if (!this.isFormed || metal == MoltenMetal.NONE) return false;
+        if (this.filterFluid == metal) return true;
+        return this.currentFluid == metal && this.lavaAmount > 0;
+    }
+
+    @Override
     public int insertLava(int amount, boolean simulate) {
         if (!this.isFormed || amount <= 0) return 0;
+        if (this.filterFluid != MoltenMetal.NONE && this.filterFluid != MoltenMetal.LAVA) return 0;
         if (this.currentFluid != MoltenMetal.NONE && this.currentFluid != MoltenMetal.LAVA && this.lavaAmount > 0) return 0;
         int space = CAPACITY - this.lavaAmount;
         int inserted = Math.min(space, amount);
@@ -444,6 +459,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     @Override
     public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
         if (!this.isFormed || metal == MoltenMetal.NONE || amount <= 0) return 0;
+        if (this.filterFluid != MoltenMetal.NONE && this.filterFluid != metal) return 0;
         if (this.currentFluid != MoltenMetal.NONE && this.currentFluid != metal && this.lavaAmount > 0) return 0;
         int space = CAPACITY - this.lavaAmount;
         int inserted = Math.min(space, amount);
@@ -568,6 +584,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         super.writeData(view);
         view.putInt("LavaAmount", this.lavaAmount);
         view.putString("FluidType", this.currentFluid.getId());
+        view.putString("FilterFluid", this.filterFluid.getId());
         view.putBoolean("IsFormed", this.isFormed);
         if (this.minPos != null) {
             view.putInt("MinX", this.minPos.getX());
@@ -589,6 +606,11 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         if (this.lavaAmount <= 0) {
             this.currentFluid = MoltenMetal.NONE;
         }
+        if (view.contains("FilterFluid")) {
+            this.filterFluid = MoltenMetal.fromId(view.getString("FilterFluid", "none"));
+        } else {
+            this.filterFluid = MoltenMetal.NONE;
+        }
         this.isFormed = view.getBoolean("IsFormed", false);
         if (view.contains("MinX") && view.contains("MinY") && view.contains("MinZ")) {
             this.minPos = new BlockPos(view.getInt("MinX", 0), view.getInt("MinY", 0), view.getInt("MinZ", 0));
@@ -600,6 +622,18 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     public int getStoredFluidAmount() {
         return this.lavaAmount;
+    }
+
+    public MoltenMetal getFilterFluid() {
+        return this.filterFluid;
+    }
+
+    public void setFilterFluid(MoltenMetal filter) {
+        this.filterFluid = filter != null ? filter : MoltenMetal.NONE;
+        markDirty();
+        if (this.world != null) {
+            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        }
     }
 
     @Override

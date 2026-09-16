@@ -54,6 +54,23 @@ public class TitaniumTankCasingBlock extends BlockWithEntity {
             if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
                 TitaniumTankControllerBlockEntity master = casingBE.getMaster();
                 if (master != null && master.isFormed()) {
+                    if (player.isSneaking()) {
+                        net.minecraft.item.ItemStack hand = player.getMainHandStack();
+                        net.enchantedwood.fluid.MoltenMetal filterMetal = net.enchantedwood.fluid.MoltenMetal.fromItem(hand);
+                        if (filterMetal != null) {
+                            if (master.getStoredFluidAmount() > 0 && master.getFluidType() != filterMetal) {
+                                player.sendMessage(Text.literal("§c⚠ Tank contains " + master.getStoredFluidAmount() + " mB of " + master.getFluidType().getDisplayName() + "! Break and replace a block to purge first."), true);
+                                return ActionResult.SUCCESS;
+                            }
+                            master.setFilterFluid(filterMetal);
+                            player.sendMessage(Text.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()), true);
+                            return ActionResult.SUCCESS;
+                        } else if (hand.isEmpty()) {
+                            master.setFilterFluid(net.enchantedwood.fluid.MoltenMetal.NONE);
+                            player.sendMessage(Text.literal("§eTank filter cleared (Accepts any fluid)."), true);
+                            return ActionResult.SUCCESS;
+                        }
+                    }
                     player.openHandledScreen(master);
                     return ActionResult.SUCCESS;
                 }
