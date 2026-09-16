@@ -73,6 +73,28 @@ public class CircuitFabricatorBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        net.minecraft.item.ItemStack held = player.getMainHandStack();
+        if (held.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider batteryItem) {
+            if (!world.isClient()) {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof CircuitFabricatorBlockEntity fab) {
+                    net.enchantedwood.energy.EnergyStorage itemStorage = batteryItem.getEnergyStorage(held);
+                    if (itemStorage != null) {
+                        int needed = CircuitFabricatorBlockEntity.CAPACITY - fab.getEnergyStorage(null).getEnergy();
+                        int extracted = itemStorage.extractEnergy(needed, false);
+                        if (extracted > 0) {
+                            fab.getEnergyStorage(null).insertEnergy(extracted, false);
+                            player.sendMessage(net.minecraft.text.Text.literal(String.format("§b⚡ Charged Fabricator: +%,d FE (%,d / %,d FE)",
+                                    extracted, fab.getEnergyStorage(null).getEnergy(), CircuitFabricatorBlockEntity.CAPACITY)), true);
+                            world.playSound(null, pos, net.minecraft.sound.SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.4f);
+                            return ActionResult.SUCCESS;
+                        }
+                    }
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+
         if (!world.isClient()) {
             NamedScreenHandlerFactory screenHandlerFactory = (NamedScreenHandlerFactory) world.getBlockEntity(pos);
             if (screenHandlerFactory != null) {
