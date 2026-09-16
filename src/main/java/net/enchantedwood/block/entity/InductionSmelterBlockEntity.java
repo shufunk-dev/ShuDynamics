@@ -651,7 +651,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         } else if (side == Direction.DOWN) {
             return new int[]{ LAVA_OUT_SLOT };
         } else {
-            return new int[]{ LAVA_IN_SLOT, GEAR_SLOT, MODULE_SLOT };
+            return new int[]{ INPUT_SLOT_1, INPUT_SLOT_2, LAVA_IN_SLOT, GEAR_SLOT, MODULE_SLOT, LAVA_OUT_SLOT };
         }
     }
 
