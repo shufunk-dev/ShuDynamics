@@ -131,16 +131,30 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockPos pos = ctx.getBlockPos();
-        Direction playerFacing = ctx.getHorizontalPlayerFacing().getOpposite();
+        Direction playerFacing = ctx.getHorizontalPlayerFacing();
 
-        // If placing on top of an asphalt slab or block, auto-detect ROAD ramp mode
+        // Check the block in front (where the ramp is rising towards)
+        BlockPos frontPos = pos.offset(playerFacing);
+        BlockState frontState = ctx.getWorld().getBlockState(frontPos);
+
+        // Check the block below
         BlockState belowState = ctx.getWorld().getBlockState(pos.down());
-        boolean onAsphalt = belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB)
-                || belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK)
-                || belowState.isOf(this)
-                || ctx.getWorld().getBlockState(pos).isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
 
-        RampType type = onAsphalt ? RampType.ROAD : RampType.GROUND;
+        boolean isConnectedToFullBlock = frontState.isOf(net.enchantedwood.block.ModBlocks.CONCRETE_CURB)
+                || frontState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK)
+                || frontState.isOpaqueFullCube();
+
+        boolean onSlab = belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
+
+        boolean inFrontIsRoadRamp = (frontState.getBlock() instanceof RoadTransitionRampBlock)
+                && frontState.get(FACING) == playerFacing
+                && frontState.get(RAMP_TYPE) == RampType.ROAD;
+
+        RampType type = RampType.GROUND;
+        if ((isConnectedToFullBlock || onSlab) && !inFrontIsRoadRamp) {
+            type = RampType.ROAD;
+        }
+
         if (ctx.getPlayer() != null && ctx.getPlayer().isSneaking()) {
             type = (type == RampType.ROAD) ? RampType.GROUND : RampType.ROAD;
         }
@@ -152,11 +166,17 @@ public class RoadTransitionRampBlock extends HorizontalFacingBlock {
 
     @Override
     protected net.minecraft.util.ActionResult onUse(BlockState state, net.minecraft.world.World world, BlockPos pos, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.hit.BlockHitResult hit) {
-        if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+        if (player.getMainHandStack().isEmpty()) {
             if (!world.isClient()) {
-                RampType newType = state.get(RAMP_TYPE) == RampType.GROUND ? RampType.ROAD : RampType.GROUND;
-                world.setBlockState(pos, state.with(RAMP_TYPE, newType), 3);
-                world.playSound(null, pos, net.minecraft.sound.BlockSoundGroup.STONE.getPlaceSound(), net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.2f);
+                if (player.isSneaking()) {
+                    RampType newType = state.get(RAMP_TYPE) == RampType.GROUND ? RampType.ROAD : RampType.GROUND;
+                    world.setBlockState(pos, state.with(RAMP_TYPE, newType), 3);
+                    world.playSound(null, pos, net.minecraft.sound.BlockSoundGroup.STONE.getPlaceSound(), net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.2f);
+                } else {
+                    Direction newFacing = state.get(FACING).rotateYClockwise();
+                    world.setBlockState(pos, state.with(FACING, newFacing), 3);
+                    world.playSound(null, pos, net.minecraft.sound.BlockSoundGroup.STONE.getPlaceSound(), net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+                }
             }
             return net.minecraft.util.ActionResult.SUCCESS;
         }

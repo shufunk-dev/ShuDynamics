@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "enchantedwood:block/asphalt",
-    "all": "enchantedwood:block/asphalt"
+    "particle": "enchantedwood:block/asphalt_block",
+    "all": "enchantedwood:block/asphalt_block"
   },
   "elements": [
     {
@@ -32,7 +32,7 @@
     },
     {
       "comment": "Step 3 Layer",
-      "from": [0, 2, 0],
+      "from": [0, 4, 0],
       "to": [16, 6, 8],
       "faces": {
         "up":    { "uv": [0, 0, 16, 8], "texture": "#all" },

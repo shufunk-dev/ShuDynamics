@@ -88,7 +88,20 @@ public class ConcreteCurbRampBlock extends HorizontalFacingBlock {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+    }
+
+    @Override
+    protected net.minecraft.util.ActionResult onUse(BlockState state, net.minecraft.world.World world, BlockPos pos, net.minecraft.entity.player.PlayerEntity player, net.minecraft.util.hit.BlockHitResult hit) {
+        if (player.getMainHandStack().isEmpty()) {
+            if (!world.isClient()) {
+                Direction newFacing = state.get(FACING).rotateYClockwise();
+                world.setBlockState(pos, state.with(FACING, newFacing), 3);
+                world.playSound(null, pos, net.minecraft.sound.BlockSoundGroup.STONE.getPlaceSound(), net.minecraft.sound.SoundCategory.BLOCKS, 1.0f, 1.0f);
+            }
+            return net.minecraft.util.ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hit);
     }
 
     @Override

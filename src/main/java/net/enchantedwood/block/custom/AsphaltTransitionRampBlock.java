@@ -31,7 +31,7 @@ public class AsphaltTransitionRampBlock extends RoadTransitionRampBlock {
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
         if (!world.isClient() && entity instanceof LivingEntity living) {
-            // Speed boost on asphalt ramp
+            // Native continuous speed boost on asphalt
             living.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20, 0, false, false, true));
         }
         super.onSteppedOn(world, pos, state, entity);
@@ -40,17 +40,36 @@ public class AsphaltTransitionRampBlock extends RoadTransitionRampBlock {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockPos pos = ctx.getBlockPos();
-        Direction playerFacing = ctx.getHorizontalPlayerFacing().getOpposite();
+        // Facing in the direction the player is looking, so the ramp rises forward towards target
+        Direction playerFacing = ctx.getHorizontalPlayerFacing();
 
+        // Check the block in front (where the ramp is rising towards)
+        BlockPos frontPos = pos.offset(playerFacing);
+        BlockState frontState = ctx.getWorld().getBlockState(frontPos);
+
+        // Check the block below
         BlockState belowState = ctx.getWorld().getBlockState(pos.down());
-        boolean onAsphalt = belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB)
-                || belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK)
-                || belowState.isOf(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP)
-                || belowState.isOf(this)
-                || ctx.getWorld().getBlockState(pos).isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
 
-        RampType type = onAsphalt ? RampType.ROAD : RampType.GROUND;
-        // Sneak to invert placement mode
+        // Auto-detect ROAD mode (8px to 16px) if:
+        // 1. Placing directly against an elevated Asphalt Block, full block, or road deck
+        // 2. Placing on top of an asphalt slab
+        // 3. Or clicking on the upper half of a side face
+        boolean isConnectedToFullBlock = frontState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_BLOCK)
+                || frontState.isOpaqueFullCube();
+
+        boolean onSlab = belowState.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_SLAB);
+
+        // If the block in front is an existing ramp of type ROAD facing the same way, this ramp should be GROUND (0 to 8px)
+        boolean inFrontIsRoadRamp = (frontState.getBlock() instanceof RoadTransitionRampBlock)
+                && frontState.get(FACING) == playerFacing
+                && frontState.get(RAMP_TYPE) == RampType.ROAD;
+
+        RampType type = RampType.GROUND;
+        if ((isConnectedToFullBlock || onSlab) && !inFrontIsRoadRamp) {
+            type = RampType.ROAD;
+        }
+
+        // Sneak during placement to manually invert the detected type
         if (ctx.getPlayer() != null && ctx.getPlayer().isSneaking()) {
             type = (type == RampType.ROAD) ? RampType.GROUND : RampType.ROAD;
         }
@@ -62,11 +81,19 @@ public class AsphaltTransitionRampBlock extends RoadTransitionRampBlock {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+        if (player.getMainHandStack().isEmpty()) {
             if (!world.isClient()) {
-                RampType newType = state.get(RAMP_TYPE) == RampType.GROUND ? RampType.ROAD : RampType.GROUND;
-                world.setBlockState(pos, state.with(RAMP_TYPE, newType), 3);
-                world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.2f);
+                if (player.isSneaking()) {
+                    // Sneak + empty hand: toggle between GROUND (0-8px) and ROAD (8-16px)
+                    RampType newType = state.get(RAMP_TYPE) == RampType.GROUND ? RampType.ROAD : RampType.GROUND;
+                    world.setBlockState(pos, state.with(RAMP_TYPE, newType), 3);
+                    world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.2f);
+                } else {
+                    // Empty hand: rotate ramp facing 90 degrees clockwise
+                    Direction newFacing = state.get(FACING).rotateYClockwise();
+                    world.setBlockState(pos, state.with(FACING, newFacing), 3);
+                    world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+                }
             }
             return ActionResult.SUCCESS;
         }
