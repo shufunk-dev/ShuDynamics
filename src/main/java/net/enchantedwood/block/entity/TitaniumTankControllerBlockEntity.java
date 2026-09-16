@@ -45,7 +45,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int lavaAmount = 0;
-    private MoltenMetal currentFluid = MoltenMetal.LAVA;
+    private MoltenMetal currentFluid = MoltenMetal.NONE;
     private boolean isFormed = false;
     private BlockPos minPos = null; // Corner (minX, minY, minZ)
 
@@ -342,6 +342,24 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     @Override
+    public boolean canInsertLava() {
+        if (!this.isFormed) return false;
+        if (this.lavaAmount > 0 && this.currentFluid != MoltenMetal.NONE && this.currentFluid != MoltenMetal.LAVA) {
+            return false;
+        }
+        return this.lavaAmount < CAPACITY;
+    }
+
+    @Override
+    public boolean canInsertFluid(MoltenMetal metal) {
+        if (!this.isFormed || metal == MoltenMetal.NONE) return false;
+        if (this.lavaAmount > 0 && this.currentFluid != MoltenMetal.NONE && this.currentFluid != metal) {
+            return false;
+        }
+        return this.lavaAmount < CAPACITY;
+    }
+
+    @Override
     public int insertLava(int amount, boolean simulate) {
         if (!this.isFormed || amount <= 0) return 0;
         if (this.currentFluid != MoltenMetal.NONE && this.currentFluid != MoltenMetal.LAVA && this.lavaAmount > 0) return 0;
@@ -487,7 +505,10 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     @Override
     public Text getDisplayName() {
-        return Text.literal("5x5 Titanium Lava Reservoir");
+        if (this.currentFluid != null && this.currentFluid != MoltenMetal.NONE) {
+            return Text.literal("5x5 " + this.currentFluid.getDisplayName() + " Tank");
+        }
+        return Text.literal("5x5 Titanium Multi-Fluid Tank");
     }
 
     @Nullable
@@ -514,7 +535,10 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     protected void readData(ReadView view) {
         super.readData(view);
         this.lavaAmount = view.getInt("LavaAmount", 0);
-        this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "lava"));
+        this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "none"));
+        if (this.lavaAmount <= 0) {
+            this.currentFluid = MoltenMetal.NONE;
+        }
         this.isFormed = view.getBoolean("IsFormed", false);
         if (view.contains("MinX") && view.contains("MinY") && view.contains("MinZ")) {
             this.minPos = new BlockPos(view.getInt("MinX", 0), view.getInt("MinY", 0), view.getInt("MinZ", 0));

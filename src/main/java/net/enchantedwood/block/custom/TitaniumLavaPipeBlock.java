@@ -114,9 +114,9 @@ public class TitaniumLavaPipeBlock extends BlockWithEntity {
             return direction == Direction.DOWN;
         }
 
-        // 3. Titanium Tank Inbound Port only accepts connection on its top face (direction is DOWN)
+        // 3. Titanium Tank Inbound Port accepts connection from top and sides
         if (block instanceof TitaniumTankInboundPortBlock) {
-            return direction == Direction.DOWN;
+            return true;
         }
 
         // 4. Induction Smelter accepts lava and exports molten metals from any face
@@ -129,10 +129,10 @@ public class TitaniumLavaPipeBlock extends BlockWithEntity {
             return true;
         }
 
-        // 6. Titanium Tank Casing: only connect if it is a valid formed outbound port (lower non-corner blocks)
+        // 6. Titanium Tank Casing: connect if formed
         BlockEntity be = world.getBlockEntity(neighborPos);
         if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
-            return casingBE.isValidOutboundPort();
+            return casingBE.getMaster() != null;
         }
 
         // 7. Any other block entity implementing LavaProvider or MoltenMetalProvider (Lava Pump, Magma Crucible)

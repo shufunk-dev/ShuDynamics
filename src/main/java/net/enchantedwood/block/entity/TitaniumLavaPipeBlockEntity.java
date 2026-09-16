@@ -167,20 +167,11 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                         if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
                             pureLavaConsumers.add(lavaProvider);
                         }
-                    } else if (neighbor instanceof TitaniumTankControllerBlockEntity) {
-                        if (dir == Direction.DOWN && lavaProvider.canInsertLava()) {
-                            pureLavaConsumers.add(lavaProvider);
-                        }
                     } else if (lavaProvider.canInsertLava()) {
                         pureLavaConsumers.add(lavaProvider);
                     }
                 } else if (neighbor instanceof MoltenMetalProvider metalProvider) {
-                    if (neighbor instanceof TitaniumTankControllerBlockEntity) {
-                        // Only insert into Tank Inbound Port from above
-                        if (dir == Direction.DOWN && metalProvider.canInsertFluid(entity.fluidType)) {
-                            metalConsumers.add(metalProvider);
-                        }
-                    } else if (metalProvider.canInsertFluid(entity.fluidType)) {
+                    if (metalProvider.canInsertFluid(entity.fluidType)) {
                         metalConsumers.add(metalProvider);
                     }
                 }

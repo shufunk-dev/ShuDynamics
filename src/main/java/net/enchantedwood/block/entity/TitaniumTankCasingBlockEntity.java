@@ -76,8 +76,8 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     @Override
     public int insertLava(int amount, boolean simulate) {
-        // Outer casings are OUTBOUND only; inbound must go through the top inbound port
-        return 0;
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.insertLava(amount, simulate) : 0;
     }
 
     @Override
@@ -89,7 +89,8 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     @Override
     public boolean canInsertLava() {
-        return false; // Casings only output lava
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null && master.canInsertLava();
     }
 
     @Override
@@ -118,7 +119,14 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     @Override
     public int insertFluid(MoltenMetal metal, int amount, boolean simulate) {
-        return 0; // Casings are outbound only
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null ? master.insertFluid(metal, amount, simulate) : 0;
+    }
+
+    @Override
+    public boolean canInsertFluid(MoltenMetal metal) {
+        TitaniumTankControllerBlockEntity master = getMaster();
+        return master != null && master.canInsertFluid(metal);
     }
 
     @Override
