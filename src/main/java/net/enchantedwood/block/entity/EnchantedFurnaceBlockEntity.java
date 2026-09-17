@@ -106,7 +106,41 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
         return 0;
     }
 
+    private boolean isExternalProcess = false;
+
+    public boolean isExternalProcess() {
+        return this.isExternalProcess;
+    }
+
+    public void setExternalProcess(@Nullable ItemStack input, int progressTicks, int maxTicks) {
+        this.isExternalProcess = true;
+        if (input != null && !input.isEmpty()) {
+            if (getStack(0).isEmpty() || !getStack(0).isOf(input.getItem())) {
+                setStack(0, input.copy());
+            }
+        }
+        int total = Math.max(1, maxTicks);
+        int cook = Math.min(total, progressTicks);
+        this.propertyDelegate.set(0, 200); // burnTime > 0 so flames render in GUI
+        this.propertyDelegate.set(1, 200); // total burnTime
+        this.propertyDelegate.set(2, cook); // cookTime
+        this.propertyDelegate.set(3, total); // cookTotal
+        markDirty();
+    }
+
+    public void clearExternalProcess() {
+        this.isExternalProcess = false;
+        setStack(0, ItemStack.EMPTY);
+        this.propertyDelegate.set(0, 0);
+        this.propertyDelegate.set(2, 0);
+        markDirty();
+    }
+
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, EnchantedFurnaceBlockEntity furnace) {
+        if (furnace.isExternalProcess) {
+            return;
+        }
+
         ItemStack input = furnace.getStack(0);
         Item dustResult = !input.isEmpty() ? getDustSmeltingResult(input.getItem()) : null;
 

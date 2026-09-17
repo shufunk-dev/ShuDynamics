@@ -436,7 +436,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
                 yield 120;
             }
-            case SMELT -> isFurnaceOnline() ? 30 : 60;
+            case SMELT -> isFurnaceOnline() ? 60 : 120;
             case CAST -> 20;
             case ASSEMBLE -> isOverclocked() ? 10 : 25;
         };
@@ -837,9 +837,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     }
                     if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
                         ItemStack inStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
-                        if (!inStack.isEmpty() && (ef.getStack(0).isEmpty() || ef.getStack(0).isOf(inStack.getItem()))) {
-                            ef.setStack(0, inStack);
-                        }
+                        ef.setExternalProcess(inStack, job.currentStepTicks, stepMax);
                     }
                     if (world.getTime() % 4 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, fPos.getX() + 0.5, fPos.getY() + 0.5, fPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
@@ -905,7 +903,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     BlockEntity furnace = getBestAvailableFurnace();
                     BlockPos sPos = furnace != null ? furnace.getPos() : pos;
                     if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
-                        ef.setStack(0, ItemStack.EMPTY);
+                        ef.clearExternalProcess();
                     }
                     world.playSound(null, sPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.9f, 1.2f);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
@@ -1831,7 +1829,17 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             plan.totalCraftingSteps++;
                             plan.smeltingSteps++;
                             int yield = Math.max(1, smeltRes.getCount());
-                            plan.steps.add(new CraftStep(StepType.SMELT, null, targetItem));
+                            net.minecraft.item.Item resolvedInput = null;
+                            for (net.minecraft.item.Item opt : ing.getMatchingItems().map(net.minecraft.registry.entry.RegistryEntry::value).toList()) {
+                                if (available.containsKey(opt) || virtualBuffer.containsKey(opt)) {
+                                    resolvedInput = opt;
+                                    break;
+                                }
+                            }
+                            if (resolvedInput == null) {
+                                resolvedInput = ing.getMatchingItems().findFirst().map(net.minecraft.registry.entry.RegistryEntry::value).orElse(null);
+                            }
+                            plan.steps.add(new CraftStep(StepType.SMELT, resolvedInput, targetItem));
                             if (yield > 1) {
                                 virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
                             }
