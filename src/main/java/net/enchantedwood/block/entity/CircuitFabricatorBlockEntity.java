@@ -155,6 +155,12 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         super(ModBlockEntities.CIRCUIT_FABRICATOR_BE, pos, state);
     }
 
+    private int externalOperationTicks = 0;
+
+    public void triggerExternalOperation(int ticks) {
+        this.externalOperationTicks = Math.max(this.externalOperationTicks, ticks);
+    }
+
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, CircuitFabricatorBlockEntity entity) {
         boolean dirty = false;
 
@@ -192,7 +198,12 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
             }
         }
 
-        boolean isLit = activeRecipe != null && entity.energyStorage.getEnergy() >= ENERGY_DRAW && entity.cookTime > 0;
+        boolean isLit = (activeRecipe != null && entity.energyStorage.getEnergy() >= ENERGY_DRAW && entity.cookTime > 0) || entity.externalOperationTicks > 0;
+        if (entity.externalOperationTicks > 0) {
+            entity.externalOperationTicks--;
+            dirty = true;
+        }
+
         if (state.get(CircuitFabricatorBlock.LIT) != isLit) {
             world.setBlockState(pos, state.with(CircuitFabricatorBlock.LIT, isLit), 3);
             dirty = true;

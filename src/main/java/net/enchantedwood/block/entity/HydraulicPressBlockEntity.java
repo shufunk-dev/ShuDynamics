@@ -98,6 +98,12 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         super(ModBlockEntities.HYDRAULIC_PRESS_BLOCK_ENTITY, pos, state);
     }
 
+    private int externalOperationTicks = 0;
+
+    public void triggerExternalOperation(int ticks) {
+        this.externalOperationTicks = Math.max(this.externalOperationTicks, ticks);
+    }
+
     public static void tick(net.minecraft.world.World world, BlockPos pos, BlockState state, HydraulicPressBlockEntity entity) {
         if (world.isClient()) return;
 
@@ -106,6 +112,11 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
 
         if (state.get(HydraulicPressBlock.GEAR_TIER) != gearTier) {
             world.setBlockState(pos, state.with(HydraulicPressBlock.GEAR_TIER, gearTier), 3);
+        }
+
+        if (entity.externalOperationTicks > 0) {
+            entity.externalOperationTicks--;
+            isCooking = true;
         }
 
         if (entity.canProcess()) {
@@ -120,7 +131,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
                     world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.6f, 0.7f);
                 }
             }
-        } else {
+        } else if (entity.externalOperationTicks <= 0) {
             entity.cookTime = Math.max(0, entity.cookTime - 2);
         }
 
@@ -174,7 +185,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         return ItemStack.EMPTY;
     }
 
-    private int getProcessingSpeed(GearTier tier) {
+    public int getProcessingSpeed(GearTier tier) {
         int base = 1;
         ItemStack gear = this.inventory.get(GEAR_SLOT);
         boolean enchanted = gear.getItem() instanceof GearItem g && g.isEnchanted();

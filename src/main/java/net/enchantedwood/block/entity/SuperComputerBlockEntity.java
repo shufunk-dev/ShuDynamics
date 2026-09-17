@@ -32,6 +32,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -111,6 +113,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private List<TitaniumTankControllerBlockEntity> cachedTankControllers = java.util.Collections.emptyList();
     private @Nullable EnchantedStorageTerminalBlockEntity cachedTerminal = null;
     private @Nullable EnchantedStorageControllerBlockEntity cachedPowerController = null;
+    private @Nullable ActiveCraftJob activeJob = null;
 
     public SuperComputerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SUPER_COMPUTER_BLOCK_ENTITY, pos, state);
@@ -360,6 +363,58 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         return this.cachedFurnaces;
     }
 
+    public @Nullable HydraulicPressBlockEntity getBestAvailablePress() {
+        for (HydraulicPressBlockEntity press : this.cachedPresses) {
+            if (press != null && !press.isRemoved()) return press;
+        }
+        return null;
+    }
+
+    public @Nullable CircuitFabricatorBlockEntity getBestAvailableFabricator() {
+        for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
+            if (fab != null && !fab.isRemoved()) return fab;
+        }
+        return null;
+    }
+
+    public @Nullable BlockEntity getBestAvailableFurnace() {
+        for (BlockEntity f : this.cachedFurnaces) {
+            if (f != null && !f.isRemoved()) return f;
+        }
+        return null;
+    }
+
+    public @Nullable CastingPortBlockEntity getBestAvailableCaster() {
+        for (CastingPortBlockEntity c : this.cachedCasters) {
+            if (c != null && !c.isRemoved()) return c;
+        }
+        return null;
+    }
+
+    public int getStepDurationTicks(CraftStep step) {
+        return switch (step.type) {
+            case PRESS -> {
+                HydraulicPressBlockEntity press = getBestAvailablePress();
+                if (press != null) {
+                    int speed = press.getProcessingSpeed(press.getActiveGearTier());
+                    yield Math.max(8, 80 / Math.max(1, speed));
+                }
+                yield 40;
+            }
+            case FABRICATE -> {
+                CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
+                if (fab != null) {
+                    float speed = fab.getSpeedMultiplier();
+                    yield Math.max(8, (int) (100 / Math.max(1.0f, speed)));
+                }
+                yield 50;
+            }
+            case SMELT -> isFurnaceOnline() ? 20 : 40;
+            case CAST -> 15;
+            case ASSEMBLE -> isOverclocked() ? 6 : 14;
+        };
+    }
+
     public record PressRecipeInfo(net.minecraft.item.Item input, int yield) {}
 
     public static @Nullable PressRecipeInfo getPressRecipeInfo(net.minecraft.item.Item targetItem) {
@@ -533,6 +588,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, SuperComputerBlockEntity entity) {
+        if (entity.activeJob != null) {
+            entity.tickActiveJob(world, pos, state);
+            return;
+        }
+
         entity.updateMachineCache(false);
         boolean wasLit = state.get(SuperComputerBlock.LIT);
 
@@ -617,9 +677,199 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
     }
 
+    private void tickActiveJob(ServerWorld world, BlockPos pos, BlockState state) {
+        if (this.activeJob == null) return;
+        ActiveCraftJob job = this.activeJob;
+        CraftStep step = job.getCurrentStep();
+
+        if (step == null) {
+            // All steps completed!
+            EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+            PlayerEntity player = world.getPlayerByUuid(job.playerUuid);
+
+            depositCraftedResult(terminal, player, job.finalResult.copy());
+            for (ItemStack leftover : job.leftoverItems) {
+                if (!leftover.isEmpty()) {
+                    depositCraftedResult(terminal, player, leftover.copy());
+                }
+            }
+
+            world.playSound(null, pos, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.BLOCKS, 0.7f, 1.1f);
+            if (player != null) {
+                sendFeedback(player, "§a⚡ Factory Completed: §f" + job.finalResult.getCount() + "x " + job.finalResult.getName().getString());
+            }
+
+            this.craftProgress = 0;
+            this.maxCraftProgress = 0;
+            boolean hadCraftAll = job.craftAll;
+            this.activeJob = null;
+
+            BlockEntity furnace = getBestAvailableFurnace();
+            if (furnace != null) {
+                BlockPos fPos = furnace.getPos();
+                BlockState fState = world.getBlockState(fPos);
+                if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
+                    world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, false), 3);
+                }
+            }
+
+            markDirty();
+
+            if (hadCraftAll && player != null) {
+                executeManualCraft(player, true);
+            } else {
+                world.setBlockState(pos, state.with(SuperComputerBlock.LIT, false), 3);
+            }
+            return;
+        }
+
+        // Keep Super Computer LIT
+        if (!state.get(SuperComputerBlock.LIT)) {
+            world.setBlockState(pos, state.with(SuperComputerBlock.LIT, true), 3);
+        }
+
+        // Determine power draw for current step
+        int powerDraw = switch (step.type) {
+            case PRESS -> 40;
+            case FABRICATE -> 50;
+            case SMELT -> 30;
+            case CAST -> 25;
+            case ASSEMBLE -> 20;
+        };
+
+        if (this.energyStorage.getEnergy() < powerDraw && !drawNetworkPower()) {
+            // Stalled due to lack of power!
+            if (world.getTime() % 60 == 0) {
+                PlayerEntity p = world.getPlayerByUuid(job.playerUuid);
+                if (p != null) sendFeedback(p, "§c[Super Computer] Factory paused: Insufficient Energy! (" + powerDraw + " FE/t needed)");
+            }
+            return;
+        }
+
+        this.energyStorage.extractEnergy(powerDraw, false);
+
+        // Real physical machine operation, animations, and in-world particles
+        switch (step.type) {
+            case PRESS -> {
+                HydraulicPressBlockEntity press = getBestAvailablePress();
+                if (press != null) {
+                    press.triggerExternalOperation(4);
+                    BlockPos pPos = press.getPos();
+                    if (world.getTime() % 3 == 0) {
+                        world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, pPos.getX() + 0.5, pPos.getY() + 0.8, pPos.getZ() + 0.5, 4, 0.15, 0.15, 0.15, 0.02);
+                    }
+                }
+            }
+            case SMELT -> {
+                BlockEntity furnace = getBestAvailableFurnace();
+                if (furnace != null) {
+                    BlockPos fPos = furnace.getPos();
+                    BlockState fState = world.getBlockState(fPos);
+                    if (fState.contains(net.minecraft.state.property.Properties.LIT) && !fState.get(net.minecraft.state.property.Properties.LIT)) {
+                        world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, true), 3);
+                    }
+                    if (world.getTime() % 4 == 0) {
+                        world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, fPos.getX() + 0.5, fPos.getY() + 0.5, fPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
+                    }
+                    if (world.getTime() % 20 == 0) {
+                        world.playSound(null, fPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.8f, 1.0f);
+                    }
+                }
+            }
+            case CAST -> {
+                CastingPortBlockEntity caster = getBestAvailableCaster();
+                if (caster != null) {
+                    BlockPos cPos = caster.getPos();
+                    if (world.getTime() % 3 == 0) {
+                        world.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, cPos.getX() + 0.5, cPos.getY() + 0.8, cPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
+                    }
+                    if (world.getTime() % 15 == 0) {
+                        world.playSound(null, cPos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.6f, 1.3f);
+                    }
+                }
+            }
+            case FABRICATE -> {
+                CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
+                if (fab != null) {
+                    fab.triggerExternalOperation(4);
+                    BlockPos bPos = fab.getPos();
+                    if (world.getTime() % 3 == 0) {
+                        world.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, bPos.getX() + 0.5, bPos.getY() + 0.8, bPos.getZ() + 0.5, 5, 0.2, 0.2, 0.2, 0.05);
+                    }
+                    if (world.getTime() % 25 == 0) {
+                        world.playSound(null, bPos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 0.6f, 1.8f);
+                    }
+                }
+            }
+            case ASSEMBLE -> {
+                if (world.getTime() % 3 == 0) {
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5, 4, 0.2, 0.1, 0.2, 0.05);
+                }
+            }
+        }
+
+        job.currentStepTicks++;
+        int stepMax = getStepDurationTicks(step);
+        job.currentStepMaxTicks = stepMax;
+
+        // Sync progress to delegate & GUI
+        this.maxCraftProgress = job.getTotalEstimatedTicks(this);
+        this.craftProgress = job.getCompletedTicks(this);
+
+        if (job.currentStepTicks >= stepMax) {
+            // Current step completed! Trigger sound & particles at the operating machine
+            switch (step.type) {
+                case PRESS -> {
+                    HydraulicPressBlockEntity press = getBestAvailablePress();
+                    BlockPos sPos = press != null ? press.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.8f, 0.6f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.1);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.LARGE_SMOKE, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.05);
+                }
+                case SMELT -> {
+                    BlockEntity furnace = getBestAvailableFurnace();
+                    BlockPos sPos = furnace != null ? furnace.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.9f, 1.2f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
+                    if (furnace != null) {
+                        BlockState fState = world.getBlockState(sPos);
+                        if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
+                            world.setBlockState(sPos, fState.with(net.minecraft.state.property.Properties.LIT, false), 3);
+                        }
+                    }
+                }
+                case CAST -> {
+                    CastingPortBlockEntity caster = getBestAvailableCaster();
+                    BlockPos sPos = caster != null ? caster.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.8f, 1.2f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
+                }
+                case FABRICATE -> {
+                    CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
+                    BlockPos sPos = fab != null ? fab.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 0.8f, 1.6f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 15, 0.2, 0.2, 0.2, 0.1);
+                }
+                case ASSEMBLE -> {
+                    world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.5f, 1.4f);
+                }
+            }
+
+            job.currentStepIndex++;
+            job.currentStepTicks = 0;
+        }
+
+        markDirty();
+    }
+
     public void executeManualCraft(PlayerEntity player, boolean craftAll) {
         if (!(this.world instanceof ServerWorld serverWorld)) return;
         updateMachineCache(true);
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
 
         List<ItemStack> patternStacks = new ArrayList<>(9);
         boolean patternEmpty = true;
@@ -664,129 +914,51 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         ItemStack resultStack = match.get().value().craft(recipeInput, serverWorld.getRegistryManager());
         if (resultStack.isEmpty()) return;
 
+        if (!canAcceptOutput(resultStack)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
+        }
+
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int maxBatches = craftAll ? 64 : 1;
-        int craftedBatches = 0;
-        int totalCraftingStepsSum = 0;
-        int totalMoltenMbUsedSum = 0;
-        int totalFabricationsSum = 0;
-        int totalPressingsSum = 0;
-        int totalSmeltingSum = 0;
-
-        for (int b = 0; b < maxBatches; b++) {
-            if (!canAcceptOutput(resultStack)) {
-                if (craftedBatches == 0) {
-                    sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+        CraftingPlanResult planResult = resolveCraftingPlan(serverWorld, terminal, player, match.get().value(), patternStacks);
+        if (!planResult.success || planResult.plan == null) {
+            if (!planResult.missingItems.isEmpty()) {
+                StringBuilder sb = new StringBuilder("§cMissing: §e");
+                boolean first = true;
+                for (java.util.Map.Entry<String, Integer> entry : planResult.missingItems.entrySet()) {
+                    if (!first) sb.append("§7, §e");
+                    sb.append(entry.getValue()).append("x ").append(entry.getKey());
+                    first = false;
                 }
-                break;
-            }
-
-            CraftingPlanResult planResult = resolveCraftingPlan(serverWorld, terminal, player, match.get().value(), patternStacks);
-            if (!planResult.success || planResult.plan == null) {
-                if (craftedBatches == 0) {
-                    if (!planResult.missingItems.isEmpty()) {
-                        StringBuilder sb = new StringBuilder("§cMissing: §e");
-                        boolean first = true;
-                        for (java.util.Map.Entry<String, Integer> entry : planResult.missingItems.entrySet()) {
-                            if (!first) sb.append("§7, §e");
-                            sb.append(entry.getValue()).append("x ").append(entry.getKey());
-                            first = false;
-                        }
-                        sendFeedback(player, sb.toString());
-                    } else {
-                        sendFeedback(player, "§c[Super Computer] Missing required materials in storage or inventory!");
-                    }
-                }
-                break;
-            }
-
-            CraftingPlan plan = planResult.plan;
-
-            int totalEnergy = ENERGY_PER_CRAFT * plan.totalCraftingSteps;
-            if (this.energyStorage.getEnergy() < totalEnergy && !drawNetworkPower()) {
-                if (craftedBatches == 0) {
-                    sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + totalEnergy + " FE)");
-                }
-                break;
-            }
-
-            // Deduct raw ingredients from storage / player
-            consumeIngredients(terminal, player, plan.rawIngredientsToConsume);
-
-            // Deduct molten metals from tanks / casting ports
-            if (!plan.moltenMetalsToConsume.isEmpty()) {
-                consumeMoltenMetals(plan.moltenMetalsToConsume);
-                totalMoltenMbUsedSum += plan.moltenMetalUsedMb;
-            }
-
-            // Deduct energy
-            if (this.energyStorage.getEnergy() >= totalEnergy) {
-                this.energyStorage.extractEnergy(totalEnergy, false);
+                sendFeedback(player, sb.toString());
             } else {
-                this.energyStorage.extractEnergy(this.energyStorage.getEnergy(), false);
+                sendFeedback(player, "§c[Super Computer] Missing required materials in storage or inventory!");
             }
-
-            // Deposit result and any leftover synthesized materials
-            depositCraftedResult(terminal, player, resultStack.copy());
-            for (ItemStack leftover : plan.leftoverSynthesized) {
-                if (!leftover.isEmpty()) {
-                    depositCraftedResult(terminal, player, leftover);
-                }
-            }
-
-            craftedBatches++;
-            totalCraftingStepsSum += plan.totalCraftingSteps;
-            totalFabricationsSum += plan.circuitFabrications;
-            totalPressingsSum += plan.hydraulicPressings;
-            totalSmeltingSum += plan.smeltingSteps;
+            return;
         }
 
-        if (craftedBatches > 0) {
-            markDirty();
-            if (totalMoltenMbUsedSum > 0) {
-                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.3f);
-                List<CastingPortBlockEntity> ports = getNearbyCastingPorts();
-                for (CastingPortBlockEntity port : ports) {
-                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
-                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
-                }
-            }
-            if (totalFabricationsSum > 0) {
-                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_BEACON_ACTIVATE, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.8f);
-                for (CircuitFabricatorBlockEntity fab : getNearbyCircuitFabricators()) {
-                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, fab.getPos().getX() + 0.5, fab.getPos().getY() + 0.8, fab.getPos().getZ() + 0.5, 15, 0.2, 0.2, 0.2, 0.1);
-                }
-            }
-            if (totalPressingsSum > 0) {
-                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 0.6f);
-                for (HydraulicPressBlockEntity press : getNearbyHydraulicPresses()) {
-                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, press.getPos().getX() + 0.5, press.getPos().getY() + 0.8, press.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.1);
-                }
-            }
-            if (totalSmeltingSum > 0) {
-                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, net.minecraft.sound.SoundCategory.BLOCKS, 0.8f, 1.1f);
-                for (BlockEntity f : getNearbyFurnaces()) {
-                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, f.getPos().getX() + 0.5, f.getPos().getY() + 0.8, f.getPos().getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
-                }
-            }
-            if (totalMoltenMbUsedSum == 0 && totalFabricationsSum == 0 && totalPressingsSum == 0 && totalSmeltingSum == 0) {
-                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.6f, 1.2f);
-            }
+        CraftingPlan plan = planResult.plan;
 
-            int totalYield = resultStack.getCount() * craftedBatches;
-            StringBuilder feedback = new StringBuilder("§a⚡ Crafted: §f").append(totalYield).append("x ").append(resultStack.getName().getString());
-            if (totalFabricationsSum > 0) feedback.append(" §d[").append(totalFabricationsSum).append("x Fabricated]");
-            if (totalPressingsSum > 0) feedback.append(" §b[").append(totalPressingsSum).append("x Pressed]");
-            if (totalSmeltingSum > 0) feedback.append(" §6[").append(totalSmeltingSum).append("x Smelted]");
-            if (totalMoltenMbUsedSum > 0) feedback.append(" §e[").append(totalMoltenMbUsedSum).append(" mB Cast]");
-            else if (totalCraftingStepsSum > craftedBatches) feedback.append(" §7(").append(totalCraftingStepsSum).append(" steps synthesized)");
-            sendFeedback(player, feedback.toString());
+        // Deduct raw ingredients and molten metals up-front (committed to the job)
+        consumeIngredients(terminal, player, plan.rawIngredientsToConsume);
+        if (!plan.moltenMetalsToConsume.isEmpty()) {
+            consumeMoltenMetals(plan.moltenMetalsToConsume);
         }
+
+        this.activeJob = new ActiveCraftJob(player.getUuid(), plan.steps, resultStack.copy(), plan.leftoverSynthesized, craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Factory Activated: §fManufacturing " + resultStack.getName().getString() + " §7(" + plan.steps.size() + " operations queued)");
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
 
     private void executeDirectCasting(ServerWorld serverWorld, PlayerEntity player, ItemStack directCast, boolean craftAll) {
         if (!isCasterOnline()) {
             sendFeedback(player, "§e[Super Computer] Place a Casting Port within 16 blocks to enable metal casting!");
+            return;
+        }
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
             return;
         }
 
@@ -796,62 +968,28 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
-        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int maxBatches = craftAll ? 64 : 1;
-        int craftedBatches = 0;
-        int totalFluidUsed = 0;
         int perBatchCost = castInfo.costMb * directCast.getCount();
-
-        for (int b = 0; b < maxBatches; b++) {
-            if (!canAcceptOutput(directCast)) {
-                if (craftedBatches == 0) {
-                    sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
-                }
-                break;
-            }
-
-            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> avail = getAvailableMoltenMetals();
-            if (avail.getOrDefault(castInfo.metal, 0) < perBatchCost) {
-                if (craftedBatches == 0) {
-                    sendFeedback(player, "§c[Super Computer] Missing Molten " + castInfo.metal.getDisplayName() + "! (Needs " + perBatchCost + " mB in tanks)");
-                }
-                break;
-            }
-
-            int energyCost = ENERGY_PER_CRAFT;
-            if (this.energyStorage.getEnergy() < energyCost && !drawNetworkPower()) {
-                if (craftedBatches == 0) {
-                    sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + energyCost + " FE)");
-                }
-                break;
-            }
-
-            // Deduct fluid
-            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> toConsume = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
-            toConsume.put(castInfo.metal, perBatchCost);
-            consumeMoltenMetals(toConsume);
-
-            // Deduct energy
-            this.energyStorage.extractEnergy(Math.min(energyCost, this.energyStorage.getEnergy()), false);
-
-            // Deposit result
-            depositCraftedResult(terminal, player, directCast.copy());
-
-            craftedBatches++;
-            totalFluidUsed += perBatchCost;
+        if (!canAcceptOutput(directCast)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
         }
 
-        if (craftedBatches > 0) {
-            markDirty();
-            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.3f);
-            List<CastingPortBlockEntity> ports = getNearbyCastingPorts();
-            for (CastingPortBlockEntity port : ports) {
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
-            }
-            int totalYield = directCast.getCount() * craftedBatches;
-            sendFeedback(player, "§a⚡ Cast: §f" + totalYield + "x " + directCast.getName().getString() + " §6[" + totalFluidUsed + " mB Molten " + castInfo.metal.getDisplayName() + "]");
+        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> avail = getAvailableMoltenMetals();
+        if (avail.getOrDefault(castInfo.metal, 0) < perBatchCost) {
+            sendFeedback(player, "§c[Super Computer] Missing Molten " + castInfo.metal.getDisplayName() + "! (Needs " + perBatchCost + " mB in tanks)");
+            return;
         }
+
+        // Deduct fluid up-front
+        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> toConsume = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+        toConsume.put(castInfo.metal, perBatchCost);
+        consumeMoltenMetals(toConsume);
+
+        List<CraftStep> steps = List.of(new CraftStep(StepType.CAST, castInfo.metal, directCast.getItem(), perBatchCost));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, directCast.copy(), List.of(), craftAll, List.of());
+        sendFeedback(player, "§6⚡ Casting: §f" + directCast.getName().getString() + " §6[" + perBatchCost + " mB Molten " + castInfo.metal.getDisplayName() + "]");
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
 
     private void executeDirectFabrication(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directFab, boolean craftAll) {
@@ -860,9 +998,19 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
         CircuitFabricatorBlockEntity.FabricatorRecipe recipe = getMatchingFabricatorRecipe(patternStacks);
         if (recipe == null) {
             sendFeedback(player, "§c[Super Computer] No valid circuit recipe in grid!");
+            return;
+        }
+
+        if (!canAcceptOutput(directFab)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
             return;
         }
 
@@ -873,74 +1021,47 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int maxBatches = craftAll ? 64 : 1;
-        int craftedBatches = 0;
-
-        for (int b = 0; b < maxBatches; b++) {
-            if (!canAcceptOutput(directFab)) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
-                break;
-            }
-
-            java.util.Map<net.minecraft.item.Item, Integer> avail = new java.util.HashMap<>();
-            if (terminal != null && terminal.isNetworkOnline()) {
-                for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                    if (si.getCount() > 0 && !si.getSample().isEmpty()) {
-                        avail.put(si.getSample().getItem(), avail.getOrDefault(si.getSample().getItem(), 0) + (int) Math.min(si.getCount(), Integer.MAX_VALUE));
-                    }
+        java.util.Map<net.minecraft.item.Item, Integer> avail = new java.util.HashMap<>();
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
+                if (si.getCount() > 0 && !si.getSample().isEmpty()) {
+                    avail.put(si.getSample().getItem(), avail.getOrDefault(si.getSample().getItem(), 0) + (int) Math.min(si.getCount(), Integer.MAX_VALUE));
                 }
             }
-            if (player != null) {
-                PlayerInventory pInv = player.getInventory();
-                for (int i = 0; i < 36; i++) {
-                    ItemStack ps = pInv.getStack(i);
-                    if (!ps.isEmpty()) {
-                        avail.put(ps.getItem(), avail.getOrDefault(ps.getItem(), 0) + ps.getCount());
-                    }
+        }
+        if (player != null) {
+            PlayerInventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack ps = pInv.getStack(i);
+                if (!ps.isEmpty()) {
+                    avail.put(ps.getItem(), avail.getOrDefault(ps.getItem(), 0) + ps.getCount());
                 }
             }
-
-            boolean canCraft = true;
-            for (ItemStack req : neededItems) {
-                int c = avail.getOrDefault(req.getItem(), 0);
-                if (c < req.getCount()) {
-                    canCraft = false;
-                    break;
-                }
-                avail.put(req.getItem(), c - req.getCount());
-            }
-
-            if (!canCraft) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Missing required components for chip fabrication!");
-                break;
-            }
-
-            int energyCost = ENERGY_PER_CRAFT;
-            if (this.energyStorage.getEnergy() < energyCost && !drawNetworkPower()) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + energyCost + " FE)");
-                break;
-            }
-
-            consumeIngredients(terminal, player, neededItems);
-            this.energyStorage.extractEnergy(Math.min(energyCost, this.energyStorage.getEnergy()), false);
-            depositCraftedResult(terminal, player, directFab.copy());
-            craftedBatches++;
         }
 
-        if (craftedBatches > 0) {
-            markDirty();
-            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_BEACON_ACTIVATE, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.8f);
-            for (CircuitFabricatorBlockEntity fab : getNearbyCircuitFabricators()) {
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, fab.getPos().getX() + 0.5, fab.getPos().getY() + 0.8, fab.getPos().getZ() + 0.5, 15, 0.2, 0.2, 0.2, 0.1);
+        for (ItemStack req : neededItems) {
+            if (avail.getOrDefault(req.getItem(), 0) < req.getCount()) {
+                sendFeedback(player, "§c[Super Computer] Missing required components for chip fabrication!");
+                return;
             }
-            int totalYield = directFab.getCount() * craftedBatches;
-            sendFeedback(player, "§a⚡ Fabricated: §f" + totalYield + "x " + directFab.getName().getString());
         }
+
+        consumeIngredients(terminal, player, neededItems);
+        List<CraftStep> steps = List.of(new CraftStep(StepType.FABRICATE, recipe.substrate(), directFab.getItem()));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, directFab.copy(), List.of(), craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Fabricating: §f" + directFab.getName().getString());
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
 
     private void executeDirectPress(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directPress, boolean craftAll) {
         if (!isPressOnline()) {
             sendFeedback(player, "§e[Super Computer] Place a Hydraulic Press within 32 blocks to enable pressing!");
+            return;
+        }
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
             return;
         }
 
@@ -957,65 +1078,51 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         ItemStack oneBatchResult = HydraulicPressBlockEntity.getPlateResult(rawInputItem);
         if (oneBatchResult.isEmpty()) return;
 
+        if (!canAcceptOutput(oneBatchResult)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
+        }
+
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int maxBatches = craftAll ? 64 : 1;
-        int craftedBatches = 0;
-
-        for (int b = 0; b < maxBatches; b++) {
-            if (!canAcceptOutput(oneBatchResult)) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
-                break;
-            }
-
-            int availCount = 0;
-            if (terminal != null && terminal.isNetworkOnline()) {
-                for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                    if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
-                        availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
-                    }
+        int availCount = 0;
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
+                if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
+                    availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
                 }
             }
-            if (player != null) {
-                PlayerInventory pInv = player.getInventory();
-                for (int i = 0; i < 36; i++) {
-                    ItemStack ps = pInv.getStack(i);
-                    if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
-                        availCount += ps.getCount();
-                    }
+        }
+        if (player != null) {
+            PlayerInventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack ps = pInv.getStack(i);
+                if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
+                    availCount += ps.getCount();
                 }
             }
-
-            if (availCount < 1) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Missing raw input items to press!");
-                break;
-            }
-
-            int energyCost = ENERGY_PER_CRAFT;
-            if (this.energyStorage.getEnergy() < energyCost && !drawNetworkPower()) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + energyCost + " FE)");
-                break;
-            }
-
-            consumeIngredients(terminal, player, List.of(new ItemStack(rawInputItem, 1)));
-            this.energyStorage.extractEnergy(Math.min(energyCost, this.energyStorage.getEnergy()), false);
-            depositCraftedResult(terminal, player, oneBatchResult.copy());
-            craftedBatches++;
         }
 
-        if (craftedBatches > 0) {
-            markDirty();
-            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 0.6f);
-            for (HydraulicPressBlockEntity press : getNearbyHydraulicPresses()) {
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, press.getPos().getX() + 0.5, press.getPos().getY() + 0.8, press.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.1);
-            }
-            int totalYield = oneBatchResult.getCount() * craftedBatches;
-            sendFeedback(player, "§a⚡ Pressed: §f" + totalYield + "x " + oneBatchResult.getName().getString());
+        if (availCount < 1) {
+            sendFeedback(player, "§c[Super Computer] Missing raw input items to press!");
+            return;
         }
+
+        consumeIngredients(terminal, player, List.of(new ItemStack(rawInputItem, 1)));
+        List<CraftStep> steps = List.of(new CraftStep(StepType.PRESS, rawInputItem, oneBatchResult.getItem()));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, oneBatchResult.copy(), List.of(), craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Pressing: §f" + oneBatchResult.getName().getString());
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
 
     private void executeDirectSmelting(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directSmelt, boolean craftAll) {
         if (!isFurnaceOnline()) {
             sendFeedback(player, "§e[Super Computer] Place an Enchanted Furnace within 32 blocks to enable automated smelting!");
+            return;
+        }
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
             return;
         }
 
@@ -1032,60 +1139,41 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         ItemStack oneBatchResult = directSmelt.copyWithCount(directSmelt.getCount() / Math.max(1, single.getCount()));
         if (oneBatchResult.isEmpty()) oneBatchResult = directSmelt.copyWithCount(1);
 
+        if (!canAcceptOutput(oneBatchResult)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
+        }
+
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int maxBatches = craftAll ? 64 : 1;
-        int craftedBatches = 0;
-
-        for (int b = 0; b < maxBatches; b++) {
-            if (!canAcceptOutput(oneBatchResult)) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
-                break;
-            }
-
-            int availCount = 0;
-            if (terminal != null && terminal.isNetworkOnline()) {
-                for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                    if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
-                        availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
-                    }
+        int availCount = 0;
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
+                if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
+                    availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
                 }
             }
-            if (player != null) {
-                PlayerInventory pInv = player.getInventory();
-                for (int i = 0; i < 36; i++) {
-                    ItemStack ps = pInv.getStack(i);
-                    if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
-                        availCount += ps.getCount();
-                    }
+        }
+        if (player != null) {
+            PlayerInventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack ps = pInv.getStack(i);
+                if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
+                    availCount += ps.getCount();
                 }
             }
-
-            if (availCount < 1) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Missing raw input items to smelt!");
-                break;
-            }
-
-            int energyCost = ENERGY_PER_CRAFT;
-            if (this.energyStorage.getEnergy() < energyCost && !drawNetworkPower()) {
-                if (craftedBatches == 0) sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + energyCost + " FE)");
-                break;
-            }
-
-            consumeIngredients(terminal, player, List.of(new ItemStack(rawInputItem, 1)));
-            this.energyStorage.extractEnergy(Math.min(energyCost, this.energyStorage.getEnergy()), false);
-            depositCraftedResult(terminal, player, oneBatchResult.copy());
-            craftedBatches++;
         }
 
-        if (craftedBatches > 0) {
-            markDirty();
-            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, net.minecraft.sound.SoundCategory.BLOCKS, 0.8f, 1.1f);
-            for (BlockEntity f : getNearbyFurnaces()) {
-                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, f.getPos().getX() + 0.5, f.getPos().getY() + 0.8, f.getPos().getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
-            }
-            int totalYield = oneBatchResult.getCount() * craftedBatches;
-            sendFeedback(player, "§a⚡ Smelted: §f" + totalYield + "x " + oneBatchResult.getName().getString());
+        if (availCount < 1) {
+            sendFeedback(player, "§c[Super Computer] Missing raw input items to smelt!");
+            return;
         }
+
+        consumeIngredients(terminal, player, List.of(new ItemStack(rawInputItem, 1)));
+        List<CraftStep> steps = List.of(new CraftStep(StepType.SMELT, rawInputItem, oneBatchResult.getItem()));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, oneBatchResult.copy(), List.of(), craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Smelting: §f" + oneBatchResult.getName().getString());
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
 
     private void sendFeedback(PlayerEntity player, String msg) {
@@ -1108,10 +1196,48 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         return false;
     }
 
+    public enum StepType {
+        CAST,
+        SMELT,
+        PRESS,
+        FABRICATE,
+        ASSEMBLE
+    }
+
+    public static class CraftStep {
+        public final StepType type;
+        public final @Nullable net.minecraft.item.Item inputItem;
+        public final @Nullable net.minecraft.item.Item outputItem;
+        public final @Nullable net.enchantedwood.fluid.MoltenMetal moltenMetal;
+        public final int amountMb;
+
+        public CraftStep(StepType type, @Nullable net.minecraft.item.Item outputItem) {
+            this(type, null, outputItem, null, 0);
+        }
+
+        public CraftStep(StepType type, @Nullable net.minecraft.item.Item inputItem, @Nullable net.minecraft.item.Item outputItem) {
+            this(type, inputItem, outputItem, null, 0);
+        }
+
+        public CraftStep(StepType type, @Nullable net.enchantedwood.fluid.MoltenMetal moltenMetal, @Nullable net.minecraft.item.Item outputItem, int amountMb) {
+            this(type, null, outputItem, moltenMetal, amountMb);
+        }
+
+        public CraftStep(StepType type, @Nullable net.minecraft.item.Item inputItem, @Nullable net.minecraft.item.Item outputItem,
+                         @Nullable net.enchantedwood.fluid.MoltenMetal moltenMetal, int amountMb) {
+            this.type = type;
+            this.inputItem = inputItem;
+            this.outputItem = outputItem;
+            this.moltenMetal = moltenMetal;
+            this.amountMb = amountMb;
+        }
+    }
+
     public static class CraftingPlan {
         public final List<ItemStack> rawIngredientsToConsume = new ArrayList<>();
         public final List<ItemStack> leftoverSynthesized = new ArrayList<>();
         public final java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> moltenMetalsToConsume = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+        public final List<CraftStep> steps = new ArrayList<>();
         public int totalCraftingSteps = 1;
         public int moltenMetalUsedMb = 0;
         public int circuitFabrications = 0;
@@ -1128,6 +1254,52 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             this.success = success;
             this.plan = plan;
             this.missingItems = missingItems;
+        }
+    }
+
+    public static class ActiveCraftJob {
+        public final java.util.UUID playerUuid;
+        public final List<CraftStep> steps;
+        public final ItemStack finalResult;
+        public final List<ItemStack> leftoverItems;
+        public final boolean craftAll;
+        public final List<ItemStack> patternSnapshot;
+
+        public int currentStepIndex = 0;
+        public int currentStepTicks = 0;
+        public int currentStepMaxTicks = 20;
+
+        public ActiveCraftJob(java.util.UUID playerUuid, List<CraftStep> steps, ItemStack finalResult,
+                              List<ItemStack> leftoverItems, boolean craftAll, List<ItemStack> patternSnapshot) {
+            this.playerUuid = playerUuid;
+            this.steps = new ArrayList<>(steps);
+            this.finalResult = finalResult;
+            this.leftoverItems = new ArrayList<>(leftoverItems);
+            this.craftAll = craftAll;
+            this.patternSnapshot = new ArrayList<>(patternSnapshot);
+        }
+
+        public @Nullable CraftStep getCurrentStep() {
+            if (currentStepIndex >= 0 && currentStepIndex < steps.size()) {
+                return steps.get(currentStepIndex);
+            }
+            return null;
+        }
+
+        public int getTotalEstimatedTicks(SuperComputerBlockEntity sc) {
+            int total = 0;
+            for (CraftStep s : steps) {
+                total += sc.getStepDurationTicks(s);
+            }
+            return Math.max(10, total);
+        }
+
+        public int getCompletedTicks(SuperComputerBlockEntity sc) {
+            int completed = 0;
+            for (int i = 0; i < currentStepIndex && i < steps.size(); i++) {
+                completed += sc.getStepDurationTicks(steps.get(i));
+            }
+            return completed + currentStepTicks;
         }
     }
 
@@ -1248,6 +1420,13 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 return new CraftingPlanResult(false, null, missingItems);
             }
 
+            // Append root assembly step
+            ItemStack rootResult = getSafeRecipeResult(craftingRecipe, world);
+            if (rootResult.isEmpty()) {
+                rootResult = craftingRecipe.craft(CraftingRecipeInput.create(3, 3, patternStacks), world.getRegistryManager());
+            }
+            plan.steps.add(new CraftStep(StepType.ASSEMBLE, rootResult.isEmpty() ? null : rootResult.getItem()));
+
             // Record any leftover synthesized items
             for (java.util.Map.Entry<net.minecraft.item.Item, Integer> entry : virtualBuffer.entrySet()) {
                 if (entry.getValue() > 0) {
@@ -1307,6 +1486,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     availableMolten.put(castInfo.metal, fluidAvail - castInfo.costMb);
                     plan.moltenMetalsToConsume.put(castInfo.metal, plan.moltenMetalsToConsume.getOrDefault(castInfo.metal, 0) + castInfo.costMb);
                     plan.moltenMetalUsedMb += castInfo.costMb;
+                    plan.steps.add(new CraftStep(StepType.CAST, castInfo.metal, targetItem, castInfo.costMb));
                     return true;
                 }
             }
@@ -1330,6 +1510,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                     List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
                     java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                    List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
                     int backupSteps = plan.totalCraftingSteps;
                     int backupMoltenUsed = plan.moltenMetalUsedMb;
                     int backupPressings = plan.hydraulicPressings;
@@ -1338,6 +1519,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     if (resolveItemRequirement(world, pressInfo.input(), available, availableMolten, virtualBuffer, plan, pressMissing, activeRecursion, depth + 1)) {
                         plan.totalCraftingSteps++;
                         plan.hydraulicPressings++;
+                        plan.steps.add(new CraftStep(StepType.PRESS, pressInfo.input(), targetItem));
                         if (pressInfo.yield() > 1) {
                             virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (pressInfo.yield() - 1));
                         }
@@ -1351,6 +1533,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
                         plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
                         plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                        plan.steps.clear(); plan.steps.addAll(backupStepsList);
                         plan.totalCraftingSteps = backupSteps;
                         plan.moltenMetalUsedMb = backupMoltenUsed;
                         plan.hydraulicPressings = backupPressings;
@@ -1367,6 +1550,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                         List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
                         java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                        List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
                         int backupSteps = plan.totalCraftingSteps;
                         int backupMoltenUsed = plan.moltenMetalUsedMb;
                         int backupFabs = plan.circuitFabrications;
@@ -1382,6 +1566,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         if (success) {
                             plan.totalCraftingSteps++;
                             plan.circuitFabrications++;
+                            plan.steps.add(new CraftStep(StepType.FABRICATE, fabRecipe.substrate(), targetItem));
                             if (fabRecipe.output().getCount() > 1) {
                                 virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (fabRecipe.output().getCount() - 1));
                             }
@@ -1395,6 +1580,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
                             plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
                             plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                            plan.steps.clear(); plan.steps.addAll(backupStepsList);
                             plan.totalCraftingSteps = backupSteps;
                             plan.moltenMetalUsedMb = backupMoltenUsed;
                             plan.circuitFabrications = backupFabs;
@@ -1412,6 +1598,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                     List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
                     java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                    List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
                     int backupSteps = plan.totalCraftingSteps;
                     int backupMoltenUsed = plan.moltenMetalUsedMb;
                     int backupSmelts = plan.smeltingSteps;
@@ -1420,6 +1607,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     if (resolveItemRequirement(world, dustCandidate, available, availableMolten, virtualBuffer, plan, dustMissing, activeRecursion, depth + 1)) {
                         plan.totalCraftingSteps++;
                         plan.smeltingSteps++;
+                        plan.steps.add(new CraftStep(StepType.SMELT, dustCandidate, targetItem));
                         return true;
                     } else {
                         if (!dustMissing.isEmpty() && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
@@ -1430,6 +1618,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
                         plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
                         plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                        plan.steps.clear(); plan.steps.addAll(backupStepsList);
                         plan.totalCraftingSteps = backupSteps;
                         plan.moltenMetalUsedMb = backupMoltenUsed;
                         plan.smeltingSteps = backupSmelts;
@@ -1455,6 +1644,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                         List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
                         java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                        List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
                         int backupSteps = plan.totalCraftingSteps;
                         int backupMoltenUsed = plan.moltenMetalUsedMb;
                         int backupSmelts = plan.smeltingSteps;
@@ -1464,6 +1654,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             plan.totalCraftingSteps++;
                             plan.smeltingSteps++;
                             int yield = Math.max(1, smeltRes.getCount());
+                            plan.steps.add(new CraftStep(StepType.SMELT, null, targetItem));
                             if (yield > 1) {
                                 virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
                             }
@@ -1477,6 +1668,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
                             plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
                             plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                            plan.steps.clear(); plan.steps.addAll(backupStepsList);
                             plan.totalCraftingSteps = backupSteps;
                             plan.moltenMetalUsedMb = backupMoltenUsed;
                             plan.smeltingSteps = backupSmelts;
@@ -1496,6 +1688,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                     List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
                     java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                    List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
                     int backupSteps = plan.totalCraftingSteps;
                     int backupMoltenUsed = plan.moltenMetalUsedMb;
 
@@ -1520,6 +1713,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
                     if (success) {
                         plan.totalCraftingSteps++;
+                        plan.steps.add(new CraftStep(StepType.ASSEMBLE, null, targetItem));
                         if (yield > 1) {
                             virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
                         }
@@ -1539,6 +1733,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         plan.rawIngredientsToConsume.addAll(backupPlan);
                         plan.moltenMetalsToConsume.clear();
                         plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                        plan.steps.clear();
+                        plan.steps.addAll(backupStepsList);
                         plan.totalCraftingSteps = backupSteps;
                         plan.moltenMetalUsedMb = backupMoltenUsed;
                     }
@@ -1611,6 +1807,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         availableMolten.put(castInfo.metal, fluidAvail - castInfo.costMb);
                         plan.moltenMetalsToConsume.put(castInfo.metal, plan.moltenMetalsToConsume.getOrDefault(castInfo.metal, 0) + castInfo.costMb);
                         plan.moltenMetalUsedMb += castInfo.costMb;
+                        plan.steps.add(new CraftStep(StepType.CAST, castInfo.metal, opt, castInfo.costMb));
                         return true;
                     }
                 }
