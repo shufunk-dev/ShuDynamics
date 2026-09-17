@@ -377,12 +377,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         }
-        if (bestIdle != null) return bestIdle;
-
-        for (HydraulicPressBlockEntity press : this.cachedPresses) {
-            if (press != null && !press.isRemoved()) return press;
-        }
-        return null;
+        return bestIdle;
     }
 
     public @Nullable CircuitFabricatorBlockEntity getBestAvailableFabricator() {
@@ -400,12 +395,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         }
-        if (bestIdle != null) return bestIdle;
-
-        for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
-            if (fab != null && !fab.isRemoved()) return fab;
-        }
-        return null;
+        return bestIdle;
     }
 
     public @Nullable BlockEntity getBestAvailableFurnace() {
@@ -418,18 +408,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         }
-        for (BlockEntity f : this.cachedFurnaces) {
-            if (f != null && !f.isRemoved()) return f;
-        }
         return null;
     }
 
     public @Nullable CastingPortBlockEntity getBestAvailableCaster() {
         for (CastingPortBlockEntity c : this.cachedCasters) {
             if (c != null && !c.isRemoved() && !c.isCasting()) return c;
-        }
-        for (CastingPortBlockEntity c : this.cachedCasters) {
-            if (c != null && !c.isRemoved()) return c;
         }
         return null;
     }
@@ -1036,6 +1020,23 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         CraftingPlan plan = planResult.plan;
 
+        if (plan.hydraulicPressings > 0 && getBestAvailablePress() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Hydraulic Presses are currently busy!");
+            return;
+        }
+        if (plan.circuitFabrications > 0 && getBestAvailableFabricator() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Circuit Fabricators are currently busy!");
+            return;
+        }
+        if (plan.smeltingSteps > 0 && getBestAvailableFurnace() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
+            return;
+        }
+        if (plan.moltenMetalUsedMb > 0 && getBestAvailableCaster() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Casting Ports are currently busy!");
+            return;
+        }
+
         // Deduct raw ingredients and molten metals up-front (committed to the job)
         consumeIngredients(terminal, player, plan.rawIngredientsToConsume);
         if (!plan.moltenMetalsToConsume.isEmpty()) {
@@ -1056,6 +1057,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         if (this.activeJob != null) {
             sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
+        if (getBestAvailableCaster() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Casting Ports are currently busy!");
             return;
         }
 
@@ -1097,6 +1103,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         if (this.activeJob != null) {
             sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
+        if (getBestAvailableFabricator() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Circuit Fabricators are currently busy!");
             return;
         }
 
@@ -1162,6 +1173,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
+        if (getBestAvailablePress() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Hydraulic Presses are currently busy!");
+            return;
+        }
+
         ItemStack single = null;
         for (ItemStack s : patternStacks) {
             if (!s.isEmpty()) {
@@ -1220,6 +1236,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         if (this.activeJob != null) {
             sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
+        if (getBestAvailableFurnace() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
             return;
         }
 
