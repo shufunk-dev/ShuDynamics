@@ -1238,9 +1238,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             } else {
                 for (ItemStack req : patternStacks) {
                     if (req.isEmpty()) continue;
-                    if (!resolveItemRequirement(world, req.getItem(), available, availableMolten, virtualBuffer, plan, activeRecursion, 0)) {
-                        String name = req.getItem().getName().getString();
-                        missingItems.put(name, missingItems.getOrDefault(name, 0) + 1);
+                    if (!resolveItemRequirement(world, req.getItem(), available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
                         allSatisfied = false;
                     }
                 }
@@ -1282,6 +1280,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten,
                                            java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer,
                                            CraftingPlan plan,
+                                           java.util.Map<String, Integer> missingItems,
                                            java.util.Set<net.minecraft.item.Item> activeRecursion,
                                            int depth) {
         // 1. If item already exists in intermediate virtual buffer, consume 1
@@ -1315,10 +1314,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         // 4. Prevent infinite loops or deep recursion
         if (depth >= 8 || activeRecursion.contains(targetItem)) {
+            missingItems.put(targetItem.getName().getString(), missingItems.getOrDefault(targetItem.getName().getString(), 0) + 1);
             return false;
         }
 
         activeRecursion.add(targetItem);
+        java.util.Map<String, Integer> bestCandidateMissing = null;
         try {
             // 5. Check if targetItem can be pressed via an online Hydraulic Press
             if (isPressOnline()) {
@@ -1333,7 +1334,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     int backupMoltenUsed = plan.moltenMetalUsedMb;
                     int backupPressings = plan.hydraulicPressings;
 
-                    if (resolveItemRequirement(world, pressInfo.input(), available, availableMolten, virtualBuffer, plan, activeRecursion, depth + 1)) {
+                    java.util.Map<String, Integer> pressMissing = new java.util.LinkedHashMap<>();
+                    if (resolveItemRequirement(world, pressInfo.input(), available, availableMolten, virtualBuffer, plan, pressMissing, activeRecursion, depth + 1)) {
                         plan.totalCraftingSteps++;
                         plan.hydraulicPressings++;
                         if (pressInfo.yield() > 1) {
@@ -1341,6 +1343,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         }
                         return true;
                     } else {
+                        if (!pressMissing.isEmpty() && (bestCandidateMissing == null || pressMissing.size() < bestCandidateMissing.size())) {
+                            bestCandidateMissing = pressMissing;
+                        }
                         available.clear(); available.putAll(backupAvailable);
                         availableMolten.clear(); availableMolten.putAll(backupMolten);
                         virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
@@ -1366,13 +1371,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         int backupMoltenUsed = plan.moltenMetalUsedMb;
                         int backupFabs = plan.circuitFabrications;
 
-                        boolean success = resolveItemRequirement(world, fabRecipe.substrate(), available, availableMolten, virtualBuffer, plan, activeRecursion, depth + 1);
-                        if (success) {
-                            for (net.minecraft.item.Item comp : fabRecipe.components()) {
-                                if (!resolveItemRequirement(world, comp, available, availableMolten, virtualBuffer, plan, activeRecursion, depth + 1)) {
-                                    success = false;
-                                    break;
-                                }
+                        java.util.Map<String, Integer> fabMissing = new java.util.LinkedHashMap<>();
+                        boolean success = resolveItemRequirement(world, fabRecipe.substrate(), available, availableMolten, virtualBuffer, plan, fabMissing, activeRecursion, depth + 1);
+                        for (net.minecraft.item.Item comp : fabRecipe.components()) {
+                            if (!resolveItemRequirement(world, comp, available, availableMolten, virtualBuffer, plan, fabMissing, activeRecursion, depth + 1)) {
+                                success = false;
                             }
                         }
 
@@ -1384,6 +1387,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             }
                             return true;
                         } else {
+                            if (!fabMissing.isEmpty() && (bestCandidateMissing == null || fabMissing.size() < bestCandidateMissing.size())) {
+                                bestCandidateMissing = fabMissing;
+                            }
                             available.clear(); available.putAll(backupAvailable);
                             availableMolten.clear(); availableMolten.putAll(backupMolten);
                             virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
@@ -1410,11 +1416,15 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     int backupMoltenUsed = plan.moltenMetalUsedMb;
                     int backupSmelts = plan.smeltingSteps;
 
-                    if (resolveItemRequirement(world, dustCandidate, available, availableMolten, virtualBuffer, plan, activeRecursion, depth + 1)) {
+                    java.util.Map<String, Integer> dustMissing = new java.util.LinkedHashMap<>();
+                    if (resolveItemRequirement(world, dustCandidate, available, availableMolten, virtualBuffer, plan, dustMissing, activeRecursion, depth + 1)) {
                         plan.totalCraftingSteps++;
                         plan.smeltingSteps++;
                         return true;
                     } else {
+                        if (!dustMissing.isEmpty() && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
+                            bestCandidateMissing = dustMissing;
+                        }
                         available.clear(); available.putAll(backupAvailable);
                         availableMolten.clear(); availableMolten.putAll(backupMolten);
                         virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
@@ -1449,7 +1459,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         int backupMoltenUsed = plan.moltenMetalUsedMb;
                         int backupSmelts = plan.smeltingSteps;
 
-                        if (resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, new java.util.HashMap<>(), activeRecursion, depth + 1)) {
+                        java.util.Map<String, Integer> smeltMissing = new java.util.LinkedHashMap<>();
+                        if (resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, smeltMissing, activeRecursion, depth + 1)) {
                             plan.totalCraftingSteps++;
                             plan.smeltingSteps++;
                             int yield = Math.max(1, smeltRes.getCount());
@@ -1458,6 +1469,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             }
                             return true;
                         } else {
+                            if (!smeltMissing.isEmpty() && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
+                                bestCandidateMissing = smeltMissing;
+                            }
                             available.clear(); available.putAll(backupAvailable);
                             availableMolten.clear(); availableMolten.putAll(backupMolten);
                             virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
@@ -1494,13 +1508,13 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
                     if (ings.isEmpty()) continue;
 
+                    java.util.Map<String, Integer> craftCandidateMissing = new java.util.LinkedHashMap<>();
                     boolean success = true;
                     for (net.minecraft.recipe.Ingredient ing : ings) {
                         if (ing == null || ing.isEmpty()) continue;
 
-                        if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, new java.util.HashMap<>(), activeRecursion, depth + 1)) {
+                        if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, craftCandidateMissing, activeRecursion, depth + 1)) {
                             success = false;
-                            break;
                         }
                     }
 
@@ -1511,6 +1525,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         }
                         return true;
                     } else {
+                        if (!craftCandidateMissing.isEmpty() && (bestCandidateMissing == null || craftCandidateMissing.size() < bestCandidateMissing.size())) {
+                            bestCandidateMissing = craftCandidateMissing;
+                        }
                         // Rollback and try the next recipe candidate
                         available.clear();
                         available.putAll(backupAvailable);
@@ -1528,9 +1545,19 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         } catch (Throwable t) {
+            missingItems.put(targetItem.getName().getString(), missingItems.getOrDefault(targetItem.getName().getString(), 0) + 1);
             return false;
         } finally {
             activeRecursion.remove(targetItem);
+        }
+
+        if (bestCandidateMissing != null && !bestCandidateMissing.isEmpty()) {
+            for (java.util.Map.Entry<String, Integer> e : bestCandidateMissing.entrySet()) {
+                missingItems.put(e.getKey(), missingItems.getOrDefault(e.getKey(), 0) + e.getValue());
+            }
+        } else {
+            String name = targetItem.getName().getString();
+            missingItems.put(name, missingItems.getOrDefault(name, 0) + 1);
         }
 
         return false;
@@ -1591,10 +1618,22 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         // Priority 4: Try to synthesize one of the matching items recursively from available materials
+        java.util.Map<String, Integer> bestSubMissing = null;
         for (net.minecraft.item.Item opt : matchingItems) {
-            if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, activeRecursion, depth)) {
+            java.util.Map<String, Integer> candidateMissing = new java.util.LinkedHashMap<>();
+            if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, candidateMissing, activeRecursion, depth)) {
                 return true;
             }
+            if (!candidateMissing.isEmpty() && (bestSubMissing == null || candidateMissing.size() < bestSubMissing.size())) {
+                bestSubMissing = candidateMissing;
+            }
+        }
+
+        if (bestSubMissing != null && !bestSubMissing.isEmpty()) {
+            for (java.util.Map.Entry<String, Integer> e : bestSubMissing.entrySet()) {
+                missingItems.put(e.getKey(), missingItems.getOrDefault(e.getKey(), 0) + e.getValue());
+            }
+            return false;
         }
 
         // If not found and not synthesizable, record friendly group missing name
