@@ -265,8 +265,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         presses.add(press);
                     } else if (be instanceof EnchantedFurnaceBlockEntity
                             || be instanceof DustSmelterBlockEntity
-                            || be instanceof DustSmelterMk2BlockEntity
-                            || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
+                            || be instanceof DustSmelterMk2BlockEntity) {
                         furnaces.add(be);
                     } else if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                         tankControllers.add(controller);
@@ -364,12 +363,19 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public @Nullable HydraulicPressBlockEntity getBestAvailablePress() {
+        if (this.activeJob != null) {
+            for (HydraulicPressBlockEntity press : this.cachedPresses) {
+                if (press != null && !press.isRemoved() && press.isExternalProcess()) return press;
+            }
+        }
         HydraulicPressBlockEntity bestIdle = null;
         int bestSpeed = -1;
         for (HydraulicPressBlockEntity press : this.cachedPresses) {
             if (press != null && !press.isRemoved()) {
-                if (press.isExternalProcess()) return press;
-                boolean isIdle = press.getStack(0).isEmpty();
+                if (this.activeJob == null && press.isExternalProcess()) {
+                    press.clearExternalProcess();
+                }
+                boolean isIdle = !press.isExternalProcess() && press.getStack(0).isEmpty();
                 int speed = press.getProcessingSpeed(press.getActiveGearTier());
                 if (isIdle && speed > bestSpeed) {
                     bestIdle = press;
@@ -381,12 +387,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public @Nullable CircuitFabricatorBlockEntity getBestAvailableFabricator() {
+        if (this.activeJob != null) {
+            for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
+                if (fab != null && !fab.isRemoved() && fab.isExternalProcess()) return fab;
+            }
+        }
         CircuitFabricatorBlockEntity bestIdle = null;
         float bestSpeed = -1f;
         for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
             if (fab != null && !fab.isRemoved()) {
-                if (fab.isExternalProcess()) return fab;
-                boolean isIdle = fab.getStack(CircuitFabricatorBlockEntity.SUBSTRATE_SLOT).isEmpty()
+                if (this.activeJob == null && fab.isExternalProcess()) {
+                    fab.clearExternalProcess();
+                }
+                boolean isIdle = !fab.isExternalProcess()
+                        && fab.getStack(CircuitFabricatorBlockEntity.SUBSTRATE_SLOT).isEmpty()
                         && fab.getStack(CircuitFabricatorBlockEntity.COMPONENT_SLOT_1).isEmpty();
                 float speed = fab.getSpeedMultiplier();
                 if (isIdle && speed > bestSpeed) {
@@ -399,13 +413,24 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public @Nullable BlockEntity getBestAvailableFurnace() {
+        if (this.activeJob != null) {
+            for (BlockEntity f : this.cachedFurnaces) {
+                if (f != null && !f.isRemoved() && f instanceof EnchantedFurnaceBlockEntity ef && ef.isExternalProcess()) {
+                    return ef;
+                }
+            }
+        }
         for (BlockEntity f : this.cachedFurnaces) {
             if (f != null && !f.isRemoved()) {
                 if (f instanceof EnchantedFurnaceBlockEntity ef) {
-                    if (ef.isExternalProcess()) return ef;
-                    if (ef.getStack(0).isEmpty()) return ef;
-                } else if (f instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity af) {
-                    if (af.getStack(0).isEmpty()) return af;
+                    if (this.activeJob == null && ef.isExternalProcess()) {
+                        ef.clearExternalProcess();
+                    }
+                    if (ef.isIdle()) return ef;
+                } else if (f instanceof DustSmelterBlockEntity ds) {
+                    if (ds.getStack(0).isEmpty() && ds.propertyDelegate.get(4) <= 0) return ds;
+                } else if (f instanceof DustSmelterMk2BlockEntity ds2) {
+                    if (ds2.getStack(0).isEmpty() && ds2.getStack(1).isEmpty() && ds2.propertyDelegate.get(0) <= 0) return ds2;
                 }
             }
         }
@@ -732,19 +757,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             boolean hadCraftAll = job.craftAll;
             this.activeJob = null;
 
-            HydraulicPressBlockEntity press = getBestAvailablePress();
-            if (press != null) press.clearExternalProcess();
-            CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
-            if (fab != null) fab.clearExternalProcess();
-            BlockEntity furnace = getBestAvailableFurnace();
-            if (furnace != null) {
-                if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
-                    ef.setStack(0, ItemStack.EMPTY);
-                }
-                BlockPos fPos = furnace.getPos();
-                BlockState fState = world.getBlockState(fPos);
-                if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
-                    world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, false), 3);
+            for (HydraulicPressBlockEntity p : this.cachedPresses) {
+                if (p != null && !p.isRemoved() && p.isExternalProcess()) p.clearExternalProcess();
+            }
+            for (CircuitFabricatorBlockEntity f : this.cachedFabricators) {
+                if (f != null && !f.isRemoved() && f.isExternalProcess()) f.clearExternalProcess();
+            }
+            for (BlockEntity f : this.cachedFurnaces) {
+                if (f != null && !f.isRemoved() && f instanceof EnchantedFurnaceBlockEntity ef && ef.isExternalProcess()) {
+                    ef.clearExternalProcess();
+                    BlockPos fPos = ef.getPos();
+                    BlockState fState = world.getBlockState(fPos);
+                    if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
+                        world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, false), 3);
+                    }
                 }
             }
 
@@ -1049,6 +1075,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     private void executeDirectCasting(ServerWorld serverWorld, PlayerEntity player, ItemStack directCast, boolean craftAll) {
+        updateMachineCache(true);
         if (!isCasterOnline()) {
             sendFeedback(player, "§e[Super Computer] Place a Casting Port within 16 blocks to enable metal casting!");
             return;
@@ -1095,6 +1122,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     private void executeDirectFabrication(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directFab, boolean craftAll) {
+        updateMachineCache(true);
         if (!isCircuitFabricatorOnline()) {
             sendFeedback(player, "§e[Super Computer] Place a Circuit Fabricator within 32 blocks to enable chip fabrication!");
             return;
@@ -1165,6 +1193,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     private void executeDirectPress(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directPress, boolean craftAll) {
+        updateMachineCache(true);
         if (!isPressOnline()) {
             sendFeedback(player, "§e[Super Computer] Place a Hydraulic Press within 32 blocks to enable pressing!");
             return;
@@ -1231,6 +1260,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     private void executeDirectSmelting(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directSmelt, boolean craftAll) {
+        updateMachineCache(true);
         if (!isFurnaceOnline()) {
             sendFeedback(player, "§e[Super Computer] Place an Enchanted Furnace within 32 blocks to enable automated smelting!");
             return;
