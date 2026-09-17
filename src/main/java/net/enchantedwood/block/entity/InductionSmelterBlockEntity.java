@@ -103,6 +103,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(Items.CHAINMAIL_LEGGINGS, MoltenMetal.IRON, 630, 160);
         registerYield(Items.CHAINMAIL_BOOTS, MoltenMetal.IRON, 360, 120);
         registerYield(Items.CROSSBOW, MoltenMetal.IRON, 90, 60);
+        registerYield(ModItems.IRON_BROAD_AXE, MoltenMetal.IRON, 540, 160);
         registerYield(Items.HEAVY_CORE, MoltenMetal.IRON, 810, 240);
         registerYield(Items.IRON_ORE, MoltenMetal.IRON, 90, 80);
         registerYield(Items.DEEPSLATE_IRON_ORE, MoltenMetal.IRON, 90, 80);
@@ -118,6 +119,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(Items.GOLDEN_SWORD, MoltenMetal.GOLD, 180, 80);
         registerYield(Items.GOLDEN_PICKAXE, MoltenMetal.GOLD, 270, 100);
         registerYield(Items.GOLDEN_AXE, MoltenMetal.GOLD, 270, 100);
+        registerYield(ModItems.GOLDEN_BROAD_AXE, MoltenMetal.GOLD, 540, 150);
         registerYield(Items.GOLDEN_SHOVEL, MoltenMetal.GOLD, 90, 60);
         registerYield(Items.GOLDEN_HOE, MoltenMetal.GOLD, 180, 80);
         registerYield(Items.GOLDEN_HELMET, MoltenMetal.GOLD, 450, 140);
@@ -141,6 +143,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(Items.RAW_COPPER, MoltenMetal.COPPER, 90, 60);
         registerYield(Items.RAW_COPPER_BLOCK, MoltenMetal.COPPER, 810, 240);
         registerYield(ModItems.COPPER_DUST, MoltenMetal.COPPER, 90, 50);
+        registerYield(ModItems.COPPER_BROAD_AXE, MoltenMetal.COPPER, 540, 140);
         registerYield(Items.COPPER_DOOR, MoltenMetal.COPPER, 180, 80);
         registerYield(Items.COPPER_TRAPDOOR, MoltenMetal.COPPER, 360, 120);
         registerYield(Items.COPPER_GRATE, MoltenMetal.COPPER, 360, 120);
@@ -183,6 +186,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.BRONZE_CHESTPLATE, MoltenMetal.BRONZE, 720, 190);
         registerYield(ModItems.BRONZE_LEGGINGS, MoltenMetal.BRONZE, 630, 170);
         registerYield(ModItems.BRONZE_BOOTS, MoltenMetal.BRONZE, 360, 130);
+        registerYield(ModItems.BRONZE_BROAD_AXE, MoltenMetal.BRONZE, 540, 150);
 
         // --- STEEL ---
         registerYield(ModItems.STEEL_INGOT, MoltenMetal.STEEL, 90, 70);
@@ -195,6 +199,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.STEEL_SHOVEL, MoltenMetal.STEEL, 90, 80);
         registerYield(ModItems.STEEL_HOE, MoltenMetal.STEEL, 180, 100);
         registerYield(ModItems.STEEL_HAMMER, MoltenMetal.STEEL, 450, 150);
+        registerYield(ModItems.STEEL_BROAD_AXE, MoltenMetal.STEEL, 540, 170);
         registerYield(ModItems.STEEL_HELMET, MoltenMetal.STEEL, 450, 160);
         registerYield(ModItems.STEEL_CHESTPLATE, MoltenMetal.STEEL, 720, 200);
         registerYield(ModItems.STEEL_LEGGINGS, MoltenMetal.STEEL, 630, 180);
@@ -211,6 +216,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.TITANIUM_AXE, MoltenMetal.TITANIUM, 270, 130);
         registerYield(ModItems.TITANIUM_SHOVEL, MoltenMetal.TITANIUM, 90, 90);
         registerYield(ModItems.TITANIUM_HOE, MoltenMetal.TITANIUM, 180, 110);
+        registerYield(ModItems.TITANIUM_BROAD_AXE, MoltenMetal.TITANIUM, 540, 200);
         registerYield(ModItems.TITANIUM_HELMET, MoltenMetal.TITANIUM, 450, 170);
         registerYield(ModItems.TITANIUM_CHESTPLATE, MoltenMetal.TITANIUM, 720, 210);
         registerYield(ModItems.TITANIUM_LEGGINGS, MoltenMetal.TITANIUM, 630, 190);
@@ -230,6 +236,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.COBALT_SHOVEL, MoltenMetal.COBALT, 90, 90);
         registerYield(ModItems.COBALT_HOE, MoltenMetal.COBALT, 180, 110);
         registerYield(ModItems.COBALT_HAMMER, MoltenMetal.COBALT, 450, 160);
+        registerYield(ModItems.COBALT_BROAD_AXE, MoltenMetal.COBALT, 540, 180);
         registerYield(ModItems.COBALT_HELMET, MoltenMetal.COBALT, 450, 170);
         registerYield(ModItems.COBALT_CHESTPLATE, MoltenMetal.COBALT, 720, 210);
         registerYield(ModItems.COBALT_LEGGINGS, MoltenMetal.COBALT, 630, 190);
@@ -248,6 +255,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.ARDITE_SHOVEL, MoltenMetal.ARDITE, 90, 90);
         registerYield(ModItems.ARDITE_HOE, MoltenMetal.ARDITE, 180, 110);
         registerYield(ModItems.ARDITE_HAMMER, MoltenMetal.ARDITE, 450, 160);
+        registerYield(ModItems.ARDITE_BROAD_AXE, MoltenMetal.ARDITE, 540, 180);
         registerYield(ModItems.ARDITE_HELMET, MoltenMetal.ARDITE, 450, 170);
         registerYield(ModItems.ARDITE_CHESTPLATE, MoltenMetal.ARDITE, 720, 210);
         registerYield(ModItems.ARDITE_LEGGINGS, MoltenMetal.ARDITE, 630, 190);
@@ -269,11 +277,65 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(ModItems.MANYULLYN_CHESTPLATE, MoltenMetal.MANYULLYN, 720, 240);
         registerYield(ModItems.MANYULLYN_LEGGINGS, MoltenMetal.MANYULLYN, 630, 220);
         registerYield(ModItems.MANYULLYN_BOOTS, MoltenMetal.MANYULLYN, 360, 170);
+        registerYield(ModItems.MANYULLYN_BROAD_AXE, MoltenMetal.MANYULLYN, 540, 220);
 
         // --- NETHERITE ---
+        registerYield(Items.NETHERITE_INGOT, MoltenMetal.NETHERITE, 90, 120);
         registerYield(Items.NETHERITE_SCRAP, MoltenMetal.NETHERITE, 90, 120);
         registerYield(Items.NETHERITE_BLOCK, MoltenMetal.NETHERITE, 810, 350);
         registerYield(ModItems.NETHERITE_DUST, MoltenMetal.NETHERITE, 90, 120);
+        registerYield(Items.NETHERITE_SWORD, MoltenMetal.NETHERITE, 180, 150);
+        registerYield(Items.NETHERITE_PICKAXE, MoltenMetal.NETHERITE, 270, 180);
+        registerYield(Items.NETHERITE_AXE, MoltenMetal.NETHERITE, 270, 180);
+        registerYield(Items.NETHERITE_SHOVEL, MoltenMetal.NETHERITE, 90, 120);
+        registerYield(Items.NETHERITE_HOE, MoltenMetal.NETHERITE, 180, 150);
+        registerYield(ModItems.NETHERITE_BROAD_AXE, MoltenMetal.NETHERITE, 540, 260);
+        registerYield(Items.NETHERITE_HELMET, MoltenMetal.NETHERITE, 450, 220);
+        registerYield(Items.NETHERITE_CHESTPLATE, MoltenMetal.NETHERITE, 720, 260);
+        registerYield(Items.NETHERITE_LEGGINGS, MoltenMetal.NETHERITE, 630, 240);
+        registerYield(Items.NETHERITE_BOOTS, MoltenMetal.NETHERITE, 360, 200);
+
+        // --- ALUMINUM ---
+        registerYield(ModItems.ALUMINUM_INGOT, MoltenMetal.ALUMINUM, 90, 50);
+        registerYield(ModItems.ALUMINUM_NUGGET, MoltenMetal.ALUMINUM, 10, 15);
+        registerYield(ModBlocks.ALUMINUM_BLOCK.asItem(), MoltenMetal.ALUMINUM, 810, 200);
+        registerYield(ModItems.RAW_BAUXITE, MoltenMetal.ALUMINUM, 90, 60);
+        registerYield(ModBlocks.RAW_BAUXITE_BLOCK.asItem(), MoltenMetal.ALUMINUM, 810, 240);
+        registerYield(ModItems.BAUXITE_DUST, MoltenMetal.ALUMINUM, 90, 50);
+        registerYield(ModItems.ALUMINUM_SWORD, MoltenMetal.ALUMINUM, 180, 70);
+        registerYield(ModItems.ALUMINUM_PICKAXE, MoltenMetal.ALUMINUM, 270, 90);
+        registerYield(ModItems.ALUMINUM_AXE, MoltenMetal.ALUMINUM, 270, 90);
+        registerYield(ModItems.ALUMINUM_SHOVEL, MoltenMetal.ALUMINUM, 90, 50);
+        registerYield(ModItems.ALUMINUM_HOE, MoltenMetal.ALUMINUM, 180, 70);
+        registerYield(ModItems.ALUMINUM_HAMMER, MoltenMetal.ALUMINUM, 450, 130);
+        registerYield(ModItems.ALUMINUM_BROAD_AXE, MoltenMetal.ALUMINUM, 540, 150);
+        registerYield(ModItems.ALUMINUM_HELMET, MoltenMetal.ALUMINUM, 450, 130);
+        registerYield(ModItems.ALUMINUM_CHESTPLATE, MoltenMetal.ALUMINUM, 720, 170);
+        registerYield(ModItems.ALUMINUM_LEGGINGS, MoltenMetal.ALUMINUM, 630, 150);
+        registerYield(ModItems.ALUMINUM_BOOTS, MoltenMetal.ALUMINUM, 360, 110);
+        registerYield(ModBlocks.BAUXITE_ORE.asItem(), MoltenMetal.ALUMINUM, 90, 80);
+        registerYield(ModBlocks.DEEPSLATE_BAUXITE_ORE.asItem(), MoltenMetal.ALUMINUM, 90, 80);
+
+        // --- TUNGSTEN ---
+        registerYield(ModItems.TUNGSTEN_INGOT, MoltenMetal.TUNGSTEN, 90, 100);
+        registerYield(ModItems.TUNGSTEN_NUGGET, MoltenMetal.TUNGSTEN, 10, 25);
+        registerYield(ModBlocks.TUNGSTEN_BLOCK.asItem(), MoltenMetal.TUNGSTEN, 810, 320);
+        registerYield(ModItems.RAW_TUNGSTEN, MoltenMetal.TUNGSTEN, 90, 110);
+        registerYield(ModBlocks.RAW_TUNGSTEN_BLOCK.asItem(), MoltenMetal.TUNGSTEN, 810, 350);
+        registerYield(ModItems.TUNGSTEN_DUST, MoltenMetal.TUNGSTEN, 90, 100);
+        registerYield(ModItems.TUNGSTEN_SWORD, MoltenMetal.TUNGSTEN, 180, 140);
+        registerYield(ModItems.TUNGSTEN_PICKAXE, MoltenMetal.TUNGSTEN, 270, 160);
+        registerYield(ModItems.TUNGSTEN_AXE, MoltenMetal.TUNGSTEN, 270, 160);
+        registerYield(ModItems.TUNGSTEN_SHOVEL, MoltenMetal.TUNGSTEN, 90, 110);
+        registerYield(ModItems.TUNGSTEN_HOE, MoltenMetal.TUNGSTEN, 180, 140);
+        registerYield(ModItems.TUNGSTEN_HAMMER, MoltenMetal.TUNGSTEN, 450, 200);
+        registerYield(ModItems.TUNGSTEN_BROAD_AXE, MoltenMetal.TUNGSTEN, 540, 220);
+        registerYield(ModItems.TUNGSTEN_HELMET, MoltenMetal.TUNGSTEN, 450, 200);
+        registerYield(ModItems.TUNGSTEN_CHESTPLATE, MoltenMetal.TUNGSTEN, 720, 250);
+        registerYield(ModItems.TUNGSTEN_LEGGINGS, MoltenMetal.TUNGSTEN, 630, 230);
+        registerYield(ModItems.TUNGSTEN_BOOTS, MoltenMetal.TUNGSTEN, 360, 180);
+        registerYield(ModBlocks.DEEPSLATE_TUNGSTEN_ORE.asItem(), MoltenMetal.TUNGSTEN, 90, 120);
+        registerYield(ModBlocks.NETHER_TUNGSTEN_ORE.asItem(), MoltenMetal.TUNGSTEN, 90, 120);
     }
 
     public static @Nullable SmeltYield getYield(ItemStack stack) {

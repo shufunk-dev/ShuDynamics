@@ -14,7 +14,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HydraulicPressScreen extends HandledScreen<HydraulicPressScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/crusher_gui.png");
+    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/hydraulic_press_gui.png");
 
     public HydraulicPressScreen(HydraulicPressScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);

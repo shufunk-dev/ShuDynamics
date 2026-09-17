@@ -18,7 +18,7 @@ public class CastingPortScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public CastingPortScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(CastingPortBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8));
+        this(syncId, playerInventory, new SimpleInventory(CastingPortBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(9));
     }
 
     public CastingPortScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -54,7 +54,7 @@ public class CastingPortScreenHandler extends ScreenHandler {
         int ord = propertyDelegate.get(0);
         CastingMode[] modes = CastingMode.values();
         if (ord >= 0 && ord < modes.length) return modes[ord];
-        return CastingMode.INGOT;
+        return CastingMode.STANDBY;
     }
 
     public MoltenMetal getFluidType() {
@@ -80,6 +80,10 @@ public class CastingPortScreenHandler extends ScreenHandler {
         int total = propertyDelegate.get(5);
         if (total <= 0) return 0;
         return (int) (((long) progress * pixels) / total);
+    }
+
+    public boolean isNetworkOnline() {
+        return propertyDelegate.get(8) == 1;
     }
 
     public Inventory getInventory() {

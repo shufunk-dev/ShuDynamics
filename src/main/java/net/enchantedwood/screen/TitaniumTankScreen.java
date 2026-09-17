@@ -56,6 +56,14 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
         // Status string
         String statusText = this.handler.isFormed() ? "§a✔ 5x5 Formed" : "§c✖ Incomplete";
         context.drawText(this.textRenderer, Text.literal(statusText), 114, 6, 0xFFFFFF, true);
+
+        // Fluid Filter / Lock Status Badge
+        net.enchantedwood.fluid.MoltenMetal filter = this.handler.getFilterFluid();
+        if (filter != null && filter != net.enchantedwood.fluid.MoltenMetal.NONE) {
+            context.drawText(this.textRenderer, Text.literal("§6🔒 " + filter.getDisplayName()), 114, 16, 0xFFFFFF, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("§7🔓 Any Fluid"), 114, 16, 0x888888, false);
+        }
     }
 
     @Override
@@ -86,6 +94,15 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
             } else {
                 tooltip.add(Text.literal("§7Accepts Lava or any of 14 Molten Metals"));
             }
+
+            net.enchantedwood.fluid.MoltenMetal activeFilter = this.handler.getFilterFluid();
+            if (activeFilter != null && activeFilter != net.enchantedwood.fluid.MoltenMetal.NONE) {
+                tooltip.add(Text.literal("§a🔒 Filter Locked: §f" + activeFilter.getDisplayName()));
+            } else {
+                tooltip.add(Text.literal("§7🔓 Filter: Unlocked (Accepts any fluid)"));
+            }
+            tooltip.add(Text.literal("§8Sneak-click with an ingot to lock fluid"));
+            tooltip.add(Text.literal("§8Sneak-click with empty hand to unlock"));
             tooltip.add(Text.literal("§8Inbound: Top Center Valve"));
             tooltip.add(Text.literal("§8Outbound: All Outer Casings"));
             context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);

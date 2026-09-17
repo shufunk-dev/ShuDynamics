@@ -49,28 +49,57 @@ public class TitaniumTankCasingBlock extends BlockWithEntity {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.isSneaking()) {
+            net.minecraft.item.ItemStack hand = player.getMainHandStack();
+            net.enchantedwood.fluid.MoltenMetal filterMetal = net.enchantedwood.fluid.MoltenMetal.fromItem(hand);
+            if (filterMetal != null) {
+                if (!world.isClient()) {
+                    BlockEntity be = world.getBlockEntity(pos);
+                    TitaniumTankControllerBlockEntity master = null;
+                    if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
+                        master = casingBE.getMaster();
+                    }
+                    if (master == null) {
+                        master = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+                    }
+                    if (master != null && master.isFormed()) {
+                        if (master.getStoredFluidAmount() > 0 && master.getFluidType() != filterMetal) {
+                            player.sendMessage(Text.literal("§c⚠ Tank contains " + master.getStoredFluidAmount() + " mB of " + master.getFluidType().getDisplayName() + "! Break and replace a block to purge first."), true);
+                            return ActionResult.SUCCESS;
+                        }
+                        master.setFilterFluid(filterMetal);
+                        player.sendMessage(Text.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()), true);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                return ActionResult.SUCCESS;
+            } else if (hand.isEmpty()) {
+                if (!world.isClient()) {
+                    BlockEntity be = world.getBlockEntity(pos);
+                    TitaniumTankControllerBlockEntity master = null;
+                    if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
+                        master = casingBE.getMaster();
+                    }
+                    if (master == null) {
+                        master = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+                    }
+                    if (master != null && master.isFormed()) {
+                        master.setFilterFluid(net.enchantedwood.fluid.MoltenMetal.NONE);
+                        player.sendMessage(Text.literal("§eTank filter cleared (Accepts any fluid)."), true);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+            // Sneaking with a non-metal item (e.g. Sign, Hanging Sign, Torch, Block) -> PASS so item can be placed on the casing!
+            return ActionResult.PASS;
+        }
+
         if (!world.isClient()) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
                 TitaniumTankControllerBlockEntity master = casingBE.getMaster();
                 if (master != null && master.isFormed()) {
-                    if (player.isSneaking()) {
-                        net.minecraft.item.ItemStack hand = player.getMainHandStack();
-                        net.enchantedwood.fluid.MoltenMetal filterMetal = net.enchantedwood.fluid.MoltenMetal.fromItem(hand);
-                        if (filterMetal != null) {
-                            if (master.getStoredFluidAmount() > 0 && master.getFluidType() != filterMetal) {
-                                player.sendMessage(Text.literal("§c⚠ Tank contains " + master.getStoredFluidAmount() + " mB of " + master.getFluidType().getDisplayName() + "! Break and replace a block to purge first."), true);
-                                return ActionResult.SUCCESS;
-                            }
-                            master.setFilterFluid(filterMetal);
-                            player.sendMessage(Text.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()), true);
-                            return ActionResult.SUCCESS;
-                        } else if (hand.isEmpty()) {
-                            master.setFilterFluid(net.enchantedwood.fluid.MoltenMetal.NONE);
-                            player.sendMessage(Text.literal("§eTank filter cleared (Accepts any fluid)."), true);
-                            return ActionResult.SUCCESS;
-                        }
-                    }
                     player.openHandledScreen(master);
                     return ActionResult.SUCCESS;
                 }

@@ -64,6 +64,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                 case 3 -> (CAPACITY >> 16) & 0xFFFF;
                 case 4 -> isFormed ? 1 : 0;
                 case 5 -> currentFluid.ordinal();
+                case 6 -> filterFluid.ordinal();
                 default -> 0;
             };
         }
@@ -78,12 +79,16 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                     MoltenMetal[] metals = MoltenMetal.values();
                     if (value >= 0 && value < metals.length) currentFluid = metals[value];
                 }
+                case 6 -> {
+                    MoltenMetal[] metals = MoltenMetal.values();
+                    if (value >= 0 && value < metals.length) filterFluid = metals[value];
+                }
             }
         }
 
         @Override
         public int size() {
-            return 6;
+            return 7;
         }
     };
 

@@ -36,6 +36,38 @@ public class ReinforcedTankGlassBlock extends TransparentBlock {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.isSneaking()) {
+            net.minecraft.item.ItemStack hand = player.getMainHandStack();
+            net.enchantedwood.fluid.MoltenMetal filterMetal = net.enchantedwood.fluid.MoltenMetal.fromItem(hand);
+            if (filterMetal != null) {
+                if (!world.isClient()) {
+                    TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+                    if (controller != null && controller.isFormed()) {
+                        if (controller.getStoredFluidAmount() > 0 && controller.getFluidType() != filterMetal) {
+                            player.sendMessage(Text.literal("§c⚠ Tank contains " + controller.getStoredFluidAmount() + " mB of " + controller.getFluidType().getDisplayName() + "! Break and replace a block to purge first."), true);
+                            return ActionResult.SUCCESS;
+                        }
+                        controller.setFilterFluid(filterMetal);
+                        player.sendMessage(Text.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()), true);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                return ActionResult.SUCCESS;
+            } else if (hand.isEmpty()) {
+                if (!world.isClient()) {
+                    TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
+                    if (controller != null && controller.isFormed()) {
+                        controller.setFilterFluid(net.enchantedwood.fluid.MoltenMetal.NONE);
+                        player.sendMessage(Text.literal("§eTank filter cleared (Accepts any fluid)."), true);
+                        return ActionResult.SUCCESS;
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+            // Sneaking with non-metal item (like a Sign) -> PASS so signs/blocks can be placed on the glass!
+            return ActionResult.PASS;
+        }
+
         if (!world.isClient()) {
             TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(world, pos);
             if (controller != null) {

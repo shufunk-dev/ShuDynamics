@@ -38,7 +38,7 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
             if (this.client != null && this.client.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult hitResult) {
                 ClientPlayNetworking.send(new net.enchantedwood.network.ToggleCastingPortModePayload(hitResult.getBlockPos()));
             }
-        }).dimensions(x + 60, y + 14, 48, 14).build();
+        }).dimensions(x + 58, y + 14, 56, 14).build();
 
         this.addDrawableChild(this.modeButton);
     }
@@ -77,6 +77,10 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         context.drawText(this.textRenderer, this.title, 8, 6, 4210752, false);
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+
+        boolean online = this.handler.isNetworkOnline();
+        String badge = online ? "§a📡" : "§8📡";
+        context.drawText(this.textRenderer, badge, this.backgroundWidth - 22, 6, 0xFFFFFF, false);
     }
 
     @Override
@@ -100,14 +104,21 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
         }
 
         // Mode Tooltip
-        if (mouseX >= x + 64 && mouseX <= x + 104 && mouseY >= y + 16 && mouseY <= y + 28) {
+        if (mouseX >= x + 56 && mouseX <= x + 116 && mouseY >= y + 14 && mouseY <= y + 28) {
             CastingMode mode = this.handler.getMode();
-            context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6⚡ Casting Mold"),
-                    Text.literal(String.format("§fMode: §e%s", mode.getDisplayName())),
-                    Text.literal(String.format("§7Cost: §b%d mB / item", mode.getFluidCostMb())),
-                    Text.literal("§8Click to cycle (Ingot -> Block -> Nugget)")
-            ), mouseX, mouseY);
+            List<Text> lines = new java.util.ArrayList<>();
+            lines.add(Text.literal("§6⚡ Casting Mold Mode"));
+            lines.add(Text.literal(String.format("§fActive: §e%s", mode.getDisplayName())));
+            if (mode == CastingMode.STANDBY) {
+                lines.add(Text.literal("§a● Standby: Auto-Craft On Demand"));
+                lines.add(Text.literal("§7Does not cast autonomously on tick."));
+                lines.add(Text.literal("§7Allows Super Computer to cast directly as needed."));
+            } else {
+                lines.add(Text.literal(String.format("§7Continuous Cast: §b%d mB / %s", mode.getFluidCostMb(), mode.getDisplayName().toLowerCase())));
+                lines.add(Text.literal("§8Pushes finished items into adjacent inventories."));
+            }
+            lines.add(Text.literal("§8Click to cycle (Standby -> Ingot -> Block -> Nugget)"));
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
         // Progress Tooltip
@@ -129,6 +140,23 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
                     Text.literal("§f• Blocks (810 mB)"),
                     Text.literal("§8Automatically pushes into adjacent chests, hoppers, or pipes.")
             ), mouseX, mouseY);
+        }
+
+        // Wireless Link Tooltip
+        if (mouseX >= x + this.backgroundWidth - 26 && mouseX <= x + this.backgroundWidth - 6 && mouseY >= y + 4 && mouseY <= y + 18) {
+            boolean online = this.handler.isNetworkOnline();
+            List<Text> lines = new java.util.ArrayList<>();
+            lines.add(Text.literal("§6📡 Wireless Storage Link"));
+            if (online) {
+                lines.add(Text.literal("§a● Status: Connected to Digital Storage"));
+                lines.add(Text.literal("§7Cast ingots/blocks automatically beam straight"));
+                lines.add(Text.literal("§7into your Base Storage Network!"));
+            } else {
+                lines.add(Text.literal("§7○ Status: Offline (No Terminal in range)"));
+                lines.add(Text.literal("§8Bring within 16 blocks of a Storage Terminal or"));
+                lines.add(Text.literal("§8Sneak + Right-Click with Wrench to bind cross-distance."));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
     }
 }

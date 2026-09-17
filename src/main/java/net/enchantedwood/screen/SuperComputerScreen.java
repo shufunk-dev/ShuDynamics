@@ -92,6 +92,13 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
 
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0x404040, false);
 
+        // Casting Automation Link status icon
+        if (this.handler.isCasterOnline()) {
+            context.drawText(this.textRenderer, Text.literal("⚡").formatted(net.minecraft.util.Formatting.GOLD), 148, 6, 0xFFAA00, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("⚡").formatted(net.minecraft.util.Formatting.DARK_GRAY), 148, 6, 0x555555, false);
+        }
+
         // Digital Storage Network status icon
         if (this.handler.isNetworkOnline()) {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GREEN), 162, 6, 0x55FF55, false);
@@ -147,10 +154,25 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
             lines.add(Text.literal("§a⚡ Execute Craft"));
             lines.add(Text.literal("§7Click: Craft 1 batch"));
             lines.add(Text.literal("§7Shift-Click: Craft all possible with what you have"));
-            lines.add(Text.literal("§8Uses materials from Digital Storage & Inventory."));
+            lines.add(Text.literal("§8Uses materials from Digital Storage, Tanks & Inventory."));
             if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
                 lines.add(Text.literal(""));
                 lines.add(Text.literal("§7Latest Status: " + lastStatus));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+        }
+
+        // Caster Link Status Tooltip (x + 144 .. 156, y + 4 .. 16)
+        if (mouseX >= x + 144 && mouseX <= x + 156 && mouseY >= y + 4 && mouseY <= y + 16) {
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§6⚡ Molten Metal Caster Link"));
+            if (this.handler.isCasterOnline()) {
+                lines.add(Text.literal("§a● Online: Connected to Casting Port & Tanks"));
+                lines.add(Text.literal("§7Draws from molten metal tanks for on-demand casting."));
+                lines.add(Text.literal("§8(Keeps metals liquified to save digital storage crystals)"));
+            } else {
+                lines.add(Text.literal("§7● Offline: No Casting Port detected"));
+                lines.add(Text.literal("§8Place a Casting Port within 16 blocks to enable metal casting."));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }

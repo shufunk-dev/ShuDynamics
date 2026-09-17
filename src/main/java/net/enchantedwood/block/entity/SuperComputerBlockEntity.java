@@ -68,6 +68,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 case 5 -> maxCraftProgress;
                 case 6 -> isNetworkOnline() ? 1 : 0;
                 case 7 -> hasValidRecipe ? 1 : 0;
+                case 8 -> isCasterOnline() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -84,12 +85,176 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         @Override
         public int size() {
-            return 8;
+            return 9;
         }
     };
 
     public SuperComputerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SUPER_COMPUTER_BLOCK_ENTITY, pos, state);
+    }
+
+    public static class MetalCastInfo {
+        public final net.enchantedwood.fluid.MoltenMetal metal;
+        public final int costMb;
+
+        public MetalCastInfo(net.enchantedwood.fluid.MoltenMetal metal, int costMb) {
+            this.metal = metal;
+            this.costMb = costMb;
+        }
+    }
+
+    public static @Nullable MetalCastInfo getMetalCastInfo(net.minecraft.item.Item item) {
+        if (item == null) return null;
+        for (net.enchantedwood.fluid.MoltenMetal metal : net.enchantedwood.fluid.MoltenMetal.values()) {
+            if (metal == net.enchantedwood.fluid.MoltenMetal.NONE || metal == net.enchantedwood.fluid.MoltenMetal.LAVA) continue;
+            if (metal.getNuggetItem() == item) {
+                return new MetalCastInfo(metal, 10);
+            }
+            if (metal.getIngotItem() == item) {
+                return new MetalCastInfo(metal, 90);
+            }
+            if (metal.getBlockItem() == item) {
+                return new MetalCastInfo(metal, 810);
+            }
+        }
+        return null;
+    }
+
+    public static @Nullable ItemStack getDirectCastingPatternResult(List<ItemStack> patternStacks) {
+        net.minecraft.item.Item firstItem = null;
+        int count = 0;
+        for (ItemStack s : patternStacks) {
+            if (!s.isEmpty()) {
+                if (firstItem == null) {
+                    firstItem = s.getItem();
+                } else if (firstItem != s.getItem()) {
+                    return null;
+                }
+                count += s.getCount();
+            }
+        }
+        if (firstItem != null && getMetalCastInfo(firstItem) != null) {
+            return new ItemStack(firstItem, Math.max(1, count));
+        }
+        return null;
+    }
+
+    public boolean isCasterOnline() {
+        return !getNearbyCastingPorts().isEmpty();
+    }
+
+    public List<CastingPortBlockEntity> getNearbyCastingPorts() {
+        if (this.world == null) return java.util.Collections.emptyList();
+        List<CastingPortBlockEntity> ports = new ArrayList<>();
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+        for (int dx = -16; dx <= 16; dx++) {
+            for (int dy = -8; dy <= 8; dy++) {
+                for (int dz = -16; dz <= 16; dz++) {
+                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                    BlockEntity be = this.world.getBlockEntity(mut);
+                    if (be instanceof CastingPortBlockEntity port) {
+                        ports.add(port);
+                    }
+                }
+            }
+        }
+        return ports;
+    }
+
+    public java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> getAvailableMoltenMetals() {
+        if (this.world == null) return new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> amounts = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+        java.util.Set<BlockPos> visitedControllers = new java.util.HashSet<>();
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+
+        for (int dx = -16; dx <= 16; dx++) {
+            for (int dy = -8; dy <= 8; dy++) {
+                for (int dz = -16; dz <= 16; dz++) {
+                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                    BlockEntity be = this.world.getBlockEntity(mut);
+
+                    if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
+                        if (visitedControllers.add(controller.getPos())) {
+                            net.enchantedwood.fluid.MoltenMetal fluid = controller.getFluidType();
+                            if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
+                                int amt = controller.getStoredFluidAmount();
+                                if (amt > 0) {
+                                    amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
+                                }
+                            }
+                        }
+                    } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
+                        TitaniumTankControllerBlockEntity master = casing.getMaster();
+                        if (master != null && master.isFormed() && visitedControllers.add(master.getPos())) {
+                            net.enchantedwood.fluid.MoltenMetal fluid = master.getFluidType();
+                            if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
+                                int amt = master.getStoredFluidAmount();
+                                if (amt > 0) {
+                                    amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
+                                }
+                            }
+                        }
+                    } else if (be instanceof CastingPortBlockEntity port) {
+                        net.enchantedwood.fluid.MoltenMetal fluid = port.getFluidType();
+                        if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
+                            int amt = port.getFluidAmount(fluid);
+                            if (amt > 0) {
+                                amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return amounts;
+    }
+
+    private void consumeMoltenMetals(java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> requiredFluids) {
+        if (this.world == null || requiredFluids == null || requiredFluids.isEmpty()) return;
+        java.util.Set<BlockPos> visitedControllers = new java.util.HashSet<>();
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+
+        for (java.util.Map.Entry<net.enchantedwood.fluid.MoltenMetal, Integer> entry : requiredFluids.entrySet()) {
+            net.enchantedwood.fluid.MoltenMetal metal = entry.getKey();
+            int needed = entry.getValue();
+            if (needed <= 0) continue;
+
+            // 1. Draw from Casting Port buffers first
+            for (int dx = -16; dx <= 16 && needed > 0; dx++) {
+                for (int dy = -8; dy <= 8 && needed > 0; dy++) {
+                    for (int dz = -16; dz <= 16 && needed > 0; dz++) {
+                        mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof CastingPortBlockEntity port && port.getFluidType() == metal) {
+                            int extracted = port.extractFluid(metal, needed, false);
+                            needed -= extracted;
+                        }
+                    }
+                }
+            }
+
+            // 2. Draw directly from Titanium Tanks
+            for (int dx = -16; dx <= 16 && needed > 0; dx++) {
+                for (int dy = -8; dy <= 8 && needed > 0; dy++) {
+                    for (int dz = -16; dz <= 16 && needed > 0; dz++) {
+                        mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
+                            if (visitedControllers.add(controller.getPos()) && controller.getFluidType() == metal) {
+                                int extracted = controller.extractFluidInternal(metal, needed, false);
+                                needed -= extracted;
+                            }
+                        } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
+                            TitaniumTankControllerBlockEntity master = casing.getMaster();
+                            if (master != null && master.isFormed() && visitedControllers.add(master.getPos()) && master.getFluidType() == metal) {
+                                int extracted = master.extractFluidInternal(metal, needed, false);
+                                needed -= extracted;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
@@ -157,20 +322,26 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         CraftingRecipeInput recipeInput = CraftingRecipeInput.create(3, 3, patternStacks);
         Optional<RecipeEntry<CraftingRecipe>> match = world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, recipeInput, world);
 
-        if (match.isEmpty()) {
-            entity.hasValidRecipe = false;
-            entity.craftProgress = 0;
-            if (!entity.inventory.get(PREVIEW_SLOT).isEmpty()) {
-                entity.inventory.set(PREVIEW_SLOT, ItemStack.EMPTY);
-                entity.markDirty();
+        ItemStack resultStack = ItemStack.EMPTY;
+        if (match.isPresent()) {
+            entity.hasValidRecipe = true;
+            resultStack = match.get().value().craft(recipeInput, world.getRegistryManager());
+        } else {
+            ItemStack directCast = getDirectCastingPatternResult(patternStacks);
+            if (directCast != null) {
+                entity.hasValidRecipe = true;
+                resultStack = directCast;
+            } else {
+                entity.hasValidRecipe = false;
+                entity.craftProgress = 0;
+                if (!entity.inventory.get(PREVIEW_SLOT).isEmpty()) {
+                    entity.inventory.set(PREVIEW_SLOT, ItemStack.EMPTY);
+                    entity.markDirty();
+                }
+                if (wasLit) world.setBlockState(pos, state.with(SuperComputerBlock.LIT, false), 3);
+                return;
             }
-            if (wasLit) world.setBlockState(pos, state.with(SuperComputerBlock.LIT, false), 3);
-            return;
         }
-
-        entity.hasValidRecipe = true;
-        RecipeEntry<CraftingRecipe> recipeEntry = match.get();
-        ItemStack resultStack = recipeEntry.value().craft(recipeInput, world.getRegistryManager());
 
         if (resultStack.isEmpty()) {
             entity.craftProgress = 0;
@@ -212,6 +383,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         CraftingRecipeInput recipeInput = CraftingRecipeInput.create(3, 3, patternStacks);
         Optional<RecipeEntry<CraftingRecipe>> match = serverWorld.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, recipeInput, serverWorld);
         if (match.isEmpty()) {
+            ItemStack directCast = getDirectCastingPatternResult(patternStacks);
+            if (directCast != null) {
+                executeDirectCasting(serverWorld, player, directCast, craftAll);
+                return;
+            }
             sendFeedback(player, "§c[Super Computer] No valid crafting recipe in the 3x3 grid!");
             return;
         }
@@ -223,6 +399,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         int maxBatches = craftAll ? 64 : 1;
         int craftedBatches = 0;
         int totalCraftingStepsSum = 0;
+        int totalMoltenMbUsedSum = 0;
 
         for (int b = 0; b < maxBatches; b++) {
             if (!canAcceptOutput(resultStack)) {
@@ -261,8 +438,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 break;
             }
 
-            // Deduct raw ingredients
+            // Deduct raw ingredients from storage / player
             consumeIngredients(terminal, player, plan.rawIngredientsToConsume);
+
+            // Deduct molten metals from tanks / casting ports
+            if (!plan.moltenMetalsToConsume.isEmpty()) {
+                consumeMoltenMetals(plan.moltenMetalsToConsume);
+                totalMoltenMbUsedSum += plan.moltenMetalUsedMb;
+            }
 
             // Deduct energy
             if (this.energyStorage.getEnergy() >= totalEnergy) {
@@ -285,9 +468,94 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         if (craftedBatches > 0) {
             markDirty();
-            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.6f, 1.2f);
+            if (totalMoltenMbUsedSum > 0) {
+                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.3f);
+                List<CastingPortBlockEntity> ports = getNearbyCastingPorts();
+                for (CastingPortBlockEntity port : ports) {
+                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
+                    serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
+                }
+            } else {
+                serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_ANVIL_USE, net.minecraft.sound.SoundCategory.BLOCKS, 0.6f, 1.2f);
+            }
             int totalYield = resultStack.getCount() * craftedBatches;
-            sendFeedback(player, "§a⚡ Crafted: §f" + totalYield + "x " + resultStack.getName().getString() + (totalCraftingStepsSum > craftedBatches ? " §7(" + totalCraftingStepsSum + " steps synthesized)" : ""));
+            String feedback = "§a⚡ Crafted: §f" + totalYield + "x " + resultStack.getName().getString();
+            if (totalMoltenMbUsedSum > 0) {
+                feedback += " §6[Cast " + totalMoltenMbUsedSum + " mB Molten Metal]";
+            } else if (totalCraftingStepsSum > craftedBatches) {
+                feedback += " §7(" + totalCraftingStepsSum + " steps synthesized)";
+            }
+            sendFeedback(player, feedback);
+        }
+    }
+
+    private void executeDirectCasting(ServerWorld serverWorld, PlayerEntity player, ItemStack directCast, boolean craftAll) {
+        if (!isCasterOnline()) {
+            sendFeedback(player, "§e[Super Computer] Place a Casting Port within 16 blocks to enable metal casting!");
+            return;
+        }
+
+        MetalCastInfo castInfo = getMetalCastInfo(directCast.getItem());
+        if (castInfo == null) {
+            sendFeedback(player, "§c[Super Computer] Item cannot be cast from molten metal!");
+            return;
+        }
+
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        int maxBatches = craftAll ? 64 : 1;
+        int craftedBatches = 0;
+        int totalFluidUsed = 0;
+        int perBatchCost = castInfo.costMb * directCast.getCount();
+
+        for (int b = 0; b < maxBatches; b++) {
+            if (!canAcceptOutput(directCast)) {
+                if (craftedBatches == 0) {
+                    sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+                }
+                break;
+            }
+
+            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> avail = getAvailableMoltenMetals();
+            if (avail.getOrDefault(castInfo.metal, 0) < perBatchCost) {
+                if (craftedBatches == 0) {
+                    sendFeedback(player, "§c[Super Computer] Missing Molten " + castInfo.metal.getDisplayName() + "! (Needs " + perBatchCost + " mB in tanks)");
+                }
+                break;
+            }
+
+            int energyCost = ENERGY_PER_CRAFT;
+            if (this.energyStorage.getEnergy() < energyCost && !drawNetworkPower()) {
+                if (craftedBatches == 0) {
+                    sendFeedback(player, "§c[Super Computer] Insufficient energy! (Needs " + energyCost + " FE)");
+                }
+                break;
+            }
+
+            // Deduct fluid
+            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> toConsume = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+            toConsume.put(castInfo.metal, perBatchCost);
+            consumeMoltenMetals(toConsume);
+
+            // Deduct energy
+            this.energyStorage.extractEnergy(Math.min(energyCost, this.energyStorage.getEnergy()), false);
+
+            // Deposit result
+            depositCraftedResult(terminal, player, directCast.copy());
+
+            craftedBatches++;
+            totalFluidUsed += perBatchCost;
+        }
+
+        if (craftedBatches > 0) {
+            markDirty();
+            serverWorld.playSound(null, this.pos, net.minecraft.sound.SoundEvents.BLOCK_LAVA_EXTINGUISH, net.minecraft.sound.SoundCategory.BLOCKS, 0.7f, 1.3f);
+            List<CastingPortBlockEntity> ports = getNearbyCastingPorts();
+            for (CastingPortBlockEntity port : ports) {
+                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
+                serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, port.getPos().getX() + 0.5, port.getPos().getY() + 0.8, port.getPos().getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
+            }
+            int totalYield = directCast.getCount() * craftedBatches;
+            sendFeedback(player, "§a⚡ Cast: §f" + totalYield + "x " + directCast.getName().getString() + " §6[" + totalFluidUsed + " mB Molten " + castInfo.metal.getDisplayName() + "]");
         }
     }
 
@@ -323,7 +591,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public static class CraftingPlan {
         public final List<ItemStack> rawIngredientsToConsume = new ArrayList<>();
         public final List<ItemStack> leftoverSynthesized = new ArrayList<>();
+        public final java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> moltenMetalsToConsume = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
         public int totalCraftingSteps = 1;
+        public int moltenMetalUsedMb = 0;
     }
 
     public static class CraftingPlanResult {
@@ -423,6 +693,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             CraftingPlan plan = new CraftingPlan();
             java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
             java.util.Set<net.minecraft.item.Item> activeRecursion = new java.util.HashSet<>();
+            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten = isCasterOnline()
+                    ? new java.util.EnumMap<>(getAvailableMoltenMetals())
+                    : new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
 
             List<net.minecraft.recipe.Ingredient> ingredients;
             try {
@@ -435,14 +708,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             if (!ingredients.isEmpty()) {
                 for (net.minecraft.recipe.Ingredient ing : ingredients) {
                     if (ing == null || ing.isEmpty()) continue;
-                    if (!resolveIngredientRequirement(world, ing, available, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
+                    if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
                         allSatisfied = false;
                     }
                 }
             } else {
                 for (ItemStack req : patternStacks) {
                     if (req.isEmpty()) continue;
-                    if (!resolveItemRequirement(world, req.getItem(), available, virtualBuffer, plan, activeRecursion, 0)) {
+                    if (!resolveItemRequirement(world, req.getItem(), available, availableMolten, virtualBuffer, plan, activeRecursion, 0)) {
                         String name = req.getItem().getName().getString();
                         missingItems.put(name, missingItems.getOrDefault(name, 0) + 1);
                         allSatisfied = false;
@@ -483,6 +756,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     private boolean resolveItemRequirement(ServerWorld world, net.minecraft.item.Item targetItem,
                                            java.util.Map<net.minecraft.item.Item, Integer> available,
+                                           java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten,
                                            java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer,
                                            CraftingPlan plan,
                                            java.util.Set<net.minecraft.item.Item> activeRecursion,
@@ -507,7 +781,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return false;
         }
 
-        // 4. Search RecipeManager for a crafting recipe that produces targetItem from available materials
+        // 5. Search RecipeManager for a crafting recipe that produces targetItem from available materials
         activeRecursion.add(targetItem);
         try {
             for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
@@ -516,9 +790,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 if (!result.isEmpty() && result.isOf(targetItem)) {
                     int yield = Math.max(1, result.getCount());
                     java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
+                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
                     java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
                     List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
+                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
                     int backupSteps = plan.totalCraftingSteps;
+                    int backupMoltenUsed = plan.moltenMetalUsedMb;
 
                     List<net.minecraft.recipe.Ingredient> ings;
                     try {
@@ -533,7 +810,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     for (net.minecraft.recipe.Ingredient ing : ings) {
                         if (ing == null || ing.isEmpty()) continue;
 
-                        if (!resolveIngredientRequirement(world, ing, available, virtualBuffer, plan, new java.util.HashMap<>(), activeRecursion, depth + 1)) {
+                        if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, new java.util.HashMap<>(), activeRecursion, depth + 1)) {
                             success = false;
                             break;
                         }
@@ -549,11 +826,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         // Rollback and try the next recipe candidate
                         available.clear();
                         available.putAll(backupAvailable);
+                        availableMolten.clear();
+                        availableMolten.putAll(backupMolten);
                         virtualBuffer.clear();
                         virtualBuffer.putAll(backupVirtual);
                         plan.rawIngredientsToConsume.clear();
                         plan.rawIngredientsToConsume.addAll(backupPlan);
+                        plan.moltenMetalsToConsume.clear();
+                        plan.moltenMetalsToConsume.putAll(backupPlanMolten);
                         plan.totalCraftingSteps = backupSteps;
+                        plan.moltenMetalUsedMb = backupMoltenUsed;
                     }
                 }
             }
@@ -568,6 +850,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     private boolean resolveIngredientRequirement(ServerWorld world, net.minecraft.recipe.Ingredient ing,
                                                  java.util.Map<net.minecraft.item.Item, Integer> available,
+                                                 java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten,
                                                  java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer,
                                                  CraftingPlan plan,
                                                  java.util.Map<String, Integer> missingItems,
@@ -605,7 +888,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         // Priority 3: Try to synthesize one of the matching items recursively from available materials
         for (net.minecraft.item.Item opt : matchingItems) {
-            if (resolveItemRequirement(world, opt, available, virtualBuffer, plan, activeRecursion, depth)) {
+            if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, activeRecursion, depth)) {
                 return true;
             }
         }

@@ -70,16 +70,28 @@ public class CastingPortBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.isSneaking()) {
+            if (player.getMainHandStack().isEmpty()) {
+                if (!world.isClient()) {
+                    BlockEntity be = world.getBlockEntity(pos);
+                    if (be instanceof CastingPortBlockEntity castingPort) {
+                        castingPort.cycleMode();
+                        CastingMode m = castingPort.getMode();
+                        if (m == CastingMode.STANDBY) {
+                            player.sendMessage(Text.literal("§6[Casting Port] §eMode: §aStandby §7(Auto-Craft / On-Demand Only)"), true);
+                        } else {
+                            player.sendMessage(Text.literal(String.format("§6[Casting Port] §eCasting Mode: §f%s §7(%d mB)", m.getDisplayName(), m.getFluidCostMb())), true);
+                        }
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+            return ActionResult.PASS;
+        }
+
         if (!world.isClient()) {
             BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof CastingPortBlockEntity castingPort) {
-                if (player.isSneaking()) {
-                    castingPort.cycleMode();
-                    CastingMode m = castingPort.getMode();
-                    player.sendMessage(Text.literal(String.format("§6[Casting Port] §eCasting Mode: §f%s §7(%d mB)", m.getDisplayName(), m.getFluidCostMb())), true);
-                    return ActionResult.SUCCESS;
-                }
-
+            if (be instanceof CastingPortBlockEntity) {
                 NamedScreenHandlerFactory screenHandlerFactory = (NamedScreenHandlerFactory) be;
                 if (screenHandlerFactory != null) {
                     player.openHandledScreen(screenHandlerFactory);

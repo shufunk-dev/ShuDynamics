@@ -16,7 +16,7 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(SuperComputerBlockEntity.TOTAL_SLOTS), new ArrayPropertyDelegate(8));
+        this(syncId, playerInventory, new SimpleInventory(SuperComputerBlockEntity.TOTAL_SLOTS), new ArrayPropertyDelegate(9));
     }
 
     public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -98,6 +98,10 @@ public class SuperComputerScreenHandler extends ScreenHandler {
 
     public boolean hasValidRecipe() {
         return this.propertyDelegate.get(7) != 0;
+    }
+
+    public boolean isCasterOnline() {
+        return this.propertyDelegate.size() > 8 && this.propertyDelegate.get(8) != 0;
     }
 
     public int getScaledProgress(int pixels) {

@@ -3,6 +3,7 @@ package net.enchantedwood.block.custom;
 import net.minecraft.util.StringIdentifiable;
 
 public enum CastingMode implements StringIdentifiable {
+    STANDBY("standby", "Standby", 0),
     INGOT("ingot", "Ingot", 90),
     BLOCK("block", "Block", 810),
     NUGGET("nugget", "Nugget", 10);
@@ -36,9 +37,10 @@ public enum CastingMode implements StringIdentifiable {
 
     public CastingMode next() {
         return switch (this) {
+            case STANDBY -> INGOT;
             case INGOT -> BLOCK;
             case BLOCK -> NUGGET;
-            case NUGGET -> INGOT;
+            case NUGGET -> STANDBY;
         };
     }
 }

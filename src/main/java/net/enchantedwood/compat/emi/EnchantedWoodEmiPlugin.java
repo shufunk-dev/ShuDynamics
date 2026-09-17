@@ -32,6 +32,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier CIRCUIT_FABRICATOR_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/circuit_fabricator_gui.png");
     public static final Identifier INDUCTION_SMELTER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/induction_smelter_gui.png");
     public static final Identifier CASTING_PORT_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/casting_port_gui.png");
+    public static final Identifier HYDRAULIC_PRESS_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/hydraulic_press_gui.png");
 
     // Categories
     public static final EmiRecipeCategory CIRCUIT_FABRICATOR = new EmiRecipeCategory(
@@ -560,12 +561,13 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         @Override
         public void addWidgets(WidgetHolder widgets) {
-            // Machine Background panel (Crusher)
-            widgets.addTexture(CRUSHER_GUI, 0, 0, 126, 56, 46, 17);
+            Identifier gui = (category == HYDRAULIC_PRESS) ? HYDRAULIC_PRESS_GUI : CRUSHER_GUI;
+            // Machine Background panel
+            widgets.addTexture(gui, 0, 0, 126, 56, 46, 17);
             // Energy bar (illuminated)
-            widgets.addTexture(CRUSHER_GUI, 106, 3, 14, 52, 190, 0);
-            // Animated crushing progress arrow
-            widgets.addAnimatedTexture(CRUSHER_GUI, 33, 17, 24, 17, 176, 14, 2000, true, false, false);
+            widgets.addTexture(gui, 106, 3, 14, 52, 190, 0);
+            // Animated progress arrow
+            widgets.addAnimatedTexture(gui, 33, 17, 24, 17, 176, 14, 2000, true, false, false);
             // Slots aligned to GUI
             widgets.addSlot(input, 9, 17).drawBack(false);
             widgets.addSlot(output, 69, 17).recipeContext(this).drawBack(false);

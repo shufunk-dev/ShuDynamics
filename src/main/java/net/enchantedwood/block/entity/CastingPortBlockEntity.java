@@ -27,6 +27,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
+
 public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, MoltenMetalProvider {
     public static final int BUFFER_CAPACITY = 2_000; // 2,000 mB buffer
     public static final int CAST_TIME = 20; // 1 second (20 ticks) per cast
@@ -34,10 +42,13 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
     public static final int INVENTORY_SIZE = 1;
 
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
-    private CastingMode mode = CastingMode.INGOT;
+    private CastingMode mode = CastingMode.STANDBY;
     private MoltenMetal currentFluid = MoltenMetal.NONE;
     private int fluidAmount = 0;
     private int castProgress = 0;
+
+    private BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -51,6 +62,7 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
                 case 5 -> CAST_TIME;
                 case 6 -> BUFFER_CAPACITY & 0xFFFF;
                 case 7 -> (BUFFER_CAPACITY >> 16) & 0xFFFF;
+                case 8 -> isNetworkOnline() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -68,7 +80,7 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
 
         @Override
         public int size() {
-            return 8;
+            return 9;
         }
     };
 
@@ -92,6 +104,64 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
         markDirty();
     }
 
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public boolean isNetworkOnline() {
+        return getNetworkTerminal() != null;
+    }
+
+    public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
+        if (this.world == null) return null;
+
+        // 1. Check bound remote network if set via Wrench
+        if (this.boundNetworkPos != null && this.world.getServer() != null) {
+            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
+            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
+            if (targetWorld != null) {
+                BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
+                if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                    return terminal;
+                } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
+                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    for (int dx = -16; dx <= 16; dx++) {
+                        for (int dy = -8; dy <= 8; dy++) {
+                            for (int dz = -16; dz <= 16; dz++) {
+                                mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
+                                BlockEntity candidate = targetWorld.getBlockEntity(mut);
+                                if (candidate instanceof EnchantedStorageTerminalBlockEntity t && t.isNetworkOnline()) {
+                                    return t;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Proximity fallback: search 16-block local base radius
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+        for (int dx = -16; dx <= 16; dx++) {
+            for (int dy = -8; dy <= 8; dy++) {
+                for (int dz = -16; dz <= 16; dz++) {
+                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                    BlockEntity be = this.world.getBlockEntity(mut);
+                    if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                        return terminal;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, CastingPortBlockEntity entity) {
         boolean dirty = false;
 
@@ -112,30 +182,30 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
                     } else {
                         // Empty buffer: adopt available fluid
                         for (MoltenMetal metal : provider.getContainedFluids()) {
-                            if (provider.getFluidAmount(metal) > 0) {
-                                int needed = BUFFER_CAPACITY - entity.fluidAmount;
-                                int extracted = provider.extractFluid(metal, needed, false);
+                            if (metal != MoltenMetal.NONE && metal != MoltenMetal.LAVA) {
+                                int extracted = provider.extractFluid(metal, BUFFER_CAPACITY, false);
                                 if (extracted > 0) {
                                     entity.currentFluid = metal;
-                                    entity.fluidAmount += extracted;
+                                    entity.fluidAmount = extracted;
                                     dirty = true;
                                     break;
                                 }
                             }
                         }
-                        if (entity.fluidAmount > 0) break;
+                        if (dirty) break;
                     }
                 }
             }
         }
 
-        // 2. Perform Casting if enough fluid is present
+        // 2. Solidify molten metal based on selected mode
         int cost = entity.mode.getFluidCostMb();
-        if (entity.fluidAmount >= cost && entity.currentFluid != MoltenMetal.NONE) {
+        if (entity.mode != CastingMode.STANDBY && entity.fluidAmount >= cost && entity.currentFluid != MoltenMetal.NONE) {
             Item castItem = switch (entity.mode) {
-                case NUGGET -> entity.currentFluid.getNuggetItem();
                 case INGOT -> entity.currentFluid.getIngotItem();
                 case BLOCK -> entity.currentFluid.getBlockItem();
+                case NUGGET -> entity.currentFluid.getNuggetItem();
+                case STANDBY -> null;
             };
 
             if (castItem != null) {
@@ -151,18 +221,31 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
                 if (entity.castProgress >= CAST_TIME) {
                     if (canDeposit) {
                         ItemStack produced = new ItemStack(castItem);
-                        // Try to auto-deposit into inventory beneath or behind/sides
-                        for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
-                            BlockEntity target = world.getBlockEntity(pos.offset(dir));
-                            if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
-                                produced = insertIntoInventory(targetInv, produced, dir.getOpposite());
-                                if (produced.isEmpty()) {
-                                    break;
+
+                        // A. First priority: Wireless beam directly into Digital Storage Network!
+                        EnchantedStorageTerminalBlockEntity terminal = entity.getNetworkTerminal();
+                        if (terminal != null && terminal.isNetworkOnline()) {
+                            produced = terminal.depositItem(produced);
+                            if (produced.isEmpty()) {
+                                world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 0.4f, 1.8f);
+                                world.spawnParticles(ParticleTypes.PORTAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4, 0.1, 0.1, 0.1, 0.05);
+                            }
+                        }
+
+                        // B. Second priority: Auto-deposit into adjacent containers (beneath or sides)
+                        if (!produced.isEmpty()) {
+                            for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
+                                BlockEntity target = world.getBlockEntity(pos.offset(dir));
+                                if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
+                                    produced = insertIntoInventory(targetInv, produced, dir.getOpposite());
+                                    if (produced.isEmpty()) {
+                                        break;
+                                    }
                                 }
                             }
                         }
 
-                        // If not completely deposited into adjacent container, store in local output slot
+                        // C. Third priority: Store in local output slot
                         if (!produced.isEmpty()) {
                             ItemStack current = entity.inventory.get(OUTPUT_SLOT);
                             if (current.isEmpty()) {
@@ -209,8 +292,14 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     private static boolean canDepositAnywhere(ServerWorld world, BlockPos pos, CastingPortBlockEntity entity, Item castItem) {
+        // 1. Wireless Digital Storage Network
+        EnchantedStorageTerminalBlockEntity terminal = entity.getNetworkTerminal();
+        if (terminal != null && terminal.isNetworkOnline()) {
+            return true;
+        }
+
         ItemStack testStack = new ItemStack(castItem);
-        // 1. Check adjacent containers
+        // 2. Adjacent containers
         for (Direction dir : new Direction[]{ Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST }) {
             BlockEntity target = world.getBlockEntity(pos.offset(dir));
             if (target instanceof Inventory targetInv && !(target instanceof CastingPortBlockEntity)) {
@@ -220,7 +309,7 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
             }
         }
 
-        // 2. Check local output slot
+        // 3. Local output slot
         ItemStack current = entity.inventory.get(OUTPUT_SLOT);
         if (current.isEmpty()) {
             return true;
@@ -436,6 +525,12 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
         this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "none"));
         this.fluidAmount = view.getInt("FluidAmount", 0);
         this.castProgress = view.getInt("CastProgress", 0);
+        if (view.contains("BoundX")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
@@ -446,5 +541,11 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
         view.putString("FluidType", this.currentFluid.getId());
         view.putInt("FluidAmount", this.fluidAmount);
         view.putInt("CastProgress", this.castProgress);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension);
+        }
     }
 }
