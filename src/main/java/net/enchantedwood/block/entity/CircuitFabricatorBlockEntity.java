@@ -158,6 +158,10 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     private int externalOperationTicks = 0;
     private boolean isExternalProcess = false;
 
+    public boolean isExternalProcess() {
+        return this.isExternalProcess;
+    }
+
     public void triggerExternalOperation(int ticks) {
         this.externalOperationTicks = Math.max(this.externalOperationTicks, ticks);
     }

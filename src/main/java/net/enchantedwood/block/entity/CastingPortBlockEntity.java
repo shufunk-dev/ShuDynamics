@@ -98,6 +98,10 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
         markDirty();
     }
 
+    public boolean isCasting() {
+        return this.castProgress > 0;
+    }
+
     public void setMode(CastingMode newMode) {
         this.mode = newMode;
         this.castProgress = 0;

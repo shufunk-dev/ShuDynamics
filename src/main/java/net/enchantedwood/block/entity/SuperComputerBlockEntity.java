@@ -364,6 +364,21 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public @Nullable HydraulicPressBlockEntity getBestAvailablePress() {
+        HydraulicPressBlockEntity bestIdle = null;
+        int bestSpeed = -1;
+        for (HydraulicPressBlockEntity press : this.cachedPresses) {
+            if (press != null && !press.isRemoved()) {
+                if (press.isExternalProcess()) return press;
+                boolean isIdle = press.getStack(0).isEmpty();
+                int speed = press.getProcessingSpeed(press.getActiveGearTier());
+                if (isIdle && speed > bestSpeed) {
+                    bestIdle = press;
+                    bestSpeed = speed;
+                }
+            }
+        }
+        if (bestIdle != null) return bestIdle;
+
         for (HydraulicPressBlockEntity press : this.cachedPresses) {
             if (press != null && !press.isRemoved()) return press;
         }
@@ -371,6 +386,22 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public @Nullable CircuitFabricatorBlockEntity getBestAvailableFabricator() {
+        CircuitFabricatorBlockEntity bestIdle = null;
+        float bestSpeed = -1f;
+        for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
+            if (fab != null && !fab.isRemoved()) {
+                if (fab.isExternalProcess()) return fab;
+                boolean isIdle = fab.getStack(CircuitFabricatorBlockEntity.SUBSTRATE_SLOT).isEmpty()
+                        && fab.getStack(CircuitFabricatorBlockEntity.COMPONENT_SLOT_1).isEmpty();
+                float speed = fab.getSpeedMultiplier();
+                if (isIdle && speed > bestSpeed) {
+                    bestIdle = fab;
+                    bestSpeed = speed;
+                }
+            }
+        }
+        if (bestIdle != null) return bestIdle;
+
         for (CircuitFabricatorBlockEntity fab : this.cachedFabricators) {
             if (fab != null && !fab.isRemoved()) return fab;
         }
@@ -379,12 +410,24 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     public @Nullable BlockEntity getBestAvailableFurnace() {
         for (BlockEntity f : this.cachedFurnaces) {
+            if (f != null && !f.isRemoved()) {
+                if (f instanceof EnchantedFurnaceBlockEntity ef) {
+                    if (ef.getStack(0).isEmpty()) return ef;
+                } else if (f instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity af) {
+                    if (af.getStack(0).isEmpty()) return af;
+                }
+            }
+        }
+        for (BlockEntity f : this.cachedFurnaces) {
             if (f != null && !f.isRemoved()) return f;
         }
         return null;
     }
 
     public @Nullable CastingPortBlockEntity getBestAvailableCaster() {
+        for (CastingPortBlockEntity c : this.cachedCasters) {
+            if (c != null && !c.isRemoved() && !c.isCasting()) return c;
+        }
         for (CastingPortBlockEntity c : this.cachedCasters) {
             if (c != null && !c.isRemoved()) return c;
         }
