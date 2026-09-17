@@ -147,9 +147,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         if (this.world == null) return java.util.Collections.emptyList();
         List<CastingPortBlockEntity> ports = new ArrayList<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
+        for (int dx = -32; dx <= 32; dx++) {
+            for (int dy = -16; dy <= 16; dy++) {
+                for (int dz = -32; dz <= 32; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof CastingPortBlockEntity port) {
@@ -167,9 +167,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         java.util.Set<BlockPos> visitedControllers = new java.util.HashSet<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
 
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
+        for (int dx = -32; dx <= 32; dx++) {
+            for (int dy = -16; dy <= 16; dy++) {
+                for (int dz = -32; dz <= 32; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
 
@@ -220,9 +220,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             if (needed <= 0) continue;
 
             // 1. Draw from Casting Port buffers first
-            for (int dx = -16; dx <= 16 && needed > 0; dx++) {
-                for (int dy = -8; dy <= 8 && needed > 0; dy++) {
-                    for (int dz = -16; dz <= 16 && needed > 0; dz++) {
+            for (int dx = -32; dx <= 32 && needed > 0; dx++) {
+                for (int dy = -16; dy <= 16 && needed > 0; dy++) {
+                    for (int dz = -32; dz <= 32 && needed > 0; dz++) {
                         mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                         BlockEntity be = this.world.getBlockEntity(mut);
                         if (be instanceof CastingPortBlockEntity port && port.getFluidType() == metal) {
@@ -234,9 +234,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
 
             // 2. Draw directly from Titanium Tanks
-            for (int dx = -16; dx <= 16 && needed > 0; dx++) {
-                for (int dy = -8; dy <= 8 && needed > 0; dy++) {
-                    for (int dz = -16; dz <= 16 && needed > 0; dz++) {
+            for (int dx = -32; dx <= 32 && needed > 0; dx++) {
+                for (int dy = -16; dy <= 16 && needed > 0; dy++) {
+                    for (int dz = -32; dz <= 32 && needed > 0; dz++) {
                         mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                         BlockEntity be = this.world.getBlockEntity(mut);
                         if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
@@ -260,9 +260,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
         if (this.world == null) return null;
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
+        for (int dx = -32; dx <= 32; dx++) {
+            for (int dy = -16; dy <= 16; dy++) {
+                for (int dz = -32; dz <= 32; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal) {
@@ -573,9 +573,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private boolean drawNetworkPower() {
         if (this.world == null) return false;
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
+        for (int dx = -32; dx <= 32; dx++) {
+            for (int dy = -16; dy <= 16; dy++) {
+                for (int dz = -32; dz <= 32; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageControllerBlockEntity controller && controller.isOnline()) {
@@ -776,7 +776,21 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return true;
         }
 
-        // 3. Prevent infinite loops or deep recursion
+        // 3. Check if targetItem can be cast on-demand via an online Casting Port (Molder)
+        if (isCasterOnline()) {
+            MetalCastInfo castInfo = getMetalCastInfo(targetItem);
+            if (castInfo != null) {
+                int fluidAvail = availableMolten.getOrDefault(castInfo.metal, 0);
+                if (fluidAvail >= castInfo.costMb) {
+                    availableMolten.put(castInfo.metal, fluidAvail - castInfo.costMb);
+                    plan.moltenMetalsToConsume.put(castInfo.metal, plan.moltenMetalsToConsume.getOrDefault(castInfo.metal, 0) + castInfo.costMb);
+                    plan.moltenMetalUsedMb += castInfo.costMb;
+                    return true;
+                }
+            }
+        }
+
+        // 4. Prevent infinite loops or deep recursion
         if (depth >= 6 || activeRecursion.contains(targetItem)) {
             return false;
         }
@@ -886,7 +900,23 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
         }
 
-        // Priority 3: Try to synthesize one of the matching items recursively from available materials
+        // Priority 3: Check if any matching item can be cast directly from available molten metals via an online Casting Port (Molder)
+        if (isCasterOnline()) {
+            for (net.minecraft.item.Item opt : matchingItems) {
+                MetalCastInfo castInfo = getMetalCastInfo(opt);
+                if (castInfo != null) {
+                    int fluidAvail = availableMolten.getOrDefault(castInfo.metal, 0);
+                    if (fluidAvail >= castInfo.costMb) {
+                        availableMolten.put(castInfo.metal, fluidAvail - castInfo.costMb);
+                        plan.moltenMetalsToConsume.put(castInfo.metal, plan.moltenMetalsToConsume.getOrDefault(castInfo.metal, 0) + castInfo.costMb);
+                        plan.moltenMetalUsedMb += castInfo.costMb;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // Priority 4: Try to synthesize one of the matching items recursively from available materials
         for (net.minecraft.item.Item opt : matchingItems) {
             if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, activeRecursion, depth)) {
                 return true;

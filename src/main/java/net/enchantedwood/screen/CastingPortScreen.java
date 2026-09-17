@@ -79,8 +79,8 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
 
         boolean online = this.handler.isNetworkOnline();
-        String badge = online ? "§a📡" : "§8📡";
-        context.drawText(this.textRenderer, badge, this.backgroundWidth - 22, 6, 0xFFFFFF, false);
+        String badge = online ? "§a✦ Link" : "§8○ Offline";
+        context.drawText(this.textRenderer, Text.literal(badge), this.backgroundWidth - 52, 6, 0xFFFFFF, true);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class CastingPortScreen extends HandledScreen<CastingPortScreenHandler> {
         }
 
         // Wireless Link Tooltip
-        if (mouseX >= x + this.backgroundWidth - 26 && mouseX <= x + this.backgroundWidth - 6 && mouseY >= y + 4 && mouseY <= y + 18) {
+        if (mouseX >= x + this.backgroundWidth - 56 && mouseX <= x + this.backgroundWidth - 6 && mouseY >= y + 4 && mouseY <= y + 18) {
             boolean online = this.handler.isNetworkOnline();
             List<Text> lines = new java.util.ArrayList<>();
             lines.add(Text.literal("§6📡 Wireless Storage Link"));

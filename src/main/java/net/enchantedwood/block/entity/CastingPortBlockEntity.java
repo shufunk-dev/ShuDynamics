@@ -146,11 +146,11 @@ public class CastingPortBlockEntity extends BlockEntity implements NamedScreenHa
             }
         }
 
-        // 2. Proximity fallback: search 16-block local base radius
+        // 2. Proximity fallback: search 32-block local base radius
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
+        for (int dx = -32; dx <= 32; dx++) {
+            for (int dy = -16; dy <= 16; dy++) {
+                for (int dz = -32; dz <= 32; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
