@@ -295,15 +295,6 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
                 appender.add(new StoredRecord(item.getSample(), item.getCount()));
             }
         }
-
-        // Also write legacy TerminalItems for full compatibility
-        var termAppender = view.getListAppender("TerminalItems", TerminalStack.CODEC);
-        for (int i = 0; i < this.storedItems.size(); i++) {
-            StoredItem item = this.storedItems.get(i);
-            if (item.getCount() > 0 && !item.getSample().isEmpty()) {
-                termAppender.add(new TerminalStack(i, item.toItemStack()));
-            }
-        }
     }
 
     @Override
