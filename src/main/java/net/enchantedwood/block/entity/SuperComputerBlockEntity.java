@@ -1106,11 +1106,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
-        if (getBestAvailableFabricator() == null) {
-            sendFeedback(player, "§c[Super Computer] All connected Circuit Fabricators are currently busy!");
-            return;
-        }
-
         CircuitFabricatorBlockEntity.FabricatorRecipe recipe = getMatchingFabricatorRecipe(patternStacks);
         if (recipe == null) {
             sendFeedback(player, "§c[Super Computer] No valid circuit recipe in grid!");
@@ -1122,42 +1117,42 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
-        List<ItemStack> neededItems = new ArrayList<>();
-        neededItems.add(new ItemStack(recipe.substrate(), 1));
-        for (net.minecraft.item.Item comp : recipe.components()) {
-            neededItems.add(new ItemStack(comp, 1));
-        }
-
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        java.util.Map<net.minecraft.item.Item, Integer> avail = new java.util.HashMap<>();
-        if (terminal != null && terminal.isNetworkOnline()) {
-            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                if (si.getCount() > 0 && !si.getSample().isEmpty()) {
-                    avail.put(si.getSample().getItem(), avail.getOrDefault(si.getSample().getItem(), 0) + (int) Math.min(si.getCount(), Integer.MAX_VALUE));
+        CraftingPlanResult planResult = resolveDirectFabricatorPlan(serverWorld, terminal, player, recipe);
+        if (!planResult.success || planResult.plan == null) {
+            if (!planResult.missingItems.isEmpty()) {
+                StringBuilder sb = new StringBuilder("§cMissing: §e");
+                boolean first = true;
+                for (java.util.Map.Entry<String, Integer> entry : planResult.missingItems.entrySet()) {
+                    if (!first) sb.append("§7, §e");
+                    sb.append(entry.getValue()).append("x ").append(entry.getKey());
+                    first = false;
                 }
-            }
-        }
-        if (player != null) {
-            PlayerInventory pInv = player.getInventory();
-            for (int i = 0; i < 36; i++) {
-                ItemStack ps = pInv.getStack(i);
-                if (!ps.isEmpty()) {
-                    avail.put(ps.getItem(), avail.getOrDefault(ps.getItem(), 0) + ps.getCount());
-                }
-            }
-        }
-
-        for (ItemStack req : neededItems) {
-            if (avail.getOrDefault(req.getItem(), 0) < req.getCount()) {
+                sendFeedback(player, sb.toString());
+            } else {
                 sendFeedback(player, "§c[Super Computer] Missing required components for chip fabrication!");
-                return;
             }
+            return;
         }
 
-        consumeIngredients(terminal, player, neededItems);
-        List<CraftStep> steps = List.of(new CraftStep(StepType.FABRICATE, recipe.substrate(), directFab.getItem()));
-        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, directFab.copy(), List.of(), craftAll, patternStacks);
-        sendFeedback(player, "§6⚡ Fabricating: §f" + directFab.getName().getString());
+        CraftingPlan plan = planResult.plan;
+
+        if (plan.hydraulicPressings > 0 && getBestAvailablePress() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Hydraulic Presses are currently busy!");
+            return;
+        }
+        if (plan.circuitFabrications > 0 && getBestAvailableFabricator() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Circuit Fabricators are currently busy!");
+            return;
+        }
+
+        consumeIngredients(terminal, player, plan.rawIngredientsToConsume);
+        if (!plan.moltenMetalsToConsume.isEmpty()) {
+            consumeMoltenMetals(plan.moltenMetalsToConsume);
+        }
+
+        this.activeJob = new ActiveCraftJob(player.getUuid(), plan.steps, directFab.copy(), plan.leftoverSynthesized, craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Fabricating: §f" + directFab.getName().getString() + " §7(" + plan.steps.size() + " operations queued)");
         markDirty();
         serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
@@ -1216,7 +1211,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         if (availCount < 1) {
-            sendFeedback(player, "§c[Super Computer] Missing raw input items to press!");
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(rawInputItem).getName().getString());
             return;
         }
 
@@ -1282,7 +1277,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         if (availCount < 1) {
-            sendFeedback(player, "§c[Super Computer] Missing raw input items to smelt!");
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(rawInputItem).getName().getString());
             return;
         }
 
@@ -1546,6 +1541,70 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             plan.steps.add(new CraftStep(StepType.ASSEMBLE, rootResult.isEmpty() ? null : rootResult.getItem()));
 
             // Record any leftover synthesized items
+            for (java.util.Map.Entry<net.minecraft.item.Item, Integer> entry : virtualBuffer.entrySet()) {
+                if (entry.getValue() > 0) {
+                    plan.leftoverSynthesized.add(new ItemStack(entry.getKey(), entry.getValue()));
+                }
+            }
+
+            return new CraftingPlanResult(true, plan, missingItems);
+        } catch (Throwable t) {
+            return new CraftingPlanResult(false, null, missingItems);
+        }
+    }
+
+    public CraftingPlanResult resolveDirectFabricatorPlan(ServerWorld world,
+                                                         @Nullable EnchantedStorageTerminalBlockEntity terminal,
+                                                         @Nullable PlayerEntity player,
+                                                         CircuitFabricatorBlockEntity.FabricatorRecipe recipe) {
+        java.util.Map<String, Integer> missingItems = new java.util.LinkedHashMap<>();
+        try {
+            java.util.Map<net.minecraft.item.Item, Integer> available = new java.util.HashMap<>();
+
+            if (terminal != null && terminal.isNetworkOnline()) {
+                for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
+                    if (item.getCount() > 0 && !item.getSample().isEmpty()) {
+                        int c = (int) Math.min(item.getCount(), (long) Integer.MAX_VALUE);
+                        available.put(item.getSample().getItem(), available.getOrDefault(item.getSample().getItem(), 0) + c);
+                    }
+                }
+            }
+
+            if (player != null) {
+                PlayerInventory pInv = player.getInventory();
+                for (int i = 0; i < 36; i++) {
+                    ItemStack pStack = pInv.getStack(i);
+                    if (!pStack.isEmpty()) {
+                        available.put(pStack.getItem(), available.getOrDefault(pStack.getItem(), 0) + pStack.getCount());
+                    }
+                }
+            }
+
+            CraftingPlan plan = new CraftingPlan();
+            java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
+            java.util.Set<net.minecraft.item.Item> activeRecursion = new java.util.HashSet<>();
+            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten = isCasterOnline()
+                    ? new java.util.EnumMap<>(getAvailableMoltenMetals())
+                    : new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
+
+            boolean allSatisfied = true;
+            if (!resolveItemRequirement(world, recipe.substrate(), available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
+                allSatisfied = false;
+            }
+
+            for (net.minecraft.item.Item comp : recipe.components()) {
+                if (!resolveItemRequirement(world, comp, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
+                    allSatisfied = false;
+                }
+            }
+
+            if (!allSatisfied) {
+                return new CraftingPlanResult(false, null, missingItems);
+            }
+
+            plan.circuitFabrications++;
+            plan.steps.add(new CraftStep(StepType.FABRICATE, recipe.substrate(), recipe.output().getItem()));
+
             for (java.util.Map.Entry<net.minecraft.item.Item, Integer> entry : virtualBuffer.entrySet()) {
                 if (entry.getValue() > 0) {
                     plan.leftoverSynthesized.add(new ItemStack(entry.getKey(), entry.getValue()));
