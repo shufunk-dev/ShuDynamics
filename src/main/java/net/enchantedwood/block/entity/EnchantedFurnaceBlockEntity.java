@@ -114,10 +114,11 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
     }
 
     public boolean isIdle() {
-        return !this.isExternalProcess
-                && getStack(0).isEmpty()
-                && this.propertyDelegate.get(0) <= 0
-                && this.propertyDelegate.get(2) <= 0;
+        if (this.isExternalProcess) return false;
+        if (!getStack(0).isEmpty()) return false;
+        if (this.propertyDelegate.get(0) > 0) return false;
+        if (this.propertyDelegate.get(2) > 0) return false;
+        return true;
     }
 
     public void setExternalProcess(@Nullable ItemStack input, int progressTicks, int maxTicks) {

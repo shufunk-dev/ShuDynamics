@@ -106,7 +106,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private boolean cachedFabricatorOnline = false;
     private boolean cachedCasterOnline = false;
     private boolean cachedNetworkOnline = false;
-    private List<BlockEntity> cachedFurnaces = java.util.Collections.emptyList();
+    private List<EnchantedFurnaceBlockEntity> cachedFurnaces = java.util.Collections.emptyList();
     private List<HydraulicPressBlockEntity> cachedPresses = java.util.Collections.emptyList();
     private List<CircuitFabricatorBlockEntity> cachedFabricators = java.util.Collections.emptyList();
     private List<CastingPortBlockEntity> cachedCasters = java.util.Collections.emptyList();
@@ -160,7 +160,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
         this.lastScanTick = currentTick;
 
-        List<BlockEntity> foundFurnaces = new ArrayList<>();
+        List<EnchantedFurnaceBlockEntity> foundFurnaces = new ArrayList<>();
         List<HydraulicPressBlockEntity> foundPresses = new ArrayList<>();
         List<CircuitFabricatorBlockEntity> foundFabricators = new ArrayList<>();
         List<CastingPortBlockEntity> foundCasters = new ArrayList<>();
@@ -229,7 +229,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     private void scanChunkArea(int minX, int maxX, int minY, int maxY, int minZ, int maxZ,
                               java.util.Set<BlockPos> visited,
-                              List<BlockEntity> furnaces,
+                              List<EnchantedFurnaceBlockEntity> furnaces,
                               List<HydraulicPressBlockEntity> presses,
                               List<CircuitFabricatorBlockEntity> fabricators,
                               List<CastingPortBlockEntity> casters,
@@ -263,10 +263,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         fabricators.add(fab);
                     } else if (be instanceof HydraulicPressBlockEntity press) {
                         presses.add(press);
-                    } else if (be instanceof EnchantedFurnaceBlockEntity
-                            || be instanceof DustSmelterBlockEntity
-                            || be instanceof DustSmelterMk2BlockEntity) {
-                        furnaces.add(be);
+                    } else if (be instanceof EnchantedFurnaceBlockEntity ef) {
+                        furnaces.add(ef);
                     } else if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                         tankControllers.add(controller);
                     } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
@@ -358,7 +356,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         return this.cachedFurnaceOnline;
     }
 
-    public List<BlockEntity> getNearbyFurnaces() {
+    public List<EnchantedFurnaceBlockEntity> getNearbyFurnaces() {
         return this.cachedFurnaces;
     }
 
@@ -412,26 +410,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         return bestIdle;
     }
 
-    public @Nullable BlockEntity getBestAvailableFurnace() {
+    public @Nullable EnchantedFurnaceBlockEntity getBestAvailableFurnace() {
         if (this.activeJob != null) {
-            for (BlockEntity f : this.cachedFurnaces) {
-                if (f != null && !f.isRemoved() && f instanceof EnchantedFurnaceBlockEntity ef && ef.isExternalProcess()) {
+            for (EnchantedFurnaceBlockEntity ef : this.cachedFurnaces) {
+                if (ef != null && !ef.isRemoved() && ef.isExternalProcess()) {
                     return ef;
                 }
             }
         }
-        for (BlockEntity f : this.cachedFurnaces) {
-            if (f != null && !f.isRemoved()) {
-                if (f instanceof EnchantedFurnaceBlockEntity ef) {
-                    if (this.activeJob == null && ef.isExternalProcess()) {
-                        ef.clearExternalProcess();
-                    }
-                    if (ef.isIdle()) return ef;
-                } else if (f instanceof DustSmelterBlockEntity ds) {
-                    if (ds.getStack(0).isEmpty() && ds.propertyDelegate.get(4) <= 0) return ds;
-                } else if (f instanceof DustSmelterMk2BlockEntity ds2) {
-                    if (ds2.getStack(0).isEmpty() && ds2.getStack(1).isEmpty() && ds2.propertyDelegate.get(0) <= 0) return ds2;
+        for (EnchantedFurnaceBlockEntity ef : this.cachedFurnaces) {
+            if (ef != null && !ef.isRemoved()) {
+                if (this.activeJob == null && ef.isExternalProcess()) {
+                    ef.clearExternalProcess();
                 }
+                if (ef.isIdle()) return ef;
             }
         }
         return null;
@@ -763,8 +755,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             for (CircuitFabricatorBlockEntity f : this.cachedFabricators) {
                 if (f != null && !f.isRemoved() && f.isExternalProcess()) f.clearExternalProcess();
             }
-            for (BlockEntity f : this.cachedFurnaces) {
-                if (f != null && !f.isRemoved() && f instanceof EnchantedFurnaceBlockEntity ef && ef.isExternalProcess()) {
+            for (EnchantedFurnaceBlockEntity ef : this.cachedFurnaces) {
+                if (ef != null && !ef.isRemoved() && ef.isExternalProcess()) {
                     ef.clearExternalProcess();
                     BlockPos fPos = ef.getPos();
                     BlockState fState = world.getBlockState(fPos);
@@ -855,17 +847,15 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
             case SMELT -> {
-                BlockEntity furnace = getBestAvailableFurnace();
+                EnchantedFurnaceBlockEntity furnace = getBestAvailableFurnace();
                 if (furnace != null) {
                     BlockPos fPos = furnace.getPos();
                     BlockState fState = world.getBlockState(fPos);
                     if (fState.contains(net.minecraft.state.property.Properties.LIT) && !fState.get(net.minecraft.state.property.Properties.LIT)) {
                         world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, true), 3);
                     }
-                    if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
-                        ItemStack inStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
-                        ef.setExternalProcess(inStack, job.currentStepTicks, stepMax);
-                    }
+                    ItemStack inStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
+                    furnace.setExternalProcess(inStack, job.currentStepTicks, stepMax);
                     if (world.getTime() % 4 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, fPos.getX() + 0.5, fPos.getY() + 0.5, fPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
                     }
@@ -927,19 +917,17 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.LARGE_SMOKE, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.05);
                 }
                 case SMELT -> {
-                    BlockEntity furnace = getBestAvailableFurnace();
+                    EnchantedFurnaceBlockEntity furnace = getBestAvailableFurnace();
                     BlockPos sPos = furnace != null ? furnace.getPos() : pos;
-                    if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
-                        ef.clearExternalProcess();
-                    }
-                    world.playSound(null, sPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.9f, 1.2f);
-                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
                     if (furnace != null) {
+                        furnace.clearExternalProcess();
                         BlockState fState = world.getBlockState(sPos);
                         if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
                             world.setBlockState(sPos, fState.with(net.minecraft.state.property.Properties.LIT, false), 3);
                         }
                     }
+                    world.playSound(null, sPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.9f, 1.2f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
                 }
                 case CAST -> {
                     CastingPortBlockEntity caster = getBestAvailableCaster();
@@ -1054,7 +1042,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
         if (plan.smeltingSteps > 0 && getBestAvailableFurnace() == null) {
-            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
+            sendFeedback(player, "§c[Super Computer] All connected Enchanted Furnaces are currently busy!");
             return;
         }
         if (plan.moltenMetalUsedMb > 0 && getBestAvailableCaster() == null) {
@@ -1068,8 +1056,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             consumeMoltenMetals(plan.moltenMetalsToConsume);
         }
 
+        StringBuilder opBreakdown = new StringBuilder();
+        if (plan.smeltingSteps > 0) opBreakdown.append(plan.smeltingSteps).append("x Smelt, ");
+        if (plan.hydraulicPressings > 0) opBreakdown.append(plan.hydraulicPressings).append("x Press, ");
+        if (plan.circuitFabrications > 0) opBreakdown.append(plan.circuitFabrications).append("x Fab, ");
+        if (plan.moltenMetalUsedMb > 0) opBreakdown.append(plan.moltenMetalUsedMb).append("mB Cast, ");
+        String opStr = opBreakdown.toString();
+        if (opStr.endsWith(", ")) opStr = opStr.substring(0, opStr.length() - 2);
+
         this.activeJob = new ActiveCraftJob(player.getUuid(), plan.steps, resultStack.copy(), plan.leftoverSynthesized, craftAll, patternStacks);
-        sendFeedback(player, "§6⚡ Factory Activated: §fManufacturing " + resultStack.getName().getString() + " §7(" + plan.steps.size() + " operations queued)");
+        sendFeedback(player, "§6⚡ Factory Activated: §fManufacturing " + resultStack.getName().getString() + " §7(" + (opStr.isEmpty() ? plan.steps.size() + " ops" : opStr) + ")");
         markDirty();
         serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
@@ -1165,7 +1161,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         CraftingPlan plan = planResult.plan;
 
         if (plan.smeltingSteps > 0 && getBestAvailableFurnace() == null) {
-            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
+            sendFeedback(player, "§c[Super Computer] All connected Enchanted Furnaces are currently busy!");
             return;
         }
         if (plan.hydraulicPressings > 0 && getBestAvailablePress() == null) {
@@ -1186,8 +1182,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             consumeMoltenMetals(plan.moltenMetalsToConsume);
         }
 
+        StringBuilder opBreakdown = new StringBuilder();
+        if (plan.smeltingSteps > 0) opBreakdown.append(plan.smeltingSteps).append("x Smelt, ");
+        if (plan.hydraulicPressings > 0) opBreakdown.append(plan.hydraulicPressings).append("x Press, ");
+        if (plan.circuitFabrications > 0) opBreakdown.append(plan.circuitFabrications).append("x Fab, ");
+        if (plan.moltenMetalUsedMb > 0) opBreakdown.append(plan.moltenMetalUsedMb).append("mB Cast, ");
+        String opStr = opBreakdown.toString();
+        if (opStr.endsWith(", ")) opStr = opStr.substring(0, opStr.length() - 2);
+
         this.activeJob = new ActiveCraftJob(player.getUuid(), plan.steps, directFab.copy(), plan.leftoverSynthesized, craftAll, patternStacks);
-        sendFeedback(player, "§6⚡ Fabricating: §f" + directFab.getName().getString() + " §7(" + plan.steps.size() + " operations queued)");
+        sendFeedback(player, "§6⚡ Fabricating: §f" + directFab.getName().getString() + " §7(" + (opStr.isEmpty() ? plan.steps.size() + " ops" : opStr) + ")");
         markDirty();
         serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
@@ -1272,7 +1276,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         if (getBestAvailableFurnace() == null) {
-            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
+            sendFeedback(player, "§c[Super Computer] All connected Enchanted Furnaces are currently busy!");
             return;
         }
 
