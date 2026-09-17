@@ -98,6 +98,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private @Nullable BlockPos boundNetworkPos = null;
     private String boundDimension = "minecraft:overworld";
 
+    private long lastScanTick = -100;
+    private boolean cachedFurnaceOnline = false;
+    private boolean cachedPressOnline = false;
+    private boolean cachedFabricatorOnline = false;
+    private boolean cachedCasterOnline = false;
+    private boolean cachedNetworkOnline = false;
+    private List<BlockEntity> cachedFurnaces = java.util.Collections.emptyList();
+    private List<HydraulicPressBlockEntity> cachedPresses = java.util.Collections.emptyList();
+    private List<CircuitFabricatorBlockEntity> cachedFabricators = java.util.Collections.emptyList();
+    private List<CastingPortBlockEntity> cachedCasters = java.util.Collections.emptyList();
+    private List<TitaniumTankControllerBlockEntity> cachedTankControllers = java.util.Collections.emptyList();
+    private @Nullable EnchantedStorageTerminalBlockEntity cachedTerminal = null;
+    private @Nullable EnchantedStorageControllerBlockEntity cachedPowerController = null;
+
     public SuperComputerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SUPER_COMPUTER_BLOCK_ENTITY, pos, state);
     }
@@ -105,6 +119,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public void bindNetwork(BlockPos pos, String dimension) {
         this.boundNetworkPos = pos;
         this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        this.lastScanTick = -100;
         markDirty();
     }
 
@@ -114,71 +129,157 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     public @Nullable BlockPos getEffectiveControllerPos() {
         if (this.boundNetworkPos != null) return this.boundNetworkPos;
-        EnchantedStorageTerminalBlockEntity term = getNetworkTerminal();
-        if (term != null && this.world != null) {
-            BlockPos.Mutable mut = new BlockPos.Mutable();
-            for (int dx = -16; dx <= 16; dx++) {
-                for (int dy = -8; dy <= 8; dy++) {
-                    for (int dz = -16; dz <= 16; dz++) {
-                        mut.set(term.getPos().getX() + dx, term.getPos().getY() + dy, term.getPos().getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof EnchantedStorageControllerBlockEntity) {
-                            return be.getPos();
-                        }
-                    }
-                }
-            }
+        if (this.cachedPowerController != null && !this.cachedPowerController.isRemoved()) {
+            return this.cachedPowerController.getPos();
+        }
+        if (this.cachedTerminal != null && !this.cachedTerminal.isRemoved()) {
+            return this.cachedTerminal.getPos();
         }
         return null;
     }
 
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
-        if (this.world == null) return null;
-        if (this.boundNetworkPos != null) {
-            BlockEntity be = this.world.getBlockEntity(this.boundNetworkPos);
-            if (be instanceof EnchantedStorageTerminalBlockEntity term) return term;
-            if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
-                BlockPos.Mutable cMut = new BlockPos.Mutable();
-                for (int dx = -32; dx <= 32; dx++) {
-                    for (int dy = -16; dy <= 16; dy++) {
-                        for (int dz = -32; dz <= 32; dz++) {
-                            cMut.set(ctrl.getPos().getX() + dx, ctrl.getPos().getY() + dy, ctrl.getPos().getZ() + dz);
-                            BlockEntity cBe = this.world.getBlockEntity(cMut);
-                            if (cBe instanceof EnchantedStorageTerminalBlockEntity term) {
-                                return term;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -64; dx <= 64; dx++) {
-            for (int dy = -32; dy <= 32; dy++) {
-                for (int dz = -64; dz <= 64; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof EnchantedStorageTerminalBlockEntity term) {
-                        return term;
-                    }
-                }
-            }
+        if (this.cachedTerminal != null && !this.cachedTerminal.isRemoved()) {
+            return this.cachedTerminal;
         }
         return null;
     }
 
     public boolean isNetworkOnline() {
-        if (this.world == null) return false;
-        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        if (terminal != null) return terminal.isNetworkOnline();
-        BlockPos ctrlPos = getEffectiveControllerPos();
-        if (ctrlPos != null) {
-            BlockEntity be = this.world.getBlockEntity(ctrlPos);
-            if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
-                return ctrl.isOnline();
+        return this.cachedNetworkOnline;
+    }
+
+    public void updateMachineCache(boolean force) {
+        if (this.world == null || this.world.isClient()) return;
+        long currentTick = this.world.getTime();
+        if (!force && (currentTick - this.lastScanTick < 40)) {
+            return;
+        }
+        this.lastScanTick = currentTick;
+
+        List<BlockEntity> foundFurnaces = new ArrayList<>();
+        List<HydraulicPressBlockEntity> foundPresses = new ArrayList<>();
+        List<CircuitFabricatorBlockEntity> foundFabricators = new ArrayList<>();
+        List<CastingPortBlockEntity> foundCasters = new ArrayList<>();
+        List<TitaniumTankControllerBlockEntity> foundTankControllers = new ArrayList<>();
+        final EnchantedStorageTerminalBlockEntity[] foundTerminal = new EnchantedStorageTerminalBlockEntity[1];
+        final EnchantedStorageControllerBlockEntity[] foundController = new EnchantedStorageControllerBlockEntity[1];
+
+        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
+
+        // 1. Direct check of boundNetworkPos if wrench-linked
+        if (this.boundNetworkPos != null && this.world.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+            BlockEntity boundBe = this.world.getBlockEntity(this.boundNetworkPos);
+            if (boundBe instanceof EnchantedStorageTerminalBlockEntity term) {
+                foundTerminal[0] = term;
+            } else if (boundBe instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                foundController[0] = ctrl;
             }
         }
-        return false;
+
+        // 2. Scan around Super Computer (radius 24 X/Z, 8 Y)
+        int minX = this.pos.getX() - 24;
+        int maxX = this.pos.getX() + 24;
+        int minY = Math.max(this.world.getBottomY(), this.pos.getY() - 8);
+        int maxY = Math.min(this.world.getTopYInclusive(), this.pos.getY() + 8);
+        int minZ = this.pos.getZ() - 24;
+        int maxZ = this.pos.getZ() + 24;
+
+        scanChunkArea(minX, maxX, minY, maxY, minZ, maxZ, visited,
+                foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers, foundTerminal, foundController);
+
+        // 3. If bound to a controller or terminal located further away, scan around it too (radius 16 X/Z, 6 Y)
+        BlockPos remotePos = foundController[0] != null ? foundController[0].getPos() : (foundTerminal[0] != null ? foundTerminal[0].getPos() : this.boundNetworkPos);
+        if (remotePos != null && remotePos.getManhattanDistance(this.pos) > 20 && this.world.isChunkLoaded(remotePos.getX() >> 4, remotePos.getZ() >> 4)) {
+            int cMinX = remotePos.getX() - 16;
+            int cMaxX = remotePos.getX() + 16;
+            int cMinY = Math.max(this.world.getBottomY(), remotePos.getY() - 6);
+            int cMaxY = Math.min(this.world.getTopYInclusive(), remotePos.getY() + 6);
+            int cMinZ = remotePos.getZ() - 16;
+            int cMaxZ = remotePos.getZ() + 16;
+
+            scanChunkArea(cMinX, cMaxX, cMinY, cMaxY, cMinZ, cMaxZ, visited,
+                    foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers, foundTerminal, foundController);
+        }
+
+        this.cachedFurnaces = foundFurnaces;
+        this.cachedPresses = foundPresses;
+        this.cachedFabricators = foundFabricators;
+        this.cachedCasters = foundCasters;
+        this.cachedTankControllers = foundTankControllers;
+        this.cachedTerminal = foundTerminal[0];
+        this.cachedPowerController = foundController[0];
+
+        this.cachedFurnaceOnline = !foundFurnaces.isEmpty();
+        this.cachedPressOnline = !foundPresses.isEmpty();
+        this.cachedFabricatorOnline = !foundFabricators.isEmpty();
+        this.cachedCasterOnline = !foundCasters.isEmpty();
+
+        boolean networkOn = false;
+        if (foundController[0] != null && foundController[0].isOnline()) {
+            networkOn = true;
+        } else if (foundTerminal[0] != null && foundTerminal[0].isNetworkOnline()) {
+            networkOn = true;
+        }
+        this.cachedNetworkOnline = networkOn;
+    }
+
+    private void scanChunkArea(int minX, int maxX, int minY, int maxY, int minZ, int maxZ,
+                              java.util.Set<BlockPos> visited,
+                              List<BlockEntity> furnaces,
+                              List<HydraulicPressBlockEntity> presses,
+                              List<CircuitFabricatorBlockEntity> fabricators,
+                              List<CastingPortBlockEntity> casters,
+                              List<TitaniumTankControllerBlockEntity> tankControllers,
+                              EnchantedStorageTerminalBlockEntity[] foundTerminal,
+                              EnchantedStorageControllerBlockEntity[] foundController) {
+        if (this.world == null) return;
+
+        int minChunkX = minX >> 4;
+        int maxChunkX = maxX >> 4;
+        int minChunkZ = minZ >> 4;
+        int maxChunkZ = maxZ >> 4;
+
+        for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+            for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+                if (!this.world.isChunkLoaded(cx, cz)) continue;
+                net.minecraft.world.chunk.WorldChunk chunk = this.world.getWorldChunk(new BlockPos(cx << 4, 0, cz << 4));
+                if (chunk == null) continue;
+
+                for (BlockEntity be : chunk.getBlockEntities().values()) {
+                    if (be == null || be.isRemoved()) continue;
+                    BlockPos bp = be.getPos();
+                    if (bp.getX() < minX || bp.getX() > maxX || bp.getY() < minY || bp.getY() > maxY || bp.getZ() < minZ || bp.getZ() > maxZ) {
+                        continue;
+                    }
+                    if (!visited.add(bp)) continue;
+
+                    if (be instanceof CastingPortBlockEntity port) {
+                        casters.add(port);
+                    } else if (be instanceof CircuitFabricatorBlockEntity fab) {
+                        fabricators.add(fab);
+                    } else if (be instanceof HydraulicPressBlockEntity press) {
+                        presses.add(press);
+                    } else if (be instanceof EnchantedFurnaceBlockEntity
+                            || be instanceof DustSmelterBlockEntity
+                            || be instanceof DustSmelterMk2BlockEntity
+                            || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
+                        furnaces.add(be);
+                    } else if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
+                        tankControllers.add(controller);
+                    } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
+                        TitaniumTankControllerBlockEntity master = casing.getMaster();
+                        if (master != null && master.isFormed() && visited.add(master.getPos())) {
+                            tankControllers.add(master);
+                        }
+                    } else if (be instanceof EnchantedStorageTerminalBlockEntity term) {
+                        if (foundTerminal[0] == null) foundTerminal[0] = term;
+                    } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                        if (foundController[0] == null) foundController[0] = ctrl;
+                    }
+                }
+            }
+        }
     }
 
     public static class MetalCastInfo {
@@ -228,189 +329,35 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public boolean isCasterOnline() {
-        return !getNearbyCastingPorts().isEmpty();
+        return this.cachedCasterOnline;
     }
 
     public List<CastingPortBlockEntity> getNearbyCastingPorts() {
-        if (this.world == null) return java.util.Collections.emptyList();
-        List<CastingPortBlockEntity> ports = new ArrayList<>();
-        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-
-        // 1. Direct scan within 64 blocks of Super Computer
-        for (int dx = -64; dx <= 64; dx++) {
-            for (int dy = -32; dy <= 32; dy++) {
-                for (int dz = -64; dz <= 64; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof CastingPortBlockEntity port) {
-                        if (visited.add(be.getPos())) {
-                            ports.add(port);
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Scan around linked Network Controller
-        BlockPos ctrlPos = getEffectiveControllerPos();
-        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
-            for (int dx = -64; dx <= 64; dx++) {
-                for (int dy = -32; dy <= 32; dy++) {
-                    for (int dz = -64; dz <= 64; dz++) {
-                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof CastingPortBlockEntity port) {
-                            if (visited.add(be.getPos())) {
-                                ports.add(port);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return ports;
+        return this.cachedCasters;
     }
 
     public boolean isCircuitFabricatorOnline() {
-        return !getNearbyCircuitFabricators().isEmpty();
+        return this.cachedFabricatorOnline;
     }
 
     public List<CircuitFabricatorBlockEntity> getNearbyCircuitFabricators() {
-        if (this.world == null) return java.util.Collections.emptyList();
-        List<CircuitFabricatorBlockEntity> fabs = new ArrayList<>();
-        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-
-        // 1. Direct scan within 64 blocks
-        for (int dx = -64; dx <= 64; dx++) {
-            for (int dy = -32; dy <= 32; dy++) {
-                for (int dz = -64; dz <= 64; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof CircuitFabricatorBlockEntity fab) {
-                        if (visited.add(be.getPos())) {
-                            fabs.add(fab);
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Scan around linked Network Controller
-        BlockPos ctrlPos = getEffectiveControllerPos();
-        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
-            for (int dx = -64; dx <= 64; dx++) {
-                for (int dy = -32; dy <= 32; dy++) {
-                    for (int dz = -64; dz <= 64; dz++) {
-                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof CircuitFabricatorBlockEntity fab) {
-                            if (visited.add(be.getPos())) {
-                                fabs.add(fab);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return fabs;
+        return this.cachedFabricators;
     }
 
     public boolean isPressOnline() {
-        return !getNearbyHydraulicPresses().isEmpty();
+        return this.cachedPressOnline;
     }
 
     public List<HydraulicPressBlockEntity> getNearbyHydraulicPresses() {
-        if (this.world == null) return java.util.Collections.emptyList();
-        List<HydraulicPressBlockEntity> presses = new ArrayList<>();
-        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-
-        // 1. Direct scan within 64 blocks
-        for (int dx = -64; dx <= 64; dx++) {
-            for (int dy = -32; dy <= 32; dy++) {
-                for (int dz = -64; dz <= 64; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof HydraulicPressBlockEntity press) {
-                        if (visited.add(be.getPos())) {
-                            presses.add(press);
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Scan around linked Network Controller
-        BlockPos ctrlPos = getEffectiveControllerPos();
-        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
-            for (int dx = -64; dx <= 64; dx++) {
-                for (int dy = -32; dy <= 32; dy++) {
-                    for (int dz = -64; dz <= 64; dz++) {
-                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof HydraulicPressBlockEntity press) {
-                            if (visited.add(be.getPos())) {
-                                presses.add(press);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return presses;
+        return this.cachedPresses;
     }
 
     public boolean isFurnaceOnline() {
-        return !getNearbyFurnaces().isEmpty();
+        return this.cachedFurnaceOnline;
     }
 
     public List<BlockEntity> getNearbyFurnaces() {
-        if (this.world == null) return java.util.Collections.emptyList();
-        List<BlockEntity> furnaces = new ArrayList<>();
-        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-
-        // 1. Direct scan within 64 blocks
-        for (int dx = -64; dx <= 64; dx++) {
-            for (int dy = -32; dy <= 32; dy++) {
-                for (int dz = -64; dz <= 64; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof EnchantedFurnaceBlockEntity
-                            || be instanceof DustSmelterBlockEntity
-                            || be instanceof DustSmelterMk2BlockEntity
-                            || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
-                        if (visited.add(be.getPos())) {
-                            furnaces.add(be);
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Scan around linked Network Controller
-        BlockPos ctrlPos = getEffectiveControllerPos();
-        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
-            for (int dx = -64; dx <= 64; dx++) {
-                for (int dy = -32; dy <= 32; dy++) {
-                    for (int dz = -64; dz <= 64; dz++) {
-                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof EnchantedFurnaceBlockEntity
-                                || be instanceof DustSmelterBlockEntity
-                                || be instanceof DustSmelterMk2BlockEntity
-                                || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
-                            if (visited.add(be.getPos())) {
-                                furnaces.add(be);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return furnaces;
+        return this.cachedFurnaces;
     }
 
     public record PressRecipeInfo(net.minecraft.item.Item input, int yield) {}
@@ -514,54 +461,37 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         if (this.world == null) return new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
         java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> amounts = new java.util.EnumMap<>(net.enchantedwood.fluid.MoltenMetal.class);
         java.util.Set<BlockPos> visitedControllers = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
 
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-
-                    if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
-                        if (visitedControllers.add(controller.getPos())) {
-                            net.enchantedwood.fluid.MoltenMetal fluid = controller.getFluidType();
-                            if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
-                                int amt = controller.getStoredFluidAmount();
-                                if (amt > 0) {
-                                    amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
-                                }
-                            }
-                        }
-                    } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
-                        TitaniumTankControllerBlockEntity master = casing.getMaster();
-                        if (master != null && master.isFormed() && visitedControllers.add(master.getPos())) {
-                            net.enchantedwood.fluid.MoltenMetal fluid = master.getFluidType();
-                            if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
-                                int amt = master.getStoredFluidAmount();
-                                if (amt > 0) {
-                                    amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
-                                }
-                            }
-                        }
-                    } else if (be instanceof CastingPortBlockEntity port) {
-                        net.enchantedwood.fluid.MoltenMetal fluid = port.getFluidType();
-                        if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
-                            int amt = port.getFluidAmount(fluid);
-                            if (amt > 0) {
-                                amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
-                            }
-                        }
+        for (TitaniumTankControllerBlockEntity controller : this.cachedTankControllers) {
+            if (controller != null && !controller.isRemoved() && controller.isFormed() && visitedControllers.add(controller.getPos())) {
+                net.enchantedwood.fluid.MoltenMetal fluid = controller.getFluidType();
+                if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
+                    int amt = controller.getStoredFluidAmount();
+                    if (amt > 0) {
+                        amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
                     }
                 }
             }
         }
+
+        for (CastingPortBlockEntity port : this.cachedCasters) {
+            if (port != null && !port.isRemoved()) {
+                net.enchantedwood.fluid.MoltenMetal fluid = port.getFluidType();
+                if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE && fluid != net.enchantedwood.fluid.MoltenMetal.LAVA) {
+                    int amt = port.getFluidAmount(fluid);
+                    if (amt > 0) {
+                        amounts.put(fluid, amounts.getOrDefault(fluid, 0) + amt);
+                    }
+                }
+            }
+        }
+
         return amounts;
     }
 
     private void consumeMoltenMetals(java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> requiredFluids) {
         if (this.world == null || requiredFluids == null || requiredFluids.isEmpty()) return;
         java.util.Set<BlockPos> visitedControllers = new java.util.HashSet<>();
-        BlockPos.Mutable mut = new BlockPos.Mutable();
 
         for (java.util.Map.Entry<net.enchantedwood.fluid.MoltenMetal, Integer> entry : requiredFluids.entrySet()) {
             net.enchantedwood.fluid.MoltenMetal metal = entry.getKey();
@@ -569,37 +499,21 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             if (needed <= 0) continue;
 
             // 1. Draw from Casting Port buffers first
-            for (int dx = -32; dx <= 32 && needed > 0; dx++) {
-                for (int dy = -16; dy <= 16 && needed > 0; dy++) {
-                    for (int dz = -32; dz <= 32 && needed > 0; dz++) {
-                        mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof CastingPortBlockEntity port && port.getFluidType() == metal) {
-                            int extracted = port.extractFluid(metal, needed, false);
-                            needed -= extracted;
-                        }
-                    }
+            for (CastingPortBlockEntity port : this.cachedCasters) {
+                if (needed <= 0) break;
+                if (port != null && !port.isRemoved() && port.getFluidType() == metal) {
+                    int extracted = port.extractFluid(metal, needed, false);
+                    needed -= extracted;
                 }
             }
 
             // 2. Draw directly from Titanium Tanks
-            for (int dx = -32; dx <= 32 && needed > 0; dx++) {
-                for (int dy = -16; dy <= 16 && needed > 0; dy++) {
-                    for (int dz = -32; dz <= 32 && needed > 0; dz++) {
-                        mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                        BlockEntity be = this.world.getBlockEntity(mut);
-                        if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
-                            if (visitedControllers.add(controller.getPos()) && controller.getFluidType() == metal) {
-                                int extracted = controller.extractFluidInternal(metal, needed, false);
-                                needed -= extracted;
-                            }
-                        } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
-                            TitaniumTankControllerBlockEntity master = casing.getMaster();
-                            if (master != null && master.isFormed() && visitedControllers.add(master.getPos()) && master.getFluidType() == metal) {
-                                int extracted = master.extractFluidInternal(metal, needed, false);
-                                needed -= extracted;
-                            }
-                        }
+            for (TitaniumTankControllerBlockEntity controller : this.cachedTankControllers) {
+                if (needed <= 0) break;
+                if (controller != null && !controller.isRemoved() && controller.isFormed() && visitedControllers.add(controller.getPos())) {
+                    if (controller.getFluidType() == metal) {
+                        int extracted = controller.extractFluidInternal(metal, needed, false);
+                        needed -= extracted;
                     }
                 }
             }
@@ -619,6 +533,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, SuperComputerBlockEntity entity) {
+        entity.updateMachineCache(false);
         boolean wasLit = state.get(SuperComputerBlock.LIT);
 
         // Determine current craft speed based on upgrade socket
@@ -704,6 +619,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     public void executeManualCraft(PlayerEntity player, boolean craftAll) {
         if (!(this.world instanceof ServerWorld serverWorld)) return;
+        updateMachineCache(true);
 
         List<ItemStack> patternStacks = new ArrayList<>(9);
         boolean patternEmpty = true;
@@ -1185,18 +1101,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     private boolean drawNetworkPower() {
         if (this.world == null) return false;
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof EnchantedStorageControllerBlockEntity controller && controller.isOnline()) {
-                        this.energyStorage.insertEnergy(1_000, false);
-                        return true;
-                    }
-                }
-            }
+        if (this.cachedPowerController != null && !this.cachedPowerController.isRemoved() && this.cachedPowerController.isOnline()) {
+            this.energyStorage.insertEnergy(1_000, false);
+            return true;
         }
         return false;
     }
