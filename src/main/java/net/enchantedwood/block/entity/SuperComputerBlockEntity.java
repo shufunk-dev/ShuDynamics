@@ -414,7 +414,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     public @Nullable CastingPortBlockEntity getBestAvailableCaster() {
         for (CastingPortBlockEntity c : this.cachedCasters) {
-            if (c != null && !c.isRemoved() && !c.isCasting()) return c;
+            if (c != null && !c.isRemoved() && !c.isCasting() && c.getStack(0).isEmpty()) return c;
         }
         return null;
     }
