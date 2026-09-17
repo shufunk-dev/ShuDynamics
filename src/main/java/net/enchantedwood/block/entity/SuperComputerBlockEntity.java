@@ -397,21 +397,21 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 HydraulicPressBlockEntity press = getBestAvailablePress();
                 if (press != null) {
                     int speed = press.getProcessingSpeed(press.getActiveGearTier());
-                    yield Math.max(8, 80 / Math.max(1, speed));
+                    yield Math.max(8, 100 / Math.max(1, speed));
                 }
-                yield 40;
+                yield 100;
             }
             case FABRICATE -> {
                 CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
                 if (fab != null) {
                     float speed = fab.getSpeedMultiplier();
-                    yield Math.max(8, (int) (100 / Math.max(1.0f, speed)));
+                    yield Math.max(10, (int) (120 / Math.max(1.0f, speed)));
                 }
-                yield 50;
+                yield 120;
             }
-            case SMELT -> isFurnaceOnline() ? 20 : 40;
-            case CAST -> 15;
-            case ASSEMBLE -> isOverclocked() ? 6 : 14;
+            case SMELT -> isFurnaceOnline() ? 30 : 60;
+            case CAST -> 20;
+            case ASSEMBLE -> isOverclocked() ? 10 : 25;
         };
     }
 
@@ -704,8 +704,15 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             boolean hadCraftAll = job.craftAll;
             this.activeJob = null;
 
+            HydraulicPressBlockEntity press = getBestAvailablePress();
+            if (press != null) press.clearExternalProcess();
+            CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
+            if (fab != null) fab.clearExternalProcess();
             BlockEntity furnace = getBestAvailableFurnace();
             if (furnace != null) {
+                if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
+                    ef.setStack(0, ItemStack.EMPTY);
+                }
                 BlockPos fPos = furnace.getPos();
                 BlockState fState = world.getBlockState(fPos);
                 if (fState.contains(net.minecraft.state.property.Properties.LIT) && fState.get(net.minecraft.state.property.Properties.LIT)) {
@@ -737,7 +744,38 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             case ASSEMBLE -> 20;
         };
 
-        if (this.energyStorage.getEnergy() < powerDraw && !drawNetworkPower()) {
+        // Extract power directly from the active physical workstation first
+        boolean powered = false;
+        switch (step.type) {
+            case PRESS -> {
+                HydraulicPressBlockEntity press = getBestAvailablePress();
+                if (press != null && press.getEnergyStorage(null).getEnergy() >= powerDraw) {
+                    press.getEnergyStorage(null).extractEnergy(powerDraw, false);
+                    powered = true;
+                }
+            }
+            case FABRICATE -> {
+                CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
+                if (fab != null && fab.getEnergyStorage(null).getEnergy() >= powerDraw) {
+                    fab.getEnergyStorage(null).extractEnergy(powerDraw, false);
+                    powered = true;
+                }
+            }
+            default -> {}
+        }
+
+        // If the workstation did not have enough power, pull from Super Computer or base network
+        if (!powered) {
+            if (this.energyStorage.getEnergy() >= powerDraw) {
+                this.energyStorage.extractEnergy(powerDraw, false);
+                powered = true;
+            } else if (drawNetworkPower()) {
+                this.energyStorage.extractEnergy(powerDraw, false);
+                powered = true;
+            }
+        }
+
+        if (!powered) {
             // Stalled due to lack of power!
             if (world.getTime() % 60 == 0) {
                 PlayerEntity p = world.getPlayerByUuid(job.playerUuid);
@@ -746,14 +784,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             return;
         }
 
-        this.energyStorage.extractEnergy(powerDraw, false);
+        int stepMax = getStepDurationTicks(step);
+        job.currentStepMaxTicks = stepMax;
 
         // Real physical machine operation, animations, and in-world particles
         switch (step.type) {
             case PRESS -> {
                 HydraulicPressBlockEntity press = getBestAvailablePress();
                 if (press != null) {
-                    press.triggerExternalOperation(4);
+                    ItemStack inputStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
+                    press.setExternalProcess(inputStack, job.currentStepTicks, stepMax);
                     BlockPos pPos = press.getPos();
                     if (world.getTime() % 3 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, pPos.getX() + 0.5, pPos.getY() + 0.8, pPos.getZ() + 0.5, 4, 0.15, 0.15, 0.15, 0.02);
@@ -767,6 +807,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     BlockState fState = world.getBlockState(fPos);
                     if (fState.contains(net.minecraft.state.property.Properties.LIT) && !fState.get(net.minecraft.state.property.Properties.LIT)) {
                         world.setBlockState(fPos, fState.with(net.minecraft.state.property.Properties.LIT, true), 3);
+                    }
+                    if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
+                        ItemStack inStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
+                        if (!inStack.isEmpty() && (ef.getStack(0).isEmpty() || ef.getStack(0).isOf(inStack.getItem()))) {
+                            ef.setStack(0, inStack);
+                        }
                     }
                     if (world.getTime() % 4 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, fPos.getX() + 0.5, fPos.getY() + 0.5, fPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
@@ -791,7 +837,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             case FABRICATE -> {
                 CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
                 if (fab != null) {
-                    fab.triggerExternalOperation(4);
+                    ItemStack substrateStack = step.inputItem != null ? new ItemStack(step.inputItem, 1) : ItemStack.EMPTY;
+                    fab.setExternalProcess(substrateStack, job.currentStepTicks, stepMax);
                     BlockPos bPos = fab.getPos();
                     if (world.getTime() % 3 == 0) {
                         world.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, bPos.getX() + 0.5, bPos.getY() + 0.8, bPos.getZ() + 0.5, 5, 0.2, 0.2, 0.2, 0.05);
@@ -809,8 +856,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         job.currentStepTicks++;
-        int stepMax = getStepDurationTicks(step);
-        job.currentStepMaxTicks = stepMax;
 
         // Sync progress to delegate & GUI
         this.maxCraftProgress = job.getTotalEstimatedTicks(this);
@@ -822,6 +867,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 case PRESS -> {
                     HydraulicPressBlockEntity press = getBestAvailablePress();
                     BlockPos sPos = press != null ? press.getPos() : pos;
+                    if (press != null) {
+                        press.clearExternalProcess();
+                    }
                     world.playSound(null, sPos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.8f, 0.6f);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.CRIT, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.1);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.LARGE_SMOKE, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.05);
@@ -829,6 +877,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 case SMELT -> {
                     BlockEntity furnace = getBestAvailableFurnace();
                     BlockPos sPos = furnace != null ? furnace.getPos() : pos;
+                    if (furnace instanceof EnchantedFurnaceBlockEntity ef) {
+                        ef.setStack(0, ItemStack.EMPTY);
+                    }
                     world.playSound(null, sPos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.9f, 1.2f);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
                     if (furnace != null) {
@@ -847,6 +898,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 case FABRICATE -> {
                     CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
                     BlockPos sPos = fab != null ? fab.getPos() : pos;
+                    if (fab != null) {
+                        fab.clearExternalProcess();
+                    }
                     world.playSound(null, sPos, SoundEvents.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 0.8f, 1.6f);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 15, 0.2, 0.2, 0.2, 0.1);
                 }

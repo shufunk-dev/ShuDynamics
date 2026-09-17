@@ -156,50 +156,82 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     }
 
     private int externalOperationTicks = 0;
+    private boolean isExternalProcess = false;
 
     public void triggerExternalOperation(int ticks) {
         this.externalOperationTicks = Math.max(this.externalOperationTicks, ticks);
     }
 
+    public void setExternalProcess(@Nullable ItemStack substrate, int progressTicks, int maxTicks) {
+        this.externalOperationTicks = 6;
+        this.isExternalProcess = true;
+        if (substrate != null && !substrate.isEmpty()) {
+            if (this.inventory.get(SUBSTRATE_SLOT).isEmpty() || !this.inventory.get(SUBSTRATE_SLOT).isOf(substrate.getItem())) {
+                this.inventory.set(SUBSTRATE_SLOT, substrate.copy());
+            }
+        }
+        this.totalCookTime = Math.max(1, maxTicks);
+        this.cookTime = Math.min(this.totalCookTime, progressTicks);
+        markDirty();
+    }
+
+    public void clearExternalProcess() {
+        this.externalOperationTicks = 0;
+        this.isExternalProcess = false;
+        this.cookTime = 0;
+        this.inventory.set(SUBSTRATE_SLOT, ItemStack.EMPTY);
+        markDirty();
+    }
+
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, CircuitFabricatorBlockEntity entity) {
         boolean dirty = false;
 
-        // 1. Determine Gear speed multiplier
-        float speedMultiplier = entity.getSpeedMultiplier();
-
-        // 2. Check for active matching recipe
-        FabricatorRecipe activeRecipe = entity.findMatchingRecipe();
-
-        if (activeRecipe != null && entity.canAcceptOutput(activeRecipe.output())) {
-            entity.totalCookTime = Math.max(20, (int) (activeRecipe.baseCookTime() / speedMultiplier));
-            boolean hasEnergy = entity.energyStorage.getEnergy() >= ENERGY_DRAW;
-
-            if (hasEnergy) {
-                entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
-                entity.cookTime++;
+        if (entity.isExternalProcess) {
+            if (entity.externalOperationTicks > 0) {
+                entity.externalOperationTicks--;
                 dirty = true;
-
-                if (entity.cookTime >= entity.totalCookTime) {
-                    entity.cookTime = 0;
-                    entity.craftRecipe(activeRecipe);
-                    dirty = true;
-                }
             } else {
-                // Decay progress slowly if power cut
-                if (entity.cookTime > 0) {
-                    entity.cookTime = Math.max(0, entity.cookTime - 1);
-                    dirty = true;
-                }
+                entity.clearExternalProcess();
             }
         } else {
-            if (entity.cookTime > 0) {
-                entity.cookTime = 0;
-                dirty = true;
+            // 1. Determine Gear speed multiplier
+            float speedMultiplier = entity.getSpeedMultiplier();
+
+            // 2. Check for active matching recipe
+            FabricatorRecipe activeRecipe = entity.findMatchingRecipe();
+
+            if (activeRecipe != null && entity.canAcceptOutput(activeRecipe.output())) {
+                entity.totalCookTime = Math.max(20, (int) (activeRecipe.baseCookTime() / speedMultiplier));
+                boolean hasEnergy = entity.energyStorage.getEnergy() >= ENERGY_DRAW;
+
+                if (hasEnergy) {
+                    entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
+                    entity.cookTime++;
+                    dirty = true;
+
+                    if (entity.cookTime >= entity.totalCookTime) {
+                        entity.cookTime = 0;
+                        entity.craftRecipe(activeRecipe);
+                        dirty = true;
+                    }
+                } else {
+                    // Decay progress slowly if power cut
+                    if (entity.cookTime > 0) {
+                        entity.cookTime = Math.max(0, entity.cookTime - 1);
+                        dirty = true;
+                    }
+                }
+            } else {
+                if (entity.cookTime > 0) {
+                    entity.cookTime = 0;
+                    dirty = true;
+                }
             }
         }
 
+        FabricatorRecipe activeRecipe = entity.findMatchingRecipe();
         boolean isLit = (activeRecipe != null && entity.energyStorage.getEnergy() >= ENERGY_DRAW && entity.cookTime > 0) || entity.externalOperationTicks > 0;
-        if (entity.externalOperationTicks > 0) {
+        if (entity.externalOperationTicks > 0 && !entity.isExternalProcess) {
             entity.externalOperationTicks--;
             dirty = true;
         }

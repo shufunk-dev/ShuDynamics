@@ -99,9 +99,31 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     }
 
     private int externalOperationTicks = 0;
+    private boolean isExternalProcess = false;
 
     public void triggerExternalOperation(int ticks) {
         this.externalOperationTicks = Math.max(this.externalOperationTicks, ticks);
+    }
+
+    public void setExternalProcess(@Nullable ItemStack input, int progressTicks, int maxTicks) {
+        this.externalOperationTicks = 6;
+        this.isExternalProcess = true;
+        if (input != null && !input.isEmpty()) {
+            if (this.inventory.get(INPUT_SLOT).isEmpty() || !this.inventory.get(INPUT_SLOT).isOf(input.getItem())) {
+                this.inventory.set(INPUT_SLOT, input.copy());
+            }
+        }
+        this.totalCookTime = Math.max(1, maxTicks);
+        this.cookTime = Math.min(this.totalCookTime, progressTicks);
+        markDirty();
+    }
+
+    public void clearExternalProcess() {
+        this.externalOperationTicks = 0;
+        this.isExternalProcess = false;
+        this.cookTime = 0;
+        this.inventory.set(INPUT_SLOT, ItemStack.EMPTY);
+        markDirty();
     }
 
     public static void tick(net.minecraft.world.World world, BlockPos pos, BlockState state, HydraulicPressBlockEntity entity) {
@@ -114,25 +136,34 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
             world.setBlockState(pos, state.with(HydraulicPressBlock.GEAR_TIER, gearTier), 3);
         }
 
-        if (entity.externalOperationTicks > 0) {
+        if (entity.isExternalProcess) {
+            if (entity.externalOperationTicks > 0) {
+                entity.externalOperationTicks--;
+                isCooking = true;
+            } else {
+                entity.clearExternalProcess();
+            }
+        } else if (entity.externalOperationTicks > 0) {
             entity.externalOperationTicks--;
             isCooking = true;
         }
 
-        if (entity.canProcess()) {
-            if (entity.energyStorage.getEnergy() >= ENERGY_DRAW) {
-                entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
-                entity.cookTime += entity.getProcessingSpeed(gearTier);
-                isCooking = true;
+        if (!entity.isExternalProcess) {
+            if (entity.canProcess()) {
+                if (entity.energyStorage.getEnergy() >= ENERGY_DRAW) {
+                    entity.energyStorage.extractEnergy(ENERGY_DRAW, false);
+                    entity.cookTime += entity.getProcessingSpeed(gearTier);
+                    isCooking = true;
 
-                if (entity.cookTime >= entity.totalCookTime) {
-                    entity.cookTime = 0;
-                    entity.processItem();
-                    world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.6f, 0.7f);
+                    if (entity.cookTime >= entity.totalCookTime) {
+                        entity.cookTime = 0;
+                        entity.processItem();
+                        world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.6f, 0.7f);
+                    }
                 }
+            } else if (entity.externalOperationTicks <= 0) {
+                entity.cookTime = Math.max(0, entity.cookTime - 2);
             }
-        } else if (entity.externalOperationTicks <= 0) {
-            entity.cookTime = Math.max(0, entity.cookTime - 2);
         }
 
         if (state.get(HydraulicPressBlock.LIT) != isCooking) {
