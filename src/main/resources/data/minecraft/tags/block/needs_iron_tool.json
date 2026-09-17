@@ -28,6 +28,10 @@
     "enchantedwood:circuit_fabricator",
     "enchantedwood:induction_smelter",
     "enchantedwood:casting_port",
-    "enchantedwood:polymer_loom"
+    "enchantedwood:polymer_loom",
+    "enchantedwood:chemical_synthesizer",
+    "enchantedwood:industrial_centrifuge",
+    "enchantedwood:powered_anvil",
+    "enchantedwood:resonance_altar"
   ]
 }
