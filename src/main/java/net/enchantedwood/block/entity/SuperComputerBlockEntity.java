@@ -402,6 +402,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         for (BlockEntity f : this.cachedFurnaces) {
             if (f != null && !f.isRemoved()) {
                 if (f instanceof EnchantedFurnaceBlockEntity ef) {
+                    if (ef.isExternalProcess()) return ef;
                     if (ef.getStack(0).isEmpty()) return ef;
                 } else if (f instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity af) {
                     if (af.getStack(0).isEmpty()) return af;
@@ -1135,12 +1136,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         CraftingPlan plan = planResult.plan;
 
+        if (plan.smeltingSteps > 0 && getBestAvailableFurnace() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Furnaces are currently busy!");
+            return;
+        }
         if (plan.hydraulicPressings > 0 && getBestAvailablePress() == null) {
             sendFeedback(player, "§c[Super Computer] All connected Hydraulic Presses are currently busy!");
             return;
         }
         if (plan.circuitFabrications > 0 && getBestAvailableFabricator() == null) {
             sendFeedback(player, "§c[Super Computer] All connected Circuit Fabricators are currently busy!");
+            return;
+        }
+        if (plan.moltenMetalUsedMb > 0 && getBestAvailableCaster() == null) {
+            sendFeedback(player, "§c[Super Computer] All connected Casting Ports are currently busy!");
             return;
         }
 
