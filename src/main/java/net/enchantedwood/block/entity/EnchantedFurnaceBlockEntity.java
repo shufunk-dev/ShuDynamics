@@ -15,9 +15,26 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
+import org.jetbrains.annotations.Nullable;
+
 public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
+
     public EnchantedFurnaceBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ENCHANTED_FURNACE_BLOCK_ENTITY, pos, state, RecipeType.SMELTING);
+    }
+
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
     }
 
     @Override
@@ -30,7 +47,29 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
         return new FurnaceScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    private static Item getDustSmeltingResult(Item item) {
+    @Override
+    protected void readData(ReadView view) {
+        super.readData(view);
+        if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
+    }
+
+    @Override
+    protected void writeData(WriteView view) {
+        super.writeData(view);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension != null ? this.boundDimension : "minecraft:overworld");
+        }
+    }
+
+    public static Item getDustSmeltingResult(Item item) {
         if (item == ModItems.IRON_DUST) return Items.IRON_INGOT;
         if (item == ModItems.COPPER_DUST) return Items.COPPER_INGOT;
         if (item == ModItems.TIN_DUST) return ModItems.TIN_INGOT;

@@ -204,6 +204,84 @@ public class WrenchItem extends Item {
                 return ActionResult.SUCCESS;
             }
 
+            // E. Shift + Right-Click Hydraulic Press -> Link or Dismantle
+            if (targetBe instanceof net.enchantedwood.block.entity.HydraulicPressBlockEntity press) {
+                if (!world.isClient()) {
+                    NbtCompound nbt = wrenchStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+                    if (nbt.contains("boundX")) {
+                        int bx = nbt.getInt("boundX").orElse(0);
+                        int by = nbt.getInt("boundY").orElse(0);
+                        int bz = nbt.getInt("boundZ").orElse(0);
+                        String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+
+                        press.bindNetwork(new BlockPos(bx, by, bz), bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wrench] §a✨ Hydraulic Press linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    } else {
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
+                        world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+
+            // F. Shift + Right-Click Circuit Fabricator -> Link or Dismantle
+            if (targetBe instanceof net.enchantedwood.block.entity.CircuitFabricatorBlockEntity fab) {
+                if (!world.isClient()) {
+                    NbtCompound nbt = wrenchStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+                    if (nbt.contains("boundX")) {
+                        int bx = nbt.getInt("boundX").orElse(0);
+                        int by = nbt.getInt("boundY").orElse(0);
+                        int bz = nbt.getInt("boundZ").orElse(0);
+                        String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+
+                        fab.bindNetwork(new BlockPos(bx, by, bz), bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wrench] §a✨ Circuit Fabricator linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    } else {
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
+                        world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+
+            // G. Shift + Right-Click Enchanted Furnace -> Link or Dismantle
+            if (targetBe instanceof net.enchantedwood.block.entity.EnchantedFurnaceBlockEntity furnace) {
+                if (!world.isClient()) {
+                    NbtCompound nbt = wrenchStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+                    if (nbt.contains("boundX")) {
+                        int bx = nbt.getInt("boundX").orElse(0);
+                        int by = nbt.getInt("boundY").orElse(0);
+                        int bz = nbt.getInt("boundZ").orElse(0);
+                        String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+
+                        furnace.bindNetwork(new BlockPos(bx, by, bz), bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wrench] §a✨ Enchanted Furnace linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    } else {
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
+                        world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+
             // 3. General Shift + Right-Click Dismantle on mod blocks
             if (state.getBlock().asItem() != null && state.getHardness(world, pos) >= 0) {
                 if (!world.isClient()) {

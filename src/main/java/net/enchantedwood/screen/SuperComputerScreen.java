@@ -92,9 +92,30 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
 
         context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0x404040, false);
 
+        // Enchanted Furnace / Smelting Link status icon
+        if (this.handler.isFurnaceOnline()) {
+            context.drawText(this.textRenderer, Text.literal("🔥").formatted(net.minecraft.util.Formatting.GOLD), 106, 6, 0xFFAA00, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("🔥").formatted(net.minecraft.util.Formatting.DARK_GRAY), 106, 6, 0x555555, false);
+        }
+
+        // Hydraulic Press Link status icon
+        if (this.handler.isPressOnline()) {
+            context.drawText(this.textRenderer, Text.literal("⚙").formatted(net.minecraft.util.Formatting.AQUA), 120, 6, 0x55FFFF, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("⚙").formatted(net.minecraft.util.Formatting.DARK_GRAY), 120, 6, 0x555555, false);
+        }
+
+        // Circuit Fabricator Link status icon
+        if (this.handler.isFabricatorOnline()) {
+            context.drawText(this.textRenderer, Text.literal("✦").formatted(net.minecraft.util.Formatting.LIGHT_PURPLE), 134, 6, 0xFF55FF, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("✦").formatted(net.minecraft.util.Formatting.DARK_GRAY), 134, 6, 0x555555, false);
+        }
+
         // Casting Automation Link status icon
         if (this.handler.isCasterOnline()) {
-            context.drawText(this.textRenderer, Text.literal("⚡").formatted(net.minecraft.util.Formatting.GOLD), 148, 6, 0xFFAA00, false);
+            context.drawText(this.textRenderer, Text.literal("⚡").formatted(net.minecraft.util.Formatting.YELLOW), 148, 6, 0xFFFF55, false);
         } else {
             context.drawText(this.textRenderer, Text.literal("⚡").formatted(net.minecraft.util.Formatting.DARK_GRAY), 148, 6, 0x555555, false);
         }
@@ -162,17 +183,60 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
+        // Furnace Link Status Tooltip (x + 102 .. 116, y + 4 .. 16)
+        if (mouseX >= x + 102 && mouseX <= x + 116 && mouseY >= y + 4 && mouseY <= y + 16) {
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§6🔥 Automated Smelting Link"));
+            if (this.handler.isFurnaceOnline()) {
+                lines.add(Text.literal("§a● Online: Connected to Enchanted Furnace / Smelters"));
+                lines.add(Text.literal("§7Smelts sand to glass, cobblestone to stone,"));
+                lines.add(Text.literal("§7charcoal from logs, and ores on-demand."));
+            } else {
+                lines.add(Text.literal("§7● Offline: No Furnace detected"));
+                lines.add(Text.literal("§8Place an Enchanted Furnace within 32 blocks to enable smelting."));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+        }
+
+        // Press Link Status Tooltip (x + 117 .. 130, y + 4 .. 16)
+        if (mouseX >= x + 117 && mouseX <= x + 130 && mouseY >= y + 4 && mouseY <= y + 16) {
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§b⚙ Hydraulic Press Link"));
+            if (this.handler.isPressOnline()) {
+                lines.add(Text.literal("§a● Online: Connected to Hydraulic Press"));
+                lines.add(Text.literal("§7Stamps silicon into wafers and ingots/blocks into plates on-demand."));
+            } else {
+                lines.add(Text.literal("§7● Offline: No Hydraulic Press detected"));
+                lines.add(Text.literal("§8Place a Hydraulic Press within 32 blocks to enable pressing."));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+        }
+
+        // Fabricator Link Status Tooltip (x + 131 .. 143, y + 4 .. 16)
+        if (mouseX >= x + 131 && mouseX <= x + 143 && mouseY >= y + 4 && mouseY <= y + 16) {
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§d✦ Circuit Fabricator Link"));
+            if (this.handler.isFabricatorOnline()) {
+                lines.add(Text.literal("§a● Online: Connected to Precision Circuit Fabricator"));
+                lines.add(Text.literal("§7Fabricates Basic, Advanced, Quantum, and Metallurgy chips on-demand."));
+            } else {
+                lines.add(Text.literal("§7● Offline: No Circuit Fabricator detected"));
+                lines.add(Text.literal("§8Place a Circuit Fabricator within 32 blocks to enable chip fabrication."));
+            }
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+        }
+
         // Caster Link Status Tooltip (x + 144 .. 156, y + 4 .. 16)
         if (mouseX >= x + 144 && mouseX <= x + 156 && mouseY >= y + 4 && mouseY <= y + 16) {
             List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§6⚡ Molten Metal Caster Link"));
+            lines.add(Text.literal("§e⚡ Molten Metal Caster Link"));
             if (this.handler.isCasterOnline()) {
                 lines.add(Text.literal("§a● Online: Connected to Casting Port & Tanks"));
                 lines.add(Text.literal("§7Draws from molten metal tanks for on-demand casting."));
                 lines.add(Text.literal("§8(Keeps metals liquified to save digital storage crystals)"));
             } else {
                 lines.add(Text.literal("§7● Offline: No Casting Port detected"));
-                lines.add(Text.literal("§8Place a Casting Port within 16 blocks to enable metal casting."));
+                lines.add(Text.literal("§8Place a Casting Port within 32 blocks to enable metal casting."));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
@@ -186,7 +250,7 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
                 lines.add(Text.literal("§7Automatically pulls ingredients from Drive Bay crystals."));
             } else {
                 lines.add(Text.literal("§c● Offline: No active Storage Controller in range"));
-                lines.add(Text.literal("§8Place within 16 blocks of an active Storage Controller."));
+                lines.add(Text.literal("§8Place within 32 blocks of an active Storage Controller."));
             }
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }

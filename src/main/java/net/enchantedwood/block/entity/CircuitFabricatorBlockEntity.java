@@ -79,8 +79,25 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, 0, 0);
 
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
+
     private int cookTime = 0;
     private int totalCookTime = 140;
+
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public boolean isPowered() {
+        return this.energyStorage.getEnergy() >= ENERGY_DRAW;
+    }
 
     public GearTier getActiveGearTier() {
         ItemStack gearStack = inventory.get(GEAR_SLOT);
@@ -344,6 +361,12 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         this.energyStorage.readData(view);
         this.cookTime = view.getInt("CookTime", 0);
         this.totalCookTime = view.getInt("TotalCookTime", 140);
+        if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
@@ -353,5 +376,11 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension != null ? this.boundDimension : "minecraft:overworld");
+        }
     }
 }

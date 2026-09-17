@@ -39,12 +39,29 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 500, 500, 0);
 
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
+
     private static final int INPUT_SLOT = 0;
     private static final int GEAR_SLOT = 1;
     private static final int OUTPUT_SLOT = 2;
 
     private int cookTime = 0;
     private int totalCookTime = 100;
+
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public boolean isPowered() {
+        return this.energyStorage.getEnergy() >= ENERGY_DRAW;
+    }
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -196,6 +213,12 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         this.energyStorage.readData(view);
         this.cookTime = view.getInt("CookTime", 0);
         this.totalCookTime = view.getInt("TotalCookTime", 100);
+        if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
@@ -205,6 +228,12 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension != null ? this.boundDimension : "minecraft:overworld");
+        }
     }
 
     @Override
