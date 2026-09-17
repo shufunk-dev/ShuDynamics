@@ -148,6 +148,9 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addWorkstation(CHEMICAL_SYNTHESIZER, EmiStack.of(ModBlocks.CHEMICAL_SYNTHESIZER));
         registry.addWorkstation(POLYMER_LOOM, EmiStack.of(ModBlocks.POLYMER_LOOM));
         registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
+        registry.addWorkstation(CIRCUIT_FABRICATOR, EmiStack.of(ModBlocks.SUPER_COMPUTER));
+        registry.addWorkstation(HYDRAULIC_PRESS, EmiStack.of(ModBlocks.SUPER_COMPUTER));
+        registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.SMELTING, EmiStack.of(ModBlocks.SUPER_COMPUTER));
 
         // Exclusion area for Induction Smelter Mixing Bay side panel
         registry.addExclusionArea(net.enchantedwood.screen.InductionSmelterScreen.class, (screen, consumer) -> {
@@ -174,7 +177,10 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
             @Override
             public boolean supportsRecipe(EmiRecipe recipe) {
-                return recipe.getCategory() == dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING;
+                return recipe.getCategory() == dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.CRAFTING
+                        || recipe.getCategory() == CIRCUIT_FABRICATOR
+                        || recipe.getCategory() == HYDRAULIC_PRESS
+                        || recipe.getCategory() == dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.SMELTING;
             }
 
             @Override
@@ -202,6 +208,60 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
                 // Send ghost pattern packet to server to populate 3x3 matrix
                 net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.SetSuperComputerRecipePayload(pattern));
                 return true;
+            }
+        });
+
+        // Recipe auto-transfer handler for physical Circuit Fabricator GUI
+        registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.CIRCUIT_FABRICATOR_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.StandardRecipeHandler<net.enchantedwood.screen.CircuitFabricatorScreenHandler>() {
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getInputSources(net.enchantedwood.screen.CircuitFabricatorScreenHandler handler) {
+                List<net.minecraft.screen.slot.Slot> list = new ArrayList<>();
+                for (int i = 6; i < handler.slots.size(); i++) {
+                    list.add(handler.getSlot(i));
+                }
+                return list;
+            }
+
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getCraftingSlots(net.enchantedwood.screen.CircuitFabricatorScreenHandler handler) {
+                return List.of(handler.getSlot(0), handler.getSlot(1), handler.getSlot(2), handler.getSlot(3));
+            }
+
+            @Override
+            public @org.jetbrains.annotations.Nullable net.minecraft.screen.slot.Slot getOutputSlot(net.enchantedwood.screen.CircuitFabricatorScreenHandler handler) {
+                return handler.getSlot(4);
+            }
+
+            @Override
+            public boolean supportsRecipe(EmiRecipe recipe) {
+                return recipe.getCategory() == CIRCUIT_FABRICATOR;
+            }
+        });
+
+        // Recipe auto-transfer handler for physical Hydraulic Press GUI
+        registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.HYDRAULIC_PRESS_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.StandardRecipeHandler<net.enchantedwood.screen.HydraulicPressScreenHandler>() {
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getInputSources(net.enchantedwood.screen.HydraulicPressScreenHandler handler) {
+                List<net.minecraft.screen.slot.Slot> list = new ArrayList<>();
+                for (int i = 3; i < handler.slots.size(); i++) {
+                    list.add(handler.getSlot(i));
+                }
+                return list;
+            }
+
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getCraftingSlots(net.enchantedwood.screen.HydraulicPressScreenHandler handler) {
+                return List.of(handler.getSlot(0));
+            }
+
+            @Override
+            public @org.jetbrains.annotations.Nullable net.minecraft.screen.slot.Slot getOutputSlot(net.enchantedwood.screen.HydraulicPressScreenHandler handler) {
+                return handler.getSlot(2);
+            }
+
+            @Override
+            public boolean supportsRecipe(EmiRecipe recipe) {
+                return recipe.getCategory() == HYDRAULIC_PRESS;
             }
         });
 
