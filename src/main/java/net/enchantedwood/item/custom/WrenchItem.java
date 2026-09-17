@@ -282,6 +282,32 @@ public class WrenchItem extends Item {
                 return ActionResult.SUCCESS;
             }
 
+            // H. Shift + Right-Click Super Computer -> Link or Dismantle
+            if (targetBe instanceof net.enchantedwood.block.entity.SuperComputerBlockEntity computer) {
+                if (!world.isClient()) {
+                    NbtCompound nbt = wrenchStack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+                    if (nbt.contains("boundX")) {
+                        int bx = nbt.getInt("boundX").orElse(0);
+                        int by = nbt.getInt("boundY").orElse(0);
+                        int bz = nbt.getInt("boundZ").orElse(0);
+                        String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+
+                        computer.bindNetwork(new BlockPos(bx, by, bz), bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wrench] §a✨ Super Computer linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    } else {
+                        ItemStack dropStack = new ItemStack(block.asItem());
+                        if (!player.getInventory().insertStack(dropStack)) {
+                            Block.dropStack(world, pos, dropStack);
+                        }
+                        world.breakBlock(pos, false, player);
+                        world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        player.sendMessage(Text.literal("§6[Wrench] §eDismantled " + block.getName().getString()), true);
+                    }
+                }
+                return ActionResult.SUCCESS;
+            }
+
             // 3. General Shift + Right-Click Dismantle on mod blocks
             if (state.getBlock().asItem() != null && state.getHardness(world, pos) >= 0) {
                 if (!world.isClient()) {

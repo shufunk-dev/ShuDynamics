@@ -15,6 +15,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.RecipeType;
@@ -94,8 +95,90 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
     };
 
+    private @Nullable BlockPos boundNetworkPos = null;
+    private String boundDimension = "minecraft:overworld";
+
     public SuperComputerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SUPER_COMPUTER_BLOCK_ENTITY, pos, state);
+    }
+
+    public void bindNetwork(BlockPos pos, String dimension) {
+        this.boundNetworkPos = pos;
+        this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
+        markDirty();
+    }
+
+    public @Nullable BlockPos getBoundNetworkPos() {
+        return this.boundNetworkPos;
+    }
+
+    public @Nullable BlockPos getEffectiveControllerPos() {
+        if (this.boundNetworkPos != null) return this.boundNetworkPos;
+        EnchantedStorageTerminalBlockEntity term = getNetworkTerminal();
+        if (term != null && this.world != null) {
+            BlockPos.Mutable mut = new BlockPos.Mutable();
+            for (int dx = -16; dx <= 16; dx++) {
+                for (int dy = -8; dy <= 8; dy++) {
+                    for (int dz = -16; dz <= 16; dz++) {
+                        mut.set(term.getPos().getX() + dx, term.getPos().getY() + dy, term.getPos().getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof EnchantedStorageControllerBlockEntity) {
+                            return be.getPos();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
+        if (this.world == null) return null;
+        if (this.boundNetworkPos != null) {
+            BlockEntity be = this.world.getBlockEntity(this.boundNetworkPos);
+            if (be instanceof EnchantedStorageTerminalBlockEntity term) return term;
+            if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                BlockPos.Mutable cMut = new BlockPos.Mutable();
+                for (int dx = -32; dx <= 32; dx++) {
+                    for (int dy = -16; dy <= 16; dy++) {
+                        for (int dz = -32; dz <= 32; dz++) {
+                            cMut.set(ctrl.getPos().getX() + dx, ctrl.getPos().getY() + dy, ctrl.getPos().getZ() + dz);
+                            BlockEntity cBe = this.world.getBlockEntity(cMut);
+                            if (cBe instanceof EnchantedStorageTerminalBlockEntity term) {
+                                return term;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        BlockPos.Mutable mut = new BlockPos.Mutable();
+        for (int dx = -64; dx <= 64; dx++) {
+            for (int dy = -32; dy <= 32; dy++) {
+                for (int dz = -64; dz <= 64; dz++) {
+                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                    BlockEntity be = this.world.getBlockEntity(mut);
+                    if (be instanceof EnchantedStorageTerminalBlockEntity term) {
+                        return term;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean isNetworkOnline() {
+        if (this.world == null) return false;
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        if (terminal != null) return terminal.isNetworkOnline();
+        BlockPos ctrlPos = getEffectiveControllerPos();
+        if (ctrlPos != null) {
+            BlockEntity be = this.world.getBlockEntity(ctrlPos);
+            if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
+                return ctrl.isOnline();
+            }
+        }
+        return false;
     }
 
     public static class MetalCastInfo {
@@ -135,7 +218,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 } else if (firstItem != s.getItem()) {
                     return null;
                 }
-                count += s.getCount();
+                count++;
             }
         }
         if (firstItem != null && getMetalCastInfo(firstItem) != null) {
@@ -151,14 +234,37 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public List<CastingPortBlockEntity> getNearbyCastingPorts() {
         if (this.world == null) return java.util.Collections.emptyList();
         List<CastingPortBlockEntity> ports = new ArrayList<>();
+        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
+
+        // 1. Direct scan within 64 blocks of Super Computer
+        for (int dx = -64; dx <= 64; dx++) {
+            for (int dy = -32; dy <= 32; dy++) {
+                for (int dz = -64; dz <= 64; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof CastingPortBlockEntity port) {
-                        ports.add(port);
+                        if (visited.add(be.getPos())) {
+                            ports.add(port);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Scan around linked Network Controller
+        BlockPos ctrlPos = getEffectiveControllerPos();
+        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
+            for (int dx = -64; dx <= 64; dx++) {
+                for (int dy = -32; dy <= 32; dy++) {
+                    for (int dz = -64; dz <= 64; dz++) {
+                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof CastingPortBlockEntity port) {
+                            if (visited.add(be.getPos())) {
+                                ports.add(port);
+                            }
+                        }
                     }
                 }
             }
@@ -173,14 +279,37 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public List<CircuitFabricatorBlockEntity> getNearbyCircuitFabricators() {
         if (this.world == null) return java.util.Collections.emptyList();
         List<CircuitFabricatorBlockEntity> fabs = new ArrayList<>();
+        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
+
+        // 1. Direct scan within 64 blocks
+        for (int dx = -64; dx <= 64; dx++) {
+            for (int dy = -32; dy <= 32; dy++) {
+                for (int dz = -64; dz <= 64; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof CircuitFabricatorBlockEntity fab) {
-                        fabs.add(fab);
+                        if (visited.add(be.getPos())) {
+                            fabs.add(fab);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Scan around linked Network Controller
+        BlockPos ctrlPos = getEffectiveControllerPos();
+        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
+            for (int dx = -64; dx <= 64; dx++) {
+                for (int dy = -32; dy <= 32; dy++) {
+                    for (int dz = -64; dz <= 64; dz++) {
+                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof CircuitFabricatorBlockEntity fab) {
+                            if (visited.add(be.getPos())) {
+                                fabs.add(fab);
+                            }
+                        }
                     }
                 }
             }
@@ -195,14 +324,37 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public List<HydraulicPressBlockEntity> getNearbyHydraulicPresses() {
         if (this.world == null) return java.util.Collections.emptyList();
         List<HydraulicPressBlockEntity> presses = new ArrayList<>();
+        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
+
+        // 1. Direct scan within 64 blocks
+        for (int dx = -64; dx <= 64; dx++) {
+            for (int dy = -32; dy <= 32; dy++) {
+                for (int dz = -64; dz <= 64; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof HydraulicPressBlockEntity press) {
-                        presses.add(press);
+                        if (visited.add(be.getPos())) {
+                            presses.add(press);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Scan around linked Network Controller
+        BlockPos ctrlPos = getEffectiveControllerPos();
+        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
+            for (int dx = -64; dx <= 64; dx++) {
+                for (int dy = -32; dy <= 32; dy++) {
+                    for (int dz = -64; dz <= 64; dz++) {
+                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof HydraulicPressBlockEntity press) {
+                            if (visited.add(be.getPos())) {
+                                presses.add(press);
+                            }
+                        }
                     }
                 }
             }
@@ -217,17 +369,43 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     public List<BlockEntity> getNearbyFurnaces() {
         if (this.world == null) return java.util.Collections.emptyList();
         List<BlockEntity> furnaces = new ArrayList<>();
+        java.util.Set<BlockPos> visited = new java.util.HashSet<>();
         BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
+
+        // 1. Direct scan within 64 blocks
+        for (int dx = -64; dx <= 64; dx++) {
+            for (int dy = -32; dy <= 32; dy++) {
+                for (int dz = -64; dz <= 64; dz++) {
                     mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
                     BlockEntity be = this.world.getBlockEntity(mut);
                     if (be instanceof EnchantedFurnaceBlockEntity
                             || be instanceof DustSmelterBlockEntity
                             || be instanceof DustSmelterMk2BlockEntity
                             || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
-                        furnaces.add(be);
+                        if (visited.add(be.getPos())) {
+                            furnaces.add(be);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Scan around linked Network Controller
+        BlockPos ctrlPos = getEffectiveControllerPos();
+        if (ctrlPos != null && !ctrlPos.equals(this.pos)) {
+            for (int dx = -64; dx <= 64; dx++) {
+                for (int dy = -32; dy <= 32; dy++) {
+                    for (int dz = -64; dz <= 64; dz++) {
+                        mut.set(ctrlPos.getX() + dx, ctrlPos.getY() + dy, ctrlPos.getZ() + dz);
+                        BlockEntity be = this.world.getBlockEntity(mut);
+                        if (be instanceof EnchantedFurnaceBlockEntity
+                                || be instanceof DustSmelterBlockEntity
+                                || be instanceof DustSmelterMk2BlockEntity
+                                || be instanceof net.minecraft.block.entity.AbstractFurnaceBlockEntity) {
+                            if (visited.add(be.getPos())) {
+                                furnaces.add(be);
+                            }
+                        }
                     }
                 }
             }
@@ -426,30 +604,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
         }
-    }
-
-    public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
-        if (this.world == null) return null;
-        BlockPos.Mutable mut = new BlockPos.Mutable();
-        for (int dx = -32; dx <= 32; dx++) {
-            for (int dy = -16; dy <= 16; dy++) {
-                for (int dz = -32; dz <= 32; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
-                    if (be instanceof EnchantedStorageTerminalBlockEntity terminal) {
-                        return terminal;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public boolean isNetworkOnline() {
-        if (this.world == null) return false;
-        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        if (terminal == null) return false;
-        return terminal.isNetworkOnline();
     }
 
     public int getEnergy() {
@@ -1365,26 +1519,20 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     }
                 }
 
-                // B. Check standard smelting recipes (e.g. Glass from Sand, Stone from Cobblestone, Charcoal from Log, etc.)
+                // B. Check standard smelting recipes (e.g. Glass from Sand, Stone from Cobblestone, Smooth Stone from Stone, Charcoal from Log, etc.)
                 for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
-                    if (!(entry.value() instanceof SmeltingRecipe smeltingRecipe)) continue;
-                    List<net.minecraft.recipe.Ingredient> ings;
-                    try {
-                        ings = smeltingRecipe.getIngredientPlacement().getIngredients();
-                    } catch (Throwable t) {
-                        continue;
-                    }
-                    if (ings.isEmpty()) continue;
-                    net.minecraft.recipe.Ingredient ing = ings.get(0);
-                    ItemStack sample = ing.getMatchingItems().findFirst().map(net.minecraft.registry.entry.RegistryEntry::value).map(ItemStack::new).orElse(ItemStack.EMPTY);
-                    if (sample.isEmpty()) continue;
+                    if (!(entry.value() instanceof AbstractCookingRecipe cookingRecipe)) continue;
+                    if (cookingRecipe.getType() != RecipeType.SMELTING && cookingRecipe.getType() != RecipeType.BLASTING) continue;
 
                     ItemStack smeltRes = ItemStack.EMPTY;
                     try {
-                        smeltRes = smeltingRecipe.craft(new SingleStackRecipeInput(sample), world.getRegistryManager());
+                        smeltRes = cookingRecipe.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
                     } catch (Throwable ignored) {}
 
                     if (!smeltRes.isEmpty() && smeltRes.isOf(targetItem)) {
+                        net.minecraft.recipe.Ingredient ing = cookingRecipe.ingredient();
+                        if (ing == null || ing.isEmpty()) continue;
+
                         java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
                         java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
                         java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
@@ -1544,7 +1692,43 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         // If not found and not synthesizable, record friendly group missing name
         String displayName = getIngredientDisplayName(ing);
+        if (!isFurnaceOnline() && canBeSmelted(world, matchingItems)) {
+            displayName += " §c(Furnace Offline)";
+        } else if (!isPressOnline() && canBePressed(matchingItems)) {
+            displayName += " §c(Press Offline)";
+        } else if (!isCircuitFabricatorOnline() && canBeFabricated(matchingItems)) {
+            displayName += " §c(Fabricator Offline)";
+        }
         missingItems.put(displayName, missingItems.getOrDefault(displayName, 0) + 1);
+        return false;
+    }
+
+    private boolean canBeSmelted(ServerWorld world, List<net.minecraft.item.Item> items) {
+        for (net.minecraft.item.Item item : items) {
+            if (EnchantedFurnaceBlockEntity.getDustSmeltingResult(item) != null) return true;
+            for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
+                if (entry.value() instanceof AbstractCookingRecipe c && (c.getType() == RecipeType.SMELTING || c.getType() == RecipeType.BLASTING)) {
+                    ItemStack res = c.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
+                    if (!res.isEmpty() && res.isOf(item)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean canBePressed(List<net.minecraft.item.Item> items) {
+        for (net.minecraft.item.Item item : items) {
+            if (getPressRecipeInfo(item) != null) return true;
+        }
+        return false;
+    }
+
+    private boolean canBeFabricated(List<net.minecraft.item.Item> items) {
+        for (net.minecraft.item.Item item : items) {
+            for (CircuitFabricatorBlockEntity.FabricatorRecipe recipe : CircuitFabricatorBlockEntity.getRecipes()) {
+                if (recipe.output().isOf(item)) return true;
+            }
+        }
         return false;
     }
 
@@ -1727,6 +1911,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         Inventories.readData(view, this.inventory);
         this.craftProgress = view.getInt("CraftProgress", 0);
         this.energyStorage.setEnergy(view.getInt("Energy", 0));
+        if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
+            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
+            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+        } else {
+            this.boundNetworkPos = null;
+        }
     }
 
     @Override
@@ -1735,5 +1925,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         Inventories.writeData(view, this.inventory);
         view.putInt("CraftProgress", this.craftProgress);
         view.putInt("Energy", this.energyStorage.getEnergy());
+        if (this.boundNetworkPos != null) {
+            view.putInt("BoundX", this.boundNetworkPos.getX());
+            view.putInt("BoundY", this.boundNetworkPos.getY());
+            view.putInt("BoundZ", this.boundNetworkPos.getZ());
+            view.putString("BoundDim", this.boundDimension != null ? this.boundDimension : "minecraft:overworld");
+        }
     }
 }
