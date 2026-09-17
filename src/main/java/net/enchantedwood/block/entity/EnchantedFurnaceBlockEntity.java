@@ -116,7 +116,6 @@ public class EnchantedFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
     public boolean isIdle() {
         if (this.isExternalProcess) return false;
         if (!getStack(0).isEmpty()) return false;
-        if (this.propertyDelegate.get(0) > 0) return false;
         if (this.propertyDelegate.get(2) > 0) return false;
         return true;
     }
