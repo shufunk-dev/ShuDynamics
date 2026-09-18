@@ -14,7 +14,6 @@
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
-* 📊 **Evolutionary Intelligence Report**: [7-Version Codebase Telemetry (v1.0 to v2.0)](shudynamics-v2.0.0-development-report.html)
 
 ---
 
