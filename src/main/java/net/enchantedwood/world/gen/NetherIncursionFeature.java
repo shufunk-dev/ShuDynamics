@@ -39,8 +39,9 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
         boolean isCrimson = biomeEntry.matchesKey(BiomeKeys.CRIMSON_FOREST);
         boolean isSoulSand = biomeEntry.matchesKey(BiomeKeys.SOUL_SAND_VALLEY);
         boolean isBasalt = biomeEntry.matchesKey(BiomeKeys.BASALT_DELTAS);
+        boolean isEnd = biomeEntry.matchesKey(BiomeKeys.END_HIGHLANDS);
 
-        if (!isWarped && !isCrimson && !isSoulSand && !isBasalt) {
+        if (!isWarped && !isCrimson && !isSoulSand && !isBasalt && !isEnd) {
             return false;
         }
 
@@ -56,8 +57,9 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                 boolean colCrimson = colBiome.matchesKey(BiomeKeys.CRIMSON_FOREST);
                 boolean colSoulSand = colBiome.matchesKey(BiomeKeys.SOUL_SAND_VALLEY);
                 boolean colBasalt = colBiome.matchesKey(BiomeKeys.BASALT_DELTAS);
+                boolean colEnd = colBiome.matchesKey(BiomeKeys.END_HIGHLANDS);
 
-                if (!colWarped && !colCrimson && !colSoulSand && !colBasalt) {
+                if (!colWarped && !colCrimson && !colSoulSand && !colBasalt && !colEnd) {
                     continue;
                 }
 
@@ -152,11 +154,35 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                         }
                     }
                     placedAny = true;
+                } else if (colEnd) {
+                    world.setBlockState(surfacePos, Blocks.END_STONE.getDefaultState(), 2);
+                    int depth = 3 + random.nextInt(3);
+                    for (int d = 1; d <= depth; d++) {
+                        BlockPos under = surfacePos.down(d);
+                        if (isTerrainReplaceable(world.getBlockState(under))) {
+                            world.setBlockState(under, Blocks.END_STONE.getDefaultState(), 2);
+                        }
+                    }
+                    placedAny = true;
+
+                    // Chorus plant chance (authentic End vegetation)
+                    if (random.nextInt(25) == 0 && world.isAir(surfacePos.up())) {
+                        generateChorusPlant(world, surfacePos.up(), random);
+                    } else if (random.nextInt(60) == 0 && world.isAir(surfacePos.up())) {
+                        // Small obsidian / purpur monument spire
+                        int spireHeight = 2 + random.nextInt(3);
+                        for (int s = 0; s < spireHeight; s++) {
+                            BlockPos sPos = surfacePos.up(1 + s);
+                            if (world.isAir(sPos)) {
+                                world.setBlockState(sPos, (s == spireHeight - 1 && random.nextBoolean()) ? Blocks.PURPUR_PILLAR.getDefaultState() : Blocks.OBSIDIAN.getDefaultState(), 2);
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        // 2. Subterranean Netherrack & Nether Overworld Ore Veins
+        // 2. Subterranean Netherrack/End Stone & Ore Veins
         int veinsCount = 10 + random.nextInt(8);
         for (int v = 0; v < veinsCount; v++) {
             int vx = origin.getX() + random.nextInt(16) - 8;
@@ -172,11 +198,19 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                             BlockPos orePos = center.add(rx, ry, rz);
                             BlockState cur = world.getBlockState(orePos);
                             if (isSubterraneanStone(cur)) {
-                                // 22% chance to place an ore, 78% Netherrack base
-                                if (random.nextInt(100) < 22) {
-                                    world.setBlockState(orePos, getRandomNetherOre(random), 2);
+                                if (isEnd) {
+                                    if (random.nextInt(100) < 15) {
+                                        world.setBlockState(orePos, Blocks.PURPUR_BLOCK.getDefaultState(), 2);
+                                    } else {
+                                        world.setBlockState(orePos, Blocks.END_STONE.getDefaultState(), 2);
+                                    }
                                 } else {
-                                    world.setBlockState(orePos, Blocks.NETHERRACK.getDefaultState(), 2);
+                                    // 22% chance to place an ore, 78% Netherrack base
+                                    if (random.nextInt(100) < 22) {
+                                        world.setBlockState(orePos, getRandomNetherOre(random), 2);
+                                    } else {
+                                        world.setBlockState(orePos, Blocks.NETHERRACK.getDefaultState(), 2);
+                                    }
                                 }
                                 placedAny = true;
                             }
@@ -291,6 +325,22 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                     }
                 }
             }
+        }
+    }
+
+    private void generateChorusPlant(StructureWorldAccess world, BlockPos pos, Random random) {
+        int height = 2 + random.nextInt(4);
+        BlockPos current = pos;
+        for (int h = 0; h < height; h++) {
+            if (world.isAir(current)) {
+                world.setBlockState(current, Blocks.CHORUS_PLANT.getDefaultState(), 2);
+                current = current.up();
+            } else {
+                break;
+            }
+        }
+        if (world.isAir(current)) {
+            world.setBlockState(current, Blocks.CHORUS_FLOWER.getDefaultState(), 2);
         }
     }
 }

@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.0.0-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.0.1-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -182,7 +182,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-2.0.0.jar
+build/libs/shudynamics-2.0.1.jar
 ```
 
 ---

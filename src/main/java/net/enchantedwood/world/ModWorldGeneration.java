@@ -372,13 +372,14 @@ public class ModWorldGeneration {
                 VOLCANIC_CALDERA_PLACED_KEY
         );
 
-        // Fractured Nether Incursions in Convergence: Overworld Cave Carvers & Nether Terrain/Ores
+        // Fractured Nether & End Incursions in Convergence: Overworld Cave Carvers & Terrain/Ores
         BiomeModifications.addCarver(
                 BiomeSelectors.includeByKey(
                         net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
                         net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
                         net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
-                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS,
+                        net.minecraft.world.biome.BiomeKeys.END_HIGHLANDS
                 ),
                 net.minecraft.world.gen.carver.ConfiguredCarvers.CAVE
         );
@@ -387,7 +388,8 @@ public class ModWorldGeneration {
                         net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
                         net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
                         net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
-                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS,
+                        net.minecraft.world.biome.BiomeKeys.END_HIGHLANDS
                 ),
                 net.minecraft.world.gen.carver.ConfiguredCarvers.CANYON
         );
@@ -396,7 +398,8 @@ public class ModWorldGeneration {
                         net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
                         net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
                         net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
-                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS,
+                        net.minecraft.world.biome.BiomeKeys.END_HIGHLANDS
                 ),
                 net.minecraft.world.gen.carver.ConfiguredCarvers.CAVE_EXTRA_UNDERGROUND
         );
@@ -406,7 +409,8 @@ public class ModWorldGeneration {
                         net.minecraft.world.biome.BiomeKeys.WARPED_FOREST,
                         net.minecraft.world.biome.BiomeKeys.CRIMSON_FOREST,
                         net.minecraft.world.biome.BiomeKeys.SOUL_SAND_VALLEY,
-                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS
+                        net.minecraft.world.biome.BiomeKeys.BASALT_DELTAS,
+                        net.minecraft.world.biome.BiomeKeys.END_HIGHLANDS
                 ),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 NETHER_INCURSION_PLACED_KEY
