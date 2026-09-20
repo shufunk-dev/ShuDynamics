@@ -109,8 +109,10 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.AQUA), 162, 6, 0x55FFFF, false);
         } else if (netStatus == 1) {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GREEN), 162, 6, 0x55FF55, false);
-        } else {
+        } else if (netStatus == 3 || netStatus == 4) {
             context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.RED), 162, 6, 0xFF5555, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("○").formatted(net.minecraft.util.Formatting.GRAY), 162, 6, 0xAAAAAA, false);
         }
     }
 
@@ -156,9 +158,10 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             List<Text> lines = new ArrayList<>();
             lines.add(Text.literal("§a🔮 Utility & Extraction Socket"));
             lines.add(Text.literal("§7Accepts: §6Fortune Core§7, §aSilk Touch Core§7,"));
-            lines.add(Text.literal("§5Interdimensional Card§7, or §bChunk Loader Module"));
+            lines.add(Text.literal("§5Interdimensional Card§7, §bChunk Loader Module§7,"));
+            lines.add(Text.literal("§eor §aWireless Storage Crystal"));
             lines.add(Text.literal("§8Provides drop multipliers, auto chunk-loading, or"));
-            lines.add(Text.literal("§8direct cross-dimensional link bridging."));
+            lines.add(Text.literal("§8quantum cross-dimensional wireless linking."));
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 

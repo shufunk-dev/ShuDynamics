@@ -78,7 +78,8 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.isOf(ModItems.FORTUNE_CORE) || stack.isOf(ModItems.SILK_TOUCH_CORE) ||
-                        stack.isOf(ModItems.INTERDIMENSIONAL_CARD) || stack.isOf(ModItems.CHUNK_LOADER_MODULE);
+                        stack.isOf(ModItems.INTERDIMENSIONAL_CARD) || stack.isOf(ModItems.CHUNK_LOADER_MODULE) ||
+                        stack.isOf(ModItems.WIRELESS_STORAGE_CRYSTAL);
             }
         });
 
@@ -97,11 +98,11 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     }
 
     public int getEnergy() {
-        return (this.propertyDelegate.get(1) << 16) | (this.propertyDelegate.get(0) & 0xFFFF);
+        return ((this.propertyDelegate.get(1) & 0xFFFF) << 16) | (this.propertyDelegate.get(0) & 0xFFFF);
     }
 
     public int getMaxEnergy() {
-        return (this.propertyDelegate.get(3) << 16) | (this.propertyDelegate.get(2) & 0xFFFF);
+        return ((this.propertyDelegate.get(3) & 0xFFFF) << 16) | (this.propertyDelegate.get(2) & 0xFFFF);
     }
 
     public int getMode() {

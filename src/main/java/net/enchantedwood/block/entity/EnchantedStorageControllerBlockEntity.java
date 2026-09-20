@@ -33,7 +33,7 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
 
     // Slot 0: Emergency Fuel, Slot 1: Chunk Loader Module, Slot 2: Interdimensional Card
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
-    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 1_000, 0, 0);
+    private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 1_000, 5_000, 0);
     private int burnTime = 0;
     private int totalBurnTime = 0;
     private boolean isChunkForceLoaded = false;
@@ -136,6 +136,9 @@ public class EnchantedStorageControllerBlockEntity extends BlockEntity implement
             if (entity.burnTime > 0) {
                 --entity.burnTime;
                 isOnline = true;
+                if (entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
+                    entity.energyStorage.insertEnergy(500, false);
+                }
             }
 
             ItemStack fuelStack = entity.inventory.get(0);

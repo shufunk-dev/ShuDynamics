@@ -23,8 +23,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.enchantedwood.block.custom.EnchantedStorageControllerBlock;
+import net.enchantedwood.block.entity.CastingPortBlockEntity;
+import net.enchantedwood.block.entity.CircuitFabricatorBlockEntity;
+import net.enchantedwood.block.entity.DigitalConverterBlockEntity;
+import net.enchantedwood.block.entity.EnchantedFurnaceBlockEntity;
 import net.enchantedwood.block.entity.EnchantedStorageControllerBlockEntity;
 import net.enchantedwood.block.entity.EnchantedStorageTerminalBlockEntity;
+import net.enchantedwood.block.entity.HydraulicPressBlockEntity;
+import net.enchantedwood.block.entity.LaserQuarryBlockEntity;
+import net.enchantedwood.block.entity.SuperComputerBlockEntity;
 
 import java.util.function.Consumer;
 
@@ -40,6 +47,7 @@ public class WirelessStorageCrystalItem extends Item {
         PlayerEntity player = context.getPlayer();
         BlockEntity be = world.getBlockEntity(pos);
 
+        // 1. Bind crystal to Controller or Terminal
         if (be instanceof EnchantedStorageControllerBlockEntity || be instanceof EnchantedStorageTerminalBlockEntity) {
             if (!world.isClient() && player != null) {
                 ItemStack stack = context.getStack();
@@ -55,6 +63,79 @@ public class WirelessStorageCrystalItem extends Item {
             }
             return ActionResult.SUCCESS;
         }
+
+        // 2. Sneak + Right-Click: Link target machine to network stored on crystal
+        if (player != null && player.isSneaking()) {
+            ItemStack stack = context.getStack();
+            NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+            if (nbt.contains("boundX")) {
+                int bx = nbt.getInt("boundX").orElse(0);
+                int by = nbt.getInt("boundY").orElse(0);
+                int bz = nbt.getInt("boundZ").orElse(0);
+                String bDim = nbt.getString("boundDimension").orElse("minecraft:overworld");
+                BlockPos targetNetPos = new BlockPos(bx, by, bz);
+
+                if (be instanceof LaserQuarryBlockEntity quarry) {
+                    if (!world.isClient()) {
+                        quarry.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Laser Quarry linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof DigitalConverterBlockEntity converter) {
+                    if (!world.isClient()) {
+                        converter.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Digital Converter linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof CastingPortBlockEntity castingPort) {
+                    if (!world.isClient()) {
+                        castingPort.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Casting Port linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof HydraulicPressBlockEntity press) {
+                    if (!world.isClient()) {
+                        press.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Hydraulic Press linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof CircuitFabricatorBlockEntity fab) {
+                    if (!world.isClient()) {
+                        fab.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Circuit Fabricator linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof EnchantedFurnaceBlockEntity furnace) {
+                    if (!world.isClient()) {
+                        furnace.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Enchanted Furnace linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                } else if (be instanceof SuperComputerBlockEntity computer) {
+                    if (!world.isClient()) {
+                        computer.bindNetwork(targetNetPos, bDim);
+                        world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 1.0f, 1.3f);
+                        player.sendMessage(Text.literal("§6[Wireless Crystal] §a✨ Super Computer linked to Base Network at (" + bx + ", " + by + ", " + bz + ")!"), true);
+                    }
+                    return ActionResult.SUCCESS;
+                }
+            } else if (be instanceof LaserQuarryBlockEntity || be instanceof DigitalConverterBlockEntity ||
+                       be instanceof CastingPortBlockEntity || be instanceof HydraulicPressBlockEntity ||
+                       be instanceof CircuitFabricatorBlockEntity || be instanceof EnchantedFurnaceBlockEntity ||
+                       be instanceof SuperComputerBlockEntity) {
+                if (!world.isClient()) {
+                    player.sendMessage(Text.literal("§e⚠️ Sneak + Right-Click on an Enchanted Storage Controller or Terminal first to bind this crystal!"), true);
+                }
+                return ActionResult.SUCCESS;
+            }
+        }
+
         return super.useOnBlock(context);
     }
 

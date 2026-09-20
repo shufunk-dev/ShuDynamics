@@ -739,7 +739,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            world.playSound(null, pos, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.BLOCKS, 0.7f, 1.1f);
             if (player != null) {
                 sendFeedback(player, "§a⚡ Factory Completed: §f" + job.finalResult.getCount() + "x " + job.finalResult.getName().getString());
             }

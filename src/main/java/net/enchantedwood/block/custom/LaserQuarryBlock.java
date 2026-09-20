@@ -77,7 +77,9 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (player.getMainHandStack().getItem() instanceof net.enchantedwood.item.custom.WrenchItem ||
-            player.getOffHandStack().getItem() instanceof net.enchantedwood.item.custom.WrenchItem) {
+            player.getOffHandStack().getItem() instanceof net.enchantedwood.item.custom.WrenchItem ||
+            ((player.getMainHandStack().getItem() instanceof net.enchantedwood.item.custom.WirelessStorageCrystalItem ||
+              player.getOffHandStack().getItem() instanceof net.enchantedwood.item.custom.WirelessStorageCrystalItem) && player.isSneaking())) {
             return ActionResult.PASS;
         }
         if (!world.isClient()) {
