@@ -405,6 +405,58 @@ public class ModItems {
     public static final Item ETERNAL_BENTO_BOX = registerItem("eternal_bento_box",
             settings -> new net.enchantedwood.item.custom.EternalBentoBoxItem(settings.maxCount(1)));
 
+    // Tier 2 & Tier 3 Boss Summoning Cores, Catalysts & Ascendant Relics
+    public static final Item CORRUPTED_CORE_OF_CATACLYSM = registerItem("corrupted_core_of_cataclysm", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§4✦ Corrupted Core of Cataclysm ✦"),
+            Text.literal("§cVolatile celestial core pulsating with cataclysmic instability."),
+            Text.literal("§7Right-click on the §eResonance Altar §7in §dThe Convergence §7to awaken"),
+            Text.literal("§4The Ascendant Colossus §7(Tier 2 Boss)."),
+            Text.literal("§8 • Demands active protection buffs and tactical precision")
+    ));
+
+    public static final Item PRIMORDIAL_RIFT_KEYSTONE = registerItem("primordial_rift_keystone", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§d✦ Primordial Rift Keystone ✦"),
+            Text.literal("§5Mythic singularity key vibrating with universe-rending energy."),
+            Text.literal("§7Right-click on the §eResonance Altar §7in §dThe Convergence §7to summon"),
+            Text.literal("§dThe Primordial Cataclysm §7(Tier 3 Mythic Final Boss)."),
+            Text.literal("§8 • The ultimate test of solo conquest in ShuDynamics")
+    ));
+
+    public static final Item PRIMORDIAL_CATALYST = registerItem("primordial_catalyst", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§6Primordial Catalyst"),
+            Text.literal("§7Concentrated cosmic catalyst dropped by The Ascendant Colossus."),
+            Text.literal("§8Used to upgrade Base Relics into their Ascendant God-Tier forms.")
+    ));
+
+    public static final Item SINGULARITY_HEART = registerItem("singularity_heart", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§4Singularity Heart"),
+            Text.literal("§7The pulsing gravitational core of The Ascendant Colossus."),
+            Text.literal("§8Essential key for forging the Primordial Rift Keystone.")
+    ));
+
+    public static final Item ASCENDANT_CLEAVER = registerItem("ascendant_cleaver",
+            settings -> new net.enchantedwood.item.custom.AscendantCleaverItem(settings.sword(ModMaterials.MANYULLYN, 10.0f, -2.8f).maxDamage(5000)));
+
+    public static final Item VOID_SINGULARITY_NEXUS = registerItem("void_singularity_nexus",
+            settings -> new net.enchantedwood.item.custom.VoidSingularityNexusItem(settings.maxDamage(3000)));
+
+    public static final Item OMEGA_BENTO_BOX = registerItem("omega_bento_box",
+            settings -> new net.enchantedwood.item.custom.OmegaBentoBoxItem(settings.maxCount(1)));
+
+    public static final Item RING_OF_GRAVITATIONAL_MASTERY = registerItem("ring_of_gravitational_mastery",
+            settings -> new net.enchantedwood.item.custom.RingOfGravitationalMasteryItem(settings.maxCount(1)));
+
+    public static final Item INFINITE_DIMENSIONAL_MATRIX = registerItem("infinite_dimensional_matrix", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(16),
+            Text.literal("§b✦ Infinite Dimensional Matrix ✦"),
+            Text.literal("§7Boundless crystalline lattice pulsing with unlimited dimensional flux."),
+            Text.literal("§8Pinnacle component for cross-dimensional limitless networks.")
+    ));
+
     // Advanced Medical Technology: Hypospray, Essences & Cartridges
     public static final Item HYPOSPRAY = registerItem("hypospray",
             settings -> new net.enchantedwood.item.custom.HyposprayItem(settings.maxCount(1)));
@@ -1836,6 +1888,16 @@ public class ModItems {
                 entries.add(RESONANCE_CLEAVER);
                 entries.add(SINGULARITY_STAFF);
                 entries.add(ETERNAL_BENTO_BOX);
+                entries.add(CORRUPTED_CORE_OF_CATACLYSM);
+                entries.add(PRIMORDIAL_RIFT_KEYSTONE);
+                entries.add(PRIMORDIAL_CATALYST);
+                entries.add(SINGULARITY_HEART);
+                entries.add(ASCENDANT_CLEAVER);
+                entries.add(VOID_SINGULARITY_NEXUS);
+                entries.add(OMEGA_BENTO_BOX);
+                entries.add(RING_OF_GRAVITATIONAL_MASTERY);
+                entries.add(INFINITE_DIMENSIONAL_MATRIX);
+                entries.add(net.enchantedwood.block.ModBlocks.TROPHY_OF_OMNIPOTENCE);
 
                 // Advanced Medical Laboratory Suite
                 entries.add(net.enchantedwood.block.ModBlocks.INDUSTRIAL_CENTRIFUGE);

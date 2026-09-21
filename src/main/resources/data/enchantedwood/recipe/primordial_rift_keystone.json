@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SPS",
+    "PHP",
+    "SPS"
+  ],
+  "key": {
+    "S": "enchantedwood:dimensional_singularity",
+    "P": "enchantedwood:fire_crystal",
+    "H": "enchantedwood:singularity_heart"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:primordial_rift_keystone"
+  }
+}

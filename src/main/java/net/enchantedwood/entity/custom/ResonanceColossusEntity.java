@@ -43,6 +43,9 @@ public class ResonanceColossusEntity extends HostileEntity {
     private int phase = 1; // 1: 100-65%, 2: 65-30%, 3: <30%
     private boolean isResetting = false;
 
+    private boolean pylonPhaseTriggered = false;
+    private boolean shieldActive = false;
+    private int activePylons = 0;
     private int resetMessageCooldown = 0;
 
     public ResonanceColossusEntity(EntityType<? extends HostileEntity> entityType, World world) {
@@ -52,15 +55,15 @@ public class ResonanceColossusEntity extends HostileEntity {
                 BossBar.Color.PURPLE,
                 BossBar.Style.NOTCHED_6
         ).setDarkenSky(true);
-        this.experiencePoints = 100;
+        this.experiencePoints = 150;
     }
 
     public static DefaultAttributeContainer.Builder createResonanceColossusAttributes() {
         return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.MAX_HEALTH, 350.0)
+                .add(EntityAttributes.MAX_HEALTH, 500.0)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.24)
-                .add(EntityAttributes.ATTACK_DAMAGE, 9.0)
-                .add(EntityAttributes.ARMOR, 10.0)
+                .add(EntityAttributes.ATTACK_DAMAGE, 11.0)
+                .add(EntityAttributes.ARMOR, 12.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 64.0);
     }
@@ -97,7 +100,38 @@ public class ResonanceColossusEntity extends HostileEntity {
             }
             return false;
         }
-        return super.damage(world, source, amount);
+        if (this.shieldActive) {
+            if (source.getAttacker() instanceof PlayerEntity player) {
+                player.sendMessage(Text.literal("§5✦ Resonance Shield is active! Destroy the " + this.activePylons + " Resonance Pylon(s)! ✦"), true);
+                world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.HOSTILE, 1.2f, 1.5f);
+            }
+            return false;
+        }
+        // Soft damage cap: maximum 25 damage per hit to prevent burst cheesing
+        float cappedAmount = Math.min(amount, 25.0f);
+        return super.damage(world, source, cappedAmount);
+    }
+
+    public void onPylonDestroyed() {
+        this.activePylons = Math.max(0, this.activePylons - 1);
+        if (this.getEntityWorld() instanceof ServerWorld sw) {
+            if (this.activePylons <= 0) {
+                this.shieldActive = false;
+                sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 2.0f, 0.8f);
+                sw.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY() + 2.0, this.getZ(), 3, 0.5, 0.5, 0.5, 0.0);
+                for (ServerPlayerEntity p : sw.getPlayers()) {
+                    if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (128.0 * 128.0)) {
+                        p.sendMessage(Text.literal("§a✦ The Resonance Shield has shattered! The Colossus is vulnerable! ✦"), false);
+                    }
+                }
+            } else {
+                for (ServerPlayerEntity p : sw.getPlayers()) {
+                    if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (128.0 * 128.0)) {
+                        p.sendMessage(Text.literal("§e✦ A Resonance Pylon was destroyed! (" + this.activePylons + " remaining) ✦"), true);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -212,6 +246,9 @@ public class ResonanceColossusEntity extends HostileEntity {
             } else {
                 this.isResetting = false;
                 this.minionsSpawned = false;
+                this.pylonPhaseTriggered = false;
+                this.shieldActive = false;
+                this.activePylons = 0;
                 this.phase = 1;
             }
             return;
@@ -225,6 +262,38 @@ public class ResonanceColossusEntity extends HostileEntity {
             this.phase = 2;
         } else {
             this.phase = 3;
+        }
+
+        // Phase 2 Pylon Shield Trigger at 65% HP
+        if (healthPct <= 0.65f && !this.pylonPhaseTriggered && !this.isResetting) {
+            this.pylonPhaseTriggered = true;
+            this.shieldActive = true;
+            this.activePylons = 3;
+            sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_ROAR, SoundCategory.HOSTILE, 2.0f, 0.6f);
+            sw.spawnParticles(ParticleTypes.SONIC_BOOM, this.getX(), this.getY() + 2.0, this.getZ(), 4, 0.5, 0.5, 0.5, 0.0);
+
+            for (ServerPlayerEntity p : sw.getPlayers()) {
+                if (p.squaredDistanceTo(this.altarPos.toCenterPos()) < (128.0 * 128.0)) {
+                    p.sendMessage(Text.literal("§5✦ The Colossus projects a Resonance Shield anchored to 3 Pylons! Shatter them! ✦"), false);
+                }
+            }
+
+            // Spawn 3 Pylons in a triangle around the altar/colossus
+            double radius = 10.0;
+            for (int i = 0; i < 3; i++) {
+                double angle = (i * (2.0 * Math.PI / 3.0));
+                double px = this.altarPos.getX() + 0.5 + Math.cos(angle) * radius;
+                double pz = this.altarPos.getZ() + 0.5 + Math.sin(angle) * radius;
+                double py = this.getY();
+
+                ResonancePylonEntity pylon = ModEntities.RESONANCE_PYLON.create(sw, net.minecraft.entity.SpawnReason.EVENT);
+                if (pylon != null) {
+                    pylon.refreshPositionAndAngles(px, py, pz, (float) Math.toDegrees(angle), 0);
+                    pylon.setParentColossus(this);
+                    sw.spawnEntity(pylon);
+                    sw.spawnParticles(ParticleTypes.END_ROD, px, py + 1.0, pz, 20, 0.5, 1.0, 0.5, 0.1);
+                }
+            }
         }
 
         this.attackTimer++;

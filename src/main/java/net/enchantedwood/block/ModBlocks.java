@@ -1174,6 +1174,18 @@ public class ModBlocks {
             Text.literal("§7or revive §5The Resonance Colossus§7."),
             Text.literal("§8 • Protected by Arena Leash & Retreat Safety Protocol"));
 
+    public static final Block TROPHY_OF_OMNIPOTENCE = registerBlockWithTooltip("trophy_of_omnipotence",
+            new net.enchantedwood.block.custom.TrophyOfOmnipotenceBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "trophy_of_omnipotence")))
+                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
+                    .hardness(5.0f)
+                    .resistance(1200.0f)
+                    .requiresTool()
+                    .luminance(state -> 15)),
+            Text.literal("§d✦ Trophy of Omnipotence ✦"),
+            Text.literal("§eThe ultimate symbol of solo mastery in ShuDynamics."),
+            Text.literal("§7Awarded upon vanquishing The Primordial Cataclysm."));
+
     public static final Block INDUSTRIAL_CENTRIFUGE = registerBlockWithTooltip("industrial_centrifuge",
             new net.enchantedwood.block.custom.IndustrialCentrifugeBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge")))

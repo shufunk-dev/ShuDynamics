@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "enchantedwood:eternal_bento_box",
+    "enchantedwood:primordial_catalyst",
+    "enchantedwood:dragon_fruit"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:omega_bento_box"
+  }
+}

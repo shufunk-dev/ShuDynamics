@@ -1,0 +1,33 @@
+{
+  "parent": "enchantedwood:convergence/resonance_conqueror",
+  "display": {
+    "icon": {
+      "id": "enchantedwood:corrupted_core_of_cataclysm"
+    },
+    "title": {
+      "translate": "advancements.enchantedwood.convergence.ascendant_conqueror.title"
+    },
+    "description": {
+      "translate": "advancements.enchantedwood.convergence.ascendant_conqueror.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill_ascendant": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "enchantedwood:ascendant_colossus"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "kill_ascendant"
+    ]
+  ]
+}

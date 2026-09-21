@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "enchantedwood:resonance_cleaver",
+    "enchantedwood:primordial_catalyst",
+    "enchantedwood:tungsten_carbide_ingot"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:ascendant_cleaver"
+  }
+}

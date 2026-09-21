@@ -64,7 +64,7 @@ public class ModEntities {
                     .build(CONVERGENCE_SPIDER_KEY)
     );
 
-    // Dimension Boss: The Resonance Colossus
+    // Dimension Boss: The Resonance Colossus (Tier 1)
     public static final RegistryKey<EntityType<?>> RESONANCE_COLOSSUS_KEY =
             RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_colossus"));
     public static final EntityType<ResonanceColossusEntity> RESONANCE_COLOSSUS = Registry.register(
@@ -75,6 +75,39 @@ public class ModEntities {
                     .build(RESONANCE_COLOSSUS_KEY)
     );
 
+    // Resonance Pylon (Tier 1 Shield Anchor)
+    public static final RegistryKey<EntityType<?>> RESONANCE_PYLON_KEY =
+            RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_pylon"));
+    public static final EntityType<ResonancePylonEntity> RESONANCE_PYLON = Registry.register(
+            Registries.ENTITY_TYPE,
+            RESONANCE_PYLON_KEY,
+            EntityType.Builder.<ResonancePylonEntity>create(ResonancePylonEntity::new, SpawnGroup.MONSTER)
+                    .dimensions(1.0f, 2.5f)
+                    .build(RESONANCE_PYLON_KEY)
+    );
+
+    // Dimension Boss: The Ascendant Colossus (Tier 2)
+    public static final RegistryKey<EntityType<?>> ASCENDANT_COLOSSUS_KEY =
+            RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "ascendant_colossus"));
+    public static final EntityType<AscendantColossusEntity> ASCENDANT_COLOSSUS = Registry.register(
+            Registries.ENTITY_TYPE,
+            ASCENDANT_COLOSSUS_KEY,
+            EntityType.Builder.<AscendantColossusEntity>create(AscendantColossusEntity::new, SpawnGroup.MONSTER)
+                    .dimensions(2.4f, 5.0f)
+                    .build(ASCENDANT_COLOSSUS_KEY)
+    );
+
+    // Dimension Boss: The Primordial Cataclysm (Tier 3 Mythic Final Boss)
+    public static final RegistryKey<EntityType<?>> PRIMORDIAL_CATACLYSM_KEY =
+            RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(EnchantedWoodMod.MOD_ID, "primordial_cataclysm"));
+    public static final EntityType<PrimordialCataclysmEntity> PRIMORDIAL_CATACLYSM = Registry.register(
+            Registries.ENTITY_TYPE,
+            PRIMORDIAL_CATACLYSM_KEY,
+            EntityType.Builder.<PrimordialCataclysmEntity>create(PrimordialCataclysmEntity::new, SpawnGroup.MONSTER)
+                    .dimensions(2.6f, 5.5f)
+                    .build(PRIMORDIAL_CATACLYSM_KEY)
+    );
+
     public static void registerModEntities() {
         EnchantedWoodMod.LOGGER.info("Registering Entities for " + EnchantedWoodMod.MOD_ID);
 
@@ -83,5 +116,8 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(CONVERGENCE_CREEPER, ConvergenceCreeperEntity.createConvergenceCreeperAttributes());
         FabricDefaultAttributeRegistry.register(CONVERGENCE_SPIDER, ConvergenceSpiderEntity.createConvergenceSpiderAttributes());
         FabricDefaultAttributeRegistry.register(RESONANCE_COLOSSUS, ResonanceColossusEntity.createResonanceColossusAttributes());
+        FabricDefaultAttributeRegistry.register(RESONANCE_PYLON, ResonancePylonEntity.createPylonAttributes());
+        FabricDefaultAttributeRegistry.register(ASCENDANT_COLOSSUS, AscendantColossusEntity.createAscendantColossusAttributes());
+        FabricDefaultAttributeRegistry.register(PRIMORDIAL_CATACLYSM, PrimordialCataclysmEntity.createPrimordialCataclysmAttributes());
     }
 }

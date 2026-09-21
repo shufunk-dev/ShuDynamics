@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "enchantedwood:singularity_staff",
+    "enchantedwood:primordial_catalyst",
+    "enchantedwood:dimensional_singularity"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:void_singularity_nexus"
+  }
+}

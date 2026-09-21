@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TPT",
+    "SMS",
+    "TPT"
+  ],
+  "key": {
+    "T": "enchantedwood:tungsten_ingot",
+    "P": "enchantedwood:plasma_anchor",
+    "S": "enchantedwood:dimensional_singularity",
+    "M": "enchantedwood:core_of_awakening"
+  },
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:corrupted_core_of_cataclysm"
+  }
+}

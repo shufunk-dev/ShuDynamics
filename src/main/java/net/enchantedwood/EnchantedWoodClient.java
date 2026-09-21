@@ -81,9 +81,14 @@ public class EnchantedWoodClient implements ClientModInitializer {
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_SKELETON, net.enchantedwood.client.renderer.ConvergenceSkeletonRenderer::new);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_CREEPER, net.enchantedwood.client.renderer.ConvergenceCreeperRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.ResonanceColossusModel.MODEL_LAYER, net.enchantedwood.client.renderer.ResonanceColossusModel::getTexturedModelData);
+        net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.registerModelLayer(net.enchantedwood.client.renderer.ResonancePylonModel.MODEL_LAYER, net.enchantedwood.client.renderer.ResonancePylonModel::getTexturedModelData);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.CONVERGENCE_SPIDER, net.enchantedwood.client.renderer.ConvergenceSpiderRenderer::new);
         net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.RESONANCE_COLOSSUS, net.enchantedwood.client.renderer.ResonanceColossusRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.RESONANCE_PYLON, net.enchantedwood.client.renderer.ResonancePylonRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.ASCENDANT_COLOSSUS, net.enchantedwood.client.renderer.AscendantColossusRenderer::new);
+        net.minecraft.client.render.entity.EntityRendererFactories.register(net.enchantedwood.entity.ModEntities.PRIMORDIAL_CATACLYSM, net.enchantedwood.client.renderer.PrimordialCataclysmRenderer::new);
 
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.TROPHY_OF_OMNIPOTENCE, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.RICE_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CUCUMBER_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
