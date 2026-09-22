@@ -12,6 +12,8 @@
 **ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, and musical mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
+* ▶️ **Official Soundtrack (YouTube)**: [https://www.youtube.com/playlist?list=PLAEoPqUv2z90](https://www.youtube.com/playlist?list=PLAEoPqUv2z90)
+* 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
 
@@ -21,7 +23,7 @@
 
 To get the best survival experience and view all custom multi-slot machine recipes, dynamic overclocking boosts, and catalytic uses, we strongly recommend installing:
 
-* **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)**: Modern Fabric recipe engine powering custom machine tabs (Induction Smelter, Circuit Fabricator, Alloy Foundry, Crusher, Soil Infuser, Blast Furnace, Coke Oven, Refinery, Magma Crucible, Super Computer), 1-click recipe transfer (`[+]` button), and catalytic boosts (**Basalt Flux Catalyst**, **Blaze Overclock Cores**, and **Speed Gears**).
+* **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)**: Modern Fabric recipe engine powering custom machine tabs (Induction Smelter, Circuit Fabricator, Harmonic Record Press, Alloy Foundry, Crusher, Soil Infuser, Blast Furnace, Coke Oven, Refinery, Magma Crucible, Super Computer), 1-click recipe transfer (`[+]` button), and catalytic boosts (**Basalt Flux Catalyst**, **Blaze Overclock Cores**, and **Speed Gears**).
 * **[Just Enough Items (JEI)](https://www.curseforge.com/minecraft/mc-mods/jei)**: Standard in-game recipe browser with quick item search and catalyst indexing.
 * **[Jade](https://www.curseforge.com/minecraft/mc-mods/jade)**: Real-time in-world HUD block inspection, machine progress bars, energy states, and custom chest tier names.
 
@@ -41,7 +43,7 @@ To get the best survival experience and view all custom multi-slot machine recip
   * **Tier 2 — The Ascendant Colossus (1,200 HP)**: Awakened with the *Ascendant Awakening Core*. Unlocks the Ascendant Cleaver and Primordial Catalyst.
   * **Tier 3 — The Primordial Cataclysm (2,500 HP)**: The ultimate raid boss awakened with the *Primordial Cataclysm Core*. Unleashes thunderstorm lightning strikes, kinetic void waves, and debilitating Weakness III debuffs.
 * **Pinnacle Creative-Tier Drops**: Conquering Tier 3 awards the **Ring of Gravitational Mastery** (permanent creative flight in survival), the **Trophy of Omnipotence**, and the **Infinite Dimensional Matrix**.
-* **Arena Leash & Reset Controls**: 42-block arena leash with auto-heal anti-cheese, plus Shift + Right-Click on the Resonance Altar or `/boss despawn` to dismiss active encounters.
+* **Arena Leash & Reset Controls**: 64-block horizontal / 40-block vertical arena leash with auto-heal anti-cheese, plus Shift + Right-Click on the Resonance Altar or `/boss despawn` to dismiss active encounters.
 
 ### 🦺 3. Modular Power Exosuit & Emergency Chassis Lock
 * **Full Armor Chassis**: Modular Power Helmet, Chestplate, Leggings, and Boots.
@@ -62,6 +64,7 @@ To get the best survival experience and view all custom multi-slot machine recip
   * **Stratosphere Break** *(High-Altitude Jetpack Flight)*
   * **Abyssal Pressure** *(Trench Exploration & Marine Depths)*
   * **Anoxic Echoes** *(Space, Void & Cosmic Dimensions)*
+* **Stream Online**: [YouTube Official Playlist](https://www.youtube.com/playlist?list=PLAEoPqUv2z90) | [Suno Official Playlist](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * **Harmonic Record Press**: Industrial machine used to stamp Blank Vinyl Discs into master music records using thematic catalyst drops and FE power. Integrated with EMI / JEI recipe viewers!
 
 ### 🧼 5. Grade-A Cleanroom Complex & Needleless Hypospray Medicine
