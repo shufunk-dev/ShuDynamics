@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "enchantedwood:block/harmonic_record_press_top",
+    "down": "enchantedwood:block/harmonic_record_press_bottom",
+    "north": "enchantedwood:block/harmonic_record_press_front_lit",
+    "south": "enchantedwood:block/harmonic_record_press_side",
+    "east": "enchantedwood:block/harmonic_record_press_side",
+    "west": "enchantedwood:block/harmonic_record_press_side",
+    "particle": "enchantedwood:block/harmonic_record_press_front_lit"
+  }
+}

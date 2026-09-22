@@ -106,7 +106,7 @@ public class TungstenBatteryBlockEntity extends BlockEntity implements NamedScre
 
             if (itemStorage != null && itemStorage.canExtract() && itemStorage.getEnergy() > 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
                 int needed = entity.energyStorage.getMaxEnergy() - entity.energyStorage.getEnergy();
-                int toExtract = Math.min(needed, MAX_TRANSFER);
+                int toExtract = Math.min(needed, Math.max(MAX_TRANSFER, itemStorage.getTransferRate()));
                 int extracted = itemStorage.extractEnergy(toExtract, false);
                 if (extracted > 0) {
                     entity.energyStorage.insertEnergy(extracted, false);

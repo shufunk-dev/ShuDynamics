@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  301,
+    "comparator_output":  8,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_stratosphere"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_stratosphere"
+}

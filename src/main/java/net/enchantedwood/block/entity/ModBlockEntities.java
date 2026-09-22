@@ -37,6 +37,14 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(HydraulicPressBlockEntity::new, ModBlocks.HYDRAULIC_PRESS).build()
             );
 
+    public static final BlockEntityType<HarmonicRecordPressBlockEntity> HARMONIC_RECORD_PRESS_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press"),
+                    FabricBlockEntityTypeBuilder.create(HarmonicRecordPressBlockEntity::new, ModBlocks.HARMONIC_RECORD_PRESS).build()
+            );
+
+
 
     public static final BlockEntityType<EnchantedLavaGeneratorBlockEntity> ENCHANTED_LAVA_GENERATOR_BLOCK_ENTITY =
             Registry.register(

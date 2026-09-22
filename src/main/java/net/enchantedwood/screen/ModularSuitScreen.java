@@ -91,8 +91,8 @@ public class ModularSuitScreen extends HandledScreen<ModularSuitScreenHandler> {
             switch (this.focusedSlot.id) {
                 case 0 -> context.drawTooltip(this.textRenderer, java.util.List.of(
                         Text.literal("§e🔋 Battery / Power Cell Slot"),
-                        Text.literal("§7Accepts: §fCopper, Aluminum, Steel, or Tungsten Battery"),
-                        Text.literal("§8Provides internal energy capacity to this armor piece.")
+                        Text.literal("§7Accepts: §fCopper, Aluminum, Steel, Tungsten Battery, or Infinite Matrix"),
+                        Text.literal("§8Provides internal energy capacity (or limitless FE) to this armor piece.")
                 ), mouseX, mouseY);
                 case 1 -> {
                     java.util.List<Text> chipTooltip = switch (tab) {

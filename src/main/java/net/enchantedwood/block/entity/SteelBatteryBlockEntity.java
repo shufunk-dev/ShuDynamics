@@ -110,7 +110,7 @@ public class SteelBatteryBlockEntity extends BlockEntity implements NamedScreenH
 
             if (itemStorage != null && itemStorage.getEnergy() > 0 && entity.energyStorage.getEnergy() < entity.energyStorage.getMaxEnergy()) {
                 int needed = entity.energyStorage.getMaxEnergy() - entity.energyStorage.getEnergy();
-                int maxTransfer = Math.min(needed, MAX_TRANSFER);
+                int maxTransfer = Math.min(needed, Math.max(MAX_TRANSFER, itemStorage.getTransferRate()));
                 int extracted = itemStorage.extractEnergy(maxTransfer, false);
                 if (extracted > 0) {
                     entity.energyStorage.insertEnergy(extracted, false);

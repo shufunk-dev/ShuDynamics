@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  270,
+    "comparator_output":  7,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_abyssal"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_abyssal"
+}

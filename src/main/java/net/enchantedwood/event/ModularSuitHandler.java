@@ -330,9 +330,6 @@ public class ModularSuitHandler {
     }
 
     private static void tickNaniteRepairs(ServerPlayerEntity player, ServerWorld world) {
-        long lastDamage = PlayerHealthHandler.getLastDamageTime(player.getUuid());
-        if (System.currentTimeMillis() - lastDamage < 10_000L) return; // Must be out of combat for 10s
-
         if (world.getTime() % 40 != 0) return; // Tick every 2 seconds
 
         EquipmentSlot[] armorSlots = new EquipmentSlot[]{
@@ -365,6 +362,22 @@ public class ModularSuitHandler {
 
         if (!hasNaniteNetwork) return;
 
+        // Logic Core scales combat lockout:
+        // Unchipped = 10s, Basic = 6s, Advanced = 3s, Quantum = 0s (continuous battlefield nanite repair)
+        long combatCooldownMs = 10_000L;
+        if ("enchantedwood:basic_computer_chip".equals(bestChipId)) {
+            combatCooldownMs = 6_000L;
+        } else if ("enchantedwood:advanced_computer_chip".equals(bestChipId)) {
+            combatCooldownMs = 3_000L;
+        } else if ("enchantedwood:quantum_computer_chip".equals(bestChipId)) {
+            combatCooldownMs = 0L;
+        }
+
+        long lastDamage = PlayerHealthHandler.getLastDamageTime(player.getUuid());
+        if (combatCooldownMs > 0 && System.currentTimeMillis() - lastDamage < combatCooldownMs) {
+            return;
+        }
+
         int repairAmount = 2; // Base speed: 2 durability points every 2 seconds
         if ("enchantedwood:basic_computer_chip".equals(bestChipId)) {
             repairAmount = 3;
@@ -393,10 +406,26 @@ public class ModularSuitHandler {
                     continue; // Not enough energy to repair this piece
                 }
 
+                boolean wasLocked = ModularPowerArmorItem.isChassisLocked(piece);
                 int currentDmg = piece.getDamage();
-                piece.setDamage(Math.max(0, currentDmg - repairAmount));
+                int newDmg = Math.max(0, currentDmg - repairAmount);
+                piece.setDamage(newDmg);
                 player.equipStack(slot, piece);
                 repairedAny = true;
+
+                // Notify player if Nanites successfully rebooted a locked chassis
+                if (wasLocked && newDmg < piece.getMaxDamage() - 1) {
+                    player.sendMessage(
+                            Text.literal("§a§l[SYSTEM REBOOT] §e" + piece.getName().getString() + " §7restored online by Nanite Network!"),
+                            true
+                    );
+                    world.playSound(
+                            null, player.getX(), player.getY(), player.getZ(),
+                            net.minecraft.sound.SoundEvents.BLOCK_BEACON_ACTIVATE,
+                            net.minecraft.sound.SoundCategory.PLAYERS,
+                            1.0f, 1.4f
+                    );
+                }
             }
         }
 

@@ -10,10 +10,29 @@ import net.enchantedwood.item.ModItems;
 
 public class PlayerFlightHandler {
 
+    public static boolean hasRingOfGravitationalMastery(ServerPlayerEntity player) {
+        return player.getInventory().containsAny(stack -> stack.isOf(ModItems.RING_OF_GRAVITATIONAL_MASTERY));
+    }
+
     public static void register() {
         ServerTickEvents.START_SERVER_TICK.register(server -> {
             for (ServerWorld world : server.getWorlds()) {
                 for (ServerPlayerEntity player : world.getPlayers()) {
+                    if (player.isCreative() || player.isSpectator()) continue;
+
+                    if (hasRingOfGravitationalMastery(player)) {
+                        player.fallDistance = 0.0f;
+                        if (!player.getAbilities().allowFlying) {
+                            player.getAbilities().allowFlying = true;
+                            player.sendAbilitiesUpdate();
+                        }
+                        if (player.getAbilities().flying && world.getTime() % 3 == 0) {
+                            world.spawnParticles(net.minecraft.particle.ParticleTypes.END_ROD, player.getX(), player.getY() + 0.2, player.getZ(), 2, 0.2, 0.1, 0.2, 0.02);
+                            world.spawnParticles(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, player.getX(), player.getY() + 0.1, player.getZ(), 3, 0.2, 0.1, 0.2, 0.05);
+                        }
+                        continue;
+                    }
+
                     tickPlayerCape(player);
                     tickPlayerJetpack(player, world);
                 }

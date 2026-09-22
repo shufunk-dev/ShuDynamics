@@ -36,7 +36,19 @@ public class ResonanceAltarBlock extends Block {
     }
 
     @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (player.isSneaking()) {
+            return dismissActiveBosses(state, world, pos, player);
+        }
+        return super.onUse(state, world, pos, player, hit);
+    }
+
+    @Override
     protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (player.isSneaking()) {
+            return dismissActiveBosses(state, world, pos, player);
+        }
+
         boolean isTier1 = stack.isOf(ModItems.CORE_OF_AWAKENING);
         boolean isTier2 = stack.isOf(ModItems.CORRUPTED_CORE_OF_CATACLYSM);
         boolean isTier3 = stack.isOf(ModItems.PRIMORDIAL_RIFT_KEYSTONE);
@@ -138,6 +150,27 @@ public class ResonanceAltarBlock extends Block {
             }
         }
 
+        return ActionResult.SUCCESS;
+    }
+
+    private ActionResult dismissActiveBosses(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        if (!world.isClient() && world instanceof ServerWorld sw) {
+            net.minecraft.util.math.Box checkArea = new net.minecraft.util.math.Box(pos).expand(128.0);
+            var t1 = sw.getEntitiesByClass(ResonanceColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+            var t2 = sw.getEntitiesByClass(net.enchantedwood.entity.custom.AscendantColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+            var t3 = sw.getEntitiesByClass(net.enchantedwood.entity.custom.PrimordialCataclysmEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+            int removed = 0;
+            for (var b : t1) { b.discard(); removed++; }
+            for (var b : t2) { b.discard(); removed++; }
+            for (var b : t3) { b.discard(); removed++; }
+            sw.setBlockState(pos, state.with(ACTIVE, false));
+            if (removed > 0) {
+                player.sendMessage(Text.literal("§e✦ Resonance Altar: Dismissed " + removed + " active boss encounter(s) and reset arena! ✦"), true);
+                sw.playSound(null, pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.BLOCKS, 1.5f, 1.0f);
+            } else {
+                player.sendMessage(Text.literal("§7✦ Resonance Altar: Reset to idle (no active bosses in arena). ✦"), true);
+            }
+        }
         return ActionResult.SUCCESS;
     }
 }

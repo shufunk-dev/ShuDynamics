@@ -72,6 +72,7 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.CIRCUIT_FABRICATOR_SCREEN_HANDLER, net.enchantedwood.screen.CircuitFabricatorScreen::new);
         HandledScreens.register(ModScreenHandlers.INDUCTION_SMELTER_SCREEN_HANDLER, net.enchantedwood.screen.InductionSmelterScreen::new);
         HandledScreens.register(ModScreenHandlers.CASTING_PORT_SCREEN_HANDLER, net.enchantedwood.screen.CastingPortScreen::new);
+        HandledScreens.register(ModScreenHandlers.HARMONIC_RECORD_PRESS_SCREEN_HANDLER, net.enchantedwood.screen.HarmonicRecordPressScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY, net.enchantedwood.client.renderer.TitaniumTankControllerBlockEntityRenderer::new);

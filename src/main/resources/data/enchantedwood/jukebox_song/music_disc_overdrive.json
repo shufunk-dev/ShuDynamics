@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  212,
+    "comparator_output":  13,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_overdrive"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_overdrive"
+}

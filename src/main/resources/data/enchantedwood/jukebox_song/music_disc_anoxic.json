@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  392,
+    "comparator_output":  6,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_anoxic"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_anoxic"
+}

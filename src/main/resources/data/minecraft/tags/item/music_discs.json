@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:music_disc_convergence",
+    "enchantedwood:music_disc_colossus",
+    "enchantedwood:music_disc_overdrive",
+    "enchantedwood:music_disc_cleanroom",
+    "enchantedwood:music_disc_autocraft",
+    "enchantedwood:music_disc_haven_bloom",
+    "enchantedwood:music_disc_crucible",
+    "enchantedwood:music_disc_stratosphere",
+    "enchantedwood:music_disc_abyssal",
+    "enchantedwood:music_disc_anoxic"
+  ]
+}

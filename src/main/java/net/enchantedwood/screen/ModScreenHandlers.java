@@ -19,6 +19,11 @@ public class ModScreenHandlers {
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "hydraulic_press"),
                     new ScreenHandlerType<>(HydraulicPressScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
 
+    public static final ScreenHandlerType<HarmonicRecordPressScreenHandler> HARMONIC_RECORD_PRESS_SCREEN_HANDLER =
+            Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press"),
+                    new ScreenHandlerType<>(HarmonicRecordPressScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));
+
+
     public static final ScreenHandlerType<EnchantedLavaGeneratorScreenHandler> ENCHANTED_LAVA_GENERATOR_SCREEN_HANDLER =
             Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_lava_generator"),
                     new ScreenHandlerType<>(EnchantedLavaGeneratorScreenHandler::new, net.minecraft.resource.featuretoggle.FeatureFlags.VANILLA_FEATURES));

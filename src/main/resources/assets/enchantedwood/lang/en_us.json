@@ -804,5 +804,49 @@
   "advancements.enchantedwood.convergence.ascendant_conqueror.title": "Cataclysm Averted",
   "advancements.enchantedwood.convergence.ascendant_conqueror.description": "Defeat The Ascendant Colossus (Tier 2) and extract its Singularity Heart.",
   "advancements.enchantedwood.convergence.master_of_reality.title": "Master of Reality",
-  "advancements.enchantedwood.convergence.master_of_reality.description": "Defeat The Primordial Cataclysm (Tier 3) and claim the Trophy of Omnipotence."
+  "advancements.enchantedwood.convergence.master_of_reality.description": "Defeat The Primordial Cataclysm (Tier 3) and claim the Trophy of Omnipotence.",
+
+  "item.enchantedwood.music_disc_convergence": "Music Disc",
+  "item.enchantedwood.music_disc_convergence.desc": "ShuDynamics - Rip the Sky Wide",
+  "jukebox_song.enchantedwood.music_disc_convergence": "ShuDynamics - Rip the Sky Wide",
+
+  "item.enchantedwood.music_disc_colossus": "Music Disc",
+  "item.enchantedwood.music_disc_colossus.desc": "ShuDynamics - Rift of the Colossus",
+  "jukebox_song.enchantedwood.music_disc_colossus": "ShuDynamics - Rift of the Colossus",
+
+  "item.enchantedwood.music_disc_overdrive": "Music Disc",
+  "item.enchantedwood.music_disc_overdrive.desc": "ShuDynamics - Highway Overdrive",
+  "jukebox_song.enchantedwood.music_disc_overdrive": "ShuDynamics - Highway Overdrive",
+
+  "item.enchantedwood.music_disc_cleanroom": "Music Disc",
+  "item.enchantedwood.music_disc_cleanroom.desc": "ShuDynamics - Sterile Protocol",
+  "jukebox_song.enchantedwood.music_disc_cleanroom": "ShuDynamics - Sterile Protocol",
+
+  "item.enchantedwood.music_disc_autocraft": "Music Disc",
+  "item.enchantedwood.music_disc_autocraft.desc": "ShuDynamics - Subroutine 64k",
+  "jukebox_song.enchantedwood.music_disc_autocraft": "ShuDynamics - Subroutine 64k",
+
+  "item.enchantedwood.music_disc_haven_bloom": "Music Disc",
+  "item.enchantedwood.music_disc_haven_bloom.desc": "ShuDynamics - Haven Bloom (The Bento Groove)",
+  "jukebox_song.enchantedwood.music_disc_haven_bloom": "ShuDynamics - Haven Bloom (The Bento Groove)",
+
+  "item.enchantedwood.music_disc_crucible": "Music Disc",
+  "item.enchantedwood.music_disc_crucible.desc": "ShuDynamics - Heart of the Crucible",
+  "jukebox_song.enchantedwood.music_disc_crucible": "ShuDynamics - Heart of the Crucible",
+
+  "item.enchantedwood.music_disc_stratosphere": "Music Disc",
+  "item.enchantedwood.music_disc_stratosphere.desc": "ShuDynamics - Stratosphere Break",
+  "jukebox_song.enchantedwood.music_disc_stratosphere": "ShuDynamics - Stratosphere Break",
+
+  "item.enchantedwood.music_disc_abyssal": "Music Disc",
+  "item.enchantedwood.music_disc_abyssal.desc": "ShuDynamics - Abyssal Pressure",
+  "jukebox_song.enchantedwood.music_disc_abyssal": "ShuDynamics - Abyssal Pressure",
+
+  "item.enchantedwood.music_disc_anoxic": "Music Disc",
+  "item.enchantedwood.music_disc_anoxic.desc": "ShuDynamics - Anoxic Echoes",
+  "jukebox_song.enchantedwood.music_disc_anoxic": "ShuDynamics - Anoxic Echoes",
+
+  "item.enchantedwood.blank_vinyl_disc": "Blank Vinyl Disc",
+  "block.enchantedwood.harmonic_record_press": "Harmonic Record Press",
+  "emi.category.enchantedwood.harmonic_record_press": "Harmonic Record Pressing"
 }

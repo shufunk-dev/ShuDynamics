@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/music_disc_anoxic"
+                 },
+    "parent":  "minecraft:item/generated"
+}

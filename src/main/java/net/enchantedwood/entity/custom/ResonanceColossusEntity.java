@@ -505,6 +505,9 @@ public class ResonanceColossusEntity extends HostileEntity {
             this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 3));
             this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 3));
 
+            // Guaranteed Music Disc drop: Rift of the Colossus
+            this.dropStack(sw, new ItemStack(ModItems.MUSIC_DISC_COLOSSUS));
+
             for (ServerPlayerEntity p : sw.getPlayers()) {
                 p.sendMessage(Text.literal("§5✦ The Resonance Colossus has collapsed! An ancient Relic has been unearthed! ✦"), false);
             }

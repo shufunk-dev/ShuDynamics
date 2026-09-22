@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/music_disc_haven_bloom"
+                 },
+    "parent":  "minecraft:item/generated"
+}

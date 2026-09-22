@@ -5,5 +5,96 @@
     "sounds": [
       "enchantedwood:block/controller_hum"
     ]
+  },
+  "music.music_disc_convergence": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_convergence",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_colossus": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_colossus",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_overdrive": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_overdrive",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_cleanroom": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_cleanroom",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_autocraft": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_autocraft",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_haven_bloom": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_haven_bloom",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_crucible": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_crucible",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_stratosphere": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_stratosphere",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_abyssal": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_abyssal",
+        "stream": true
+      }
+    ]
+  },
+  "music.music_disc_anoxic": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "enchantedwood:music/music_disc_anoxic",
+        "stream": true
+      }
+    ]
   }
 }
+

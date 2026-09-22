@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  196,
+    "comparator_output":  12,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_cleanroom"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_cleanroom"
+}

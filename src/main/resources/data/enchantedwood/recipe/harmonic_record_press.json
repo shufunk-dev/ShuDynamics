@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "J": "minecraft:jukebox",
+    "S": "enchantedwood:steel_ingot",
+    "C": "enchantedwood:basic_computer_chip",
+    "B": "enchantedwood:copper_battery",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "SJS",
+    "CBC",
+    "SRS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchantedwood:harmonic_record_press"
+  }
+}

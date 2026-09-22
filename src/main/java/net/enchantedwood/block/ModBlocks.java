@@ -38,6 +38,19 @@ public class ModBlocks {
             Text.literal("§6Enchanted Mystical Furnace"),
             Text.literal("§7High-efficiency furnace with accelerated smelting speed & dust support."));
 
+    public static final Block HARMONIC_RECORD_PRESS = registerBlockWithTooltip("harmonic_record_press",
+            new net.enchantedwood.block.custom.HarmonicRecordPressBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.HarmonicRecordPressBlock.LIT) ? 11 : 0)),
+            Text.literal("§6Harmonic Record Press"),
+            Text.literal("§7Acoustic turntable press for cutting & duplicating Music Discs."),
+            Text.literal("§e • Consumes Blank Vinyl Discs + Thematic Catalysts"),
+            Text.literal("§8 • Overclockable with Gears. Draws 40 FE/t."));
+
     public static final Block CRUSHER = registerBlockWithTooltip("crusher",
             new net.enchantedwood.block.custom.CrusherBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher")))

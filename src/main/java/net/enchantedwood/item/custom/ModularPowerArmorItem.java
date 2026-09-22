@@ -53,10 +53,16 @@ public class ModularPowerArmorItem extends Item {
     }
 
     public static int getStoredEnergy(ItemStack stack) {
+        if ("enchantedwood:infinite_dimensional_matrix".equals(getInstalledBatteryId(stack))) {
+            return 10_000_000;
+        }
         return getCustomData(stack).getInt("Energy", 0);
     }
 
     public static int getMaxEnergy(ItemStack stack) {
+        if ("enchantedwood:infinite_dimensional_matrix".equals(getInstalledBatteryId(stack))) {
+            return 10_000_000;
+        }
         return getCustomData(stack).getInt("MaxEnergy", 0);
     }
 
@@ -120,12 +126,24 @@ public class ModularPowerArmorItem extends Item {
         setCustomData(stack, nbt);
     }
 
+    public static boolean isChassisLocked(ItemStack stack) {
+        return stack.getItem() instanceof ModularPowerArmorItem && stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - 1;
+    }
+
     public static boolean hasModule(ItemStack stack, String moduleId) {
+        // If chassis is locked down at 1 HP, active modules are offline to protect systems,
+        // EXCEPT Nanite Auto-Repair which remains active to reboot the chassis!
+        if (isChassisLocked(stack) && !"enchantedwood:nanite_repair_matrix".equals(moduleId)) {
+            return false;
+        }
         NbtCompound nbt = getCustomData(stack);
         return moduleId.equals(nbt.getString("Module0", "")) || moduleId.equals(nbt.getString("Module1", ""));
     }
 
     public static int extractEnergy(ItemStack stack, int amount) {
+        if ("enchantedwood:infinite_dimensional_matrix".equals(getInstalledBatteryId(stack))) {
+            return amount;
+        }
         int stored = getStoredEnergy(stack);
         int toExtract = Math.min(stored, amount);
         if (toExtract > 0) {
@@ -146,6 +164,9 @@ public class ModularPowerArmorItem extends Item {
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
+        if ("enchantedwood:infinite_dimensional_matrix".equals(getInstalledBatteryId(stack))) {
+            return false;
+        }
         return getMaxEnergy(stack) > 0;
     }
 
@@ -167,12 +188,21 @@ public class ModularPowerArmorItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+        if (isChassisLocked(stack)) {
+            textConsumer.accept(Text.literal("§c⚠ EMERGENCY CHASSIS LOCK ⚠"));
+            textConsumer.accept(Text.literal("§cIntegrity critical (1 HP)! Safety shutdown active."));
+            textConsumer.accept(Text.literal("§eRepair in Anvil or allow Nanites to reboot chassis."));
+        }
+
         textConsumer.accept(Text.literal("§6⚡ Modular Power Suit Chassis"));
         textConsumer.accept(Text.literal("§7Reinforced titanium exoskeleton engineered for deep-dimension anomalies."));
 
         int max = getMaxEnergy(stack);
         int energy = getStoredEnergy(stack);
-        if (max > 0) {
+        boolean isInfinite = "enchantedwood:infinite_dimensional_matrix".equals(getInstalledBatteryId(stack));
+        if (isInfinite) {
+            textConsumer.accept(Text.literal("§eEnergy: §a∞ Infinite FE"));
+        } else if (max > 0) {
             textConsumer.accept(Text.literal(String.format("§eEnergy: §f%,d / %,d FE", energy, max)));
         } else {
             textConsumer.accept(Text.literal("§8• No Battery Installed (Slot in Suit Panel [V] or Powered Anvil)"));
@@ -180,8 +210,12 @@ public class ModularPowerArmorItem extends Item {
 
         String batteryId = getInstalledBatteryId(stack);
         if (!batteryId.isEmpty()) {
-            Item item = Registries.ITEM.get(Identifier.tryParse(batteryId));
-            textConsumer.accept(Text.literal("§e🔋 Battery: §f" + item.getName().getString()));
+            if (isInfinite) {
+                textConsumer.accept(Text.literal("§d🔋 Battery: §b✦ Infinite Dimensional Matrix ✦ §a(Limitless Energy)"));
+            } else {
+                Item item = Registries.ITEM.get(Identifier.tryParse(batteryId));
+                textConsumer.accept(Text.literal("§e🔋 Battery: §f" + item.getName().getString()));
+            }
         }
 
         String chipId = getInstalledChipId(stack);

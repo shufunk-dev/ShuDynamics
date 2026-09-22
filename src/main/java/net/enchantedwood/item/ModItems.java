@@ -32,6 +32,8 @@ import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.Rarity;
+import net.enchantedwood.sound.ModSounds;
 import java.util.function.Function;
 
 public class ModItems {
@@ -405,6 +407,34 @@ public class ModItems {
     public static final Item ETERNAL_BENTO_BOX = registerItem("eternal_bento_box",
             settings -> new net.enchantedwood.item.custom.EternalBentoBoxItem(settings.maxCount(1)));
 
+    // Blank Vinyl Disc & Music Discs
+    public static final Item BLANK_VINYL_DISC = registerItem("blank_vinyl_disc", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.maxCount(64),
+            Text.literal("§7Unrecorded vinyl disc pressed from rubber & resin."),
+            Text.literal("§8Used in the §eHarmonic Record Press §8to cut custom music discs.")
+    ));
+
+    public static final Item MUSIC_DISC_CONVERGENCE = registerItem("music_disc_convergence",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.CONVERGENCE_SONG)));
+    public static final Item MUSIC_DISC_COLOSSUS = registerItem("music_disc_colossus",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.COLOSSUS_SONG)));
+    public static final Item MUSIC_DISC_OVERDRIVE = registerItem("music_disc_overdrive",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.OVERDRIVE_SONG)));
+    public static final Item MUSIC_DISC_CLEANROOM = registerItem("music_disc_cleanroom",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.CLEANROOM_SONG)));
+    public static final Item MUSIC_DISC_AUTOCRAFT = registerItem("music_disc_autocraft",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.AUTOCRAFT_SONG)));
+    public static final Item MUSIC_DISC_HAVEN_BLOOM = registerItem("music_disc_haven_bloom",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.HAVEN_BLOOM_SONG)));
+    public static final Item MUSIC_DISC_CRUCIBLE = registerItem("music_disc_crucible",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.CRUCIBLE_SONG)));
+    public static final Item MUSIC_DISC_STRATOSPHERE = registerItem("music_disc_stratosphere",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.STRATOSPHERE_SONG)));
+    public static final Item MUSIC_DISC_ABYSSAL = registerItem("music_disc_abyssal",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.ABYSSAL_SONG)));
+    public static final Item MUSIC_DISC_ANOXIC = registerItem("music_disc_anoxic",
+            settings -> new Item(settings.maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(ModSounds.ANOXIC_SONG)));
+
     // Tier 2 & Tier 3 Boss Summoning Cores, Catalysts & Ascendant Relics
     public static final Item CORRUPTED_CORE_OF_CATACLYSM = registerItem("corrupted_core_of_cataclysm", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings.maxCount(16),
@@ -450,12 +480,8 @@ public class ModItems {
     public static final Item RING_OF_GRAVITATIONAL_MASTERY = registerItem("ring_of_gravitational_mastery",
             settings -> new net.enchantedwood.item.custom.RingOfGravitationalMasteryItem(settings.maxCount(1)));
 
-    public static final Item INFINITE_DIMENSIONAL_MATRIX = registerItem("infinite_dimensional_matrix", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.maxCount(16),
-            Text.literal("§b✦ Infinite Dimensional Matrix ✦"),
-            Text.literal("§7Boundless crystalline lattice pulsing with unlimited dimensional flux."),
-            Text.literal("§8Pinnacle component for cross-dimensional limitless networks.")
-    ));
+    public static final Item INFINITE_DIMENSIONAL_MATRIX = registerItem("infinite_dimensional_matrix",
+            net.enchantedwood.item.custom.InfiniteDimensionalMatrixItem::new);
 
     // Advanced Medical Technology: Hypospray, Essences & Cartridges
     public static final Item HYPOSPRAY = registerItem("hypospray",
@@ -1982,6 +2008,20 @@ public class ModItems {
                 entries.add(TAN_TI_INGOT);
                 entries.add(HAFNIUM_TUNGSTEN_CARBIDE_INGOT);
                 entries.add(NEO_TITANIUM_INGOT);
+
+                // Record Press & Music Discs
+                entries.add(net.enchantedwood.block.ModBlocks.HARMONIC_RECORD_PRESS);
+                entries.add(BLANK_VINYL_DISC);
+                entries.add(MUSIC_DISC_CONVERGENCE);
+                entries.add(MUSIC_DISC_COLOSSUS);
+                entries.add(MUSIC_DISC_OVERDRIVE);
+                entries.add(MUSIC_DISC_CLEANROOM);
+                entries.add(MUSIC_DISC_AUTOCRAFT);
+                entries.add(MUSIC_DISC_HAVEN_BLOOM);
+                entries.add(MUSIC_DISC_CRUCIBLE);
+                entries.add(MUSIC_DISC_STRATOSPHERE);
+                entries.add(MUSIC_DISC_ABYSSAL);
+                entries.add(MUSIC_DISC_ANOXIC);
             })
             .build();
 

@@ -6,7 +6,9 @@
     "CropBlockMixin",
     "StemBlockMixin",
     "AttachedStemBlockMixin",
-    "TopologicalSortsMixin"
+    "TopologicalSortsMixin",
+    "ClampedEntityAttributeMixin",
+    "ItemStackMixin"
   ],
   "client": [],
   "injectors": {

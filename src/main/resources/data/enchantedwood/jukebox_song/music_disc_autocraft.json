@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  199,
+    "comparator_output":  11,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_autocraft"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_autocraft"
+}

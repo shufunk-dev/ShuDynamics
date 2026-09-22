@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  309,
+    "comparator_output":  9,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_crucible"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_crucible"
+}

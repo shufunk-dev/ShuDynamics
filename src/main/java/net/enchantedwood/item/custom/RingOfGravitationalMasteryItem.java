@@ -27,6 +27,17 @@ public class RingOfGravitationalMasteryItem extends Item {
     }
 
     @Override
+    public net.minecraft.util.ActionResult use(World world, PlayerEntity user, net.minecraft.util.Hand hand) {
+        if (!world.isClient()) {
+            user.getAbilities().allowFlying = true;
+            user.sendAbilitiesUpdate();
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.PLAYERS, 1.2f, 1.4f);
+            user.sendMessage(Text.literal("§d✦ Gravitational Mastery Engaged: Double-tap Jump (Space) to fly!"), true);
+        }
+        return net.minecraft.util.ActionResult.SUCCESS;
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @org.jetbrains.annotations.Nullable net.minecraft.entity.EquipmentSlot slot) {
         super.inventoryTick(stack, world, entity, slot);
         if (entity instanceof ServerPlayerEntity player) {

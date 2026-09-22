@@ -9,6 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -131,6 +132,13 @@ public class ResonanceFrameValidator {
                         if (advEntry != null) {
                             player.getAdvancementTracker().grantCriterion(advEntry, "activated_gateway");
                         }
+
+                        // Award Music Disc: Rip the Sky Wide (Convergence)!
+                        ItemStack disc = new ItemStack(net.enchantedwood.item.ModItems.MUSIC_DISC_CONVERGENCE);
+                        if (!player.getInventory().insertStack(disc)) {
+                            player.dropItem(disc, false);
+                        }
+                        player.sendMessage(Text.literal("§5✦ The dimensional rift frequency crystallized into a Music Disc (Convergence)! ✦"), false);
                     }
                 }
             }

@@ -33,8 +33,14 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier INDUCTION_SMELTER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/induction_smelter_gui.png");
     public static final Identifier CASTING_PORT_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/casting_port_gui.png");
     public static final Identifier HYDRAULIC_PRESS_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/hydraulic_press_gui.png");
+    public static final Identifier HARMONIC_RECORD_PRESS_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/harmonic_record_press_gui.png");
 
     // Categories
+    public static final EmiRecipeCategory HARMONIC_RECORD_PRESS = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press"),
+            EmiStack.of(ModBlocks.HARMONIC_RECORD_PRESS)
+    );
+
     public static final EmiRecipeCategory CIRCUIT_FABRICATOR = new EmiRecipeCategory(
             Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator"),
             EmiStack.of(ModBlocks.CIRCUIT_FABRICATOR)
@@ -128,8 +134,10 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(CIRCUIT_FABRICATOR);
         registry.addCategory(INDUCTION_SMELTER);
         registry.addCategory(CASTING_PORT);
+        registry.addCategory(HARMONIC_RECORD_PRESS);
 
         // Register Workstations (Catalysts)
+        registry.addWorkstation(HARMONIC_RECORD_PRESS, EmiStack.of(ModBlocks.HARMONIC_RECORD_PRESS));
         registry.addWorkstation(CIRCUIT_FABRICATOR, EmiStack.of(ModBlocks.CIRCUIT_FABRICATOR));
         registry.addWorkstation(INDUCTION_SMELTER, EmiStack.of(ModBlocks.INDUCTION_SMELTER));
         registry.addWorkstation(CASTING_PORT, EmiStack.of(ModBlocks.CASTING_PORT));
@@ -306,6 +314,36 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         // 14. Casting Port Recipes
         registerCastingPortRecipes(registry);
+
+        // 15. Harmonic Record Press Recipes
+        registerHarmonicRecordPressRecipes(registry);
+
+        // Harmonic Record Press recipe handler
+        registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.HARMONIC_RECORD_PRESS_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.StandardRecipeHandler<net.enchantedwood.screen.HarmonicRecordPressScreenHandler>() {
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getInputSources(net.enchantedwood.screen.HarmonicRecordPressScreenHandler handler) {
+                List<net.minecraft.screen.slot.Slot> list = new ArrayList<>();
+                for (int i = 4; i < handler.slots.size(); i++) {
+                    list.add(handler.getSlot(i));
+                }
+                return list;
+            }
+
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getCraftingSlots(net.enchantedwood.screen.HarmonicRecordPressScreenHandler handler) {
+                return List.of(handler.getSlot(0), handler.getSlot(1));
+            }
+
+            @Override
+            public @org.jetbrains.annotations.Nullable net.minecraft.screen.slot.Slot getOutputSlot(net.enchantedwood.screen.HarmonicRecordPressScreenHandler handler) {
+                return handler.getSlot(2);
+            }
+
+            @Override
+            public boolean supportsRecipe(EmiRecipe recipe) {
+                return recipe.getCategory() == HARMONIC_RECORD_PRESS;
+            }
+        });
     }
 
     private static void registerHydraulicPressRecipes(EmiRegistry registry) {
@@ -1193,6 +1231,87 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
                 EmiStack.of(Items.COPPER_INGOT), EmiStack.of(Items.COPPER_BLOCK), "810 mB Molten Copper -> Block"));
         registry.addRecipe(new CastingPortEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
                 EmiStack.of(ModItems.BRONZE_INGOT), EmiStack.of(ModBlocks.BRONZE_BLOCK), "810 mB Molten Bronze -> Block"));
+    }
+
+    private static void registerHarmonicRecordPressRecipes(EmiRegistry registry) {
+        int idx = 0;
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.CRYING_OBSIDIAN), EmiStack.of(ModItems.MYSTERY_KEYSTONE))),
+                EmiStack.of(ModItems.MUSIC_DISC_CONVERGENCE), "Rip the Sky Wide"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.FIRE_CRYSTAL), EmiStack.of(ModItems.CORE_OF_AWAKENING))),
+                EmiStack.of(ModItems.MUSIC_DISC_COLOSSUS), "Rift of the Colossus"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.HIGH_OCTANE_FUEL_CANISTER), EmiStack.of(ModItems.GASOLINE_CANISTER), EmiStack.of(ModItems.BIOFUEL_CANISTER))),
+                EmiStack.of(ModItems.MUSIC_DISC_OVERDRIVE), "Highway Overdrive"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.SILICON_WAFER), EmiStack.of(ModItems.ADRENALINE_STIM_CARTRIDGE), EmiStack.of(ModItems.STERILE_POLYMER_FABRIC))),
+                EmiStack.of(ModItems.MUSIC_DISC_CLEANROOM), "Sterile Protocol"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.STORAGE_CRYSTAL_1K), EmiStack.of(ModItems.STORAGE_CRYSTAL_4K), EmiStack.of(ModItems.BASIC_COMPUTER_CHIP), EmiStack.of(ModItems.ADVANCED_COMPUTER_CHIP))),
+                EmiStack.of(ModItems.MUSIC_DISC_AUTOCRAFT), "Subroutine 64k"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.MASTER_RAINBOW_ROLL), EmiStack.of(ModItems.WASABI_ROOT), EmiStack.of(ModItems.SUSHI_RICE), EmiStack.of(ModItems.GOLDEN_HONEY_MOCHI))),
+                EmiStack.of(ModItems.MUSIC_DISC_HAVEN_BLOOM), "Haven Bloom (The Bento Groove)"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.MANYULLYN_INGOT), EmiStack.of(ModItems.BASALT_FLUX_CATALYST), EmiStack.of(ModItems.TUNGSTEN_CARBIDE_INGOT))),
+                EmiStack.of(ModItems.MUSIC_DISC_CRUCIBLE), "Heart of the Crucible"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.HYDROGEN_CANISTER), EmiStack.of(ModItems.ION_REPULSOR_MODULE), EmiStack.of(ModItems.HYDROGEN_JETPACK))),
+                EmiStack.of(ModItems.MUSIC_DISC_STRATOSPHERE), "Stratosphere Break"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.DIVING_MASK), EmiStack.of(ModItems.SNORKEL), EmiStack.of(Items.NAUTILUS_SHELL), EmiStack.of(ModItems.SCUBA_CHESTPLATE))),
+                EmiStack.of(ModItems.MUSIC_DISC_ABYSSAL), "Abyssal Pressure"));
+
+        registry.addRecipe(new HarmonicRecordPressEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "press_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(ModItems.SULFUR_DUST), EmiStack.of(ModItems.CUCUMBER), EmiStack.of(ModItems.DRAGON_FRUIT), EmiStack.of(ModItems.PRIMORDIAL_CATALYST))),
+                EmiStack.of(ModItems.MUSIC_DISC_ANOXIC), "Anoxic Echoes"));
+    }
+
+    public static class HarmonicRecordPressEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient catalyst;
+        private final EmiStack output;
+        private final String songTitle;
+
+        public HarmonicRecordPressEmiRecipe(Identifier id, EmiIngredient catalyst, EmiStack output, String songTitle) {
+            this.id = id;
+            this.catalyst = catalyst;
+            this.output = output;
+            this.songTitle = songTitle;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return HARMONIC_RECORD_PRESS; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(EmiStack.of(ModItems.BLANK_VINYL_DISC), catalyst); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 130; }
+        @Override public int getDisplayHeight() { return 56; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Background Panel
+            widgets.addTexture(HARMONIC_RECORD_PRESS_GUI, 0, 0, 130, 56, 40, 16);
+            // Illuminated Energy Bar
+            widgets.addTexture(HARMONIC_RECORD_PRESS_GUI, 112, 2, 14, 52, 190, 0);
+            // Animated Cutting Needle / Progress Arrow
+            widgets.addAnimatedTexture(HARMONIC_RECORD_PRESS_GUI, 36, 19, 24, 16, 176, 14, 2500, true, false, false);
+            // Slots aligned to GUI
+            widgets.addSlot(EmiStack.of(ModItems.BLANK_VINYL_DISC), 8, 6).drawBack(false);
+            widgets.addSlot(catalyst, 8, 32).drawBack(false);
+            widgets.addSlot(output, 76, 19).recipeContext(this).drawBack(false);
+            if (songTitle != null && !songTitle.isEmpty()) {
+                widgets.addText(Text.literal("§6♪ §f" + songTitle), 8, 48, 0xFFFFFF, true);
+            }
+        }
     }
 }
 

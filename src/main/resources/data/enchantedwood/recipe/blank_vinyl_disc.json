@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": "enchantedwood:rubber",
+    "E": "enchantedwood:resin",
+    "I": "minecraft:iron_nugget"
+  },
+  "pattern": [
+    "RR",
+    "EI"
+  ],
+  "result": {
+    "count": 4,
+    "id": "enchantedwood:blank_vinyl_disc"
+  }
+}

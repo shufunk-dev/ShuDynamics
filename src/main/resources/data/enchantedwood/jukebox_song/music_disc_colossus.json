@@ -1,0 +1,8 @@
+﻿{
+    "length_in_seconds":  325,
+    "comparator_output":  14,
+    "description":  {
+                        "translate":  "jukebox_song.enchantedwood.music_disc_colossus"
+                    },
+    "sound_event":  "enchantedwood:music.music_disc_colossus"
+}

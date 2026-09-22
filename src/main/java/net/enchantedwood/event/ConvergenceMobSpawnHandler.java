@@ -10,7 +10,9 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.enchantedwood.item.ModItems;
 
 public class ConvergenceMobSpawnHandler {
 
@@ -65,5 +67,20 @@ public class ConvergenceMobSpawnHandler {
                 }
             }
         });
+
+        // Rare drop: Anoxic Echoes from mutant Convergence mobs
+        net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+            if (entity.getEntityWorld() instanceof ServerWorld sw) {
+                if (entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity ||
+                    entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity ||
+                    entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity ||
+                    entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity) {
+                    if (sw.getRandom().nextFloat() < 0.035f) {
+                        entity.dropStack(sw, new ItemStack(ModItems.MUSIC_DISC_ANOXIC));
+                    }
+                }
+            }
+        });
     }
 }
+
