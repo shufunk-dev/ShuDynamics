@@ -1,4 +1,4 @@
-# ✨ ShuDynamics — 2.0: The Convergence Update
+# ✨ ShuDynamics — 2.1.0: The Harmonic Convergence Update 🎶⚡
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, and dimensional exploration mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Dual-Powered Induction Smeltery**, and the alien **Convergence Dimension** featuring the ancient **Resonance Colossus Boss**.
+**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, and musical mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
@@ -35,19 +35,36 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **Lethal Environmental Hazards**: Survive Caustic Acid Precipitation & Waters, Volcanic Caldera Hyperthermia, and Atmospheric Hypoxia in anoxic barrens and caverns.
 * **Hostile Mob Conversions**: Dangerous dimensional variants: crystalline Convergence Zombies (Sulfur drops), Tactical-Blink Convergence Skeletons (charged resonance arrows), Singularity-pulling Convergence Creepers (acid clouds), and Caustic Web-Shooter Convergence Spiders.
 
-### 👑 2. The Resonance Colossus Boss & Dimensional Relics
-* **Summoning Ritual**: Forge a **Core of Awakening** from Netherite, Fire Crystals, Sulfur, and Titanium to awaken the 350 HP **Resonance Colossus** at the carved **Resonance Altar** in The Convergence.
-* **42-Block Arena Leash & Anti-Cheese**: Retracting $>42$ blocks causes the boss to disengage, teleport back to the altar dais, and rapidly regenerate health.
-* **3 Dynamic Combat Phases**: Ground Slam & Acid Geysers (Phase 1); Minion spawns & Singularity Gravity Vortex (Phase 2); Enraged Overdrive Shatterstrike (Phase 3).
-* **Smart Knockout Relic Drops**: Guaranteed sequential acquisition of the **Resonance Cleaver** (14 DMG sonic shockwaves), **Singularity Staff** (miniature gravity vortex), and **Eternal Bento Box** (infinite gourmet sushi extraction).
+### 👑 2. Three-Tier Boss Progression & Creative-Tier Relics
+* **3-Tier Ritual Gauntlet**:
+  * **Tier 1 — The Resonance Colossus (500 HP)**: Awakened with the *Core of Awakening*. Deploys invulnerability shield pylons, ground slams, and acid geysers. Drops the Resonance Cleaver, Singularity Staff, and Eternal Bento Box.
+  * **Tier 2 — The Ascendant Colossus (1,200 HP)**: Awakened with the *Ascendant Awakening Core*. Unlocks the Ascendant Cleaver and Primordial Catalyst.
+  * **Tier 3 — The Primordial Cataclysm (2,500 HP)**: The ultimate raid boss awakened with the *Primordial Cataclysm Core*. Unleashes thunderstorm lightning strikes, kinetic void waves, and debilitating Weakness III debuffs.
+* **Pinnacle Creative-Tier Drops**: Conquering Tier 3 awards the **Ring of Gravitational Mastery** (permanent creative flight in survival), the **Trophy of Omnipotence**, and the **Infinite Dimensional Matrix**.
+* **Arena Leash & Reset Controls**: 42-block arena leash with auto-heal anti-cheese, plus Shift + Right-Click on the Resonance Altar or `/boss despawn` to dismiss active encounters.
 
-### 🦺 3. Modular Power Exosuit & Hot-Swappable Upgrades
+### 🦺 3. Modular Power Exosuit & Emergency Chassis Lock
 * **Full Armor Chassis**: Modular Power Helmet, Chestplate, Leggings, and Boots.
 * **In-Game 'V' Key Access Panel**: Hotkey opens the modular configuration panel with tab switching, battery buffers, coprocessor logic chip slots, and dual module sockets per piece.
+* **🛡️ Emergency Chassis Lock**: When any suit piece takes fatal durability damage, it is locked safely at **1 HP** instead of shattering. Installed Quantum Chips, Batteries, and Nanite Matrices are **100% preserved**.
+* **Combat Nanite Overclock**: Logic Core processors scale the combat lockout for the **Nanite Auto-Repair Matrix** down to **0 seconds** (Quantum Core), enabling continuous live-chassis welding under active fire!
 * **8 Modular Upgrades**: Auto-dimming Night Vision HUD, Hydrogen Thruster rocket flight, 100% Electric Quantum Ion Repulsors (fall damage immune), Speed Servo Legs, Hydraulic Step-Assist (+0.6 block height), High-Jump Actuators (100% fall negation), Fluoropolymer Acid-Proof Plating, and Thermal Refractory Plating.
-* **Global Suit Network**: Installing the **Nanite Repair Matrix** in *any single piece* circulates nanites to auto-repair all 4 equipped modular armor pieces simultaneously!
 
-### 🧼 4. Grade-A Cleanroom Complex & Needleless Hypospray Medicine
+### 🎵 4. 10-Track Original Soundtrack & Harmonic Record Press
+* **10 Original Music Discs**: Streamed original soundtrack composed specifically for ShuDynamics and playable in any vanilla Jukebox:
+  * **Rip the Sky Wide** *(The Convergence Main Theme)*
+  * **Rift of the Colossus** *(Boss Battle Theme)*
+  * **Highway Overdrive** *(Roadways & High-Speed Driving)*
+  * **Sterile Protocol** *(Cleanroom Complex & Laboratories)*
+  * **Subroutine 64k** *(Digital Storage Networks & Automation)*
+  * **Haven Bloom (The Bento Groove)** *(Cuisine & Relaxation)*
+  * **Heart of the Crucible** *(Nether Metallurgy & Extreme Heat)*
+  * **Stratosphere Break** *(High-Altitude Jetpack Flight)*
+  * **Abyssal Pressure** *(Trench Exploration & Marine Depths)*
+  * **Anoxic Echoes** *(Space, Void & Cosmic Dimensions)*
+* **Harmonic Record Press**: Industrial machine used to stamp Blank Vinyl Discs into master music records using thematic catalyst drops and FE power. Integrated with EMI / JEI recipe viewers!
+
+### 🧼 5. Grade-A Cleanroom Complex & Needleless Hypospray Medicine
 * **Airtight Sterile Facilities**: Fabricate **Sterile Polymer Fabric** on the **Polymer Loom** to tailor the 4-piece **Cleanroom Bunny Suit** (Hood, Smock, Trousers, Booties).
 * **Cleanroom Air Scrubber & Controller**: Enclosed room detection via 3D BFS flood-fill (up to 2,500 blocks). Status becomes `ACTIVE (STERILE - GRADE A)`, broadcasting **1,000 FE/t wireless cleanroom power** to all interior machines without physical cables!
 * **✦ Pure Medicine Synthesis**: Compounding in an active cleanroom yields **✦ Pure Cartridges** with doubled buff durations (12:00).
@@ -55,7 +72,7 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **36-Slot Sterile Medical Cabinet & 3-Mode Cleanroom Lamp**: Daylight White, Germicidal UV-C, and Off modes.
 * **Pneumatic Needleless Hypospray**: High-velocity aerosol injection for self, teammates, or pets. Features 5 medical cartridges (Acid-Neutralizing, Heat-Buffer, Hyper-Oxygenation, Nanite Trauma emergency heal, and Adrenaline Stim) with 5-second metabolic saturation / overdose safeguards.
 
-### 🏭 5. Dual-Powered Induction Smeltery & Precision Semiconductors
+### 🏭 6. Dual-Powered Induction Smeltery & Precision Semiconductors
 * **Precision Circuit Fabricator**: Etches Silicon Wafers into Basic, Advanced, Quantum, and Metallurgy Controller microchips.
 * **Dual-Powered Induction Smelter**: Requires 10,000 mB Lava (5 mB/smelt) and 50,000 FE electric buffer (45 FE/t).
 * **32,400 mB Dynamic Multi-Fluid Chamber**: Holds up to 15 molten metals simultaneously without clogging.
@@ -63,19 +80,22 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **Metallurgy Controller Socket & [MIX: ON/OFF] Toggle**: Unlocks dual holding tanks with stoichiometric liquid alloying (Molten Bronze, Manyullyn) without cross-contamination.
 * **Automated Casting Access Port**: Interactive toggle cycles Ingot (90 mB), Block (810 mB), and Nugget (10 mB) molds with automatic item solidification and adjacent container extraction.
 
-### ⛏️ 6. Convergence Minerals & Advanced Superalloys
+### ⛏️ 7. Convergence Minerals & Advanced Superalloys
 * **Exotic Subterranean Deposits**: Fluorite Crystals, Zirconia (Baddeleyite), Tantalum, Hafnium, Neodymium, and Silica Aerogel.
 * **High-Performance Superalloys**: Forge **Tan-Ti Superalloy**, **Hafnium-Tungsten Carbide**, **Neo-Titanium Spring-Steel**, and **Reinforced Aerogel Glass** in the Alloy Foundry.
 
-### 🚜 7. Autonomous Road Paver Mk2 & Heavy Viaducts
+### 🚜 8. Autonomous Road Paver Mk2 & Heavy Viaducts
 * **Road Paver Mk2**: Clears obstacles 4 blocks high, lays a 5-wide roadway deck with structural sub-deck girders, probes downward up to 48 blocks to automatically cast dual vertical structural support pillars across ravines and canyons, and cleanly displaces water to bridge oceans!
 * **Highway Off-Ramp Transitions**: Smooth half-slab and full-block Asphalt Ramps and Concrete Curb Ramps with speed boost retention.
 * **Pressurized ATV Hazard Canopy**: Hermetically seals vehicle cockpits against all caustic acid rain, toxic caldera heat, and atmospheric hypoxia.
 
-### 🍱 8. Convergence Botanicals & Gourmet Cuisine
+### 🍱 9. Convergence Botanicals & Multi-Course Bento Boxes
+* **Multi-Course Bento Boxes (Eternal & Omega)**: Hold **Shift + Right-Click** to cycle between 3 specialized culinary courses on the fly:
+  * **Course 1 (Feast of the Colossus / Celestial Feast)**: Full hunger & saturation, 1–2m Tri-Shield hazard immunity, Regen & Absorption.
+  * **Course 2 (Wasabi Combat Rush)**: Instantly strips Weakness & debuffs, granting continuous 5-minute debuff immunity (Adrenaline Rush), +25% attack speed, Haste II, and Strength II (Omega).
+  * **Course 3 (Honey Mochi Fortification)**: Kinetic Dampening (fall/kinetic impact immunity), Resistance, and heavy Absorption.
 * **Exotic Crops & Orchards**: Cultivate 8-stage water-saturated Rice Paddies, Cucumber Vines, Wild Wasabi, Wild Dragon Fruit, and Starfruit & Avocado orchards.
 * **Gourmet Sushi Rolls**: Salmon Roll, Cod Roll, Avocado Cucumber Roll, California Roll, Garden Roll, and the Master Rainbow Roll (Speed II, Haste II, Resistance I, Regeneration II + Full Saturation).
-* **Hazard-Protection Cuisine**: Alkaline Detox Roll (Acid Protection), Volcanic Dragon Roll (Thermal Protection), High-Altitude Kelp Roll (Atmospheric Protection), Wasabi Nigiri (instant debuff cleanse), Pitaya Bowl, Golden Honey Mochi, and Starfruit Tart.
 
 ---
 
@@ -116,6 +136,7 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **Chunk Loader & Interdimensional Cards**: Infinite Overworld and cross-dimensional storage access.
 
 ### ⚡ 14. High-Voltage Power Grids, Geothermal Energy & Fluid Logistics
+* **✦ Infinite Dimensional Matrix (Apex Power Core)**: Pinnacle relic from The Primordial Cataclysm. Slot into the discharge bay of any Battery Block to pump out up to 100,000 FE/t, locking your base power grid at 100% capacity forever with zero fuel or generators. Slot into all 4 Modular Suit pieces for endless God-mode suit energy!
 * **Multi-Tier Solid Fuel & Geothermal Generators**: Passive 400 FE/t power generated continuously from surrounding lava.
 * **Heavy Energy Storage**: Up to 100,000,000 FE stationary Tungsten Battery Units and 1,000,000 FE portable Battery Packs.
 * **Explosion-Proof Conduits**: 25,600 FE/t **Basalt Energy Cables** and 25,000 FE/t **Tungsten Cables** with explosion and heat immunity.
