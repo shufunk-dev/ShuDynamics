@@ -50,6 +50,7 @@ tools/
 *.js
 *.ps1
 CURSEFORGE_DESCRIPTION.md
+CHANGELOG*.md
 
 # OS & Temp Files
 .DS_Store
