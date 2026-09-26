@@ -1,0 +1,100 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.0,
+  "downfall": 0.5,
+  "attributes": {
+    "minecraft:visual/sky_color": "#c0d8ff",
+    "minecraft:visual/fog_color": "#deebff"
+  },
+  "effects": {
+    "water_color": "#39568c",
+    "water_fog_color": "#263a5e",
+    "grass_color": "#80b497",
+    "foliage_color": "#60a47e"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_water"
+    ],
+    [
+      "minecraft:trees_snowy",
+      "minecraft:patch_grass_plain",
+      "enchantedwood:convergence_vegetation"
+    ],
+    [
+      "minecraft:freeze_top_layer"
+    ]
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:rabbit",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:polar_bear",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "enchantedwood:convergence_spider",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 40
+      },
+      {
+        "type": "enchantedwood:convergence_creeper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

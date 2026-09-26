@@ -1,0 +1,100 @@
+{
+  "has_precipitation": false,
+  "temperature": 2.0,
+  "downfall": 0.0,
+  "attributes": {
+    "minecraft:visual/sky_color": "#6eb1ff",
+    "minecraft:visual/fog_color": "#d2e3ff"
+  },
+  "effects": {
+    "water_color": "#326bc7",
+    "water_fog_color": "#204580",
+    "grass_color": "#bfb755",
+    "foliage_color": "#aea444"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_water_surface",
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_water"
+    ],
+    [
+      "minecraft:patch_sugar_cane_desert",
+      "minecraft:patch_cactus_desert",
+      "minecraft:patch_dead_bush_2",
+      "minecraft:desert_well"
+    ],
+    []
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:camel",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 4
+      },
+      {
+        "type": "minecraft:rabbit",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 10
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "enchantedwood:convergence_spider",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 40
+      },
+      {
+        "type": "enchantedwood:convergence_creeper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

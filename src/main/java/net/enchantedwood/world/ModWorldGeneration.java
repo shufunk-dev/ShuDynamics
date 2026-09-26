@@ -251,6 +251,22 @@ public class ModWorldGeneration {
         RegistryKey<net.minecraft.world.biome.Biome> resonanceSanctum =
                 RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_sanctum"));
 
+        // Convergence Lost Biomes
+        RegistryKey<net.minecraft.world.biome.Biome> alphaRainforest =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "alpha_rainforest"));
+        RegistryKey<net.minecraft.world.biome.Biome> seasonalForest =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "seasonal_forest"));
+        RegistryKey<net.minecraft.world.biome.Biome> shrubland =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "shrubland"));
+        RegistryKey<net.minecraft.world.biome.Biome> modifiedJungleEdge =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "modified_jungle_edge"));
+        RegistryKey<net.minecraft.world.biome.Biome> alphaTundra =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "alpha_tundra"));
+        RegistryKey<net.minecraft.world.biome.Biome> desertLakes =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "desert_lakes"));
+        RegistryKey<net.minecraft.world.biome.Biome> gravellyMountains =
+                RegistryKey.of(RegistryKeys.BIOME, Identifier.of(EnchantedWoodMod.MOD_ID, "gravelly_mountains"));
+
         // Standard Vanilla Ores for Convergence Custom Biomes in exact canonical vanilla order from minecraft-merged.jar
         String[] vanillaOreIds = {
                 "ore_dirt",
@@ -290,7 +306,11 @@ public class ModWorldGeneration {
                     Identifier.of("minecraft", oreId)
             );
             BiomeModifications.addFeature(
-                    BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera),
+                    BiomeSelectors.includeByKey(
+                            riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera,
+                            alphaRainforest, seasonalForest, shrubland, modifiedJungleEdge,
+                            alphaTundra, desertLakes, gravellyMountains
+                    ),
                     GenerationStep.Feature.UNDERGROUND_ORES,
                     placedKey
             );
@@ -303,7 +323,11 @@ public class ModWorldGeneration {
                 TIN_ORE_PLACED_KEY
         );
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera),
+                BiomeSelectors.includeByKey(
+                        riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera,
+                        alphaRainforest, seasonalForest, shrubland, modifiedJungleEdge,
+                        alphaTundra, desertLakes, gravellyMountains
+                ),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 TIN_ORE_PLACED_KEY
         );

@@ -1,0 +1,105 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.2,
+  "downfall": 0.3,
+  "attributes": {
+    "minecraft:visual/sky_color": "#7daaff",
+    "minecraft:visual/fog_color": "#c4dbff"
+  },
+  "effects": {
+    "water_color": "#3f76e4",
+    "water_fog_color": "#254585",
+    "grass_color": "#8ab689",
+    "foliage_color": "#6b9e6a"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_water"
+    ],
+    [
+      "minecraft:trees_windswept_hills",
+      "minecraft:disk_gravel",
+      "minecraft:patch_grass_plain",
+      "enchantedwood:convergence_vegetation"
+    ],
+    []
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:goat",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:llama",
+        "maxCount": 3,
+        "minCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:sheep",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 10
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "enchantedwood:convergence_spider",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 40
+      },
+      {
+        "type": "enchantedwood:convergence_creeper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.5,
+  "downfall": 0.1,
+  "attributes": {
+    "minecraft:visual/sky_color": "#87b5ff",
+    "minecraft:visual/fog_color": "#c8dcff"
+  },
+  "effects": {
+    "water_color": "#326bc7",
+    "water_fog_color": "#204580",
+    "grass_color": "#a5b24e",
+    "foliage_color": "#919b3e"
+  },
+  "carvers": [
+    "minecraft:cave",
+    "minecraft:canyon"
+  ],
+  "features": [
+    [],
+    [
+      "minecraft:lake_lava_underground"
+    ],
+    [],
+    [
+      "minecraft:monster_room"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "minecraft:spring_water"
+    ],
+    [
+      "enchantedwood:shrubland_bush",
+      "minecraft:patch_tall_grass_2",
+      "minecraft:patch_dead_bush",
+      "minecraft:patch_grass_plain",
+      "minecraft:flower_plain",
+      "enchantedwood:convergence_vegetation"
+    ],
+    []
+  ],
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "minecraft:sheep",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 14
+      },
+      {
+        "type": "minecraft:pig",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 8
+      },
+      {
+        "type": "minecraft:cow",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 10
+      },
+      {
+        "type": "minecraft:horse",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 5
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "enchantedwood:convergence_spider",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 40
+      },
+      {
+        "type": "enchantedwood:convergence_creeper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 35
+      },
+      {
+        "type": "enchantedwood:convergence_skeleton",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 30
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  }
+}
