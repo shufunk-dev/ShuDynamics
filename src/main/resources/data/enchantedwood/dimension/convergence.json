@@ -198,8 +198,8 @@
               1.2
             ],
             "continentalness": [
-              0.05,
-              0.5
+              -0.15,
+              0.6
             ],
             "erosion": [
               -0.4,
@@ -228,7 +228,7 @@
               0.8
             ],
             "continentalness": [
-              0.1,
+              -0.15,
               0.7
             ],
             "erosion": [
@@ -258,7 +258,7 @@
               -0.1
             ],
             "continentalness": [
-              0.05,
+              -0.15,
               0.6
             ],
             "erosion": [
@@ -318,7 +318,7 @@
               0.4
             ],
             "continentalness": [
-              0.05,
+              -0.15,
               0.6
             ],
             "erosion": [
@@ -348,8 +348,8 @@
               -0.4
             ],
             "continentalness": [
-              0.08,
-              0.55
+              -0.15,
+              0.7
             ],
             "erosion": [
               -0.7,
@@ -379,7 +379,7 @@
             ],
             "continentalness": [
               -1.2,
-              -0.05
+              -0.25
             ],
             "erosion": [
               -1.0,
@@ -409,7 +409,7 @@
             ],
             "continentalness": [
               -1.2,
-              -0.05
+              -0.25
             ],
             "erosion": [
               -1.0,
@@ -439,11 +439,41 @@
             ],
             "continentalness": [
               -1.2,
-              -0.05
+              -0.25
             ],
             "erosion": [
               -1.0,
               1.0
+            ],
+            "weirdness": [
+              -1.0,
+              1.0
+            ],
+            "depth": [
+              0,
+              1.2
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "minecraft:beach",
+          "parameters": {
+            "temperature": [
+              -0.1,
+              1.2
+            ],
+            "humidity": [
+              -1.0,
+              1.0
+            ],
+            "continentalness": [
+              -0.25,
+              -0.15
+            ],
+            "erosion": [
+              -0.6,
+              0.8
             ],
             "weirdness": [
               -1.0,
@@ -498,8 +528,8 @@
               -0.4
             ],
             "continentalness": [
-              0,
-              0.6
+              -0.15,
+              0.8
             ],
             "erosion": [
               -0.2,
