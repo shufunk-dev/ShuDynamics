@@ -340,23 +340,23 @@
           "biome": "enchantedwood:desert_lakes",
           "parameters": {
             "temperature": [
-              0.8,
+              0.6,
               1.5
             ],
             "humidity": [
-              -1.3,
-              -0.4
+              -1.4,
+              -0.3
             ],
             "continentalness": [
               -0.15,
-              0.65
+              0.8
             ],
             "erosion": [
-              -0.7,
-              0.2
+              -0.8,
+              0.6
             ],
             "weirdness": [
-              0.2,
+              -0.1,
               0.9
             ],
             "depth": [
