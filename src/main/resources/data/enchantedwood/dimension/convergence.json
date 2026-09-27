@@ -280,24 +280,24 @@
           "biome": "enchantedwood:modified_jungle_edge",
           "parameters": {
             "temperature": [
-              0.5,
-              1.1
+              0.4,
+              1.0
             ],
             "humidity": [
-              0.5,
-              1.1
+              0.3,
+              0.8
             ],
             "continentalness": [
-              0.3,
-              0.9
+              -0.15,
+              0.7
             ],
             "erosion": [
-              -1.2,
-              -0.6
+              -0.6,
+              0.4
             ],
             "weirdness": [
-              0.2,
-              0.9
+              0.4,
+              1.0
             ],
             "depth": [
               0,
@@ -498,12 +498,12 @@
               0.1
             ],
             "continentalness": [
-              0.4,
+              0.2,
               1.1
             ],
             "erosion": [
-              -1.3,
-              -0.7
+              -1.1,
+              -0.2
             ],
             "weirdness": [
               -0.9,
