@@ -19,7 +19,6 @@
   "features": [
     [],
     [
-      "minecraft:lake_water_surface",
       "minecraft:lake_lava_underground"
     ],
     [],
@@ -34,7 +33,7 @@
       "minecraft:spring_water"
     ],
     [
-      "minecraft:trees_birch_and_oak",
+      "minecraft:trees_birch_and_oak_leaf_litter",
       "minecraft:patch_pumpkin",
       "minecraft:patch_grass_forest",
       "minecraft:flower_flower_forest",
