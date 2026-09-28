@@ -1,15 +1,15 @@
-# ✨ ShuDynamics — 2.1.0: The Harmonic Convergence Update 🎶⚡
+# ✨ ShuDynamics — 2.2.0: The Lost Biomes Convergence Overhaul 🌲🏜️⚡
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.1.0-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.2.0-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, and musical mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
+**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, and musical mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, **7 nostalgic Lost Biomes in the fractured Convergence dimension**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * ▶️ **Official Soundtrack (YouTube)**: [https://www.youtube.com/playlist?list=PLAEoPqUv2z90](https://www.youtube.com/playlist?list=PLAEoPqUv2z90)
@@ -29,11 +29,21 @@ To get the best survival experience and view all custom multi-slot machine recip
 
 ---
 
-## 🌟 Major Version 2.0 Highlights — The Convergence
+## 🌟 Major Highlights — The Convergence & Lost Biomes Overhaul (v2.2.0)
 
-### 🌌 1. The Convergence Dimension & Gateway Construction
+### 🌌 1. The Convergence Dimension & The 7 Lost Biomes
 * **Player-Built Gateway**: Construct a Nether Portal-sized frame (2×3 interior) containing **all 6 distinct Anomaly Keystones** and **at least 4 Crying Obsidian** blocks, then right-click any frame block to rupture the dimensional barrier and ignite the portal!
-* **4 Alien Biomes**: Explore the **Caustic Mire**, **Scorched Caldera**, **Anoxic Barrens**, and **Riftwood Haven**.
+* **4 Alien Core Biomes**: Explore the **Caustic Mire**, **Scorched Caldera**, **Anoxic Barrens**, and **Riftwood Haven**.
+* **🌲 7 Nostalgic "Lost" Biomes Restored**: Dimensional rifts have pulled forgotten eras of Minecraft geography into The Convergence:
+  * **Alpha Rainforest**: Vibrant retro foliage (`#48b518`), classic Alpha oak canopies, plains flora, and draping vines.
+  * **Seasonal Forest**: Fiery autumn amber canopies (`#d66b18`) with golden meadow grass (`#a69a34`), birch and oak leaf litter, and wild pumpkin patches.
+  * **Shrubland**: Arid transitional scrubland populated by custom shrubland bushes, dead bushes, tall grass, and grazing herds.
+  * **Modified Jungle Edge**: Hyper-rare nostalgic edge biome featuring steep rolling terrain (`#59c93c`), sparse jungle trees, bamboo groves, melons, and parrot/ocelot wildlife.
+  * **Alpha Tundra**: Crisp retro winter landscape with pale grass (`#80b497`), snowy spruce trees, top-layer freezing ice, and arctic polar bears & rabbits.
+  * **Desert Lakes**: Lush oasis basins featuring clusters of 4 connected natural spring lakes per chunk, sandy shorelines, sugar cane, cacti, and camel herds.
+  * **Gravelly Mountains**: Rugged windswept mountain peaks layered in surface gravel disks, high-altitude alpine pines, and mountain goats.
+* **Full Ore & Subterranean Integration**: All 7 Lost Biomes feature complete standard vanilla ore distribution (dirt, gravel, granite, diorite, andesite, coal, iron, gold, redstone, diamond, lapis, copper) plus ShuDynamics **Tin Ore** deposits.
+* **Natural Ocean & Beach Buffers**: Dedicated multi-noise ocean biomes (`warm_ocean`, `ocean`, `frozen_ocean`) and sandy beaches prevent jarring void drops and create seamless maritime transitions.
 * **Lethal Environmental Hazards**: Survive Caustic Acid Precipitation & Waters, Volcanic Caldera Hyperthermia, and Atmospheric Hypoxia in anoxic barrens and caverns.
 * **Hostile Mob Conversions**: Dangerous dimensional variants: crystalline Convergence Zombies (Sulfur drops), Tactical-Blink Convergence Skeletons (charged resonance arrows), Singularity-pulling Convergence Creepers (acid clouds), and Caustic Web-Shooter Convergence Spiders.
 
@@ -104,20 +114,20 @@ To get the best survival experience and view all custom multi-slot machine recip
 
 ## ⚡ Core Mod Systems & Technology Tree
 
-### ⛏️ 9. Digital Laser Quarry & Extraction Cores
+### ⛏️ 10. Digital Laser Quarry & Extraction Cores
 * **Autonomous Chunk Excavation**: Autonomous laser excavation station deployed in the Overworld or the Mining Dimension (*Quarry Expanse*).
 * **Infinite-Range Remote Linking**: Industrial Wrench wirelessly binds the Quarry to your base Controller—transmitting power and beaming items directly into storage crystals over infinite distances.
 * **24/7 Autonomous Chunk Loading**: Automatically keeps active mining footprints (1×1, 3×3, or 5×5 chunks) loaded and operational.
 * **Modular Upgrade Cores**: Range Upgrades (T1 & T2), Fortune Core (Fortune III ore multiplication), and Silk Touch Core.
 
-### 🖥️ 10. Modular Super Computer & Autocrafting Mainframe
+### 🖥️ 11. Modular Super Computer & Autocrafting Mainframe
 * **Centralized Recipe Synthesis**: Integrates directly into your digital storage network to calculate and craft complex multi-stage items on demand.
 * **1-Click EMI Recipe Encoding**: Ghost blueprint matrix supports manual item placement or instant 1-click recipe transfer (`[+]` button) from EMI / JEI recipe viewers.
 * **Recursive Dependency Resolver**: Intelligently detects and synthesizes missing intermediate prerequisites (e.g., Raw Ore $\rightarrow$ Dust $\rightarrow$ Ingot $\rightarrow$ Gear $\rightarrow$ Machine) in a single request.
 * **Live HUD Status Notifications**: Real-time on-screen banner alerts notify you of missing ingredients, energy deficits, or active synthesis cycles.
 * **Gear Upgrade Socket**: Scales synthesis speed with standard and enchanted gears, up to instantaneous processing with the Blaze Overclock Core.
 
-### 🏎️ 11. Modular All-Terrain Vehicles (ATV) & Industrial Attachments
+### 🏎️ 12. Modular All-Terrain Vehicles (ATV) & Industrial Attachments
 * **Drivable ATV**: High-mobility exploration vehicle featuring 6 customizable module slots (Engines, Tires, Suspensions, Chassis, Cargo Trunks, and Fuel/Batteries).
 * **Vehicle Fabricator & Tuning Bay**: Dedicated automotive workshop workstation with shift-click vehicle retrieval.
 * **Mobile Mining Drill Bits** *(Iron, Steel, Titanium, Netherite)*: Front-mounted heavy drills that bore 2×2 horizontal tunnels through mountains, automatically depositing extracted blocks into the rear cargo trunk.
@@ -126,19 +136,19 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **Directional Headlights**: Halogen and LED high beams cast real-time directional illumination cones while driving at night or underground.
 * **Balanced Quad-Suspension**: Four-wheel matched suspension completely absorbs 100% of vertical fall impact for both rider and vehicle.
 
-### ♻️ 12. Automated Item Salvager & Recycler (Uncrafter)
+### ♻️ 13. Automated Item Salvager & Recycler (Uncrafter)
 * **Thermal Deconstruction Station**: Breaks down obsolete weapons, damaged armor, superseded machinery, conduits, chests, and gears back into pure base ingots, gems, and constituent materials.
 * **100% Component Recovery**: Full recipe reversal for supported equipment and machinery.
 * **4-Slot Segregated Output Tray**: Separates composite parts into dedicated physical extraction bins without jamming.
 * **Gear Overclocking**: Accelerates disassembly cycles up to 8× with the Blaze Overclock Core.
 
-### 💾 13. Digital Storage Networks & Modular Enchanted Chests
+### 💾 14. Digital Storage Networks & Modular Enchanted Chests
 * **Modular Enchanted Chests**: In-world right-click upgradeable chests (Base $\rightarrow$ Copper $\rightarrow$ Bronze $\rightarrow$ Iron $\rightarrow$ Gold $\rightarrow$ Diamond $\rightarrow$ Netherite) expanding up to 108 slots with zero item loss.
 * **Enchanted Storage Controller**: Central mainframe with ambient audio, dual hybrid power inputs, and 3 expansion bays.
 * **6-Slot Drive Bay & 54-Slot Terminal**: 1k–64k Crystal Storage Drives with dynamic LED matrix and anti-data loss locks.
 * **Chunk Loader & Interdimensional Cards**: Infinite Overworld and cross-dimensional storage access.
 
-### ⚡ 14. High-Voltage Power Grids, Geothermal Energy & Fluid Logistics
+### ⚡ 15. High-Voltage Power Grids, Geothermal Energy & Fluid Logistics
 * **✦ Infinite Dimensional Matrix (Apex Power Core)**: Pinnacle relic from The Primordial Cataclysm. Slot into the discharge bay of any Battery Block to pump out up to 100,000 FE/t, locking your base power grid at 100% capacity forever with zero fuel or generators. Slot into all 4 Modular Suit pieces for endless God-mode suit energy!
 * **Multi-Tier Solid Fuel & Geothermal Generators**: Passive 400 FE/t power generated continuously from surrounding lava.
 * **Heavy Energy Storage**: Up to 100,000,000 FE stationary Tungsten Battery Units and 1,000,000 FE portable Battery Packs.
@@ -146,24 +156,24 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **Fluid Logistics**: Submersible **Lava Pumps**, refractory **Lava Pipes**, and 5×5 Titanium Multiblock Reservoirs.
 * **Petrochemicals & Distillation**: Refines crude oil sand into Gasoline, Biofuel, and High-Octane Racing Fuel.
 
-### 🏭 15. Pyrometallurgy, Overclocking & Machining
+### 🏭 16. Pyrometallurgy, Overclocking & Machining
 * **Alloy Foundry**: Dual-input pyrometallurgical arc furnace for high-purity alloy synthesis (Bronze, Manyullyn, Tungsten Carbide, Signalum, Lumium, Enderium).
 * **Steel Blast Furnace**: Traditional Coke Coal smelting or zero-carbon Green Hydrogen reduction with **Basalt Flux Catalyst** 2× speed/yield boosts.
 * **Mechanical Crusher Mk2**: Dual-chamber pulverizer with speed gear sockets scaling ore outputs up to 8×!
 * **Magma Crucible**: High-temperature rock liquefier converting stone, basalt, and obsidian into liquid lava.
 * **Blaze Overclock Cores**: Dedicated turbo overclock slots granting +200% operating speed across all machines.
 
-### 📦 16. Universal Item Logistics
+### 📦 17. Universal Item Logistics
 * **Item Transport Pipes**: 6-way modular conduit network for high-throughput item routing.
 * **Extractors & Inserters**: Intelligent directional machine feeding and chest extraction.
 * **Industrial Wrench**: 4-way side configuration tool for instant pipe connection tuning and machine rotation.
 
-### 🌾 17. Agronomy & Volcanic Soil
+### 🌾 18. Agronomy & Volcanic Soil
 * **Soil Infuser**: Powered machine that enriches standard dirt with ash, sulfur, or catalysts.
 * **Volcanic Soil**: Farmland with built-in perpetual hydration and accelerated growth ticks—even in the Nether!
 * **Volcanic Fertilizer & Sweet Corn**: High-saturation agricultural crops and bio-ethanol feedstock.
 
-### 🛡️ 18. Armor Progression, 3×3 Excavation Tools & Aquatic Gear
+### 🛡️ 19. Armor Progression, 3×3 Excavation Tools & Aquatic Gear
 * **8 Tiers of Custom Armor Sets**: Enchanted Wood, Enchanted Cobblestone, Tin, Bronze, Aluminum, Steel, Titanium, Enchanted Diamond, and Enchanted Netherite.
 * **3×3 Mining Hammers**: Heavy-duty excavation hammers scaling from Wood to Enchanted Netherite.
 * **Infernal Sledgehammer**: 3×3 excavation hammer with built-in auto-smelting for mined ores and cobblestone.
@@ -179,7 +189,7 @@ To get the best survival experience and view all custom multi-slot machine recip
 3. **Expand Your Storage**: Craft a starter **Enchanted Chest** and right-click it with Copper, Bronze, and Iron upgrades to expand capacity up to 108 slots without moving a single item.
 4. **Alloy Metallurgy & Vehicles**: Build the **Alloy Foundry** to smelt Bronze and Steel. Construct the **Vehicle Fabricator** and assemble your first **Modular ATV** for rapid landscape exploration.
 5. **Digital Automation**: Transition to the **Enchanted Storage Controller** and **Crystal Drive Bays**. Craft the **Modular Super Computer** to enable 1-click autocrafting from EMI/JEI.
-6. **The Convergence**: Gather all 6 **Anomaly Keystones**, forge a portal frame with Crying Obsidian, equip your **Modular Power Exosuit** and **Hypospray**, and step into **The Convergence** to face the **Resonance Colossus**!
+6. **The Convergence & Lost Biomes**: Gather all 6 **Anomaly Keystones**, forge a portal frame with Crying Obsidian, equip your **Modular Power Exosuit** and **Hypospray**, and step into **The Convergence** to explore the 7 nostalgic Lost Biomes and face the **Resonance Colossus**!
 
 ---
 
@@ -206,7 +216,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-2.1.0.jar
+build/libs/shudynamics-2.2.0.jar
 ```
 
 ---
