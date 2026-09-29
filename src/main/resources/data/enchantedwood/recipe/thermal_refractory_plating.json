@@ -1,15 +1,15 @@
-﻿{
+{
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
     "BFB",
-    "FTF",
+    "FHF",
     "BFB"
   ],
   "key": {
     "B": "enchantedwood:volcanic_bricks",
     "F": "enchantedwood:fire_crystal",
-    "T": "enchantedwood:titanium_ingot"
+    "H": "enchantedwood:hafnium_tungsten_carbide_ingot"
   },
   "result": {
     "count": 1,
