@@ -1,9 +1,9 @@
-# ✨ ShuDynamics — 2.2.0: The Lost Biomes Convergence Overhaul 🌲🏜️⚡
+# ✨ ShuDynamics — 2.2.1: Convergence Structures & Subterranean Exploration 🏰⚔️🕳️
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.2.0-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.2.1-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -26,6 +26,24 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)**: Modern Fabric recipe engine powering custom machine tabs (Induction Smelter, Circuit Fabricator, Harmonic Record Press, Alloy Foundry, Crusher, Soil Infuser, Blast Furnace, Coke Oven, Refinery, Magma Crucible, Super Computer), 1-click recipe transfer (`[+]` button), and catalytic boosts (**Basalt Flux Catalyst**, **Blaze Overclock Cores**, and **Speed Gears**).
 * **[Just Enough Items (JEI)](https://www.curseforge.com/minecraft/mc-mods/jei)**: Standard in-game recipe browser with quick item search and catalyst indexing.
 * **[Jade](https://www.curseforge.com/minecraft/mc-mods/jade)**: Real-time in-world HUD block inspection, machine progress bars, energy states, and custom chest tier names.
+
+---
+
+## 🌟 What's New in v2.2.1 — Convergence Structures & Subterranean Exploration Patch
+
+* 🏰 **Full Vanilla & Dimensional Structure Suite**: The Convergence is now a complete synthesis of Minecraft's dimensions:
+  * **Strongholds**: Generates underground in concentric rings across all 12 Convergence biomes, complete with libraries, iron doors, and functional End Portal rooms. Eyes of Ender now seek out Convergence strongholds directly!
+  * **Woodland Mansions**: Towering dark manor houses generating across `seasonal_forest` and `alpha_rainforest`.
+  * **Nether Fortresses & Bastion Remnants**: Surface-adapted vertical placement ensures bastions and fortresses tower majestically over `scorched_caldera` and volcanic terrain with active mob spawns instead of being buried in stone or the void.
+  * **Desert Temples & Jungle Temples**: Spawning across `desert_lakes`, `modified_jungle_edge`, and `alpha_rainforest` with TNT traps and loot chambers.
+  * **Ocean Monuments**: Submerged within `caustic_mire` and `desert_lakes` waters with Guardians and Elder Guardians.
+  * **Ancient Cities & Trial Chambers**: Deep subterranean generation across deep biomes with functional Sculk Shriekers, Wardens, Breeze spawners, and ominous vaults.
+  * **Pillager Outposts, Swamp Huts, Igloos, Trail Ruins, Ruined Portals, & Biome Villages**: Seamlessly integrated across their thematic biomes.
+* 🕳️ **Continuous 3D Cave Systems**: Integrated `minecraft:cave_extra_underground` carvers across all 12 Convergence biomes, connecting surface entrances down to bedrock and deepslate.
+* ⚡ **Overhauled Rift Chasms**:
+  * Reduced spawn frequency to make chasms rare and exciting instead of landscape clutter.
+  * Removed square surface stone scarring; natural grass, sand, flowers, and trees now meet the chasm edge smoothly.
+  * Plunges deep into deepslate (down to Y = -15 to -40) with 3 to 4 winding horizontal branch tunnels that directly breach into surrounding cave networks and mineshafts.
 
 ---
 

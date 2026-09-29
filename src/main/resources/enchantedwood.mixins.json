@@ -8,7 +8,9 @@
     "AttachedStemBlockMixin",
     "TopologicalSortsMixin",
     "ClampedEntityAttributeMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "NetherFortressStructureMixin",
+    "JigsawStructureMixin"
   ],
   "client": [],
   "injectors": {

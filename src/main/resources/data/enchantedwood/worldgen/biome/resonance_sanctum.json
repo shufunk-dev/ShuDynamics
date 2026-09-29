@@ -21,7 +21,9 @@
     "foliage_color": "#513a70"
   },
   "carvers": [
-    "minecraft:cave"
+    "minecraft:cave",
+    "minecraft:cave_extra_underground",
+    "minecraft:canyon"
   ],
   "features": [
     [],

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:riftwood_haven",
+    "enchantedwood:seasonal_forest",
+    "enchantedwood:shrubland",
+    "enchantedwood:alpha_rainforest",
+    "enchantedwood:gravelly_mountains",
+    "enchantedwood:anoxic_barrens",
+    "enchantedwood:caustic_mire",
+    "enchantedwood:alpha_tundra",
+    "enchantedwood:desert_lakes"
+  ]
+}

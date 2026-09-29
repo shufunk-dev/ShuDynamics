@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:seasonal_forest",
+    "enchantedwood:alpha_rainforest",
+    "enchantedwood:shrubland",
+    "enchantedwood:alpha_tundra"
+  ]
+}

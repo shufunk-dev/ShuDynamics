@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:riftwood_haven",
+    "enchantedwood:seasonal_forest",
+    "enchantedwood:shrubland",
+    "enchantedwood:gravelly_mountains",
+    "enchantedwood:anoxic_barrens",
+    "enchantedwood:caustic_mire"
+  ]
+}

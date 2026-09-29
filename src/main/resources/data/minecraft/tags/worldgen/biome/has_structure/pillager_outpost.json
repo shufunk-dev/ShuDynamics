@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:shrubland",
+    "enchantedwood:gravelly_mountains",
+    "enchantedwood:alpha_tundra",
+    "enchantedwood:desert_lakes"
+  ]
+}

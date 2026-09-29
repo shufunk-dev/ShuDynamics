@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:riftwood_haven",
+    "enchantedwood:alpha_rainforest",
+    "enchantedwood:seasonal_forest",
+    "enchantedwood:shrubland",
+    "enchantedwood:modified_jungle_edge",
+    "enchantedwood:alpha_tundra",
+    "enchantedwood:desert_lakes",
+    "enchantedwood:gravelly_mountains",
+    "enchantedwood:anoxic_barrens",
+    "enchantedwood:caustic_mire",
+    "enchantedwood:scorched_caldera",
+    "enchantedwood:resonance_sanctum"
+  ]
+}
