@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "TWT",
+    "NMN",
     "GQG",
-    "TWT"
+    "NMN"
   ],
   "key": {
-    "T": "enchantedwood:titanium_ingot",
-    "W": "enchantedwood:silicon_wafer",
+    "N": "enchantedwood:neo_titanium_ingot",
+    "M": "enchantedwood:neodymium_magnet",
     "G": "enchantedwood:steel_gear",
     "Q": "enchantedwood:quantum_computer_chip"
   },

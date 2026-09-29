@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "TAT",
+    "NAN",
     "SCS",
-    "T T"
+    "N N"
   ],
   "key": {
-    "T": "enchantedwood:titanium_ingot",
+    "N": "enchantedwood:neo_titanium_ingot",
     "A": "minecraft:rabbit_foot",
     "S": "enchantedwood:titanium_suspension",
     "C": "enchantedwood:advanced_computer_chip"
