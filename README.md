@@ -1,9 +1,9 @@
-# ✨ ShuDynamics — 2.2.1: Convergence Structures & Subterranean Exploration 🏰⚔️🕳️
+# ✨ ShuDynamics — 2.2.2: The Definitive Convergence & Superalloys Edition 🏰⚔️🕳️
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.2.1-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.2.2-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -29,7 +29,19 @@ To get the best survival experience and view all custom multi-slot machine recip
 
 ---
 
-## 🌟 What's New in v2.2.1 — Convergence Structures & Subterranean Exploration Patch
+## 🌟 What's New in v2.2.2 — Convergence Superalloys & Progression Balance Patch
+
+* ⚡ **True Superalloy Progression**: All 4 Convergence exotic minerals are now deeply integrated into the survival tech tree:
+  * **Quantum Ion Repulsor Module**: Now strictly requires **4× Neo-Titanium Spring-Steel Ingots** (forged from Neodymium Ore + Titanium in the Alloy Foundry) and **2× Neodymium Magnets**. Infinite electric flight is now a true endgame milestone earned by conquering The Convergence!
+  * **High-Jump Actuator Module**: Now requires **4× Neo-Titanium Spring-Steel Ingots** alongside Titanium Suspensions for enhanced kinetic recoil.
+  * **Thermal Refractory Plating**: Now requires **Hafnium-Tungsten Carbide Ingots** (forged from Hafnium Ore mined in the deep Scorched Caldera + Tungsten), making total lava swimming and caldera heat immunity an earned reward.
+  * **Fluoropolymer Acid-Proof Plating**: Now requires **Tan-Ti Superalloy Ingots** (forged from Tantalum Ore mined in the Caustic Mire + Titanium), making caustic acid immunity an earned reward.
+* 🛡️ **Paced Mid-Game Flight**: Early exosuit flight is now correctly centered around the **Hydrogen Thrusters** and fuel canister management, ensuring petrochemical infrastructure has meaningful gameplay value before unlocking late-game Iron-Man mode.
+* ♻️ **Item Salvager Synchronization**: Salvaging modules now accurately returns their authentic superalloys and advanced components.
+
+---
+
+## 🌟 Previous Highlights (v2.2.1) — Convergence Structures & Subterranean Exploration
 
 * 🏰 **Full Vanilla & Dimensional Structure Suite**: The Convergence is now a complete synthesis of Minecraft's dimensions:
   * **Strongholds**: Generates underground in concentric rings across all 12 Convergence biomes, complete with libraries, iron doors, and functional End Portal rooms. Eyes of Ender now seek out Convergence strongholds directly!
