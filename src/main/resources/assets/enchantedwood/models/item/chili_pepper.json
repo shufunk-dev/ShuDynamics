@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/chili_pepper"
+                 },
+    "parent":  "minecraft:item/generated"
+}

@@ -88,7 +88,7 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
         if (maxEnergy > 0 && energy > 0) {
             int scaledH = Math.min(54, (int) ((long) energy * 54 / maxEnergy));
             int energyY = (y + 18) + (54 - scaledH);
-            context.fill(x + 8, energyY, x + 16, y + 18 + 54, 0xFFE53935);
+            context.fill(x + 8, energyY, x + 17, y + 18 + 54, 0xFFE53935);
         }
     }
 

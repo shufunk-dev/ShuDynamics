@@ -24,6 +24,12 @@ public class HammerItem extends Item {
         super(settings);
     }
 
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, net.minecraft.component.type.TooltipDisplayComponent displayComponent, java.util.function.Consumer<net.minecraft.text.Text> textConsumer, net.minecraft.item.tooltip.TooltipType type) {
+        textConsumer.accept(net.minecraft.text.Text.literal("§7Mines a §e3×3 area §7centered on targeted block."));
+        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    }
+
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {

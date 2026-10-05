@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IGI",
+    "IFI",
+    "IEI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:glass",
+    "F": "minecraft:snowball",
+    "E": "minecraft:bucket"
+  },
+  "result": {
+    "id": "enchantedwood:cryo_freezer",
+    "count": 1
+  }
+}

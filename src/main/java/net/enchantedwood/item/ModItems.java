@@ -375,9 +375,369 @@ public class ModItems {
             Text.literal("§b✦ Aerial tactical mobility in boss arenas.")
     ));
 
+    // ==========================================
+    // Culinary Expansion: Seeds & Produce
+    // ==========================================
+    public static final Item TOMATO_SEEDS = registerItem("tomato_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.TOMATO_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to cultivate ripe juicy tomatoes."),
+            Text.literal("§8Essential for rich tomato sauces and pizza bases.")
+    ));
+    public static final Item TOMATO = registerItem("tomato", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            Text.literal("§cPlump, juicy garden tomato."),
+            Text.literal("§8Can be crushed into savory tomato sauce or sliced for burgers and salads.")
+    ));
+
+    public static final Item ONION_SEEDS = registerItem("onion_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.ONION_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to cultivate pungent onions."),
+            Text.literal("§8Aromatic seasoning for pizzas, burgers, tacos, and salads.")
+    ));
+    public static final Item ONION = registerItem("onion", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.3f).build()),
+            Text.literal("§eCrisp, pungent garden onion."),
+            Text.literal("§8Adds savory depth to artisan dishes and street food.")
+    ));
+
+    public static final Item LETTUCE_SEEDS = registerItem("lettuce_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.LETTUCE_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to cultivate fresh leafy lettuce."),
+            Text.literal("§8Crisp leafy greens for burgers, tacos, and garden salads.")
+    ));
+    public static final Item LETTUCE = registerItem("lettuce", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.4f).build()),
+            Text.literal("§aCrisp leafy green lettuce."),
+            Text.literal("§8Vital ingredient for burgers, tacos, and refreshing salads.")
+    ));
+
+    public static final Item SOYBEAN_SEEDS = registerItem("soybean_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.SOYBEAN_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to cultivate versatile soybeans."),
+            Text.literal("§8High-protein legume processed into soy milk, artisan cheese, and tofu.")
+    ));
+    public static final Item SOYBEANS = registerItem("soybeans", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.3f).build()),
+            Text.literal("§eNutritious golden soybeans."),
+            Text.literal("§8Can be pressed into soy milk, curdled into cheese, or made into tofu.")
+    ));
+
+    public static final Item CHILI_PEPPER_SEEDS = registerItem("chili_pepper_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
+            net.enchantedwood.block.ModBlocks.CHILI_PEPPER_CROP,
+            settings,
+            Text.literal("§7Plant on tilled farmland to cultivate fiery chili peppers."),
+            Text.literal("§8Adds spicy heat to supreme pizzas and street tacos.")
+    ));
+    public static final Item CHILI_PEPPER = registerItem("chili_pepper", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(2).saturationModifier(0.4f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 15, 0)))
+                            .build()
+            ),
+            Text.literal("§cFiery red chili pepper with a spicy kick."),
+            Text.literal("§eGrants brief Speed I (15s). Key ingredient for Supreme Pizza & Tacos.")
+    ));
+
+    public static final Item STRAWBERRY = registerItem("strawberry", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.5f).build()),
+            Text.literal("§cSweet, fragrant summer strawberry."),
+            Text.literal("§8Harvested from strawberry bushes. Churned into gourmet ice cream.")
+    ));
+
+    public static final Item BLUEBERRY = registerItem("blueberry", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.4f).build()),
+            Text.literal("§9Rich antioxidant wild blueberry."),
+            Text.literal("§8Harvested from blueberry bushes. Churned into vibrant ice cream.")
+    ));
+
+    // ==========================================
+    // Culinary Expansion: Processed Ingredients
+    // ==========================================
+    public static final Item SALT = registerItem("salt", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§fRefined mineral salt crystals."),
+            Text.literal("§8Boiled from sea water buckets or centrifuged from Calcite & Dripstone."),
+            Text.literal("§7Essential seasoning for doughs, patties, cheese, and ice cream coolant.")
+    ));
+
+    public static final Item WHEAT_FLOUR = registerItem("wheat_flour", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§fFinely milled whole wheat flour."),
+            Text.literal("§8Ground in a Crusher or mortar. The foundation for breads and doughs.")
+    ));
+
+    public static final Item PIZZA_DOUGH = registerItem("pizza_dough", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§eHand-tossed artisan pizza dough."),
+            Text.literal("§8Kneaded with flour, salt, and water. Base for brick oven pizzas.")
+    ));
+
+    public static final Item BURGER_BUN = registerItem("burger_bun", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.5f).build()),
+            Text.literal("§6Golden toasted brioche sesame bun."),
+            Text.literal("§8Baked in the Brick Oven or furnace.")
+    ));
+
+    public static final Item TACO_SHELL = registerItem("taco_shell", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            Text.literal("§eCrisp stone-ground corn tortilla shell."),
+            Text.literal("§8Prepared from corn kernels and baked crisp.")
+    ));
+
+    public static final Item TOMATO_SAUCE = registerItem("tomato_sauce", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            Text.literal("§cRich slow-simmered marinara sauce."),
+            Text.literal("§8Cooked from ripe tomatoes, salt, and aromatic herbs.")
+    ));
+
+    public static final Item SOY_MILK = registerItem("soy_milk", settings -> new net.enchantedwood.item.custom.BottleFoodItem(
+            settings.food(new FoodComponent.Builder().nutrition(2).saturationModifier(0.4f).build()),
+            Text.literal("§fSilky smooth plant-based soy milk in a glass bottle."),
+            Text.literal("§aClears all active status effects when consumed like cow's milk."),
+            Text.literal("§8Used to churn ice cream and ferment artisan cheese.")
+    ));
+
+    public static final Item CHEESE_SLICE = registerItem("cheese_slice", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.6f).build()),
+            Text.literal("§eRich, creamy aged artisan cheese slice."),
+            Text.literal("§8Meltable topping for pizzas and juicy burgers.")
+    ));
+
+    public static final Item TOFU = registerItem("tofu", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.6f).build()),
+            Text.literal("§fTender pressed soybean curd."),
+            Text.literal("§8Nutritious plant protein suitable for savory vegan delicacies.")
+    ));
+
+    public static final Item RAW_BURGER_PATTY = registerItem("raw_burger_patty", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§cSeasoned minced ground beef patty."),
+            Text.literal("§8Sear in the Brick Oven or furnace to unlock juicy savory goodness.")
+    ));
+
+    public static final Item COOKED_BURGER_PATTY = registerItem("cooked_burger_patty", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(6).saturationModifier(0.8f).build()),
+            Text.literal("§6Flame-broiled savory beef burger patty."),
+            Text.literal("§8Ready to be assembled into hearty cheeseburgers.")
+    ));
+
+    public static final Item PREPARED_ANCHOVIES = registerItem("prepared_anchovies", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.5f).build()),
+            Text.literal("§7Salt-cured savory ocean anchovy fillets."),
+            Text.literal("§8Intense umami topping for traditional artisanal pizza.")
+    ));
+
+    // ==========================================
+    // Culinary Expansion: Artisan Brick Oven Pizzas
+    // ==========================================
+    public static final Item RAW_MARGHERITA_PIZZA = registerItem("raw_margherita_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§eUnbaked Margherita Pizza with tomato sauce and mozzarella."),
+            Text.literal("§7Bake in the §6Brick Oven §7for an authentic crispy crust.")
+    ));
+    public static final Item MARGHERITA_PIZZA = registerItem("margherita_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(10).saturationModifier(0.8f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.SATURATION, 20 * 5, 0)))
+                            .build()
+            ),
+            Text.literal("§6✦ Brick Oven Margherita Pizza ✦"),
+            Text.literal("§7Classic Neapolitan pizza with bubbling cheese and sweet basil tomato sauce."),
+            Text.literal("§aRestores 10 hunger points with lasting Saturation.")
+    ));
+
+    public static final Item RAW_MEAT_LOVERS_PIZZA = registerItem("raw_meat_lovers_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§cUnbaked Meat Lovers Pizza piled high with steak, pork, and patty."),
+            Text.literal("§7Bake in the §6Brick Oven §7to render the savory meats.")
+    ));
+    public static final Item MEAT_LOVERS_PIZZA = registerItem("meat_lovers_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(14).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 20 * 30, 0)))
+                            .build()
+            ),
+            Text.literal("§c✦ Carnivore's Brick Oven Meat Lovers Pizza ✦"),
+            Text.literal("§7Loaded with steak, roasted pork, and seasoned beef over bubbling cheese."),
+            Text.literal("§cGrants Strength I (30s). Restores 14 hunger points.")
+    ));
+
+    public static final Item RAW_ANCHOVY_ONION_PIZZA = registerItem("raw_anchovy_onion_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§7Unbaked Coastal Pizza with cured anchovies and sweet onions."),
+            Text.literal("§7Bake in the §6Brick Oven §7for seaside umami excellence.")
+    ));
+    public static final Item ANCHOVY_ONION_PIZZA = registerItem("anchovy_onion_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(11).saturationModifier(0.8f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§3✦ Mediterranean Anchovy & Onion Pizza ✦"),
+            Text.literal("§7Deep ocean umami balanced by caramelized sweet onions and tangy tomato sauce."),
+            Text.literal("§bGrants Water Breathing (45s). Restores 11 hunger points.")
+    ));
+
+    public static final Item RAW_SUPREME_PIZZA = registerItem("raw_supreme_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings,
+            Text.literal("§6Unbaked Supreme Pizza loaded with all toppings."),
+            Text.literal("§7Bake in the §6Brick Oven §7for the ultimate master feast.")
+    ));
+    public static final Item SUPREME_PIZZA = registerItem("supreme_pizza", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(16).saturationModifier(1.0f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 15, 0)))
+                            .build()
+            ),
+            Text.literal("§6✦ Grand Master Supreme Pizza ✦"),
+            Text.literal("§7The pinnacle of brick oven baking: cheese, steak, onions, and spicy chilies."),
+            Text.literal("§dGrants Regeneration I (15s) and full Saturation. Restores 16 hunger points.")
+    ));
+
+    // ==========================================
+    // Culinary Expansion: Gourmet Street Foods
+    // ==========================================
+    public static final Item CLASSIC_CHEESEBURGER = registerItem("classic_cheeseburger", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(10).saturationModifier(0.8f).build()),
+            Text.literal("§6Classic All-American Cheeseburger"),
+            Text.literal("§7Flame-broiled beef patty, melted cheese, crisp lettuce, tomato, and onion in a brioche bun."),
+            Text.literal("§aHearty meal restoring 10 hunger points.")
+    ));
+
+    public static final Item DELUXE_BACON_BURGER = registerItem("deluxe_bacon_burger", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(13).saturationModifier(0.9f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 20, 0)))
+                            .build()
+            ),
+            Text.literal("§6✦ Deluxe Smoked Bacon Cheeseburger ✦"),
+            Text.literal("§7Stacked double patty with crispy smoked bacon, double cheese, and smoky sauce."),
+            Text.literal("§9Grants Resistance I (20s). Restores 13 hunger points.")
+    ));
+
+    public static final Item BEEF_TACO = registerItem("beef_taco", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(new FoodComponent.Builder().nutrition(8).saturationModifier(0.7f).build()),
+            Text.literal("§eCrispy Street Beef Taco"),
+            Text.literal("§7Seasoned ground beef, shredded cheese, lettuce, and diced onion in a crunchy corn shell."),
+            Text.literal("§aRestores 8 hunger points.")
+    ));
+
+    public static final Item FISH_TACO = registerItem("fish_taco", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.7f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 20 * 20, 0)))
+                            .build()
+            ),
+            Text.literal("§bBaja Fresh Fish Taco"),
+            Text.literal("§7Tender grilled fish fillet with cilantro lime dressing, lettuce, and chili peppers."),
+            Text.literal("§bGrants Dolphin's Grace (20s). Restores 8 hunger points.")
+    ));
+
+    // ==========================================
+    // Culinary Expansion: Fresh Farm Salads
+    // ==========================================
+    public static final Item GARDEN_SALAD = registerItem("garden_salad", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(6).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 30, 0)))
+                            .build()
+            ),
+            Text.literal("§aFresh Farmer's Garden Salad"),
+            Text.literal("§7Tossed crisp lettuce, sweet tomatoes, sliced onions, and cucumbers in an artisan wooden bowl."),
+            Text.literal("§aGrants Speed I (30s). Returns empty bowl.")
+    ));
+
+    public static final Item BERRY_MEDLEY_SALAD = registerItem("berry_medley_salad", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(7).saturationModifier(0.7f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 0)))
+                            .build()
+            ),
+            Text.literal("§d✦ Wild Berry Medley Salad ✦"),
+            Text.literal("§7Tossed strawberries, blueberries, sweet berries, and greens glazed with wildflower honey."),
+            Text.literal("§dGrants Regeneration I (10s). Returns empty bowl.")
+    ));
+
+    // ==========================================
+    // Culinary Expansion: Churned Gourmet Ice Creams
+    // ==========================================
+    public static final Item VANILLA_ICE_CREAM = registerItem("vanilla_ice_cream", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(new FoodComponent.Builder().nutrition(6).saturationModifier(0.5f).build()),
+            Text.literal("§fCreamy Classic Vanilla Ice Cream"),
+            Text.literal("§7Slow-churned with milk, ice, and sweet sugar in an ice cream bowl."),
+            Text.literal("§eClears harmful ailments and refreshes the spirit.")
+    ));
+
+    public static final Item STRAWBERRY_ICE_CREAM = registerItem("strawberry_ice_cream", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(7).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§cSweet Strawberry Swirl Ice Cream"),
+            Text.literal("§7Churned with ripe strawberries and rich cream."),
+            Text.literal("§cGrants Speed I (45s).")
+    ));
+
+    public static final Item BLUEBERRY_ICE_CREAM = registerItem("blueberry_ice_cream", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(7).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§9Antioxidant Blueberry Ice Cream"),
+            Text.literal("§7Velvety blueberry custard churned to frozen perfection."),
+            Text.literal("§9Grants Night Vision (45s).")
+    ));
+
+    public static final Item CHOCOLATE_ICE_CREAM = registerItem("chocolate_ice_cream", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(8).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.HASTE, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§6Decadent Dutch Chocolate Ice Cream"),
+            Text.literal("§7Rich cocoa beans churned with sweet milk into dark chocolate decadence."),
+            Text.literal("§eGrants Haste I (45s).")
+    ));
+
+    public static final Item SWEET_BERRY_ICE_CREAM = registerItem("sweet_berry_ice_cream", settings -> new net.enchantedwood.item.custom.BowlFoodItem(
+            settings.food(
+                    new FoodComponent.Builder().nutrition(7).saturationModifier(0.6f).build(),
+                    ConsumableComponents.food()
+                            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 20 * 45, 0)))
+                            .build()
+            ),
+            Text.literal("§cWild Sweet Berry Gelato"),
+            Text.literal("§7Tart and sweet wild berries churned with whole milk."),
+            Text.literal("§aGrants Jump Boost I (45s).")
+    ));
+
+    public static final Item ICE_CUBES = registerItem("ice_cubes",
+            settings -> new net.enchantedwood.item.custom.TooltipItem(settings,
+                    Text.literal("§bPure Ice Cubes"),
+                    Text.literal("§7Cryogenically frozen crystalline ice cubes. Perfect for rapid chilling and refreshing drinks.")));
+
     // Convergence Mob Variant Spawn Eggs
     public static final Item CONVERGENCE_ZOMBIE_SPAWN_EGG = registerItem("convergence_zombie_spawn_egg",
             settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_ZOMBIE, settings));
+
 
     public static final Item CONVERGENCE_SKELETON_SPAWN_EGG = registerItem("convergence_skeleton_spawn_egg",
             settings -> new net.enchantedwood.item.custom.ConvergenceSpawnEggItem(net.enchantedwood.entity.ModEntities.CONVERGENCE_SKELETON, settings));
@@ -1179,7 +1539,14 @@ public class ModItems {
     public static final Item WOODEN_HAMMER = registerItem("wooden_hammer",
             settings -> new HammerItem(settings.pickaxe(ToolMaterial.WOOD, 2.0f, -3.2f)));
     public static final Item STONE_HAMMER = registerItem("stone_hammer",
-            settings -> new HammerItem(settings.pickaxe(ToolMaterial.STONE, 3.0f, -3.2f)));
+            settings -> new HammerItem(settings.pickaxe(ToolMaterial.STONE, 3.0f, -3.2f)) {
+                @Override
+                public void appendTooltip(ItemStack stack, Item.TooltipContext context, net.minecraft.component.type.TooltipDisplayComponent displayComponent, java.util.function.Consumer<net.minecraft.text.Text> textConsumer, net.minecraft.item.tooltip.TooltipType type) {
+                    super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+                    textConsumer.accept(net.minecraft.text.Text.literal("§8Craftable with Cobblestone, Andesite, Granite,"));
+                    textConsumer.accept(net.minecraft.text.Text.literal("§8Diorite, Basalt, Deepslate, or Netherrack."));
+                }
+            });
     public static final Item COPPER_HAMMER = registerItem("copper_hammer",
             settings -> new HammerItem(settings.pickaxe(ModMaterials.COPPER, 3.5f, -3.1f)));
     public static final Item IRON_HAMMER = registerItem("iron_hammer",
@@ -1749,6 +2116,8 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.ITEM_SALVAGER);
                 entries.add(net.enchantedwood.block.ModBlocks.MAGMA_CRUCIBLE);
                 entries.add(net.enchantedwood.block.ModBlocks.LAVA_PUMP);
+                entries.add(net.enchantedwood.block.ModBlocks.WATER_PUMP);
+                entries.add(net.enchantedwood.block.ModBlocks.CRYO_FREEZER);
                 entries.add(net.enchantedwood.block.ModBlocks.CRUSHER_MK2);
                 entries.add(net.enchantedwood.block.ModBlocks.DUST_SMELTER_MK2);
                 entries.add(net.enchantedwood.block.ModBlocks.SOIL_INFUSER);
@@ -1760,6 +2129,7 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.TITANIUM_TANK_INBOUND_PORT);
 
                 // Universal Item Logistics System
+                entries.add(net.enchantedwood.block.ModBlocks.WATER_PIPE);
                 entries.add(net.enchantedwood.block.ModBlocks.ITEM_PIPE);
                 entries.add(net.enchantedwood.block.ModBlocks.ITEM_EXTRACTOR);
                 entries.add(net.enchantedwood.block.ModBlocks.ITEM_INSERTER);
@@ -2022,8 +2392,64 @@ public class ModItems {
                 entries.add(MUSIC_DISC_STRATOSPHERE);
                 entries.add(MUSIC_DISC_ABYSSAL);
                 entries.add(MUSIC_DISC_ANOXIC);
+
+                // Culinary Expansion: Appliances, Crops & Foods
+                entries.add(net.enchantedwood.block.ModBlocks.BRICK_OVEN);
+                entries.add(net.enchantedwood.block.ModBlocks.ICE_CREAM_MACHINE);
+                entries.add(TOMATO_SEEDS);
+                entries.add(TOMATO);
+                entries.add(ONION_SEEDS);
+                entries.add(ONION);
+                entries.add(LETTUCE_SEEDS);
+                entries.add(LETTUCE);
+                entries.add(SOYBEAN_SEEDS);
+                entries.add(SOYBEANS);
+                entries.add(CHILI_PEPPER_SEEDS);
+                entries.add(CHILI_PEPPER);
+                entries.add(STRAWBERRY);
+                entries.add(BLUEBERRY);
+                entries.add(net.enchantedwood.block.ModBlocks.STRAWBERRY_BUSH);
+                entries.add(net.enchantedwood.block.ModBlocks.BLUEBERRY_BUSH);
+
+                entries.add(SALT);
+                entries.add(WHEAT_FLOUR);
+                entries.add(PIZZA_DOUGH);
+                entries.add(BURGER_BUN);
+                entries.add(TACO_SHELL);
+                entries.add(TOMATO_SAUCE);
+                entries.add(SOY_MILK);
+                entries.add(CHEESE_SLICE);
+                entries.add(TOFU);
+                entries.add(RAW_BURGER_PATTY);
+                entries.add(COOKED_BURGER_PATTY);
+                entries.add(PREPARED_ANCHOVIES);
+
+                entries.add(RAW_MARGHERITA_PIZZA);
+                entries.add(MARGHERITA_PIZZA);
+                entries.add(RAW_MEAT_LOVERS_PIZZA);
+                entries.add(MEAT_LOVERS_PIZZA);
+                entries.add(RAW_ANCHOVY_ONION_PIZZA);
+                entries.add(ANCHOVY_ONION_PIZZA);
+                entries.add(RAW_SUPREME_PIZZA);
+                entries.add(SUPREME_PIZZA);
+
+                entries.add(CLASSIC_CHEESEBURGER);
+                entries.add(DELUXE_BACON_BURGER);
+                entries.add(BEEF_TACO);
+                entries.add(FISH_TACO);
+
+                entries.add(GARDEN_SALAD);
+                entries.add(BERRY_MEDLEY_SALAD);
+
+                entries.add(VANILLA_ICE_CREAM);
+                entries.add(STRAWBERRY_ICE_CREAM);
+                entries.add(BLUEBERRY_ICE_CREAM);
+                entries.add(CHOCOLATE_ICE_CREAM);
+                entries.add(SWEET_BERRY_ICE_CREAM);
+                entries.add(ICE_CUBES);
             })
             .build();
+
 
     private static <T extends Item> T registerItem(String name, Function<Item.Settings, T> itemFactory) {
         RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));

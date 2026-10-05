@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:corn_seeds",
+    "enchantedwood:rice_seeds",
+    "enchantedwood:cucumber_seeds",
+    "enchantedwood:tomato_seeds",
+    "enchantedwood:onion_seeds",
+    "enchantedwood:lettuce_seeds",
+    "enchantedwood:soybean_seeds",
+    "enchantedwood:chili_pepper_seeds"
+  ]
+}

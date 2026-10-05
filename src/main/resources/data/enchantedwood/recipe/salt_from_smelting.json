@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  200,
+    "experience":  0.2,
+    "ingredient":  "minecraft:water_bucket",
+    "type":  "minecraft:smelting",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:salt",
+                   "count":  4
+               }
+}

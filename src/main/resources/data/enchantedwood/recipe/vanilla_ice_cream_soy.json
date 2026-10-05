@@ -1,0 +1,15 @@
+﻿{
+    "ingredients":  [
+                        "minecraft:bowl",
+                        "enchantedwood:soy_milk",
+                        "minecraft:sugar",
+                        "minecraft:ice",
+                        "enchantedwood:salt"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:vanilla_ice_cream",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

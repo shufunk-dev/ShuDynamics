@@ -1,0 +1,11 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:lettuce"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:lettuce_seeds",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

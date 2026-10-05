@@ -1,0 +1,11 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:soybeans"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:soybean_seeds",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

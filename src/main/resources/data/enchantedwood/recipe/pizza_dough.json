@@ -1,0 +1,14 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:wheat_flour",
+                        "enchantedwood:wheat_flour",
+                        "enchantedwood:salt",
+                        "minecraft:water_bucket"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:pizza_dough",
+                   "count":  4
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

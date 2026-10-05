@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/tomato_sauce"
+                 },
+    "parent":  "minecraft:item/generated"
+}

@@ -44,6 +44,20 @@ public class ModBlockEntities {
                     FabricBlockEntityTypeBuilder.create(HarmonicRecordPressBlockEntity::new, ModBlocks.HARMONIC_RECORD_PRESS).build()
             );
 
+    public static final BlockEntityType<BrickOvenBlockEntity> BRICK_OVEN_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "brick_oven"),
+                    FabricBlockEntityTypeBuilder.create(BrickOvenBlockEntity::new, ModBlocks.BRICK_OVEN).build()
+            );
+
+    public static final BlockEntityType<IceCreamMachineBlockEntity> ICE_CREAM_MACHINE_BLOCK_ENTITY =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "ice_cream_machine"),
+                    FabricBlockEntityTypeBuilder.create(IceCreamMachineBlockEntity::new, ModBlocks.ICE_CREAM_MACHINE).build()
+            );
+
 
 
     public static final BlockEntityType<EnchantedLavaGeneratorBlockEntity> ENCHANTED_LAVA_GENERATOR_BLOCK_ENTITY =
@@ -291,6 +305,27 @@ public class ModBlockEntities {
                     Registries.BLOCK_ENTITY_TYPE,
                     Identifier.of(EnchantedWoodMod.MOD_ID, "lava_pump"),
                     FabricBlockEntityTypeBuilder.create(LavaPumpBlockEntity::new, ModBlocks.LAVA_PUMP).build()
+            );
+
+    public static final BlockEntityType<WaterPumpBlockEntity> WATER_PUMP_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "water_pump"),
+                    FabricBlockEntityTypeBuilder.create(WaterPumpBlockEntity::new, ModBlocks.WATER_PUMP).build()
+            );
+
+    public static final BlockEntityType<CryoFreezerBlockEntity> CRYO_FREEZER_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "cryo_freezer"),
+                    FabricBlockEntityTypeBuilder.create(CryoFreezerBlockEntity::new, ModBlocks.CRYO_FREEZER).build()
+            );
+
+    public static final BlockEntityType<WaterPipeBlockEntity> WATER_PIPE_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(EnchantedWoodMod.MOD_ID, "water_pipe"),
+                    FabricBlockEntityTypeBuilder.create(WaterPipeBlockEntity::new, ModBlocks.WATER_PIPE).build()
             );
 
     public static final BlockEntityType<CrusherMk2BlockEntity> CRUSHER_MK2_BE =

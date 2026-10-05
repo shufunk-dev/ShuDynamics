@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/raw_meat_lovers_pizza"
+                 },
+    "parent":  "minecraft:item/generated"
+}

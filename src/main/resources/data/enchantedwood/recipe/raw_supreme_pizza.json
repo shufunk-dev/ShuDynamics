@@ -1,0 +1,16 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:pizza_dough",
+                        "enchantedwood:tomato_sauce",
+                        "enchantedwood:cheese_slice",
+                        "minecraft:cooked_beef",
+                        "enchantedwood:onion",
+                        "enchantedwood:chili_pepper"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:raw_supreme_pizza",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

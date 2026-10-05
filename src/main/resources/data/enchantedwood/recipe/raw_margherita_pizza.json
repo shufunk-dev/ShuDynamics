@@ -1,0 +1,13 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:pizza_dough",
+                        "enchantedwood:tomato_sauce",
+                        "enchantedwood:cheese_slice"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:raw_margherita_pizza",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

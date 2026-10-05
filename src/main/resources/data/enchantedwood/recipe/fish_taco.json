@@ -1,0 +1,14 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:taco_shell",
+                        "minecraft:cooked_cod",
+                        "enchantedwood:lettuce",
+                        "enchantedwood:chili_pepper"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:fish_taco",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

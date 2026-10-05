@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  75,
+    "experience":  0.35,
+    "ingredient":  "enchantedwood:raw_burger_patty",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:cooked_burger_patty",
+                   "count":  1
+               }
+}

@@ -1,0 +1,9 @@
+﻿{
+    "textures":  {
+                     "front":  "enchantedwood:block/brick_oven_front_on",
+                     "top":  "enchantedwood:block/brick_oven_top",
+                     "side":  "enchantedwood:block/brick_oven_side",
+                     "bottom":  "enchantedwood:block/brick_oven_top"
+                 },
+    "parent":  "minecraft:block/orientable"
+}

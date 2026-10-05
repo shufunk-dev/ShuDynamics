@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.2,
+    "ingredient":  "enchantedwood:pizza_dough",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:burger_bun",
+                   "count":  1
+               }
+}

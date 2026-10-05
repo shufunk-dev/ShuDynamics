@@ -1,0 +1,14 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:soybeans",
+                        "enchantedwood:soybeans",
+                        "minecraft:water_bucket",
+                        "minecraft:glass_bottle"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:soy_milk",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

@@ -1,10 +1,14 @@
 package net.enchantedwood.block.entity;
 
 import net.enchantedwood.block.custom.SuperComputerBlock;
+import net.enchantedwood.block.custom.WaterPumpBlock;
+import net.enchantedwood.block.custom.LavaPumpBlock;
+import net.enchantedwood.block.custom.MagmaCrucibleBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.item.Items;
 import net.enchantedwood.screen.SuperComputerScreenHandler;
 import net.enchantedwood.util.ItemTransportHelper;
 import net.minecraft.block.BlockState;
@@ -77,6 +81,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 case 9 -> isCircuitFabricatorOnline() ? 1 : 0;
                 case 10 -> isPressOnline() ? 1 : 0;
                 case 11 -> isFurnaceOnline() ? 1 : 0;
+                case 12 -> isWaterPumpOnline() ? 1 : 0;
+                case 13 -> isLavaSourceOnline() ? 1 : 0;
                 default -> 0;
             };
         }
@@ -93,7 +99,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
         @Override
         public int size() {
-            return 12;
+            return 14;
         }
     };
 
@@ -106,11 +112,17 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private boolean cachedFabricatorOnline = false;
     private boolean cachedCasterOnline = false;
     private boolean cachedNetworkOnline = false;
+    private boolean cachedWaterPumpOnline = false;
+    private boolean cachedLavaOnline = false;
     private List<EnchantedFurnaceBlockEntity> cachedFurnaces = java.util.Collections.emptyList();
     private List<HydraulicPressBlockEntity> cachedPresses = java.util.Collections.emptyList();
     private List<CircuitFabricatorBlockEntity> cachedFabricators = java.util.Collections.emptyList();
     private List<CastingPortBlockEntity> cachedCasters = java.util.Collections.emptyList();
     private List<TitaniumTankControllerBlockEntity> cachedTankControllers = java.util.Collections.emptyList();
+    private List<WaterPumpBlockEntity> cachedWaterPumps = java.util.Collections.emptyList();
+    private List<LavaPumpBlockEntity> cachedLavaPumps = java.util.Collections.emptyList();
+    private List<MagmaCrucibleBlockEntity> cachedCrucibles = java.util.Collections.emptyList();
+    private List<Inventory> cachedContainers = java.util.Collections.emptyList();
     private @Nullable EnchantedStorageTerminalBlockEntity cachedTerminal = null;
     private @Nullable EnchantedStorageControllerBlockEntity cachedPowerController = null;
     private @Nullable ActiveCraftJob activeJob = null;
@@ -165,6 +177,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         List<CircuitFabricatorBlockEntity> foundFabricators = new ArrayList<>();
         List<CastingPortBlockEntity> foundCasters = new ArrayList<>();
         List<TitaniumTankControllerBlockEntity> foundTankControllers = new ArrayList<>();
+        List<WaterPumpBlockEntity> foundWaterPumps = new ArrayList<>();
+        List<LavaPumpBlockEntity> foundLavaPumps = new ArrayList<>();
+        List<MagmaCrucibleBlockEntity> foundCrucibles = new ArrayList<>();
+        List<Inventory> foundContainers = new ArrayList<>();
         final EnchantedStorageTerminalBlockEntity[] foundTerminal = new EnchantedStorageTerminalBlockEntity[1];
         final EnchantedStorageControllerBlockEntity[] foundController = new EnchantedStorageControllerBlockEntity[1];
 
@@ -180,29 +196,31 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
         }
 
-        // 2. Scan around Super Computer (radius 24 X/Z, 8 Y)
-        int minX = this.pos.getX() - 24;
-        int maxX = this.pos.getX() + 24;
-        int minY = Math.max(this.world.getBottomY(), this.pos.getY() - 8);
-        int maxY = Math.min(this.world.getTopYInclusive(), this.pos.getY() + 8);
-        int minZ = this.pos.getZ() - 24;
-        int maxZ = this.pos.getZ() + 24;
+        // 2. Scan around Super Computer (radius 48 X/Z, 32 Y)
+        int minX = this.pos.getX() - 48;
+        int maxX = this.pos.getX() + 48;
+        int minY = Math.max(this.world.getBottomY(), this.pos.getY() - 32);
+        int maxY = Math.min(this.world.getTopYInclusive(), this.pos.getY() + 32);
+        int minZ = this.pos.getZ() - 48;
+        int maxZ = this.pos.getZ() + 48;
 
         scanChunkArea(minX, maxX, minY, maxY, minZ, maxZ, visited,
-                foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers, foundTerminal, foundController);
+                foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers,
+                foundWaterPumps, foundLavaPumps, foundCrucibles, foundContainers, foundTerminal, foundController);
 
-        // 3. If bound to a controller or terminal located further away, scan around it too (radius 16 X/Z, 6 Y)
+        // 3. If bound to a controller or terminal located further away, scan around it too (radius 32 X/Z, 16 Y)
         BlockPos remotePos = foundController[0] != null ? foundController[0].getPos() : (foundTerminal[0] != null ? foundTerminal[0].getPos() : this.boundNetworkPos);
         if (remotePos != null && remotePos.getManhattanDistance(this.pos) > 20 && this.world.isChunkLoaded(remotePos.getX() >> 4, remotePos.getZ() >> 4)) {
-            int cMinX = remotePos.getX() - 16;
-            int cMaxX = remotePos.getX() + 16;
-            int cMinY = Math.max(this.world.getBottomY(), remotePos.getY() - 6);
-            int cMaxY = Math.min(this.world.getTopYInclusive(), remotePos.getY() + 6);
-            int cMinZ = remotePos.getZ() - 16;
-            int cMaxZ = remotePos.getZ() + 16;
+            int cMinX = remotePos.getX() - 32;
+            int cMaxX = remotePos.getX() + 32;
+            int cMinY = Math.max(this.world.getBottomY(), remotePos.getY() - 16);
+            int cMaxY = Math.min(this.world.getTopYInclusive(), remotePos.getY() + 16);
+            int cMinZ = remotePos.getZ() - 32;
+            int cMaxZ = remotePos.getZ() + 32;
 
             scanChunkArea(cMinX, cMaxX, cMinY, cMaxY, cMinZ, cMaxZ, visited,
-                    foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers, foundTerminal, foundController);
+                    foundFurnaces, foundPresses, foundFabricators, foundCasters, foundTankControllers,
+                    foundWaterPumps, foundLavaPumps, foundCrucibles, foundContainers, foundTerminal, foundController);
         }
 
         this.cachedFurnaces = foundFurnaces;
@@ -210,6 +228,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         this.cachedFabricators = foundFabricators;
         this.cachedCasters = foundCasters;
         this.cachedTankControllers = foundTankControllers;
+        this.cachedWaterPumps = foundWaterPumps;
+        this.cachedLavaPumps = foundLavaPumps;
+        this.cachedCrucibles = foundCrucibles;
+        this.cachedContainers = foundContainers;
         this.cachedTerminal = foundTerminal[0];
         this.cachedPowerController = foundController[0];
 
@@ -217,6 +239,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         this.cachedPressOnline = !foundPresses.isEmpty();
         this.cachedFabricatorOnline = !foundFabricators.isEmpty();
         this.cachedCasterOnline = !foundCasters.isEmpty();
+        this.cachedWaterPumpOnline = !foundWaterPumps.isEmpty();
+        this.cachedLavaOnline = !foundLavaPumps.isEmpty() || !foundCrucibles.isEmpty();
 
         boolean networkOn = false;
         if (foundController[0] != null && foundController[0].isOnline()) {
@@ -234,6 +258,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                               List<CircuitFabricatorBlockEntity> fabricators,
                               List<CastingPortBlockEntity> casters,
                               List<TitaniumTankControllerBlockEntity> tankControllers,
+                              List<WaterPumpBlockEntity> waterPumps,
+                              List<LavaPumpBlockEntity> lavaPumps,
+                              List<MagmaCrucibleBlockEntity> crucibles,
+                              List<Inventory> containers,
                               EnchantedStorageTerminalBlockEntity[] foundTerminal,
                               EnchantedStorageControllerBlockEntity[] foundController) {
         if (this.world == null) return;
@@ -265,6 +293,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         presses.add(press);
                     } else if (be instanceof EnchantedFurnaceBlockEntity ef) {
                         furnaces.add(ef);
+                    } else if (be instanceof WaterPumpBlockEntity wp) {
+                        waterPumps.add(wp);
+                    } else if (be instanceof LavaPumpBlockEntity lp) {
+                        lavaPumps.add(lp);
+                    } else if (be instanceof MagmaCrucibleBlockEntity mc) {
+                        crucibles.add(mc);
                     } else if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                         tankControllers.add(controller);
                     } else if (be instanceof TitaniumTankCasingBlockEntity casing) {
@@ -276,10 +310,119 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         if (foundTerminal[0] == null) foundTerminal[0] = term;
                     } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl) {
                         if (foundController[0] == null) foundController[0] = ctrl;
+                    } else if (be instanceof Inventory inv && !(be instanceof SuperComputerBlockEntity) && !(be instanceof EnchantedStorageTerminalBlockEntity)) {
+                        containers.add(inv);
                     }
                 }
             }
         }
+    }
+
+    public java.util.Map<net.minecraft.item.Item, Integer> collectAvailableItems(@Nullable EnchantedStorageTerminalBlockEntity terminal,
+                                                                                @Nullable PlayerEntity player,
+                                                                                @Nullable List<ItemStack> patternStacks) {
+        java.util.Map<net.minecraft.item.Item, Integer> available = new java.util.HashMap<>();
+
+        // 1. Digital Storage Terminal crystals
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
+                if (item.getCount() > 0 && !item.getSample().isEmpty()) {
+                    int c = (int) Math.min(item.getCount(), (long) Integer.MAX_VALUE);
+                    available.put(item.getSample().getItem(), available.getOrDefault(item.getSample().getItem(), 0) + c);
+                }
+            }
+        }
+
+        // 2. Player Inventory (slots 0..35: hotbar + main inventory)
+        if (player != null) {
+            PlayerInventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack pStack = pInv.getStack(i);
+                if (!pStack.isEmpty()) {
+                    available.put(pStack.getItem(), available.getOrDefault(pStack.getItem(), 0) + pStack.getCount());
+                }
+            }
+        }
+
+        // 3. Directly adjacent inventories (Chests, Barrels, Enchanted Chests, etc.)
+        if (this.world != null) {
+            for (Direction dir : Direction.values()) {
+                BlockEntity be = this.world.getBlockEntity(this.pos.offset(dir));
+                if (be instanceof Inventory adjInv && !(be instanceof SuperComputerBlockEntity) && !(be instanceof EnchantedStorageTerminalBlockEntity)) {
+                    for (int s = 0; s < adjInv.size(); s++) {
+                        ItemStack stk = adjInv.getStack(s);
+                        if (!stk.isEmpty()) {
+                            available.put(stk.getItem(), available.getOrDefault(stk.getItem(), 0) + stk.getCount());
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. Scanned connected containers within network area
+        for (Inventory container : this.cachedContainers) {
+            if (container != null) {
+                for (int s = 0; s < container.size(); s++) {
+                    ItemStack stk = container.getStack(s);
+                    if (!stk.isEmpty()) {
+                        available.put(stk.getItem(), available.getOrDefault(stk.getItem(), 0) + stk.getCount());
+                    }
+                }
+            }
+        }
+
+        // 5. Water Pumps (Bucket in slot = empty buckets, Bucket out slot = water buckets)
+        for (WaterPumpBlockEntity wp : this.cachedWaterPumps) {
+            if (wp != null && !wp.isRemoved()) {
+                ItemStack inStack = wp.getStack(WaterPumpBlockEntity.BUCKET_IN_SLOT);
+                if (!inStack.isEmpty()) {
+                    available.put(inStack.getItem(), available.getOrDefault(inStack.getItem(), 0) + inStack.getCount());
+                }
+                ItemStack outStack = wp.getStack(WaterPumpBlockEntity.BUCKET_OUT_SLOT);
+                if (!outStack.isEmpty()) {
+                    available.put(outStack.getItem(), available.getOrDefault(outStack.getItem(), 0) + outStack.getCount());
+                }
+            }
+        }
+
+        // 6. Lava Pumps (Bucket in slot = empty buckets, Bucket out slot = lava buckets)
+        for (LavaPumpBlockEntity lp : this.cachedLavaPumps) {
+            if (lp != null && !lp.isRemoved()) {
+                ItemStack inStack = lp.getStack(LavaPumpBlockEntity.BUCKET_IN_SLOT);
+                if (!inStack.isEmpty()) {
+                    available.put(inStack.getItem(), available.getOrDefault(inStack.getItem(), 0) + inStack.getCount());
+                }
+                ItemStack outStack = lp.getStack(LavaPumpBlockEntity.BUCKET_OUT_SLOT);
+                if (!outStack.isEmpty()) {
+                    available.put(outStack.getItem(), available.getOrDefault(outStack.getItem(), 0) + outStack.getCount());
+                }
+            }
+        }
+
+        // 7. Magma Crucibles (Bucket input slot = empty buckets, Bucket output slot = lava buckets)
+        for (MagmaCrucibleBlockEntity mc : this.cachedCrucibles) {
+            if (mc != null && !mc.isRemoved()) {
+                ItemStack inStack = mc.getStack(MagmaCrucibleBlockEntity.BUCKET_INPUT_SLOT);
+                if (!inStack.isEmpty()) {
+                    available.put(inStack.getItem(), available.getOrDefault(inStack.getItem(), 0) + inStack.getCount());
+                }
+                ItemStack outStack = mc.getStack(MagmaCrucibleBlockEntity.BUCKET_OUTPUT_SLOT);
+                if (!outStack.isEmpty()) {
+                    available.put(outStack.getItem(), available.getOrDefault(outStack.getItem(), 0) + outStack.getCount());
+                }
+            }
+        }
+
+        // 8. Items placed into the 3x3 pattern matrix itself
+        if (patternStacks != null) {
+            for (ItemStack ps : patternStacks) {
+                if (!ps.isEmpty()) {
+                    available.put(ps.getItem(), available.getOrDefault(ps.getItem(), 0) + ps.getCount());
+                }
+            }
+        }
+
+        return available;
     }
 
     public static class MetalCastInfo {
@@ -358,6 +501,69 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
 
     public List<EnchantedFurnaceBlockEntity> getNearbyFurnaces() {
         return this.cachedFurnaces;
+    }
+
+    public boolean isWaterPumpOnline() {
+        if (this.cachedWaterPumpOnline) return true;
+        if (this.world != null) {
+            BlockPos.Mutable mut = new BlockPos.Mutable();
+            for (int dx = -16; dx <= 16; dx++) {
+                for (int dy = -8; dy <= 8; dy++) {
+                    for (int dz = -16; dz <= 16; dz++) {
+                        mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
+                        if (this.world.getFluidState(mut).isOf(net.minecraft.fluid.Fluids.WATER) || this.world.getBlockState(mut).isOf(net.minecraft.block.Blocks.WATER)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<WaterPumpBlockEntity> getNearbyWaterPumps() {
+        return this.cachedWaterPumps;
+    }
+
+    public @Nullable WaterPumpBlockEntity getBestAvailableWaterPump() {
+        for (WaterPumpBlockEntity wp : this.cachedWaterPumps) {
+            if (wp != null && !wp.isRemoved()) return wp;
+        }
+        return null;
+    }
+
+    public boolean isLavaSourceOnline() {
+        return this.cachedLavaOnline;
+    }
+
+    public boolean isLavaPumpOnline() {
+        return !this.cachedLavaPumps.isEmpty();
+    }
+
+    public List<LavaPumpBlockEntity> getNearbyLavaPumps() {
+        return this.cachedLavaPumps;
+    }
+
+    public @Nullable LavaPumpBlockEntity getBestAvailableLavaPump() {
+        for (LavaPumpBlockEntity lp : this.cachedLavaPumps) {
+            if (lp != null && !lp.isRemoved()) return lp;
+        }
+        return null;
+    }
+
+    public boolean isCrucibleOnline() {
+        return !this.cachedCrucibles.isEmpty();
+    }
+
+    public List<MagmaCrucibleBlockEntity> getNearbyCrucibles() {
+        return this.cachedCrucibles;
+    }
+
+    public @Nullable MagmaCrucibleBlockEntity getBestAvailableCrucible() {
+        for (MagmaCrucibleBlockEntity mc : this.cachedCrucibles) {
+            if (mc != null && !mc.isRemoved()) return mc;
+        }
+        return null;
     }
 
     public @Nullable HydraulicPressBlockEntity getBestAvailablePress() {
@@ -456,6 +662,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
             case SMELT -> isFurnaceOnline() ? 60 : 120;
             case CAST -> 20;
+            case PUMP_WATER -> 20;
+            case PUMP_LAVA -> 30;
+            case MELT_LAVA -> 40;
             case ASSEMBLE -> isOverclocked() ? 10 : 25;
         };
     }
@@ -538,6 +747,69 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             ItemStack res = match.get().value().craft(new SingleStackRecipeInput(single), world.getRegistryManager());
             if (!res.isEmpty()) {
                 return new ItemStack(res.getItem(), res.getCount() * single.getCount());
+            }
+        }
+        return null;
+    }
+
+    public static @Nullable ItemStack getDirectWaterPumpPatternResult(List<ItemStack> patternStacks) {
+        ItemStack single = null;
+        for (ItemStack s : patternStacks) {
+            if (!s.isEmpty()) {
+                if (single != null) return null;
+                single = s;
+            }
+        }
+        if (single == null) return null;
+
+        if (single.isOf(Items.BUCKET) || single.isOf(Items.WATER_BUCKET)) {
+            return new ItemStack(Items.WATER_BUCKET);
+        }
+        if (single.isOf(ModItems.COPPER_BUCKET) || single.isOf(ModItems.COPPER_WATER_BUCKET)) {
+            return new ItemStack(ModItems.COPPER_WATER_BUCKET);
+        }
+        return null;
+    }
+
+    public static @Nullable ItemStack getDirectLavaPatternResult(List<ItemStack> patternStacks) {
+        ItemStack single = null;
+        ItemStack second = null;
+        for (ItemStack s : patternStacks) {
+            if (!s.isEmpty()) {
+                if (single == null) {
+                    single = s;
+                } else if (second == null) {
+                    second = s;
+                } else {
+                    return null;
+                }
+            }
+        }
+        if (single == null) return null;
+
+        if (second == null) {
+            if (single.isOf(Items.LAVA_BUCKET)) return new ItemStack(Items.LAVA_BUCKET);
+            if (single.isOf(ModItems.COPPER_LAVA_BUCKET)) return new ItemStack(ModItems.COPPER_LAVA_BUCKET);
+            return null;
+        }
+
+        ItemStack bucket = null;
+        ItemStack other = null;
+        if (single.isOf(Items.BUCKET) || single.isOf(ModItems.COPPER_BUCKET)) {
+            bucket = single;
+            other = second;
+        } else if (second.isOf(Items.BUCKET) || second.isOf(ModItems.COPPER_BUCKET)) {
+            bucket = second;
+            other = single;
+        }
+
+        if (bucket != null && other != null) {
+            boolean isCopper = bucket.isOf(ModItems.COPPER_BUCKET);
+            net.minecraft.item.Item otherItem = other.getItem();
+            if (otherItem == ModItems.FIRE_CRYSTAL || otherItem == Items.MAGMA_BLOCK || otherItem == Items.BASALT ||
+                otherItem == Items.BLACKSTONE || otherItem == Items.COBBLESTONE || otherItem == Items.STONE ||
+                otherItem == Items.NETHERRACK || otherItem == Items.LAVA_BUCKET) {
+                return isCopper ? new ItemStack(ModItems.COPPER_LAVA_BUCKET) : new ItemStack(Items.LAVA_BUCKET);
             }
         }
         return null;
@@ -676,6 +948,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             ItemStack directFab = getDirectFabricatorPatternResult(patternStacks);
             ItemStack directPress = getDirectPressPatternResult(patternStacks);
             ItemStack directSmelt = getDirectSmeltingPatternResult(world, patternStacks);
+            ItemStack directWater = getDirectWaterPumpPatternResult(patternStacks);
+            ItemStack directLava = getDirectLavaPatternResult(patternStacks);
 
             if (directCast != null) {
                 entity.hasValidRecipe = true;
@@ -689,6 +963,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             } else if (directSmelt != null) {
                 entity.hasValidRecipe = true;
                 resultStack = directSmelt;
+            } else if (directWater != null) {
+                entity.hasValidRecipe = true;
+                resultStack = directWater;
+            } else if (directLava != null) {
+                entity.hasValidRecipe = true;
+                resultStack = directLava;
             } else {
                 entity.hasValidRecipe = false;
                 entity.craftProgress = 0;
@@ -786,6 +1066,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             case FABRICATE -> 50;
             case SMELT -> 30;
             case CAST -> 25;
+            case PUMP_WATER -> 20;
+            case PUMP_LAVA -> 30;
+            case MELT_LAVA -> 35;
             case ASSEMBLE -> 20;
         };
 
@@ -803,6 +1086,27 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
                 if (fab != null && fab.getEnergyStorage(null).getEnergy() >= powerDraw) {
                     fab.getEnergyStorage(null).extractEnergy(powerDraw, false);
+                    powered = true;
+                }
+            }
+            case PUMP_WATER -> {
+                WaterPumpBlockEntity pump = getBestAvailableWaterPump();
+                if (pump != null && pump.getEnergyStorage(null).getEnergy() >= powerDraw) {
+                    pump.getEnergyStorage(null).extractEnergy(powerDraw, false);
+                    powered = true;
+                }
+            }
+            case PUMP_LAVA -> {
+                LavaPumpBlockEntity pump = getBestAvailableLavaPump();
+                if (pump != null && pump.getEnergyStorage(null).getEnergy() >= powerDraw) {
+                    pump.getEnergyStorage(null).extractEnergy(powerDraw, false);
+                    powered = true;
+                }
+            }
+            case MELT_LAVA -> {
+                MagmaCrucibleBlockEntity crucible = getBestAvailableCrucible();
+                if (crucible != null && crucible.getEnergyStorage(null).getEnergy() >= powerDraw) {
+                    crucible.getEnergyStorage(null).extractEnergy(powerDraw, false);
                     powered = true;
                 }
             }
@@ -889,6 +1193,39 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     }
                 }
             }
+            case PUMP_WATER -> {
+                WaterPumpBlockEntity pump = getBestAvailableWaterPump();
+                BlockPos wPos = pump != null ? pump.getPos() : pos;
+                if (world.getTime() % 4 == 0) {
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.SPLASH, wPos.getX() + 0.5, wPos.getY() + 0.9, wPos.getZ() + 0.5, 4, 0.2, 0.1, 0.2, 0.05);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.BUBBLE, wPos.getX() + 0.5, wPos.getY() + 0.8, wPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
+                }
+                if (world.getTime() % 15 == 0) {
+                    world.playSound(null, wPos, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, 0.6f, 1.2f);
+                }
+            }
+            case PUMP_LAVA -> {
+                LavaPumpBlockEntity pump = getBestAvailableLavaPump();
+                BlockPos lPos = pump != null ? pump.getPos() : pos;
+                if (world.getTime() % 4 == 0) {
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, lPos.getX() + 0.5, lPos.getY() + 0.9, lPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, lPos.getX() + 0.5, lPos.getY() + 0.8, lPos.getZ() + 0.5, 2, 0.15, 0.15, 0.15, 0.02);
+                }
+                if (world.getTime() % 15 == 0) {
+                    world.playSound(null, lPos, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.6f, 1.0f);
+                }
+            }
+            case MELT_LAVA -> {
+                MagmaCrucibleBlockEntity crucible = getBestAvailableCrucible();
+                BlockPos cPos = crucible != null ? crucible.getPos() : pos;
+                if (world.getTime() % 3 == 0) {
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, cPos.getX() + 0.5, cPos.getY() + 0.9, cPos.getZ() + 0.5, 4, 0.2, 0.1, 0.2, 0.03);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.SMOKE, cPos.getX() + 0.5, cPos.getY() + 0.9, cPos.getZ() + 0.5, 3, 0.15, 0.15, 0.15, 0.02);
+                }
+                if (world.getTime() % 15 == 0) {
+                    world.playSound(null, cPos, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.7f, 1.0f);
+                }
+            }
             case ASSEMBLE -> {
                 if (world.getTime() % 3 == 0) {
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5, 4, 0.2, 0.1, 0.2, 0.05);
@@ -942,6 +1279,33 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     }
                     world.playSound(null, sPos, SoundEvents.BLOCK_BEACON_POWER_SELECT, SoundCategory.BLOCKS, 0.8f, 1.6f);
                     world.spawnParticles(net.minecraft.particle.ParticleTypes.ENCHANTED_HIT, sPos.getX() + 0.5, sPos.getY() + 0.8, sPos.getZ() + 0.5, 15, 0.2, 0.2, 0.2, 0.1);
+                }
+                case PUMP_WATER -> {
+                    WaterPumpBlockEntity pump = getBestAvailableWaterPump();
+                    if (pump != null) {
+                        pump.extractWater(1000, false);
+                    }
+                    BlockPos sPos = pump != null ? pump.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.8f, 1.0f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.SPLASH, sPos.getX() + 0.5, sPos.getY() + 0.9, sPos.getZ() + 0.5, 10, 0.2, 0.2, 0.2, 0.05);
+                }
+                case PUMP_LAVA -> {
+                    LavaPumpBlockEntity pump = getBestAvailableLavaPump();
+                    if (pump != null) {
+                        pump.extractLava(1000, false);
+                    }
+                    BlockPos sPos = pump != null ? pump.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.BLOCKS, 0.8f, 1.0f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.LAVA, sPos.getX() + 0.5, sPos.getY() + 0.9, sPos.getZ() + 0.5, 8, 0.2, 0.2, 0.2, 0.05);
+                }
+                case MELT_LAVA -> {
+                    MagmaCrucibleBlockEntity crucible = getBestAvailableCrucible();
+                    if (crucible != null) {
+                        crucible.extractLava(1000, false);
+                    }
+                    BlockPos sPos = crucible != null ? crucible.getPos() : pos;
+                    world.playSound(null, sPos, SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundCategory.BLOCKS, 0.8f, 1.0f);
+                    world.spawnParticles(net.minecraft.particle.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.9, sPos.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
                 }
                 case ASSEMBLE -> {
                     world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.5f, 1.4f);
@@ -998,6 +1362,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             ItemStack directSmelt = getDirectSmeltingPatternResult(serverWorld, patternStacks);
             if (directSmelt != null) {
                 executeDirectSmelting(serverWorld, player, patternStacks, directSmelt, craftAll);
+                return;
+            }
+            ItemStack directWater = getDirectWaterPumpPatternResult(patternStacks);
+            if (directWater != null) {
+                executeDirectWaterPumping(serverWorld, player, patternStacks, directWater, craftAll);
+                return;
+            }
+            ItemStack directLava = getDirectLavaPatternResult(patternStacks);
+            if (directLava != null) {
+                executeDirectLavaPumping(serverWorld, player, patternStacks, directLava, craftAll);
                 return;
             }
             sendFeedback(player, "§c[Super Computer] No valid crafting recipe in the 3x3 grid!");
@@ -1231,23 +1605,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int availCount = 0;
-        if (terminal != null && terminal.isNetworkOnline()) {
-            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
-                    availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
-                }
-            }
-        }
-        if (player != null) {
-            PlayerInventory pInv = player.getInventory();
-            for (int i = 0; i < 36; i++) {
-                ItemStack ps = pInv.getStack(i);
-                if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
-                    availCount += ps.getCount();
-                }
-            }
-        }
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        int availCount = available.getOrDefault(rawInputItem, 0);
 
         if (availCount < 1) {
             sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(rawInputItem).getName().getString());
@@ -1265,7 +1624,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     private void executeDirectSmelting(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directSmelt, boolean craftAll) {
         updateMachineCache(true);
         if (!isFurnaceOnline()) {
-            sendFeedback(player, "§e[Super Computer] Place an Enchanted Furnace within 32 blocks to enable automated smelting!");
+            sendFeedback(player, "§e[Super Computer] Place an Enchanted Furnace within 48 blocks to enable automated smelting!");
             return;
         }
 
@@ -1298,23 +1657,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        int availCount = 0;
-        if (terminal != null && terminal.isNetworkOnline()) {
-            for (EnchantedStorageTerminalBlockEntity.StoredItem si : terminal.getStoredItems()) {
-                if (si.getCount() > 0 && si.getSample().isOf(rawInputItem)) {
-                    availCount += (int) Math.min(si.getCount(), Integer.MAX_VALUE);
-                }
-            }
-        }
-        if (player != null) {
-            PlayerInventory pInv = player.getInventory();
-            for (int i = 0; i < 36; i++) {
-                ItemStack ps = pInv.getStack(i);
-                if (!ps.isEmpty() && ps.isOf(rawInputItem)) {
-                    availCount += ps.getCount();
-                }
-            }
-        }
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        int availCount = available.getOrDefault(rawInputItem, 0);
 
         if (availCount < 1) {
             sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(rawInputItem).getName().getString());
@@ -1325,6 +1669,81 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         List<CraftStep> steps = List.of(new CraftStep(StepType.SMELT, rawInputItem, oneBatchResult.getItem()));
         this.activeJob = new ActiveCraftJob(player.getUuid(), steps, oneBatchResult.copy(), List.of(), craftAll, patternStacks);
         sendFeedback(player, "§6⚡ Smelting: §f" + oneBatchResult.getName().getString());
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
+    }
+
+    private void executeDirectWaterPumping(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directWater, boolean craftAll) {
+        updateMachineCache(true);
+        if (!isWaterPumpOnline()) {
+            sendFeedback(player, "§e[Super Computer] Place an Electric Water Pump (or water source) within 48 blocks to enable automated water extraction!");
+            return;
+        }
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
+        boolean isCopper = directWater.isOf(ModItems.COPPER_WATER_BUCKET);
+        net.minecraft.item.Item emptyBucket = isCopper ? ModItems.COPPER_BUCKET : Items.BUCKET;
+
+        if (!canAcceptOutput(directWater)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
+        }
+
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        int availBuckets = available.getOrDefault(emptyBucket, 0);
+
+        if (availBuckets < 1) {
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Water Pump, or pattern grid)");
+            return;
+        }
+
+        consumeIngredients(terminal, player, List.of(new ItemStack(emptyBucket, 1)));
+        List<CraftStep> steps = List.of(new CraftStep(StepType.PUMP_WATER, emptyBucket, directWater.getItem()));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, directWater.copy(), List.of(), craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Pumping Water: §f" + directWater.getName().getString());
+        markDirty();
+        serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
+    }
+
+    private void executeDirectLavaPumping(ServerWorld serverWorld, PlayerEntity player, List<ItemStack> patternStacks, ItemStack directLava, boolean craftAll) {
+        updateMachineCache(true);
+        if (!isLavaSourceOnline()) {
+            sendFeedback(player, "§e[Super Computer] Place a Lava Pump or Magma Crucible within 48 blocks to enable lava handling!");
+            return;
+        }
+
+        if (this.activeJob != null) {
+            sendFeedback(player, "§e[Super Computer] Factory is currently busy working on a job!");
+            return;
+        }
+
+        boolean isCopper = directLava.isOf(ModItems.COPPER_LAVA_BUCKET);
+        net.minecraft.item.Item emptyBucket = isCopper ? ModItems.COPPER_BUCKET : Items.BUCKET;
+
+        if (!canAcceptOutput(directLava)) {
+            sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
+            return;
+        }
+
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        int availBuckets = available.getOrDefault(emptyBucket, 0);
+
+        if (availBuckets < 1) {
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Lava Pump, or pattern grid)");
+            return;
+        }
+
+        StepType stepType = isLavaPumpOnline() ? StepType.PUMP_LAVA : StepType.MELT_LAVA;
+        consumeIngredients(terminal, player, List.of(new ItemStack(emptyBucket, 1)));
+        List<CraftStep> steps = List.of(new CraftStep(stepType, emptyBucket, directLava.getItem()));
+        this.activeJob = new ActiveCraftJob(player.getUuid(), steps, directLava.copy(), List.of(), craftAll, patternStacks);
+        sendFeedback(player, "§6⚡ Pumping Lava: §f" + directLava.getName().getString());
         markDirty();
         serverWorld.setBlockState(this.pos, serverWorld.getBlockState(this.pos).with(SuperComputerBlock.LIT, true), 3);
     }
@@ -1354,6 +1773,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         SMELT,
         PRESS,
         FABRICATE,
+        PUMP_WATER,
+        PUMP_LAVA,
+        MELT_LAVA,
         ASSEMBLE
     }
 
@@ -1514,29 +1936,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                                  List<ItemStack> patternStacks) {
         java.util.Map<String, Integer> missingItems = new java.util.LinkedHashMap<>();
         try {
-            // Snapshot available items from Terminal, Player Inventory, and Matrix
-            java.util.Map<net.minecraft.item.Item, Integer> available = new java.util.HashMap<>();
-
-            // 1. Digital Storage Terminal crystals
-            if (terminal != null && terminal.isNetworkOnline()) {
-                for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
-                    if (item.getCount() > 0 && !item.getSample().isEmpty()) {
-                        int c = (int) Math.min(item.getCount(), (long) Integer.MAX_VALUE);
-                        available.put(item.getSample().getItem(), available.getOrDefault(item.getSample().getItem(), 0) + c);
-                    }
-                }
-            }
-
-            // 2. Player Inventory (slots 0..35: hotbar + main inventory)
-            if (player != null) {
-                PlayerInventory pInv = player.getInventory();
-                for (int i = 0; i < 36; i++) {
-                    ItemStack pStack = pInv.getStack(i);
-                    if (!pStack.isEmpty()) {
-                        available.put(pStack.getItem(), available.getOrDefault(pStack.getItem(), 0) + pStack.getCount());
-                    }
-                }
-            }
+            // Snapshot available items from Terminal, Player Inventory, Machine networks, and Matrix
+            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
 
             CraftingPlan plan = new CraftingPlan();
             java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
@@ -1587,6 +1988,16 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
+            // Record any recipe remainders from crafted items (e.g. empty buckets, bowls, bottles)
+            for (ItemStack s : patternStacks) {
+                if (!s.isEmpty()) {
+                    ItemStack rem = s.getRecipeRemainder();
+                    if (!rem.isEmpty()) {
+                        plan.leftoverSynthesized.add(rem.copy());
+                    }
+                }
+            }
+
             return new CraftingPlanResult(true, plan, missingItems);
         } catch (Throwable t) {
             return new CraftingPlanResult(false, null, missingItems);
@@ -1599,26 +2010,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                                          CircuitFabricatorBlockEntity.FabricatorRecipe recipe) {
         java.util.Map<String, Integer> missingItems = new java.util.LinkedHashMap<>();
         try {
-            java.util.Map<net.minecraft.item.Item, Integer> available = new java.util.HashMap<>();
-
-            if (terminal != null && terminal.isNetworkOnline()) {
-                for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
-                    if (item.getCount() > 0 && !item.getSample().isEmpty()) {
-                        int c = (int) Math.min(item.getCount(), (long) Integer.MAX_VALUE);
-                        available.put(item.getSample().getItem(), available.getOrDefault(item.getSample().getItem(), 0) + c);
-                    }
-                }
-            }
-
-            if (player != null) {
-                PlayerInventory pInv = player.getInventory();
-                for (int i = 0; i < 36; i++) {
-                    ItemStack pStack = pInv.getStack(i);
-                    if (!pStack.isEmpty()) {
-                        available.put(pStack.getItem(), available.getOrDefault(pStack.getItem(), 0) + pStack.getCount());
-                    }
-                }
-            }
+            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, null);
 
             CraftingPlan plan = new CraftingPlan();
             java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
@@ -1705,6 +2097,108 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     plan.moltenMetalUsedMb += castInfo.costMb;
                     plan.steps.add(new CraftStep(StepType.CAST, castInfo.metal, targetItem, castInfo.costMb));
                     return true;
+                }
+            }
+        }
+
+        // 3b. Check if targetItem is a Water Bucket and can be filled via an online Water Pump or nearby water
+        if (targetItem == Items.WATER_BUCKET || targetItem == ModItems.COPPER_WATER_BUCKET) {
+            if (isWaterPumpOnline()) {
+                net.minecraft.item.Item emptyBucket = (targetItem == ModItems.COPPER_WATER_BUCKET) ? ModItems.COPPER_BUCKET : Items.BUCKET;
+                if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, depth + 1)) {
+                    plan.totalCraftingSteps++;
+                    plan.steps.add(new CraftStep(StepType.PUMP_WATER, emptyBucket, targetItem));
+                    return true;
+                }
+                // Fallback: If no empty bucket is in storage, but Water Pump has at least 1000 mB or nearby water,
+                // direct water pumping fulfills the recipe step seamlessly!
+                WaterPumpBlockEntity pump = getBestAvailableWaterPump();
+                if (pump != null && (pump.getWaterAmount() >= 1000 || WaterPumpBlockEntity.hasWaterNearby(world, pump.getPos()))) {
+                    plan.totalCraftingSteps++;
+                    plan.steps.add(new CraftStep(StepType.PUMP_WATER, null, targetItem));
+                    return true;
+                }
+            } else {
+                missingItems.put(targetItem.getName().getString() + " §c(Place Water Pump or Water nearby)", 1);
+                return false;
+            }
+        }
+
+        // 3c. Check if targetItem is a Lava Bucket and can be pumped or melted via an online Lava Pump / Magma Crucible
+        if ((targetItem == Items.LAVA_BUCKET || targetItem == ModItems.COPPER_LAVA_BUCKET) && isLavaSourceOnline()) {
+            net.minecraft.item.Item emptyBucket = (targetItem == ModItems.COPPER_LAVA_BUCKET) ? ModItems.COPPER_BUCKET : Items.BUCKET;
+            if (isLavaPumpOnline()) {
+                if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, depth + 1)) {
+                    plan.totalCraftingSteps++;
+                    plan.steps.add(new CraftStep(StepType.PUMP_LAVA, emptyBucket, targetItem));
+                    return true;
+                }
+                LavaPumpBlockEntity pump = getBestAvailableLavaPump();
+                if (pump != null && pump.getLavaAmount() >= 1000) {
+                    plan.totalCraftingSteps++;
+                    plan.steps.add(new CraftStep(StepType.PUMP_LAVA, null, targetItem));
+                    return true;
+                }
+            } else if (isCrucibleOnline()) {
+                MagmaCrucibleBlockEntity bestCrucible = getBestAvailableCrucible();
+                if (bestCrucible != null && bestCrucible.getLavaAmount() >= 1000) {
+                    if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, depth + 1)) {
+                        plan.totalCraftingSteps++;
+                        plan.steps.add(new CraftStep(StepType.MELT_LAVA, emptyBucket, targetItem));
+                        return true;
+                    }
+                    plan.totalCraftingSteps++;
+                    plan.steps.add(new CraftStep(StepType.MELT_LAVA, null, targetItem));
+                    return true;
+                } else {
+                    // Try to resolve rock melting materials + empty bucket
+                    net.minecraft.item.Item[] meltCandidates = new net.minecraft.item.Item[]{
+                        ModItems.FIRE_CRYSTAL, Items.MAGMA_BLOCK, Items.BASALT, Items.BLACKSTONE,
+                        Items.COBBLESTONE, Items.STONE, Items.NETHERRACK
+                    };
+                    int[] meltCounts = new int[]{ 1, 2, 4, 4, 10, 10, 10 };
+                    for (int m = 0; m < meltCandidates.length; m++) {
+                        net.minecraft.item.Item rock = meltCandidates[m];
+                        int neededCount = meltCounts[m];
+
+                        java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
+                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
+                        java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
+                        List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
+                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                        List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
+                        int backupSteps = plan.totalCraftingSteps;
+
+                        boolean rockOk = true;
+                        for (int k = 0; k < neededCount; k++) {
+                            if (!resolveItemRequirement(world, rock, available, availableMolten, virtualBuffer, plan, new java.util.LinkedHashMap<>(), activeRecursion, depth + 1)) {
+                                rockOk = false;
+                                break;
+                            }
+                        }
+
+                        if (rockOk && resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, new java.util.LinkedHashMap<>(), activeRecursion, depth + 1)) {
+                            plan.totalCraftingSteps++;
+                            plan.steps.add(new CraftStep(StepType.MELT_LAVA, rock, targetItem));
+                            return true;
+                        }
+
+                        // Rollback
+                        available.clear(); available.putAll(backupAvailable);
+                        availableMolten.clear(); availableMolten.putAll(backupMolten);
+                        virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
+                        plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
+                        plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                        plan.steps.clear(); plan.steps.addAll(backupStepsList);
+                        plan.totalCraftingSteps = backupSteps;
+                    }
+
+                    // If couldn't resolve specific rock, still check if empty bucket alone can be queued
+                    if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, new java.util.LinkedHashMap<>(), activeRecursion, depth + 1)) {
+                        plan.totalCraftingSteps++;
+                        plan.steps.add(new CraftStep(StepType.MELT_LAVA, emptyBucket, targetItem));
+                        return true;
+                    }
                 }
             }
         }
@@ -2068,6 +2562,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             displayName += " §c(Press Offline)";
         } else if (!isCircuitFabricatorOnline() && canBeFabricated(matchingItems)) {
             displayName += " §c(Fabricator Offline)";
+        } else if (!isWaterPumpOnline() && matchingItems.stream().anyMatch(i -> i == Items.WATER_BUCKET || i == ModItems.COPPER_WATER_BUCKET)) {
+            displayName += " §c(Water Pump Offline)";
+        } else if (!isLavaSourceOnline() && matchingItems.stream().anyMatch(i -> i == Items.LAVA_BUCKET || i == ModItems.COPPER_LAVA_BUCKET)) {
+            displayName += " §c(Lava Pump / Crucible Offline)";
         }
         missingItems.put(displayName, missingItems.getOrDefault(displayName, 0) + 1);
         return false;
@@ -2128,6 +2626,134 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                             pInv.setStack(i, ItemStack.EMPTY);
                         }
                         pInv.markDirty();
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 3. Deduct from 3x3 pattern matrix itself
+            if (needed > 0) {
+                for (int s = 0; s < 9; s++) {
+                    ItemStack pStack = this.inventory.get(s);
+                    if (!pStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(pStack, req)) {
+                        int take = Math.min(needed, pStack.getCount());
+                        pStack.decrement(take);
+                        needed -= take;
+                        if (pStack.isEmpty()) {
+                            this.inventory.set(s, ItemStack.EMPTY);
+                        }
+                        this.markDirty();
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 4. Deduct from Water Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
+            if (needed > 0) {
+                for (WaterPumpBlockEntity wp : this.cachedWaterPumps) {
+                    if (wp != null && !wp.isRemoved()) {
+                        for (int slot : new int[]{WaterPumpBlockEntity.BUCKET_OUT_SLOT, WaterPumpBlockEntity.BUCKET_IN_SLOT}) {
+                            ItemStack wpStack = wp.getStack(slot);
+                            if (!wpStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(wpStack, req)) {
+                                int take = Math.min(needed, wpStack.getCount());
+                                wpStack.decrement(take);
+                                needed -= take;
+                                if (wpStack.isEmpty()) {
+                                    wp.setStack(slot, ItemStack.EMPTY);
+                                }
+                                wp.markDirty();
+                                if (needed <= 0) break;
+                            }
+                        }
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 5. Deduct from Lava Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
+            if (needed > 0) {
+                for (LavaPumpBlockEntity lp : this.cachedLavaPumps) {
+                    if (lp != null && !lp.isRemoved()) {
+                        for (int slot : new int[]{LavaPumpBlockEntity.BUCKET_OUT_SLOT, LavaPumpBlockEntity.BUCKET_IN_SLOT}) {
+                            ItemStack lpStack = lp.getStack(slot);
+                            if (!lpStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(lpStack, req)) {
+                                int take = Math.min(needed, lpStack.getCount());
+                                lpStack.decrement(take);
+                                needed -= take;
+                                if (lpStack.isEmpty()) {
+                                    lp.setStack(slot, ItemStack.EMPTY);
+                                }
+                                lp.markDirty();
+                                if (needed <= 0) break;
+                            }
+                        }
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 6. Deduct from Magma Crucibles (BUCKET_OUTPUT_SLOT first, then BUCKET_INPUT_SLOT)
+            if (needed > 0) {
+                for (MagmaCrucibleBlockEntity mc : this.cachedCrucibles) {
+                    if (mc != null && !mc.isRemoved()) {
+                        for (int slot : new int[]{MagmaCrucibleBlockEntity.BUCKET_OUTPUT_SLOT, MagmaCrucibleBlockEntity.BUCKET_INPUT_SLOT}) {
+                            ItemStack mcStack = mc.getStack(slot);
+                            if (!mcStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(mcStack, req)) {
+                                int take = Math.min(needed, mcStack.getCount());
+                                mcStack.decrement(take);
+                                needed -= take;
+                                if (mcStack.isEmpty()) {
+                                    mc.setStack(slot, ItemStack.EMPTY);
+                                }
+                                mc.markDirty();
+                                if (needed <= 0) break;
+                            }
+                        }
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 7. Deduct from adjacent inventories if still needed
+            if (needed > 0 && this.world != null) {
+                for (Direction dir : Direction.values()) {
+                    BlockEntity be = this.world.getBlockEntity(this.pos.offset(dir));
+                    if (be instanceof Inventory adjInv && !(be instanceof SuperComputerBlockEntity) && !(be instanceof EnchantedStorageTerminalBlockEntity)) {
+                        for (int s = 0; s < adjInv.size(); s++) {
+                            ItemStack pStack = adjInv.getStack(s);
+                            if (!pStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(pStack, req)) {
+                                int take = Math.min(needed, pStack.getCount());
+                                pStack.decrement(take);
+                                needed -= take;
+                                if (pStack.isEmpty()) {
+                                    adjInv.setStack(s, ItemStack.EMPTY);
+                                }
+                                adjInv.markDirty();
+                                if (needed <= 0) break;
+                            }
+                        }
+                        if (needed <= 0) break;
+                    }
+                }
+            }
+
+            // 8. Deduct from scanned room containers (cachedContainers)
+            if (needed > 0) {
+                for (Inventory container : this.cachedContainers) {
+                    if (container != null && !(container instanceof SuperComputerBlockEntity) && !(container instanceof EnchantedStorageTerminalBlockEntity)) {
+                        for (int s = 0; s < container.size(); s++) {
+                            ItemStack pStack = container.getStack(s);
+                            if (!pStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(pStack, req)) {
+                                int take = Math.min(needed, pStack.getCount());
+                                pStack.decrement(take);
+                                needed -= take;
+                                if (pStack.isEmpty()) {
+                                    container.setStack(s, ItemStack.EMPTY);
+                                }
+                                container.markDirty();
+                                if (needed <= 0) break;
+                            }
+                        }
                         if (needed <= 0) break;
                     }
                 }

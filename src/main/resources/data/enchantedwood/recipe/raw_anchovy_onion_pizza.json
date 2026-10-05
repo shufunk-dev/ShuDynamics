@@ -1,0 +1,15 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:pizza_dough",
+                        "enchantedwood:tomato_sauce",
+                        "enchantedwood:cheese_slice",
+                        "enchantedwood:prepared_anchovies",
+                        "enchantedwood:onion"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:raw_anchovy_onion_pizza",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

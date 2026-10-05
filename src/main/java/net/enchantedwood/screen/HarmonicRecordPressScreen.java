@@ -32,7 +32,7 @@ public class HarmonicRecordPressScreen extends HandledScreen<HarmonicRecordPress
         // 1. Progress Needle / Record Cutter Arrow
         int progress = this.handler.getScaledProgress();
         if (progress > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 76, y + 35, 176.0f, 14.0f, progress + 1, 16, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 76, y + 35, 176.0f, 14.0f, progress, 16, 256, 256);
         }
 
         // 2. Energy Bar

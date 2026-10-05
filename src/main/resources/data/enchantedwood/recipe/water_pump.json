@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IPI",
+    "GCG",
+    "IEI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "G": "minecraft:glass",
+    "C": "minecraft:bucket",
+    "E": "enchantedwood:copper_cable"
+  },
+  "result": {
+    "id": "enchantedwood:water_pump",
+    "count": 1
+  }
+}

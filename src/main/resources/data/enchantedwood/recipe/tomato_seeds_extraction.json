@@ -1,0 +1,11 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:tomato"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:tomato_seeds",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

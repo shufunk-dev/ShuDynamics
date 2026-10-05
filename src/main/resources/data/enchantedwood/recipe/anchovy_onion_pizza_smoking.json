@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.6,
+    "ingredient":  "enchantedwood:raw_anchovy_onion_pizza",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:anchovy_onion_pizza",
+                   "count":  1
+               }
+}

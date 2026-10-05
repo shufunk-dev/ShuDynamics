@@ -1,0 +1,12 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:soy_milk",
+                        "enchantedwood:salt"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:cheese_slice",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

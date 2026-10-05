@@ -57,6 +57,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.ITEM_SALVAGER_SCREEN_HANDLER, net.enchantedwood.screen.ItemSalvagerScreen::new);
         HandledScreens.register(ModScreenHandlers.MAGMA_CRUCIBLE_SCREEN_HANDLER, net.enchantedwood.screen.MagmaCrucibleScreen::new);
         HandledScreens.register(ModScreenHandlers.LAVA_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.LavaPumpScreen::new);
+        HandledScreens.register(ModScreenHandlers.WATER_PUMP_SCREEN_HANDLER, net.enchantedwood.screen.WaterPumpScreen::new);
+        HandledScreens.register(ModScreenHandlers.CRYO_FREEZER_SCREEN_HANDLER, net.enchantedwood.screen.CryoFreezerScreen::new);
         HandledScreens.register(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.CrusherMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.DUST_SMELTER_MK2_SCREEN_HANDLER, net.enchantedwood.screen.DustSmelterMk2Screen::new);
         HandledScreens.register(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, net.enchantedwood.screen.SoilInfuserScreen::new);
@@ -73,6 +75,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
         HandledScreens.register(ModScreenHandlers.INDUCTION_SMELTER_SCREEN_HANDLER, net.enchantedwood.screen.InductionSmelterScreen::new);
         HandledScreens.register(ModScreenHandlers.CASTING_PORT_SCREEN_HANDLER, net.enchantedwood.screen.CastingPortScreen::new);
         HandledScreens.register(ModScreenHandlers.HARMONIC_RECORD_PRESS_SCREEN_HANDLER, net.enchantedwood.screen.HarmonicRecordPressScreen::new);
+        HandledScreens.register(ModScreenHandlers.BRICK_OVEN_SCREEN_HANDLER, net.enchantedwood.screen.BrickOvenScreen::new);
+        HandledScreens.register(ModScreenHandlers.ICE_CREAM_MACHINE_SCREEN_HANDLER, net.enchantedwood.screen.IceCreamMachineScreen::new);
 
         BlockEntityRendererFactories.register(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, EnchantedChestBlockEntityRenderer::new);
         BlockEntityRendererFactories.register(ModBlockEntities.TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY, net.enchantedwood.client.renderer.TitaniumTankControllerBlockEntityRenderer::new);
@@ -93,6 +97,16 @@ public class EnchantedWoodClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CORN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.RICE_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CUCUMBER_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.TOMATO_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.ONION_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.LETTUCE_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.SOYBEAN_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.CHILI_PEPPER_CROP, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.STRAWBERRY_BUSH, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.BLUEBERRY_BUSH, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_RICE, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_CUCUMBER, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
+
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_RICE, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.WILD_CUCUMBER, net.minecraft.client.render.BlockRenderLayer.CUTOUT);
         net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap.putBlock(net.enchantedwood.block.ModBlocks.AVOCADO_SAPLING, net.minecraft.client.render.BlockRenderLayer.CUTOUT);

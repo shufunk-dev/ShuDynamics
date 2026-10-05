@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/prepared_anchovies"
+                 },
+    "parent":  "minecraft:item/generated"
+}

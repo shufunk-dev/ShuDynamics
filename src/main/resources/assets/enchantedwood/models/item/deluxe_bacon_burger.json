@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/deluxe_bacon_burger"
+                 },
+    "parent":  "minecraft:item/generated"
+}

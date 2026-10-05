@@ -142,18 +142,23 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements NamedScreen
 
         // 1. Fill empty bucket with liquid lava from internal tank
         ItemStack bucketIn = entity.inventory.get(BUCKET_INPUT_SLOT);
-        if (!bucketIn.isEmpty() && bucketIn.isOf(Items.BUCKET) && entity.lavaAmount >= 1000) {
-            ItemStack bucketOut = entity.inventory.get(BUCKET_OUTPUT_SLOT);
-            if (bucketOut.isEmpty()) {
-                entity.lavaAmount -= 1000;
-                bucketIn.decrement(1);
-                entity.inventory.set(BUCKET_OUTPUT_SLOT, new ItemStack(Items.LAVA_BUCKET));
-                dirty = true;
-            } else if (bucketOut.isOf(Items.LAVA_BUCKET) && bucketOut.getCount() < bucketOut.getMaxCount()) {
-                entity.lavaAmount -= 1000;
-                bucketIn.decrement(1);
-                bucketOut.increment(1);
-                dirty = true;
+        if (!bucketIn.isEmpty() && entity.lavaAmount >= 1000) {
+            boolean isVanillaBucket = bucketIn.isOf(Items.BUCKET);
+            boolean isCopperBucket = bucketIn.isOf(ModItems.COPPER_BUCKET);
+            if (isVanillaBucket || isCopperBucket) {
+                ItemStack filledItem = isVanillaBucket ? new ItemStack(Items.LAVA_BUCKET) : new ItemStack(ModItems.COPPER_LAVA_BUCKET);
+                ItemStack bucketOut = entity.inventory.get(BUCKET_OUTPUT_SLOT);
+                if (bucketOut.isEmpty()) {
+                    entity.lavaAmount -= 1000;
+                    bucketIn.decrement(1);
+                    entity.inventory.set(BUCKET_OUTPUT_SLOT, filledItem);
+                    dirty = true;
+                } else if (ItemStack.areItemsEqual(bucketOut, filledItem) && bucketOut.getCount() < bucketOut.getMaxCount()) {
+                    entity.lavaAmount -= 1000;
+                    bucketIn.decrement(1);
+                    bucketOut.increment(1);
+                    dirty = true;
+                }
             }
         }
 

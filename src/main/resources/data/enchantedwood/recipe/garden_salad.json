@@ -1,0 +1,15 @@
+﻿{
+    "ingredients":  [
+                        "minecraft:bowl",
+                        "enchantedwood:lettuce",
+                        "enchantedwood:tomato",
+                        "enchantedwood:onion",
+                        "enchantedwood:cucumber"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:garden_salad",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

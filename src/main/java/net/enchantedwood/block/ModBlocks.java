@@ -51,6 +51,34 @@ public class ModBlocks {
             Text.literal("§e • Consumes Blank Vinyl Discs + Thematic Catalysts"),
             Text.literal("§8 • Overclockable with Gears. Draws 40 FE/t."));
 
+    public static final Block BRICK_OVEN = registerBlockWithTooltip("brick_oven",
+            new net.enchantedwood.block.custom.BrickOvenBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "brick_oven")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.5f)
+                    .resistance(6.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.BrickOvenBlock.LIT) ? 13 : 0)),
+            Text.literal("§6Traditional Brick Oven"),
+            Text.literal("§7Artisan masonry oven for high-speed baking & culinary crafting."),
+            Text.literal("§b • Dual Heating: Connect FE Energy Cables (20 FE/t) or Solid Fuels"),
+            Text.literal("§e • Top Slot: Flour, Pizza Dough, Raw Pizzas, Meats, Water Buckets"),
+            Text.literal("§6 • Bottom Slot: Coal, Charcoal, Wood Logs, Planks, Lava Buckets"),
+            Text.literal("§a • Bakes 2.5x faster than standard furnaces (4 sec per item)"));
+
+    public static final Block ICE_CREAM_MACHINE = registerBlockWithTooltip("ice_cream_machine",
+            new net.enchantedwood.block.custom.IceCreamMachineBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ice_cream_machine")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(3.5f)
+                    .resistance(6.0f)
+                    .requiresTool()),
+            Text.literal("§bCulinary Ice Cream Churner"),
+            Text.literal("§7Churns chilled ice, salt, milk, and toppings into gourmet ice creams."),
+            Text.literal("§e • Dual Powered: Manual right-click hand-crank or FE Energy (20 FE/t)"),
+            Text.literal("§b • Accepts Ice, Packed Ice, Blue Ice, and Salt as coolant"));
+
+
     public static final Block CRUSHER = registerBlockWithTooltip("crusher",
             new net.enchantedwood.block.custom.CrusherBlock(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher")))
@@ -948,6 +976,35 @@ public class ModBlocks {
             Text.literal("§6Submersible Thermal Lava Pump"),
             Text.literal("§8Pumps liquid lava from Nether seas into adjacent pipes and generators."));
 
+    public static final Block WATER_PUMP = registerBlockWithTooltip("water_pump",
+            new net.enchantedwood.block.custom.WaterPumpBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "water_pump")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.WaterPumpBlock.LIT) ? 10 : 0)),
+            Text.literal("§6Electric Water Pump"),
+            Text.literal("§7Pumps water, fills water buckets (stacks up to 16), & auto-feeds machines."),
+            Text.literal("§b • Dual Source: Rapid from water source (500 mB) or atmospheric aquifer (250 mB)"),
+            Text.literal("§e • Automation: Auto-pulls empty buckets from top, auto-ejects filled buckets below/sides"),
+            Text.literal("§a • Super Computer: Program with an Empty Bucket to auto-craft Water Buckets!"),
+            Text.literal("§8 • Overclockable with Gears. Draws 20 FE/t."));
+
+    public static final Block CRYO_FREEZER = registerBlockWithTooltip("cryo_freezer",
+            new net.enchantedwood.block.custom.CryoFreezerBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cryo_freezer")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(4.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .luminance(state -> state.get(net.enchantedwood.block.custom.CryoFreezerBlock.LIT) ? 12 : 0)),
+            Text.literal("§bElectric Cryo-Freezer"),
+            Text.literal("§7Freezes water into ice, packed ice & blue ice. Overclockable with Gears."),
+            Text.literal("§b • Dual Inflow: Accepts water buckets or siphons directly from Water Pumps"),
+            Text.literal("§f • Cryo Chilling: Transforms water into Ice, and compresses Ice -> Packed -> Blue Ice"),
+            Text.literal("§8 • Overclockable with Gears. Draws 25 FE/t."));
+
     public static final Block CRUSHER_MK2 = registerBlockWithTooltip("crusher_mk2",
             new net.enchantedwood.block.custom.CrusherMk2Block(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2")))
@@ -1066,6 +1123,89 @@ public class ModBlocks {
                     .nonOpaque()),
             Text.literal("§aWild Cucumber Shrub"),
             Text.literal("§7Native flora of §dThe Convergence§7. Harvest for Cucumbers & Seeds."));
+
+    public static final Block TOMATO_CROP = registerBlockWithoutItem("tomato_crop",
+            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tomato_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.TOMATO,
+                    () -> net.enchantedwood.item.ModItems.TOMATO_SEEDS));
+
+    public static final Block ONION_CROP = registerBlockWithoutItem("onion_crop",
+            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "onion_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.ONION,
+                    () -> net.enchantedwood.item.ModItems.ONION_SEEDS));
+
+    public static final Block LETTUCE_CROP = registerBlockWithoutItem("lettuce_crop",
+            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "lettuce_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.LETTUCE,
+                    () -> net.enchantedwood.item.ModItems.LETTUCE_SEEDS));
+
+    public static final Block SOYBEAN_CROP = registerBlockWithoutItem("soybean_crop",
+            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "soybean_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.SOYBEANS,
+                    () -> net.enchantedwood.item.ModItems.SOYBEAN_SEEDS));
+
+    public static final Block CHILI_PEPPER_CROP = registerBlockWithoutItem("chili_pepper_crop",
+            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "chili_pepper_crop")))
+                    .noCollision()
+                    .ticksRandomly()
+                    .breakInstantly()
+                    .sounds(BlockSoundGroup.CROP)
+                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.CHILI_PEPPER,
+                    () -> net.enchantedwood.item.ModItems.CHILI_PEPPER_SEEDS));
+
+    public static final Block STRAWBERRY_BUSH = registerBlockWithTooltip("strawberry_bush",
+            new net.enchantedwood.block.custom.BerryBushBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "strawberry_bush")))
+                    .ticksRandomly()
+                    .noCollision()
+                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.STRAWBERRY),
+            Text.literal("§cStrawberry Bush"),
+            Text.literal("§7Produces sweet juicy strawberries. Right-click to harvest."));
+
+    public static final Block BLUEBERRY_BUSH = registerBlockWithTooltip("blueberry_bush",
+            new net.enchantedwood.block.custom.BerryBushBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "blueberry_bush")))
+                    .ticksRandomly()
+                    .noCollision()
+                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH)
+                    .nonOpaque(),
+                    () -> net.enchantedwood.item.ModItems.BLUEBERRY),
+            Text.literal("§9Blueberry Bush"),
+            Text.literal("§7Produces antioxidant blueberries. Right-click to harvest."));
+
 
     public static final Block AVOCADO_LOG = registerBlock("avocado_log",
             new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
@@ -1321,6 +1461,18 @@ public class ModBlocks {
                     .requiresTool()),
             Text.literal("§6Titanium Tank Inbound Port"),
             Text.literal("§8Top-center 5x5 Multiblock Valve. Inbound lava pipes connect here."));
+
+    public static final Block WATER_PIPE = registerBlockWithTooltip("water_pipe",
+            new net.enchantedwood.block.custom.WaterPipeBlock(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "water_pipe")))
+                    .sounds(BlockSoundGroup.COPPER)
+                    .hardness(2.0f)
+                    .resistance(8.0f)
+                    .requiresTool()
+                    .nonOpaque()),
+            Text.literal("§bCopper Water Pipe"),
+            Text.literal("§7Fluid conduit for pressurized water transport. Transfers 500 mB/t."),
+            Text.literal("§8Connects Water Pumps to Freezers, Oxygen Generators & Tanks."));
 
     // Universal Item Logistics System
     public static final Block ITEM_PIPE = registerBlockWithTooltip("item_pipe",

@@ -58,7 +58,7 @@ public class VehicleFabricatorScreen extends HandledScreen<VehicleFabricatorScre
         if (maxEnergy > 0 && energy > 0) {
             int scaledHeight = Math.min(94, (int) ((long) energy * 94 / maxEnergy));
             int energyY = (y + 19) + (94 - scaledHeight);
-            context.fill(x + 9, energyY, x + 19, y + 19 + 94, 0xFFFF2222);
+            context.fill(x + 9, energyY, x + 20, y + 19 + 94, 0xFFFF2222);
         }
 
         // Draw Assembly Progress Arrow (x + 138, y + 45, w: 24, h: 4)

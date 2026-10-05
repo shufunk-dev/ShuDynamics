@@ -27,11 +27,12 @@ import net.enchantedwood.gas.GasProvider;
 import net.enchantedwood.gas.GasStorage;
 import net.enchantedwood.gas.GasType;
 import net.enchantedwood.gas.SimpleGasStorage;
+import net.enchantedwood.fluid.WaterProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.OxygenGeneratorScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
-public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, GasProvider {
+public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, GasProvider, WaterProvider {
     public static final int ENERGY_CAPACITY = 100_000;
     public static final int MAX_ENERGY_DRAW = 60; // 60 FE/t
     public static final int WATER_CAPACITY = 10_000; // 10,000 mB (10 Buckets)
@@ -226,6 +227,37 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
 
     public GasStorage getHydrogenTank() {
         return this.hydrogenTank;
+    }
+
+    @Override
+    public int getWaterAmount() {
+        return this.waterAmount;
+    }
+
+    @Override
+    public int getMaxWater() {
+        return WATER_CAPACITY;
+    }
+
+    @Override
+    public int insertWater(int amount, boolean simulate) {
+        int space = WATER_CAPACITY - this.waterAmount;
+        int toInsert = Math.min(space, amount);
+        if (!simulate && toInsert > 0) {
+            this.waterAmount += toInsert;
+            markDirty();
+        }
+        return toInsert;
+    }
+
+    @Override
+    public int extractWater(int amount, boolean simulate) {
+        int toExtract = Math.min(this.waterAmount, amount);
+        if (!simulate && toExtract > 0) {
+            this.waterAmount -= toExtract;
+            markDirty();
+        }
+        return toExtract;
     }
 
     public static void tick(ServerWorld world, BlockPos pos, BlockState state, OxygenGeneratorBlockEntity entity) {

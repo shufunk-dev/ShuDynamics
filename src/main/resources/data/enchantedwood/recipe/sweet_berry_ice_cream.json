@@ -1,0 +1,12 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:vanilla_ice_cream",
+                        "minecraft:sweet_berries"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:sweet_berry_ice_cream",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

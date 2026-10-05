@@ -1,0 +1,47 @@
+{
+  "textures": {
+    "particle": "enchantedwood:block/water_pipe",
+    "wire": "enchantedwood:block/water_pipe"
+  },
+  "elements": [
+    {
+      "comment": "Core",
+      "from": [ 5, 5, 5 ],
+      "to": [ 11, 11, 11 ],
+      "faces": {
+        "north": { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "east":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "south": { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "west":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "up":    { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "down":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" }
+      }
+    },
+    {
+      "comment": "East arm",
+      "from": [ 11, 5, 5 ],
+      "to": [ 16, 11, 11 ],
+      "faces": {
+        "north": { "uv": [ 0, 5, 5, 11 ], "texture": "#wire" },
+        "east":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "south": { "uv": [ 0, 5, 5, 11 ], "texture": "#wire" },
+        "west":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "up":    { "uv": [ 5, 0, 11, 5 ], "texture": "#wire" },
+        "down":  { "uv": [ 5, 0, 11, 5 ], "texture": "#wire" }
+      }
+    },
+    {
+      "comment": "West arm",
+      "from": [ 0, 5, 5 ],
+      "to": [ 5, 11, 11 ],
+      "faces": {
+        "north": { "uv": [ 0, 5, 5, 11 ], "texture": "#wire" },
+        "east":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "south": { "uv": [ 0, 5, 5, 11 ], "texture": "#wire" },
+        "west":  { "uv": [ 5, 5, 11, 11 ], "texture": "#wire" },
+        "up":    { "uv": [ 5, 0, 11, 5 ], "texture": "#wire" },
+        "down":  { "uv": [ 5, 0, 11, 5 ], "texture": "#wire" }
+      }
+    }
+  ]
+}

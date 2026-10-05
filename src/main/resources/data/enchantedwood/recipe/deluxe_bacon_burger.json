@@ -1,0 +1,16 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:burger_bun",
+                        "enchantedwood:cooked_burger_patty",
+                        "enchantedwood:cooked_burger_patty",
+                        "enchantedwood:cheese_slice",
+                        "minecraft:cooked_porkchop",
+                        "enchantedwood:onion"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:deluxe_bacon_burger",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

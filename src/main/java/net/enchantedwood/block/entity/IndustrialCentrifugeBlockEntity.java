@@ -164,9 +164,17 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
         if (item == Items.GLOW_BERRIES || item == ModItems.WASABI_ROOT) {
             return new CentrifugeRecipe(item, new ItemStack(ModItems.ADRENAL_ESSENCE), new ItemStack(Items.GLOWSTONE_DUST));
         }
+        // 6. Mineral Salt Extraction (Calcite / Dripstone)
+        if (item == Items.CALCITE) {
+            return new CentrifugeRecipe(item, new ItemStack(ModItems.SALT, 2), new ItemStack(Items.SAND));
+        }
+        if (item == Items.POINTED_DRIPSTONE || item == Items.DRIPSTONE_BLOCK) {
+            return new CentrifugeRecipe(item, new ItemStack(ModItems.SALT, 2), new ItemStack(Items.CLAY_BALL));
+        }
 
         return null;
     }
+
 
     private boolean canOutput(CentrifugeRecipe recipe) {
         ItemStack currentOut1 = inventory.get(OUTPUT_SLOT_1);

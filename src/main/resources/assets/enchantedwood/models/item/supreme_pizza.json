@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/supreme_pizza"
+                 },
+    "parent":  "minecraft:item/generated"
+}

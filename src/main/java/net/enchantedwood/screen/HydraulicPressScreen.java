@@ -32,7 +32,7 @@ public class HydraulicPressScreen extends HandledScreen<HydraulicPressScreenHand
         // 1. Progress Arrow
         int progress = this.handler.getScaledProgress();
         if (progress > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, progress + 1, 16, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, progress, 16, 256, 256);
         }
 
         // 2. Energy Bar

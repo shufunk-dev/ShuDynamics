@@ -1,0 +1,12 @@
+﻿{
+    "ingredients":  [
+                        "minecraft:cod",
+                        "enchantedwood:salt"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:prepared_anchovies",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

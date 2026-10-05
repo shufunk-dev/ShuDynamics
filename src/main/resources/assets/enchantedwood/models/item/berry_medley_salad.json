@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/berry_medley_salad"
+                 },
+    "parent":  "minecraft:item/generated"
+}

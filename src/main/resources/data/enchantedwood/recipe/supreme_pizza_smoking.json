@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.8,
+    "ingredient":  "enchantedwood:raw_supreme_pizza",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:supreme_pizza",
+                   "count":  1
+               }
+}

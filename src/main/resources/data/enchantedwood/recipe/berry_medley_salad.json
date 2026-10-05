@@ -1,0 +1,15 @@
+﻿{
+    "ingredients":  [
+                        "minecraft:bowl",
+                        "enchantedwood:strawberry",
+                        "enchantedwood:blueberry",
+                        "minecraft:sweet_berries",
+                        "minecraft:honey_bottle"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:berry_medley_salad",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

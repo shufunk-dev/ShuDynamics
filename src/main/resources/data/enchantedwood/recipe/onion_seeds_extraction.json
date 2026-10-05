@@ -1,0 +1,11 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:onion"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:onion_seeds",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

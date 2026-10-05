@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "enchantedwood:block/water_pump_top",
+    "bottom": "enchantedwood:block/water_pump_bottom",
+    "front": "enchantedwood:block/water_pump_front",
+    "side": "enchantedwood:block/water_pump_side"
+  }
+}

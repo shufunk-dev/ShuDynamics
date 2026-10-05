@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/wheat_flour"
+                 },
+    "parent":  "minecraft:item/generated"
+}

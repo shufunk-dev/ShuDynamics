@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:corn",
+    "enchantedwood:rice",
+    "enchantedwood:cucumber",
+    "enchantedwood:tomato",
+    "enchantedwood:onion",
+    "enchantedwood:lettuce",
+    "enchantedwood:soybeans",
+    "enchantedwood:chili_pepper",
+    "enchantedwood:avocado",
+    "enchantedwood:starfruit"
+  ]
+}

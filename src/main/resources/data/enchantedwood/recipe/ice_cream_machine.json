@@ -1,0 +1,19 @@
+﻿{
+    "key":  {
+                "C":  "minecraft:copper_ingot",
+                "R":  "minecraft:redstone",
+                "G":  "enchantedwood:iron_gear",
+                "I":  "minecraft:iron_ingot"
+            },
+    "category":  "misc",
+    "pattern":  [
+                    "ICI",
+                    "IGI",
+                    "IRI"
+                ],
+    "result":  {
+                   "id":  "enchantedwood:ice_cream_machine",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shaped"
+}

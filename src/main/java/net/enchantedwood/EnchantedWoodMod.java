@@ -77,5 +77,47 @@ public class EnchantedWoodMod implements ModInitializer {
             builder.add(ModItems.ENCHANTED_LAVA_BUCKET.asItem(), 60000);
             builder.add(ModItems.ENCHANTED_COPPER_LAVA_BUCKET.asItem(), 60000);
         });
+        // Composting Registrations (Corn seeds, grains, leaves, saplings)
+        net.fabricmc.fabric.api.registry.CompostingChanceRegistry composting = net.fabricmc.fabric.api.registry.CompostingChanceRegistry.INSTANCE;
+        composting.add(ModItems.CORN_SEEDS, 0.3f);
+        composting.add(ModItems.CORN, 0.65f);
+        composting.add(ModItems.ROASTED_CORN, 0.85f);
+        composting.add(ModItems.RICE_SEEDS, 0.3f);
+        composting.add(ModItems.RICE, 0.65f);
+        composting.add(ModItems.SUSHI_RICE, 0.85f);
+        composting.add(ModItems.CUCUMBER_SEEDS, 0.3f);
+        composting.add(ModItems.CUCUMBER, 0.65f);
+        composting.add(ModItems.AVOCADO, 0.65f);
+        composting.add(ModItems.STARFRUIT, 0.65f);
+        composting.add(ModBlocks.RUBBER_LEAVES, 0.3f);
+        composting.add(ModBlocks.STARFRUIT_LEAVES, 0.3f);
+        composting.add(ModBlocks.AVOCADO_LEAVES, 0.3f);
+        composting.add(ModBlocks.RUBBER_SAPLING, 0.3f);
+        composting.add(ModBlocks.STARFRUIT_SAPLING, 0.3f);
+        composting.add(ModBlocks.AVOCADO_SAPLING, 0.3f);
+
+        // Culinary Expansion Composting
+        composting.add(ModItems.TOMATO_SEEDS, 0.3f);
+        composting.add(ModItems.ONION_SEEDS, 0.3f);
+        composting.add(ModItems.LETTUCE_SEEDS, 0.3f);
+        composting.add(ModItems.SOYBEAN_SEEDS, 0.3f);
+        composting.add(ModItems.CHILI_PEPPER_SEEDS, 0.3f);
+        composting.add(ModItems.TOMATO, 0.65f);
+        composting.add(ModItems.ONION, 0.65f);
+        composting.add(ModItems.LETTUCE, 0.65f);
+        composting.add(ModItems.SOYBEANS, 0.65f);
+        composting.add(ModItems.CHILI_PEPPER, 0.65f);
+        composting.add(ModItems.STRAWBERRY, 0.65f);
+        composting.add(ModItems.BLUEBERRY, 0.65f);
+        composting.add(ModBlocks.STRAWBERRY_BUSH, 0.5f);
+        composting.add(ModBlocks.BLUEBERRY_BUSH, 0.5f);
+        composting.add(ModItems.WHEAT_FLOUR, 0.5f);
+        composting.add(ModItems.PIZZA_DOUGH, 0.65f);
+        composting.add(ModItems.BURGER_BUN, 0.85f);
+        composting.add(ModItems.TACO_SHELL, 0.65f);
+        composting.add(ModItems.TOFU, 0.65f);
+        composting.add(ModItems.GARDEN_SALAD, 1.0f);
+        composting.add(ModItems.BERRY_MEDLEY_SALAD, 1.0f);
     }
 }
+

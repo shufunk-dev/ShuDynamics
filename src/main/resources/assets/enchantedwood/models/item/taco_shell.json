@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/taco_shell"
+                 },
+    "parent":  "minecraft:item/generated"
+}

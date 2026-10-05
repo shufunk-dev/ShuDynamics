@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.5,
+    "ingredient":  "enchantedwood:raw_margherita_pizza",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:margherita_pizza",
+                   "count":  1
+               }
+}

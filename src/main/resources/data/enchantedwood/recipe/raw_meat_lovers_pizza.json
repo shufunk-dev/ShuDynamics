@@ -1,0 +1,16 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:pizza_dough",
+                        "enchantedwood:tomato_sauce",
+                        "enchantedwood:cheese_slice",
+                        "minecraft:cooked_beef",
+                        "minecraft:cooked_porkchop",
+                        "enchantedwood:cooked_burger_patty"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:raw_meat_lovers_pizza",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

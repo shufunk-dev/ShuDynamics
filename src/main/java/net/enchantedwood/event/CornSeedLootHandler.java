@@ -23,23 +23,47 @@ public class CornSeedLootHandler {
         LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
             Identifier id = key.getValue();
 
-            // 1. Breaking Wild Grass / Ferns (12% chance to drop Corn Kernels)
+            // 1. Breaking Wild Grass / Ferns (Drop chances for agricultural seeds and berries)
             if (id.equals(SHORT_GRASS_LOOT) || id.equals(TALL_GRASS_LOOT) || id.equals(FERN_LOOT)) {
-                LootPool.Builder pool = LootPool.builder()
-                        .conditionally(RandomChanceLootCondition.builder(0.12f))
-                        .with(ItemEntry.builder(ModItems.CORN_SEEDS))
-                        .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(1.0f)));
-                tableBuilder.pool(pool);
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.10f))
+                        .with(ItemEntry.builder(ModItems.CORN_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.08f))
+                        .with(ItemEntry.builder(ModItems.TOMATO_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.08f))
+                        .with(ItemEntry.builder(ModItems.ONION_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.08f))
+                        .with(ItemEntry.builder(ModItems.LETTUCE_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.08f))
+                        .with(ItemEntry.builder(ModItems.SOYBEAN_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.06f))
+                        .with(ItemEntry.builder(ModItems.CHILI_PEPPER_SEEDS)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.05f))
+                        .with(ItemEntry.builder(ModItems.STRAWBERRY)));
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.05f))
+                        .with(ItemEntry.builder(ModItems.BLUEBERRY)));
             }
 
             // 2. Village House Chests (Plains, Savanna, Desert)
             if (id.equals(VILLAGE_PLAINS) || id.equals(VILLAGE_SAVANNA) || id.equals(VILLAGE_DESERT)) {
-                LootPool.Builder pool = LootPool.builder()
-                        .conditionally(RandomChanceLootCondition.builder(0.40f))
-                        .with(ItemEntry.builder(ModItems.CORN_SEEDS))
-                        .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 6.0f)));
-                tableBuilder.pool(pool);
+                tableBuilder.pool(LootPool.builder()
+                        .conditionally(RandomChanceLootCondition.builder(0.35f))
+                        .with(ItemEntry.builder(ModItems.CORN_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 6.0f))))
+                        .with(ItemEntry.builder(ModItems.TOMATO_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 5.0f))))
+                        .with(ItemEntry.builder(ModItems.ONION_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 5.0f))))
+                        .with(ItemEntry.builder(ModItems.LETTUCE_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 5.0f))))
+                        .with(ItemEntry.builder(ModItems.SOYBEAN_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 5.0f))))
+                        .with(ItemEntry.builder(ModItems.CHILI_PEPPER_SEEDS).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 4.0f))))
+                        .with(ItemEntry.builder(ModItems.SALT).apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 6.0f)))));
             }
         });
     }
+
 }

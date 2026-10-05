@@ -1,0 +1,11 @@
+﻿{
+    "ingredients":  [
+                        "minecraft:wheat"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:wheat_flour",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

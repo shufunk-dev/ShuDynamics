@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.7,
+    "ingredient":  "enchantedwood:raw_meat_lovers_pizza",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:meat_lovers_pizza",
+                   "count":  1
+               }
+}

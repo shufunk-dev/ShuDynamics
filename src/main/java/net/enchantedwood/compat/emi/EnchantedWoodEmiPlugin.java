@@ -34,12 +34,31 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier CASTING_PORT_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/casting_port_gui.png");
     public static final Identifier HYDRAULIC_PRESS_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/hydraulic_press_gui.png");
     public static final Identifier HARMONIC_RECORD_PRESS_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/harmonic_record_press_gui.png");
+    public static final Identifier BRICK_OVEN_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/brick_oven_gui.png");
+    public static final Identifier ICE_CREAM_MACHINE_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/ice_cream_machine_gui.png");
+    public static final Identifier CRYO_FREEZER_GUI = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/cryo_freezer_gui.png");
 
     // Categories
+    public static final EmiRecipeCategory CRYO_FREEZER = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "cryo_freezer"),
+            EmiStack.of(ModBlocks.CRYO_FREEZER)
+    );
+
     public static final EmiRecipeCategory HARMONIC_RECORD_PRESS = new EmiRecipeCategory(
             Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press"),
             EmiStack.of(ModBlocks.HARMONIC_RECORD_PRESS)
     );
+
+    public static final EmiRecipeCategory BRICK_OVEN = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "brick_oven"),
+            EmiStack.of(ModBlocks.BRICK_OVEN)
+    );
+
+    public static final EmiRecipeCategory ICE_CREAM_MACHINE = new EmiRecipeCategory(
+            Identifier.of(EnchantedWoodMod.MOD_ID, "ice_cream_machine"),
+            EmiStack.of(ModBlocks.ICE_CREAM_MACHINE)
+    );
+
 
     public static final EmiRecipeCategory CIRCUIT_FABRICATOR = new EmiRecipeCategory(
             Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator"),
@@ -135,10 +154,19 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         registry.addCategory(INDUCTION_SMELTER);
         registry.addCategory(CASTING_PORT);
         registry.addCategory(HARMONIC_RECORD_PRESS);
+        registry.addCategory(BRICK_OVEN);
+        registry.addCategory(ICE_CREAM_MACHINE);
+        registry.addCategory(CRYO_FREEZER);
 
         // Register Workstations (Catalysts)
+        registry.addWorkstation(CRYO_FREEZER, EmiStack.of(ModBlocks.CRYO_FREEZER));
         registry.addWorkstation(HARMONIC_RECORD_PRESS, EmiStack.of(ModBlocks.HARMONIC_RECORD_PRESS));
+        registry.addWorkstation(BRICK_OVEN, EmiStack.of(ModBlocks.BRICK_OVEN));
+        registry.addWorkstation(ICE_CREAM_MACHINE, EmiStack.of(ModBlocks.ICE_CREAM_MACHINE));
+        registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.SMELTING, EmiStack.of(ModBlocks.BRICK_OVEN));
+        registry.addWorkstation(dev.emi.emi.api.recipe.VanillaEmiRecipeCategories.SMOKING, EmiStack.of(ModBlocks.BRICK_OVEN));
         registry.addWorkstation(CIRCUIT_FABRICATOR, EmiStack.of(ModBlocks.CIRCUIT_FABRICATOR));
+
         registry.addWorkstation(INDUCTION_SMELTER, EmiStack.of(ModBlocks.INDUCTION_SMELTER));
         registry.addWorkstation(CASTING_PORT, EmiStack.of(ModBlocks.CASTING_PORT));
         registry.addWorkstation(ALLOY_FOUNDRY, EmiStack.of(ModBlocks.ALLOY_FOUNDRY));
@@ -317,6 +345,43 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         // 15. Harmonic Record Press Recipes
         registerHarmonicRecordPressRecipes(registry);
+
+        // 16. Brick Oven Recipes
+        registerBrickOvenRecipes(registry);
+
+        // 17. Ice Cream Machine Recipes
+        registerIceCreamMachineRecipes(registry);
+
+        // 18. Cryo-Freezer Recipes
+        registerCryoFreezerRecipes(registry);
+
+        // Cryo-Freezer recipe handler
+        registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.CRYO_FREEZER_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.StandardRecipeHandler<net.enchantedwood.screen.CryoFreezerScreenHandler>() {
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getInputSources(net.enchantedwood.screen.CryoFreezerScreenHandler handler) {
+                List<net.minecraft.screen.slot.Slot> list = new ArrayList<>();
+                for (int i = 5; i < handler.slots.size(); i++) {
+                    list.add(handler.getSlot(i));
+                }
+                return list;
+            }
+
+            @Override
+            public List<net.minecraft.screen.slot.Slot> getCraftingSlots(net.enchantedwood.screen.CryoFreezerScreenHandler handler) {
+                return List.of(handler.getSlot(2)); // Solid Input
+            }
+
+            @Override
+            public @org.jetbrains.annotations.Nullable net.minecraft.screen.slot.Slot getOutputSlot(net.enchantedwood.screen.CryoFreezerScreenHandler handler) {
+                return handler.getSlot(3);
+            }
+
+            @Override
+            public boolean supportsRecipe(EmiRecipe recipe) {
+                return recipe.getCategory() == CRYO_FREEZER;
+            }
+        });
+
 
         // Harmonic Record Press recipe handler
         registry.addRecipeHandler(net.enchantedwood.screen.ModScreenHandlers.HARMONIC_RECORD_PRESS_SCREEN_HANDLER, new dev.emi.emi.api.recipe.handler.StandardRecipeHandler<net.enchantedwood.screen.HarmonicRecordPressScreenHandler>() {
@@ -1313,5 +1378,166 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             }
         }
     }
+
+    private static void registerBrickOvenRecipes(EmiRegistry registry) {
+        int idx = 0;
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.RAW_MARGHERITA_PIZZA), EmiStack.of(ModItems.MARGHERITA_PIZZA)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.RAW_MEAT_LOVERS_PIZZA), EmiStack.of(ModItems.MEAT_LOVERS_PIZZA)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.RAW_ANCHOVY_ONION_PIZZA), EmiStack.of(ModItems.ANCHOVY_ONION_PIZZA)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.RAW_SUPREME_PIZZA), EmiStack.of(ModItems.SUPREME_PIZZA)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.PIZZA_DOUGH), EmiStack.of(ModItems.BURGER_BUN)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(ModItems.RAW_BURGER_PATTY), EmiStack.of(ModItems.COOKED_BURGER_PATTY)));
+        registry.addRecipe(new BrickOvenEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "oven_" + idx++), EmiStack.of(Items.WATER_BUCKET), EmiStack.of(ModItems.SALT, 4)));
+    }
+
+    public static class BrickOvenEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiStack input;
+        private final EmiStack output;
+
+        public BrickOvenEmiRecipe(Identifier id, EmiStack input, EmiStack output) {
+            this.id = id;
+            this.input = input;
+            this.output = output;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return BRICK_OVEN; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(input); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 110; }
+        @Override public int getDisplayHeight() { return 54; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            widgets.addTexture(BRICK_OVEN_GUI, 0, 0, 110, 54, 45, 15);
+            // Animated hearth flame
+            widgets.addAnimatedTexture(BRICK_OVEN_GUI, 11, 21, 14, 14, 176, 0, 1000, false, true, true);
+            // Animated baking progress arrow
+            widgets.addAnimatedTexture(BRICK_OVEN_GUI, 34, 19, 24, 17, 176, 14, 2000, true, false, false);
+
+            widgets.addSlot(input, 11, 2).drawBack(false);
+            widgets.addSlot(EmiIngredient.of(List.of(EmiStack.of(Items.COAL), EmiStack.of(Items.CHARCOAL), EmiStack.of(ModItems.ENCHANTED_COAL))), 11, 38).drawBack(false);
+            widgets.addSlot(output, 71, 20).recipeContext(this).drawBack(false);
+        }
+    }
+
+    private static void registerIceCreamMachineRecipes(EmiRegistry registry) {
+        int idx = 0;
+        registry.addRecipe(new IceCreamMachineEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "churn_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MILK_BUCKET), EmiStack.of(ModItems.SOY_MILK))),
+                EmiStack.of(ModItems.SALT), EmiStack.of(ModItems.VANILLA_ICE_CREAM)));
+        registry.addRecipe(new IceCreamMachineEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "churn_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MILK_BUCKET), EmiStack.of(ModItems.SOY_MILK))),
+                EmiStack.of(ModItems.STRAWBERRY), EmiStack.of(ModItems.STRAWBERRY_ICE_CREAM)));
+        registry.addRecipe(new IceCreamMachineEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "churn_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MILK_BUCKET), EmiStack.of(ModItems.SOY_MILK))),
+                EmiStack.of(ModItems.BLUEBERRY), EmiStack.of(ModItems.BLUEBERRY_ICE_CREAM)));
+        registry.addRecipe(new IceCreamMachineEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "churn_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MILK_BUCKET), EmiStack.of(ModItems.SOY_MILK))),
+                EmiStack.of(Items.COCOA_BEANS), EmiStack.of(ModItems.CHOCOLATE_ICE_CREAM)));
+        registry.addRecipe(new IceCreamMachineEmiRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "churn_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.MILK_BUCKET), EmiStack.of(ModItems.SOY_MILK))),
+                EmiStack.of(Items.SWEET_BERRIES), EmiStack.of(ModItems.SWEET_BERRY_ICE_CREAM)));
+    }
+
+    public static class IceCreamMachineEmiRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient base;
+        private final EmiStack flavor;
+        private final EmiStack output;
+
+        public IceCreamMachineEmiRecipe(Identifier id, EmiIngredient base, EmiStack flavor, EmiStack output) {
+            this.id = id;
+            this.base = base;
+            this.flavor = flavor;
+            this.output = output;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return ICE_CREAM_MACHINE; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() {
+            return List.of(
+                    base,
+                    EmiStack.of(Items.SUGAR),
+                    EmiIngredient.of(List.of(EmiStack.of(Items.ICE), EmiStack.of(ModItems.ICE_CUBES), EmiStack.of(Items.PACKED_ICE), EmiStack.of(Items.BLUE_ICE), EmiStack.of(Items.SNOWBALL), EmiStack.of(ModItems.SALT))),
+                    flavor
+            );
+        }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 150; }
+        @Override public int getDisplayHeight() { return 58; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Machine GUI panel (cropped from ice_cream_machine_gui)
+            widgets.addTexture(ICE_CREAM_MACHINE_GUI, 0, 0, 150, 58, 25, 14);
+            // Animated churning arrow
+            widgets.addAnimatedTexture(ICE_CREAM_MACHINE_GUI, 57, 20, 28, 17, 176, 46, 2500, true, false, false);
+
+            // Inputs (aligned to actual machine slot layout: 2x2 grid)
+            widgets.addSlot(EmiIngredient.of(List.of(EmiStack.of(Items.ICE), EmiStack.of(ModItems.ICE_CUBES), EmiStack.of(Items.PACKED_ICE), EmiStack.of(Items.BLUE_ICE), EmiStack.of(Items.SNOWBALL), EmiStack.of(ModItems.SALT))), 9, 6).drawBack(false);
+            widgets.addSlot(base, 31, 6).drawBack(false);
+            widgets.addSlot(EmiStack.of(Items.SUGAR), 9, 34).drawBack(false);
+            widgets.addSlot(flavor, 31, 34).drawBack(false);
+
+            // Output
+            widgets.addSlot(output, 99, 20).recipeContext(this).drawBack(false);
+        }
+    }
+
+    private static void registerCryoFreezerRecipes(EmiRegistry registry) {
+        int idx = 0;
+        registry.addRecipe(new CryoFreezerRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "freeze_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.WATER_BUCKET), EmiStack.of(ModItems.COPPER_WATER_BUCKET))), 1000, EmiStack.of(Items.ICE), "Water Freezing"));
+        registry.addRecipe(new CryoFreezerRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "freeze_" + idx++),
+                EmiStack.of(Items.ICE), 1000, EmiStack.of(Items.PACKED_ICE), "Ice Densification"));
+        registry.addRecipe(new CryoFreezerRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "freeze_" + idx++),
+                EmiStack.of(Items.PACKED_ICE), 1000, EmiStack.of(Items.BLUE_ICE), "Hyper-Cryo Densification"));
+        registry.addRecipe(new CryoFreezerRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "freeze_" + idx++),
+                EmiStack.of(Items.SNOWBALL, 4), 250, EmiStack.of(Items.ICE), "Snowball Compaction"));
+        registry.addRecipe(new CryoFreezerRecipe(Identifier.of(EnchantedWoodMod.MOD_ID, "freeze_" + idx++),
+                EmiIngredient.of(List.of(EmiStack.of(Items.WATER_BUCKET), EmiStack.of(ModItems.COPPER_WATER_BUCKET))), 250, EmiStack.of(ModItems.ICE_CUBES, 4), "Rapid Cryo Ice Cubes"));
+    }
+
+    public static class CryoFreezerRecipe implements EmiRecipe {
+        private final Identifier id;
+        private final EmiIngredient input;
+        private final int waterMb;
+        private final EmiStack output;
+        private final String note;
+
+        public CryoFreezerRecipe(Identifier id, EmiIngredient input, int waterMb, EmiStack output, String note) {
+            this.id = id;
+            this.input = input;
+            this.waterMb = waterMb;
+            this.output = output;
+            this.note = note;
+        }
+
+        @Override public EmiRecipeCategory getCategory() { return CRYO_FREEZER; }
+        @Override public Identifier getId() { return id; }
+        @Override public List<EmiIngredient> getInputs() { return List.of(input); }
+        @Override public List<EmiStack> getOutputs() { return List.of(output); }
+        @Override public int getDisplayWidth() { return 130; }
+        @Override public int getDisplayHeight() { return 56; }
+
+        @Override
+        public void addWidgets(WidgetHolder widgets) {
+            // Machine Background panel cropped from cryo_freezer_gui (x: 40..170, y: 17..73)
+            widgets.addTexture(CRYO_FREEZER_GUI, 0, 0, 130, 56, 38, 17);
+            // Water tank preview (illuminated with sparkling water)
+            widgets.addTexture(CRYO_FREEZER_GUI, 3, 3, 18, 50, 212, 0);
+            // Animated frost arrow
+            widgets.addAnimatedTexture(CRYO_FREEZER_GUI, 79, 18, 22, 16, 176, 14, 2500, true, false, false);
+            // Slots
+            widgets.addSlot(input, 59, 17).drawBack(false);
+            widgets.addSlot(output, 107, 17).recipeContext(this).drawBack(false);
+            if (note != null && !note.isEmpty()) {
+                widgets.addText(Text.literal("§b" + waterMb + " mB Water §8• §7" + note), 26, 44, 0x444444, false);
+            }
+        }
+    }
 }
+
 

@@ -209,12 +209,16 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         }
 
         // Fixed yield items
+        if (item == Items.WHEAT) {
+            return 2;
+        }
         if (item == Items.BLAZE_ROD) {
             return 4;
         }
         if (item == Items.MAGMA_BLOCK) {
             return 4;
         }
+
 
         // Base multiplier from gear tier (NONE=2x, IRON=2x, COPPER=3x, BRONZE=3x, GOLD=4x, DIAMOND=5x, NETHERITE=6x)
         int multiplier = tier.getBaseOreYield();
@@ -300,8 +304,10 @@ public class CrusherBlockEntity extends BlockEntity implements NamedScreenHandle
         if (item == Items.COAL_ORE || item == Items.DEEPSLATE_COAL_ORE || item == Items.COAL || item == Items.COAL_BLOCK || item == ModItems.COKE_COAL || item == ModBlocks.COKE_COAL_BLOCK.asItem()) return ModItems.COAL_DUST;
         if (item == Items.BLAZE_ROD) return Items.BLAZE_POWDER;
         if (item == Items.MAGMA_BLOCK) return Items.MAGMA_CREAM;
+        if (item == Items.WHEAT) return ModItems.WHEAT_FLOUR;
         return null;
     }
+
 
     @Override
     protected void readData(ReadView view) {

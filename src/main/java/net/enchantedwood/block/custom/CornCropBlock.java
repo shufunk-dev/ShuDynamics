@@ -5,13 +5,27 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
 public class CornCropBlock extends CropBlock {
     public static final int MAX_AGE = 7;
@@ -30,6 +44,10 @@ public class CornCropBlock extends CropBlock {
 
     public CornCropBlock(Settings settings) {
         super(settings);
+    }
+
+    public ItemConvertible getSeed() {
+        return ModItems.CORN_SEEDS;
     }
 
     @Override
@@ -60,5 +78,50 @@ public class CornCropBlock extends CropBlock {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(AGE);
+    }
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (this.isMature(state)) {
+            if (world.isClient()) {
+                return ActionResult.SUCCESS;
+            }
+
+            ItemStack held = player.getMainHandStack();
+            int fortune = 0;
+            ItemEnchantmentsComponent enchantments = held.get(DataComponentTypes.ENCHANTMENTS);
+            if (enchantments != null) {
+                for (var entry : enchantments.getEnchantmentEntries()) {
+                    if (entry.getKey().matchesKey(Enchantments.FORTUNE)) {
+                        fortune = entry.getIntValue();
+                        break;
+                    }
+                }
+            }
+
+            int produceCount = 1;
+            int seedCount = 1;
+            if (fortune > 0) {
+                produceCount += world.random.nextInt(fortune + 1);
+                seedCount += world.random.nextInt(fortune + 1);
+            } else if (world.random.nextFloat() < 0.5f) {
+                seedCount++;
+            }
+
+            dropStack(world, pos, new ItemStack(ModItems.CORN, produceCount));
+            dropStack(world, pos, new ItemStack(ModItems.CORN_SEEDS, seedCount));
+
+            world.playSound(null, pos, SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            BlockState resetState = state.with(this.getAgeProperty(), 0);
+            world.setBlockState(pos, resetState, Block.NOTIFY_LISTENERS);
+            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, resetState));
+
+            if (!player.isCreative() && held.isIn(ItemTags.HOES)) {
+                held.damage(1, (ServerWorld) world, (ServerPlayerEntity) player, item -> {});
+            }
+
+            return ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hit);
     }
 }

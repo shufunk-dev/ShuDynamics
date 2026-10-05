@@ -35,11 +35,11 @@ public class DustSmelterMk2Screen extends HandledScreen<DustSmelterMk2ScreenHand
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
 
-        // 2. Dual Progress Arrows at x + 76, y + 24 and y + 48 (width 24, height 17)
+        // 2. Dual Progress Arrows at x + 75, y + 24 and y + 48 (width 24, height 17)
         int cookWidth = this.handler.getScaledCookProgress(24);
         if (cookWidth > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 76, y + 24, 176.0f, 14.0f, cookWidth, 17, 256, 256);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 76, y + 48, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 75, y + 24, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 75, y + 48, 176.0f, 14.0f, cookWidth, 17, 256, 256);
         }
     }
 

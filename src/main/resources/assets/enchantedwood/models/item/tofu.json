@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/tofu"
+                 },
+    "parent":  "minecraft:item/generated"
+}

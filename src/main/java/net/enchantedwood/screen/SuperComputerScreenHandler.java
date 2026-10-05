@@ -16,7 +16,7 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     private final PropertyDelegate propertyDelegate;
 
     public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(SuperComputerBlockEntity.TOTAL_SLOTS), new ArrayPropertyDelegate(12));
+        this(syncId, playerInventory, new SimpleInventory(SuperComputerBlockEntity.TOTAL_SLOTS), new ArrayPropertyDelegate(14));
     }
 
     public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -114,6 +114,14 @@ public class SuperComputerScreenHandler extends ScreenHandler {
 
     public boolean isFurnaceOnline() {
         return this.propertyDelegate.size() > 11 && this.propertyDelegate.get(11) != 0;
+    }
+
+    public boolean isWaterPumpOnline() {
+        return this.propertyDelegate.size() > 12 && this.propertyDelegate.get(12) != 0;
+    }
+
+    public boolean isLavaSourceOnline() {
+        return this.propertyDelegate.size() > 13 && this.propertyDelegate.get(13) != 0;
     }
 
     public int getScaledProgress(int pixels) {

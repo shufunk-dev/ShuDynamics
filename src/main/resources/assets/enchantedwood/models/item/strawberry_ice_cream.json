@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "enchantedwood:item/strawberry_ice_cream"
+                 },
+    "parent":  "minecraft:item/generated"
+}

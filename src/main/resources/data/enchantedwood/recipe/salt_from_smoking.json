@@ -1,0 +1,11 @@
+﻿{
+    "cookingtime":  100,
+    "experience":  0.2,
+    "ingredient":  "minecraft:water_bucket",
+    "type":  "minecraft:smoking",
+    "category":  "food",
+    "result":  {
+                   "id":  "enchantedwood:salt",
+                   "count":  4
+               }
+}

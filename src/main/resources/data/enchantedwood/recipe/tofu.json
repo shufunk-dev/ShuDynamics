@@ -1,0 +1,13 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:soybeans",
+                        "enchantedwood:soybeans",
+                        "minecraft:water_bucket"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:tofu",
+                   "count":  4
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

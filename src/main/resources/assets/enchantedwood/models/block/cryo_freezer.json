@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "enchantedwood:block/cryo_freezer_top",
+    "bottom": "enchantedwood:block/cryo_freezer_bottom",
+    "front": "enchantedwood:block/cryo_freezer_front",
+    "side": "enchantedwood:block/cryo_freezer_side"
+  }
+}

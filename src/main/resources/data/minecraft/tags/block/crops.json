@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:corn_crop",
+    "enchantedwood:rice_crop",
+    "enchantedwood:cucumber_crop",
+    "enchantedwood:tomato_crop",
+    "enchantedwood:onion_crop",
+    "enchantedwood:lettuce_crop",
+    "enchantedwood:soybean_crop",
+    "enchantedwood:chili_pepper_crop"
+  ]
+}

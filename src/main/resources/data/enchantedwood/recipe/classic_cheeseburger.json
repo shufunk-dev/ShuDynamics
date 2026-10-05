@@ -1,0 +1,15 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:burger_bun",
+                        "enchantedwood:cooked_burger_patty",
+                        "enchantedwood:cheese_slice",
+                        "enchantedwood:lettuce",
+                        "enchantedwood:tomato"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:classic_cheeseburger",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,12 @@
+﻿{
+    "ingredients":  [
+                        "enchantedwood:corn",
+                        "enchantedwood:salt"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "enchantedwood:taco_shell",
+                   "count":  2
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

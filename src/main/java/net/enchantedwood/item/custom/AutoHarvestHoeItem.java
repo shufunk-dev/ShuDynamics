@@ -11,6 +11,9 @@ import net.minecraft.block.PotatoesBlock;
 import net.minecraft.block.BeetrootsBlock;
 import net.minecraft.block.TorchflowerBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.enchantedwood.block.custom.CornCropBlock;
+import net.enchantedwood.block.custom.GenericCropBlock;
+import net.enchantedwood.item.ModItems;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
@@ -78,6 +81,16 @@ public class AutoHarvestHoeItem extends HoeItem {
                                 drop.decrement(1);
                                 replanted = true;
                                 break;
+                            }
+                        }
+
+                        if (!replanted) {
+                            for (ItemStack drop : drops) {
+                                if (drop.isIn(net.minecraft.registry.tag.ItemTags.VILLAGER_PLANTABLE_SEEDS) || drop.getItem().getTranslationKey().contains("seed")) {
+                                    drop.decrement(1);
+                                    replanted = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -150,6 +163,8 @@ public class AutoHarvestHoeItem extends HoeItem {
         if (cropBlock instanceof PotatoesBlock) return Items.POTATO;
         if (cropBlock instanceof BeetrootsBlock) return Items.BEETROOT_SEEDS;
         if (cropBlock instanceof TorchflowerBlock) return Items.TORCHFLOWER_SEEDS;
+        if (cropBlock instanceof CornCropBlock) return ModItems.CORN_SEEDS;
+        if (cropBlock instanceof GenericCropBlock genericCrop) return genericCrop.getSeed().asItem();
         return Items.WHEAT_SEEDS;
     }
 

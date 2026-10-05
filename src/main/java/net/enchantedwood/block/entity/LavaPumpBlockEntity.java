@@ -5,6 +5,7 @@ import net.enchantedwood.block.custom.LavaPumpBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
+import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.LavaPumpScreenHandler;
 import net.minecraft.block.BlockState;
@@ -141,18 +142,23 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
 
         // 1. Fill empty bucket with liquid lava from internal tank
         ItemStack bucketIn = entity.inventory.get(BUCKET_IN_SLOT);
-        if (!bucketIn.isEmpty() && bucketIn.isOf(Items.BUCKET) && entity.lavaAmount >= 1000) {
-            ItemStack bucketOut = entity.inventory.get(BUCKET_OUT_SLOT);
-            if (bucketOut.isEmpty()) {
-                entity.lavaAmount -= 1000;
-                bucketIn.decrement(1);
-                entity.inventory.set(BUCKET_OUT_SLOT, new ItemStack(Items.LAVA_BUCKET));
-                dirty = true;
-            } else if (bucketOut.isOf(Items.LAVA_BUCKET) && bucketOut.getCount() < bucketOut.getMaxCount()) {
-                entity.lavaAmount -= 1000;
-                bucketIn.decrement(1);
-                bucketOut.increment(1);
-                dirty = true;
+        if (!bucketIn.isEmpty() && entity.lavaAmount >= 1000) {
+            boolean isVanillaBucket = bucketIn.isOf(Items.BUCKET);
+            boolean isCopperBucket = bucketIn.isOf(ModItems.COPPER_BUCKET);
+            if (isVanillaBucket || isCopperBucket) {
+                ItemStack filledItem = isVanillaBucket ? new ItemStack(Items.LAVA_BUCKET) : new ItemStack(ModItems.COPPER_LAVA_BUCKET);
+                ItemStack bucketOut = entity.inventory.get(BUCKET_OUT_SLOT);
+                if (bucketOut.isEmpty()) {
+                    entity.lavaAmount -= 1000;
+                    bucketIn.decrement(1);
+                    entity.inventory.set(BUCKET_OUT_SLOT, filledItem);
+                    dirty = true;
+                } else if (ItemStack.areItemsEqual(bucketOut, filledItem) && bucketOut.getCount() < bucketOut.getMaxCount()) {
+                    entity.lavaAmount -= 1000;
+                    bucketIn.decrement(1);
+                    bucketOut.increment(1);
+                    dirty = true;
+                }
             }
         }
 
