@@ -1,54 +1,52 @@
 {
   "type": "minecraft:ore",
-  "config": {
-    "discard_chance_on_air_exposure": 0.0,
-    "size": 14,
-    "targets": [
-      {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:sand"
-        },
-        "state": {
-          "id": "enchantedwood:oil_sand"
-        }
+  "discard_chance_on_air_exposure": 0,
+  "size": 14,
+  "targets": [
+    {
+      "target": {
+        "predicate_type": "minecraft:block_match",
+        "block": "minecraft:sand"
       },
-      {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:sandstone"
-        },
-        "state": {
-          "id": "enchantedwood:oil_sand"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:red_sand"
-        },
-        "state": {
-          "id": "enchantedwood:oil_sand"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "minecraft:tag_match",
-          "tag": "minecraft:terracotta"
-        },
-        "state": {
-          "id": "enchantedwood:oil_sand"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "minecraft:tag_match",
-          "tag": "minecraft:stone_ore_replaceables"
-        },
-        "state": {
-          "id": "enchantedwood:oil_sand"
-        }
+      "state": {
+        "id": "enchantedwood:oil_sand"
       }
-    ]
-  }
+    },
+    {
+      "target": {
+        "predicate_type": "minecraft:block_match",
+        "block": "minecraft:sandstone"
+      },
+      "state": {
+        "id": "enchantedwood:oil_sand"
+      }
+    },
+    {
+      "target": {
+        "predicate_type": "minecraft:block_match",
+        "block": "minecraft:red_sand"
+      },
+      "state": {
+        "id": "enchantedwood:oil_sand"
+      }
+    },
+    {
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "minecraft:terracotta"
+      },
+      "state": {
+        "id": "enchantedwood:oil_sand"
+      }
+    },
+    {
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "minecraft:stone_ore_replaceables"
+      },
+      "state": {
+        "id": "enchantedwood:oil_sand"
+      }
+    }
+  ]
 }
