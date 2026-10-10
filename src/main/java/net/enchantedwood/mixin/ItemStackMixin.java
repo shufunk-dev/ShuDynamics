@@ -26,7 +26,7 @@ public abstract class ItemStackMixin {
     @Shadow public abstract Component getHoverName();
 
     @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
-    private void enforceEmergencyChassisLock(int damage, ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo ci) {
+    private void enforceEmergencyChassisLock(int damage, ServerPlayer player, Consumer<ItemStack> breakCallback, CallbackInfo ci) {
         if (this.getItem() instanceof ModularPowerArmorItem && this.isDamageableItem()) {
             int maxDmg = this.getMaxDamage();
             if (damage >= maxDmg) {
