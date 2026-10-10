@@ -319,8 +319,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public java.util.Map<net.minecraft.item.Item, Integer> collectAvailableItems(@Nullable EnchantedStorageTerminalBlockEntity terminal,
-                                                                                @Nullable PlayerEntity player,
-                                                                                @Nullable List<ItemStack> patternStacks) {
+                                                                                @Nullable PlayerEntity player) {
         java.util.Map<net.minecraft.item.Item, Integer> available = new java.util.HashMap<>();
 
         // 1. Digital Storage Terminal crystals
@@ -413,14 +412,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
             }
         }
 
-        // 8. Items placed into the 3x3 pattern matrix itself
-        if (patternStacks != null) {
-            for (ItemStack ps : patternStacks) {
-                if (!ps.isEmpty()) {
-                    available.put(ps.getItem(), available.getOrDefault(ps.getItem(), 0) + ps.getCount());
-                }
-            }
-        }
+        // NOTE: The 3x3 pattern matrix (slots 0..8) is purely a virtual recipe blueprint.
+        // It NEVER contributes available items for manufacturing.
 
         return available;
     }
@@ -744,6 +737,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         // 2. Check vanilla smelting recipes
         Optional<RecipeEntry<SmeltingRecipe>> match = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SingleStackRecipeInput(single), world);
         if (match.isPresent()) {
+            if (isEquipmentRecycleRecipe(match.get().value(), world)) return null;
             ItemStack res = match.get().value().craft(new SingleStackRecipeInput(single), world.getRegistryManager());
             if (!res.isEmpty()) {
                 return new ItemStack(res.getItem(), res.getCount() * single.getCount());
@@ -1605,7 +1599,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
         int availCount = available.getOrDefault(rawInputItem, 0);
 
         if (availCount < 1) {
@@ -1657,7 +1651,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
         int availCount = available.getOrDefault(rawInputItem, 0);
 
         if (availCount < 1) {
@@ -1694,11 +1688,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
         int availBuckets = available.getOrDefault(emptyBucket, 0);
 
         if (availBuckets < 1) {
-            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Water Pump, or pattern grid)");
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Water Pump, or inventory)");
             return;
         }
 
@@ -1731,11 +1725,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         }
 
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
-        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+        java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
         int availBuckets = available.getOrDefault(emptyBucket, 0);
 
         if (availBuckets < 1) {
-            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Lava Pump, or pattern grid)");
+            sendFeedback(player, "§c[Super Computer] Missing: §e1x " + new ItemStack(emptyBucket).getName().getString() + " §7(Place empty bucket in storage, Lava Pump, or inventory)");
             return;
         }
 
@@ -1936,8 +1930,8 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                                  List<ItemStack> patternStacks) {
         java.util.Map<String, Integer> missingItems = new java.util.LinkedHashMap<>();
         try {
-            // Snapshot available items from Terminal, Player Inventory, Machine networks, and Matrix
-            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, patternStacks);
+            // Snapshot available items from Terminal, Player Inventory, Machine networks, and Room storage
+            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
 
             CraftingPlan plan = new CraftingPlan();
             java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
@@ -1988,12 +1982,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // Record any recipe remainders from crafted items (e.g. empty buckets, bowls, bottles)
-            for (ItemStack s : patternStacks) {
-                if (!s.isEmpty()) {
-                    ItemStack rem = s.getRecipeRemainder();
+            // Record any recipe remainders from actually consumed raw ingredients (e.g. empty buckets, bowls, bottles)
+            for (ItemStack consumed : plan.rawIngredientsToConsume) {
+                if (!consumed.isEmpty()) {
+                    ItemStack rem = consumed.getRecipeRemainder();
                     if (!rem.isEmpty()) {
-                        plan.leftoverSynthesized.add(rem.copy());
+                        plan.leftoverSynthesized.add(rem.copyWithCount(consumed.getCount()));
                     }
                 }
             }
@@ -2010,7 +2004,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                                                          CircuitFabricatorBlockEntity.FabricatorRecipe recipe) {
         java.util.Map<String, Integer> missingItems = new java.util.LinkedHashMap<>();
         try {
-            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player, null);
+            java.util.Map<net.minecraft.item.Item, Integer> available = collectAvailableItems(terminal, player);
 
             CraftingPlan plan = new CraftingPlan();
             java.util.Map<net.minecraft.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
@@ -2110,34 +2104,25 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                     plan.steps.add(new CraftStep(StepType.PUMP_WATER, emptyBucket, targetItem));
                     return true;
                 }
-                // Fallback: If no empty bucket is in storage, but Water Pump has at least 1000 mB or nearby water,
-                // direct water pumping fulfills the recipe step seamlessly!
-                WaterPumpBlockEntity pump = getBestAvailableWaterPump();
-                if (pump != null && (pump.getWaterAmount() >= 1000 || WaterPumpBlockEntity.hasWaterNearby(world, pump.getPos()))) {
-                    plan.totalCraftingSteps++;
-                    plan.steps.add(new CraftStep(StepType.PUMP_WATER, null, targetItem));
-                    return true;
-                }
             } else {
                 missingItems.put(targetItem.getName().getString() + " §c(Place Water Pump or Water nearby)", 1);
                 return false;
             }
+            missingItems.put(targetItem.getName().getString() + " §c(Requires empty bucket)", 1);
+            return false;
         }
 
         // 3c. Check if targetItem is a Lava Bucket and can be pumped or melted via an online Lava Pump / Magma Crucible
         if ((targetItem == Items.LAVA_BUCKET || targetItem == ModItems.COPPER_LAVA_BUCKET) && isLavaSourceOnline()) {
             net.minecraft.item.Item emptyBucket = (targetItem == ModItems.COPPER_LAVA_BUCKET) ? ModItems.COPPER_BUCKET : Items.BUCKET;
             if (isLavaPumpOnline()) {
-                if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, depth + 1)) {
-                    plan.totalCraftingSteps++;
-                    plan.steps.add(new CraftStep(StepType.PUMP_LAVA, emptyBucket, targetItem));
-                    return true;
-                }
                 LavaPumpBlockEntity pump = getBestAvailableLavaPump();
                 if (pump != null && pump.getLavaAmount() >= 1000) {
-                    plan.totalCraftingSteps++;
-                    plan.steps.add(new CraftStep(StepType.PUMP_LAVA, null, targetItem));
-                    return true;
+                    if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, depth + 1)) {
+                        plan.totalCraftingSteps++;
+                        plan.steps.add(new CraftStep(StepType.PUMP_LAVA, emptyBucket, targetItem));
+                        return true;
+                    }
                 }
             } else if (isCrucibleOnline()) {
                 MagmaCrucibleBlockEntity bestCrucible = getBestAvailableCrucible();
@@ -2147,9 +2132,6 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         plan.steps.add(new CraftStep(StepType.MELT_LAVA, emptyBucket, targetItem));
                         return true;
                     }
-                    plan.totalCraftingSteps++;
-                    plan.steps.add(new CraftStep(StepType.MELT_LAVA, null, targetItem));
-                    return true;
                 } else {
                     // Try to resolve rock melting materials + empty bucket
                     net.minecraft.item.Item[] meltCandidates = new net.minecraft.item.Item[]{
@@ -2192,15 +2174,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         plan.steps.clear(); plan.steps.addAll(backupStepsList);
                         plan.totalCraftingSteps = backupSteps;
                     }
-
-                    // If couldn't resolve specific rock, still check if empty bucket alone can be queued
-                    if (resolveItemRequirement(world, emptyBucket, available, availableMolten, virtualBuffer, plan, new java.util.LinkedHashMap<>(), activeRecursion, depth + 1)) {
-                        plan.totalCraftingSteps++;
-                        plan.steps.add(new CraftStep(StepType.MELT_LAVA, emptyBucket, targetItem));
-                        return true;
-                    }
                 }
             }
+            missingItems.put(targetItem.getName().getString() + " §c(Requires empty bucket or lava source)", 1);
+            return false;
         }
 
         // 4. Prevent infinite loops or deep recursion
@@ -2300,105 +2277,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 7. Check if targetItem can be smelted via an online Enchanted Furnace / Smelter
-            if (isFurnaceOnline()) {
-                // A. Check custom dust smelting (e.g. Iron Ingot from Iron Dust, etc.)
-                for (net.minecraft.item.Item dustCandidate : getDustSmeltingInputs(targetItem)) {
-                    java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
-                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
-                    java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
-                    List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
-                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
-                    List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
-                    int backupSteps = plan.totalCraftingSteps;
-                    int backupMoltenUsed = plan.moltenMetalUsedMb;
-                    int backupSmelts = plan.smeltingSteps;
-
-                    java.util.Map<String, Integer> dustMissing = new java.util.LinkedHashMap<>();
-                    if (resolveItemRequirement(world, dustCandidate, available, availableMolten, virtualBuffer, plan, dustMissing, activeRecursion, depth + 1)) {
-                        plan.totalCraftingSteps++;
-                        plan.smeltingSteps++;
-                        plan.steps.add(new CraftStep(StepType.SMELT, dustCandidate, targetItem));
-                        return true;
-                    } else {
-                        if (!dustMissing.isEmpty() && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
-                            bestCandidateMissing = dustMissing;
-                        }
-                        available.clear(); available.putAll(backupAvailable);
-                        availableMolten.clear(); availableMolten.putAll(backupMolten);
-                        virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
-                        plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
-                        plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
-                        plan.steps.clear(); plan.steps.addAll(backupStepsList);
-                        plan.totalCraftingSteps = backupSteps;
-                        plan.moltenMetalUsedMb = backupMoltenUsed;
-                        plan.smeltingSteps = backupSmelts;
-                    }
-                }
-
-                // B. Check standard smelting recipes (e.g. Glass from Sand, Stone from Cobblestone, Smooth Stone from Stone, Charcoal from Log, etc.)
-                for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
-                    if (!(entry.value() instanceof AbstractCookingRecipe cookingRecipe)) continue;
-                    if (cookingRecipe.getType() != RecipeType.SMELTING && cookingRecipe.getType() != RecipeType.BLASTING) continue;
-
-                    ItemStack smeltRes = ItemStack.EMPTY;
-                    try {
-                        smeltRes = cookingRecipe.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
-                    } catch (Throwable ignored) {}
-
-                    if (!smeltRes.isEmpty() && smeltRes.isOf(targetItem)) {
-                        net.minecraft.recipe.Ingredient ing = cookingRecipe.ingredient();
-                        if (ing == null || ing.isEmpty()) continue;
-
-                        java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
-                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
-                        java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
-                        List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
-                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
-                        List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
-                        int backupSteps = plan.totalCraftingSteps;
-                        int backupMoltenUsed = plan.moltenMetalUsedMb;
-                        int backupSmelts = plan.smeltingSteps;
-
-                        java.util.Map<String, Integer> smeltMissing = new java.util.LinkedHashMap<>();
-                        if (resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, smeltMissing, activeRecursion, depth + 1)) {
-                            plan.totalCraftingSteps++;
-                            plan.smeltingSteps++;
-                            int yield = Math.max(1, smeltRes.getCount());
-                            net.minecraft.item.Item resolvedInput = null;
-                            for (net.minecraft.item.Item opt : ing.getMatchingItems().map(net.minecraft.registry.entry.RegistryEntry::value).toList()) {
-                                if (available.containsKey(opt) || virtualBuffer.containsKey(opt)) {
-                                    resolvedInput = opt;
-                                    break;
-                                }
-                            }
-                            if (resolvedInput == null) {
-                                resolvedInput = ing.getMatchingItems().findFirst().map(net.minecraft.registry.entry.RegistryEntry::value).orElse(null);
-                            }
-                            plan.steps.add(new CraftStep(StepType.SMELT, resolvedInput, targetItem));
-                            if (yield > 1) {
-                                virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
-                            }
-                            return true;
-                        } else {
-                            if (!smeltMissing.isEmpty() && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
-                                bestCandidateMissing = smeltMissing;
-                            }
-                            available.clear(); available.putAll(backupAvailable);
-                            availableMolten.clear(); availableMolten.putAll(backupMolten);
-                            virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
-                            plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
-                            plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
-                            plan.steps.clear(); plan.steps.addAll(backupStepsList);
-                            plan.totalCraftingSteps = backupSteps;
-                            plan.moltenMetalUsedMb = backupMoltenUsed;
-                            plan.smeltingSteps = backupSmelts;
-                        }
-                    }
-                }
-            }
-
-            // 8. Search RecipeManager for a crafting recipe that produces targetItem from available materials
+            // 7. Search RecipeManager for a crafting recipe that produces targetItem from available materials
             for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
                 if (!(entry.value() instanceof CraftingRecipe craftingRecipe)) continue;
                 ItemStack result = getSafeRecipeResult(craftingRecipe, world);
@@ -2458,6 +2337,105 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                         plan.steps.addAll(backupStepsList);
                         plan.totalCraftingSteps = backupSteps;
                         plan.moltenMetalUsedMb = backupMoltenUsed;
+                    }
+                }
+            }
+
+            // 8. Check if targetItem can be smelted via an online Enchanted Furnace / Smelter
+            if (isFurnaceOnline()) {
+                // A. Check custom dust smelting (e.g. Iron Ingot from Iron Dust, etc.)
+                for (net.minecraft.item.Item dustCandidate : getDustSmeltingInputs(targetItem)) {
+                    java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
+                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
+                    java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
+                    List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
+                    java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                    List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
+                    int backupSteps = plan.totalCraftingSteps;
+                    int backupMoltenUsed = plan.moltenMetalUsedMb;
+                    int backupSmelts = plan.smeltingSteps;
+
+                    java.util.Map<String, Integer> dustMissing = new java.util.LinkedHashMap<>();
+                    if (resolveItemRequirement(world, dustCandidate, available, availableMolten, virtualBuffer, plan, dustMissing, activeRecursion, depth + 1)) {
+                        plan.totalCraftingSteps++;
+                        plan.smeltingSteps++;
+                        plan.steps.add(new CraftStep(StepType.SMELT, dustCandidate, targetItem));
+                        return true;
+                    } else {
+                        if (!dustMissing.isEmpty() && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
+                            bestCandidateMissing = dustMissing;
+                        }
+                        available.clear(); available.putAll(backupAvailable);
+                        availableMolten.clear(); availableMolten.putAll(backupMolten);
+                        virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
+                        plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
+                        plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                        plan.steps.clear(); plan.steps.addAll(backupStepsList);
+                        plan.totalCraftingSteps = backupSteps;
+                        plan.moltenMetalUsedMb = backupMoltenUsed;
+                        plan.smeltingSteps = backupSmelts;
+                    }
+                }
+
+                // B. Check standard smelting recipes (e.g. Glass from Sand, Stone from Cobblestone, Smooth Stone from Stone, Charcoal from Log, etc.)
+                for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
+                    if (!(entry.value() instanceof AbstractCookingRecipe cookingRecipe)) continue;
+                    if (cookingRecipe.getType() != RecipeType.SMELTING && cookingRecipe.getType() != RecipeType.BLASTING) continue;
+                    if (isEquipmentRecycleRecipe(cookingRecipe, world)) continue;
+
+                    ItemStack smeltRes = ItemStack.EMPTY;
+                    try {
+                        smeltRes = cookingRecipe.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
+                    } catch (Throwable ignored) {}
+
+                    if (!smeltRes.isEmpty() && smeltRes.isOf(targetItem)) {
+                        net.minecraft.recipe.Ingredient ing = cookingRecipe.ingredient();
+                        if (ing == null || ing.isEmpty()) continue;
+
+                        java.util.Map<net.minecraft.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
+                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
+                        java.util.Map<net.minecraft.item.Item, Integer> backupVirtual = new java.util.HashMap<>(virtualBuffer);
+                        List<ItemStack> backupPlan = new ArrayList<>(plan.rawIngredientsToConsume);
+                        java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupPlanMolten = new java.util.EnumMap<>(plan.moltenMetalsToConsume);
+                        List<CraftStep> backupStepsList = new ArrayList<>(plan.steps);
+                        int backupSteps = plan.totalCraftingSteps;
+                        int backupMoltenUsed = plan.moltenMetalUsedMb;
+                        int backupSmelts = plan.smeltingSteps;
+
+                        java.util.Map<String, Integer> smeltMissing = new java.util.LinkedHashMap<>();
+                        if (resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, smeltMissing, activeRecursion, depth + 1)) {
+                            plan.totalCraftingSteps++;
+                            plan.smeltingSteps++;
+                            int yield = Math.max(1, smeltRes.getCount());
+                            net.minecraft.item.Item resolvedInput = null;
+                            for (net.minecraft.item.Item opt : ing.getMatchingItems().map(net.minecraft.registry.entry.RegistryEntry::value).toList()) {
+                                if (available.containsKey(opt) || virtualBuffer.containsKey(opt)) {
+                                    resolvedInput = opt;
+                                    break;
+                                }
+                            }
+                            if (resolvedInput == null) {
+                                resolvedInput = ing.getMatchingItems().findFirst().map(net.minecraft.registry.entry.RegistryEntry::value).orElse(null);
+                            }
+                            plan.steps.add(new CraftStep(StepType.SMELT, resolvedInput, targetItem));
+                            if (yield > 1) {
+                                virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
+                            }
+                            return true;
+                        } else {
+                            if (!smeltMissing.isEmpty() && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
+                                bestCandidateMissing = smeltMissing;
+                            }
+                            available.clear(); available.putAll(backupAvailable);
+                            availableMolten.clear(); availableMolten.putAll(backupMolten);
+                            virtualBuffer.clear(); virtualBuffer.putAll(backupVirtual);
+                            plan.rawIngredientsToConsume.clear(); plan.rawIngredientsToConsume.addAll(backupPlan);
+                            plan.moltenMetalsToConsume.clear(); plan.moltenMetalsToConsume.putAll(backupPlanMolten);
+                            plan.steps.clear(); plan.steps.addAll(backupStepsList);
+                            plan.totalCraftingSteps = backupSteps;
+                            plan.moltenMetalUsedMb = backupMoltenUsed;
+                            plan.smeltingSteps = backupSmelts;
+                        }
                     }
                 }
             }
@@ -2571,11 +2549,40 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
         return false;
     }
 
+    private static boolean isEquipmentRecycleRecipe(AbstractCookingRecipe cookingRecipe, ServerWorld world) {
+        try {
+            ItemStack res = cookingRecipe.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
+            if (!res.isEmpty() && (res.isOf(Items.IRON_NUGGET) || res.isOf(Items.GOLD_NUGGET) || res.getItem().getTranslationKey().endsWith("_nugget"))) {
+                return true;
+            }
+        } catch (Throwable ignored) {}
+
+        net.minecraft.recipe.Ingredient ing = cookingRecipe.ingredient();
+        if (ing == null || ing.isEmpty()) return false;
+        try {
+            for (net.minecraft.item.Item item : ing.getMatchingItems().map(net.minecraft.registry.entry.RegistryEntry::value).toList()) {
+                ItemStack stack = item.getDefaultStack();
+                if (stack.isDamageable() ||
+                    stack.contains(net.minecraft.component.DataComponentTypes.MAX_DAMAGE) ||
+                    stack.contains(net.minecraft.component.DataComponentTypes.TOOL) ||
+                    stack.contains(net.minecraft.component.DataComponentTypes.EQUIPPABLE) ||
+                    item == Items.IRON_HORSE_ARMOR ||
+                    item == Items.GOLDEN_HORSE_ARMOR) {
+                    return true;
+                }
+            }
+        } catch (Throwable t) {
+            return false;
+        }
+        return false;
+    }
+
     private boolean canBeSmelted(ServerWorld world, List<net.minecraft.item.Item> items) {
         for (net.minecraft.item.Item item : items) {
             if (EnchantedFurnaceBlockEntity.getDustSmeltingResult(item) != null) return true;
             for (RecipeEntry<?> entry : world.getRecipeManager().values()) {
                 if (entry.value() instanceof AbstractCookingRecipe c && (c.getType() == RecipeType.SMELTING || c.getType() == RecipeType.BLASTING)) {
+                    if (isEquipmentRecycleRecipe(c, world)) continue;
                     ItemStack res = c.craft(new SingleStackRecipeInput(ItemStack.EMPTY), world.getRegistryManager());
                     if (!res.isEmpty() && res.isOf(item)) return true;
                 }
@@ -2631,24 +2638,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 3. Deduct from 3x3 pattern matrix itself
-            if (needed > 0) {
-                for (int s = 0; s < 9; s++) {
-                    ItemStack pStack = this.inventory.get(s);
-                    if (!pStack.isEmpty() && ItemStack.areItemsAndComponentsEqual(pStack, req)) {
-                        int take = Math.min(needed, pStack.getCount());
-                        pStack.decrement(take);
-                        needed -= take;
-                        if (pStack.isEmpty()) {
-                            this.inventory.set(s, ItemStack.EMPTY);
-                        }
-                        this.markDirty();
-                        if (needed <= 0) break;
-                    }
-                }
-            }
-
-            // 4. Deduct from Water Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
+            // 3. Deduct from Water Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
             if (needed > 0) {
                 for (WaterPumpBlockEntity wp : this.cachedWaterPumps) {
                     if (wp != null && !wp.isRemoved()) {
@@ -2670,7 +2660,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 5. Deduct from Lava Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
+            // 4. Deduct from Lava Pumps (BUCKET_OUT_SLOT first, then BUCKET_IN_SLOT)
             if (needed > 0) {
                 for (LavaPumpBlockEntity lp : this.cachedLavaPumps) {
                     if (lp != null && !lp.isRemoved()) {
@@ -2692,7 +2682,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 6. Deduct from Magma Crucibles (BUCKET_OUTPUT_SLOT first, then BUCKET_INPUT_SLOT)
+            // 5. Deduct from Magma Crucibles (BUCKET_OUTPUT_SLOT first, then BUCKET_INPUT_SLOT)
             if (needed > 0) {
                 for (MagmaCrucibleBlockEntity mc : this.cachedCrucibles) {
                     if (mc != null && !mc.isRemoved()) {
@@ -2714,7 +2704,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 7. Deduct from adjacent inventories if still needed
+            // 6. Deduct from adjacent inventories if still needed
             if (needed > 0 && this.world != null) {
                 for (Direction dir : Direction.values()) {
                     BlockEntity be = this.world.getBlockEntity(this.pos.offset(dir));
@@ -2737,7 +2727,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements NamedScreen
                 }
             }
 
-            // 8. Deduct from scanned room containers (cachedContainers)
+            // 7. Deduct from scanned room containers (cachedContainers)
             if (needed > 0) {
                 for (Inventory container : this.cachedContainers) {
                     if (container != null && !(container instanceof SuperComputerBlockEntity) && !(container instanceof EnchantedStorageTerminalBlockEntity)) {

@@ -1,9 +1,9 @@
-# ✨ ShuDynamics — 2.3.0: The Culinary Arts & Cryogenic Logistics Edition 🍕🍦❄️🌾
+# ✨ ShuDynamics — 2.3.2: The Culinary Arts & Cryogenic Logistics (Patch Edition 2) 🍕🍦❄️🌾
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.3.0-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.3.2-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -26,6 +26,28 @@ To get the best survival experience and view all custom multi-slot machine recip
 * **[EMI](https://www.curseforge.com/minecraft/mc-mods/emi)**: Modern Fabric recipe engine powering custom machine tabs (Induction Smelter, Circuit Fabricator, Harmonic Record Press, Alloy Foundry, Crusher, Soil Infuser, Blast Furnace, Coke Oven, Refinery, Magma Crucible, Super Computer, Cryo Freezer, Ice Cream Machine, Brick Oven), 1-click recipe transfer (`[+]` button), and catalytic boosts (**Basalt Flux Catalyst**, **Blaze Overclock Cores**, and **Speed Gears**).
 * **[Just Enough Items (JEI)](https://www.curseforge.com/minecraft/mc-mods/jei)**: Standard in-game recipe browser with quick item search and catalyst indexing.
 * **[Jade](https://www.curseforge.com/minecraft/mc-mods/jade)**: Real-time in-world HUD block inspection, machine progress bars, energy states, and custom chest tier names.
+
+---
+
+## 🌟 What's New in v2.3.2 (Patch 2.3.2)
+
+* 💡 **Super Computer Recipe Solver Priority & Scrap Smelting Prevention**:
+  * **Crafting Prioritization**: Reordered recipe resolution to check 3×3 crafting table recipes before furnace smelting. Previously, when resolving nuggets (such as for lanterns), the solver prioritized smelting, matching vanilla's tool scrap recipe (`1 iron pickaxe -> 1 iron nugget`) and crafting full iron pickaxes to smelt them into scrap rather than crafting nuggets directly from ingots (`1 iron ingot -> 9 iron nuggets`).
+  * **Equipment Recycling Blacklist**: Added comprehensive equipment recycling filtering (`isEquipmentRecycleRecipe`) to block damageable tools, weapons, armor, and horse armor from ever being synthesized or scheduled as furnace inputs for nugget production.
+  * **Direct Smelting Guard**: Hardened direct 3×3 pattern smelting so equipment recycling recipes cannot be programmed or queued manually in the Super Computer grid.
+
+---
+
+## 🌟 What's New in v2.3.1 (Patch 2.3.1)
+
+* 🛡️ **Super Computer Free-Crafting Exploit Patch**:
+  * Fixed an emergency flaw where the Super Computer's 3×3 ghost blueprint matrix was queried as real physical inventory during recursive dependency verification, allowing items to be crafted freely without prerequisite materials or dimension gating.
+* ⛏️ **Universal Iron Pickaxe Machine Harvesting**:
+  * Added block drop loot tables and mining tags to all newly added machines and appliances (**Brick Oven**, **Ice Cream Machine**, **Harmonic Record Press**, **Water Pump**, **Cryo Freezer**, **Water Pipe**, **Crusher Mk2**, and **Dust Smelter Mk2**).
+  * Players can now safely mine and pick up these machines using an **Iron Pickaxe or higher** without fear of lost blocks if they don't have a Wrench.
+  * Preserved full instant Shift + Right-Click **Wrench dismantling** directly into the player's inventory for quick, lossless reorganization.
+* 📦 **Machine Inventory Protection**:
+  * Implemented container item scattering on the **Ice Cream Machine** upon destruction, ensuring contained ingredients, ice, and ice creams safely drop onto the ground rather than being voided.
 
 ---
 
@@ -183,7 +205,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-2.3.0.jar
+build/libs/shudynamics-2.3.1.jar
 ```
 
 ---

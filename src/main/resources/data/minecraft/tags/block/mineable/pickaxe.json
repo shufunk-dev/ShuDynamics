@@ -133,6 +133,12 @@
     "enchantedwood:industrial_centrifuge",
     "enchantedwood:powered_anvil",
     "enchantedwood:resonance_altar",
-    "enchantedwood:enchanted_lamp"
+    "enchantedwood:enchanted_lamp",
+    "enchantedwood:brick_oven",
+    "enchantedwood:ice_cream_machine",
+    "enchantedwood:harmonic_record_press",
+    "enchantedwood:water_pump",
+    "enchantedwood:cryo_freezer",
+    "enchantedwood:water_pipe"
   ]
 }

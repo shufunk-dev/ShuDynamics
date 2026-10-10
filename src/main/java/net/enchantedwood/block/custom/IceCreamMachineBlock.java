@@ -22,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -205,6 +206,17 @@ public class IceCreamMachineBlock extends BlockWithEntity {
             }
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof IceCreamMachineBlockEntity machine) {
+                ItemScatterer.spawn(world, pos, machine);
+            }
+            super.onStateReplaced(state, world, pos, moved);
+        }
     }
 
     @Override

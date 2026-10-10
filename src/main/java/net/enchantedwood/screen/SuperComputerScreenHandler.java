@@ -28,10 +28,10 @@ public class SuperComputerScreenHandler extends ScreenHandler {
         inventory.onOpen(playerInventory.player);
         this.addProperties(propertyDelegate);
 
-        // 1. 3x3 Recipe Programming Matrix (Slots 0..8)
+        // 1. 3x3 Recipe Programming Matrix (Slots 0..8) - Ghost Pattern Matrix
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                this.addSlot(new Slot(inventory, col + row * 3, 30 + col * 18, 17 + row * 18));
+                this.addSlot(new GhostPatternSlot(inventory, col + row * 3, 30 + col * 18, 17 + row * 18));
             }
         }
 
@@ -59,6 +59,11 @@ public class SuperComputerScreenHandler extends ScreenHandler {
 
             @Override
             public boolean canTakeItems(PlayerEntity playerEntity) {
+                return false;
+            }
+
+            @Override
+            public boolean canTakePartial(PlayerEntity playerEntity) {
                 return false;
             }
         });
@@ -140,7 +145,7 @@ public class SuperComputerScreenHandler extends ScreenHandler {
 
     @Override
     public void onSlotClick(int slotIndex, int button, net.minecraft.screen.slot.SlotActionType actionType, PlayerEntity player) {
-        // 1. Ghost Pattern Matrix (Slots 0..8)
+        // 1. Ghost Pattern Matrix (Slots 0..8) - Purely virtual blueprint programming
         if (slotIndex >= 0 && slotIndex < 9) {
             Slot slot = this.slots.get(slotIndex);
             ItemStack cursorStack = this.getCursorStack();
@@ -153,9 +158,6 @@ public class SuperComputerScreenHandler extends ScreenHandler {
                     // Empty cursor click clears the slot
                     slot.setStack(ItemStack.EMPTY);
                 }
-                slot.markDirty();
-                this.sendContentUpdates();
-                return;
             } else if (actionType == net.minecraft.screen.slot.SlotActionType.SWAP) {
                 // Hotbar key (1..9) pressed over slot: place ghost copy from that hotbar slot
                 ItemStack hotbarStack = player.getInventory().getStack(button);
@@ -164,16 +166,14 @@ public class SuperComputerScreenHandler extends ScreenHandler {
                 } else {
                     slot.setStack(ItemStack.EMPTY);
                 }
-                slot.markDirty();
-                this.sendContentUpdates();
-                return;
-            } else if (actionType == net.minecraft.screen.slot.SlotActionType.CLONE) {
-                // Middle click clears slot
+            } else if (actionType == net.minecraft.screen.slot.SlotActionType.CLONE || actionType == net.minecraft.screen.slot.SlotActionType.THROW) {
+                // Middle click or throw clears slot without dropping anything into the world
                 slot.setStack(ItemStack.EMPTY);
-                slot.markDirty();
-                this.sendContentUpdates();
-                return;
             }
+            // Block all other actions (e.g. QUICK_CRAFT, PICKUP_ALL) from touching ghost pattern slots
+            slot.markDirty();
+            this.sendContentUpdates();
+            return;
         }
 
         // 2. Target Preview Slot (Slot 14) is completely non-interactive
@@ -256,5 +256,26 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
+    }
+
+    public static class GhostPatternSlot extends Slot {
+        public GhostPatternSlot(Inventory inventory, int index, int x, int y) {
+            super(inventory, index, x, y);
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public boolean canTakeItems(PlayerEntity playerEntity) {
+            return false;
+        }
+
+        @Override
+        public boolean canTakePartial(PlayerEntity playerEntity) {
+            return false;
+        }
     }
 }
