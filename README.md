@@ -1,15 +1,28 @@
-# ✨ ShuDynamics — 2.3.2: The Culinary Arts & Cryogenic Logistics (Patch Edition 2) 🍕🍦❄️🌾
+# ✨ ShuDynamics — The Industrial, Dimensional & Culinary Odyssey ⚡🍕❄️🌌
 
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11%2B%20%7C%201.21.2%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
-[![Java](https://img.shields.io/badge/Java-21-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.3.2-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
+[![Latest Release](https://img.shields.io/badge/Release-v2.3.2--26.3%20%7C%20v2.3.2-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
-**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, culinary arts, and musical mod for **Minecraft Fabric (1.21.11+ / 1.21.2+)**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, **artisan kitchen appliances & cryogenic logistics**, **7 nostalgic Lost Biomes in the fractured Convergence dimension**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
+**ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, culinary arts, and musical mod for **Minecraft Fabric**, officially maintained for both **Minecraft 26.3 ("Wilderness Bound")** and **Minecraft 1.21.11+ / 1.21.2+**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, **artisan kitchen appliances & cryogenic logistics**, **7 nostalgic Lost Biomes in the fractured Convergence dimension**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
+
+---
+
+## 🌿 Dual-Version Architecture & Git Branches
+
+ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft versions:
+
+| Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
+|:---:|:---:|:---:|:---:|:---:|
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.3.2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.3.2.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+
+*All ongoing feature updates and patches are actively synchronized across both branches.*
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
 * ▶️ **Official Soundtrack (YouTube)**: [https://www.youtube.com/playlist?list=PLAEoPqUv2z90](https://www.youtube.com/playlist?list=PLAEoPqUv2z90)
