@@ -2,71 +2,69 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class SteelGeneratorScreen extends HandledScreen<SteelGeneratorScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/steel_generator_gui.png");
+public class SteelGeneratorScreen extends AbstractContainerScreen<SteelGeneratorScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/steel_generator_gui.png");
 
-    public SteelGeneratorScreen(SteelGeneratorScreenHandler handler, PlayerInventory inventory, Text title) {
+    public SteelGeneratorScreen(SteelGeneratorScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // 1. Draw burning flame
-        if (this.handler.isBurning()) {
-            int fuelHeight = this.handler.getScaledFuelProgress(14);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 81, y + 49 - fuelHeight, 176.0f, 14.0f - fuelHeight, 14, fuelHeight + 1, 256, 256);
+        if (this.menu.isBurning()) {
+            int fuelHeight = this.menu.getScaledFuelProgress(14);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 81, y + 49 - fuelHeight, 176.0f, 14.0f - fuelHeight, 14, fuelHeight + 1, 256, 256);
         }
 
         // 2. Draw Energy Bar (height = 50px, at x + 138, y + 20)
-        int energyHeight = this.handler.getScaledEnergy(50);
+        int energyHeight = this.menu.getScaledEnergy(50);
         if (energyHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 138, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 138, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
+
 
         // Energy Bar Tooltip
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
         if (mouseX >= x + 137 && mouseX <= x + 155 && mouseY >= y + 19 && mouseY <= y + 71) {
-            String energyText = String.format("%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy());
-            String rateText = String.format("Output: +%d FE/t", this.handler.getGenerationRate());
-            context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6Energy Buffer"),
-                    Text.literal("§e" + energyText),
-                    Text.literal("§a" + rateText)
+            String energyText = String.format("%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy());
+            String rateText = String.format("Output: +%d FE/t", this.menu.getGenerationRate());
+            context.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.literal("§6Energy Buffer"),
+                    Component.literal("§e" + energyText),
+                    Component.literal("§a" + rateText)
             ), mouseX, mouseY);
         }
 
         // Empty Fuel Slot Tooltip
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id == 0) {
-            context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6🔥 Solid Fuel Slot"),
-                    Text.literal("§7Insert combustible fuel:"),
-                    Text.literal("§f• Coal, Charcoal, Coke Coal, Wood, Fire Crystal")
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index == 0) {
+            context.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.literal("§6🔥 Solid Fuel Slot"),
+                    Component.literal("§7Insert combustible fuel:"),
+                    Component.literal("§f• Coal, Charcoal, Coke Coal, Wood, Fire Crystal")
             ), mouseX, mouseY);
         }
     }

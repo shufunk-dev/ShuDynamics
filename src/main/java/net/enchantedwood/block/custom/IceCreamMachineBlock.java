@@ -3,103 +3,100 @@ package net.enchantedwood.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.enchantedwood.block.entity.IceCreamMachineBlockEntity;
 import net.enchantedwood.block.entity.ModBlockEntities;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
 
-public class IceCreamMachineBlock extends BlockWithEntity {
-    public static final MapCodec<IceCreamMachineBlock> CODEC = createCodec(IceCreamMachineBlock::new);
-    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
-    public static final BooleanProperty LIT = Properties.LIT;
+public class IceCreamMachineBlock extends BaseEntityBlock {
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public IceCreamMachineBlock(Settings settings) {
+    public IceCreamMachineBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, LIT);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new IceCreamMachineBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return world instanceof ServerWorld serverWorld
-                ? validateTicker(type, ModBlockEntities.ICE_CREAM_MACHINE_BLOCK_ENTITY, (w, pos, st, blockEntity) -> IceCreamMachineBlockEntity.tick(serverWorld, pos, st, blockEntity))
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return world instanceof ServerLevel serverWorld
+                ? createTickerHelper(type, ModBlockEntities.ICE_CREAM_MACHINE_BLOCK_ENTITY, (w, pos, st, blockEntity) -> IceCreamMachineBlockEntity.tick(serverWorld, pos, st, blockEntity))
                 : null;
     }
 
-    private static final VoxelShape BASE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape BASE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
     // Facing North -> Handle on East (+X, extending from x=16 to x=22)
-    private static final VoxelShape SHAPE_NORTH = VoxelShapes.union(BASE, Block.createCuboidShape(16.0, 7.0, 6.0, 22.0, 15.0, 11.0));
+    private static final VoxelShape SHAPE_NORTH = Shapes.or(BASE, Block.box(16.0, 7.0, 6.0, 22.0, 15.0, 11.0));
     // Facing South -> Handle on West (-X, extending from x=-6 to x=0)
-    private static final VoxelShape SHAPE_SOUTH = VoxelShapes.union(BASE, Block.createCuboidShape(-6.0, 7.0, 5.0, 0.0, 15.0, 10.0));
+    private static final VoxelShape SHAPE_SOUTH = Shapes.or(BASE, Block.box(-6.0, 7.0, 5.0, 0.0, 15.0, 10.0));
     // Facing East -> Handle on South (+Z, extending from z=16 to z=22)
-    private static final VoxelShape SHAPE_EAST = VoxelShapes.union(BASE, Block.createCuboidShape(5.0, 7.0, 16.0, 10.0, 15.0, 22.0));
+    private static final VoxelShape SHAPE_EAST = Shapes.or(BASE, Block.box(5.0, 7.0, 16.0, 10.0, 15.0, 22.0));
     // Facing West -> Handle on North (-Z, extending from z=-6 to z=0)
-    private static final VoxelShape SHAPE_WEST = VoxelShapes.union(BASE, Block.createCuboidShape(6.0, 7.0, -6.0, 11.0, 15.0, 0.0));
+    private static final VoxelShape SHAPE_WEST = Shapes.or(BASE, Block.box(6.0, 7.0, -6.0, 11.0, 15.0, 0.0));
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return switch (state.get(FACING)) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
             case NORTH -> SHAPE_NORTH;
             case SOUTH -> SHAPE_SOUTH;
             case EAST -> SHAPE_EAST;
@@ -109,8 +106,8 @@ public class IceCreamMachineBlock extends BlockWithEntity {
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return switch (state.get(FACING)) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
             case NORTH -> SHAPE_NORTH;
             case SOUTH -> SHAPE_SOUTH;
             case EAST -> SHAPE_EAST;
@@ -120,7 +117,7 @@ public class IceCreamMachineBlock extends BlockWithEntity {
     }
 
     public static boolean isHandleHit(Direction facing, Direction hitSide, double relX, double relY, double relZ) {
-        Direction handleSide = facing.rotateYClockwise();
+        Direction handleSide = facing.getClockWise();
 
         // 1. Ray hit the handle side face directly
         if (hitSide == handleSide) {
@@ -144,94 +141,94 @@ public class IceCreamMachineBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof IceCreamMachineBlockEntity machine) {
-                Direction facing = state.get(FACING);
-                Direction handleSide = facing.rotateYClockwise();
+                Direction facing = state.getValue(FACING);
+                Direction handleSide = facing.getClockWise();
 
                 // 1. Sneak-click always opens GUI
-                if (player.isSneaking()) {
-                    player.openHandledScreen(machine);
-                    return ActionResult.SUCCESS;
+                if (player.isShiftKeyDown()) {
+                    player.openMenu(machine);
+                    return InteractionResult.SUCCESS;
                 }
 
                 // 2. Check if the player clicked the crank handle (any face of the handle or handle region)
-                double relX = hit.getPos().x - pos.getX();
-                double relY = hit.getPos().y - pos.getY();
-                double relZ = hit.getPos().z - pos.getZ();
+                double relX = hit.getLocation().x - pos.getX();
+                double relY = hit.getLocation().y - pos.getY();
+                double relZ = hit.getLocation().z - pos.getZ();
 
-                if (isHandleHit(facing, hit.getSide(), relX, relY, relZ)) {
+                if (isHandleHit(facing, hit.getDirection(), relX, relY, relZ)) {
                     // Check if adjacent block blocks the handle
-                    BlockPos neighborPos = pos.offset(handleSide);
+                    BlockPos neighborPos = pos.relative(handleSide);
                     BlockState neighborState = world.getBlockState(neighborPos);
-                    if (neighborState.isSolidBlock(world, neighborPos) || neighborState.blocksMovement()) {
-                        world.playSound(null, pos, SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 0.8f, 1.2f);
-                        player.sendMessage(Text.literal("§cCannot churn: Crank handle is blocked by the adjacent block to the " + handleSide.asString().toUpperCase() + "!"), true);
-                        return ActionResult.SUCCESS;
+                    if (neighborState.isRedstoneConductor(world, neighborPos) || neighborState.isSolid()) {
+                        world.playSound(null, pos, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 0.8f, 1.2f);
+                        player.sendOverlayMessage(Component.literal("§cCannot churn: Crank handle is blocked by the adjacent block to the " + handleSide.getSerializedName().toUpperCase() + "!"));
+                        return InteractionResult.SUCCESS;
                     }
 
                     // Attempt manual crank
                     if (machine.canChurn()) {
                         machine.manualCrank();
-                        world.playSound(null, pos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 0.8f, 1.4f);
+                        world.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.8f, 1.4f);
                         int pct = (machine.getChurnProgress() * 100) / Math.max(1, machine.getMaxChurnProgress());
                         if (pct == 0) {
-                            world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.9f, 1.2f);
-                            player.sendMessage(Text.literal("§a✨ Ice Cream ready! Open the machine to collect it."), true);
+                            world.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.9f, 1.2f);
+                            player.sendOverlayMessage(Component.literal("§a✨ Ice Cream ready! Open the machine to collect it."));
                         } else {
-                            player.sendMessage(Text.literal("§b🌀 Churned ice cream! (" + pct + "%)"), true);
+                            player.sendOverlayMessage(Component.literal("§b🌀 Churned ice cream! (" + pct + "%)"));
                         }
                     } else {
                         // Diagnostic feedback: Explain EXACTLY why it cannot churn instead of opening GUI
-                        world.playSound(null, pos, SoundEvents.BLOCK_DISPENSER_FAIL, SoundCategory.BLOCKS, 0.7f, 1.2f);
+                        world.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.7f, 1.2f);
                         if (machine.getRefrigerationTime() <= 0 && machine.getInventory().get(IceCreamMachineBlockEntity.REFRIGERANT_SLOT).isEmpty()) {
-                            player.sendMessage(Text.literal("§cCannot churn: Missing Refrigerant! Insert Ice, Ice Cubes, or Salt."), true);
+                            player.sendOverlayMessage(Component.literal("§cCannot churn: Missing Refrigerant! Insert Ice, Ice Cubes, or Salt."));
                         } else if (machine.getInventory().get(IceCreamMachineBlockEntity.BASE_SLOT).isEmpty()) {
-                            player.sendMessage(Text.literal("§cCannot churn: Missing Liquid Base! Insert Milk or Soy Milk."), true);
+                            player.sendOverlayMessage(Component.literal("§cCannot churn: Missing Liquid Base! Insert Milk or Soy Milk."));
                         } else if (machine.getInventory().get(IceCreamMachineBlockEntity.SWEETENER_SLOT).isEmpty()) {
-                            player.sendMessage(Text.literal("§cCannot churn: Missing Sweetener! Insert Sugar or Honey."), true);
+                            player.sendOverlayMessage(Component.literal("§cCannot churn: Missing Sweetener! Insert Sugar or Honey."));
                         } else if (!machine.getInventory().get(IceCreamMachineBlockEntity.OUTPUT_SLOT).isEmpty()) {
-                            player.sendMessage(Text.literal("§cCannot churn: Output tray is full! Collect your ice cream."), true);
+                            player.sendOverlayMessage(Component.literal("§cCannot churn: Output tray is full! Collect your ice cream."));
                         } else {
-                            player.sendMessage(Text.literal("§cCannot churn: Missing ingredients. Right-click the front to open GUI."), true);
+                            player.sendOverlayMessage(Component.literal("§cCannot churn: Missing ingredients. Right-click the front to open GUI."));
                         }
                     }
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
 
                 // 3. Clicking front, top, left, or back opens GUI
-                player.openHandledScreen(machine);
+                player.openMenu(machine);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
-        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+        if (!state.is(world.getBlockState(pos).getBlock())) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof IceCreamMachineBlockEntity machine) {
-                ItemScatterer.spawn(world, pos, machine);
+                Containers.dropContents(world, pos, machine);
             }
-            super.onStateReplaced(state, world, pos, moved);
+            super.affectNeighborsAfterRemoval(state, world, pos, moved);
         }
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(LIT)) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        if (state.getValue(LIT)) {
             double x = pos.getX() + 0.5;
             double y = pos.getY() + 0.6;
             double z = pos.getZ() + 0.5;
 
             if (random.nextDouble() < 0.2) {
-                world.playSoundClient(x, y, z, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.4f, 1.5f, false);
+                world.playLocalSound(x, y, z, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.4f, 1.5f, false);
             }
 
-            world.addParticleClient(ParticleTypes.SNOWFLAKE, x + (random.nextDouble() - 0.5) * 0.4, y, z + (random.nextDouble() - 0.5) * 0.4, 0.0, 0.02, 0.0);
-            world.addParticleClient(ParticleTypes.CLOUD, x + (random.nextDouble() - 0.5) * 0.3, y + 0.2, z + (random.nextDouble() - 0.5) * 0.3, 0.0, 0.01, 0.0);
+            world.addParticle(ParticleTypes.SNOWFLAKE, x + (random.nextDouble() - 0.5) * 0.4, y, z + (random.nextDouble() - 0.5) * 0.4, 0.0, 0.02, 0.0);
+            world.addParticle(ParticleTypes.CLOUD, x + (random.nextDouble() - 0.5) * 0.3, y + 0.2, z + (random.nextDouble() - 0.5) * 0.3, 0.0, 0.01, 0.0);
         }
     }
 }

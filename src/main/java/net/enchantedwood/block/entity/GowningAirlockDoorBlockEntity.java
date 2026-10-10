@@ -1,21 +1,20 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 
 public class GowningAirlockDoorBlockEntity extends BlockEntity {
     private int autoCloseTimer = 0;
@@ -25,8 +24,8 @@ public class GowningAirlockDoorBlockEntity extends BlockEntity {
         super(ModBlockEntities.GOWNING_AIRLOCK_DOOR_BE, pos, state);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, GowningAirlockDoorBlockEntity entity) {
-        boolean isOpen = state.get(DoorBlock.OPEN);
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, GowningAirlockDoorBlockEntity entity) {
+        boolean isOpen = state.getValue(DoorBlock.OPEN);
 
         if (!isOpen) {
             entity.scanCooldown++;
@@ -40,12 +39,12 @@ public class GowningAirlockDoorBlockEntity extends BlockEntity {
                 entity.autoCloseTimer--;
             } else {
                 // Check if any entity is currently in the doorway
-                Box doorway = new Box(pos).stretch(0, 1.0, 0);
-                List<PlayerEntity> insideDoorway = world.getEntitiesByClass(PlayerEntity.class, doorway, p -> true);
+                AABB doorway = new AABB(pos).expandTowards(0, 1.0, 0);
+                List<Player> insideDoorway = world.getEntitiesOfClass(Player.class, doorway, p -> true);
 
                 if (insideDoorway.isEmpty()) {
                     entity.setDoorOpenState(world, pos, state, false);
-                    world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.1f);
+                    world.playSound(null, pos, SoundEvents.IRON_DOOR_CLOSE, SoundSource.BLOCKS, 1.0f, 1.1f);
                     entity.scanCooldown = -20; // 1-second cooldown after closing before scanning again
                 } else {
                     entity.autoCloseTimer = 20;
@@ -54,9 +53,9 @@ public class GowningAirlockDoorBlockEntity extends BlockEntity {
         }
     }
 
-    private void scanExterior(ServerWorld world, BlockPos pos, BlockState state) {
-        Direction facing = state.get(DoorBlock.FACING);
-        BlockPos inFront = pos.offset(facing);
+    private void scanExterior(ServerLevel world, BlockPos pos, BlockState state) {
+        Direction facing = state.getValue(DoorBlock.FACING);
+        BlockPos inFront = pos.relative(facing);
 
         // Exact 1-block doorway column in front of the door with zero bleed behind the door or into side walls
         double minX = inFront.getX();
@@ -76,45 +75,45 @@ public class GowningAirlockDoorBlockEntity extends BlockEntity {
             maxX += 0.25;
         }
 
-        Box scanBox = new Box(minX, minY, minZ, maxX, maxY, maxZ);
+        AABB scanBox = new AABB(minX, minY, minZ, maxX, maxY, maxZ);
 
-        List<ServerPlayerEntity> players = world.getEntitiesByClass(ServerPlayerEntity.class, scanBox, p -> !p.isSpectator());
+        List<ServerPlayer> players = world.getEntitiesOfClass(ServerPlayer.class, scanBox, p -> !p.isSpectator());
 
         if (!players.isEmpty()) {
-            world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
             setDoorOpenState(world, pos, state, true);
             this.autoCloseTimer = 70; // 3.5 seconds
-            players.getFirst().sendMessage(Text.literal("§a✦ Gowning Room Airlock: Welcome Personnel ✦"), true);
+            players.getFirst().sendOverlayMessage(Component.literal("§a✦ Gowning Room Airlock: Welcome Personnel ✦"));
         }
     }
 
     public void openForExit() {
-        if (world != null && !world.isClient()) {
-            BlockState state = getCachedState();
-            setDoorOpenState((ServerWorld) world, pos, state, true);
-            world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        if (level != null && !level.isClientSide()) {
+            BlockState state = getBlockState();
+            setDoorOpenState((ServerLevel) level, worldPosition, state, true);
+            level.playSound(null, worldPosition, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
             this.autoCloseTimer = 70;
         }
     }
 
-    private void setDoorOpenState(ServerWorld world, BlockPos pos, BlockState state, boolean open) {
-        world.setBlockState(pos, state.with(DoorBlock.OPEN, open), 3);
-        BlockPos upperPos = pos.up();
+    private void setDoorOpenState(ServerLevel world, BlockPos pos, BlockState state, boolean open) {
+        world.setBlock(pos, state.setValue(DoorBlock.OPEN, open), 3);
+        BlockPos upperPos = pos.above();
         BlockState upperState = world.getBlockState(upperPos);
-        if (upperState.isOf(state.getBlock())) {
-            world.setBlockState(upperPos, upperState.with(DoorBlock.OPEN, open), 3);
+        if (upperState.is(state.getBlock())) {
+            world.setBlock(upperPos, upperState.setValue(DoorBlock.OPEN, open), 3);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        this.autoCloseTimer = view.getInt("AutoCloseTimer", 0);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        this.autoCloseTimer = view.getIntOr("AutoCloseTimer", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         view.putInt("AutoCloseTimer", this.autoCloseTimer);
     }
 }

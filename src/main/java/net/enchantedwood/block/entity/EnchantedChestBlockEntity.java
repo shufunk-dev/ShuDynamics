@@ -1,51 +1,48 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestLidAnimator;
-import net.minecraft.block.entity.LidOpenable;
-import net.minecraft.block.entity.ViewerCountManager;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.util.Nameable;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.EnchantedChestBlock;
 import net.enchantedwood.screen.EnchantedChestScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestLidController;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class EnchantedChestBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LidOpenable, Nameable {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(162, ItemStack.EMPTY);
+public class EnchantedChestBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, LidBlockEntity, Nameable {
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(162, ItemStack.EMPTY);
     private GearTier gearTier = GearTier.NONE;
     private int activePage = 0;
     private int viewerCount = 0;
 
-    private final ChestLidAnimator lidAnimator = new ChestLidAnimator();
+    private final ChestLidController lidAnimator = new ChestLidController();
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -65,74 +62,74 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 3;
         }
     };
 
     public EnchantedChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY, pos, state);
-        if (state.contains(EnchantedChestBlock.GEAR_TIER)) {
-            this.gearTier = state.get(EnchantedChestBlock.GEAR_TIER);
+        if (state.hasProperty(EnchantedChestBlock.GEAR_TIER)) {
+            this.gearTier = state.getValue(EnchantedChestBlock.GEAR_TIER);
         }
     }
 
-    private final ViewerCountManager stateManager = new ViewerCountManager() {
+    private final ContainerOpenersCounter stateManager = new ContainerOpenersCounter() {
         @Override
-        protected void onContainerOpen(World world, BlockPos pos, BlockState state) {
+        protected void onOpen(Level world, BlockPos pos, BlockState state) {
             world.playSound(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D,
-                    SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+                    SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
         }
 
         @Override
-        protected void onContainerClose(World world, BlockPos pos, BlockState state) {
+        protected void onClose(Level world, BlockPos pos, BlockState state) {
             world.playSound(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D,
-                    SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+                    SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
         }
 
         @Override
-        protected void onViewerCountUpdate(World world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
-            world.addSyncedBlockEvent(pos, state.getBlock(), 1, newViewerCount);
+        protected void openerCountChanged(Level world, BlockPos pos, BlockState state, int oldViewerCount, int newViewerCount) {
+            world.blockEvent(pos, state.getBlock(), 1, newViewerCount);
         }
 
         @Override
-        public boolean isPlayerViewing(PlayerEntity player) {
-            if (player.currentScreenHandler instanceof EnchantedChestScreenHandler handler) {
+        public boolean isOwnContainer(Player player) {
+            if (player.containerMenu instanceof EnchantedChestScreenHandler handler) {
                 return handler.getInventory() == EnchantedChestBlockEntity.this;
             }
             return false;
         }
     };
 
-    public static void clientTick(World world, BlockPos pos, BlockState state, EnchantedChestBlockEntity entity) {
-        entity.lidAnimator.step();
+    public static void clientTick(Level world, BlockPos pos, BlockState state, EnchantedChestBlockEntity entity) {
+        entity.lidAnimator.tickLid();
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, EnchantedChestBlockEntity entity) {
-        if (!entity.removed) {
-            entity.stateManager.updateViewerCount(world, pos, state);
+    public static void tick(Level world, BlockPos pos, BlockState state, EnchantedChestBlockEntity entity) {
+        if (!entity.remove) {
+            entity.stateManager.recheckOpeners(world, pos, state);
         }
-        entity.lidAnimator.step();
+        entity.lidAnimator.tickLid();
     }
 
     @Override
-    public boolean onSyncedBlockEvent(int type, int data) {
+    public boolean triggerEvent(int type, int data) {
         if (type == 1) {
-            this.lidAnimator.setOpen(data > 0);
+            this.lidAnimator.shouldBeOpen(data > 0);
             return true;
         }
-        return super.onSyncedBlockEvent(type, data);
+        return super.triggerEvent(type, data);
     }
 
-    public void onOpen(PlayerEntity player) {
-        if (!this.removed && !player.isSpectator()) {
-            this.stateManager.openContainer(player, this.getWorld(), this.getPos(), this.getCachedState(), 5.0D);
+    public void onOpen(Player player) {
+        if (!this.remove && !player.isSpectator()) {
+            this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 5.0D);
         }
     }
 
-    public void onClose(PlayerEntity player) {
-        if (!this.removed && !player.isSpectator()) {
-            this.stateManager.closeContainer(player, this.getWorld(), this.getPos(), this.getCachedState());
+    public void onClose(Player player) {
+        if (!this.remove && !player.isSpectator()) {
+            this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
     }
 
@@ -142,12 +139,12 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
 
 
     @Override
-    public float getAnimationProgress(float tickDelta) {
-        return this.lidAnimator.getProgress(tickDelta);
+    public float getOpenNess(float tickDelta) {
+        return this.lidAnimator.getOpenness(tickDelta);
     }
 
     @Override
-    public Text getName() {
+    public Component getName() {
         return getDisplayName();
     }
 
@@ -157,47 +154,47 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public Text getCustomName() {
+    public Component getCustomName() {
         return hasCustomName() ? getDisplayName() : null;
     }
 
     @Override
-    public Text getDisplayName() {
+    public Component getDisplayName() {
         GearTier tier = getGearTier();
         if (tier != null && tier != GearTier.NONE) {
             return switch (tier) {
-                case COPPER -> Text.translatable("item.enchantedwood.copper_enchanted_chest");
-                case BRONZE -> Text.translatable("item.enchantedwood.bronze_enchanted_chest");
-                case IRON -> Text.translatable("item.enchantedwood.iron_enchanted_chest");
-                case ENCHANTED_IRON -> Text.translatable("item.enchantedwood.enchanted_iron_enchanted_chest");
-                case ALUMINUM -> Text.translatable("item.enchantedwood.aluminum_enchanted_chest");
-                case STEEL -> Text.translatable("item.enchantedwood.steel_enchanted_chest");
-                case GOLD -> Text.translatable("item.enchantedwood.gold_enchanted_chest");
-                case TITANIUM -> Text.translatable("item.enchantedwood.titanium_enchanted_chest");
-                case DIAMOND -> Text.translatable("item.enchantedwood.diamond_enchanted_chest");
-                case NETHERITE -> Text.translatable("item.enchantedwood.netherite_enchanted_chest");
-                default -> Text.literal("Enchanted Chest (" + tier.asString() + ")");
+                case COPPER -> Component.translatable("item.enchantedwood.copper_enchanted_chest");
+                case BRONZE -> Component.translatable("item.enchantedwood.bronze_enchanted_chest");
+                case IRON -> Component.translatable("item.enchantedwood.iron_enchanted_chest");
+                case ENCHANTED_IRON -> Component.translatable("item.enchantedwood.enchanted_iron_enchanted_chest");
+                case ALUMINUM -> Component.translatable("item.enchantedwood.aluminum_enchanted_chest");
+                case STEEL -> Component.translatable("item.enchantedwood.steel_enchanted_chest");
+                case GOLD -> Component.translatable("item.enchantedwood.gold_enchanted_chest");
+                case TITANIUM -> Component.translatable("item.enchantedwood.titanium_enchanted_chest");
+                case DIAMOND -> Component.translatable("item.enchantedwood.diamond_enchanted_chest");
+                case NETHERITE -> Component.translatable("item.enchantedwood.netherite_enchanted_chest");
+                default -> Component.literal("Enchanted Chest (" + tier.getSerializedName() + ")");
             };
         }
-        return Text.translatable("container.enchantedwood.enchanted_chest");
+        return Component.translatable("container.enchantedwood.enchanted_chest");
     }
 
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new EnchantedChestScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     public void upgradeTier(GearTier newTier) {
         this.gearTier = newTier;
-        markDirty();
-        if (this.world != null) {
-            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), net.minecraft.block.Block.NOTIFY_LISTENERS);
+        setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
         }
     }
 
     public GearTier getGearTier() {
-        if ((this.gearTier == null || this.gearTier == GearTier.NONE) && this.hasWorld() && this.getCachedState().contains(EnchantedChestBlock.GEAR_TIER)) {
-            GearTier stateTier = this.getCachedState().get(EnchantedChestBlock.GEAR_TIER);
+        if ((this.gearTier == null || this.gearTier == GearTier.NONE) && this.hasLevel() && this.getBlockState().hasProperty(EnchantedChestBlock.GEAR_TIER)) {
+            GearTier stateTier = this.getBlockState().getValue(EnchantedChestBlock.GEAR_TIER);
             if (stateTier != null && stateTier != GearTier.NONE) {
                 this.gearTier = stateTier;
             }
@@ -240,11 +237,11 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
             for (int j = i + 1; j < nonEmpty.size(); j++) {
                 ItemStack b = nonEmpty.get(j);
                 if (b.isEmpty()) continue;
-                if (ItemStack.areItemsAndComponentsEqual(a, b)) {
-                    int transfer = Math.min(b.getCount(), a.getMaxCount() - a.getCount());
+                if (ItemStack.isSameItemSameComponents(a, b)) {
+                    int transfer = Math.min(b.getCount(), a.getMaxStackSize() - a.getCount());
                     if (transfer > 0) {
-                        a.increment(transfer);
-                        b.decrement(transfer);
+                        a.grow(transfer);
+                        b.shrink(transfer);
                     }
                 }
             }
@@ -263,38 +260,38 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
                 inventory.set(i, ItemStack.EMPTY);
             }
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
-        int tierOrdinal = view.getInt("GearTier", -1);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
+        int tierOrdinal = view.getIntOr("GearTier", -1);
         if (tierOrdinal >= 0 && tierOrdinal < GearTier.values().length) {
             this.gearTier = GearTier.values()[tierOrdinal];
-        } else if (this.getCachedState().contains(EnchantedChestBlock.GEAR_TIER)) {
-            this.gearTier = this.getCachedState().get(EnchantedChestBlock.GEAR_TIER);
+        } else if (this.getBlockState().hasProperty(EnchantedChestBlock.GEAR_TIER)) {
+            this.gearTier = this.getBlockState().getValue(EnchantedChestBlock.GEAR_TIER);
         }
-        this.activePage = view.getInt("ActivePage", 0);
+        this.activePage = view.getIntOr("ActivePage", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         view.putInt("GearTier", this.getGearTier().ordinal());
         view.putInt("ActivePage", this.activePage);
     }
 
     @Override
-    public net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket.create(this);
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(net.minecraft.registry.RegistryWrapper.WrapperLookup registries) {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("GearTier", this.getGearTier().ordinal());
         nbt.putInt("ActivePage", this.activePage);
         return nbt;
@@ -302,7 +299,7 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
 
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         int max = getMaxSlots();
         int[] slots = new int[max];
         for (int i = 0; i < max; i++) {
@@ -312,17 +309,17 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot < getMaxSlots();
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot < getMaxSlots();
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -335,36 +332,36 @@ public class EnchantedChestBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

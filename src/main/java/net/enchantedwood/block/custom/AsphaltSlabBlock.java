@@ -1,88 +1,88 @@
 package net.enchantedwood.block.custom;
 
 import net.enchantedwood.item.ModItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.enums.SlabType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class AsphaltSlabBlock extends SlabBlock {
-    public AsphaltSlabBlock(Settings settings) {
+    public AsphaltSlabBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-        if (!world.isClient()) {
+    public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
+        if (!world.isClientSide()) {
             if (entity instanceof LivingEntity living) {
                 // Give a subtle continuous speed boost when running on asphalt roads
-                living.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20, 0, false, false, true));
+                living.addEffect(new MobEffectInstance(MobEffects.SPEED, 20, 0, false, false, true));
             }
         }
-        super.onSteppedOn(world, pos, state, entity);
+        super.stepOn(world, pos, state, entity);
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (stack.isOf(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP.asItem())) {
-            if (!world.isClient()) {
-                Direction facing = player.getHorizontalFacing().getOpposite();
-                BlockState rampState = net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP.getDefaultState()
-                        .with(RoadTransitionRampBlock.FACING, facing)
-                        .with(RoadTransitionRampBlock.RAMP_TYPE, RoadTransitionRampBlock.RampType.ROAD);
-                world.setBlockState(pos, rampState, 3);
-                world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (stack.is(net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP.asItem())) {
+            if (!world.isClientSide()) {
+                Direction facing = player.getDirection().getOpposite();
+                BlockState rampState = net.enchantedwood.block.ModBlocks.ROAD_TRANSITION_RAMP.defaultBlockState()
+                        .setValue(RoadTransitionRampBlock.FACING, facing)
+                        .setValue(RoadTransitionRampBlock.RAMP_TYPE, RoadTransitionRampBlock.RampType.ROAD);
+                world.setBlock(pos, rampState, 3);
+                world.playSound(null, pos, SoundType.STONE.getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 if (!player.isCreative()) {
-                    stack.decrement(1);
+                    stack.shrink(1);
                 }
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        if (stack.isOf(net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.asItem())) {
-            if (!world.isClient()) {
-                Direction facing = player.getHorizontalFacing().getOpposite();
-                BlockState rampState = net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.getDefaultState()
-                        .with(RoadTransitionRampBlock.FACING, facing)
-                        .with(RoadTransitionRampBlock.RAMP_TYPE, RoadTransitionRampBlock.RampType.ROAD);
-                world.setBlockState(pos, rampState, 3);
-                world.playSound(null, pos, BlockSoundGroup.STONE.getPlaceSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+        if (stack.is(net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.asItem())) {
+            if (!world.isClientSide()) {
+                Direction facing = player.getDirection().getOpposite();
+                BlockState rampState = net.enchantedwood.block.ModBlocks.ASPHALT_TRANSITION_RAMP.defaultBlockState()
+                        .setValue(RoadTransitionRampBlock.FACING, facing)
+                        .setValue(RoadTransitionRampBlock.RAMP_TYPE, RoadTransitionRampBlock.RampType.ROAD);
+                world.setBlock(pos, rampState, 3);
+                world.playSound(null, pos, SoundType.STONE.getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 if (!player.isCreative()) {
-                    stack.decrement(1);
+                    stack.shrink(1);
                 }
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return super.onUseWithItem(stack, state, world, pos, player, hand, hit);
+        return super.useItemOn(stack, state, world, pos, player, hand, hit);
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (!world.isClient() && player != null && !player.isCreative()) {
-            ItemStack tool = player.getMainHandStack();
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        if (!world.isClientSide() && player != null && !player.isCreative()) {
+            ItemStack tool = player.getMainHandItem();
             if (AsphaltBlock.isIronOrBetterPickaxe(tool)) {
-                int slabCount = state.get(TYPE) == SlabType.DOUBLE ? 2 : 1;
-                if (AsphaltBlock.hasSilkTouch(tool) || world.random.nextBoolean()) {
+                int slabCount = state.getValue(TYPE) == SlabType.DOUBLE ? 2 : 1;
+                if (AsphaltBlock.hasSilkTouch(tool) || world.getRandom().nextBoolean()) {
                     // 50% chance: Drop Asphalt Slab intact
-                    dropStack(world, pos, new ItemStack(this, slabCount));
+                    popResource(world, pos, new ItemStack(this, slabCount));
                 } else {
                     // 50% chance: Reverts into Mineral Tar
-                    dropStack(world, pos, new ItemStack(ModItems.MINERAL_TAR, slabCount));
+                    popResource(world, pos, new ItemStack(ModItems.MINERAL_TAR, slabCount));
                 }
             }
         }
-        return super.onBreak(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 }

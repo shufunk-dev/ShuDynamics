@@ -1,17 +1,16 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.text.Text;
-
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.CocoaBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class CropHarvesterItem extends Item {
     public enum HarvesterTier {
@@ -58,8 +57,8 @@ public class CropHarvesterItem extends Item {
 
     private final HarvesterTier tier;
 
-    public CropHarvesterItem(HarvesterTier tier, Settings settings) {
-        super(settings.maxDamage(tier.getDurability()));
+    public CropHarvesterItem(HarvesterTier tier, Properties settings) {
+        super(settings.durability(tier.getDurability()));
         this.tier = tier;
     }
 
@@ -69,35 +68,35 @@ public class CropHarvesterItem extends Item {
 
     public boolean isMatureCrop(BlockState state) {
         if (state.getBlock() instanceof CropBlock crop) {
-            return crop.isMature(state);
+            return crop.isMaxAge(state);
         }
         if (state.getBlock() instanceof CocoaBlock) {
-            return state.get(CocoaBlock.AGE) >= 2;
+            return state.getValue(CocoaBlock.AGE) >= 2;
         }
         if (state.getBlock() instanceof NetherWartBlock) {
-            return state.get(NetherWartBlock.AGE) >= 3;
+            return state.getValue(NetherWartBlock.AGE) >= 3;
         }
-        if (state.isOf(net.minecraft.block.Blocks.BAMBOO)
-                || state.isOf(net.minecraft.block.Blocks.BAMBOO_SAPLING)
-                || state.isOf(net.minecraft.block.Blocks.SUGAR_CANE)
-                || state.isOf(net.minecraft.block.Blocks.CACTUS)) {
+        if (state.is(net.minecraft.world.level.block.Blocks.BAMBOO)
+                || state.is(net.minecraft.world.level.block.Blocks.BAMBOO_SAPLING)
+                || state.is(net.minecraft.world.level.block.Blocks.SUGAR_CANE)
+                || state.is(net.minecraft.world.level.block.Blocks.CACTUS)) {
             return true;
         }
-        if (state.isIn(BlockTags.CROPS)) {
+        if (state.is(BlockTags.CROPS)) {
             return true;
         }
         return false;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§7Front-Mounted ATV Agricultural Harvester"));
-        textConsumer.accept(Text.literal("§eTier: " + tier.getColorCode() + tier.getName()));
-        int remaining = stack.getMaxDamage() - stack.getDamage();
-        textConsumer.accept(Text.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " crops"));
-        textConsumer.accept(Text.literal("§bReaping Speed: §f" + tier.getSpeedMultiplier() + "x"));
-        textConsumer.accept(Text.literal("§aHarvest Width: §f" + (tier.getRadius() * 2 + 1) + " blocks wide"));
-        textConsumer.accept(Text.literal("§8Reaps mature crops, auto-replants seeds & routes produce to trunk."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§7Front-Mounted ATV Agricultural Harvester"));
+        textConsumer.accept(Component.literal("§eTier: " + tier.getColorCode() + tier.getName()));
+        int remaining = stack.getMaxDamage() - stack.getDamageValue();
+        textConsumer.accept(Component.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " crops"));
+        textConsumer.accept(Component.literal("§bReaping Speed: §f" + tier.getSpeedMultiplier() + "x"));
+        textConsumer.accept(Component.literal("§aHarvest Width: §f" + (tier.getRadius() * 2 + 1) + " blocks wide"));
+        textConsumer.accept(Component.literal("§8Reaps mature crops, auto-replants seeds & routes produce to trunk."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

@@ -1,14 +1,13 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.text.Text;
-
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TreeSawItem extends Item {
     public enum SawTier {
@@ -55,8 +54,8 @@ public class TreeSawItem extends Item {
 
     private final SawTier tier;
 
-    public TreeSawItem(SawTier tier, Settings settings) {
-        super(settings.maxDamage(tier.getDurability()));
+    public TreeSawItem(SawTier tier, Properties settings) {
+        super(settings.durability(tier.getDurability()));
         this.tier = tier;
     }
 
@@ -65,24 +64,24 @@ public class TreeSawItem extends Item {
     }
 
     public boolean canHarvest(BlockState state) {
-        return state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)
-                || state.isOf(net.minecraft.block.Blocks.BAMBOO)
-                || state.isOf(net.minecraft.block.Blocks.BAMBOO_SAPLING)
-                || state.isOf(net.minecraft.block.Blocks.SUGAR_CANE)
-                || state.isOf(net.minecraft.block.Blocks.CACTUS)
-                || state.isOf(net.minecraft.block.Blocks.VINE)
-                || state.isOf(net.minecraft.block.Blocks.COCOA);
+        return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES)
+                || state.is(net.minecraft.world.level.block.Blocks.BAMBOO)
+                || state.is(net.minecraft.world.level.block.Blocks.BAMBOO_SAPLING)
+                || state.is(net.minecraft.world.level.block.Blocks.SUGAR_CANE)
+                || state.is(net.minecraft.world.level.block.Blocks.CACTUS)
+                || state.is(net.minecraft.world.level.block.Blocks.VINE)
+                || state.is(net.minecraft.world.level.block.Blocks.COCOA);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§7Front-Mounted ATV Tree Harvester Saw"));
-        textConsumer.accept(Text.literal("§eTier: " + tier.getColorCode() + tier.getName()));
-        int remaining = stack.getMaxDamage() - stack.getDamage();
-        textConsumer.accept(Text.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " logs"));
-        textConsumer.accept(Text.literal("§bSawing Speed: §f" + tier.getSpeedMultiplier() + "x"));
-        textConsumer.accept(Text.literal("§aMax Tree Felling Cap: §f" + tier.getMaxLogsPerTree() + " logs"));
-        textConsumer.accept(Text.literal("§8Install in ATV Tool Slot. Timber, saplings & drops auto-route to trunk."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§7Front-Mounted ATV Tree Harvester Saw"));
+        textConsumer.accept(Component.literal("§eTier: " + tier.getColorCode() + tier.getName()));
+        int remaining = stack.getMaxDamage() - stack.getDamageValue();
+        textConsumer.accept(Component.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " logs"));
+        textConsumer.accept(Component.literal("§bSawing Speed: §f" + tier.getSpeedMultiplier() + "x"));
+        textConsumer.accept(Component.literal("§aMax Tree Felling Cap: §f" + tier.getMaxLogsPerTree() + " logs"));
+        textConsumer.accept(Component.literal("§8Install in ATV Tool Slot. Timber, saplings & drops auto-route to trunk."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

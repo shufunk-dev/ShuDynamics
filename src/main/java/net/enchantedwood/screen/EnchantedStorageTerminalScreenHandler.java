@@ -1,71 +1,70 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.Property;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.enchantedwood.block.entity.EnchantedStorageTerminalBlockEntity;
-
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
+public class EnchantedStorageTerminalScreenHandler extends AbstractContainerMenu {
     public static final int PAGE_SIZE = EnchantedStorageTerminalBlockEntity.PAGE_SIZE;
     public static final int TOTAL_STORAGE_SLOTS = EnchantedStorageTerminalBlockEntity.STORAGE_SLOTS;
 
-    public static class UncappedInventory extends SimpleInventory {
+    public static class UncappedInventory extends SimpleContainer {
         public UncappedInventory(int size) {
             super(size);
         }
 
         @Override
-        public int getMaxCountPerStack() {
+        public int getMaxStackSize() {
             return Integer.MAX_VALUE;
         }
 
         @Override
-        public int getMaxCount(ItemStack stack) {
+        public int getMaxStackSize(ItemStack stack) {
             return Integer.MAX_VALUE;
         }
 
         @Override
-        public void setStack(int slot, ItemStack stack) {
-            this.getHeldStacks().set(slot, stack);
-            this.markDirty();
+        public void setItem(int slot, ItemStack stack) {
+            this.getItems().set(slot, stack);
+            this.setChanged();
         }
     }
 
-    private final Inventory inventory;
+    private final Container inventory;
     private final UncappedInventory displayInventory = new UncappedInventory(PAGE_SIZE);
-    private final PropertyDelegate propertyDelegate;
-    private final Property pageProperty = Property.create();
-    private final Property totalPagesProperty = Property.create();
+    private final ContainerData propertyDelegate;
+    private final DataSlot pageProperty = DataSlot.standalone();
+    private final DataSlot totalPagesProperty = DataSlot.standalone();
 
     private int currentPage = 0;
     private String searchQuery = "";
     private final List<Integer> filteredIndices = new ArrayList<>();
 
-    public EnchantedStorageTerminalScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new UncappedInventory(TOTAL_STORAGE_SLOTS), new ArrayPropertyDelegate(4));
+    public EnchantedStorageTerminalScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new UncappedInventory(TOTAL_STORAGE_SLOTS), new SimpleContainerData(4));
     }
 
-    public EnchantedStorageTerminalScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public EnchantedStorageTerminalScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ENCHANTED_STORAGE_TERMINAL_SCREEN_HANDLER, syncId);
-        checkSize(inventory, TOTAL_STORAGE_SLOTS);
+        checkContainerSize(inventory, TOTAL_STORAGE_SLOTS);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
-        this.addProperty(this.pageProperty);
-        this.addProperty(this.totalPagesProperty);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        this.addDataSlot(this.pageProperty);
+        this.addDataSlot(this.totalPagesProperty);
 
         updateFilteredIndices();
 
@@ -102,7 +101,7 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
         this.currentPage = 0;
         updateFilteredIndices();
         updateDisplaySlots();
-        this.sendContentUpdates();
+        this.broadcastChanges();
     }
 
     public String getSearchQuery() {
@@ -120,8 +119,8 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                         this.filteredIndices.add(i);
                     } else {
                         ItemStack stack = item.getSample();
-                        String name = stack.getName().getString().toLowerCase(java.util.Locale.ROOT);
-                        String path = net.minecraft.registry.Registries.ITEM.getId(stack.getItem()).getPath().toLowerCase(java.util.Locale.ROOT);
+                        String name = stack.getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
+                        String path = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().toLowerCase(java.util.Locale.ROOT);
                         if (name.contains(this.searchQuery) || path.contains(this.searchQuery)) {
                             this.filteredIndices.add(i);
                         }
@@ -144,11 +143,11 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                 int itemIndex = this.filteredIndices.get(targetIndex);
                 if (itemIndex >= 0 && itemIndex < terminal.getStoredItems().size()) {
                     EnchantedStorageTerminalBlockEntity.StoredItem item = terminal.getStoredItems().get(itemIndex);
-                    this.displayInventory.setStack(i, item.toItemStack());
+                    this.displayInventory.setItem(i, item.toItemStack());
                     continue;
                 }
             }
-            this.displayInventory.setStack(i, ItemStack.EMPTY);
+            this.displayInventory.setItem(i, ItemStack.EMPTY);
         }
     }
 
@@ -160,7 +159,7 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
         if (page >= 0 && page < getTotalPages()) {
             this.currentPage = page;
             updateDisplaySlots();
-            this.sendContentUpdates();
+            this.broadcastChanges();
         }
     }
 
@@ -185,23 +184,23 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public void sendContentUpdates() {
+    public void broadcastChanges() {
         this.pageProperty.set(this.currentPage);
         if (this.inventory instanceof EnchantedStorageTerminalBlockEntity) {
             int count = this.filteredIndices.size();
             this.totalPagesProperty.set(Math.max(1, (int) Math.ceil((double) count / PAGE_SIZE)));
         }
-        super.sendContentUpdates();
+        super.broadcastChanges();
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean clickMenuButton(Player player, int id) {
         if (id == 0) {
             // Previous page
             if (this.currentPage > 0) {
                 this.currentPage--;
                 updateDisplaySlots();
-                this.sendContentUpdates();
+                this.broadcastChanges();
                 return true;
             }
         } else if (id == 1) {
@@ -209,7 +208,7 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
             if (this.currentPage < getTotalPages() - 1) {
                 this.currentPage++;
                 updateDisplaySlots();
-                this.sendContentUpdates();
+                this.broadcastChanges();
                 return true;
             }
         }
@@ -217,36 +216,36 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        if (player.getEntityWorld().isClient()) {
-            super.onSlotClick(slotIndex, button, actionType, player);
+    public void clicked(int slotIndex, int button, ContainerInput actionType, Player player) {
+        if (player.level().isClientSide()) {
+            super.clicked(slotIndex, button, actionType, player);
             return;
         }
 
         if (!(this.inventory instanceof EnchantedStorageTerminalBlockEntity terminal)) {
-            super.onSlotClick(slotIndex, button, actionType, player);
+            super.clicked(slotIndex, button, actionType, player);
             return;
         }
 
         // 1. Interacting with Terminal Display Slots (0..53)
         if (slotIndex >= 0 && slotIndex < PAGE_SIZE) {
             int targetIndex = this.currentPage * PAGE_SIZE + slotIndex;
-            ItemStack cursor = getCursorStack();
+            ItemStack cursor = getCarried();
 
-            if (actionType == SlotActionType.PICKUP) {
+            if (actionType == ContainerInput.PICKUP) {
                 if (cursor.isEmpty()) {
                     if (targetIndex >= 0 && targetIndex < this.filteredIndices.size()) {
                         int itemIndex = this.filteredIndices.get(targetIndex);
                         if (itemIndex >= 0 && itemIndex < terminal.getStoredItems().size()) {
                             EnchantedStorageTerminalBlockEntity.StoredItem stored = terminal.getStoredItems().get(itemIndex);
                             if (stored.getCount() > 0) {
-                                int maxExtract = stored.getSample().getMaxCount();
+                                int maxExtract = stored.getSample().getMaxStackSize();
                                 int take = (button == 0)
                                         ? (int) Math.min((long) maxExtract, stored.getCount())
                                         : Math.max(1, (int) Math.min((long) maxExtract, stored.getCount()) / 2);
 
                                 ItemStack extracted = terminal.extractItem(stored.getSample(), take);
-                                setCursorStack(extracted);
+                                setCarried(extracted);
                             }
                         }
                     }
@@ -254,17 +253,17 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                     // Deposit from cursor into terminal
                     if (button == 0) {
                         ItemStack remainder = terminal.depositItem(cursor);
-                        setCursorStack(remainder);
+                        setCarried(remainder);
                     } else if (button == 1) {
                         ItemStack one = cursor.copyWithCount(1);
                         ItemStack remainder = terminal.depositItem(one);
                         if (remainder.isEmpty()) {
-                            cursor.decrement(1);
-                            setCursorStack(cursor.isEmpty() ? ItemStack.EMPTY : cursor);
+                            cursor.shrink(1);
+                            setCarried(cursor.isEmpty() ? ItemStack.EMPTY : cursor);
                         }
                     }
                 }
-            } else if (actionType == SlotActionType.QUICK_MOVE) {
+            } else if (actionType == ContainerInput.QUICK_MOVE) {
                 // Shift-Click from terminal to player inventory
                 if (targetIndex >= 0 && targetIndex < this.filteredIndices.size()) {
                     int itemIndex = this.filteredIndices.get(targetIndex);
@@ -272,15 +271,15 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                         EnchantedStorageTerminalBlockEntity.StoredItem stored = terminal.getStoredItems().get(itemIndex);
                         if (stored.getCount() > 0) {
                             ItemStack sample = stored.getSample();
-                            int maxStack = sample.getMaxCount();
+                            int maxStack = sample.getMaxStackSize();
 
                             // Count how much room the player has
                             int room = 0;
                             for (int i = PAGE_SIZE; i < PAGE_SIZE + 36; i++) {
-                                ItemStack pStack = this.slots.get(i).getStack();
+                                ItemStack pStack = this.slots.get(i).getItem();
                                 if (pStack.isEmpty()) {
                                     room += maxStack;
-                                } else if (ItemStack.areItemsAndComponentsEqual(pStack, sample)) {
+                                } else if (ItemStack.isSameItemSameComponents(pStack, sample)) {
                                     room += Math.max(0, maxStack - pStack.getCount());
                                 }
                             }
@@ -289,7 +288,7 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
                                 int toExtract = (int) Math.min((long) room, stored.getCount());
                                 ItemStack extracted = terminal.extractItem(sample, toExtract);
                                 if (!extracted.isEmpty()) {
-                                    if (!this.insertItem(extracted, PAGE_SIZE, PAGE_SIZE + 36, true)) {
+                                    if (!this.moveItemStackTo(extracted, PAGE_SIZE, PAGE_SIZE + 36, true)) {
                                         if (!extracted.isEmpty()) {
                                             terminal.depositItem(extracted);
                                         }
@@ -303,60 +302,60 @@ public class EnchantedStorageTerminalScreenHandler extends ScreenHandler {
 
             updateFilteredIndices();
             updateDisplaySlots();
-            this.sendContentUpdates();
+            this.broadcastChanges();
             return;
         }
 
         // 2. Shift-Clicking from Player Inventory to Terminal (slotIndex >= PAGE_SIZE)
-        if (actionType == SlotActionType.QUICK_MOVE && slotIndex >= PAGE_SIZE) {
+        if (actionType == ContainerInput.QUICK_MOVE && slotIndex >= PAGE_SIZE) {
             Slot pSlot = this.slots.get(slotIndex);
-            ItemStack pStack = pSlot.getStack();
+            ItemStack pStack = pSlot.getItem();
             if (!pStack.isEmpty()) {
                 ItemStack remainder = terminal.depositItem(pStack);
-                pSlot.setStack(remainder);
-                pSlot.markDirty();
+                pSlot.setByPlayer(remainder);
+                pSlot.setChanged();
                 updateFilteredIndices();
                 updateDisplaySlots();
-                this.sendContentUpdates();
+                this.broadcastChanges();
                 return;
             }
         }
 
         // Standard player inventory actions
-        super.onSlotClick(slotIndex, button, actionType, player);
+        super.clicked(slotIndex, button, actionType, player);
         updateFilteredIndices();
         updateDisplaySlots();
-        this.sendContentUpdates();
+        this.broadcastChanges();
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         // Handled in onSlotClick
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return isOnline();
     }
 
     public static class TerminalSlot extends Slot {
-        public TerminalSlot(Inventory inventory, int index, int x, int y) {
+        public TerminalSlot(Container inventory, int index, int x, int y) {
             super(inventory, index, x, y);
         }
 
         @Override
-        public boolean canInsert(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
 
         @Override
-        public int getMaxItemCount() {
+        public int getMaxStackSize() {
             return Integer.MAX_VALUE;
         }
 
         @Override
-        public int getMaxItemCount(ItemStack stack) {
+        public int getMaxStackSize(ItemStack stack) {
             return Integer.MAX_VALUE;
         }
     }

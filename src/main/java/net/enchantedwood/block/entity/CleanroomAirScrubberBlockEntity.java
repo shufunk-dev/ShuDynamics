@@ -1,24 +1,23 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.TintedGlassBlock;
-import net.minecraft.block.TransparentBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.enchantedwood.block.custom.*;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.TintedGlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -40,7 +39,7 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
         super(ModBlockEntities.CLEANROOM_AIR_SCRUBBER_BE, pos, state);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, CleanroomAirScrubberBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, CleanroomAirScrubberBlockEntity entity) {
         entity.scanTimer++;
 
         // Draw energy to maintain positive pressure
@@ -55,23 +54,23 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
             entity.scanRoom(world, pos);
 
             boolean sterile = entity.isSealed && hasEnergy;
-            if (state.get(CleanroomAirScrubberBlock.STERILE) != sterile) {
-                world.setBlockState(pos, state.with(CleanroomAirScrubberBlock.STERILE, sterile));
+            if (state.getValue(CleanroomAirScrubberBlock.STERILE) != sterile) {
+                world.setBlockAndUpdate(pos, state.setValue(CleanroomAirScrubberBlock.STERILE, sterile));
             }
 
             if (sterile) {
                 CleanroomManager.registerCleanroom(world, pos, entity.interiorPositions);
                 // Particle visual cue at scrubber face
-                Direction facing = state.get(CleanroomAirScrubberBlock.FACING);
-                BlockPos facePos = pos.offset(facing);
-                world.spawnParticles(ParticleTypes.CLOUD,
+                Direction facing = state.getValue(CleanroomAirScrubberBlock.FACING);
+                BlockPos facePos = pos.relative(facing);
+                world.sendParticles(ParticleTypes.CLOUD,
                         facePos.getX() + 0.5, facePos.getY() + 0.5, facePos.getZ() + 0.5,
                         2, 0.2, 0.2, 0.2, 0.01);
             } else {
                 CleanroomManager.unregisterCleanroom(world, pos);
             }
 
-            entity.markDirty();
+            entity.setChanged();
         }
 
         // Wireless Cleanroom Induction Power Bus:
@@ -102,11 +101,11 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
      * Breadth-First-Search (BFS) flood-fill to verify airtight room perimeter.
      * Bounded at MAX_VOLUME (2,500 blocks).
      */
-    public void scanRoom(ServerWorld world, BlockPos scrubberPos) {
-        Direction facing = world.getBlockState(scrubberPos).get(CleanroomAirScrubberBlock.FACING);
-        BlockPos start = scrubberPos.offset(facing);
+    public void scanRoom(ServerLevel world, BlockPos scrubberPos) {
+        Direction facing = world.getBlockState(scrubberPos).getValue(CleanroomAirScrubberBlock.FACING);
+        BlockPos start = scrubberPos.relative(facing);
 
-        if (!world.isAir(start) && !isCleanroomInteriorBlock(world, start, world.getBlockState(start))) {
+        if (!world.isEmptyBlock(start) && !isCleanroomInteriorBlock(world, start, world.getBlockState(start))) {
             // Front face is blocked by an unsealed block
             isSealed = false;
             lastLeakPos = start;
@@ -142,7 +141,7 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
                 return;
             }
 
-            if (current.getY() >= world.getTopYInclusive() - 5 || current.getY() <= world.getBottomY() + 5) {
+            if (current.getY() >= world.getMaxY() - 5 || current.getY() <= world.getMinY() + 5) {
                 isSealed = false;
                 lastLeakPos = current;
                 interiorPositions.clear();
@@ -151,7 +150,7 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
             }
 
             for (Direction dir : Direction.values()) {
-                BlockPos neighbor = current.offset(dir);
+                BlockPos neighbor = current.relative(dir);
                 if (neighbor.equals(scrubberPos)) {
                     continue; // The scrubber itself is a sealed boundary
                 }
@@ -175,7 +174,7 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
                 }
 
                 // 3. Check if neighbor is air
-                if (world.isAir(neighbor)) {
+                if (world.isEmptyBlock(neighbor)) {
                     if (visited.add(neighbor)) {
                         queue.add(neighbor);
                     }
@@ -199,7 +198,7 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
         isSealed = true;
     }
 
-    private boolean isAirtightBoundary(ServerWorld world, BlockPos pos, BlockState state) {
+    private boolean isAirtightBoundary(ServerLevel world, BlockPos pos, BlockState state) {
         var block = state.getBlock();
 
         // Any BlockEntity that is NOT a door, scrubber, or medical cabinet is interior equipment, NOT a boundary wall!
@@ -222,15 +221,15 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
             return true;
         }
 
-        if (state.isIn(BlockTags.IMPERMEABLE)) {
+        if (state.is(BlockTags.IMPERMEABLE)) {
             return true;
         }
 
         // Full solid cubes (e.g. steel blocks, titanium casings, smooth stone, concrete)
-        return state.isOpaqueFullCube();
+        return state.isSolidRender();
     }
 
-    private boolean isCleanroomInteriorBlock(ServerWorld world, BlockPos pos, BlockState state) {
+    private boolean isCleanroomInteriorBlock(ServerLevel world, BlockPos pos, BlockState state) {
         var block = state.getBlock();
 
         // Doors and the scrubber are boundaries, not interior furnishings
@@ -245,71 +244,71 @@ public class CleanroomAirScrubberBlockEntity extends BlockEntity implements Ener
 
         // Lighting, redstone, buttons, levers, display panels, carpets
         if (block instanceof SterileCleanroomLampBlock ||
-            block instanceof net.minecraft.block.TorchBlock ||
-            block instanceof net.minecraft.block.WallTorchBlock ||
-            block instanceof net.minecraft.block.LanternBlock ||
-            block instanceof net.minecraft.block.EndRodBlock ||
-            block instanceof net.minecraft.block.RedstoneWireBlock ||
-            block instanceof net.minecraft.block.LeverBlock ||
-            block instanceof net.minecraft.block.ButtonBlock ||
-            block instanceof net.minecraft.block.LightBlock ||
-            block instanceof net.minecraft.block.CarpetBlock) {
+            block instanceof net.minecraft.world.level.block.TorchBlock ||
+            block instanceof net.minecraft.world.level.block.WallTorchBlock ||
+            block instanceof net.minecraft.world.level.block.LanternBlock ||
+            block instanceof net.minecraft.world.level.block.EndRodBlock ||
+            block instanceof net.minecraft.world.level.block.RedstoneWireBlock ||
+            block instanceof net.minecraft.world.level.block.LeverBlock ||
+            block instanceof net.minecraft.world.level.block.ButtonBlock ||
+            block instanceof net.minecraft.world.level.block.LightBlock ||
+            block instanceof net.minecraft.world.level.block.CarpetBlock) {
             return true;
         }
         return false;
     }
 
-    public void reportStatusTo(PlayerEntity player) {
-        if (world == null || world.isClient()) return;
+    public void reportStatusTo(Player player) {
+        if (level == null || level.isClientSide()) return;
 
         boolean hasPower = energyStorage.getEnergy() >= ENERGY_DRAW;
 
         if (isSealed && hasPower) {
-            player.sendMessage(Text.literal("§a========================================"), false);
-            player.sendMessage(Text.literal("§a✦ CLEANROOM AIR SCRUBBER: 100% STERILE ✦"), false);
-            player.sendMessage(Text.literal("§7• Hermetic Enclosure: §aVERIFIED (No Leaks)"), false);
-            player.sendMessage(Text.literal("§7• Positive Air Pressure: §aACTIVE"), false);
-            player.sendMessage(Text.literal("§7• Sterile Interior Volume: §f" + interiorPositions.size() + " blocks"), false);
-            player.sendMessage(Text.literal("§e• Cleanroom Energy Buffer: §6" + String.format("%,d / %,d FE", energyStorage.getEnergy(), CAPACITY)), false);
-            player.sendMessage(Text.literal("§d• Wireless Power Grid: §aACTIVE §7(" + interiorMachines.size() + " Machines Powered wirelessly)"), false);
-            player.sendMessage(Text.literal("§b✦ Synthesizer output upgraded to GRADE-A PURE!"), false);
-            player.sendMessage(Text.literal("§a========================================"), false);
+            player.sendSystemMessage(Component.literal("§a========================================"));
+            player.sendSystemMessage(Component.literal("§a✦ CLEANROOM AIR SCRUBBER: 100% STERILE ✦"));
+            player.sendSystemMessage(Component.literal("§7• Hermetic Enclosure: §aVERIFIED (No Leaks)"));
+            player.sendSystemMessage(Component.literal("§7• Positive Air Pressure: §aACTIVE"));
+            player.sendSystemMessage(Component.literal("§7• Sterile Interior Volume: §f" + interiorPositions.size() + " blocks"));
+            player.sendSystemMessage(Component.literal("§e• Cleanroom Energy Buffer: §6" + String.format("%,d / %,d FE", energyStorage.getEnergy(), CAPACITY)));
+            player.sendSystemMessage(Component.literal("§d• Wireless Power Grid: §aACTIVE §7(" + interiorMachines.size() + " Machines Powered wirelessly)"));
+            player.sendSystemMessage(Component.literal("§b✦ Synthesizer output upgraded to GRADE-A PURE!"));
+            player.sendSystemMessage(Component.literal("§a========================================"));
         } else if (!hasPower) {
-            player.sendMessage(Text.literal("§e========================================"), false);
-            player.sendMessage(Text.literal("§e⚠ CLEANROOM AIR SCRUBBER: OFFLINE (NO POWER) ⚠"), false);
-            player.sendMessage(Text.literal("§7• Connect FE power cables (Requires 20 FE/t)."), false);
-            player.sendMessage(Text.literal("§7• Current Energy: §c" + String.format("%,d / %,d FE", energyStorage.getEnergy(), CAPACITY)), false);
-            player.sendMessage(Text.literal("§e========================================"), false);
+            player.sendSystemMessage(Component.literal("§e========================================"));
+            player.sendSystemMessage(Component.literal("§e⚠ CLEANROOM AIR SCRUBBER: OFFLINE (NO POWER) ⚠"));
+            player.sendSystemMessage(Component.literal("§7• Connect FE power cables (Requires 20 FE/t)."));
+            player.sendSystemMessage(Component.literal("§7• Current Energy: §c" + String.format("%,d / %,d FE", energyStorage.getEnergy(), CAPACITY)));
+            player.sendSystemMessage(Component.literal("§e========================================"));
         } else {
-            player.sendMessage(Text.literal("§c========================================"), false);
-            player.sendMessage(Text.literal("§c✖ CLEANROOM AIR SCRUBBER: SEAL BREACH DETECTED ✖"), false);
-            player.sendMessage(Text.literal("§7• Status: §cUNPRESSURIZED (Atmosphere Leaking)"), false);
+            player.sendSystemMessage(Component.literal("§c========================================"));
+            player.sendSystemMessage(Component.literal("§c✖ CLEANROOM AIR SCRUBBER: SEAL BREACH DETECTED ✖"));
+            player.sendSystemMessage(Component.literal("§7• Status: §cUNPRESSURIZED (Atmosphere Leaking)"));
             if (lastLeakPos != null) {
-                player.sendMessage(Text.literal("§7• Breach Coordinate: §e[" + lastLeakPos.getX() + ", " + lastLeakPos.getY() + ", " + lastLeakPos.getZ() + "]"), false);
-                player.sendMessage(Text.literal("§8  Seal all open holes with Cleanroom Casings, Glass, or an Airlock Door."), false);
+                player.sendSystemMessage(Component.literal("§7• Breach Coordinate: §e[" + lastLeakPos.getX() + ", " + lastLeakPos.getY() + ", " + lastLeakPos.getZ() + "]"));
+                player.sendSystemMessage(Component.literal("§8  Seal all open holes with Cleanroom Casings, Glass, or an Airlock Door."));
             } else {
-                player.sendMessage(Text.literal("§7• Place scrubber with at least 1 adjacent interior air block."), false);
+                player.sendSystemMessage(Component.literal("§7• Place scrubber with at least 1 adjacent interior air block."));
             }
-            player.sendMessage(Text.literal("§c========================================"), false);
+            player.sendSystemMessage(Component.literal("§c========================================"));
         }
     }
 
     public void onRemoved() {
-        if (world != null) {
-            CleanroomManager.unregisterZone(world.getRegistryKey(), pos);
+        if (level != null) {
+            CleanroomManager.unregisterZone(level.dimension(), worldPosition);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.energyStorage.readData(view);
-        this.isSealed = view.getBoolean("IsSealed", false);
+        this.isSealed = view.getBooleanOr("IsSealed", false);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         this.energyStorage.writeData(view);
         view.putBoolean("IsSealed", this.isSealed);
     }

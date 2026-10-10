@@ -1,27 +1,27 @@
 package net.enchantedwood.screen;
 
 import net.enchantedwood.entity.custom.AtvEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class AtvScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
+public class AtvScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
 
-    public AtvScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(AtvEntity.TOTAL_INVENTORY_SIZE));
+    public AtvScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(AtvEntity.TOTAL_INVENTORY_SIZE));
     }
 
-    public AtvScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+    public AtvScreenHandler(int syncId, Inventory playerInventory, Container inventory) {
         super(ModScreenHandlers.ATV_SCREEN_HANDLER, syncId);
-        checkSize(inventory, AtvEntity.TOTAL_INVENTORY_SIZE);
+        checkContainerSize(inventory, AtvEntity.TOTAL_INVENTORY_SIZE);
         this.inventory = inventory;
 
-        inventory.onOpen(playerInventory.player);
+        inventory.startOpen(playerInventory.player);
 
         // 1. Installed Vehicle Components (Locked / Display-Only; modify at Vehicle Fabricator)
         // Column 1: Engine, Tires, Suspension
@@ -37,7 +37,7 @@ public class AtvScreenHandler extends ScreenHandler {
         // Slot 6: Fuel / Battery Slot (Interactive; accepts fuel & batteries)
         this.addSlot(new Slot(inventory, AtvEntity.FUEL_SLOT, 142, 18) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isFuel(stack);
             }
         });
@@ -45,7 +45,7 @@ public class AtvScreenHandler extends ScreenHandler {
         // Slot 7: Front Tool Attachment Slot (Interactive; accepts Drill Bits, Tree Saws, Crop Harvesters)
         this.addSlot(new Slot(inventory, AtvEntity.TOOL_SLOT, 142, 54) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isToolAttachment(stack);
             }
         });
@@ -77,40 +77,40 @@ public class AtvScreenHandler extends ScreenHandler {
     }
 
     public static boolean isFuel(ItemStack stack) {
-        return stack.isOf(net.enchantedwood.item.ModItems.GASOLINE_CANISTER)
-                || stack.isOf(net.enchantedwood.item.ModItems.BIOFUEL_CANISTER)
-                || stack.isOf(net.enchantedwood.item.ModItems.HIGH_OCTANE_FUEL_CANISTER)
-                || stack.isOf(net.minecraft.item.Items.COAL)
-                || stack.isOf(net.minecraft.item.Items.CHARCOAL)
+        return stack.is(net.enchantedwood.item.ModItems.GASOLINE_CANISTER)
+                || stack.is(net.enchantedwood.item.ModItems.BIOFUEL_CANISTER)
+                || stack.is(net.enchantedwood.item.ModItems.HIGH_OCTANE_FUEL_CANISTER)
+                || stack.is(net.minecraft.world.item.Items.COAL)
+                || stack.is(net.minecraft.world.item.Items.CHARCOAL)
                 || stack.getItem() instanceof net.enchantedwood.energy.EnergyProvider;
     }
 
     private static class ReadOnlyModuleSlot extends Slot {
-        public ReadOnlyModuleSlot(Inventory inventory, int index, int x, int y) {
+        public ReadOnlyModuleSlot(Container inventory, int index, int x, int y) {
             super(inventory, index, x, y);
         }
 
         @Override
-        public boolean canInsert(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
 
         @Override
-        public boolean canTakeItems(PlayerEntity playerEntity) {
+        public boolean mayPickup(Player playerEntity) {
             return false;
         }
     }
 
-    public Inventory getAtvInventory() {
+    public Container getAtvInventory() {
         return this.inventory;
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < 17) { // ATV Slots (0..16)
@@ -119,46 +119,46 @@ public class AtvScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
                 // Move from ATV fuel slot (6), tool slot (7), or trunk storage (8-16) to player inventory
-                if (!this.insertItem(originalStack, 17, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, 17, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from Player Inventory into ATV:
                 if (isToolAttachment(originalStack)) {
                     // Try tool slot first
-                    if (!this.insertItem(originalStack, 7, 8, false)) {
+                    if (!this.moveItemStackTo(originalStack, 7, 8, false)) {
                         // Then trunk storage
-                        if (!this.insertItem(originalStack, 8, 17, false)) {
+                        if (!this.moveItemStackTo(originalStack, 8, 17, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
                 } else if (isFuel(originalStack)) {
                     // Try fuel slot first
-                    if (!this.insertItem(originalStack, 6, 7, false)) {
+                    if (!this.moveItemStackTo(originalStack, 6, 7, false)) {
                         // Then trunk storage
-                        if (!this.insertItem(originalStack, 8, 17, false)) {
+                        if (!this.moveItemStackTo(originalStack, 8, 17, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
                 } else {
                     // Regular items go directly into cargo trunk storage
-                    if (!this.insertItem(originalStack, 8, 17, false)) {
+                    if (!this.moveItemStackTo(originalStack, 8, 17, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

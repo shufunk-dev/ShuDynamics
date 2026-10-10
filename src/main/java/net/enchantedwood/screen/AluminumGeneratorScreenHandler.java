@@ -1,38 +1,38 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.entity.CopperGeneratorBlockEntity;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class AluminumGeneratorScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class AluminumGeneratorScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public AluminumGeneratorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(1), new ArrayPropertyDelegate(7));
+    public AluminumGeneratorScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(1), new SimpleContainerData(7));
     }
 
-    public AluminumGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public AluminumGeneratorScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ALUMINUM_GENERATOR_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 1);
+        checkContainerSize(inventory, 1);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Fuel Slot (center)
         this.addSlot(new Slot(inventory, 0, 80, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return CopperGeneratorBlockEntity.getFuelTime(playerInventory.player.getEntityWorld(), stack) > 0;
+            public boolean mayPlace(ItemStack stack) {
+                return CopperGeneratorBlockEntity.getFuelTime(playerInventory.player.level(), stack) > 0;
             }
         });
 
@@ -75,50 +75,50 @@ public class AluminumGeneratorScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot == 0) {
-                if (!this.insertItem(originalStack, 1, 37, true)) {
+                if (!this.moveItemStackTo(originalStack, 1, 37, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (CopperGeneratorBlockEntity.getFuelTime(player.getEntityWorld(), originalStack) > 0) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                if (CopperGeneratorBlockEntity.getFuelTime(player.level(), originalStack) > 0) {
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 1 && invSlot < 28) {
-                    if (!this.insertItem(originalStack, 28, 37, false)) {
+                    if (!this.moveItemStackTo(originalStack, 28, 37, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 28 && invSlot < 37) {
-                    if (!this.insertItem(originalStack, 1, 28, false)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 28, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

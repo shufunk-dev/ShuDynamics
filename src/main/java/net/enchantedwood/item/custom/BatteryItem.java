@@ -3,16 +3,16 @@ package net.enchantedwood.item.custom;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.ItemEnergyProvider;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -22,46 +22,46 @@ public class BatteryItem extends Item implements ItemEnergyProvider, EnergyProvi
     private final int maxReceive;
     private final int maxExtract;
 
-    public BatteryItem(Settings settings, int capacity, int maxReceive, int maxExtract) {
-        super(settings.maxCount(1));
+    public BatteryItem(Properties settings, int capacity, int maxReceive, int maxExtract) {
+        super(settings.stacksTo(1));
         this.capacity = capacity;
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
     }
 
     public static int getStoredEnergy(ItemStack stack) {
-        if (stack.contains(DataComponentTypes.CUSTOM_DATA)) {
-            NbtComponent nbtComponent = stack.get(DataComponentTypes.CUSTOM_DATA);
+        if (stack.has(DataComponents.CUSTOM_DATA)) {
+            CustomData nbtComponent = stack.get(DataComponents.CUSTOM_DATA);
             if (nbtComponent != null) {
-                return nbtComponent.copyNbt().getInt("Energy", 0);
+                return nbtComponent.copyTag().getIntOr("Energy", 0);
             }
         }
         return 0;
     }
 
     public static void setStoredEnergy(ItemStack stack, int energy) {
-        NbtCompound nbt = stack.contains(DataComponentTypes.CUSTOM_DATA) && stack.get(DataComponentTypes.CUSTOM_DATA) != null
-                ? stack.get(DataComponentTypes.CUSTOM_DATA).copyNbt()
-                : new NbtCompound();
+        CompoundTag nbt = stack.has(DataComponents.CUSTOM_DATA) && stack.get(DataComponents.CUSTOM_DATA) != null
+                ? stack.get(DataComponents.CUSTOM_DATA).copyTag()
+                : new CompoundTag();
         nbt.putInt("Energy", Math.max(0, energy));
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
 
     @Override
-    public boolean isItemBarVisible(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getItemBarStep(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         int energy = getStoredEnergy(stack);
         return Math.round((float) energy * 13.0f / (float) this.capacity);
     }
 
     @Override
-    public int getItemBarColor(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         float f = Math.max(0.0f, (float) getStoredEnergy(stack) / (float) this.capacity);
-        return MathHelper.hsvToRgb(f / 3.0f, 1.0f, 1.0f);
+        return Mth.hsvToRgb(f / 3.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -120,11 +120,11 @@ public class BatteryItem extends Item implements ItemEnergyProvider, EnergyProvi
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
         int energy = getStoredEnergy(stack);
         int percent = (int) (((long) energy * 100) / this.capacity);
-        textConsumer.accept(Text.literal(String.format("§b⚡ Energy: §f%,d / %,d FE §7(%d%%)", energy, this.capacity, percent)));
-        textConsumer.accept(Text.literal("§8Right-click any Battery Block or Generator to recharge."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        textConsumer.accept(Component.literal(String.format("§b⚡ Energy: §f%,d / %,d FE §7(%d%%)", energy, this.capacity, percent)));
+        textConsumer.accept(Component.literal("§8Right-click any Battery Block or Generator to recharge."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

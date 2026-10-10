@@ -8,30 +8,30 @@ import net.enchantedwood.energy.ItemEnergyProvider;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.RoadPaverMk2ScreenHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class RoadPaverMk2BlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int ENERGY_CAPACITY = 60_000;
     public static final int ENERGY_PER_STEP = 80;
     public static final int MAX_FUEL = 5_000;
@@ -50,7 +50,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     public static final int BATTERY_SLOT = 12;
     public static final int FUEL_SLOT = 13;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 1000, 1000, 0);
 
     private int paveTimer = 0;
@@ -58,7 +58,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     private boolean isPaving = false;
     private int pavedSteps = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -97,7 +97,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 10;
         }
     };
@@ -106,7 +106,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         super(ModBlockEntities.ROAD_PAVER_MK2_BLOCK_ENTITY, pos, state);
     }
 
-    public DefaultedList<ItemStack> getInventory() {
+    public NonNullList<ItemStack> getInventory() {
         return inventory;
     }
 
@@ -119,13 +119,13 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.road_paver_mk2");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.road_paver_mk2");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new RoadPaverMk2ScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -135,21 +135,21 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.paveTimer = view.getInt("PaveTimer", 0);
-        this.fuelLevel = view.getInt("FuelLevel", 0);
-        this.isPaving = view.getBoolean("IsPaving", false);
-        this.pavedSteps = view.getInt("PavedSteps", 0);
+        this.paveTimer = view.getIntOr("PaveTimer", 0);
+        this.fuelLevel = view.getIntOr("FuelLevel", 0);
+        this.isPaving = view.getBooleanOr("IsPaving", false);
+        this.pavedSteps = view.getIntOr("PavedSteps", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("PaveTimer", this.paveTimer);
         view.putInt("FuelLevel", this.fuelLevel);
@@ -157,7 +157,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         view.putInt("PavedSteps", this.pavedSteps);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, RoadPaverMk2BlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, RoadPaverMk2BlockEntity entity) {
         boolean stateChanged = false;
 
         // 1. Battery charging (FE) from Slot 12
@@ -184,8 +184,8 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         }
 
         // 3. Paving Validation: Must not be powered by redstone, has road materials, has FE power, has fuel
-        boolean hasRedstone = world.isReceivingRedstonePower(pos);
-        Direction facing = state.get(RoadPaverMk2Block.FACING);
+        boolean hasRedstone = world.hasNeighborSignal(pos);
+        Direction facing = state.getValue(RoadPaverMk2Block.FACING);
         int availableAsphalt = entity.countAsphalt();
 
         boolean hasPower = entity.energyStorage.getEnergy() >= ENERGY_PER_STEP;
@@ -210,37 +210,37 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
             }
         }
 
-        if (state.get(RoadPaverMk2Block.PAVING) != entity.isPaving) {
-            world.setBlockState(pos, state.with(RoadPaverMk2Block.PAVING, entity.isPaving), 3);
+        if (state.getValue(RoadPaverMk2Block.PAVING) != entity.isPaving) {
+            world.setBlock(pos, state.setValue(RoadPaverMk2Block.PAVING, entity.isPaving), 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     private boolean processFuel() {
         ItemStack fuelStack = inventory.get(FUEL_SLOT);
         if (!fuelStack.isEmpty() && this.fuelLevel <= MAX_FUEL - 200) {
-            if (fuelStack.isOf(ModItems.GASOLINE_CANISTER)) {
+            if (fuelStack.is(ModItems.GASOLINE_CANISTER)) {
                 this.fuelLevel = Math.min(MAX_FUEL, this.fuelLevel + 1000);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.returnEmptyCanister();
                 return true;
-            } else if (fuelStack.isOf(ModItems.BIOFUEL_CANISTER)) {
+            } else if (fuelStack.is(ModItems.BIOFUEL_CANISTER)) {
                 this.fuelLevel = Math.min(MAX_FUEL, this.fuelLevel + 600);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.returnEmptyCanister();
                 return true;
-            } else if (fuelStack.isOf(ModItems.HIGH_OCTANE_FUEL_CANISTER)) {
+            } else if (fuelStack.is(ModItems.HIGH_OCTANE_FUEL_CANISTER)) {
                 this.fuelLevel = Math.min(MAX_FUEL, this.fuelLevel + 1500);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.returnEmptyCanister();
                 return true;
-            } else if (fuelStack.isOf(net.minecraft.item.Items.COAL) || fuelStack.isOf(net.minecraft.item.Items.CHARCOAL) || fuelStack.isOf(ModItems.COKE_COAL)) {
+            } else if (fuelStack.is(net.minecraft.world.item.Items.COAL) || fuelStack.is(net.minecraft.world.item.Items.CHARCOAL) || fuelStack.is(ModItems.COKE_COAL)) {
                 this.fuelLevel = Math.min(MAX_FUEL, this.fuelLevel + 200);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 return true;
             }
         }
@@ -251,8 +251,8 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         ItemStack fuelStack = inventory.get(FUEL_SLOT);
         if (fuelStack.isEmpty()) {
             inventory.set(FUEL_SLOT, new ItemStack(ModItems.EMPTY_GAS_CANISTER));
-        } else if (this.getWorld() instanceof ServerWorld serverWorld) {
-            Block.dropStack(serverWorld, this.getPos(), new ItemStack(ModItems.EMPTY_GAS_CANISTER));
+        } else if (this.getLevel() instanceof ServerLevel serverWorld) {
+            Block.popResource(serverWorld, this.getBlockPos(), new ItemStack(ModItems.EMPTY_GAS_CANISTER));
         }
     }
 
@@ -260,7 +260,7 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         int count = 0;
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+            if (stack.is(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.is(ModBlocks.ASPHALT_SLAB.asItem())) {
                 count += stack.getCount();
             }
         }
@@ -270,13 +270,13 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     private ItemStack consumeOneAsphalt() {
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
+            if (stack.is(ModBlocks.ASPHALT_SLAB.asItem())) {
                 return stack.split(1);
             }
         }
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem())) {
+            if (stack.is(ModBlocks.ASPHALT_BLOCK.asItem())) {
                 return stack.split(1);
             }
         }
@@ -286,33 +286,33 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     private boolean consumeOneClay() {
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(ModBlocks.CONCRETE_CURB.asItem())) {
-                stack.decrement(1);
+            if (stack.is(ModBlocks.CONCRETE_CURB.asItem())) {
+                stack.shrink(1);
                 return true;
             }
         }
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(net.minecraft.item.Items.CLAY_BALL)) {
-                stack.decrement(1);
+            if (stack.is(net.minecraft.world.item.Items.CLAY_BALL)) {
+                stack.shrink(1);
                 return true;
             }
         }
         for (int i = ROAD_SLOTS_START; i < ROAD_SLOTS_END; i++) {
             ItemStack stack = inventory.get(i);
-            if (stack.isOf(net.minecraft.item.Items.CLAY)) {
-                stack.decrement(1);
-                ItemStack remainder = new ItemStack(net.minecraft.item.Items.CLAY_BALL, 3);
+            if (stack.is(net.minecraft.world.item.Items.CLAY)) {
+                stack.shrink(1);
+                ItemStack remainder = new ItemStack(net.minecraft.world.item.Items.CLAY_BALL, 3);
                 for (int j = ROAD_SLOTS_START; j < ROAD_SLOTS_END; j++) {
                     if (remainder.isEmpty()) break;
                     ItemStack target = inventory.get(j);
                     if (target.isEmpty()) {
                         inventory.set(j, remainder);
                         break;
-                    } else if (target.isOf(net.minecraft.item.Items.CLAY_BALL) && target.getCount() < 64) {
+                    } else if (target.is(net.minecraft.world.item.Items.CLAY_BALL) && target.getCount() < 64) {
                         int toAdd = Math.min(remainder.getCount(), 64 - target.getCount());
-                        target.increment(toAdd);
-                        remainder.decrement(toAdd);
+                        target.grow(toAdd);
+                        remainder.shrink(toAdd);
                     }
                 }
                 return true;
@@ -327,77 +327,77 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
             ItemStack stack = inventory.get(i);
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem) {
                 Block block = blockItem.getBlock();
-                stack.decrement(1);
-                return block.getDefaultState();
+                stack.shrink(1);
+                return block.defaultBlockState();
             }
         }
         // 2. Default high-durability reinforced stone bridge pier
-        return Blocks.STONE_BRICKS.getDefaultState();
+        return Blocks.STONE_BRICKS.defaultBlockState();
     }
 
-    private void paveRoadAhead(ServerWorld world, BlockPos pos, Direction facing) {
+    private void paveRoadAhead(ServerLevel world, BlockPos pos, Direction facing) {
         this.pavedSteps++;
-        Direction leftDir = facing.rotateYCounterclockwise();
-        Direction rightDir = facing.rotateYClockwise();
-        BlockPos aheadCenter = pos.offset(facing);
+        Direction leftDir = facing.getCounterClockWise();
+        Direction rightDir = facing.getClockWise();
+        BlockPos aheadCenter = pos.relative(facing);
 
         // 5 Columns: [-2: Left Curb, -1: Left Asphalt, 0: Center Asphalt, +1: Right Asphalt, +2: Right Curb]
-        BlockPos curbLeftPos = aheadCenter.offset(leftDir, 2);
+        BlockPos curbLeftPos = aheadCenter.relative(leftDir, 2);
         BlockPos[] asphaltPositions = new BlockPos[]{
-                aheadCenter.offset(leftDir, 1),
+                aheadCenter.relative(leftDir, 1),
                 aheadCenter,
-                aheadCenter.offset(rightDir, 1)
+                aheadCenter.relative(rightDir, 1)
         };
-        BlockPos curbRightPos = aheadCenter.offset(rightDir, 2);
+        BlockPos curbRightPos = aheadCenter.relative(rightDir, 2);
 
         // 1. Clear and Pave Left Curb (-2)
         clearPath(world, curbLeftPos);
-        BlockPos groundLeft = curbLeftPos.down();
+        BlockPos groundLeft = curbLeftPos.below();
         if (consumeOneClay()) {
-            world.setBlockState(groundLeft, ModBlocks.CONCRETE_CURB.getDefaultState().with(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, leftDir), 3);
+            world.setBlock(groundLeft, ModBlocks.CONCRETE_CURB.defaultBlockState().setValue(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, leftDir), 3);
         }
 
         // 2. Clear and Pave Center Asphalt Columns (-1, 0, 1)
         for (BlockPos roadPos : asphaltPositions) {
             clearPath(world, roadPos);
-            BlockPos groundPos = roadPos.down();
+            BlockPos groundPos = roadPos.below();
             ItemStack placedItem = consumeOneAsphalt();
             if (!placedItem.isEmpty()) {
-                if (placedItem.isOf(ModBlocks.ASPHALT_SLAB.asItem())) {
-                    world.setBlockState(groundPos, ModBlocks.ASPHALT_SLAB.getDefaultState().with(net.minecraft.block.SlabBlock.TYPE, net.minecraft.block.enums.SlabType.BOTTOM), 3);
+                if (placedItem.is(ModBlocks.ASPHALT_SLAB.asItem())) {
+                    world.setBlock(groundPos, ModBlocks.ASPHALT_SLAB.defaultBlockState().setValue(net.minecraft.world.level.block.SlabBlock.TYPE, net.minecraft.world.level.block.state.properties.SlabType.BOTTOM), 3);
                 } else {
-                    world.setBlockState(groundPos, ModBlocks.ASPHALT_BLOCK.getDefaultState(), 3);
+                    world.setBlock(groundPos, ModBlocks.ASPHALT_BLOCK.defaultBlockState(), 3);
                 }
             }
         }
 
         // 3. Clear and Pave Right Curb (+2)
         clearPath(world, curbRightPos);
-        BlockPos groundRight = curbRightPos.down();
+        BlockPos groundRight = curbRightPos.below();
         if (consumeOneClay()) {
-            world.setBlockState(groundRight, ModBlocks.CONCRETE_CURB.getDefaultState().with(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, rightDir), 3);
+            world.setBlock(groundRight, ModBlocks.CONCRETE_CURB.defaultBlockState().setValue(net.enchantedwood.block.custom.ConcreteCurbBlock.FACING, rightDir), 3);
         }
 
         // 4. Structural Sub-Deck Girders (reinforces bridge deck over air/water)
-        BlockPos[] allGround = new BlockPos[]{ groundLeft, asphaltPositions[0].down(), aheadCenter.down(), asphaltPositions[2].down(), groundRight };
+        BlockPos[] allGround = new BlockPos[]{ groundLeft, asphaltPositions[0].below(), aheadCenter.below(), asphaltPositions[2].below(), groundRight };
         for (BlockPos gPos : allGround) {
-            BlockPos girderPos = gPos.down();
-            if (world.isAir(girderPos) || world.getBlockState(girderPos).isLiquid()) {
-                world.setBlockState(girderPos, Blocks.STONE_BRICKS.getDefaultState(), 3);
+            BlockPos girderPos = gPos.below();
+            if (world.isEmptyBlock(girderPos) || world.getBlockState(girderPos).liquid()) {
+                world.setBlock(girderPos, Blocks.STONE_BRICKS.defaultBlockState(), 3);
             }
         }
 
         // 5. Automated Support Pillar Casting Every 5 Blocks
         if (this.pavedSteps % PILLAR_INTERVAL == 0) {
-            castSupportPillar(world, groundLeft.down());
-            castSupportPillar(world, groundRight.down());
+            castSupportPillar(world, groundLeft.below());
+            castSupportPillar(world, groundRight.below());
         }
 
         // 6. Move Paver forward if path is clear
-        BlockPos nextPaverPos = pos.offset(facing);
-        if (world.isAir(nextPaverPos)) {
+        BlockPos nextPaverPos = pos.relative(facing);
+        if (world.isEmptyBlock(nextPaverPos)) {
             BlockState currentState = world.getBlockState(pos);
-            DefaultedList<ItemStack> savedInventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+            NonNullList<ItemStack> savedInventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
             for (int i = 0; i < INVENTORY_SIZE; i++) {
                 savedInventory.set(i, inventory.get(i).copy());
             }
@@ -406,9 +406,9 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
             int savedSteps = this.pavedSteps;
 
             inventory.clear();
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 
-            world.setBlockState(nextPaverPos, currentState, 3);
+            world.setBlock(nextPaverPos, currentState, 3);
             BlockEntity newEntity = world.getBlockEntity(nextPaverPos);
             if (newEntity instanceof RoadPaverMk2BlockEntity paver) {
                 for (int i = 0; i < INVENTORY_SIZE; i++) {
@@ -417,29 +417,29 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
                 paver.energyStorage.setEnergy(savedEnergy);
                 paver.fuelLevel = savedFuel;
                 paver.pavedSteps = savedSteps;
-                paver.markDirty();
+                paver.setChanged();
             }
         }
     }
 
-    private void castSupportPillar(ServerWorld world, BlockPos startPos) {
+    private void castSupportPillar(ServerLevel world, BlockPos startPos) {
         // Only build pillar if startPos is over air or water
-        BlockPos firstCheck = startPos.down();
-        if (!world.isAir(firstCheck) && !world.getBlockState(firstCheck).isLiquid()) {
+        BlockPos firstCheck = startPos.below();
+        if (!world.isEmptyBlock(firstCheck) && !world.getBlockState(firstCheck).liquid()) {
             return;
         }
 
         // Project downwards up to 48 blocks until solid foundation is reached
         for (int dy = 1; dy <= 48; dy++) {
-            BlockPos pillarPos = startPos.down(dy);
-            if (pillarPos.getY() <= world.getBottomY() + 1) {
+            BlockPos pillarPos = startPos.below(dy);
+            if (pillarPos.getY() <= world.getMinY() + 1) {
                 break;
             }
 
             BlockState current = world.getBlockState(pillarPos);
-            if (world.isAir(pillarPos) || current.isLiquid()) {
+            if (world.isEmptyBlock(pillarPos) || current.liquid()) {
                 BlockState pillarState = getPillarBlock();
-                world.setBlockState(pillarPos, pillarState, 3);
+                world.setBlock(pillarPos, pillarState, 3);
             } else {
                 // Anchored into solid terrain
                 break;
@@ -447,47 +447,47 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
         }
     }
 
-    private void clearPath(ServerWorld world, BlockPos pos) {
+    private void clearPath(ServerLevel world, BlockPos pos) {
         BlockPos clearPos1 = pos;
-        BlockPos clearPos2 = pos.up();
-        if (!world.isAir(clearPos1) && world.getBlockState(clearPos1).getBlock() != ModBlocks.ROAD_PAVER_MK2) {
-            world.breakBlock(clearPos1, true);
+        BlockPos clearPos2 = pos.above();
+        if (!world.isEmptyBlock(clearPos1) && world.getBlockState(clearPos1).getBlock() != ModBlocks.ROAD_PAVER_MK2) {
+            world.destroyBlock(clearPos1, true);
         }
-        if (!world.isAir(clearPos2)) {
-            world.breakBlock(clearPos2, true);
+        if (!world.isEmptyBlock(clearPos2)) {
+            world.destroyBlock(clearPos2, true);
         }
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot < ROAD_SLOTS_END) {
-            return stack.isOf(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.isOf(ModBlocks.ASPHALT_SLAB.asItem())
-                    || stack.isOf(net.minecraft.item.Items.CLAY_BALL) || stack.isOf(net.minecraft.item.Items.CLAY)
-                    || stack.isOf(ModBlocks.CONCRETE_CURB.asItem());
+            return stack.is(ModBlocks.ASPHALT_BLOCK.asItem()) || stack.is(ModBlocks.ASPHALT_SLAB.asItem())
+                    || stack.is(net.minecraft.world.item.Items.CLAY_BALL) || stack.is(net.minecraft.world.item.Items.CLAY)
+                    || stack.is(ModBlocks.CONCRETE_CURB.asItem());
         } else if (slot < PILLAR_SLOTS_END) {
             return stack.getItem() instanceof BlockItem;
         } else if (slot == BATTERY_SLOT) {
             return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
         } else if (slot == FUEL_SLOT) {
-            return stack.isOf(ModItems.GASOLINE_CANISTER) || stack.isOf(ModItems.BIOFUEL_CANISTER)
-                    || stack.isOf(ModItems.HIGH_OCTANE_FUEL_CANISTER) || stack.isOf(net.minecraft.item.Items.COAL)
-                    || stack.isOf(net.minecraft.item.Items.CHARCOAL) || stack.isOf(ModItems.COKE_COAL);
+            return stack.is(ModItems.GASOLINE_CANISTER) || stack.is(ModItems.BIOFUEL_CANISTER)
+                    || stack.is(ModItems.HIGH_OCTANE_FUEL_CANISTER) || stack.is(net.minecraft.world.item.Items.COAL)
+                    || stack.is(net.minecraft.world.item.Items.CHARCOAL) || stack.is(ModItems.COKE_COAL);
         }
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        return slot == FUEL_SLOT && stack.isOf(ModItems.EMPTY_GAS_CANISTER);
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
+        return slot == FUEL_SLOT && stack.is(ModItems.EMPTY_GAS_CANISTER);
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -500,36 +500,36 @@ public class RoadPaverMk2BlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

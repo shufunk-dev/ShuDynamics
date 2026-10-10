@@ -1,34 +1,34 @@
 package net.enchantedwood.screen;
 
 import net.enchantedwood.block.entity.PoweredAnvilBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class PoweredAnvilScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class PoweredAnvilScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
     private final BlockPos blockPos;
 
-    public PoweredAnvilScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(PoweredAnvilBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(4), BlockPos.ORIGIN);
+    public PoweredAnvilScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(PoweredAnvilBlockEntity.INVENTORY_SIZE), new SimpleContainerData(4), BlockPos.ZERO);
     }
 
-    public PoweredAnvilScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate, BlockPos blockPos) {
+    public PoweredAnvilScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate, BlockPos blockPos) {
         super(ModScreenHandlers.POWERED_ANVIL_SCREEN_HANDLER, syncId);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
         this.blockPos = blockPos;
-        this.addProperties(propertyDelegate);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Damaged Equipment Input
         this.addSlot(new Slot(inventory, PoweredAnvilBlockEntity.INPUT_SLOT, 38, 45));
@@ -59,26 +59,26 @@ public class PoweredAnvilScreenHandler extends ScreenHandler {
     }
 
     public ItemStack getInputStack() {
-        return this.inventory.getStack(PoweredAnvilBlockEntity.INPUT_SLOT);
+        return this.inventory.getItem(PoweredAnvilBlockEntity.INPUT_SLOT);
     }
 
     public ItemStack getMaterialStack() {
-        return this.inventory.getStack(PoweredAnvilBlockEntity.MATERIAL_SLOT);
+        return this.inventory.getItem(PoweredAnvilBlockEntity.MATERIAL_SLOT);
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean clickMenuButton(Player player, int id) {
         if (id == 0) {
             // Repair Action
-            if (player.getEntityWorld().getBlockEntity(this.blockPos) instanceof PoweredAnvilBlockEntity anvil) {
+            if (player.level().getBlockEntity(this.blockPos) instanceof PoweredAnvilBlockEntity anvil) {
                 anvil.executeRepair(player);
                 return true;
             }
         } else if (id == 1) {
             // Switch to Suit Bay Tab
-            player.openHandledScreen(new SimpleNamedScreenHandlerFactory(
+            player.openMenu(new SimpleMenuProvider(
                     (syncId, inv, p) -> new ModularSuitScreenHandler(syncId, inv, this.blockPos),
-                    Text.literal("Modular Suit Access Panel")
+                    Component.literal("Modular Suit Access Panel")
             ));
             return true;
         }
@@ -86,34 +86,34 @@ public class PoweredAnvilScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < 2) {
-                if (!this.insertItem(originalStack, 2, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, 2, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.isDamaged()) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) return ItemStack.EMPTY;
                 } else {
-                    if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;

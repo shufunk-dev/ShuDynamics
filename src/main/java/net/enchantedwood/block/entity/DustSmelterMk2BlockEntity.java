@@ -9,29 +9,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.DustSmelterMk2ScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class DustSmelterMk2BlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 100_000;
     public static final int MAX_RECEIVE = 5_000;
     public static final int ENERGY_DRAW = 75; // 75 FE/t when processing
@@ -43,14 +43,14 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
     public static final int GEAR_SLOT = 4;
     public static final int INVENTORY_SIZE = 5;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 80;
     private float experience = 0.0f;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -74,7 +74,7 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -88,7 +88,7 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
         if (gearStack.getItem() instanceof GearItem gearItem) {
             return gearItem.getGearTier();
         }
-        if (gearStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
+        if (gearStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
             return GearTier.BLAZE_OVERCLOCK;
         }
         return GearTier.NONE;
@@ -113,17 +113,17 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.dust_smelter_mk2");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.dust_smelter_mk2");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new DustSmelterMk2ScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, DustSmelterMk2BlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, DustSmelterMk2BlockEntity entity) {
         boolean dirty = false;
 
         entity.totalCookTime = getTierCookTime(entity.getActiveGearTier());
@@ -172,13 +172,13 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
             }
         }
 
-        if (state.get(DustSmelterMk2Block.LIT) != isSmelting) {
-            world.setBlockState(pos, state.with(DustSmelterMk2Block.LIT, isSmelting), 3);
+        if (state.getValue(DustSmelterMk2Block.LIT) != isSmelting) {
+            world.setBlock(pos, state.setValue(DustSmelterMk2Block.LIT, isSmelting), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -194,11 +194,11 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
 
         // 1. Try to merge into an output slot that already has this exact ingot with space
         ItemStack prefStack = inventory.get(preferred);
-        if (!prefStack.isEmpty() && prefStack.isOf(outputItem) && prefStack.getCount() + 1 <= prefStack.getMaxCount()) {
+        if (!prefStack.isEmpty() && prefStack.is(outputItem) && prefStack.getCount() + 1 <= prefStack.getMaxStackSize()) {
             return preferred;
         }
         ItemStack secStack = inventory.get(secondary);
-        if (!secStack.isEmpty() && secStack.isOf(outputItem) && secStack.getCount() + 1 <= secStack.getMaxCount()) {
+        if (!secStack.isEmpty() && secStack.is(outputItem) && secStack.getCount() + 1 <= secStack.getMaxStackSize()) {
             return secondary;
         }
 
@@ -223,14 +223,14 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
         ItemStack currentOut = inventory.get(outputSlot);
         if (currentOut.isEmpty()) {
             inventory.set(outputSlot, new ItemStack(outputItem, 1));
-        } else if (currentOut.isOf(outputItem) && currentOut.getCount() + 1 <= currentOut.getMaxCount()) {
-            currentOut.increment(1);
+        } else if (currentOut.is(outputItem) && currentOut.getCount() + 1 <= currentOut.getMaxStackSize()) {
+            currentOut.grow(1);
         } else {
             return;
         }
 
         this.experience += getExperienceAmount(input.getItem());
-        input.decrement(1);
+        input.shrink(1);
     }
 
     public static Item getOutputItem(Item item) {
@@ -273,7 +273,7 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
         return 0.7f;
     }
 
-    public void dropExperience(ServerWorld world, PlayerEntity player) {
+    public void dropExperience(ServerLevel world, Player player) {
         int totalXp = (int) this.experience;
         float remainder = this.experience - totalXp;
         if (remainder > 0.0f && Math.random() < remainder) {
@@ -281,25 +281,25 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
         }
         this.experience = 0.0f;
         if (totalXp > 0) {
-            net.minecraft.entity.ExperienceOrbEntity.spawn(world, net.minecraft.util.math.Vec3d.ofCenter(this.pos), totalXp);
+            net.minecraft.world.entity.ExperienceOrb.award(world, net.minecraft.world.phys.Vec3.atCenterOf(this.worldPosition), totalXp);
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 80);
-        this.experience = view.getFloat("Experience", 0.0f);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 80);
+        this.experience = view.getFloatOr("Experience", 0.0f);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
@@ -308,20 +308,20 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
 
     // SidedInventory Implementation
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{OUTPUT_SLOT_A, OUTPUT_SLOT_B};
         if (side == Direction.UP) return new int[]{INPUT_SLOT_A, INPUT_SLOT_B};
         return new int[]{GEAR_SLOT, INPUT_SLOT_A, INPUT_SLOT_B, OUTPUT_SLOT_A, OUTPUT_SLOT_B};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT_A) {
             if (getOutputItem(stack.getItem()) == null) return false;
             // Anti-monopoly: reject if Slot B already holds this item
             if (dir != null) {
                 ItemStack slotB = inventory.get(INPUT_SLOT_B);
-                if (!slotB.isEmpty() && ItemStack.areItemsAndComponentsEqual(slotB, stack)) {
+                if (!slotB.isEmpty() && ItemStack.isSameItemSameComponents(slotB, stack)) {
                     return false;
                 }
             }
@@ -332,25 +332,25 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
             // Anti-monopoly: reject if Slot A already holds this item
             if (dir != null) {
                 ItemStack slotA = inventory.get(INPUT_SLOT_A);
-                if (!slotA.isEmpty() && ItemStack.areItemsAndComponentsEqual(slotA, stack)) {
+                if (!slotA.isEmpty() && ItemStack.isSameItemSameComponents(slotA, stack)) {
                     return false;
                 }
             }
             return true;
         }
         if (slot == GEAR_SLOT) {
-            return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
         }
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == OUTPUT_SLOT_A || slot == OUTPUT_SLOT_B;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -363,36 +363,36 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

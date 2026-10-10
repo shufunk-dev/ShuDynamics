@@ -5,36 +5,34 @@ import net.enchantedwood.effect.ModStatusEffects;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.ModularPowerArmorItem;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 
 public class ModularSuitHandler {
 
-    private static final Identifier STEP_ASSIST_MODIFIER_ID = Identifier.of(EnchantedWoodMod.MOD_ID, "suit_step_assist");
+    private static final Identifier STEP_ASSIST_MODIFIER_ID = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "suit_step_assist");
 
     public static void register() {
         ServerTickEvents.START_SERVER_TICK.register(server -> {
-            for (ServerWorld world : server.getWorlds()) {
-                for (ServerPlayerEntity player : world.getPlayers()) {
+            for (ServerLevel world : server.getAllLevels()) {
+                for (ServerPlayer player : world.players()) {
                     tickPlayerSuit(player, world);
                 }
             }
         });
     }
 
-    private static void tickPlayerSuit(ServerPlayerEntity player, ServerWorld world) {
+    private static void tickPlayerSuit(ServerPlayer player, ServerLevel world) {
         if (player.isSpectator()) return;
 
         tickHelmetModules(player, world);
@@ -44,30 +42,30 @@ public class ModularSuitHandler {
         tickNaniteRepairs(player, world);
     }
 
-    private static void tickHelmetModules(ServerPlayerEntity player, ServerWorld world) {
-        ItemStack helmet = player.getEquippedStack(EquipmentSlot.HEAD);
-        if (!helmet.isOf(ModItems.MODULAR_POWER_HELMET)) return;
+    private static void tickHelmetModules(ServerPlayer player, ServerLevel world) {
+        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+        if (!helmet.is(ModItems.MODULAR_POWER_HELMET)) return;
 
         // Check Adaptive Night Vision HUD
         if (ModularPowerArmorItem.hasModule(helmet, "enchantedwood:night_vision_module")) {
-            int lightLevel = world.getLightLevel(player.getBlockPos());
+            int lightLevel = world.getMaxLocalRawBrightness(player.blockPosition());
             if (lightLevel <= 6) {
                 // In dark area: check suit battery power (siphons from helmet or chestplate/suit)
                 boolean hasPower = getSuitStoredEnergy(player) >= 2;
                 if (hasPower) {
                     // Drain 40 FE / sec (throttled to 20 FE every 10 ticks).
                     // Throttling prevents modifying the itemstack NBT every tick, which thrashed GUI slot sync and caused audio artifacts!
-                    if (world.getTime() % 10 == 0) {
+                    if (world.getGameTime() % 10 == 0) {
                         extractSuitEnergy(player, "enchantedwood:night_vision_module", 20);
                     }
 
-                    StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+                    MobEffectInstance currentEffect = player.getEffect(MobEffects.NIGHT_VISION);
                     // Vanilla Minecraft begins warning flicker at <= 200 ticks (10s).
                     // By maintaining duration at 320 ticks (16s) and refreshing at <= 240 ticks (12s),
                     // it never reaches 200 ticks, completely eliminating any flickering!
                     if (currentEffect == null || currentEffect.getDuration() <= 240) {
-                        player.addStatusEffect(new StatusEffectInstance(
-                                StatusEffects.NIGHT_VISION,
+                        player.addEffect(new MobEffectInstance(
+                                MobEffects.NIGHT_VISION,
                                 320,
                                 0,
                                 false,
@@ -77,24 +75,24 @@ public class ModularSuitHandler {
                     }
                 } else {
                     // Out of power: shut off HUD quietly without spamming audio
-                    StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+                    MobEffectInstance currentEffect = player.getEffect(MobEffects.NIGHT_VISION);
                     if (currentEffect != null && currentEffect.getDuration() <= 340) {
-                        player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                        player.removeEffect(MobEffects.NIGHT_VISION);
                     }
                 }
             } else if (lightLevel >= 9) {
                 // Bright area: power down HUD to conserve power quietly
-                StatusEffectInstance currentEffect = player.getStatusEffect(StatusEffects.NIGHT_VISION);
+                MobEffectInstance currentEffect = player.getEffect(MobEffects.NIGHT_VISION);
                 if (currentEffect != null && currentEffect.getDuration() <= 340) {
-                    player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                    player.removeEffect(MobEffects.NIGHT_VISION);
                 }
             }
         }
     }
 
-    public static boolean hasSuitModule(ServerPlayerEntity player, String moduleId) {
+    public static boolean hasSuitModule(ServerPlayer player, String moduleId) {
         for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, moduleId)) {
                 return true;
             }
@@ -102,11 +100,11 @@ public class ModularSuitHandler {
         return false;
     }
 
-    public static int getSuitStoredEnergy(ServerPlayerEntity player) {
+    public static int getSuitStoredEnergy(ServerPlayer player) {
         int total = 0;
         EquipmentSlot[] slots = new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET};
         for (EquipmentSlot slot : slots) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem) {
                 total += ModularPowerArmorItem.getStoredEnergy(piece);
             }
@@ -114,11 +112,11 @@ public class ModularSuitHandler {
         return total;
     }
 
-    public static boolean extractSuitEnergy(ServerPlayerEntity player, String moduleId, int amount) {
+    public static boolean extractSuitEnergy(ServerPlayer player, String moduleId, int amount) {
         EquipmentSlot[] slots = new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.HEAD, EquipmentSlot.FEET};
         // 1. Try host piece first
         for (EquipmentSlot slot : slots) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem && ModularPowerArmorItem.hasModule(piece, moduleId)) {
                 if (ModularPowerArmorItem.getStoredEnergy(piece) >= amount) {
                     ModularPowerArmorItem.extractEnergy(piece, amount);
@@ -128,7 +126,7 @@ public class ModularSuitHandler {
         }
         // 2. Siphon from any other suit piece
         for (EquipmentSlot slot : slots) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem) {
                 if (ModularPowerArmorItem.getStoredEnergy(piece) >= amount) {
                     ModularPowerArmorItem.extractEnergy(piece, amount);
@@ -139,12 +137,12 @@ public class ModularSuitHandler {
         return false;
     }
 
-    private static void tickChestplateModules(ServerPlayerEntity player, ServerWorld world) {
+    private static void tickChestplateModules(ServerPlayer player, ServerLevel world) {
         // Fluoropolymer Acid-Proof Plating Module (Installed in Chestplate, Leggings, etc.)
         if (hasSuitModule(player, "enchantedwood:acid_proof_plating")) {
-            boolean hasToxin = player.hasStatusEffect(StatusEffects.POISON)
-                    || player.hasStatusEffect(StatusEffects.WITHER)
-                    || player.hasStatusEffect(StatusEffects.NAUSEA);
+            boolean hasToxin = player.hasEffect(MobEffects.POISON)
+                    || player.hasEffect(MobEffects.WITHER)
+                    || player.hasEffect(MobEffects.NAUSEA);
             boolean inAcid = ConvergenceHazardHandler.isInCausticHazard(world, player);
             boolean activeLoad = hasToxin || inAcid;
 
@@ -157,7 +155,7 @@ public class ModularSuitHandler {
             }
 
             if (hasEnergy) {
-                player.addStatusEffect(new StatusEffectInstance(
+                player.addEffect(new MobEffectInstance(
                         ModStatusEffects.ACID_PROTECTION,
                         60,
                         0,
@@ -165,28 +163,28 @@ public class ModularSuitHandler {
                         false,
                         true
                 ));
-                if (player.hasStatusEffect(StatusEffects.POISON)) {
-                    player.removeStatusEffect(StatusEffects.POISON);
+                if (player.hasEffect(MobEffects.POISON)) {
+                    player.removeEffect(MobEffects.POISON);
                 }
-                if (player.hasStatusEffect(StatusEffects.WITHER)) {
-                    player.removeStatusEffect(StatusEffects.WITHER);
+                if (player.hasEffect(MobEffects.WITHER)) {
+                    player.removeEffect(MobEffects.WITHER);
                 }
-                if (player.hasStatusEffect(StatusEffects.NAUSEA)) {
-                    player.removeStatusEffect(StatusEffects.NAUSEA);
+                if (player.hasEffect(MobEffects.NAUSEA)) {
+                    player.removeEffect(MobEffects.NAUSEA);
                 }
-                if (activeLoad && world.getTime() % 10 == 0) {
-                    world.spawnParticles(
+                if (activeLoad && world.getGameTime() % 10 == 0) {
+                    world.sendParticles(
                             ParticleTypes.HAPPY_VILLAGER,
                             player.getX(), player.getY() + 0.8, player.getZ(),
                             2, 0.2, 0.3, 0.2, 0.01
                     );
                 }
             } else {
-                if (player.hasStatusEffect(ModStatusEffects.ACID_PROTECTION)) {
-                    player.removeStatusEffect(ModStatusEffects.ACID_PROTECTION);
+                if (player.hasEffect(ModStatusEffects.ACID_PROTECTION)) {
+                    player.removeEffect(ModStatusEffects.ACID_PROTECTION);
                 }
-                if (activeLoad && world.getTime() % 40 == 0) {
-                    player.sendMessage(Text.literal("§c⚠ ACID SHIELD COLLAPSED: 0 FE! Corrosive acid burning suit! ⚠"), true);
+                if (activeLoad && world.getGameTime() % 40 == 0) {
+                    player.sendOverlayMessage(Component.literal("§c⚠ ACID SHIELD COLLAPSED: 0 FE! Corrosive acid burning suit! ⚠"));
                 }
             }
         }
@@ -207,20 +205,20 @@ public class ModularSuitHandler {
             }
 
             if (hasEnergy) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.FIRE_RESISTANCE,
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.FIRE_RESISTANCE,
                         60,
                         0,
                         true,
                         false,
                         true
                 ));
-                player.extinguish();
+                player.clearFire();
                 if (inLava) {
-                    player.setVelocity(player.getVelocity().x * 1.15, Math.max(player.getVelocity().y, 0.1), player.getVelocity().z * 1.15);
+                    player.setDeltaMovement(player.getDeltaMovement().x * 1.15, Math.max(player.getDeltaMovement().y, 0.1), player.getDeltaMovement().z * 1.15);
                     player.fallDistance = 0.0f;
-                    if (world.getTime() % 10 == 0) {
-                        world.spawnParticles(
+                    if (world.getGameTime() % 10 == 0) {
+                        world.sendParticles(
                                 ParticleTypes.FLAME,
                                 player.getX(), player.getY() + 0.1, player.getZ(),
                                 2, 0.2, 0.0, 0.2, 0.01
@@ -228,37 +226,37 @@ public class ModularSuitHandler {
                     }
                 }
             } else {
-                if (player.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
-                    player.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
+                if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                    player.removeEffect(MobEffects.FIRE_RESISTANCE);
                 }
-                if (activeLoad && world.getTime() % 40 == 0) {
-                    player.sendMessage(Text.literal("§c⚠ THERMAL SHIELD OVERHEATED: 0 FE! Heatsinks offline! ⚠"), true);
+                if (activeLoad && world.getGameTime() % 40 == 0) {
+                    player.sendOverlayMessage(Component.literal("§c⚠ THERMAL SHIELD OVERHEATED: 0 FE! Heatsinks offline! ⚠"));
                 }
             }
         }
     }
 
-    private static void tickLeggingsModules(ServerPlayerEntity player, ServerWorld world) {
-        ItemStack legs = player.getEquippedStack(EquipmentSlot.LEGS);
-        if (!legs.isOf(ModItems.MODULAR_POWER_LEGGINGS)) return;
+    private static void tickLeggingsModules(ServerPlayer player, ServerLevel world) {
+        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
+        if (!legs.is(ModItems.MODULAR_POWER_LEGGINGS)) return;
 
         // Speed Servo Leg Module
         if (ModularPowerArmorItem.hasModule(legs, "enchantedwood:speed_servo_module")) {
             int stored = ModularPowerArmorItem.getStoredEnergy(legs);
             if (stored >= 2) {
-                boolean isMoving = player.isSprinting() || player.getVelocity().horizontalLengthSquared() > 0.005;
+                boolean isMoving = player.isSprinting() || player.getDeltaMovement().horizontalDistanceSqr() > 0.005;
                 if (isMoving) {
                     ModularPowerArmorItem.extractEnergy(legs, 2);
-                    if (player.isSprinting() && world.getTime() % 4 == 0) {
-                        world.spawnParticles(
+                    if (player.isSprinting() && world.getGameTime() % 4 == 0) {
+                        world.sendParticles(
                                 ParticleTypes.ELECTRIC_SPARK,
                                 player.getX(), player.getY() + 0.1, player.getZ(),
                                 1, 0.15, 0.05, 0.15, 0.02
                         );
                     }
                 }
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.SPEED,
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.SPEED,
                         30,
                         1,
                         true,
@@ -269,25 +267,25 @@ public class ModularSuitHandler {
         }
     }
 
-    private static void tickBootsModules(ServerPlayerEntity player, ServerWorld world) {
-        ItemStack boots = player.getEquippedStack(EquipmentSlot.FEET);
-        EntityAttributeInstance stepAttr = player.getAttributeInstance(EntityAttributes.STEP_HEIGHT);
+    private static void tickBootsModules(ServerPlayer player, ServerLevel world) {
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        AttributeInstance stepAttr = player.getAttribute(Attributes.STEP_HEIGHT);
 
-        boolean hasStepAssist = boots.isOf(ModItems.MODULAR_POWER_BOOTS) &&
+        boolean hasStepAssist = boots.is(ModItems.MODULAR_POWER_BOOTS) &&
                 ModularPowerArmorItem.hasModule(boots, "enchantedwood:step_assist_module") &&
                 ModularPowerArmorItem.getStoredEnergy(boots) > 0;
 
         if (stepAttr != null) {
             if (hasStepAssist) {
                 if (!stepAttr.hasModifier(STEP_ASSIST_MODIFIER_ID)) {
-                    stepAttr.addTemporaryModifier(new EntityAttributeModifier(
+                    stepAttr.addTransientModifier(new AttributeModifier(
                             STEP_ASSIST_MODIFIER_ID,
                             0.6,
-                            EntityAttributeModifier.Operation.ADD_VALUE
+                            AttributeModifier.Operation.ADD_VALUE
                     ));
                 }
                 // Passive drain: 1 FE every second while walking on ground
-                if (player.isOnGround() && (player.isSprinting() || player.getVelocity().horizontalLengthSquared() > 0.005) && world.getTime() % 20 == 0) {
+                if (player.onGround() && (player.isSprinting() || player.getDeltaMovement().horizontalDistanceSqr() > 0.005) && world.getGameTime() % 20 == 0) {
                     ModularPowerArmorItem.extractEnergy(boots, 1);
                 }
             } else if (stepAttr.hasModifier(STEP_ASSIST_MODIFIER_ID)) {
@@ -295,14 +293,14 @@ public class ModularSuitHandler {
             }
         }
 
-        if (!boots.isOf(ModItems.MODULAR_POWER_BOOTS)) return;
+        if (!boots.is(ModItems.MODULAR_POWER_BOOTS)) return;
 
         // High-Jump Actuator Boot Module
         if (ModularPowerArmorItem.hasModule(boots, "enchantedwood:high_jump_module")) {
             int stored = ModularPowerArmorItem.getStoredEnergy(boots);
             if (stored >= 1) {
-                player.addStatusEffect(new StatusEffectInstance(
-                        StatusEffects.JUMP_BOOST,
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.JUMP_BOOST,
                         30,
                         1,
                         true,
@@ -315,10 +313,10 @@ public class ModularSuitHandler {
                     player.fallDistance = 0.0f;
                 }
 
-                if (!player.isOnGround()) {
+                if (!player.onGround()) {
                     ModularPowerArmorItem.extractEnergy(boots, 1);
-                    if (world.getTime() % 4 == 0) {
-                        world.spawnParticles(
+                    if (world.getGameTime() % 4 == 0) {
+                        world.sendParticles(
                                 ParticleTypes.CLOUD,
                                 player.getX(), player.getY(), player.getZ(),
                                 1, 0.1, 0.0, 0.1, 0.01
@@ -329,8 +327,8 @@ public class ModularSuitHandler {
         }
     }
 
-    private static void tickNaniteRepairs(ServerPlayerEntity player, ServerWorld world) {
-        if (world.getTime() % 40 != 0) return; // Tick every 2 seconds
+    private static void tickNaniteRepairs(ServerPlayer player, ServerLevel world) {
+        if (world.getGameTime() % 40 != 0) return; // Tick every 2 seconds
 
         EquipmentSlot[] armorSlots = new EquipmentSlot[]{
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
@@ -342,7 +340,7 @@ public class ModularSuitHandler {
         ItemStack primaryNanitePiece = ItemStack.EMPTY;
 
         for (EquipmentSlot slot : armorSlots) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem &&
                     ModularPowerArmorItem.hasModule(piece, "enchantedwood:nanite_repair_matrix")) {
                 hasNaniteNetwork = true;
@@ -373,7 +371,7 @@ public class ModularSuitHandler {
             combatCooldownMs = 0L;
         }
 
-        long lastDamage = PlayerHealthHandler.getLastDamageTime(player.getUuid());
+        long lastDamage = PlayerHealthHandler.getLastDamageTime(player.getUUID());
         if (combatCooldownMs > 0 && System.currentTimeMillis() - lastDamage < combatCooldownMs) {
             return;
         }
@@ -391,7 +389,7 @@ public class ModularSuitHandler {
         boolean repairedAny = false;
 
         for (EquipmentSlot slot : armorSlots) {
-            ItemStack piece = player.getEquippedStack(slot);
+            ItemStack piece = player.getItemBySlot(slot);
             if (piece.getItem() instanceof ModularPowerArmorItem && piece.isDamaged()) {
                 // Check energy: draw from piece first, then from primary nanite piece if needed
                 int energyAvailable = ModularPowerArmorItem.getStoredEnergy(piece);
@@ -407,22 +405,20 @@ public class ModularSuitHandler {
                 }
 
                 boolean wasLocked = ModularPowerArmorItem.isChassisLocked(piece);
-                int currentDmg = piece.getDamage();
+                int currentDmg = piece.getDamageValue();
                 int newDmg = Math.max(0, currentDmg - repairAmount);
-                piece.setDamage(newDmg);
-                player.equipStack(slot, piece);
+                piece.setDamageValue(newDmg);
+                player.setItemSlot(slot, piece);
                 repairedAny = true;
 
                 // Notify player if Nanites successfully rebooted a locked chassis
                 if (wasLocked && newDmg < piece.getMaxDamage() - 1) {
-                    player.sendMessage(
-                            Text.literal("§a§l[SYSTEM REBOOT] §e" + piece.getName().getString() + " §7restored online by Nanite Network!"),
-                            true
-                    );
+                    player.sendOverlayMessage(
+                            Component.literal("§a§l[SYSTEM REBOOT] §e" + piece.getHoverName().getString() + " §7restored online by Nanite Network!"));
                     world.playSound(
                             null, player.getX(), player.getY(), player.getZ(),
-                            net.minecraft.sound.SoundEvents.BLOCK_BEACON_ACTIVATE,
-                            net.minecraft.sound.SoundCategory.PLAYERS,
+                            net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE,
+                            net.minecraft.sounds.SoundSource.PLAYERS,
                             1.0f, 1.4f
                     );
                 }
@@ -430,8 +426,8 @@ public class ModularSuitHandler {
         }
 
         if (repairedAny) {
-            player.playerScreenHandler.sendContentUpdates();
-            world.spawnParticles(
+            player.inventoryMenu.broadcastChanges();
+            world.sendParticles(
                     ParticleTypes.ELECTRIC_SPARK,
                     player.getX(), player.getY() + 1.0, player.getZ(),
                     3, 0.2, 0.3, 0.2, 0.05

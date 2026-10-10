@@ -1,8 +1,8 @@
 package net.enchantedwood.item;
 
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.tag.BlockTags;
 import net.enchantedwood.tag.ModTags;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ToolMaterial;
 
 public class ModMaterials {
     public static final ToolMaterial ENCHANTED_WOOD = new ToolMaterial(

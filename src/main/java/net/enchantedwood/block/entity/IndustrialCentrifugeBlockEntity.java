@@ -8,29 +8,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.IndustrialCentrifugeScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class IndustrialCentrifugeBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class IndustrialCentrifugeBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 25; // 25 FE/t
@@ -41,13 +41,13 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
     public static final int GEAR_SLOT = 3;
     public static final int INVENTORY_SIZE = 4;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 140; // 7 seconds base
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -71,7 +71,7 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -101,7 +101,7 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
         };
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, IndustrialCentrifugeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, IndustrialCentrifugeBlockEntity entity) {
         GearTier tier = entity.getActiveGearTier();
         entity.totalCookTime = getTierCookTime(tier);
 
@@ -113,26 +113,26 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
                 entity.energyStorage.extractEnergy(energyRequired, false);
                 entity.cookTime++;
 
-                if (!state.get(IndustrialCentrifugeBlock.LIT)) {
-                    world.setBlockState(pos, state.with(IndustrialCentrifugeBlock.LIT, true));
+                if (!state.getValue(IndustrialCentrifugeBlock.LIT)) {
+                    world.setBlockAndUpdate(pos, state.setValue(IndustrialCentrifugeBlock.LIT, true));
                 }
 
                 if (entity.cookTime >= entity.totalCookTime) {
                     entity.craft(recipe);
                     entity.cookTime = 0;
                 }
-                entity.markDirty();
+                entity.setChanged();
                 return;
             }
         }
 
         if (entity.cookTime > 0) {
             entity.cookTime = Math.max(0, entity.cookTime - 2);
-            entity.markDirty();
+            entity.setChanged();
         }
 
-        if (state.get(IndustrialCentrifugeBlock.LIT)) {
-            world.setBlockState(pos, state.with(IndustrialCentrifugeBlock.LIT, false));
+        if (state.getValue(IndustrialCentrifugeBlock.LIT)) {
+            world.setBlockAndUpdate(pos, state.setValue(IndustrialCentrifugeBlock.LIT, false));
         }
     }
 
@@ -180,73 +180,73 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
         ItemStack currentOut1 = inventory.get(OUTPUT_SLOT_1);
         ItemStack currentOut2 = inventory.get(OUTPUT_SLOT_2);
 
-        boolean out1Ok = currentOut1.isEmpty() || (ItemStack.areItemsAndComponentsEqual(currentOut1, recipe.out1()) &&
-                currentOut1.getCount() + recipe.out1().getCount() <= currentOut1.getMaxCount());
+        boolean out1Ok = currentOut1.isEmpty() || (ItemStack.isSameItemSameComponents(currentOut1, recipe.out1()) &&
+                currentOut1.getCount() + recipe.out1().getCount() <= currentOut1.getMaxStackSize());
 
-        boolean out2Ok = currentOut2.isEmpty() || (ItemStack.areItemsAndComponentsEqual(currentOut2, recipe.out2()) &&
-                currentOut2.getCount() + recipe.out2().getCount() <= currentOut2.getMaxCount());
+        boolean out2Ok = currentOut2.isEmpty() || (ItemStack.isSameItemSameComponents(currentOut2, recipe.out2()) &&
+                currentOut2.getCount() + recipe.out2().getCount() <= currentOut2.getMaxStackSize());
 
         return out1Ok && out2Ok;
     }
 
     private void craft(CentrifugeRecipe recipe) {
-        inventory.get(INPUT_SLOT).decrement(1);
+        inventory.get(INPUT_SLOT).shrink(1);
 
         ItemStack currentOut1 = inventory.get(OUTPUT_SLOT_1);
         if (currentOut1.isEmpty()) {
             inventory.set(OUTPUT_SLOT_1, recipe.out1().copy());
         } else {
-            currentOut1.increment(recipe.out1().getCount());
+            currentOut1.grow(recipe.out1().getCount());
         }
 
         ItemStack currentOut2 = inventory.get(OUTPUT_SLOT_2);
         if (currentOut2.isEmpty()) {
             inventory.set(OUTPUT_SLOT_2, recipe.out2().copy());
         } else {
-            currentOut2.increment(recipe.out2().getCount());
+            currentOut2.grow(recipe.out2().getCount());
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 140);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 140);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{OUTPUT_SLOT_1, OUTPUT_SLOT_2};
         if (side == Direction.UP) return new int[]{INPUT_SLOT};
         return new int[]{INPUT_SLOT, OUTPUT_SLOT_1, OUTPUT_SLOT_2};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return slot == INPUT_SLOT;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -259,49 +259,49 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Name
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > stack.getMaxCount()) {
-            stack.setCount(stack.getMaxCount());
+        if (stack.getCount() > stack.getMaxStackSize()) {
+            stack.setCount(stack.getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.literal("Industrial Centrifuge");
+    public Component getDisplayName() {
+        return Component.literal("Industrial Centrifuge");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new IndustrialCentrifugeScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 

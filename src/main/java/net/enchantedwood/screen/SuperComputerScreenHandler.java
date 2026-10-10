@@ -1,32 +1,32 @@
 package net.enchantedwood.screen;
 
 import net.enchantedwood.block.entity.SuperComputerBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class SuperComputerScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class SuperComputerScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(SuperComputerBlockEntity.TOTAL_SLOTS), new ArrayPropertyDelegate(14));
+    public SuperComputerScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(SuperComputerBlockEntity.TOTAL_SLOTS), new SimpleContainerData(14));
     }
 
-    public SuperComputerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public SuperComputerScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.SUPER_COMPUTER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, SuperComputerBlockEntity.TOTAL_SLOTS);
+        checkContainerSize(inventory, SuperComputerBlockEntity.TOTAL_SLOTS);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // 1. 3x3 Recipe Programming Matrix (Slots 0..8) - Ghost Pattern Matrix
         for (int row = 0; row < 3; ++row) {
@@ -38,7 +38,7 @@ public class SuperComputerScreenHandler extends ScreenHandler {
         // 2. Upgrade Socket (Slot 9)
         this.addSlot(new Slot(inventory, SuperComputerBlockEntity.UPGRADE_SLOT, 8, 53) {
             @Override
-            public int getMaxItemCount() {
+            public int getMaxStackSize() {
                 return 1;
             }
         });
@@ -53,17 +53,17 @@ public class SuperComputerScreenHandler extends ScreenHandler {
         // 4. Target Recipe Preview Slot (Slot 14 - Display Only)
         this.addSlot(new Slot(inventory, SuperComputerBlockEntity.PREVIEW_SLOT, 96, 18) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
             @Override
-            public boolean canTakeItems(PlayerEntity playerEntity) {
+            public boolean mayPickup(Player playerEntity) {
                 return false;
             }
 
             @Override
-            public boolean canTakePartial(PlayerEntity playerEntity) {
+            public boolean allowModification(Player playerEntity) {
                 return false;
             }
         });
@@ -106,27 +106,27 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     }
 
     public boolean isCasterOnline() {
-        return this.propertyDelegate.size() > 8 && this.propertyDelegate.get(8) != 0;
+        return this.propertyDelegate.getCount() > 8 && this.propertyDelegate.get(8) != 0;
     }
 
     public boolean isFabricatorOnline() {
-        return this.propertyDelegate.size() > 9 && this.propertyDelegate.get(9) != 0;
+        return this.propertyDelegate.getCount() > 9 && this.propertyDelegate.get(9) != 0;
     }
 
     public boolean isPressOnline() {
-        return this.propertyDelegate.size() > 10 && this.propertyDelegate.get(10) != 0;
+        return this.propertyDelegate.getCount() > 10 && this.propertyDelegate.get(10) != 0;
     }
 
     public boolean isFurnaceOnline() {
-        return this.propertyDelegate.size() > 11 && this.propertyDelegate.get(11) != 0;
+        return this.propertyDelegate.getCount() > 11 && this.propertyDelegate.get(11) != 0;
     }
 
     public boolean isWaterPumpOnline() {
-        return this.propertyDelegate.size() > 12 && this.propertyDelegate.get(12) != 0;
+        return this.propertyDelegate.getCount() > 12 && this.propertyDelegate.get(12) != 0;
     }
 
     public boolean isLavaSourceOnline() {
-        return this.propertyDelegate.size() > 13 && this.propertyDelegate.get(13) != 0;
+        return this.propertyDelegate.getCount() > 13 && this.propertyDelegate.get(13) != 0;
     }
 
     public int getScaledProgress(int pixels) {
@@ -144,35 +144,35 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, net.minecraft.screen.slot.SlotActionType actionType, PlayerEntity player) {
+    public void clicked(int slotIndex, int button, net.minecraft.world.inventory.ContainerInput actionType, Player player) {
         // 1. Ghost Pattern Matrix (Slots 0..8) - Purely virtual blueprint programming
         if (slotIndex >= 0 && slotIndex < 9) {
             Slot slot = this.slots.get(slotIndex);
-            ItemStack cursorStack = this.getCursorStack();
+            ItemStack cursorStack = this.getCarried();
 
-            if (actionType == net.minecraft.screen.slot.SlotActionType.PICKUP || actionType == net.minecraft.screen.slot.SlotActionType.QUICK_MOVE) {
+            if (actionType == net.minecraft.world.inventory.ContainerInput.PICKUP || actionType == net.minecraft.world.inventory.ContainerInput.QUICK_MOVE) {
                 if (!cursorStack.isEmpty()) {
                     // Place 1x ghost copy without consuming the cursor item
-                    slot.setStack(cursorStack.copyWithCount(1));
+                    slot.setByPlayer(cursorStack.copyWithCount(1));
                 } else {
                     // Empty cursor click clears the slot
-                    slot.setStack(ItemStack.EMPTY);
+                    slot.setByPlayer(ItemStack.EMPTY);
                 }
-            } else if (actionType == net.minecraft.screen.slot.SlotActionType.SWAP) {
+            } else if (actionType == net.minecraft.world.inventory.ContainerInput.SWAP) {
                 // Hotbar key (1..9) pressed over slot: place ghost copy from that hotbar slot
-                ItemStack hotbarStack = player.getInventory().getStack(button);
+                ItemStack hotbarStack = player.getInventory().getItem(button);
                 if (!hotbarStack.isEmpty()) {
-                    slot.setStack(hotbarStack.copyWithCount(1));
+                    slot.setByPlayer(hotbarStack.copyWithCount(1));
                 } else {
-                    slot.setStack(ItemStack.EMPTY);
+                    slot.setByPlayer(ItemStack.EMPTY);
                 }
-            } else if (actionType == net.minecraft.screen.slot.SlotActionType.CLONE || actionType == net.minecraft.screen.slot.SlotActionType.THROW) {
+            } else if (actionType == net.minecraft.world.inventory.ContainerInput.CLONE || actionType == net.minecraft.world.inventory.ContainerInput.THROW) {
                 // Middle click or throw clears slot without dropping anything into the world
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             }
             // Block all other actions (e.g. QUICK_CRAFT, PICKUP_ALL) from touching ghost pattern slots
-            slot.markDirty();
-            this.sendContentUpdates();
+            slot.setChanged();
+            this.broadcastChanges();
             return;
         }
 
@@ -181,47 +181,47 @@ public class SuperComputerScreenHandler extends ScreenHandler {
             return;
         }
 
-        super.onSlotClick(slotIndex, button, actionType, player);
+        super.clicked(slotIndex, button, actionType, player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             // Ignore quick moves from the preview slot or ghost matrix
             if (invSlot == SuperComputerBlockEntity.PREVIEW_SLOT || invSlot < 9) {
                 if (invSlot < 9) {
-                    slot.setStack(ItemStack.EMPTY);
-                    slot.markDirty();
-                    this.sendContentUpdates();
+                    slot.setByPlayer(ItemStack.EMPTY);
+                    slot.setChanged();
+                    this.broadcastChanges();
                 }
                 return ItemStack.EMPTY;
             }
 
             // Output buffer (slots 10..13) and Upgrade slot (9) -> Player Inventory (slots 15..50)
             if (invSlot >= 9 && invSlot < SuperComputerBlockEntity.TOTAL_SLOTS) {
-                if (!this.insertItem(originalStack, SuperComputerBlockEntity.TOTAL_SLOTS, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, SuperComputerBlockEntity.TOTAL_SLOTS, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // From player inventory:
                 // If Blaze Overclock Core, insert into Upgrade Slot (slot 9)
-                if (originalStack.isOf(net.enchantedwood.item.ModItems.BLAZE_OVERCLOCK_CORE) && !this.slots.get(SuperComputerBlockEntity.UPGRADE_SLOT).hasStack()) {
-                    if (!this.insertItem(originalStack, SuperComputerBlockEntity.UPGRADE_SLOT, SuperComputerBlockEntity.UPGRADE_SLOT + 1, false)) {
+                if (originalStack.is(net.enchantedwood.item.ModItems.BLAZE_OVERCLOCK_CORE) && !this.slots.get(SuperComputerBlockEntity.UPGRADE_SLOT).hasItem()) {
+                    if (!this.moveItemStackTo(originalStack, SuperComputerBlockEntity.UPGRADE_SLOT, SuperComputerBlockEntity.UPGRADE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
                     // Otherwise place a ghost copy in the first empty pattern slot (0..8)
                     for (int i = 0; i < 9; i++) {
                         Slot patternSlot = this.slots.get(i);
-                        if (!patternSlot.hasStack()) {
-                            patternSlot.setStack(originalStack.copyWithCount(1));
-                            patternSlot.markDirty();
-                            this.sendContentUpdates();
+                        if (!patternSlot.hasItem()) {
+                            patternSlot.setByPlayer(originalStack.copyWithCount(1));
+                            patternSlot.setChanged();
+                            this.broadcastChanges();
                             break;
                         }
                     }
@@ -230,9 +230,9 @@ public class SuperComputerScreenHandler extends ScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
 
@@ -240,7 +240,7 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean clickMenuButton(Player player, int id) {
         if (this.inventory instanceof SuperComputerBlockEntity be) {
             if (id == 0) {
                 be.executeManualCraft(player, false);
@@ -254,27 +254,27 @@ public class SuperComputerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     public static class GhostPatternSlot extends Slot {
-        public GhostPatternSlot(Inventory inventory, int index, int x, int y) {
+        public GhostPatternSlot(Container inventory, int index, int x, int y) {
             super(inventory, index, x, y);
         }
 
         @Override
-        public boolean canInsert(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return false;
         }
 
         @Override
-        public boolean canTakeItems(PlayerEntity playerEntity) {
+        public boolean mayPickup(Player playerEntity) {
             return false;
         }
 
         @Override
-        public boolean canTakePartial(PlayerEntity playerEntity) {
+        public boolean allowModification(Player playerEntity) {
             return false;
         }
     }

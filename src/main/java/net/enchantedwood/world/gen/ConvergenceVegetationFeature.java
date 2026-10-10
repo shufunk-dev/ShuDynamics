@@ -1,33 +1,36 @@
 package net.enchantedwood.world.gen;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.world.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+public class ConvergenceVegetationFeature implements Feature {
+    public static final com.mojang.serialization.MapCodec<ConvergenceVegetationFeature> CODEC = com.mojang.serialization.MapCodec.unit(ConvergenceVegetationFeature::new);
 
-public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> {
-    public ConvergenceVegetationFeature(Codec<DefaultFeatureConfig> configCodec) {
-        super(configCodec);
+    public ConvergenceVegetationFeature() {
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
+    public com.mojang.serialization.MapCodec<? extends Feature> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean place(net.minecraft.world.level.WorldGenLevel world, net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos origin) {
+        
 
         // STRICT DIMENSION CHECK: Exclusively generates in The Convergence
-        if (world.toServerWorld().getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) {
+        if (world.getLevel().dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
             return false;
         }
 
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
+        
+        
         boolean placedAny = false;
 
         // 1. Generate Wild Rice patches
@@ -35,10 +38,10 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
             int dx = random.nextInt(8) - random.nextInt(8);
             int dz = random.nextInt(8) - random.nextInt(8);
             int dy = random.nextInt(4) - random.nextInt(4);
-            BlockPos target = origin.add(dx, dy, dz);
+            BlockPos target = origin.offset(dx, dy, dz);
 
-            if (world.isAir(target) && ModBlocks.WILD_RICE.getDefaultState().canPlaceAt(world, target)) {
-                world.setBlockState(target, ModBlocks.WILD_RICE.getDefaultState(), 2);
+            if (world.isEmptyBlock(target) && ModBlocks.WILD_RICE.defaultBlockState().canSurvive(world, target)) {
+                world.setBlock(target, ModBlocks.WILD_RICE.defaultBlockState(), 2);
                 placedAny = true;
             }
         }
@@ -48,10 +51,10 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
             int dx = random.nextInt(10) - random.nextInt(10);
             int dz = random.nextInt(10) - random.nextInt(10);
             int dy = random.nextInt(4) - random.nextInt(4);
-            BlockPos target = origin.add(dx, dy, dz);
+            BlockPos target = origin.offset(dx, dy, dz);
 
-            if (world.isAir(target) && ModBlocks.WILD_CUCUMBER.getDefaultState().canPlaceAt(world, target)) {
-                world.setBlockState(target, ModBlocks.WILD_CUCUMBER.getDefaultState(), 2);
+            if (world.isEmptyBlock(target) && ModBlocks.WILD_CUCUMBER.defaultBlockState().canSurvive(world, target)) {
+                world.setBlock(target, ModBlocks.WILD_CUCUMBER.defaultBlockState(), 2);
                 placedAny = true;
             }
         }
@@ -61,10 +64,10 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
             int dx = random.nextInt(8) - random.nextInt(8);
             int dz = random.nextInt(8) - random.nextInt(8);
             int dy = random.nextInt(4) - random.nextInt(4);
-            BlockPos target = origin.add(dx, dy, dz);
+            BlockPos target = origin.offset(dx, dy, dz);
 
-            if (world.isAir(target) && ModBlocks.WILD_WASABI.getDefaultState().canPlaceAt(world, target)) {
-                world.setBlockState(target, ModBlocks.WILD_WASABI.getDefaultState(), 2);
+            if (world.isEmptyBlock(target) && ModBlocks.WILD_WASABI.defaultBlockState().canSurvive(world, target)) {
+                world.setBlock(target, ModBlocks.WILD_WASABI.defaultBlockState(), 2);
                 placedAny = true;
             }
         }
@@ -74,10 +77,10 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
             int dx = random.nextInt(10) - random.nextInt(10);
             int dz = random.nextInt(10) - random.nextInt(10);
             int dy = random.nextInt(4) - random.nextInt(4);
-            BlockPos target = origin.add(dx, dy, dz);
+            BlockPos target = origin.offset(dx, dy, dz);
 
-            if (world.isAir(target) && ModBlocks.WILD_DRAGON_FRUIT.getDefaultState().canPlaceAt(world, target)) {
-                world.setBlockState(target, ModBlocks.WILD_DRAGON_FRUIT.getDefaultState(), 2);
+            if (world.isEmptyBlock(target) && ModBlocks.WILD_DRAGON_FRUIT.defaultBlockState().canSurvive(world, target)) {
+                world.setBlock(target, ModBlocks.WILD_DRAGON_FRUIT.defaultBlockState(), 2);
                 placedAny = true;
             }
         }
@@ -95,50 +98,50 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
         return placedAny;
     }
 
-    private void generateStarfruitTree(StructureWorldAccess world, BlockPos pos, Random random) {
+    private void generateStarfruitTree(WorldGenLevel world, BlockPos pos, RandomSource random) {
         BlockPos surface = pos;
-        while (surface.getY() > world.getBottomY() && world.isAir(surface)) {
-            surface = surface.down();
+        while (surface.getY() > world.getMinY() && world.isEmptyBlock(surface)) {
+            surface = surface.below();
         }
-        BlockPos trunkBase = surface.up();
+        BlockPos trunkBase = surface.above();
         BlockState ground = world.getBlockState(surface);
-        if (!ground.isOf(Blocks.GRASS_BLOCK) && !ground.isOf(Blocks.DIRT) && !ground.isOf(ModBlocks.VOLCANIC_SOIL)) {
+        if (!ground.is(Blocks.GRASS_BLOCK) && !ground.is(Blocks.DIRT) && !ground.is(ModBlocks.VOLCANIC_SOIL)) {
             return;
         }
 
         int height = 4 + random.nextInt(3);
 
         for (int y = 0; y < height; y++) {
-            BlockPos logPos = trunkBase.up(y);
-            if (world.isAir(logPos) || world.getBlockState(logPos).isOf(ModBlocks.STARFRUIT_LEAVES)) {
-                world.setBlockState(logPos, ModBlocks.STARFRUIT_LOG.getDefaultState(), 2);
+            BlockPos logPos = trunkBase.above(y);
+            if (world.isEmptyBlock(logPos) || world.getBlockState(logPos).is(ModBlocks.STARFRUIT_LEAVES)) {
+                world.setBlock(logPos, ModBlocks.STARFRUIT_LOG.defaultBlockState(), 2);
             }
         }
 
-        BlockPos canopyCenter = trunkBase.up(height);
+        BlockPos canopyCenter = trunkBase.above(height);
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
                 for (int dy = -2; dy <= 1; dy++) {
                     if (Math.abs(dx) == 2 && Math.abs(dz) == 2 && (dy == 1 || random.nextBoolean())) {
                         continue;
                     }
-                    BlockPos leafPos = canopyCenter.add(dx, dy, dz);
-                    if (world.isAir(leafPos)) {
-                        world.setBlockState(leafPos, ModBlocks.STARFRUIT_LEAVES.getDefaultState(), 2);
+                    BlockPos leafPos = canopyCenter.offset(dx, dy, dz);
+                    if (world.isEmptyBlock(leafPos)) {
+                        world.setBlock(leafPos, ModBlocks.STARFRUIT_LEAVES.defaultBlockState(), 2);
                     }
                 }
             }
         }
     }
 
-    private void generateAvocadoTree(StructureWorldAccess world, BlockPos pos, Random random) {
+    private void generateAvocadoTree(WorldGenLevel world, BlockPos pos, RandomSource random) {
         BlockPos surface = pos;
-        while (surface.getY() > world.getBottomY() && world.isAir(surface)) {
-            surface = surface.down();
+        while (surface.getY() > world.getMinY() && world.isEmptyBlock(surface)) {
+            surface = surface.below();
         }
-        BlockPos trunkBase = surface.up();
+        BlockPos trunkBase = surface.above();
         BlockState ground = world.getBlockState(surface);
-        if (!ground.isOf(Blocks.GRASS_BLOCK) && !ground.isOf(Blocks.DIRT) && !ground.isOf(ModBlocks.VOLCANIC_SOIL)) {
+        if (!ground.is(Blocks.GRASS_BLOCK) && !ground.is(Blocks.DIRT) && !ground.is(ModBlocks.VOLCANIC_SOIL)) {
             return;
         }
 
@@ -146,23 +149,23 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
 
         // Trunk
         for (int y = 0; y < height; y++) {
-            BlockPos logPos = trunkBase.up(y);
-            if (world.isAir(logPos) || world.getBlockState(logPos).isOf(ModBlocks.AVOCADO_LEAVES)) {
-                world.setBlockState(logPos, ModBlocks.AVOCADO_LOG.getDefaultState(), 2);
+            BlockPos logPos = trunkBase.above(y);
+            if (world.isEmptyBlock(logPos) || world.getBlockState(logPos).is(ModBlocks.AVOCADO_LEAVES)) {
+                world.setBlock(logPos, ModBlocks.AVOCADO_LOG.defaultBlockState(), 2);
             }
         }
 
         // Canopy
-        BlockPos canopyCenter = trunkBase.up(height);
+        BlockPos canopyCenter = trunkBase.above(height);
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
                 for (int dy = -2; dy <= 1; dy++) {
                     if (Math.abs(dx) == 2 && Math.abs(dz) == 2 && (dy == 1 || random.nextBoolean())) {
                         continue;
                     }
-                    BlockPos leafPos = canopyCenter.add(dx, dy, dz);
-                    if (world.isAir(leafPos)) {
-                        world.setBlockState(leafPos, ModBlocks.AVOCADO_LEAVES.getDefaultState(), 2);
+                    BlockPos leafPos = canopyCenter.offset(dx, dy, dz);
+                    if (world.isEmptyBlock(leafPos)) {
+                        world.setBlock(leafPos, ModBlocks.AVOCADO_LEAVES.defaultBlockState(), 2);
                     }
                 }
             }

@@ -4,173 +4,173 @@ import net.enchantedwood.entity.ModEntities;
 import net.enchantedwood.entity.custom.ResonanceColossusEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.world.dimension.ModDimensions;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class ResonanceAltarBlock extends Block {
 
-    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public ResonanceAltarBlock(Settings settings) {
+    public ResonanceAltarBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ACTIVE, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player.isSneaking()) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (player.isShiftKeyDown()) {
             return dismissActiveBosses(state, world, pos, player);
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Override
-    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (player.isSneaking()) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (player.isShiftKeyDown()) {
             return dismissActiveBosses(state, world, pos, player);
         }
 
-        boolean isTier1 = stack.isOf(ModItems.CORE_OF_AWAKENING);
-        boolean isTier2 = stack.isOf(ModItems.CORRUPTED_CORE_OF_CATACLYSM);
-        boolean isTier3 = stack.isOf(ModItems.PRIMORDIAL_RIFT_KEYSTONE);
+        boolean isTier1 = stack.is(ModItems.CORE_OF_AWAKENING);
+        boolean isTier2 = stack.is(ModItems.CORRUPTED_CORE_OF_CATACLYSM);
+        boolean isTier3 = stack.is(ModItems.PRIMORDIAL_RIFT_KEYSTONE);
 
         if (!isTier1 && !isTier2 && !isTier3) {
-            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
-        if (world.isClient()) {
-            return ActionResult.SUCCESS;
+        if (world.isClientSide()) {
+            return InteractionResult.SUCCESS;
         }
 
         // Safety Protocol 1: Dimension Lock (Only active inside The Convergence dimension)
-        if (world.getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) {
-            player.sendMessage(Text.literal("§cThe Resonance Altar requires the unstable dimensional frequencies of The Convergence to perform summoning rituals."), true);
-            world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 0.8f);
-            return ActionResult.FAIL;
+        if (world.dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
+            player.sendSystemMessage(Component.literal("§cThe Resonance Altar requires the unstable dimensional frequencies of The Convergence to perform summoning rituals."));
+            world.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 0.8f);
+            return InteractionResult.FAIL;
         }
 
         // Check if already active & verify if any tier of boss is active nearby
-        net.minecraft.util.math.Box checkArea = new net.minecraft.util.math.Box(pos).expand(128.0);
-        java.util.List<ResonanceColossusEntity> t1 = world.getEntitiesByClass(ResonanceColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
-        java.util.List<net.enchantedwood.entity.custom.AscendantColossusEntity> t2 = world.getEntitiesByClass(net.enchantedwood.entity.custom.AscendantColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
-        java.util.List<net.enchantedwood.entity.custom.PrimordialCataclysmEntity> t3 = world.getEntitiesByClass(net.enchantedwood.entity.custom.PrimordialCataclysmEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+        net.minecraft.world.phys.AABB checkArea = new net.minecraft.world.phys.AABB(pos).inflate(128.0);
+        java.util.List<ResonanceColossusEntity> t1 = world.getEntitiesOfClass(ResonanceColossusEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
+        java.util.List<net.enchantedwood.entity.custom.AscendantColossusEntity> t2 = world.getEntitiesOfClass(net.enchantedwood.entity.custom.AscendantColossusEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
+        java.util.List<net.enchantedwood.entity.custom.PrimordialCataclysmEntity> t3 = world.getEntitiesOfClass(net.enchantedwood.entity.custom.PrimordialCataclysmEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
 
         boolean anyBossActive = !t1.isEmpty() || !t2.isEmpty() || !t3.isEmpty();
 
-        if (state.get(ACTIVE)) {
+        if (state.getValue(ACTIVE)) {
             if (anyBossActive) {
-                player.sendMessage(Text.literal("§eA Boss encounter is currently active on the battlefield!"), true);
-                return ActionResult.FAIL;
+                player.sendOverlayMessage(Component.literal("§eA Boss encounter is currently active on the battlefield!"));
+                return InteractionResult.FAIL;
             } else {
-                world.setBlockState(pos, state.with(ACTIVE, false));
+                world.setBlockAndUpdate(pos, state.setValue(ACTIVE, false));
             }
         } else if (anyBossActive) {
-            player.sendMessage(Text.literal("§eA Boss encounter is currently active on the battlefield!"), true);
-            return ActionResult.FAIL;
+            player.sendSystemMessage(Component.literal("§eA Boss encounter is currently active on the battlefield!"));
+            return InteractionResult.FAIL;
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             if (!player.isCreative()) {
-                stack.decrement(1);
+                stack.shrink(1);
             }
 
             // Set Altar to active
-            serverWorld.setBlockState(pos, state.with(ACTIVE, true));
+            serverWorld.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));
 
             if (isTier1) {
                 // Tier 1: Resonance Colossus
-                serverWorld.spawnParticles(ParticleTypes.SONIC_BOOM, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 3, 0.2, 0.2, 0.2, 0.0);
-                serverWorld.spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 40, 1.0, 1.0, 1.0, 0.15);
-                serverWorld.playSound(null, pos, SoundEvents.ENTITY_WARDEN_ROAR, SoundCategory.HOSTILE, 1.5f, 0.7f);
-                serverWorld.playSound(null, pos, SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.HOSTILE, 1.5f, 0.8f);
+                serverWorld.sendParticles(ParticleTypes.SONIC_BOOM, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 3, 0.2, 0.2, 0.2, 0.0);
+                serverWorld.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 40, 1.0, 1.0, 1.0, 0.15);
+                serverWorld.playSound(null, pos, SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 1.5f, 0.7f);
+                serverWorld.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.HOSTILE, 1.5f, 0.8f);
 
-                ResonanceColossusEntity colossus = ModEntities.RESONANCE_COLOSSUS.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
+                ResonanceColossusEntity colossus = ModEntities.RESONANCE_COLOSSUS.create(serverWorld, net.minecraft.world.entity.EntitySpawnReason.EVENT);
                 if (colossus != null) {
-                    colossus.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
+                    colossus.snapTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
                     colossus.setAltarPos(pos);
-                    serverWorld.spawnEntity(colossus);
+                    serverWorld.addFreshEntity(colossus);
                 }
 
-                for (PlayerEntity p : serverWorld.getPlayers()) {
-                    p.sendMessage(Text.literal("§5✦ The ground shakes as The Resonance Colossus (Tier 1) awakens at the Dais! ✦"), false);
+                for (Player p : serverWorld.players()) {
+                    p.sendOverlayMessage(Component.literal("§5✦ The ground shakes as The Resonance Colossus (Tier 1) awakens at the Dais! ✦"));
                 }
             } else if (isTier2) {
                 // Tier 2: Ascendant Colossus
-                serverWorld.spawnParticles(ParticleTypes.SONIC_BOOM, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 5, 0.2, 0.2, 0.2, 0.0);
-                serverWorld.spawnParticles(ParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 60, 1.2, 1.2, 1.2, 0.2);
-                serverWorld.playSound(null, pos, SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0f, 0.8f);
-                serverWorld.playSound(null, pos, SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.HOSTILE, 2.0f, 0.6f);
+                serverWorld.sendParticles(ParticleTypes.SONIC_BOOM, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 5, 0.2, 0.2, 0.2, 0.0);
+                serverWorld.sendParticles(ParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 60, 1.2, 1.2, 1.2, 0.2);
+                serverWorld.playSound(null, pos, SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 2.0f, 0.8f);
+                serverWorld.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.HOSTILE, 2.0f, 0.6f);
 
-                net.enchantedwood.entity.custom.AscendantColossusEntity ascendant = ModEntities.ASCENDANT_COLOSSUS.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
+                net.enchantedwood.entity.custom.AscendantColossusEntity ascendant = ModEntities.ASCENDANT_COLOSSUS.create(serverWorld, net.minecraft.world.entity.EntitySpawnReason.EVENT);
                 if (ascendant != null) {
-                    ascendant.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
+                    ascendant.snapTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
                     ascendant.setAltarPos(pos);
-                    serverWorld.spawnEntity(ascendant);
+                    serverWorld.addFreshEntity(ascendant);
                 }
 
-                for (PlayerEntity p : serverWorld.getPlayers()) {
-                    p.sendMessage(Text.literal("§4✦ Crimson lightning rends the sky as The Ascendant Colossus (Tier 2) descends upon the Dais! ✦"), false);
+                for (Player p : serverWorld.players()) {
+                    p.sendSystemMessage(Component.literal("§4✦ Crimson lightning rends the sky as The Ascendant Colossus (Tier 2) descends upon the Dais! ✦"));
                 }
             } else {
                 // Tier 3: Primordial Cataclysm
-                serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 100, 2.0, 2.0, 2.0, 0.3);
-                serverWorld.spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 80, 1.5, 1.5, 1.5, 0.1);
-                serverWorld.playSound(null, pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.HOSTILE, 2.5f, 0.4f);
-                serverWorld.playSound(null, pos, SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 2.5f, 0.5f);
+                serverWorld.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 100, 2.0, 2.0, 2.0, 0.3);
+                serverWorld.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 2.0, pos.getZ() + 0.5, 80, 1.5, 1.5, 1.5, 0.1);
+                serverWorld.playSound(null, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.HOSTILE, 2.5f, 0.4f);
+                serverWorld.playSound(null, pos, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2.5f, 0.5f);
 
-                net.enchantedwood.entity.custom.PrimordialCataclysmEntity cataclysm = ModEntities.PRIMORDIAL_CATACLYSM.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
+                net.enchantedwood.entity.custom.PrimordialCataclysmEntity cataclysm = ModEntities.PRIMORDIAL_CATACLYSM.create(serverWorld, net.minecraft.world.entity.EntitySpawnReason.EVENT);
                 if (cataclysm != null) {
-                    cataclysm.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
+                    cataclysm.snapTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
                     cataclysm.setAltarPos(pos);
-                    serverWorld.spawnEntity(cataclysm);
+                    serverWorld.addFreshEntity(cataclysm);
                 }
 
-                for (PlayerEntity p : serverWorld.getPlayers()) {
-                    p.sendMessage(Text.literal("§d✦ The fabric of reality fractures! The Primordial Cataclysm (Tier 3 Mythic Boss) has arrived! ✦"), false);
+                for (Player p : serverWorld.players()) {
+                    p.sendSystemMessage(Component.literal("§d✦ The fabric of reality fractures! The Primordial Cataclysm (Tier 3 Mythic Boss) has arrived! ✦"));
                 }
             }
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private ActionResult dismissActiveBosses(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (!world.isClient() && world instanceof ServerWorld sw) {
-            net.minecraft.util.math.Box checkArea = new net.minecraft.util.math.Box(pos).expand(128.0);
-            var t1 = sw.getEntitiesByClass(ResonanceColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
-            var t2 = sw.getEntitiesByClass(net.enchantedwood.entity.custom.AscendantColossusEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
-            var t3 = sw.getEntitiesByClass(net.enchantedwood.entity.custom.PrimordialCataclysmEntity.class, checkArea, net.minecraft.entity.LivingEntity::isAlive);
+    private InteractionResult dismissActiveBosses(BlockState state, Level world, BlockPos pos, Player player) {
+        if (!world.isClientSide() && world instanceof ServerLevel sw) {
+            net.minecraft.world.phys.AABB checkArea = new net.minecraft.world.phys.AABB(pos).inflate(128.0);
+            var t1 = sw.getEntitiesOfClass(ResonanceColossusEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
+            var t2 = sw.getEntitiesOfClass(net.enchantedwood.entity.custom.AscendantColossusEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
+            var t3 = sw.getEntitiesOfClass(net.enchantedwood.entity.custom.PrimordialCataclysmEntity.class, checkArea, net.minecraft.world.entity.LivingEntity::isAlive);
             int removed = 0;
             for (var b : t1) { b.discard(); removed++; }
             for (var b : t2) { b.discard(); removed++; }
             for (var b : t3) { b.discard(); removed++; }
-            sw.setBlockState(pos, state.with(ACTIVE, false));
+            sw.setBlockAndUpdate(pos, state.setValue(ACTIVE, false));
             if (removed > 0) {
-                player.sendMessage(Text.literal("§e✦ Resonance Altar: Dismissed " + removed + " active boss encounter(s) and reset arena! ✦"), true);
-                sw.playSound(null, pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.BLOCKS, 1.5f, 1.0f);
+                player.sendSystemMessage(Component.literal("§e✦ Resonance Altar: Dismissed " + removed + " active boss encounter(s) and reset arena! ✦"));
+                sw.playSound(null, pos, SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.BLOCKS, 1.5f, 1.0f);
             } else {
-                player.sendMessage(Text.literal("§7✦ Resonance Altar: Reset to idle (no active bosses in arena). ✦"), true);
+                player.sendOverlayMessage(Component.literal("§7✦ Resonance Altar: Reset to idle (no active bosses in arena). ✦"));
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

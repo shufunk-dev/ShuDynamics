@@ -1,45 +1,47 @@
 package net.enchantedwood.world.gen;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.world.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+public class NetherIncursionFeature implements Feature {
+    public static final com.mojang.serialization.MapCodec<NetherIncursionFeature> CODEC = com.mojang.serialization.MapCodec.unit(NetherIncursionFeature::new);
 
-public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
-    public NetherIncursionFeature(Codec<DefaultFeatureConfig> configCodec) {
-        super(configCodec);
+    public NetherIncursionFeature() {
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
+    public com.mojang.serialization.MapCodec<? extends Feature> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean place(net.minecraft.world.level.WorldGenLevel world, net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos origin) {
+        
 
         // STRICT DIMENSION CHECK: Exclusively generates in The Convergence
-        if (world.toServerWorld().getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) {
+        if (world.getLevel().dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
             return false;
         }
 
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
+        
+        
 
         // Check if origin biome is one of the Nether incursion biomes
-        RegistryEntry<Biome> biomeEntry = world.getBiome(origin);
-        boolean isWarped = biomeEntry.matchesKey(BiomeKeys.WARPED_FOREST);
-        boolean isCrimson = biomeEntry.matchesKey(BiomeKeys.CRIMSON_FOREST);
-        boolean isSoulSand = biomeEntry.matchesKey(BiomeKeys.SOUL_SAND_VALLEY);
-        boolean isBasalt = biomeEntry.matchesKey(BiomeKeys.BASALT_DELTAS);
-        boolean isEnd = biomeEntry.matchesKey(BiomeKeys.END_HIGHLANDS);
+        Holder<Biome> biomeEntry = world.getBiome(origin);
+        boolean isWarped = biomeEntry.is(Biomes.WARPED_FOREST);
+        boolean isCrimson = biomeEntry.is(Biomes.CRIMSON_FOREST);
+        boolean isSoulSand = biomeEntry.is(Biomes.SOUL_SAND_VALLEY);
+        boolean isBasalt = biomeEntry.is(Biomes.BASALT_DELTAS);
+        boolean isEnd = biomeEntry.is(Biomes.END_HIGHLANDS);
 
         if (!isWarped && !isCrimson && !isSoulSand && !isBasalt && !isEnd) {
             return false;
@@ -50,21 +52,21 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
         // 1. Surface and Subsurface Terrain Transformation (16x16 column area)
         for (int dx = -8; dx < 8; dx++) {
             for (int dz = -8; dz < 8; dz++) {
-                BlockPos colPos = origin.add(dx, 0, dz);
-                RegistryEntry<Biome> colBiome = world.getBiome(colPos);
+                BlockPos colPos = origin.offset(dx, 0, dz);
+                Holder<Biome> colBiome = world.getBiome(colPos);
 
-                boolean colWarped = colBiome.matchesKey(BiomeKeys.WARPED_FOREST);
-                boolean colCrimson = colBiome.matchesKey(BiomeKeys.CRIMSON_FOREST);
-                boolean colSoulSand = colBiome.matchesKey(BiomeKeys.SOUL_SAND_VALLEY);
-                boolean colBasalt = colBiome.matchesKey(BiomeKeys.BASALT_DELTAS);
-                boolean colEnd = colBiome.matchesKey(BiomeKeys.END_HIGHLANDS);
+                boolean colWarped = colBiome.is(Biomes.WARPED_FOREST);
+                boolean colCrimson = colBiome.is(Biomes.CRIMSON_FOREST);
+                boolean colSoulSand = colBiome.is(Biomes.SOUL_SAND_VALLEY);
+                boolean colBasalt = colBiome.is(Biomes.BASALT_DELTAS);
+                boolean colEnd = colBiome.is(Biomes.END_HIGHLANDS);
 
                 if (!colWarped && !colCrimson && !colSoulSand && !colBasalt && !colEnd) {
                     continue;
                 }
 
                 // Find highest solid surface block
-                int topY = world.getTopY(net.minecraft.world.Heightmap.Type.WORLD_SURFACE_WG, colPos.getX(), colPos.getZ()) - 1;
+                int topY = world.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG, colPos.getX(), colPos.getZ()) - 1;
                 BlockPos surfacePos = new BlockPos(colPos.getX(), topY, colPos.getZ());
 
                 BlockState surfaceState = world.getBlockState(surfacePos);
@@ -74,34 +76,34 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
 
                 if (colWarped) {
                     // Warped Nylium on top
-                    world.setBlockState(surfacePos, Blocks.WARPED_NYLIUM.getDefaultState(), 2);
+                    world.setBlock(surfacePos, Blocks.WARPED_NYLIUM.defaultBlockState(), 2);
                     int depth = 3 + random.nextInt(3);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = surfacePos.down(d);
+                        BlockPos under = surfacePos.below(d);
                         if (isTerrainReplaceable(world.getBlockState(under))) {
-                            world.setBlockState(under, Blocks.NETHERRACK.getDefaultState(), 2);
+                            world.setBlock(under, Blocks.NETHERRACK.defaultBlockState(), 2);
                         }
                     }
                     placedAny = true;
 
                     // Huge Warped Fungus Tree Chance (approx 1-3 per chunk)
-                    if (random.nextInt(30) == 0 && world.isAir(surfacePos.up())) {
-                        generateHugeWarpedFungus(world, surfacePos.up(), random);
-                    } else if (random.nextInt(5) == 0 && world.isAir(surfacePos.up())) {
+                    if (random.nextInt(30) == 0 && world.isEmptyBlock(surfacePos.above())) {
+                        generateHugeWarpedFungus(world, surfacePos.above(), random);
+                    } else if (random.nextInt(5) == 0 && world.isEmptyBlock(surfacePos.above())) {
                         // Flora carpet
                         int floraRoll = random.nextInt(10);
                         if (floraRoll < 4) {
-                            world.setBlockState(surfacePos.up(), Blocks.WARPED_ROOTS.getDefaultState(), 2);
+                            world.setBlock(surfacePos.above(), Blocks.WARPED_ROOTS.defaultBlockState(), 2);
                         } else if (floraRoll < 7) {
-                            world.setBlockState(surfacePos.up(), Blocks.NETHER_SPROUTS.getDefaultState(), 2);
+                            world.setBlock(surfacePos.above(), Blocks.NETHER_SPROUTS.defaultBlockState(), 2);
                         } else if (floraRoll < 8) {
-                            world.setBlockState(surfacePos.up(), Blocks.WARPED_FUNGUS.getDefaultState(), 2);
+                            world.setBlock(surfacePos.above(), Blocks.WARPED_FUNGUS.defaultBlockState(), 2);
                         } else {
                             int vineHeight = 1 + random.nextInt(4);
                             for (int v = 0; v < vineHeight; v++) {
-                                BlockPos vinePos = surfacePos.up(1 + v);
-                                if (world.isAir(vinePos)) {
-                                    world.setBlockState(vinePos, Blocks.TWISTING_VINES.getDefaultState(), 2);
+                                BlockPos vinePos = surfacePos.above(1 + v);
+                                if (world.isEmptyBlock(vinePos)) {
+                                    world.setBlock(vinePos, Blocks.TWISTING_VINES.defaultBlockState(), 2);
                                 } else {
                                     break;
                                 }
@@ -110,71 +112,71 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                     }
                 } else if (colCrimson) {
                     // Crimson Nylium on top
-                    world.setBlockState(surfacePos, Blocks.CRIMSON_NYLIUM.getDefaultState(), 2);
+                    world.setBlock(surfacePos, Blocks.CRIMSON_NYLIUM.defaultBlockState(), 2);
                     int depth = 3 + random.nextInt(3);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = surfacePos.down(d);
+                        BlockPos under = surfacePos.below(d);
                         if (isTerrainReplaceable(world.getBlockState(under))) {
-                            world.setBlockState(under, Blocks.NETHERRACK.getDefaultState(), 2);
+                            world.setBlock(under, Blocks.NETHERRACK.defaultBlockState(), 2);
                         }
                     }
                     placedAny = true;
 
                     // Huge Crimson Fungus Tree Chance
-                    if (random.nextInt(30) == 0 && world.isAir(surfacePos.up())) {
-                        generateHugeCrimsonFungus(world, surfacePos.up(), random);
-                    } else if (random.nextInt(5) == 0 && world.isAir(surfacePos.up())) {
+                    if (random.nextInt(30) == 0 && world.isEmptyBlock(surfacePos.above())) {
+                        generateHugeCrimsonFungus(world, surfacePos.above(), random);
+                    } else if (random.nextInt(5) == 0 && world.isEmptyBlock(surfacePos.above())) {
                         int floraRoll = random.nextInt(10);
                         if (floraRoll < 7) {
-                            world.setBlockState(surfacePos.up(), Blocks.CRIMSON_ROOTS.getDefaultState(), 2);
+                            world.setBlock(surfacePos.above(), Blocks.CRIMSON_ROOTS.defaultBlockState(), 2);
                         } else {
-                            world.setBlockState(surfacePos.up(), Blocks.CRIMSON_FUNGUS.getDefaultState(), 2);
+                            world.setBlock(surfacePos.above(), Blocks.CRIMSON_FUNGUS.defaultBlockState(), 2);
                         }
                     }
                 } else if (colSoulSand) {
-                    BlockState soulState = random.nextBoolean() ? Blocks.SOUL_SAND.getDefaultState() : Blocks.SOUL_SOIL.getDefaultState();
-                    world.setBlockState(surfacePos, soulState, 2);
+                    BlockState soulState = random.nextBoolean() ? Blocks.SOUL_SAND.defaultBlockState() : Blocks.SOUL_SOIL.defaultBlockState();
+                    world.setBlock(surfacePos, soulState, 2);
                     int depth = 2 + random.nextInt(4);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = surfacePos.down(d);
+                        BlockPos under = surfacePos.below(d);
                         if (isTerrainReplaceable(world.getBlockState(under))) {
-                            world.setBlockState(under, soulState, 2);
+                            world.setBlock(under, soulState, 2);
                         }
                     }
                     placedAny = true;
                 } else if (colBasalt) {
-                    BlockState basaltState = random.nextFloat() < 0.65f ? Blocks.BASALT.getDefaultState() :
-                            (random.nextFloat() < 0.5f ? Blocks.BLACKSTONE.getDefaultState() : Blocks.MAGMA_BLOCK.getDefaultState());
-                    world.setBlockState(surfacePos, basaltState, 2);
+                    BlockState basaltState = random.nextFloat() < 0.65f ? Blocks.BASALT.defaultBlockState() :
+                            (random.nextFloat() < 0.5f ? Blocks.BLACKSTONE.defaultBlockState() : Blocks.MAGMA_BLOCK.defaultBlockState());
+                    world.setBlock(surfacePos, basaltState, 2);
                     int depth = 2 + random.nextInt(3);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = surfacePos.down(d);
+                        BlockPos under = surfacePos.below(d);
                         if (isTerrainReplaceable(world.getBlockState(under))) {
-                            world.setBlockState(under, Blocks.BLACKSTONE.getDefaultState(), 2);
+                            world.setBlock(under, Blocks.BLACKSTONE.defaultBlockState(), 2);
                         }
                     }
                     placedAny = true;
                 } else if (colEnd) {
-                    world.setBlockState(surfacePos, Blocks.END_STONE.getDefaultState(), 2);
+                    world.setBlock(surfacePos, Blocks.END_STONE.defaultBlockState(), 2);
                     int depth = 3 + random.nextInt(3);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = surfacePos.down(d);
+                        BlockPos under = surfacePos.below(d);
                         if (isTerrainReplaceable(world.getBlockState(under))) {
-                            world.setBlockState(under, Blocks.END_STONE.getDefaultState(), 2);
+                            world.setBlock(under, Blocks.END_STONE.defaultBlockState(), 2);
                         }
                     }
                     placedAny = true;
 
                     // Chorus plant chance (authentic End vegetation)
-                    if (random.nextInt(25) == 0 && world.isAir(surfacePos.up())) {
-                        generateChorusPlant(world, surfacePos.up(), random);
-                    } else if (random.nextInt(60) == 0 && world.isAir(surfacePos.up())) {
+                    if (random.nextInt(25) == 0 && world.isEmptyBlock(surfacePos.above())) {
+                        generateChorusPlant(world, surfacePos.above(), random);
+                    } else if (random.nextInt(60) == 0 && world.isEmptyBlock(surfacePos.above())) {
                         // Small obsidian / purpur monument spire
                         int spireHeight = 2 + random.nextInt(3);
                         for (int s = 0; s < spireHeight; s++) {
-                            BlockPos sPos = surfacePos.up(1 + s);
-                            if (world.isAir(sPos)) {
-                                world.setBlockState(sPos, (s == spireHeight - 1 && random.nextBoolean()) ? Blocks.PURPUR_PILLAR.getDefaultState() : Blocks.OBSIDIAN.getDefaultState(), 2);
+                            BlockPos sPos = surfacePos.above(1 + s);
+                            if (world.isEmptyBlock(sPos)) {
+                                world.setBlock(sPos, (s == spireHeight - 1 && random.nextBoolean()) ? Blocks.PURPUR_PILLAR.defaultBlockState() : Blocks.OBSIDIAN.defaultBlockState(), 2);
                             }
                         }
                     }
@@ -195,21 +197,21 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
                 for (int ry = -radius; ry <= radius; ry++) {
                     for (int rz = -radius; rz <= radius; rz++) {
                         if (rx * rx + ry * ry + rz * rz <= radius * radius + random.nextInt(2)) {
-                            BlockPos orePos = center.add(rx, ry, rz);
+                            BlockPos orePos = center.offset(rx, ry, rz);
                             BlockState cur = world.getBlockState(orePos);
                             if (isSubterraneanStone(cur)) {
                                 if (isEnd) {
                                     if (random.nextInt(100) < 15) {
-                                        world.setBlockState(orePos, Blocks.PURPUR_BLOCK.getDefaultState(), 2);
+                                        world.setBlock(orePos, Blocks.PURPUR_BLOCK.defaultBlockState(), 2);
                                     } else {
-                                        world.setBlockState(orePos, Blocks.END_STONE.getDefaultState(), 2);
+                                        world.setBlock(orePos, Blocks.END_STONE.defaultBlockState(), 2);
                                     }
                                 } else {
                                     // 22% chance to place an ore, 78% Netherrack base
                                     if (random.nextInt(100) < 22) {
-                                        world.setBlockState(orePos, getRandomNetherOre(random), 2);
+                                        world.setBlock(orePos, getRandomNetherOre(random), 2);
                                     } else {
-                                        world.setBlockState(orePos, Blocks.NETHERRACK.getDefaultState(), 2);
+                                        world.setBlock(orePos, Blocks.NETHERRACK.defaultBlockState(), 2);
                                     }
                                 }
                                 placedAny = true;
@@ -224,56 +226,56 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
     }
 
     private boolean isTerrainReplaceable(BlockState state) {
-        return state.isOf(Blocks.GRASS_BLOCK) || state.isOf(Blocks.DIRT) || state.isOf(Blocks.COARSE_DIRT) ||
-               state.isOf(Blocks.PODZOL) || state.isOf(Blocks.STONE) || state.isOf(Blocks.DEEPSLATE) ||
-               state.isOf(Blocks.SAND) || state.isOf(Blocks.GRAVEL) || state.isOf(Blocks.MUD);
+        return state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.DIRT) || state.is(Blocks.COARSE_DIRT) ||
+               state.is(Blocks.PODZOL) || state.is(Blocks.STONE) || state.is(Blocks.DEEPSLATE) ||
+               state.is(Blocks.SAND) || state.is(Blocks.GRAVEL) || state.is(Blocks.MUD);
     }
 
     private boolean isSubterraneanStone(BlockState state) {
-        return state.isOf(Blocks.STONE) || state.isOf(Blocks.DEEPSLATE) || state.isOf(Blocks.ANDESITE) ||
-               state.isOf(Blocks.DIORITE) || state.isOf(Blocks.GRANITE) || state.isOf(Blocks.TUFF);
+        return state.is(Blocks.STONE) || state.is(Blocks.DEEPSLATE) || state.is(Blocks.ANDESITE) ||
+               state.is(Blocks.DIORITE) || state.is(Blocks.GRANITE) || state.is(Blocks.TUFF);
     }
 
-    private BlockState getRandomNetherOre(Random random) {
+    private BlockState getRandomNetherOre(RandomSource random) {
         int roll = random.nextInt(130);
-        if (roll < 22) return ModBlocks.NETHER_IRON_ORE.getDefaultState();
-        if (roll < 44) return ModBlocks.NETHER_COAL_ORE.getDefaultState();
-        if (roll < 62) return ModBlocks.NETHER_COPPER_ORE.getDefaultState();
-        if (roll < 78) return ModBlocks.NETHER_TIN_ORE.getDefaultState();
-        if (roll < 92) return ModBlocks.NETHER_REDSTONE_ORE.getDefaultState();
-        if (roll < 103) return ModBlocks.NETHER_LAPIS_ORE.getDefaultState();
-        if (roll < 108) return ModBlocks.NETHER_DIAMOND_ORE.getDefaultState();
-        if (roll < 117) return Blocks.NETHER_GOLD_ORE.getDefaultState();
-        if (roll < 125) return Blocks.NETHER_QUARTZ_ORE.getDefaultState();
-        return ModBlocks.NETHER_TUNGSTEN_ORE.getDefaultState();
+        if (roll < 22) return ModBlocks.NETHER_IRON_ORE.defaultBlockState();
+        if (roll < 44) return ModBlocks.NETHER_COAL_ORE.defaultBlockState();
+        if (roll < 62) return ModBlocks.NETHER_COPPER_ORE.defaultBlockState();
+        if (roll < 78) return ModBlocks.NETHER_TIN_ORE.defaultBlockState();
+        if (roll < 92) return ModBlocks.NETHER_REDSTONE_ORE.defaultBlockState();
+        if (roll < 103) return ModBlocks.NETHER_LAPIS_ORE.defaultBlockState();
+        if (roll < 108) return ModBlocks.NETHER_DIAMOND_ORE.defaultBlockState();
+        if (roll < 117) return Blocks.NETHER_GOLD_ORE.defaultBlockState();
+        if (roll < 125) return Blocks.NETHER_QUARTZ_ORE.defaultBlockState();
+        return ModBlocks.NETHER_TUNGSTEN_ORE.defaultBlockState();
     }
 
-    private void generateHugeWarpedFungus(StructureWorldAccess world, BlockPos groundPos, Random random) {
+    private void generateHugeWarpedFungus(WorldGenLevel world, BlockPos groundPos, RandomSource random) {
         int height = 5 + random.nextInt(6);
 
         // Trunk
         for (int y = 0; y < height; y++) {
-            BlockPos stemPos = groundPos.up(y);
-            if (world.isAir(stemPos) || world.getBlockState(stemPos).isOf(Blocks.WARPED_WART_BLOCK)) {
-                world.setBlockState(stemPos, Blocks.WARPED_STEM.getDefaultState(), 2);
+            BlockPos stemPos = groundPos.above(y);
+            if (world.isEmptyBlock(stemPos) || world.getBlockState(stemPos).is(Blocks.WARPED_WART_BLOCK)) {
+                world.setBlock(stemPos, Blocks.WARPED_STEM.defaultBlockState(), 2);
             }
         }
 
         // Canopy
-        BlockPos top = groundPos.up(height);
+        BlockPos top = groundPos.above(height);
         int capRadius = 2 + random.nextInt(2);
         for (int dx = -capRadius; dx <= capRadius; dx++) {
             for (int dz = -capRadius; dz <= capRadius; dz++) {
                 for (int dy = -2; dy <= 1; dy++) {
                     int distSq = dx * dx + dz * dz;
                     if (distSq <= capRadius * capRadius) {
-                        BlockPos leafPos = top.add(dx, dy, dz);
-                        if (world.isAir(leafPos)) {
+                        BlockPos leafPos = top.offset(dx, dy, dz);
+                        if (world.isEmptyBlock(leafPos)) {
                             // Scattered shroomlights inside the canopy
                             if (distSq <= 2 && random.nextInt(5) == 0) {
-                                world.setBlockState(leafPos, Blocks.SHROOMLIGHT.getDefaultState(), 2);
+                                world.setBlock(leafPos, Blocks.SHROOMLIGHT.defaultBlockState(), 2);
                             } else {
-                                world.setBlockState(leafPos, Blocks.WARPED_WART_BLOCK.getDefaultState(), 2);
+                                world.setBlock(leafPos, Blocks.WARPED_WART_BLOCK.defaultBlockState(), 2);
                             }
                         }
                     }
@@ -282,39 +284,39 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void generateHugeCrimsonFungus(StructureWorldAccess world, BlockPos groundPos, Random random) {
+    private void generateHugeCrimsonFungus(WorldGenLevel world, BlockPos groundPos, RandomSource random) {
         int height = 5 + random.nextInt(6);
 
         // Trunk
         for (int y = 0; y < height; y++) {
-            BlockPos stemPos = groundPos.up(y);
-            if (world.isAir(stemPos) || world.getBlockState(stemPos).isOf(Blocks.NETHER_WART_BLOCK)) {
-                world.setBlockState(stemPos, Blocks.CRIMSON_STEM.getDefaultState(), 2);
+            BlockPos stemPos = groundPos.above(y);
+            if (world.isEmptyBlock(stemPos) || world.getBlockState(stemPos).is(Blocks.NETHER_WART_BLOCK)) {
+                world.setBlock(stemPos, Blocks.CRIMSON_STEM.defaultBlockState(), 2);
             }
         }
 
         // Canopy
-        BlockPos top = groundPos.up(height);
+        BlockPos top = groundPos.above(height);
         int capRadius = 2 + random.nextInt(2);
         for (int dx = -capRadius; dx <= capRadius; dx++) {
             for (int dz = -capRadius; dz <= capRadius; dz++) {
                 for (int dy = -2; dy <= 1; dy++) {
                     int distSq = dx * dx + dz * dz;
                     if (distSq <= capRadius * capRadius) {
-                        BlockPos leafPos = top.add(dx, dy, dz);
-                        if (world.isAir(leafPos)) {
+                        BlockPos leafPos = top.offset(dx, dy, dz);
+                        if (world.isEmptyBlock(leafPos)) {
                             if (distSq <= 2 && random.nextInt(5) == 0) {
-                                world.setBlockState(leafPos, Blocks.SHROOMLIGHT.getDefaultState(), 2);
+                                world.setBlock(leafPos, Blocks.SHROOMLIGHT.defaultBlockState(), 2);
                             } else {
-                                world.setBlockState(leafPos, Blocks.NETHER_WART_BLOCK.getDefaultState(), 2);
+                                world.setBlock(leafPos, Blocks.NETHER_WART_BLOCK.defaultBlockState(), 2);
 
                                 // Weeping vines hanging below canopy rim
-                                if (dy == -2 && random.nextInt(4) == 0 && world.isAir(leafPos.down())) {
+                                if (dy == -2 && random.nextInt(4) == 0 && world.isEmptyBlock(leafPos.below())) {
                                     int vineLen = 1 + random.nextInt(3);
                                     for (int v = 1; v <= vineLen; v++) {
-                                        BlockPos vinePos = leafPos.down(v);
-                                        if (world.isAir(vinePos)) {
-                                            world.setBlockState(vinePos, Blocks.WEEPING_VINES.getDefaultState(), 2);
+                                        BlockPos vinePos = leafPos.below(v);
+                                        if (world.isEmptyBlock(vinePos)) {
+                                            world.setBlock(vinePos, Blocks.WEEPING_VINES.defaultBlockState(), 2);
                                         } else {
                                             break;
                                         }
@@ -328,19 +330,19 @@ public class NetherIncursionFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    private void generateChorusPlant(StructureWorldAccess world, BlockPos pos, Random random) {
+    private void generateChorusPlant(WorldGenLevel world, BlockPos pos, RandomSource random) {
         int height = 2 + random.nextInt(4);
         BlockPos current = pos;
         for (int h = 0; h < height; h++) {
-            if (world.isAir(current)) {
-                world.setBlockState(current, Blocks.CHORUS_PLANT.getDefaultState(), 2);
-                current = current.up();
+            if (world.isEmptyBlock(current)) {
+                world.setBlock(current, Blocks.CHORUS_PLANT.defaultBlockState(), 2);
+                current = current.above();
             } else {
                 break;
             }
         }
-        if (world.isAir(current)) {
-            world.setBlockState(current, Blocks.CHORUS_FLOWER.getDefaultState(), 2);
+        if (world.isEmptyBlock(current)) {
+            world.setBlock(current, Blocks.CHORUS_FLOWER.defaultBlockState(), 2);
         }
     }
 }

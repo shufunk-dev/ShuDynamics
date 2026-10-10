@@ -4,45 +4,45 @@ import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.WaterPumpBlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class WaterPumpScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class WaterPumpScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public WaterPumpScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(WaterPumpBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8));
+    public WaterPumpScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(WaterPumpBlockEntity.INVENTORY_SIZE), new SimpleContainerData(8));
     }
 
-    public WaterPumpScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public WaterPumpScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.WATER_PUMP_SCREEN_HANDLER, syncId);
-        checkSize(inventory, WaterPumpBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, WaterPumpBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Bucket Input (x=123, y=25)
         this.addSlot(new Slot(inventory, WaterPumpBlockEntity.BUCKET_IN_SLOT, 123, 25) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.BUCKET) || stack.isOf(ModItems.COPPER_BUCKET);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
             }
         });
 
         // Slot 1: Bucket Output (x=123, y=53)
         this.addSlot(new Slot(inventory, WaterPumpBlockEntity.BUCKET_OUT_SLOT, 123, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -50,7 +50,7 @@ public class WaterPumpScreenHandler extends ScreenHandler {
         // Slot 2: Gear Upgrade (x=152, y=8)
         this.addSlot(new Slot(inventory, WaterPumpBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -111,45 +111,45 @@ public class WaterPumpScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < WaterPumpBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, WaterPumpBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, WaterPumpBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, WaterPumpBlockEntity.GEAR_SLOT, WaterPumpBlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, WaterPumpBlockEntity.GEAR_SLOT, WaterPumpBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(Items.BUCKET) || originalStack.isOf(ModItems.COPPER_BUCKET)) {
-                    if (!this.insertItem(originalStack, WaterPumpBlockEntity.BUCKET_IN_SLOT, WaterPumpBlockEntity.BUCKET_IN_SLOT + 1, false)) {
+                } else if (originalStack.is(Items.BUCKET) || originalStack.is(ModItems.COPPER_BUCKET)) {
+                    if (!this.moveItemStackTo(originalStack, WaterPumpBlockEntity.BUCKET_IN_SLOT, WaterPumpBlockEntity.BUCKET_IN_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot < 3 + 27) {
-                    if (!this.insertItem(originalStack, 3 + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, 3 + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, 3, 3 + 27, false)) {
+                } else if (!this.moveItemStackTo(originalStack, 3, 3 + 27, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

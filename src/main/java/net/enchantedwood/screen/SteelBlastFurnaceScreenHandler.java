@@ -1,68 +1,68 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class SteelBlastFurnaceScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class SteelBlastFurnaceScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public SteelBlastFurnaceScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(5), new ArrayPropertyDelegate(9));
+    public SteelBlastFurnaceScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(5), new SimpleContainerData(9));
     }
 
-    public SteelBlastFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public SteelBlastFurnaceScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.STEEL_BLAST_FURNACE_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 5);
+        checkContainerSize(inventory, 5);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Iron Input (48, 24)
         this.addSlot(new Slot(inventory, 0, 48, 24) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.IRON_INGOT) || stack.isOf(ModItems.IRON_DUST);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.IRON_INGOT) || stack.is(ModItems.IRON_DUST);
             }
         });
 
         // Slot 1: Coke Coal Input (48, 48)
         this.addSlot(new Slot(inventory, 1, 48, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.COKE_COAL);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.COKE_COAL);
             }
         });
 
         // Slot 2: Steel Output (116, 35)
         this.addSlot(new Slot(inventory, 2, 116, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
 
         // Slot 3: H2 Canister In (80, 17)
         this.addSlot(new Slot(inventory, 3, 80, 17) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.HYDROGEN_CANISTER);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.HYDROGEN_CANISTER);
             }
         });
 
         // Slot 4: Empty Canister Out (80, 53)
         this.addSlot(new Slot(inventory, 4, 80, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
 
         // Player Inventory
@@ -111,53 +111,53 @@ public class SteelBlastFurnaceScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot == 2 || invSlot == 4) { // Output slots
-                if (!this.insertItem(originalStack, 5, 41, true)) {
+                if (!this.moveItemStackTo(originalStack, 5, 41, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(originalStack, newStack);
+                slot.onQuickCraft(originalStack, newStack);
             } else if (invSlot >= 0 && invSlot <= 4) { // Machine input slots
-                if (!this.insertItem(originalStack, 5, 41, false)) {
+                if (!this.moveItemStackTo(originalStack, 5, 41, false)) {
                     return ItemStack.EMPTY;
                 }
             } else { // Player Inventory
-                if (originalStack.isOf(Items.IRON_INGOT) || originalStack.isOf(ModItems.IRON_DUST)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) return ItemStack.EMPTY;
-                } else if (originalStack.isOf(ModItems.COKE_COAL)) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
-                } else if (originalStack.isOf(ModItems.HYDROGEN_CANISTER)) {
-                    if (!this.insertItem(originalStack, 3, 4, false)) return ItemStack.EMPTY;
+                if (originalStack.is(Items.IRON_INGOT) || originalStack.is(ModItems.IRON_DUST)) {
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) return ItemStack.EMPTY;
+                } else if (originalStack.is(ModItems.COKE_COAL)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) return ItemStack.EMPTY;
+                } else if (originalStack.is(ModItems.HYDROGEN_CANISTER)) {
+                    if (!this.moveItemStackTo(originalStack, 3, 4, false)) return ItemStack.EMPTY;
                 } else if (invSlot >= 5 && invSlot < 32) {
-                    if (!this.insertItem(originalStack, 32, 41, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 32, 41, false)) return ItemStack.EMPTY;
                 } else if (invSlot >= 32 && invSlot < 41) {
-                    if (!this.insertItem(originalStack, 5, 32, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 5, 32, false)) return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

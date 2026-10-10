@@ -2,20 +2,20 @@ package net.enchantedwood.world.dimension;
 
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.event.ConvergenceHazardHandler;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtLong;
-import net.minecraft.nbt.NbtSizeTracker;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.storage.LevelResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,33 +42,33 @@ public class ConvergencePortalManager {
         Path file = getSaveFilePath(server);
         if (Files.exists(file)) {
             try {
-                NbtCompound root = NbtIo.readCompressed(file, NbtSizeTracker.ofUnlimitedBytes());
+                CompoundTag root = NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap());
                 if (root != null) {
-                    NbtCompound returnsNbt = root.getCompoundOrEmpty("player_returns");
-                    for (String key : returnsNbt.getKeys()) {
+                    CompoundTag returnsNbt = root.getCompoundOrEmpty("player_returns");
+                    for (String key : returnsNbt.keySet()) {
                         try {
                             UUID uuid = UUID.fromString(key);
-                            long posLong = returnsNbt.getLong(key, 0L);
+                            long posLong = returnsNbt.getLongOr(key, 0L);
                             if (posLong != 0L) {
-                                PLAYER_RETURN_POINTS.put(uuid, BlockPos.fromLong(posLong));
+                                PLAYER_RETURN_POINTS.put(uuid, BlockPos.of(posLong));
                             }
                         } catch (Exception ignored) {
                         }
                     }
 
-                    NbtList overworldList = root.getListOrEmpty("overworld_gateways");
+                    ListTag overworldList = root.getListOrEmpty("overworld_gateways");
                     for (int i = 0; i < overworldList.size(); i++) {
-                        NbtElement el = overworldList.get(i);
-                        if (el instanceof NbtLong nbtLong) {
-                            OVERWORLD_GATEWAYS.add(BlockPos.fromLong(nbtLong.longValue()));
+                        Tag el = overworldList.get(i);
+                        if (el instanceof LongTag nbtLong) {
+                            OVERWORLD_GATEWAYS.add(BlockPos.of(nbtLong.longValue()));
                         }
                     }
 
-                    NbtList convList = root.getListOrEmpty("convergence_gateways");
+                    ListTag convList = root.getListOrEmpty("convergence_gateways");
                     for (int i = 0; i < convList.size(); i++) {
-                        NbtElement el = convList.get(i);
-                        if (el instanceof NbtLong nbtLong) {
-                            CONVERGENCE_GATEWAYS.add(BlockPos.fromLong(nbtLong.longValue()));
+                        Tag el = convList.get(i);
+                        if (el instanceof LongTag nbtLong) {
+                            CONVERGENCE_GATEWAYS.add(BlockPos.of(nbtLong.longValue()));
                         }
                     }
                     LOGGER.info("Loaded {} player returns, {} Overworld gateways, {} Convergence gateways.",
@@ -85,23 +85,23 @@ public class ConvergencePortalManager {
         if (server == null) return;
         Path file = getSaveFilePath(server);
         try {
-            NbtCompound root = new NbtCompound();
+            CompoundTag root = new CompoundTag();
 
-            NbtCompound returnsNbt = new NbtCompound();
+            CompoundTag returnsNbt = new CompoundTag();
             for (Map.Entry<UUID, BlockPos> entry : PLAYER_RETURN_POINTS.entrySet()) {
                 returnsNbt.putLong(entry.getKey().toString(), entry.getValue().asLong());
             }
             root.put("player_returns", returnsNbt);
 
-            NbtList overworldList = new NbtList();
+            ListTag overworldList = new ListTag();
             for (BlockPos pos : OVERWORLD_GATEWAYS) {
-                overworldList.add(NbtLong.of(pos.asLong()));
+                overworldList.add(LongTag.valueOf(pos.asLong()));
             }
             root.put("overworld_gateways", overworldList);
 
-            NbtList convList = new NbtList();
+            ListTag convList = new ListTag();
             for (BlockPos pos : CONVERGENCE_GATEWAYS) {
-                convList.add(NbtLong.of(pos.asLong()));
+                convList.add(LongTag.valueOf(pos.asLong()));
             }
             root.put("convergence_gateways", convList);
 
@@ -115,13 +115,13 @@ public class ConvergencePortalManager {
     }
 
     private static Path getSaveFilePath(MinecraftServer server) {
-        return server.getSavePath(WorldSavePath.ROOT).resolve("shudynamics_gateways.dat");
+        return server.getWorldPath(LevelResource.ROOT).resolve("shudynamics_gateways.dat");
     }
 
     public static void setPlayerReturnPoint(MinecraftServer server, UUID playerUuid, BlockPos overworldPos) {
         ensureLoaded(server);
-        PLAYER_RETURN_POINTS.put(playerUuid, overworldPos.toImmutable());
-        OVERWORLD_GATEWAYS.add(overworldPos.toImmutable());
+        PLAYER_RETURN_POINTS.put(playerUuid, overworldPos.immutable());
+        OVERWORLD_GATEWAYS.add(overworldPos.immutable());
         save(server);
     }
 
@@ -130,32 +130,32 @@ public class ConvergencePortalManager {
         return PLAYER_RETURN_POINTS.get(playerUuid);
     }
 
-    public static void registerGateway(ServerWorld world, BlockPos pos) {
+    public static void registerGateway(ServerLevel world, BlockPos pos) {
         if (world == null || pos == null) return;
         ensureLoaded(world.getServer());
-        BlockPos immutablePos = pos.toImmutable();
-        if (world.getRegistryKey() == World.OVERWORLD) {
+        BlockPos immutablePos = pos.immutable();
+        if (world.dimension() == Level.OVERWORLD) {
             OVERWORLD_GATEWAYS.add(immutablePos);
-        } else if (world.getRegistryKey() == ModDimensions.CONVERGENCE_WORLD_KEY) {
+        } else if (world.dimension() == ModDimensions.CONVERGENCE_WORLD_KEY) {
             CONVERGENCE_GATEWAYS.add(immutablePos);
             ConvergenceHazardHandler.registerSanctuary(immutablePos);
         }
         save(world.getServer());
     }
 
-    public static void unregisterGateway(ServerWorld world, BlockPos pos) {
+    public static void unregisterGateway(ServerLevel world, BlockPos pos) {
         if (world == null || pos == null) return;
         ensureLoaded(world.getServer());
-        if (world.getRegistryKey() == World.OVERWORLD) {
-            OVERWORLD_GATEWAYS.removeIf(p -> p.getSquaredDistance(pos) <= 9);
-            PLAYER_RETURN_POINTS.entrySet().removeIf(e -> e.getValue().getSquaredDistance(pos) <= 9);
-        } else if (world.getRegistryKey() == ModDimensions.CONVERGENCE_WORLD_KEY) {
-            CONVERGENCE_GATEWAYS.removeIf(p -> p.getSquaredDistance(pos) <= 9);
+        if (world.dimension() == Level.OVERWORLD) {
+            OVERWORLD_GATEWAYS.removeIf(p -> p.distSqr(pos) <= 9);
+            PLAYER_RETURN_POINTS.entrySet().removeIf(e -> e.getValue().distSqr(pos) <= 9);
+        } else if (world.dimension() == ModDimensions.CONVERGENCE_WORLD_KEY) {
+            CONVERGENCE_GATEWAYS.removeIf(p -> p.distSqr(pos) <= 9);
         }
         save(world.getServer());
     }
 
-    public static BlockPos findExistingPortal(ServerWorld targetWorld, BlockPos targetPos, UUID playerUuid, boolean returningToOverworld) {
+    public static BlockPos findExistingPortal(ServerLevel targetWorld, BlockPos targetPos, UUID playerUuid, boolean returningToOverworld) {
         if (targetWorld == null) return null;
         ensureLoaded(targetWorld.getServer());
 
@@ -174,8 +174,8 @@ public class ConvergencePortalManager {
 
             // 2. Check registered Overworld gateways sorted by distance
             BlockPos closestGw = OVERWORLD_GATEWAYS.stream()
-                    .filter(gw -> gw.getSquaredDistance(targetPos) <= 256 * 256)
-                    .min(Comparator.comparingDouble(gw -> gw.getSquaredDistance(targetPos)))
+                    .filter(gw -> gw.distSqr(targetPos) <= 256 * 256)
+                    .min(Comparator.comparingDouble(gw -> gw.distSqr(targetPos)))
                     .orElse(null);
 
             if (closestGw != null) {
@@ -192,7 +192,7 @@ public class ConvergencePortalManager {
             // 3. Scan 128-block area in loaded chunks
             BlockPos scanned = scanForRiftInRadius(targetWorld, targetPos, 128);
             if (scanned != null) {
-                OVERWORLD_GATEWAYS.add(scanned.toImmutable());
+                OVERWORLD_GATEWAYS.add(scanned.immutable());
                 save(targetWorld.getServer());
                 return scanned;
             }
@@ -206,8 +206,8 @@ public class ConvergencePortalManager {
             candidates.addAll(ConvergenceHazardHandler.SANCTUARY_CENTERS);
 
             BlockPos closestGw = candidates.stream()
-                    .filter(gw -> gw.getSquaredDistance(targetPos) <= 256 * 256)
-                    .min(Comparator.comparingDouble(gw -> gw.getSquaredDistance(targetPos)))
+                    .filter(gw -> gw.distSqr(targetPos) <= 256 * 256)
+                    .min(Comparator.comparingDouble(gw -> gw.distSqr(targetPos)))
                     .orElse(null);
 
             if (closestGw != null) {
@@ -221,8 +221,8 @@ public class ConvergencePortalManager {
             // 2. Scan 128-block area
             BlockPos scanned = scanForRiftInRadius(targetWorld, targetPos, 128);
             if (scanned != null) {
-                CONVERGENCE_GATEWAYS.add(scanned.toImmutable());
-                ConvergenceHazardHandler.registerSanctuary(scanned.toImmutable());
+                CONVERGENCE_GATEWAYS.add(scanned.immutable());
+                ConvergenceHazardHandler.registerSanctuary(scanned.immutable());
                 save(targetWorld.getServer());
                 return scanned;
             }
@@ -231,14 +231,14 @@ public class ConvergencePortalManager {
         }
     }
 
-    public static BlockPos findExactRiftPos(ServerWorld world, BlockPos pos) {
+    public static BlockPos findExactRiftPos(ServerLevel world, BlockPos pos) {
         if (world == null || pos == null) return null;
         for (int dx = -2; dx <= 2; dx++) {
             for (int dy = -2; dy <= 2; dy++) {
                 for (int dz = -2; dz <= 2; dz++) {
-                    BlockPos check = pos.add(dx, dy, dz);
-                    if (world.isChunkLoaded(check.getX() >> 4, check.getZ() >> 4)) {
-                        if (world.getBlockState(check).isOf(ModBlocks.DORMANT_RIFT)) {
+                    BlockPos check = pos.offset(dx, dy, dz);
+                    if (world.hasChunk(check.getX() >> 4, check.getZ() >> 4)) {
+                        if (world.getBlockState(check).is(ModBlocks.DORMANT_RIFT)) {
                             return check;
                         }
                     }
@@ -248,7 +248,7 @@ public class ConvergencePortalManager {
         return null;
     }
 
-    public static BlockPos scanForRiftInRadius(ServerWorld world, BlockPos center, int radiusBlocks) {
+    public static BlockPos scanForRiftInRadius(ServerLevel world, BlockPos center, int radiusBlocks) {
         int centerChunkX = center.getX() >> 4;
         int centerChunkZ = center.getZ() >> 4;
         int chunkRadius = Math.max(1, (radiusBlocks + 15) >> 4);
@@ -260,25 +260,25 @@ public class ConvergencePortalManager {
             for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
                 int cx = centerChunkX + dx;
                 int cz = centerChunkZ + dz;
-                if (!world.isChunkLoaded(cx, cz)) {
+                if (!world.hasChunk(cx, cz)) {
                     continue;
                 }
-                WorldChunk chunk = world.getChunk(cx, cz);
+                LevelChunk chunk = world.getChunk(cx, cz);
                 if (chunk == null) continue;
 
-                ChunkSection[] sections = chunk.getSectionArray();
+                LevelChunkSection[] sections = chunk.getSections();
                 for (int sIdx = 0; sIdx < sections.length; sIdx++) {
-                    ChunkSection section = sections[sIdx];
-                    if (section == null || section.isEmpty()) continue;
-                    if (!section.hasAny(state -> state.isOf(ModBlocks.DORMANT_RIFT))) continue;
+                    LevelChunkSection section = sections[sIdx];
+                    if (section == null || section.hasOnlyAir()) continue;
+                    if (!section.maybeHas(state -> state.is(ModBlocks.DORMANT_RIFT))) continue;
 
-                    int sectionBaseY = world.sectionIndexToCoord(sIdx) << 4;
+                    int sectionBaseY = world.getSectionYFromSectionIndex(sIdx) << 4;
                     for (int lx = 0; lx < 16; lx++) {
                         for (int lz = 0; lz < 16; lz++) {
                             for (int ly = 0; ly < 16; ly++) {
-                                if (section.getBlockState(lx, ly, lz).isOf(ModBlocks.DORMANT_RIFT)) {
+                                if (section.getBlockState(lx, ly, lz).is(ModBlocks.DORMANT_RIFT)) {
                                     BlockPos found = new BlockPos((cx << 4) + lx, sectionBaseY + ly, (cz << 4) + lz);
-                                    double distSq = found.getSquaredDistance(center);
+                                    double distSq = found.distSqr(center);
                                     if (distSq < closestDistSq) {
                                         closestDistSq = distSq;
                                         closest = found;

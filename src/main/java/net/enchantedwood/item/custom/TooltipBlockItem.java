@@ -1,27 +1,27 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.Block;
 
 public class TooltipBlockItem extends BlockItem {
-    private final List<Text> tooltips;
+    private final List<Component> tooltips;
 
-    public TooltipBlockItem(Block block, Settings settings, Text... tooltips) {
+    public TooltipBlockItem(Block block, Properties settings, Component... tooltips) {
         super(block, settings);
         this.tooltips = List.of(tooltips);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        net.minecraft.component.type.NbtComponent nbtComponent = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        net.minecraft.world.item.component.CustomData nbtComponent = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
         if (nbtComponent != null) {
-            net.minecraft.nbt.NbtCompound nbt = nbtComponent.copyNbt();
+            net.minecraft.nbt.CompoundTag nbt = nbtComponent.copyTag();
             if (nbt.contains("boundX")) {
                 int x = nbt.getInt("boundX").orElse(0);
                 int y = nbt.getInt("boundY").orElse(0);
@@ -30,13 +30,13 @@ public class TooltipBlockItem extends BlockItem {
                 String dimName = dim.contains("mining_dimension") ? "Mining Dimension" :
                         dim.contains("nether") ? "Nether" :
                         dim.contains("end") ? "The End" : "Overworld";
-                textConsumer.accept(Text.literal("§6✔ Bound Network: §f(" + x + ", " + y + ", " + z + ") in " + dimName));
-                textConsumer.accept(Text.literal("§a✨ Automatically reconnects when placed!"));
+                textConsumer.accept(Component.literal("§6✔ Bound Network: §f(" + x + ", " + y + ", " + z + ") in " + dimName));
+                textConsumer.accept(Component.literal("§a✨ Automatically reconnects when placed!"));
             }
         }
-        for (Text line : tooltips) {
+        for (Component line : tooltips) {
             textConsumer.accept(line);
         }
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

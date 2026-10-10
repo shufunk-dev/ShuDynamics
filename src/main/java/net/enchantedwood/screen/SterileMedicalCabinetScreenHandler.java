@@ -1,26 +1,26 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.entity.SterileMedicalCabinetBlockEntity;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
+public class SterileMedicalCabinetScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
 
-    public SterileMedicalCabinetScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(SterileMedicalCabinetBlockEntity.INVENTORY_SIZE));
+    public SterileMedicalCabinetScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(SterileMedicalCabinetBlockEntity.INVENTORY_SIZE));
     }
 
-    public SterileMedicalCabinetScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+    public SterileMedicalCabinetScreenHandler(int syncId, Inventory playerInventory, Container inventory) {
         super(ModScreenHandlers.STERILE_MEDICAL_CABINET_SCREEN_HANDLER, syncId);
-        checkSize(inventory, SterileMedicalCabinetBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, SterileMedicalCabinetBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
-        inventory.onOpen(playerInventory.player);
+        inventory.startOpen(playerInventory.player);
 
         // 36 Controlled Medical Slots (4 rows of 9)
         // Row 0: Fabrication & Injector (y = 18)
@@ -28,7 +28,7 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
             final int slotIndex = col;
             this.addSlot(new Slot(inventory, slotIndex, 8 + col * 18, 18) {
                 @Override
-                public boolean canInsert(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return SterileMedicalCabinetBlockEntity.isItemValidForSlot(slotIndex, stack);
                 }
             });
@@ -39,7 +39,7 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
             final int slotIndex = 9 + col;
             this.addSlot(new Slot(inventory, slotIndex, 8 + col * 18, 40) {
                 @Override
-                public boolean canInsert(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return SterileMedicalCabinetBlockEntity.isItemValidForSlot(slotIndex, stack);
                 }
             });
@@ -50,7 +50,7 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
             final int slotIndex = 18 + col;
             this.addSlot(new Slot(inventory, slotIndex, 8 + col * 18, 62) {
                 @Override
-                public boolean canInsert(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return SterileMedicalCabinetBlockEntity.isItemValidForSlot(slotIndex, stack);
                 }
             });
@@ -61,7 +61,7 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
             final int slotIndex = 27 + col;
             this.addSlot(new Slot(inventory, slotIndex, 8 + col * 18, 84) {
                 @Override
-                public boolean canInsert(ItemStack stack) {
+                public boolean mayPlace(ItemStack stack) {
                     return SterileMedicalCabinetBlockEntity.isItemValidForSlot(slotIndex, stack);
                 }
             });
@@ -81,16 +81,16 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             // Shift-clicking from cabinet into player inventory
             if (invSlot < SterileMedicalCabinetBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, SterileMedicalCabinetBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, SterileMedicalCabinetBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
@@ -103,7 +103,7 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
                 // Try specific dedicated slot first
                 for (int targetSlot = 0; targetSlot < SterileMedicalCabinetBlockEntity.INVENTORY_SIZE; targetSlot++) {
                     if (SterileMedicalCabinetBlockEntity.isItemValidForSlot(targetSlot, originalStack)) {
-                        if (this.insertItem(originalStack, targetSlot, targetSlot + 1, false)) {
+                        if (this.moveItemStackTo(originalStack, targetSlot, targetSlot + 1, false)) {
                             inserted = true;
                             if (originalStack.isEmpty()) break;
                         }
@@ -116,16 +116,16 @@ public class SterileMedicalCabinetScreenHandler extends ScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

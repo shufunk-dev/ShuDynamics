@@ -1,6 +1,5 @@
 package net.enchantedwood.energy;
 
-import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**

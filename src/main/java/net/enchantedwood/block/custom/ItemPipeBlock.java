@@ -6,103 +6,101 @@ import net.enchantedwood.block.entity.ItemInserterBlockEntity;
 import net.enchantedwood.block.entity.ItemPipeBlockEntity;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.util.Wrenchable;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemPipeBlock extends BlockWithEntity implements Wrenchable {
-    public static final MapCodec<ItemPipeBlock> CODEC = createCodec(ItemPipeBlock::new);
+public class ItemPipeBlock extends BaseEntityBlock implements Wrenchable {
 
-    public static final EnumProperty<PipeSide> NORTH = EnumProperty.of("north", PipeSide.class);
-    public static final EnumProperty<PipeSide> SOUTH = EnumProperty.of("south", PipeSide.class);
-    public static final EnumProperty<PipeSide> EAST = EnumProperty.of("east", PipeSide.class);
-    public static final EnumProperty<PipeSide> WEST = EnumProperty.of("west", PipeSide.class);
-    public static final EnumProperty<PipeSide> UP = EnumProperty.of("up", PipeSide.class);
-    public static final EnumProperty<PipeSide> DOWN = EnumProperty.of("down", PipeSide.class);
+    public static final EnumProperty<PipeSide> NORTH = EnumProperty.create("north", PipeSide.class);
+    public static final EnumProperty<PipeSide> SOUTH = EnumProperty.create("south", PipeSide.class);
+    public static final EnumProperty<PipeSide> EAST = EnumProperty.create("east", PipeSide.class);
+    public static final EnumProperty<PipeSide> WEST = EnumProperty.create("west", PipeSide.class);
+    public static final EnumProperty<PipeSide> UP = EnumProperty.create("up", PipeSide.class);
+    public static final EnumProperty<PipeSide> DOWN = EnumProperty.create("down", PipeSide.class);
 
-    private static final VoxelShape CORE_SHAPE = Block.createCuboidShape(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
-    private static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(5.0, 5.0, 0.0, 11.0, 11.0, 5.0);
-    private static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(5.0, 5.0, 11.0, 11.0, 11.0, 16.0);
-    private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(11.0, 5.0, 5.0, 16.0, 11.0, 11.0);
-    private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0.0, 5.0, 5.0, 5.0, 11.0, 11.0);
-    private static final VoxelShape UP_SHAPE = Block.createCuboidShape(5.0, 11.0, 5.0, 11.0, 16.0, 11.0);
-    private static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 5.0, 11.0);
+    private static final VoxelShape CORE_SHAPE = Block.box(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
+    private static final VoxelShape NORTH_SHAPE = Block.box(5.0, 5.0, 0.0, 11.0, 11.0, 5.0);
+    private static final VoxelShape SOUTH_SHAPE = Block.box(5.0, 5.0, 11.0, 11.0, 11.0, 16.0);
+    private static final VoxelShape EAST_SHAPE = Block.box(11.0, 5.0, 5.0, 16.0, 11.0, 11.0);
+    private static final VoxelShape WEST_SHAPE = Block.box(0.0, 5.0, 5.0, 5.0, 11.0, 11.0);
+    private static final VoxelShape UP_SHAPE = Block.box(5.0, 11.0, 5.0, 11.0, 16.0, 11.0);
+    private static final VoxelShape DOWN_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.0, 11.0);
 
-    public ItemPipeBlock(Settings settings) {
+    public ItemPipeBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(NORTH, PipeSide.NONE)
-                .with(SOUTH, PipeSide.NONE)
-                .with(EAST, PipeSide.NONE)
-                .with(WEST, PipeSide.NONE)
-                .with(UP, PipeSide.NONE)
-                .with(DOWN, PipeSide.NONE));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(NORTH, PipeSide.NONE)
+                .setValue(SOUTH, PipeSide.NONE)
+                .setValue(EAST, PipeSide.NONE)
+                .setValue(WEST, PipeSide.NONE)
+                .setValue(UP, PipeSide.NONE)
+                .setValue(DOWN, PipeSide.NONE));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ItemPipeBlockEntity(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (world instanceof ServerWorld serverWorld && type == ModBlockEntities.ITEM_PIPE_BLOCK_ENTITY) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        if (world instanceof ServerLevel serverWorld && type == ModBlockEntities.ITEM_PIPE_BLOCK_ENTITY) {
             return (w, pos, st, blockEntity) -> ItemPipeBlockEntity.tick(serverWorld, pos, st, (ItemPipeBlockEntity) blockEntity);
         }
         return null;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         VoxelShape shape = CORE_SHAPE;
-        if (state.get(UP).isConnected()) shape = VoxelShapes.union(shape, UP_SHAPE);
-        if (state.get(DOWN).isConnected()) shape = VoxelShapes.union(shape, DOWN_SHAPE);
-        if (state.get(NORTH).isConnected()) shape = VoxelShapes.union(shape, NORTH_SHAPE);
-        if (state.get(SOUTH).isConnected()) shape = VoxelShapes.union(shape, SOUTH_SHAPE);
-        if (state.get(WEST).isConnected()) shape = VoxelShapes.union(shape, WEST_SHAPE);
-        if (state.get(EAST).isConnected()) shape = VoxelShapes.union(shape, EAST_SHAPE);
+        if (state.getValue(UP).isConnected()) shape = Shapes.or(shape, UP_SHAPE);
+        if (state.getValue(DOWN).isConnected()) shape = Shapes.or(shape, DOWN_SHAPE);
+        if (state.getValue(NORTH).isConnected()) shape = Shapes.or(shape, NORTH_SHAPE);
+        if (state.getValue(SOUTH).isConnected()) shape = Shapes.or(shape, SOUTH_SHAPE);
+        if (state.getValue(WEST).isConnected()) shape = Shapes.or(shape, WEST_SHAPE);
+        if (state.getValue(EAST).isConnected()) shape = Shapes.or(shape, EAST_SHAPE);
         return shape;
     }
 
-    public PipeSide getPipeSide(BlockView world, BlockPos pos, Direction direction) {
-        BlockPos neighborPos = pos.offset(direction);
+    public PipeSide getPipeSide(BlockGetter world, BlockPos pos, Direction direction) {
+        BlockPos neighborPos = pos.relative(direction);
         BlockState neighborState = world.getBlockState(neighborPos);
         Block block = neighborState.getBlock();
 
@@ -133,26 +131,26 @@ public class ItemPipeBlock extends BlockWithEntity implements Wrenchable {
         return PipeSide.CONNECTED;
     }
 
-    public BlockState updateConnections(WorldView world, BlockPos pos, BlockState state) {
+    public BlockState updateConnections(LevelReader world, BlockPos pos, BlockState state) {
         return state
-                .with(NORTH, getPipeSide(world, pos, Direction.NORTH))
-                .with(SOUTH, getPipeSide(world, pos, Direction.SOUTH))
-                .with(EAST, getPipeSide(world, pos, Direction.EAST))
-                .with(WEST, getPipeSide(world, pos, Direction.WEST))
-                .with(UP, getPipeSide(world, pos, Direction.UP))
-                .with(DOWN, getPipeSide(world, pos, Direction.DOWN));
+                .setValue(NORTH, getPipeSide(world, pos, Direction.NORTH))
+                .setValue(SOUTH, getPipeSide(world, pos, Direction.SOUTH))
+                .setValue(EAST, getPipeSide(world, pos, Direction.EAST))
+                .setValue(WEST, getPipeSide(world, pos, Direction.WEST))
+                .setValue(UP, getPipeSide(world, pos, Direction.UP))
+                .setValue(DOWN, getPipeSide(world, pos, Direction.DOWN));
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        World world = ctx.getWorld();
-        BlockPos pos = ctx.getBlockPos();
-        return updateConnections(world, pos, this.getDefaultState());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        Level world = ctx.getLevel();
+        BlockPos pos = ctx.getClickedPos();
+        return updateConnections(world, pos, this.defaultBlockState());
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, net.minecraft.util.math.random.Random random) {
-        return state.with(
+    protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, net.minecraft.util.RandomSource random) {
+        return state.setValue(
                 switch (direction) {
                     case NORTH -> NORTH;
                     case SOUTH -> SOUTH;
@@ -166,69 +164,69 @@ public class ItemPipeBlock extends BlockWithEntity implements Wrenchable {
     }
 
     @Override
-    public ActionResult onWrenched(World world, BlockPos pos, PlayerEntity player, Direction side) {
+    public InteractionResult onWrenched(Level world, BlockPos pos, Player player, Direction side) {
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof ItemPipeBlockEntity pipe) {
             boolean disconnected = pipe.toggleConnection(side);
 
             // Synchronize facing neighbor if present
-            BlockPos neighborPos = pos.offset(side);
+            BlockPos neighborPos = pos.relative(side);
             BlockEntity neighborBe = world.getBlockEntity(neighborPos);
             if (neighborBe instanceof ItemPipeBlockEntity neighborPipe) {
                 neighborPipe.setDisconnected(side.getOpposite(), disconnected);
                 BlockState neighborState = world.getBlockState(neighborPos);
                 if (neighborState.getBlock() instanceof ItemPipeBlock neighborBlock) {
-                    world.setBlockState(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.NOTIFY_ALL);
+                    world.setBlock(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.UPDATE_ALL);
                 }
             } else if (neighborBe instanceof ItemExtractorBlockEntity neighborExt) {
                 neighborExt.setDisconnected(side.getOpposite(), disconnected);
                 BlockState neighborState = world.getBlockState(neighborPos);
                 if (neighborState.getBlock() instanceof ItemExtractorBlock neighborBlock) {
-                    world.setBlockState(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.NOTIFY_ALL);
+                    world.setBlock(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.UPDATE_ALL);
                 }
             } else if (neighborBe instanceof ItemInserterBlockEntity neighborIns) {
                 neighborIns.setDisconnected(side.getOpposite(), disconnected);
                 BlockState neighborState = world.getBlockState(neighborPos);
                 if (neighborState.getBlock() instanceof ItemInserterBlock neighborBlock) {
-                    world.setBlockState(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.NOTIFY_ALL);
+                    world.setBlock(neighborPos, neighborBlock.updateConnections(world, neighborPos, neighborState), Block.UPDATE_ALL);
                 }
             }
 
             BlockState updated = updateConnections(world, pos, world.getBlockState(pos));
-            world.setBlockState(pos, updated, Block.NOTIFY_ALL);
+            world.setBlock(pos, updated, Block.UPDATE_ALL);
 
-            world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 1.0f, disconnected ? 0.7f : 1.3f);
+            world.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1.0f, disconnected ? 0.7f : 1.3f);
 
-            if (!world.isClient()) {
-                if (world instanceof ServerWorld serverWorld) {
-                    Vec3d p = pos.toCenterPos().add(Vec3d.of(side.getVector()).multiply(0.4));
-                    serverWorld.spawnParticles(ParticleTypes.WAX_OFF, p.x, p.y, p.z, 6, 0.08, 0.08, 0.08, 0.02);
+            if (!world.isClientSide()) {
+                if (world instanceof ServerLevel serverWorld) {
+                    Vec3 p = Vec3.atCenterOf(pos).add(Vec3.atLowerCornerOf(side.getUnitVec3i()).scale(0.4));
+                    serverWorld.sendParticles(ParticleTypes.WAX_OFF, p.x, p.y, p.z, 6, 0.08, 0.08, 0.08, 0.02);
                 }
-                player.sendMessage(Text.literal(disconnected ?
-                        "§6[Wrench] §c⛔ Capped & Disconnected §e" + side.asString().toUpperCase() :
-                        "§6[Wrench] §a✔ Uncapped & Connected §e" + side.asString().toUpperCase()), true);
+                player.sendOverlayMessage(Component.literal(disconnected ?
+                        "§6[Wrench] §c⛔ Capped & Disconnected §e" + side.getSerializedName().toUpperCase() :
+                        "§6[Wrench] §a✔ Uncapped & Connected §e" + side.getSerializedName().toUpperCase()));
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public ActionResult onShiftWrenched(World world, BlockPos pos, PlayerEntity player, Direction side) {
-        if (!world.isClient()) {
-            world.breakBlock(pos, true, player);
-            world.playSound(null, pos, SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            player.sendMessage(Text.literal("§6[Wrench] §eDismantled Item Transport Pipe"), true);
+    public InteractionResult onShiftWrenched(Level world, BlockPos pos, Player player, Direction side) {
+        if (!world.isClientSide()) {
+            world.destroyBlock(pos, true, player);
+            world.playSound(null, pos, SoundEvents.CHAIN_BREAK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            player.sendOverlayMessage(Component.literal("§6[Wrench] §eDismantled Item Transport Pipe"));
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, net.minecraft.entity.player.PlayerEntity player) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, net.minecraft.world.entity.player.Player player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof ItemPipeBlockEntity pipe) {
-            ItemScatterer.spawn(world, pos, pipe.getItems());
+            Containers.dropContents(world, pos, pipe.getItems());
         }
-        return super.onBreak(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 }

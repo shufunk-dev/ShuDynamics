@@ -9,52 +9,51 @@ import net.enchantedwood.fluid.MoltenMetal;
 import net.enchantedwood.fluid.MoltenMetalProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.TitaniumTankScreenHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
 import java.util.List;
 
-public class TitaniumTankControllerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider, MoltenMetalProvider {
+public class TitaniumTankControllerBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, LavaProvider, MoltenMetalProvider {
     public static final int CAPACITY = 500_000; // 500,000 mB = 500 buckets
     public static final int BUCKET_IN_SLOT = 0;
     public static final int BUCKET_OUT_SLOT = 1;
     public static final int INVENTORY_SIZE = 2;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int lavaAmount = 0;
     private MoltenMetal currentFluid = MoltenMetal.NONE;
     private MoltenMetal filterFluid = MoltenMetal.NONE;
     private boolean isFormed = false;
     private BlockPos minPos = null; // Corner (minX, minY, minZ)
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -87,7 +86,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -107,17 +106,17 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     // ==========================================
     // MULTIBLOCK VALIDATION & FORMATION
     // ==========================================
-    public static @Nullable TitaniumTankControllerBlockEntity findControllerForBlock(World world, BlockPos pos) {
+    public static @Nullable TitaniumTankControllerBlockEntity findControllerForBlock(Level world, BlockPos pos) {
         if (world == null) return null;
         for (int dy = 0; dy <= 4; dy++) {
             for (int dx = -2; dx <= 2; dx++) {
                 for (int dz = -2; dz <= 2; dz++) {
-                    BlockPos checkPos = pos.add(dx, dy, dz);
+                    BlockPos checkPos = pos.offset(dx, dy, dz);
                     BlockEntity be = world.getBlockEntity(checkPos);
                     if (be instanceof TitaniumTankControllerBlockEntity controller) {
                         BlockPos min = controller.isFormed() && controller.getMinPos() != null
                                 ? controller.getMinPos()
-                                : checkPos.add(-2, -4, -2);
+                                : checkPos.offset(-2, -4, -2);
                         int rx = pos.getX() - min.getX();
                         int ry = pos.getY() - min.getY();
                         int rz = pos.getZ() - min.getZ();
@@ -132,13 +131,13 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     public boolean tryFormStructure() {
-        if (this.world == null || this.world.isClient()) return false;
+        if (this.level == null || this.level.isClientSide()) return false;
         if (this.isFormed && this.minPos != null && validateStructureAt(this.minPos)) {
             return true;
         }
 
         // Controller is at top center: pos is (minX + 2, minY + 4, minZ + 2)
-        BlockPos origin = this.pos.add(-2, -4, -2);
+        BlockPos origin = this.worldPosition.offset(-2, -4, -2);
         if (validateStructureAt(origin)) {
             assembleStructureAt(origin);
             return true;
@@ -150,8 +149,8 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 for (int z = 0; z < 5; z++) {
-                    BlockPos p = min.add(x, y, z);
-                    BlockState bs = this.world.getBlockState(p);
+                    BlockPos p = min.offset(x, y, z);
+                    BlockState bs = this.level.getBlockState(p);
                     Block b = bs.getBlock();
 
                     if (y == 0) {
@@ -195,77 +194,77 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 for (int z = 0; z < 5; z++) {
-                    BlockPos p = min.add(x, y, z);
-                    BlockState bs = this.world.getBlockState(p);
+                    BlockPos p = min.offset(x, y, z);
+                    BlockState bs = this.level.getBlockState(p);
 
-                    if (bs.contains(TitaniumTankCasingBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(TitaniumTankCasingBlock.FORMED, true), Block.NOTIFY_ALL);
-                    } else if (bs.contains(ReinforcedTankGlassBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(ReinforcedTankGlassBlock.FORMED, true), Block.NOTIFY_ALL);
-                    } else if (bs.contains(TitaniumTankInboundPortBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(TitaniumTankInboundPortBlock.FORMED, true), Block.NOTIFY_ALL);
+                    if (bs.hasProperty(TitaniumTankCasingBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(TitaniumTankCasingBlock.FORMED, true), Block.UPDATE_ALL);
+                    } else if (bs.hasProperty(ReinforcedTankGlassBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(ReinforcedTankGlassBlock.FORMED, true), Block.UPDATE_ALL);
+                    } else if (bs.hasProperty(TitaniumTankInboundPortBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(TitaniumTankInboundPortBlock.FORMED, true), Block.UPDATE_ALL);
                     }
 
-                    BlockEntity be = this.world.getBlockEntity(p);
+                    BlockEntity be = this.level.getBlockEntity(p);
                     if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
-                        casingBE.setMasterPos(this.pos);
+                        casingBE.setMasterPos(this.worldPosition);
                     }
                 }
             }
         }
 
         // Formation Sound & Particles
-        this.world.playSound(null, this.pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, SoundCategory.BLOCKS, 1.2f, 0.8f);
-        if (this.world instanceof ServerWorld sw) {
-            sw.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING, this.pos.getX() + 0.5, this.pos.getY() - 1.5, this.pos.getZ() + 0.5, 40, 1.5, 1.5, 1.5, 0.1);
+        this.level.playSound(null, this.worldPosition, SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.BLOCKS, 1.2f, 0.8f);
+        if (this.level instanceof ServerLevel sw) {
+            sw.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, this.worldPosition.getX() + 0.5, this.worldPosition.getY() - 1.5, this.worldPosition.getZ() + 0.5, 40, 1.5, 1.5, 1.5, 0.1);
         }
 
         updateInteriorLavaBlocks();
-        markDirty();
+        setChanged();
     }
 
     // ==========================================
     // ANTI-GRIEF DECONSTRUCTION & STEAM PURGE
     // ==========================================
     public void dismantleStructure() {
-        if (!this.isFormed || this.world == null || this.minPos == null) return;
+        if (!this.isFormed || this.level == null || this.minPos == null) return;
 
         // Emergency Steam Purge: vaporize all interior fluid safely to air
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 3; x++) {
                 for (int z = 1; z <= 3; z++) {
-                    BlockPos p = this.minPos.add(x, y, z);
-                    BlockState bs = this.world.getBlockState(p);
+                    BlockPos p = this.minPos.offset(x, y, z);
+                    BlockState bs = this.level.getBlockState(p);
                     if (bs.getBlock() == Blocks.LAVA) {
-                        this.world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+                        this.level.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                     }
                 }
             }
         }
 
         // Steam Hiss Sound & Smoke Particles
-        this.world.playSound(null, this.pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0f, 1.2f);
-        if (this.world instanceof ServerWorld sw) {
-            sw.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.pos.getX() + 0.5, this.pos.getY() - 2.0, this.pos.getZ() + 0.5, 50, 1.5, 1.5, 1.5, 0.05);
-            sw.spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() - 2.0, this.pos.getZ() + 0.5, 60, 1.5, 1.5, 1.5, 0.08);
+        this.level.playSound(null, this.worldPosition, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.2f);
+        if (this.level instanceof ServerLevel sw) {
+            sw.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.worldPosition.getX() + 0.5, this.worldPosition.getY() - 2.0, this.worldPosition.getZ() + 0.5, 50, 1.5, 1.5, 1.5, 0.05);
+            sw.sendParticles(ParticleTypes.SMOKE, this.worldPosition.getX() + 0.5, this.worldPosition.getY() - 2.0, this.worldPosition.getZ() + 0.5, 60, 1.5, 1.5, 1.5, 0.08);
         }
 
         // Unlink all member blocks
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 for (int z = 0; z < 5; z++) {
-                    BlockPos p = this.minPos.add(x, y, z);
-                    BlockState bs = this.world.getBlockState(p);
+                    BlockPos p = this.minPos.offset(x, y, z);
+                    BlockState bs = this.level.getBlockState(p);
 
-                    if (bs.contains(TitaniumTankCasingBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(TitaniumTankCasingBlock.FORMED, false), Block.NOTIFY_ALL);
-                    } else if (bs.contains(ReinforcedTankGlassBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(ReinforcedTankGlassBlock.FORMED, false), Block.NOTIFY_ALL);
-                    } else if (bs.contains(TitaniumTankInboundPortBlock.FORMED)) {
-                        this.world.setBlockState(p, bs.with(TitaniumTankInboundPortBlock.FORMED, false), Block.NOTIFY_ALL);
+                    if (bs.hasProperty(TitaniumTankCasingBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(TitaniumTankCasingBlock.FORMED, false), Block.UPDATE_ALL);
+                    } else if (bs.hasProperty(ReinforcedTankGlassBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(ReinforcedTankGlassBlock.FORMED, false), Block.UPDATE_ALL);
+                    } else if (bs.hasProperty(TitaniumTankInboundPortBlock.FORMED)) {
+                        this.level.setBlock(p, bs.setValue(TitaniumTankInboundPortBlock.FORMED, false), Block.UPDATE_ALL);
                     }
 
-                    BlockEntity be = this.world.getBlockEntity(p);
+                    BlockEntity be = this.level.getBlockEntity(p);
                     if (be instanceof TitaniumTankCasingBlockEntity casingBE) {
                         casingBE.setMasterPos(null);
                     }
@@ -277,9 +276,9 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         this.lavaAmount = 0; // Voided safely by the steam purge
         this.currentFluid = MoltenMetal.NONE;
         this.minPos = null;
-        markDirty();
-        if (this.world != null) {
-            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
 
@@ -287,33 +286,33 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     // INTERIOR FLUID LEVEL & CLIENT SYNC
     // ==========================================
     public void updateInteriorLavaBlocks() {
-        if (!this.isFormed || this.world == null || this.minPos == null || this.world.isClient()) return;
+        if (!this.isFormed || this.level == null || this.minPos == null || this.level.isClientSide()) return;
 
         // Safely clear any legacy physical lava blocks to air so fluid is smoothly rendered by BER
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 3; x++) {
                 for (int z = 1; z <= 3; z++) {
-                    BlockPos p = this.minPos.add(x, y, z);
-                    BlockState current = this.world.getBlockState(p);
+                    BlockPos p = this.minPos.offset(x, y, z);
+                    BlockState current = this.level.getBlockState(p);
                     if (current.getBlock() == Blocks.LAVA) {
-                        this.world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+                        this.level.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                     }
                 }
             }
         }
 
-        this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
     }
 
     // ==========================================
     // TICK LOGIC: BUCKET HANDLING & INTEGRITY
     // ==========================================
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, TitaniumTankControllerBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, TitaniumTankControllerBlockEntity entity) {
         boolean dirty = false;
 
         if (entity.isFormed) {
             // Periodic structure integrity check every 40 ticks
-            if (world.getTime() % 40 == 0) {
+            if (world.getGameTime() % 40 == 0) {
                 if (entity.minPos == null || !entity.validateStructureAt(entity.minPos)) {
                     entity.dismantleStructure();
                     return;
@@ -324,32 +323,32 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             ItemStack input = entity.inventory.get(BUCKET_IN_SLOT);
             ItemStack output = entity.inventory.get(BUCKET_OUT_SLOT);
 
-            if (!input.isEmpty() && input.isOf(Items.LAVA_BUCKET)) {
-                if (entity.lavaAmount + 1000 <= CAPACITY && (entity.currentFluid == MoltenMetal.LAVA || entity.lavaAmount == 0) && (output.isEmpty() || (output.isOf(Items.BUCKET) && output.getCount() < output.getMaxCount()))) {
+            if (!input.isEmpty() && input.is(Items.LAVA_BUCKET)) {
+                if (entity.lavaAmount + 1000 <= CAPACITY && (entity.currentFluid == MoltenMetal.LAVA || entity.lavaAmount == 0) && (output.isEmpty() || (output.is(Items.BUCKET) && output.getCount() < output.getMaxStackSize()))) {
                     entity.currentFluid = MoltenMetal.LAVA;
                     entity.lavaAmount += 1000;
-                    input.decrement(1);
+                    input.shrink(1);
                     if (output.isEmpty()) {
                         entity.inventory.set(BUCKET_OUT_SLOT, new ItemStack(Items.BUCKET));
                     } else {
-                        output.increment(1);
+                        output.grow(1);
                     }
                     entity.updateInteriorLavaBlocks();
                     dirty = true;
                 }
             }
             // 2. Manual Bucket Out (Drain tank into Empty Bucket - Lava only)
-            else if (!input.isEmpty() && input.isOf(Items.BUCKET)) {
-                if (entity.lavaAmount >= 1000 && entity.currentFluid == MoltenMetal.LAVA && (output.isEmpty() || (output.isOf(Items.LAVA_BUCKET) && output.getCount() < output.getMaxCount()))) {
+            else if (!input.isEmpty() && input.is(Items.BUCKET)) {
+                if (entity.lavaAmount >= 1000 && entity.currentFluid == MoltenMetal.LAVA && (output.isEmpty() || (output.is(Items.LAVA_BUCKET) && output.getCount() < output.getMaxStackSize()))) {
                     entity.lavaAmount -= 1000;
                     if (entity.lavaAmount <= 0) {
                         entity.currentFluid = MoltenMetal.NONE;
                     }
-                    input.decrement(1);
+                    input.shrink(1);
                     if (output.isEmpty()) {
                         entity.inventory.set(BUCKET_OUT_SLOT, new ItemStack(Items.LAVA_BUCKET));
                     } else {
-                        output.increment(1);
+                        output.grow(1);
                     }
                     entity.updateInteriorLavaBlocks();
                     dirty = true;
@@ -358,7 +357,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -417,7 +416,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             this.currentFluid = MoltenMetal.LAVA;
             this.lavaAmount += inserted;
             updateInteriorLavaBlocks();
-            markDirty();
+            setChanged();
         }
         return inserted;
     }
@@ -441,7 +440,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                 this.currentFluid = MoltenMetal.NONE;
             }
             updateInteriorLavaBlocks();
-            markDirty();
+            setChanged();
         }
         return extracted;
     }
@@ -472,7 +471,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             this.currentFluid = metal;
             this.lavaAmount += inserted;
             updateInteriorLavaBlocks();
-            markDirty();
+            setChanged();
         }
         return inserted;
     }
@@ -496,7 +495,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
                 this.currentFluid = MoltenMetal.NONE;
             }
             updateInteriorLavaBlocks();
-            markDirty();
+            setChanged();
         }
         return extracted;
     }
@@ -510,7 +509,7 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     // INVENTORY & SCREEN HANDLER
     // ==========================================
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -520,73 +519,73 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack res = Inventories.splitStack(inventory, slot, amount);
-        if (!res.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack res = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!res.isEmpty()) setChanged();
         return res;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[]{BUCKET_IN_SLOT, BUCKET_OUT_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == BUCKET_IN_SLOT;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == BUCKET_OUT_SLOT;
     }
 
     @Override
-    public Text getDisplayName() {
+    public Component getDisplayName() {
         if (this.currentFluid != null && this.currentFluid != MoltenMetal.NONE) {
-            return Text.literal("5x5 " + this.currentFluid.getDisplayName() + " Tank");
+            return Component.literal("5x5 " + this.currentFluid.getDisplayName() + " Tank");
         }
-        return Text.literal("5x5 Titanium Multi-Fluid Tank");
+        return Component.literal("5x5 Titanium Multi-Fluid Tank");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new TitaniumTankScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         view.putInt("LavaAmount", this.lavaAmount);
         view.putString("FluidType", this.currentFluid.getId());
         view.putString("FilterFluid", this.filterFluid.getId());
@@ -596,15 +595,15 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             view.putInt("MinY", this.minPos.getY());
             view.putInt("MinZ", this.minPos.getZ());
         }
-        Inventories.writeData(view, this.inventory);
+        ContainerHelper.saveAllItems(view, this.inventory);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
         if (view.contains("FluidType")) {
-            this.currentFluid = MoltenMetal.fromId(view.getString("FluidType", "none"));
+            this.currentFluid = MoltenMetal.fromId(view.getStringOr("FluidType", "none"));
         } else {
             this.currentFluid = (this.lavaAmount > 0) ? MoltenMetal.LAVA : MoltenMetal.NONE;
         }
@@ -612,17 +611,17 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
             this.currentFluid = MoltenMetal.NONE;
         }
         if (view.contains("FilterFluid")) {
-            this.filterFluid = MoltenMetal.fromId(view.getString("FilterFluid", "none"));
+            this.filterFluid = MoltenMetal.fromId(view.getStringOr("FilterFluid", "none"));
         } else {
             this.filterFluid = MoltenMetal.NONE;
         }
-        this.isFormed = view.getBoolean("IsFormed", false);
+        this.isFormed = view.getBooleanOr("IsFormed", false);
         if (view.contains("MinX") && view.contains("MinY") && view.contains("MinZ")) {
-            this.minPos = new BlockPos(view.getInt("MinX", 0), view.getInt("MinY", 0), view.getInt("MinZ", 0));
+            this.minPos = new BlockPos(view.getIntOr("MinX", 0), view.getIntOr("MinY", 0), view.getIntOr("MinZ", 0));
         } else {
             this.minPos = null;
         }
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
     }
 
     public int getStoredFluidAmount() {
@@ -635,19 +634,19 @@ public class TitaniumTankControllerBlockEntity extends BlockEntity implements Na
 
     public void setFilterFluid(MoltenMetal filter) {
         this.filterFluid = filter != null ? filter : MoltenMetal.NONE;
-        markDirty();
-        if (this.world != null) {
-            this.world.updateListeners(this.pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
 
     @Override
-    public BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        return createNbt(registries);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
     }
 }

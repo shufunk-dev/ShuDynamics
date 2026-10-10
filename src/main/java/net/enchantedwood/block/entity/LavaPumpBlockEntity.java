@@ -8,32 +8,32 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.LavaPumpScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.enchantedwood.fluid.LavaProvider;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider {
+public class LavaPumpBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, LavaProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 25; // 25 FE/t
@@ -44,14 +44,14 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     public static final int GEAR_SLOT = 2;
     public static final int INVENTORY_SIZE = 3;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int pumpProgress = 0;
     private int totalPumpTime = 40;
     private int lavaAmount = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -77,7 +77,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -115,7 +115,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     public int drainLava(int amount) {
         int toDrain = Math.min(this.lavaAmount, amount);
         this.lavaAmount -= toDrain;
-        if (toDrain > 0) markDirty();
+        if (toDrain > 0) setChanged();
         return toDrain;
     }
 
@@ -125,17 +125,17 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.lava_pump");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.lava_pump");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new LavaPumpScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, LavaPumpBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, LavaPumpBlockEntity entity) {
         boolean dirty = false;
 
         entity.totalPumpTime = getTierPumpTime(entity.getActiveGearTier());
@@ -143,20 +143,20 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
         // 1. Fill empty bucket with liquid lava from internal tank
         ItemStack bucketIn = entity.inventory.get(BUCKET_IN_SLOT);
         if (!bucketIn.isEmpty() && entity.lavaAmount >= 1000) {
-            boolean isVanillaBucket = bucketIn.isOf(Items.BUCKET);
-            boolean isCopperBucket = bucketIn.isOf(ModItems.COPPER_BUCKET);
+            boolean isVanillaBucket = bucketIn.is(Items.BUCKET);
+            boolean isCopperBucket = bucketIn.is(ModItems.COPPER_BUCKET);
             if (isVanillaBucket || isCopperBucket) {
                 ItemStack filledItem = isVanillaBucket ? new ItemStack(Items.LAVA_BUCKET) : new ItemStack(ModItems.COPPER_LAVA_BUCKET);
                 ItemStack bucketOut = entity.inventory.get(BUCKET_OUT_SLOT);
                 if (bucketOut.isEmpty()) {
                     entity.lavaAmount -= 1000;
-                    bucketIn.decrement(1);
+                    bucketIn.shrink(1);
                     entity.inventory.set(BUCKET_OUT_SLOT, filledItem);
                     dirty = true;
-                } else if (ItemStack.areItemsEqual(bucketOut, filledItem) && bucketOut.getCount() < bucketOut.getMaxCount()) {
+                } else if (ItemStack.isSameItem(bucketOut, filledItem) && bucketOut.getCount() < bucketOut.getMaxStackSize()) {
                     entity.lavaAmount -= 1000;
-                    bucketIn.decrement(1);
-                    bucketOut.increment(1);
+                    bucketIn.shrink(1);
+                    bucketOut.grow(1);
                     dirty = true;
                 }
             }
@@ -187,7 +187,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
         // 3. Push lava directly into adjacent Lava Providers (Pipes, Generators, Tanks)
         if (entity.lavaAmount > 0) {
             for (Direction dir : Direction.values()) {
-                BlockEntity be = world.getBlockEntity(pos.offset(dir));
+                BlockEntity be = world.getBlockEntity(pos.relative(dir));
                 if (be instanceof LavaProvider provider && !(be instanceof LavaPumpBlockEntity)) {
                     if (provider.canInsertLava()) {
                         int toSend = Math.min(entity.lavaAmount, 250);
@@ -201,20 +201,20 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
             }
         }
 
-        if (state.get(LavaPumpBlock.LIT) != isPumping) {
-            world.setBlockState(pos, state.with(LavaPumpBlock.LIT, isPumping), 3);
+        if (state.getValue(LavaPumpBlock.LIT) != isPumping) {
+            world.setBlock(pos, state.setValue(LavaPumpBlock.LIT, isPumping), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
-    private static boolean hasLavaBelow(World world, BlockPos pos) {
+    private static boolean hasLavaBelow(Level world, BlockPos pos) {
         for (int dy = -1; dy >= -3; dy--) {
-            BlockPos check = pos.add(0, dy, 0);
-            if (world.getFluidState(check).isOf(Fluids.LAVA) || world.getBlockState(check).isOf(Blocks.LAVA) || world.getBlockState(check).isOf(Blocks.MAGMA_BLOCK)) {
+            BlockPos check = pos.offset(0, dy, 0);
+            if (world.getFluidState(check).is(Fluids.LAVA) || world.getBlockState(check).is(Blocks.LAVA) || world.getBlockState(check).is(Blocks.MAGMA_BLOCK)) {
                 return true;
             }
         }
@@ -222,20 +222,20 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.pumpProgress = view.getInt("PumpProgress", 0);
-        this.totalPumpTime = view.getInt("TotalPumpTime", 40);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
+        this.pumpProgress = view.getIntOr("PumpProgress", 0);
+        this.totalPumpTime = view.getIntOr("TotalPumpTime", 40);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("PumpProgress", this.pumpProgress);
         view.putInt("TotalPumpTime", this.totalPumpTime);
@@ -244,26 +244,26 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{BUCKET_OUT_SLOT};
         if (side == Direction.UP) return new int[]{BUCKET_IN_SLOT};
         return new int[]{BUCKET_IN_SLOT, GEAR_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (slot == BUCKET_IN_SLOT) return stack.isOf(Items.BUCKET);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (slot == BUCKET_IN_SLOT) return stack.is(Items.BUCKET);
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == BUCKET_OUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -276,36 +276,36 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
@@ -329,7 +329,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements NamedScreenHandl
         int extracted = Math.min(this.lavaAmount, amount);
         if (!simulate && extracted > 0) {
             this.lavaAmount -= extracted;
-            markDirty();
+            setChanged();
         }
         return extracted;
     }

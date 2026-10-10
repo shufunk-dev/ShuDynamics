@@ -1,38 +1,38 @@
 package net.enchantedwood.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class KineticDampeningStatusEffect extends StatusEffect {
+public class KineticDampeningStatusEffect extends MobEffect {
     public KineticDampeningStatusEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0xFFB703); // Honey Amber
+        super(MobEffectCategory.BENEFICIAL, 0xFFB703); // Honey Amber
         addAttributeModifier(
-                EntityAttributes.KNOCKBACK_RESISTANCE,
-                Identifier.of(EnchantedWoodMod.MOD_ID, "kinetic_knockback_resistance"),
+                Attributes.KNOCKBACK_RESISTANCE,
+                Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "kinetic_knockback_resistance"),
                 1.0, // 100% Knockback Resistance
-                EntityAttributeModifier.Operation.ADD_VALUE
+                AttributeModifier.Operation.ADD_VALUE
         );
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel world, LivingEntity entity, int amplifier) {
         // Absorb impact and kinetic shock
         entity.fallDistance = 0.0f;
 
-        if (world.getTime() % 20 == 0) {
-            world.spawnParticles(
+        if (world.getGameTime() % 20 == 0) {
+            world.sendParticles(
                     ParticleTypes.FALLING_HONEY,
                     entity.getX(), entity.getY() + 0.8, entity.getZ(),
                     2, 0.25, 0.25, 0.25, 0.01

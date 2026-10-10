@@ -1,85 +1,84 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import net.enchantedwood.event.PlayerEquipmentState;
 import net.enchantedwood.event.PlayerHealthHandler;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-public class PlayerEquipmentInventory implements Inventory {
-    private final ServerPlayerEntity player;
+public class PlayerEquipmentInventory implements Container {
+    private final ServerPlayer player;
 
-    public PlayerEquipmentInventory(ServerPlayerEntity player) {
+    public PlayerEquipmentInventory(ServerPlayer player) {
         this.player = player;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return 2;
     }
 
     @Override
     public boolean isEmpty() {
-        return getStack(0).isEmpty() && getStack(1).isEmpty();
+        return getItem(0).isEmpty() && getItem(1).isEmpty();
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         if (slot == 0) return PlayerEquipmentState.getEquippedCape(player);
         if (slot == 1) return PlayerEquipmentState.getEquippedHeart(player);
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack current = getStack(slot);
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack current = getItem(slot);
         if (!current.isEmpty()) {
             ItemStack result = current.split(amount);
             if (current.isEmpty()) {
-                setStack(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             } else {
-                setStack(slot, current);
+                setItem(slot, current);
             }
-            markDirty();
+            setChanged();
             return result;
         }
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack current = getStack(slot);
-        setStack(slot, ItemStack.EMPTY);
-        markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack current = getItem(slot);
+        setItem(slot, ItemStack.EMPTY);
+        setChanged();
         return current;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         if (slot == 0) {
             PlayerEquipmentState.equipCape(player, stack);
         } else if (slot == 1) {
             PlayerEquipmentState.equipHeart(player, stack);
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public void markDirty() {
+    public void setChanged() {
         PlayerEquipmentState.savePlayerData(player);
         PlayerHealthHandler.applyHeartAbsorptionImmediate(player);
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public void clear() {
-        setStack(0, ItemStack.EMPTY);
-        setStack(1, ItemStack.EMPTY);
+    public void clearContent() {
+        setItem(0, ItemStack.EMPTY);
+        setItem(1, ItemStack.EMPTY);
     }
 }

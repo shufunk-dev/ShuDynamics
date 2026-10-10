@@ -1,33 +1,33 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.SterileMedicalCabinetScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.IntStream;
 
-public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inventory, NamedScreenHandlerFactory, SidedInventory {
+public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Container, MenuProvider, WorldlyContainer {
     public static final int INVENTORY_SIZE = 36;
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
 
     private static final int[] SLOTS_TOP = IntStream.range(0, 32).toArray();
     private static final int[] SLOTS_BOTTOM = IntStream.range(27, 36).toArray();
@@ -65,13 +65,13 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
             // Row 1: Cartridge Fabrication & Injectors
             case 0 -> item == ModItems.HYPOSPRAY;
             case 1 -> item == ModItems.EMPTY_CARTRIDGE;
-            case 2 -> stack.isOf(Items.GLASS_PANE);
-            case 3 -> stack.isOf(Items.GLASS);
+            case 2 -> stack.is(Items.GLASS_PANE);
+            case 3 -> stack.is(Items.GLASS);
             case 4 -> item == ModItems.TIN_INGOT;
             case 5 -> item == ModItems.TITANIUM_INGOT || item == ModItems.TITANIUM_NUGGET;
-            case 6 -> stack.isOf(Items.QUARTZ);
-            case 7 -> stack.isOf(Items.REDSTONE);
-            case 8 -> stack.isOf(Items.GLOWSTONE_DUST);
+            case 6 -> stack.is(Items.QUARTZ);
+            case 7 -> stack.is(Items.REDSTONE);
+            case 8 -> stack.is(Items.GLOWSTONE_DUST);
 
             // Row 2: Synthesized Essences & Recycled Byproducts
             case 9 -> item == ModItems.ALKALINE_BASE_EXTRACT;
@@ -80,19 +80,19 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
             case 12 -> item == ModItems.CELLULAR_NANITE_EXTRACT;
             case 13 -> item == ModItems.ADRENAL_ESSENCE;
             case 14 -> item == ModItems.VOLCANIC_ASH;
-            case 15 -> stack.isOf(Items.BONE_MEAL);
+            case 15 -> stack.is(Items.BONE_MEAL);
             case 16 -> item == ModItems.SULFUR_DUST;
-            case 17 -> stack.isOf(Items.SUGAR);
+            case 17 -> stack.is(Items.SUGAR);
 
             // Row 3: Biological Feedstocks, Catalysts & Cleanroom Textiles
-            case 18 -> stack.isOf(Items.SLIME_BALL);
-            case 19 -> stack.isOf(Items.MAGMA_CREAM) || stack.isOf(Items.CRIMSON_FUNGUS);
-            case 20 -> stack.isOf(Items.KELP) || stack.isOf(Items.SEAGRASS) || item == ModItems.CUCUMBER;
-            case 21 -> item == ModItems.DRAGON_FRUIT || stack.isOf(Items.NETHER_WART);
-            case 22 -> stack.isOf(Items.GLOW_BERRIES) || item == ModItems.WASABI_ROOT;
-            case 23 -> stack.isOf(Items.BLAZE_POWDER) || item == ModItems.FIRE_CRYSTAL;
-            case 24 -> stack.isOf(Items.GOLDEN_APPLE) || stack.isOf(Items.ENCHANTED_GOLDEN_APPLE) || stack.isOf(Items.GHAST_TEAR);
-            case 25 -> item == ModItems.ALUMINUM_INGOT || stack.isOf(Items.IRON_INGOT);
+            case 18 -> stack.is(Items.SLIME_BALL);
+            case 19 -> stack.is(Items.MAGMA_CREAM) || stack.is(Items.CRIMSON_FUNGUS);
+            case 20 -> stack.is(Items.KELP) || stack.is(Items.SEAGRASS) || item == ModItems.CUCUMBER;
+            case 21 -> item == ModItems.DRAGON_FRUIT || stack.is(Items.NETHER_WART);
+            case 22 -> stack.is(Items.GLOW_BERRIES) || item == ModItems.WASABI_ROOT;
+            case 23 -> stack.is(Items.BLAZE_POWDER) || item == ModItems.FIRE_CRYSTAL;
+            case 24 -> stack.is(Items.GOLDEN_APPLE) || stack.is(Items.ENCHANTED_GOLDEN_APPLE) || stack.is(Items.GHAST_TEAR);
+            case 25 -> item == ModItems.ALUMINUM_INGOT || stack.is(Items.IRON_INGOT);
             case 26 -> item == ModItems.STERILE_POLYMER_FABRIC;
 
             // Row 4: Finished Cartridges (Standard & ✦ Pure) & Dispensary Buffer
@@ -116,7 +116,7 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -129,63 +129,63 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public boolean isValid(int slot, ItemStack stack) {
+    public boolean canPlaceItem(int slot, ItemStack stack) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) return SLOTS_TOP;
         if (side == Direction.DOWN) return SLOTS_BOTTOM;
         return SLOTS_ALL;
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return isItemValidForSlot(slot, stack);
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         if (dir == Direction.DOWN) {
             return slot >= 27; // Extract finished cartridges from bottom
         }
@@ -193,36 +193,36 @@ public class SterileMedicalCabinetBlockEntity extends BlockEntity implements Inv
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.literal("§b✦ Sterile Medical Cabinet ✦");
+    public Component getDisplayName() {
+        return Component.literal("§b✦ Sterile Medical Cabinet ✦");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new SterileMedicalCabinetScreenHandler(syncId, playerInventory, this);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
     }
 
     @Override
-    public net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket toUpdatePacket() {
-        return net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket.create(this);
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(net.minecraft.registry.RegistryWrapper.WrapperLookup registries) {
-        NbtCompound nbt = new NbtCompound();
+    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        CompoundTag nbt = new CompoundTag();
         return nbt;
     }
 }

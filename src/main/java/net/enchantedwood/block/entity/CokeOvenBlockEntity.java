@@ -1,31 +1,31 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.custom.CokeOvenBlock;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.CokeOvenScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory {
+public class CokeOvenBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer {
     public static final int TOTAL_COOK_TIME = 200; // 10 seconds per Coke Coal
     public static final int INVENTORY_SIZE = 3;
 
@@ -33,10 +33,10 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     public static final int OUTPUT_SLOT = 1;
     public static final int TAR_SLOT = 2;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private int cookTime = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -52,7 +52,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 2;
         }
     };
@@ -62,17 +62,17 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.coke_oven");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.coke_oven");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new CokeOvenScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, CokeOvenBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, CokeOvenBlockEntity entity) {
         boolean stateChanged = false;
 
         ItemStack input = entity.inventory.get(INPUT_SLOT);
@@ -80,27 +80,27 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
         ItemStack tarOutput = entity.inventory.get(TAR_SLOT);
 
         boolean hasValidInput = isValidInput(input);
-        boolean hasOutputSpace = output.isEmpty() || (output.isOf(ModItems.COKE_COAL) && output.getCount() < output.getMaxCount());
-        boolean hasTarSpace = tarOutput.isEmpty() || (tarOutput.isOf(ModItems.MINERAL_TAR) && tarOutput.getCount() < tarOutput.getMaxCount());
+        boolean hasOutputSpace = output.isEmpty() || (output.is(ModItems.COKE_COAL) && output.getCount() < output.getMaxStackSize());
+        boolean hasTarSpace = tarOutput.isEmpty() || (tarOutput.is(ModItems.MINERAL_TAR) && tarOutput.getCount() < tarOutput.getMaxStackSize());
 
         if (hasValidInput && hasOutputSpace && hasTarSpace) {
             entity.cookTime++;
             if (entity.cookTime >= TOTAL_COOK_TIME) {
                 entity.cookTime = 0;
-                input.decrement(1);
+                input.shrink(1);
 
                 // 1. Primary Output: Coke Coal
                 if (output.isEmpty()) {
                     entity.inventory.set(OUTPUT_SLOT, new ItemStack(ModItems.COKE_COAL));
                 } else {
-                    output.increment(1);
+                    output.grow(1);
                 }
 
                 // 2. Byproduct Output: Mineral Tar
                 if (tarOutput.isEmpty()) {
                     entity.inventory.set(TAR_SLOT, new ItemStack(ModItems.MINERAL_TAR));
                 } else {
-                    tarOutput.increment(1);
+                    tarOutput.grow(1);
                 }
             }
             stateChanged = true;
@@ -112,38 +112,38 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
         }
 
         boolean isCookingNow = hasValidInput && hasOutputSpace && hasTarSpace;
-        if (state.get(CokeOvenBlock.LIT) != isCookingNow) {
-            world.setBlockState(pos, state.with(CokeOvenBlock.LIT, isCookingNow), 3);
+        if (state.getValue(CokeOvenBlock.LIT) != isCookingNow) {
+            world.setBlock(pos, state.setValue(CokeOvenBlock.LIT, isCookingNow), 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     private static boolean isValidInput(ItemStack stack) {
-        return stack.isOf(Items.COAL) || stack.isOf(Items.CHARCOAL) || stack.isIn(ItemTags.LOGS);
+        return stack.is(Items.COAL) || stack.is(Items.CHARCOAL) || stack.is(ItemTags.LOGS);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
-        this.cookTime = view.getInt("CookTime", 0);
+        ContainerHelper.loadAllItems(view, this.inventory);
+        this.cookTime = view.getIntOr("CookTime", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         view.putInt("CookTime", this.cookTime);
     }
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) {
             return new int[]{OUTPUT_SLOT, TAR_SLOT};
         }
@@ -151,17 +151,17 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == INPUT_SLOT && isValidInput(stack);
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT || slot == TAR_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -174,41 +174,41 @@ public class CokeOvenBlockEntity extends BlockEntity implements NamedScreenHandl
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
-        markDirty();
+        setChanged();
     }
 }

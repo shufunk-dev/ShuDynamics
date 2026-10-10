@@ -1,11 +1,11 @@
 package net.enchantedwood.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.ResonanceFrameValidator;
 
@@ -16,21 +16,21 @@ public class ResonanceFrameHandler {
             BlockPos pos = hitResult.getBlockPos();
             BlockState state = world.getBlockState(pos);
 
-            if (state.isOf(Blocks.CRYING_OBSIDIAN) ||
-                state.isOf(ModBlocks.ATMOSPHERIC_ANCHOR) ||
-                state.isOf(ModBlocks.KINETIC_ANCHOR) ||
-                state.isOf(ModBlocks.THERMAL_ANCHOR) ||
-                state.isOf(ModBlocks.METALLURGICAL_ANCHOR) ||
-                state.isOf(ModBlocks.PLASMA_ANCHOR) ||
-                state.isOf(ModBlocks.DIMENSIONAL_SINGULARITY)) {
+            if (state.is(Blocks.CRYING_OBSIDIAN) ||
+                state.is(ModBlocks.ATMOSPHERIC_ANCHOR) ||
+                state.is(ModBlocks.KINETIC_ANCHOR) ||
+                state.is(ModBlocks.THERMAL_ANCHOR) ||
+                state.is(ModBlocks.METALLURGICAL_ANCHOR) ||
+                state.is(ModBlocks.PLASMA_ANCHOR) ||
+                state.is(ModBlocks.DIMENSIONAL_SINGULARITY)) {
 
-                if (!world.isClient() && player instanceof ServerPlayerEntity serverPlayer) {
+                if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                     if (ResonanceFrameValidator.tryActivateGateway(world, pos, serverPlayer)) {
-                        return ActionResult.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 }

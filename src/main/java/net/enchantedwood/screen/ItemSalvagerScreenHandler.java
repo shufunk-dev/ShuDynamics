@@ -3,37 +3,37 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.ItemSalvagerBlockEntity;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class ItemSalvagerScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class ItemSalvagerScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public ItemSalvagerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(ItemSalvagerBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public ItemSalvagerScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(ItemSalvagerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public ItemSalvagerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public ItemSalvagerScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ITEM_SALVAGER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, ItemSalvagerBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, ItemSalvagerBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Input Slot (x=49, y=35)
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.INPUT_SLOT, 49, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return ItemSalvagerBlockEntity.isSalvageable(stack);
             }
         });
@@ -41,25 +41,25 @@ public class ItemSalvagerScreenHandler extends ScreenHandler {
         // Slots 1-4: Output Slots (2x2 grid at 107, 26 / 125, 26 / 107, 44 / 125, 44)
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.OUTPUT_SLOT_1, 107, 26) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.OUTPUT_SLOT_2, 125, 26) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.OUTPUT_SLOT_3, 107, 44) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.OUTPUT_SLOT_4, 125, 44) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
 
         // Slot 5: Gear Upgrade Slot (x=152, y=8)
         this.addSlot(new Slot(inventory, ItemSalvagerBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -116,50 +116,50 @@ public class ItemSalvagerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < ItemSalvagerBlockEntity.INVENTORY_SIZE) {
                 // Moving from machine to player inventory
-                if (!this.insertItem(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from player inventory to machine
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, ItemSalvagerBlockEntity.GEAR_SLOT, ItemSalvagerBlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, ItemSalvagerBlockEntity.GEAR_SLOT, ItemSalvagerBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (ItemSalvagerBlockEntity.isSalvageable(originalStack)) {
-                    if (!this.insertItem(originalStack, ItemSalvagerBlockEntity.INPUT_SLOT, ItemSalvagerBlockEntity.INPUT_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, ItemSalvagerBlockEntity.INPUT_SLOT, ItemSalvagerBlockEntity.INPUT_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= ItemSalvagerBlockEntity.INVENTORY_SIZE && invSlot < ItemSalvagerBlockEntity.INVENTORY_SIZE + 27) {
-                    if (!this.insertItem(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= ItemSalvagerBlockEntity.INVENTORY_SIZE + 27 && invSlot < this.slots.size()) {
-                    if (!this.insertItem(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE, ItemSalvagerBlockEntity.INVENTORY_SIZE + 27, false)) {
+                    if (!this.moveItemStackTo(originalStack, ItemSalvagerBlockEntity.INVENTORY_SIZE, ItemSalvagerBlockEntity.INVENTORY_SIZE + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

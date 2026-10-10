@@ -1,6 +1,6 @@
 package net.enchantedwood.energy;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public interface ItemEnergyProvider {

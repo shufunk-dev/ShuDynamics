@@ -1,22 +1,21 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-
 import java.util.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemPipeBlockEntity extends BlockEntity {
     public static final int BUFFER_SIZE = 4;
-    private final DefaultedList<ItemStack> buffer = DefaultedList.ofSize(BUFFER_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> buffer = NonNullList.withSize(BUFFER_SIZE, ItemStack.EMPTY);
     private int cooldown = 0;
     private int disconnectedSides = 0; // Bitmask for disconnected directions
 
@@ -24,7 +23,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
         super(ModBlockEntities.ITEM_PIPE_BLOCK_ENTITY, pos, state);
     }
 
-    public DefaultedList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return this.buffer;
     }
 
@@ -34,7 +33,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
 
     public boolean toggleConnection(Direction dir) {
         this.disconnectedSides ^= (1 << dir.ordinal());
-        markDirty();
+        setChanged();
         return isDisconnected(dir);
     }
 
@@ -44,12 +43,12 @@ public class ItemPipeBlockEntity extends BlockEntity {
         } else {
             this.disconnectedSides &= ~(1 << dir.ordinal());
         }
-        markDirty();
+        setChanged();
     }
 
     public boolean hasSpace() {
         for (ItemStack stack : this.buffer) {
-            if (stack.isEmpty() || stack.getCount() < stack.getMaxCount()) {
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxStackSize()) {
                 return true;
             }
         }
@@ -60,7 +59,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
         if (stack.isEmpty()) return false;
         for (ItemStack current : this.buffer) {
             if (current.isEmpty()) return true;
-            if (ItemStack.areItemsAndComponentsEqual(current, stack) && current.getCount() < current.getMaxCount()) {
+            if (ItemStack.isSameItemSameComponents(current, stack) && current.getCount() < current.getMaxStackSize()) {
                 return true;
             }
         }
@@ -74,13 +73,13 @@ public class ItemPipeBlockEntity extends BlockEntity {
         // 1. Merge into matching slots
         for (int i = 0; i < BUFFER_SIZE; i++) {
             ItemStack current = this.buffer.get(i);
-            if (!current.isEmpty() && ItemStack.areItemsAndComponentsEqual(current, toInsert)) {
-                int space = current.getMaxCount() - current.getCount();
+            if (!current.isEmpty() && ItemStack.isSameItemSameComponents(current, toInsert)) {
+                int space = current.getMaxStackSize() - current.getCount();
                 if (space > 0) {
                     int move = Math.min(space, toInsert.getCount());
-                    current.increment(move);
-                    toInsert.decrement(move);
-                    markDirty();
+                    current.grow(move);
+                    toInsert.shrink(move);
+                    setChanged();
                     if (toInsert.isEmpty()) return ItemStack.EMPTY;
                 }
             }
@@ -91,7 +90,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
             ItemStack current = this.buffer.get(i);
             if (current.isEmpty()) {
                 this.buffer.set(i, toInsert.copy());
-                markDirty();
+                setChanged();
                 return ItemStack.EMPTY;
             }
         }
@@ -99,7 +98,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
         return toInsert;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, ItemPipeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, ItemPipeBlockEntity entity) {
         if (entity.cooldown > 0) {
             --entity.cooldown;
             return;
@@ -124,7 +123,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
             boolean inserted = false;
             for (Direction dir : Direction.values()) {
                 if (entity.isDisconnected(dir)) continue;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof ItemInserterBlockEntity inserter) {
                     if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
                         ItemStack remaining = inserter.receiveItemFromPipe(stack);
@@ -157,7 +156,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
             // 2. Use BFS network pathfinding to route towards the nearest reachable Inserter or Digital Converter
             Direction bestRoute = findBestRoute(world, pos, entity, stack);
             if (bestRoute != null) {
-                BlockEntity target = world.getBlockEntity(pos.offset(bestRoute));
+                BlockEntity target = world.getBlockEntity(pos.relative(bestRoute));
                 if (target instanceof ItemPipeBlockEntity nextPipe) {
                     ItemStack remaining = nextPipe.insertItem(stack);
                     if (remaining.getCount() != stack.getCount()) {
@@ -187,13 +186,13 @@ public class ItemPipeBlockEntity extends BlockEntity {
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
             entity.cooldown = 2; // Smooth 2-tick transfer step
         }
     }
 
     @Nullable
-    public static Direction findBestRoute(ServerWorld world, BlockPos startPos, ItemPipeBlockEntity startPipe, ItemStack stack) {
+    public static Direction findBestRoute(ServerLevel world, BlockPos startPos, ItemPipeBlockEntity startPipe, ItemStack stack) {
         Queue<BlockPos> queue = new ArrayDeque<>();
         Map<BlockPos, Direction> firstStepMap = new HashMap<>();
         Set<BlockPos> visited = new HashSet<>();
@@ -202,7 +201,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
 
         for (Direction dir : Direction.values()) {
             if (startPipe.isDisconnected(dir)) continue;
-            BlockPos neighborPos = startPos.offset(dir);
+            BlockPos neighborPos = startPos.relative(dir);
             BlockEntity neighbor = world.getBlockEntity(neighborPos);
 
             if (neighbor instanceof ItemInserterBlockEntity inserter) {
@@ -220,7 +219,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
                     visited.add(neighborPos);
                 }
             } else if (neighbor instanceof ItemExtractorBlockEntity nextExt) {
-                Direction extFacing = world.getBlockState(neighborPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+                Direction extFacing = world.getBlockState(neighborPos).getValue(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
                 if (dir.getOpposite() != extFacing && !nextExt.isDisconnected(dir.getOpposite()) && nextExt.canAccept(stack)) {
                     queue.add(neighborPos);
                     firstStepMap.put(neighborPos, dir);
@@ -237,7 +236,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
             BlockEntity currentBe = world.getBlockEntity(currentPos);
             Direction currentFacing = null;
             if (currentBe instanceof ItemExtractorBlockEntity ext) {
-                currentFacing = world.getBlockState(currentPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+                currentFacing = world.getBlockState(currentPos).getValue(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
             } else if (!(currentBe instanceof ItemPipeBlockEntity)) {
                 continue;
             }
@@ -247,7 +246,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
                 if (currentBe instanceof ItemPipeBlockEntity p && p.isDisconnected(dir)) continue;
                 if (currentBe instanceof ItemExtractorBlockEntity e && e.isDisconnected(dir)) continue;
 
-                BlockPos nextPos = currentPos.offset(dir);
+                BlockPos nextPos = currentPos.relative(dir);
                 if (visited.contains(nextPos)) continue;
 
                 BlockEntity nextBe = world.getBlockEntity(nextPos);
@@ -266,7 +265,7 @@ public class ItemPipeBlockEntity extends BlockEntity {
                         queue.add(nextPos);
                     }
                 } else if (nextBe instanceof ItemExtractorBlockEntity nextExt) {
-                    Direction extFacing = world.getBlockState(nextPos).get(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
+                    Direction extFacing = world.getBlockState(nextPos).getValue(net.enchantedwood.block.custom.ItemExtractorBlock.FACING);
                     if (dir.getOpposite() != extFacing && !nextExt.isDisconnected(dir.getOpposite())) {
                         visited.add(nextPos);
                         firstStepMap.put(nextPos, firstStep);
@@ -280,18 +279,18 @@ public class ItemPipeBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.buffer.clear();
-        Inventories.readData(view, this.buffer);
-        this.cooldown = view.getInt("Cooldown", 0);
-        this.disconnectedSides = view.getInt("DisconnectedSides", 0);
+        ContainerHelper.loadAllItems(view, this.buffer);
+        this.cooldown = view.getIntOr("Cooldown", 0);
+        this.disconnectedSides = view.getIntOr("DisconnectedSides", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.buffer);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.buffer);
         view.putInt("Cooldown", this.cooldown);
         view.putInt("DisconnectedSides", this.disconnectedSides);
     }

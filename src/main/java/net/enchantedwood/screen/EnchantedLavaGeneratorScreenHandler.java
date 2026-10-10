@@ -1,57 +1,57 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class EnchantedLavaGeneratorScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class EnchantedLavaGeneratorScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public EnchantedLavaGeneratorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(5), new ArrayPropertyDelegate(6));
+    public EnchantedLavaGeneratorScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(5), new SimpleContainerData(6));
     }
 
-    public EnchantedLavaGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public EnchantedLavaGeneratorScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ENCHANTED_LAVA_GENERATOR_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 5);
+        checkContainerSize(inventory, 5);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Machine Slots
         // Slot 0: Cobblestone Input
         this.addSlot(new Slot(inventory, 0, 44, 17) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.COBBLESTONE);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.COBBLESTONE);
             }
         });
 
         // Slot 1: Fuel Slot (Enchanted Coal Block ONLY)
         this.addSlot(new Slot(inventory, 1, 26, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
             }
         });
 
         // Slot 2: Gear Upgrade Slot
         this.addSlot(new Slot(inventory, 2, 62, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem gear && gear.isEnchanted();
             }
         });
@@ -59,15 +59,15 @@ public class EnchantedLavaGeneratorScreenHandler extends ScreenHandler {
         // Slot 3: Empty Bucket Input
         this.addSlot(new Slot(inventory, 3, 108, 17) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.BUCKET) || stack.isOf(ModItems.COPPER_BUCKET);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
             }
         });
 
         // Slot 4: Output Slot
         this.addSlot(new Slot(inventory, 4, 108, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -119,62 +119,62 @@ public class EnchantedLavaGeneratorScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < 5) {
-                if (!this.insertItem(originalStack, 5, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, 5, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (originalStack.isOf(Items.COBBLESTONE)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                if (originalStack.is(Items.COBBLESTONE)) {
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                } else if (originalStack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (originalStack.getItem() instanceof GearItem gear && gear.isEnchanted()) {
-                    if (!this.insertItem(originalStack, 2, 3, false)) {
+                    if (!this.moveItemStackTo(originalStack, 2, 3, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(Items.BUCKET) || originalStack.isOf(ModItems.COPPER_BUCKET)) {
-                    if (!this.insertItem(originalStack, 3, 4, false)) {
+                } else if (originalStack.is(Items.BUCKET) || originalStack.is(ModItems.COPPER_BUCKET)) {
+                    if (!this.moveItemStackTo(originalStack, 3, 4, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 5 && invSlot < 32) {
-                    if (!this.insertItem(originalStack, 32, 41, false)) {
+                    if (!this.moveItemStackTo(originalStack, 32, 41, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 32 && invSlot < 41) {
-                    if (!this.insertItem(originalStack, 5, 32, false)) {
+                    if (!this.moveItemStackTo(originalStack, 5, 32, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

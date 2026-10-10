@@ -9,29 +9,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.CrusherMk2ScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class CrusherMk2BlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 50; // 50 FE/t
@@ -42,14 +42,14 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     public static final int GEAR_SLOT = 3;
     public static final int INVENTORY_SIZE = 4;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 100;
     private float experience = 0.0f;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -74,7 +74,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -131,17 +131,17 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.crusher_mk2");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.crusher_mk2");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new CrusherMk2ScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, CrusherMk2BlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, CrusherMk2BlockEntity entity) {
         boolean dirty = false;
 
         entity.totalCookTime = getTierCookTime(entity.getActiveGearTier());
@@ -169,36 +169,36 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             }
         }
 
-        if (state.get(CrusherMk2Block.LIT) != isCrushing) {
-            world.setBlockState(pos, state.with(CrusherMk2Block.LIT, isCrushing), 3);
+        if (state.getValue(CrusherMk2Block.LIT) != isCrushing) {
+            world.setBlock(pos, state.setValue(CrusherMk2Block.LIT, isCrushing), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     private boolean canAcceptOutputs(Mk2CrushRecipe recipe) {
         int primaryAmount = recipe.isBlock ? recipe.baseCount : getTierYield();
         ItemStack currentPri = inventory.get(PRIMARY_OUTPUT_SLOT);
-        if (!currentPri.isEmpty() && (!currentPri.isOf(recipe.primaryOutput) || currentPri.getCount() + primaryAmount > currentPri.getMaxCount())) {
+        if (!currentPri.isEmpty() && (!currentPri.is(recipe.primaryOutput) || currentPri.getCount() + primaryAmount > currentPri.getMaxStackSize())) {
             return false;
         }
 
-        if (inventory.get(INPUT_SLOT).isOf(Items.MAGMA_BLOCK)) {
+        if (inventory.get(INPUT_SLOT).is(Items.MAGMA_BLOCK)) {
             ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
             if (!currentBy.isEmpty()) {
-                if (!currentBy.isOf(ModItems.SULFUR_DUST) && !currentBy.isOf(Items.BLAZE_POWDER)) {
+                if (!currentBy.is(ModItems.SULFUR_DUST) && !currentBy.is(Items.BLAZE_POWDER)) {
                     return false;
                 }
-                if (currentBy.getCount() >= currentBy.getMaxCount()) {
+                if (currentBy.getCount() >= currentBy.getMaxStackSize()) {
                     return false;
                 }
             }
         } else if (recipe.byproduct != null) {
             ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
-            if (!currentBy.isEmpty() && (!currentBy.isOf(recipe.byproduct) || currentBy.getCount() + recipe.byproductCount > currentBy.getMaxCount())) {
+            if (!currentBy.isEmpty() && (!currentBy.is(recipe.byproduct) || currentBy.getCount() + recipe.byproductCount > currentBy.getMaxStackSize())) {
                 return false;
             }
         }
@@ -208,19 +208,19 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
 
     private void processCrush(Mk2CrushRecipe recipe) {
         ItemStack input = inventory.get(INPUT_SLOT);
-        input.decrement(1);
+        input.shrink(1);
 
         int primaryAmount = recipe.isBlock ? recipe.baseCount : getTierYield();
         ItemStack currentPri = inventory.get(PRIMARY_OUTPUT_SLOT);
         if (currentPri.isEmpty()) {
             inventory.set(PRIMARY_OUTPUT_SLOT, new ItemStack(recipe.primaryOutput, primaryAmount));
         } else {
-            currentPri.increment(primaryAmount);
+            currentPri.grow(primaryAmount);
         }
 
-        if (input.isOf(Items.MAGMA_BLOCK)) {
+        if (input.is(Items.MAGMA_BLOCK)) {
             ItemStack currentBy = inventory.get(BYPRODUCT_OUTPUT_SLOT);
-            float roll = (this.world != null ? this.world.random.nextFloat() : (float) Math.random());
+            float roll = (this.level != null ? this.level.getRandom().nextFloat() : (float) Math.random());
             Item chosenByproduct = null;
             if (roll < 0.40f) {
                 chosenByproduct = ModItems.SULFUR_DUST;
@@ -230,8 +230,8 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             if (chosenByproduct != null) {
                 if (currentBy.isEmpty()) {
                     inventory.set(BYPRODUCT_OUTPUT_SLOT, new ItemStack(chosenByproduct, 1));
-                } else if (currentBy.isOf(chosenByproduct) && currentBy.getCount() < currentBy.getMaxCount()) {
-                    currentBy.increment(1);
+                } else if (currentBy.is(chosenByproduct) && currentBy.getCount() < currentBy.getMaxStackSize()) {
+                    currentBy.grow(1);
                 }
             }
         } else if (recipe.byproduct != null) {
@@ -239,7 +239,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
             if (currentBy.isEmpty()) {
                 inventory.set(BYPRODUCT_OUTPUT_SLOT, new ItemStack(recipe.byproduct, recipe.byproductCount));
             } else {
-                currentBy.increment(recipe.byproductCount);
+                currentBy.grow(recipe.byproductCount);
             }
         }
 
@@ -329,7 +329,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         if (item == Items.RAW_COPPER || item == Items.COPPER_ORE || item == Items.DEEPSLATE_COPPER_ORE) {
             return new Mk2CrushRecipe(ModItems.COPPER_DUST, 4, false, ModItems.GOLD_DUST, 1);
         }
-        if (item == Items.RAW_COPPER_BLOCK || item == Items.COPPER_BLOCK) {
+        if (item == Items.RAW_COPPER_BLOCK || Items.COPPER_BLOCK.asList().contains(item)) {
             return new Mk2CrushRecipe(ModItems.COPPER_DUST, 36, true, ModItems.GOLD_DUST, 3);
         }
         if (item == Items.COPPER_INGOT) {
@@ -465,7 +465,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
         }
 
         // Stone Recycling & Milling
-        if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.RED_TERRACOTTA || item == Items.GRANITE) {
+        if (item == Items.DIORITE || item == Items.TERRACOTTA || item == Items.DYED_TERRACOTTA.red() || item == Items.GRANITE) {
             return new Mk2CrushRecipe(ModItems.RAW_BAUXITE, 1, false, Items.SAND, 1);
         }
         if (item == Items.COBBLESTONE || item == Items.STONE) {
@@ -491,20 +491,20 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 100);
-        this.experience = view.getFloat("Experience", 0.0f);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 100);
+        this.experience = view.getFloatOr("Experience", 0.0f);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
@@ -513,26 +513,26 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{PRIMARY_OUTPUT_SLOT, BYPRODUCT_OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT};
         return new int[]{INPUT_SLOT, GEAR_SLOT, PRIMARY_OUTPUT_SLOT, BYPRODUCT_OUTPUT_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT) return getRecipe(stack.getItem()) != null;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == PRIMARY_OUTPUT_SLOT || slot == BYPRODUCT_OUTPUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -545,36 +545,36 @@ public class CrusherMk2BlockEntity extends BlockEntity implements NamedScreenHan
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

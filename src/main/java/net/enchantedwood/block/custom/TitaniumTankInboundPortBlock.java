@@ -3,121 +3,118 @@ package net.enchantedwood.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.block.entity.TitaniumTankControllerBlockEntity;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class TitaniumTankInboundPortBlock extends BlockWithEntity {
-    public static final MapCodec<TitaniumTankInboundPortBlock> CODEC = createCodec(TitaniumTankInboundPortBlock::new);
-    public static final BooleanProperty FORMED = BooleanProperty.of("formed");
+public class TitaniumTankInboundPortBlock extends BaseEntityBlock {
+    public static final BooleanProperty FORMED = BooleanProperty.create("formed");
 
-    public TitaniumTankInboundPortBlock(Settings settings) {
+    public TitaniumTankInboundPortBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FORMED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FORMED, false));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FORMED);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TitaniumTankControllerBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (world instanceof ServerWorld serverWorld && type == ModBlockEntities.TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        if (world instanceof ServerLevel serverWorld && type == ModBlockEntities.TITANIUM_TANK_CONTROLLER_BLOCK_ENTITY) {
             return (w, pos, st, blockEntity) -> TitaniumTankControllerBlockEntity.tick(serverWorld, pos, st, (TitaniumTankControllerBlockEntity) blockEntity);
         }
         return null;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player.isSneaking()) {
-            net.minecraft.item.ItemStack hand = player.getMainHandStack();
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (player.isShiftKeyDown()) {
+            net.minecraft.world.item.ItemStack hand = player.getMainHandItem();
             net.enchantedwood.fluid.MoltenMetal filterMetal = net.enchantedwood.fluid.MoltenMetal.fromItem(hand);
             if (filterMetal != null) {
-                if (!world.isClient()) {
+                if (!world.isClientSide()) {
                     BlockEntity be = world.getBlockEntity(pos);
                     if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                         if (controller.getStoredFluidAmount() > 0 && controller.getFluidType() != filterMetal) {
-                            player.sendMessage(Text.literal("§c⚠ Tank contains " + controller.getStoredFluidAmount() + " mB of " + controller.getFluidType().getDisplayName() + "! Break and replace a block to purge first."), true);
-                            return ActionResult.SUCCESS;
+                            player.sendOverlayMessage(Component.literal("§c⚠ Tank contains " + controller.getStoredFluidAmount() + " mB of " + controller.getFluidType().getDisplayName() + "! Break and replace a block to purge first."));
+                            return InteractionResult.SUCCESS;
                         }
                         controller.setFilterFluid(filterMetal);
-                        player.sendMessage(Text.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()), true);
-                        return ActionResult.SUCCESS;
+                        player.sendOverlayMessage(Component.literal("§a✔ 5x5 Tank locked to: §f" + filterMetal.getDisplayName()));
+                        return InteractionResult.SUCCESS;
                     }
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else if (hand.isEmpty()) {
-                if (!world.isClient()) {
+                if (!world.isClientSide()) {
                     BlockEntity be = world.getBlockEntity(pos);
                     if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                         controller.setFilterFluid(net.enchantedwood.fluid.MoltenMetal.NONE);
-                        player.sendMessage(Text.literal("§eTank filter cleared (Accepts any fluid)."), true);
-                        return ActionResult.SUCCESS;
+                        player.sendOverlayMessage(Component.literal("§eTank filter cleared (Accepts any fluid)."));
+                        return InteractionResult.SUCCESS;
                     }
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             // Sneaking with non-metal item -> PASS so signs/blocks can be placed
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
 
-        if (!world.isClient()) {
+        if (!world.isClientSide()) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof TitaniumTankControllerBlockEntity controller) {
                 if (controller.isFormed()) {
-                    player.openHandledScreen(controller);
-                    return ActionResult.SUCCESS;
+                    player.openMenu(controller);
+                    return InteractionResult.SUCCESS;
                 } else {
                     if (controller.tryFormStructure()) {
-                        player.sendMessage(Text.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"), true);
+                        player.sendOverlayMessage(Component.literal("§a✔ 5x5 Titanium Multi-Fluid Tank formed!"));
                     } else {
-                        player.sendMessage(Text.literal("§e[Titanium Tank] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."), true);
+                        player.sendOverlayMessage(Component.literal("§e[Titanium Tank] Structure incomplete (5x5x5 hollow frame with Top Inbound Port required)."));
                     }
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (!world.isClient()) {
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        if (!world.isClientSide()) {
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof TitaniumTankControllerBlockEntity controller) {
                 controller.dismantleStructure();
             }
         }
-        return super.onBreak(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 }

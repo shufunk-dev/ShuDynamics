@@ -1,62 +1,62 @@
 package net.enchantedwood.block.custom;
 
 import net.enchantedwood.item.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CornCropBlock extends CropBlock {
     public static final int MAX_AGE = 7;
-    public static final IntProperty AGE = Properties.AGE_7;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
 
     private static final VoxelShape[] AGE_TO_SHAPE = new VoxelShape[]{
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+            Block.box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 6.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     };
 
-    public CornCropBlock(Settings settings) {
+    public CornCropBlock(Properties settings) {
         super(settings);
     }
 
-    public ItemConvertible getSeed() {
+    public ItemLike getSeed() {
         return ModItems.CORN_SEEDS;
     }
 
     @Override
-    protected ItemConvertible getSeedsItem() {
+    protected ItemLike getBaseSeedId() {
         return ModItems.CORN_SEEDS;
     }
 
     @Override
-    public IntProperty getAgeProperty() {
+    public IntegerProperty getAgeProperty() {
         return AGE;
     }
 
@@ -66,33 +66,33 @@ public class CornCropBlock extends CropBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return AGE_TO_SHAPE[this.getAge(state)];
     }
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return floor.isOf(net.minecraft.block.Blocks.FARMLAND) || floor.isOf(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
+    protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+        return floor.is(net.minecraft.world.level.block.Blocks.FARMLAND) || floor.is(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (this.isMature(state)) {
-            if (world.isClient()) {
-                return ActionResult.SUCCESS;
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (this.isMaxAge(state)) {
+            if (world.isClientSide()) {
+                return InteractionResult.SUCCESS;
             }
 
-            ItemStack held = player.getMainHandStack();
+            ItemStack held = player.getMainHandItem();
             int fortune = 0;
-            ItemEnchantmentsComponent enchantments = held.get(DataComponentTypes.ENCHANTMENTS);
+            ItemEnchantments enchantments = held.get(DataComponents.ENCHANTMENTS);
             if (enchantments != null) {
-                for (var entry : enchantments.getEnchantmentEntries()) {
-                    if (entry.getKey().matchesKey(Enchantments.FORTUNE)) {
+                for (var entry : enchantments.entrySet()) {
+                    if (entry.getKey().is(Enchantments.FORTUNE)) {
                         fortune = entry.getIntValue();
                         break;
                     }
@@ -102,26 +102,26 @@ public class CornCropBlock extends CropBlock {
             int produceCount = 1;
             int seedCount = 1;
             if (fortune > 0) {
-                produceCount += world.random.nextInt(fortune + 1);
-                seedCount += world.random.nextInt(fortune + 1);
-            } else if (world.random.nextFloat() < 0.5f) {
+                produceCount += world.getRandom().nextInt(fortune + 1);
+                seedCount += world.getRandom().nextInt(fortune + 1);
+            } else if (world.getRandom().nextFloat() < 0.5f) {
                 seedCount++;
             }
 
-            dropStack(world, pos, new ItemStack(ModItems.CORN, produceCount));
-            dropStack(world, pos, new ItemStack(ModItems.CORN_SEEDS, seedCount));
+            popResource(world, pos, new ItemStack(ModItems.CORN, produceCount));
+            popResource(world, pos, new ItemStack(ModItems.CORN_SEEDS, seedCount));
 
-            world.playSound(null, pos, SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            BlockState resetState = state.with(this.getAgeProperty(), 0);
-            world.setBlockState(pos, resetState, Block.NOTIFY_LISTENERS);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, resetState));
+            world.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            BlockState resetState = state.setValue(this.getAgeProperty(), 0);
+            world.setBlock(pos, resetState, Block.UPDATE_CLIENTS);
+            world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, resetState));
 
-            if (!player.isCreative() && held.isIn(ItemTags.HOES)) {
-                held.damage(1, (ServerWorld) world, (ServerPlayerEntity) player, item -> {});
+            if (!player.isCreative() && held.is(ItemTags.HOES)) {
+                held.hurtAndBreak(1, (ServerLevel) world, (ServerPlayer) player, item -> {});
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 }

@@ -2,71 +2,69 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 @Environment(EnvType.CLIENT)
-public class EnchantedChestScreen extends HandledScreen<EnchantedChestScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/enchanted_chest_gui.png");
-    private ButtonWidget upButton;
-    private ButtonWidget downButton;
-    private ButtonWidget sortButton;
+public class EnchantedChestScreen extends AbstractContainerScreen<EnchantedChestScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/enchanted_chest_gui.png");
+    private Button upButton;
+    private Button downButton;
+    private Button sortButton;
 
-    public EnchantedChestScreen(EnchantedChestScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-        this.backgroundWidth = 194;
-        this.backgroundHeight = 222;
-        this.titleX = 8;
-        this.titleY = 5;
-        this.playerInventoryTitleY = this.backgroundHeight - 94;
+    public EnchantedChestScreen(EnchantedChestScreenHandler handler, Inventory inventory, Component title) {
+        super(handler, inventory, title, 194, 222);
+        this.titleLabelX = 8;
+        this.titleLabelY = 5;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
         // Up Scroll Button
-        this.upButton = ButtonWidget.builder(Text.literal("▲"), button -> {
-            int newRow = Math.max(0, this.handler.getScrollRow() - 1);
-            this.handler.setScrollRow(newRow);
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 100 + newRow);
+        this.upButton = Button.builder(Component.literal("▲"), button -> {
+            int newRow = Math.max(0, this.menu.getScrollRow() - 1);
+            this.menu.setScrollRow(newRow);
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 100 + newRow);
             }
-        }).dimensions(x + 174, y + 4, 12, 11).build();
-        this.addDrawableChild(this.upButton);
+        }).bounds(x + 174, y + 4, 12, 11).build();
+        this.addRenderableWidget(this.upButton);
 
         // Down Scroll Button
-        this.downButton = ButtonWidget.builder(Text.literal("▼"), button -> {
-            int newRow = Math.min(this.handler.getMaxScrollRows(), this.handler.getScrollRow() + 1);
-            this.handler.setScrollRow(newRow);
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 100 + newRow);
+        this.downButton = Button.builder(Component.literal("▼"), button -> {
+            int newRow = Math.min(this.menu.getMaxScrollRows(), this.menu.getScrollRow() + 1);
+            this.menu.setScrollRow(newRow);
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 100 + newRow);
             }
-        }).dimensions(x + 174, y + 126, 12, 11).build();
-        this.addDrawableChild(this.downButton);
+        }).bounds(x + 174, y + 126, 12, 11).build();
+        this.addRenderableWidget(this.downButton);
 
         // Sort Button
-        this.sortButton = ButtonWidget.builder(Text.literal("Sort"), button -> {
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 2);
+        this.sortButton = Button.builder(Component.literal("Sort"), button -> {
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 2);
             }
-        }).dimensions(x + 138, y + 3, 32, 11).build();
-        this.addDrawableChild(this.sortButton);
+        }).bounds(x + 138, y + 3, 32, 11).build();
+        this.addRenderableWidget(this.sortButton);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        int maxScrollRows = this.handler.getMaxScrollRows();
+        int maxScrollRows = this.menu.getMaxScrollRows();
         if (maxScrollRows > 0) {
-            int currentScroll = this.handler.getScrollRow();
+            int currentScroll = this.menu.getScrollRow();
             int newScroll = currentScroll;
             if (verticalAmount < 0) {
                 newScroll = Math.min(currentScroll + 1, maxScrollRows);
@@ -74,9 +72,9 @@ public class EnchantedChestScreen extends HandledScreen<EnchantedChestScreenHand
                 newScroll = Math.max(currentScroll - 1, 0);
             }
             if (newScroll != currentScroll) {
-                this.handler.setScrollRow(newScroll);
-                if (this.client != null && this.client.interactionManager != null) {
-                    this.client.interactionManager.clickButton(this.handler.syncId, 100 + newScroll);
+                this.menu.setScrollRow(newScroll);
+                if (this.minecraft != null && this.minecraft.gameMode != null) {
+                    this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 100 + newScroll);
                 }
             }
             return true;
@@ -85,48 +83,47 @@ public class EnchantedChestScreen extends HandledScreen<EnchantedChestScreenHand
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0x404040, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0x404040, false);
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0x404040, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040, false);
 
-        int maxSlots = this.handler.getMaxSlots();
-        int scrollRow = this.handler.getScrollRow() + 1;
+        int maxSlots = this.menu.getMaxSlots();
+        int scrollRow = this.menu.getScrollRow() + 1;
         int totalRows = (int) Math.ceil((double) maxSlots / 9.0);
 
         String capacityInfo = maxSlots + " Slots (Row " + scrollRow + "/" + totalRows + ")";
-        context.drawText(this.textRenderer, capacityInfo, 7, 128, 0x404040, false);
+        context.text(this.font, capacityInfo, 7, 128, 0x404040, false);
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // Render Scrollbar Thumb Widget
-        int maxScrollRows = this.handler.getMaxScrollRows();
+        int maxScrollRows = this.menu.getMaxScrollRows();
         int thumbY = y + 17;
         if (maxScrollRows > 0) {
-            float progress = (float) this.handler.getScrollRow() / (float) maxScrollRows;
+            float progress = (float) this.menu.getScrollRow() / (float) maxScrollRows;
             thumbY += (int) (progress * (108 - 15));
         }
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 174, thumbY, 196.0f, 0.0f, 12, 15, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 174, thumbY, 196.0f, 0.0f, 12, 15, 256, 256);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
+
         if (this.upButton != null && this.downButton != null) {
-            boolean canScroll = this.handler.getMaxScrollRows() > 0;
+            boolean canScroll = this.menu.getMaxScrollRows() > 0;
             this.upButton.visible = canScroll;
             this.downButton.visible = canScroll;
-            this.upButton.active = this.handler.getScrollRow() > 0;
-            this.downButton.active = this.handler.getScrollRow() < this.handler.getMaxScrollRows();
+            this.upButton.active = this.menu.getScrollRow() > 0;
+            this.downButton.active = this.menu.getScrollRow() < this.menu.getMaxScrollRows();
         }
-
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
     }
 }

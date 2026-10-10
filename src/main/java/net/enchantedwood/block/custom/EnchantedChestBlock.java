@@ -1,78 +1,72 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.block.entity.EnchantedChestBlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockEntityProvider {
-    public static final MapCodec<EnchantedChestBlock> CODEC = createCodec(EnchantedChestBlock::new);
-    public static final EnumProperty<GearTier> GEAR_TIER = EnumProperty.of("gear_tier", GearTier.class);
-    protected static final net.minecraft.util.shape.VoxelShape SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
+public class EnchantedChestBlock extends HorizontalDirectionalBlock implements EntityBlock {
+    public static final EnumProperty<GearTier> GEAR_TIER = EnumProperty.create("gear_tier", GearTier.class);
+    protected static final net.minecraft.world.phys.shapes.VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
 
-    public EnchantedChestBlock(Settings settings) {
+    public EnchantedChestBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(FACING, Direction.NORTH)
-                .with(GEAR_TIER, GearTier.NONE));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(GEAR_TIER, GearTier.NONE));
     }
 
     @Override
-    protected net.minecraft.util.shape.VoxelShape getOutlineShape(BlockState state, net.minecraft.world.BlockView world, BlockPos pos, net.minecraft.block.ShapeContext context) {
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    protected BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.INVISIBLE;
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return CODEC;
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.INVISIBLE;
     }
 
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new EnchantedChestBlockEntity(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         if (type == ModBlockEntities.ENCHANTED_CHEST_BLOCK_ENTITY) {
-            return world.isClient()
+            return world.isClientSide()
                     ? (w, pos, st, be) -> EnchantedChestBlockEntity.clientTick(w, pos, st, (EnchantedChestBlockEntity) be)
                     : (w, pos, st, be) -> EnchantedChestBlockEntity.tick(w, pos, st, (EnchantedChestBlockEntity) be);
         }
@@ -80,56 +74,56 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
     }
 
     @Override
-    protected boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
-        super.onSyncedBlockEvent(state, world, pos, type, data);
+    protected boolean triggerEvent(BlockState state, Level world, BlockPos pos, int type, int data) {
+        super.triggerEvent(state, world, pos, type, data);
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity != null && blockEntity.onSyncedBlockEvent(type, data);
+        return blockEntity != null && blockEntity.triggerEvent(type, data);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof EnchantedChestBlockEntity chestEntity) {
-                ItemStack handStack = player.getStackInHand(Hand.MAIN_HAND);
+                ItemStack handStack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
                 if (handStack.getItem() instanceof GearItem gearItem) {
                     GearTier newTier = gearItem.getGearTier();
-                    GearTier currentTier = state.get(GEAR_TIER);
+                    GearTier currentTier = state.getValue(GEAR_TIER);
                     if (newTier.ordinal() > currentTier.ordinal()) {
                         boolean hasRedstone = player.getInventory().contains(new ItemStack(ModItems.ENCHANTED_REDSTONE));
                         if (hasRedstone || player.isCreative()) {
                             if (!player.isCreative()) {
-                                player.getInventory().remove(stack -> stack.isOf(ModItems.ENCHANTED_REDSTONE), 1, player.playerScreenHandler.getCraftingInput());
-                                handStack.decrement(1);
+                                player.getInventory().clearOrCountMatchingItems(stack -> stack.is(ModItems.ENCHANTED_REDSTONE), false, 1, player.inventoryMenu.getCraftSlots());
+                                handStack.shrink(1);
                             }
-                            world.setBlockState(pos, state.with(GEAR_TIER, newTier), 3);
+                            world.setBlock(pos, state.setValue(GEAR_TIER, newTier), 3);
                             chestEntity.upgradeTier(newTier);
-                            player.sendMessage(Text.translatable("message.enchantedwood.upgraded_chest_tier", newTier.asString().replace("_", " ").toUpperCase()), true);
-                            return ActionResult.SUCCESS;
+                            player.sendOverlayMessage(Component.translatable("message.enchantedwood.upgraded_chest_tier", newTier.getSerializedName().replace("_", " ").toUpperCase()));
+                            return InteractionResult.SUCCESS;
                         } else {
-                            player.sendMessage(Text.translatable("message.enchantedwood.upgrade_requires_redstone"), true);
-                            return ActionResult.SUCCESS;
+                            player.sendOverlayMessage(Component.translatable("message.enchantedwood.upgrade_requires_redstone"));
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
 
-                if (blockEntity instanceof NamedScreenHandlerFactory factory) {
-                    player.openHandledScreen(factory);
+                if (blockEntity instanceof MenuProvider factory) {
+                    player.openMenu(factory);
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public ItemStack getPickStack(net.minecraft.world.WorldView world, BlockPos pos, BlockState state, boolean includeData) {
-        GearTier currentTier = state.get(GEAR_TIER);
+    public ItemStack getCloneItemStack(net.minecraft.world.level.LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
+        GearTier currentTier = state.getValue(GEAR_TIER);
         return switch (currentTier) {
             case COPPER -> new ItemStack(ModItems.COPPER_ENCHANTED_CHEST);
             case BRONZE -> new ItemStack(ModItems.BRONZE_ENCHANTED_CHEST);
@@ -142,16 +136,16 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack);
-        if (!world.isClient()) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        super.setPlacedBy(world, pos, state, placer, itemStack);
+        if (!world.isClientSide()) {
             GearTier tier = GearTier.NONE;
             if (itemStack.getItem() instanceof net.enchantedwood.item.custom.EnchantedChestTierItem tierItem) {
                 tier = tierItem.getTier();
             } else {
-                NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+                CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
                 if (nbtComponent != null) {
-                    NbtCompound nbt = nbtComponent.copyNbt();
+                    CompoundTag nbt = nbtComponent.copyTag();
                     Optional<String> tierOpt = nbt.getString("GearTier");
                     if (tierOpt.isPresent()) {
                         try {
@@ -162,7 +156,7 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
             }
 
             if (tier != GearTier.NONE) {
-                world.setBlockState(pos, state.with(GEAR_TIER, tier), 3);
+                world.setBlock(pos, state.setValue(GEAR_TIER, tier), 3);
                 BlockEntity be = world.getBlockEntity(pos);
                 if (be instanceof EnchantedChestBlockEntity chestEntity) {
                     chestEntity.upgradeTier(tier);
@@ -172,9 +166,9 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (!world.isClient() && !player.isCreative()) {
-            GearTier currentTier = state.get(GEAR_TIER);
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        if (!world.isClientSide() && !player.isCreative()) {
+            GearTier currentTier = state.getValue(GEAR_TIER);
             ItemStack dropStack = switch (currentTier) {
                 case COPPER -> new ItemStack(ModItems.COPPER_ENCHANTED_CHEST);
                 case BRONZE -> new ItemStack(ModItems.BRONZE_ENCHANTED_CHEST);
@@ -185,36 +179,36 @@ public class EnchantedChestBlock extends HorizontalFacingBlock implements BlockE
                 default -> new ItemStack(this);
             };
 
-            Block.dropStack(world, pos, dropStack);
+            Block.popResource(world, pos, dropStack);
 
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof EnchantedChestBlockEntity chestEntity) {
-                ItemScatterer.spawn(world, pos, chestEntity);
-                chestEntity.clear();
+                Containers.dropContents(world, pos, chestEntity);
+                chestEntity.clearContent();
             }
 
             world.removeBlock(pos, false);
             return state;
         }
-        return super.onBreak(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 
 
 
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, GEAR_TIER);
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
-        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+        if (!state.is(world.getBlockState(pos).getBlock())) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof EnchantedChestBlockEntity chestEntity) {
-                ItemScatterer.spawn(world, pos, chestEntity);
+                Containers.dropContents(world, pos, chestEntity);
             }
-            super.onStateReplaced(state, world, pos, moved);
+            super.affectNeighborsAfterRemoval(state, world, pos, moved);
         }
     }
 }

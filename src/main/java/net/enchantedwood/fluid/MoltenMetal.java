@@ -2,19 +2,19 @@ package net.enchantedwood.fluid;
 
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.item.ModItems;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public enum MoltenMetal implements StringIdentifiable {
+public enum MoltenMetal implements StringRepresentable {
     NONE("none", "None", 0x00000000, null, null, null),
     LAVA("lava", "Lava", 0xFFD95B10, null, null, null),
     IRON("iron", "Molten Iron", 0xFFD8D8D8, () -> Items.IRON_NUGGET, () -> Items.IRON_INGOT, () -> Items.IRON_BLOCK),
     GOLD("gold", "Molten Gold", 0xFFFEE649, () -> Items.GOLD_NUGGET, () -> Items.GOLD_INGOT, () -> Items.GOLD_BLOCK),
-    COPPER("copper", "Molten Copper", 0xFFE77C56, () -> ModItems.COPPER_NUGGET, () -> Items.COPPER_INGOT, () -> Items.COPPER_BLOCK),
+    COPPER("copper", "Molten Copper", 0xFFE77C56, () -> ModItems.COPPER_NUGGET, () -> Items.COPPER_INGOT, () -> Items.COPPER_BLOCK.weathering().unaffected()),
     TIN("tin", "Molten Tin", 0xFFBAC8CF, () -> ModItems.TIN_NUGGET, () -> ModItems.TIN_INGOT, () -> ModBlocks.TIN_BLOCK.asItem()),
     BRONZE("bronze", "Molten Bronze", 0xFFDE8735, () -> ModItems.BRONZE_NUGGET, () -> ModItems.BRONZE_INGOT, () -> ModBlocks.BRONZE_BLOCK.asItem()),
     ALUMINUM("aluminum", "Molten Aluminum", 0xFFCCD5DD, () -> ModItems.ALUMINUM_NUGGET, () -> ModItems.ALUMINUM_INGOT, () -> ModBlocks.ALUMINUM_BLOCK.asItem()),
@@ -46,7 +46,7 @@ public enum MoltenMetal implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.id;
     }
 
@@ -83,12 +83,12 @@ public enum MoltenMetal implements StringIdentifiable {
         return NONE;
     }
 
-    public static @Nullable MoltenMetal fromItem(net.minecraft.item.ItemStack stack) {
+    public static @Nullable MoltenMetal fromItem(net.minecraft.world.item.ItemStack stack) {
         if (stack.isEmpty()) return null;
-        if (stack.isOf(Items.LAVA_BUCKET)) return LAVA;
-        if (stack.isOf(Items.RAW_IRON) || stack.isOf(Items.RAW_IRON_BLOCK)) return IRON;
-        if (stack.isOf(Items.RAW_GOLD) || stack.isOf(Items.RAW_GOLD_BLOCK)) return GOLD;
-        if (stack.isOf(Items.RAW_COPPER) || stack.isOf(Items.RAW_COPPER_BLOCK)) return COPPER;
+        if (stack.is(Items.LAVA_BUCKET)) return LAVA;
+        if (stack.is(Items.RAW_IRON) || stack.is(Items.RAW_IRON_BLOCK)) return IRON;
+        if (stack.is(Items.RAW_GOLD) || stack.is(Items.RAW_GOLD_BLOCK)) return GOLD;
+        if (stack.is(Items.RAW_COPPER) || stack.is(Items.RAW_COPPER_BLOCK)) return COPPER;
 
         Item item = stack.getItem();
         for (MoltenMetal metal : values()) {

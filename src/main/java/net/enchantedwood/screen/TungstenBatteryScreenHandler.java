@@ -3,36 +3,36 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.entity.TungstenBatteryBlockEntity;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.ItemEnergyProvider;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class TungstenBatteryScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class TungstenBatteryScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public TungstenBatteryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(TungstenBatteryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(5));
+    public TungstenBatteryScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(TungstenBatteryBlockEntity.INVENTORY_SIZE), new SimpleContainerData(5));
     }
 
-    public TungstenBatteryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public TungstenBatteryScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.TUNGSTEN_BATTERY_SCREEN_HANDLER, syncId);
-        checkSize(inventory, TungstenBatteryBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, TungstenBatteryBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Discharge Slot (x=16, y=35)
         this.addSlot(new Slot(inventory, TungstenBatteryBlockEntity.DISCHARGE_SLOT, 16, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
             }
         });
@@ -40,7 +40,7 @@ public class TungstenBatteryScreenHandler extends ScreenHandler {
         // Slot 1: Charge Slot (x=144, y=35)
         this.addSlot(new Slot(inventory, TungstenBatteryBlockEntity.CHARGE_SLOT, 144, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
             }
         });
@@ -78,42 +78,42 @@ public class TungstenBatteryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < TungstenBatteryBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, TungstenBatteryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, TungstenBatteryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof ItemEnergyProvider || originalStack.getItem() instanceof EnergyProvider) {
-                    if (!this.insertItem(originalStack, TungstenBatteryBlockEntity.CHARGE_SLOT, TungstenBatteryBlockEntity.CHARGE_SLOT + 1, false) &&
-                        !this.insertItem(originalStack, TungstenBatteryBlockEntity.DISCHARGE_SLOT, TungstenBatteryBlockEntity.DISCHARGE_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, TungstenBatteryBlockEntity.CHARGE_SLOT, TungstenBatteryBlockEntity.CHARGE_SLOT + 1, false) &&
+                        !this.moveItemStackTo(originalStack, TungstenBatteryBlockEntity.DISCHARGE_SLOT, TungstenBatteryBlockEntity.DISCHARGE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot < 2 + 27) {
-                    if (!this.insertItem(originalStack, 2 + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, 2 + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, 2, 2 + 27, false)) {
+                } else if (!this.moveItemStackTo(originalStack, 2, 2 + 27, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

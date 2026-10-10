@@ -1,25 +1,5 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock;
@@ -27,10 +7,30 @@ import net.enchantedwood.fluid.LavaProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.EnchantedLavaGeneratorScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, LavaProvider {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
+public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, LavaProvider {
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(5, ItemStack.EMPTY);
 
     private int cookTime = 0;
     private int totalCookTime = 600;
@@ -39,7 +39,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
     private int lavaAmount = 0; // In mB / mL (Max 10,000 mL)
     public static final int MAX_LAVA = 10000;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -65,7 +65,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 6;
         }
     };
@@ -75,12 +75,12 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.enchanted_lava_generator");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.enchanted_lava_generator");
     }
 
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new EnchantedLavaGeneratorScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -107,7 +107,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
         };
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, EnchantedLavaGeneratorBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, EnchantedLavaGeneratorBlockEntity entity) {
         boolean isBurningOriginally = entity.burnTime > 0;
         boolean stateChanged = false;
 
@@ -118,9 +118,9 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
         GearTier currentGearTier = entity.getActiveGearTier();
         entity.totalCookTime = getTierCookTime(currentGearTier);
 
-        if (state.get(EnchantedLavaGeneratorBlock.GEAR_TIER) != currentGearTier) {
-            state = state.with(EnchantedLavaGeneratorBlock.GEAR_TIER, currentGearTier);
-            world.setBlockState(pos, state, 3);
+        if (state.getValue(EnchantedLavaGeneratorBlock.GEAR_TIER) != currentGearTier) {
+            state = state.setValue(EnchantedLavaGeneratorBlock.GEAR_TIER, currentGearTier);
+            world.setBlock(pos, state, 3);
             stateChanged = true;
         }
 
@@ -131,10 +131,10 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
 
         // Refuel ONLY using Enchanted Coal Block
         if (entity.burnTime <= 0 && canMelt) {
-            if (fuelStack.isOf(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
+            if (fuelStack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
                 entity.burnTime = 90000;
                 entity.totalBurnTime = 90000;
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 stateChanged = true;
             }
         }
@@ -144,7 +144,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
             ++entity.cookTime;
             if (entity.cookTime >= entity.totalCookTime) {
                 entity.cookTime = 0;
-                cobbleStack.decrement(1);
+                cobbleStack.shrink(1);
                 entity.lavaAmount = Math.min(MAX_LAVA, entity.lavaAmount + 100);
                 stateChanged = true;
             }
@@ -160,22 +160,22 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
             ItemStack outputStack = entity.inventory.get(4);
 
             Item lavaBucketItem = null;
-            if (emptyBucketStack.isOf(Items.BUCKET)) {
+            if (emptyBucketStack.is(Items.BUCKET)) {
                 lavaBucketItem = Items.LAVA_BUCKET;
-            } else if (emptyBucketStack.isOf(ModItems.COPPER_BUCKET)) {
+            } else if (emptyBucketStack.is(ModItems.COPPER_BUCKET)) {
                 lavaBucketItem = ModItems.COPPER_LAVA_BUCKET;
             }
 
             if (lavaBucketItem != null) {
                 if (outputStack.isEmpty()) {
-                    emptyBucketStack.decrement(1);
+                    emptyBucketStack.shrink(1);
                     entity.lavaAmount -= 1000;
                     entity.inventory.set(4, new ItemStack(lavaBucketItem, 1));
                     stateChanged = true;
-                } else if (outputStack.isOf(lavaBucketItem) && outputStack.getCount() < outputStack.getMaxCount()) {
-                    emptyBucketStack.decrement(1);
+                } else if (outputStack.is(lavaBucketItem) && outputStack.getCount() < outputStack.getMaxStackSize()) {
+                    emptyBucketStack.shrink(1);
                     entity.lavaAmount -= 1000;
-                    outputStack.increment(1);
+                    outputStack.grow(1);
                     stateChanged = true;
                 }
             }
@@ -183,37 +183,37 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
 
         boolean isBurningNow = entity.burnTime > 0;
         if (isBurningOriginally != isBurningNow) {
-            state = state.with(EnchantedLavaGeneratorBlock.LIT, isBurningNow);
-            world.setBlockState(pos, state, 3);
+            state = state.setValue(EnchantedLavaGeneratorBlock.LIT, isBurningNow);
+            world.setBlock(pos, state, 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     private boolean canMeltCobble(ItemStack cobbleStack) {
         if (cobbleStack.isEmpty()) return false;
-        if (!cobbleStack.isOf(Items.COBBLESTONE)) return false;
+        if (!cobbleStack.is(Items.COBBLESTONE)) return false;
         return this.lavaAmount + 100 <= MAX_LAVA;
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 600);
-        this.burnTime = view.getInt("BurnTime", 0);
-        this.totalBurnTime = view.getInt("TotalBurnTime", 0);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 600);
+        this.burnTime = view.getIntOr("BurnTime", 0);
+        this.totalBurnTime = view.getIntOr("TotalBurnTime", 0);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
         view.putInt("BurnTime", this.burnTime);
@@ -223,7 +223,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
 
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) {
             return new int[]{4}; // Output slot
         } else if (side == Direction.UP) {
@@ -234,21 +234,21 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (slot == 0) return stack.isOf(Items.COBBLESTONE);
-        if (slot == 1) return stack.isOf(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (slot == 0) return stack.is(Items.COBBLESTONE);
+        if (slot == 1) return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
         if (slot == 2) return stack.getItem() instanceof GearItem gear && gear.isEnchanted();
-        if (slot == 3) return stack.isOf(Items.BUCKET) || stack.isOf(ModItems.COPPER_BUCKET);
+        if (slot == 3) return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == 4;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -261,36 +261,36 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
@@ -319,7 +319,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Na
         int extracted = Math.min(this.lavaAmount, amount);
         if (!simulate && extracted > 0) {
             this.lavaAmount -= extracted;
-            markDirty();
+            setChanged();
         }
         return extracted;
     }

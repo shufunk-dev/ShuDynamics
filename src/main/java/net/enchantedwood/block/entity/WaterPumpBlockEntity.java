@@ -9,31 +9,31 @@ import net.enchantedwood.fluid.WaterProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.WaterPumpScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, WaterProvider {
+public class WaterPumpBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, WaterProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int BASE_ENERGY_DRAW = 20; // 20 FE/t
@@ -44,14 +44,14 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
     public static final int GEAR_SLOT = 2;
     public static final int INVENTORY_SIZE = 3;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int pumpProgress = 0;
     private int totalPumpTime = 40;
     private int waterAmount = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -77,7 +77,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -140,7 +140,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         int toInsert = Math.min(space, amount);
         if (!simulate && toInsert > 0) {
             this.waterAmount += toInsert;
-            markDirty();
+            setChanged();
         }
         return toInsert;
     }
@@ -150,7 +150,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         int toDrain = Math.min(this.waterAmount, amount);
         if (!simulate && toDrain > 0) {
             this.waterAmount -= toDrain;
-            markDirty();
+            setChanged();
         }
         return toDrain;
     }
@@ -161,17 +161,17 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.water_pump");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.water_pump");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new WaterPumpScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, WaterPumpBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, WaterPumpBlockEntity entity) {
         boolean dirty = false;
 
         GearTier tier = entity.getActiveGearTier();
@@ -181,8 +181,8 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         // 1. Fill empty buckets with water from internal tank
         ItemStack bucketIn = entity.inventory.get(BUCKET_IN_SLOT);
         if (!bucketIn.isEmpty() && entity.waterAmount >= 1000) {
-            boolean isVanillaBucket = bucketIn.isOf(Items.BUCKET);
-            boolean isCopperBucket = bucketIn.isOf(ModItems.COPPER_BUCKET);
+            boolean isVanillaBucket = bucketIn.is(Items.BUCKET);
+            boolean isCopperBucket = bucketIn.is(ModItems.COPPER_BUCKET);
 
             if (isVanillaBucket || isCopperBucket) {
                 ItemStack filledItem = isVanillaBucket ? new ItemStack(Items.WATER_BUCKET) : new ItemStack(ModItems.COPPER_WATER_BUCKET);
@@ -190,13 +190,13 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
 
                 if (bucketOut.isEmpty()) {
                     entity.waterAmount -= 1000;
-                    bucketIn.decrement(1);
+                    bucketIn.shrink(1);
                     entity.inventory.set(BUCKET_OUT_SLOT, filledItem);
                     dirty = true;
-                } else if (ItemStack.areItemsEqual(bucketOut, filledItem) && bucketOut.getCount() < 16) {
+                } else if (ItemStack.isSameItem(bucketOut, filledItem) && bucketOut.getCount() < 16) {
                     entity.waterAmount -= 1000;
-                    bucketIn.decrement(1);
-                    bucketOut.increment(1);
+                    bucketIn.shrink(1);
+                    bucketOut.grow(1);
                     dirty = true;
                 }
             }
@@ -207,20 +207,20 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         if (!currentOut.isEmpty()) {
             for (Direction dir : Direction.values()) {
                 if (dir == Direction.UP) continue;
-                BlockEntity targetBe = world.getBlockEntity(pos.offset(dir));
-                if (targetBe instanceof Inventory targetInv && !(targetBe instanceof WaterPumpBlockEntity)) {
-                    for (int s = 0; s < targetInv.size(); s++) {
-                        if (targetInv.isValid(s, currentOut)) {
-                            ItemStack existing = targetInv.getStack(s);
+                BlockEntity targetBe = world.getBlockEntity(pos.relative(dir));
+                if (targetBe instanceof Container targetInv && !(targetBe instanceof WaterPumpBlockEntity)) {
+                    for (int s = 0; s < targetInv.getContainerSize(); s++) {
+                        if (targetInv.canPlaceItem(s, currentOut)) {
+                            ItemStack existing = targetInv.getItem(s);
                             if (existing.isEmpty()) {
-                                targetInv.setStack(s, currentOut.split(1));
-                                targetInv.markDirty();
+                                targetInv.setItem(s, currentOut.split(1));
+                                targetInv.setChanged();
                                 dirty = true;
                                 break;
-                            } else if (ItemStack.areItemsEqual(existing, currentOut) && existing.getCount() < existing.getMaxCount()) {
-                                existing.increment(1);
-                                currentOut.decrement(1);
-                                targetInv.markDirty();
+                            } else if (ItemStack.isSameItem(existing, currentOut) && existing.getCount() < existing.getMaxStackSize()) {
+                                existing.grow(1);
+                                currentOut.shrink(1);
+                                targetInv.setChanged();
                                 dirty = true;
                                 break;
                             }
@@ -237,21 +237,21 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
 
         // 3. Auto-pull empty buckets from container above
         if (entity.inventory.get(BUCKET_IN_SLOT).getCount() < 16) {
-            BlockEntity topBe = world.getBlockEntity(pos.up());
-            if (topBe instanceof Inventory topInv && !(topBe instanceof WaterPumpBlockEntity)) {
-                for (int s = 0; s < topInv.size(); s++) {
-                    ItemStack topStack = topInv.getStack(s);
-                    if (!topStack.isEmpty() && (topStack.isOf(Items.BUCKET) || topStack.isOf(ModItems.COPPER_BUCKET))) {
+            BlockEntity topBe = world.getBlockEntity(pos.above());
+            if (topBe instanceof Container topInv && !(topBe instanceof WaterPumpBlockEntity)) {
+                for (int s = 0; s < topInv.getContainerSize(); s++) {
+                    ItemStack topStack = topInv.getItem(s);
+                    if (!topStack.isEmpty() && (topStack.is(Items.BUCKET) || topStack.is(ModItems.COPPER_BUCKET))) {
                         ItemStack inSlot = entity.inventory.get(BUCKET_IN_SLOT);
                         if (inSlot.isEmpty()) {
                             entity.inventory.set(BUCKET_IN_SLOT, topStack.split(1));
-                            topInv.markDirty();
+                            topInv.setChanged();
                             dirty = true;
                             break;
-                        } else if (ItemStack.areItemsEqual(inSlot, topStack) && inSlot.getCount() < inSlot.getMaxCount()) {
-                            inSlot.increment(1);
-                            topStack.decrement(1);
-                            topInv.markDirty();
+                        } else if (ItemStack.isSameItem(inSlot, topStack) && inSlot.getCount() < inSlot.getMaxStackSize()) {
+                            inSlot.grow(1);
+                            topStack.shrink(1);
+                            topInv.setChanged();
                             dirty = true;
                             break;
                         }
@@ -286,7 +286,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
         // 3. Push water directly into adjacent Water Providers (e.g. Oxygen Generator)
         if (entity.waterAmount > 0) {
             for (Direction dir : Direction.values()) {
-                BlockEntity be = world.getBlockEntity(pos.offset(dir));
+                BlockEntity be = world.getBlockEntity(pos.relative(dir));
                 if (be instanceof WaterProvider provider && !(be instanceof WaterPumpBlockEntity)) {
                     if (provider.canInsertWater()) {
                         int toSend = Math.min(entity.waterAmount, 250);
@@ -300,28 +300,28 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
             }
         }
 
-        if (state.get(WaterPumpBlock.LIT) != isPumping) {
-            world.setBlockState(pos, state.with(WaterPumpBlock.LIT, isPumping), 3);
+        if (state.getValue(WaterPumpBlock.LIT) != isPumping) {
+            world.setBlock(pos, state.setValue(WaterPumpBlock.LIT, isPumping), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
-    public static boolean hasWaterNearby(World world, BlockPos pos) {
+    public static boolean hasWaterNearby(Level world, BlockPos pos) {
         // Check 3 blocks directly below
         for (int dy = -1; dy >= -3; dy--) {
-            BlockPos check = pos.add(0, dy, 0);
-            if (world.getFluidState(check).isOf(Fluids.WATER) || world.getBlockState(check).isOf(Blocks.WATER)) {
+            BlockPos check = pos.offset(0, dy, 0);
+            if (world.getFluidState(check).is(Fluids.WATER) || world.getBlockState(check).is(Blocks.WATER)) {
                 return true;
             }
         }
         // Check horizontal neighbors
-        for (Direction dir : Direction.Type.HORIZONTAL) {
-            BlockPos check = pos.offset(dir);
-            if (world.getFluidState(check).isOf(Fluids.WATER) || world.getBlockState(check).isOf(Blocks.WATER)) {
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            BlockPos check = pos.relative(dir);
+            if (world.getFluidState(check).is(Fluids.WATER) || world.getBlockState(check).is(Blocks.WATER)) {
                 return true;
             }
         }
@@ -329,20 +329,20 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.pumpProgress = view.getInt("PumpProgress", 0);
-        this.totalPumpTime = view.getInt("TotalPumpTime", 40);
-        this.waterAmount = view.getInt("WaterAmount", 0);
+        this.pumpProgress = view.getIntOr("PumpProgress", 0);
+        this.totalPumpTime = view.getIntOr("TotalPumpTime", 40);
+        this.waterAmount = view.getIntOr("WaterAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("PumpProgress", this.pumpProgress);
         view.putInt("TotalPumpTime", this.totalPumpTime);
@@ -351,16 +351,16 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{BUCKET_OUT_SLOT};
         if (side == Direction.UP) return new int[]{BUCKET_IN_SLOT};
         return new int[]{BUCKET_IN_SLOT, GEAR_SLOT, BUCKET_OUT_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == BUCKET_IN_SLOT) {
-            return stack.isOf(Items.BUCKET) || stack.isOf(ModItems.COPPER_BUCKET);
+            return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
         }
         if (slot == GEAR_SLOT) {
             return stack.getItem() instanceof GearItem;
@@ -369,12 +369,12 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == BUCKET_OUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -387,38 +387,38 @@ public class WaterPumpBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(this.inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 }

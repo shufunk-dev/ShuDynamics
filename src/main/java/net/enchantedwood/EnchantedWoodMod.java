@@ -1,7 +1,6 @@
 package net.enchantedwood;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.enchantedwood.block.ModBlocks;
@@ -21,8 +20,8 @@ public class EnchantedWoodMod implements ModInitializer {
         ModItems.registerModItems();
         // Unclamp MAX_HEALTH attribute ceiling from 1024.0 -> 100,000.0
         try {
-            if (net.minecraft.entity.attribute.EntityAttributes.MAX_HEALTH.value() instanceof net.minecraft.entity.attribute.ClampedEntityAttribute clamped) {
-                for (java.lang.reflect.Field f : net.minecraft.entity.attribute.ClampedEntityAttribute.class.getDeclaredFields()) {
+            if (net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH.value() instanceof net.minecraft.world.entity.ai.attributes.RangedAttribute clamped) {
+                for (java.lang.reflect.Field f : net.minecraft.world.entity.ai.attributes.RangedAttribute.class.getDeclaredFields()) {
                     if (f.getType() == double.class) {
                         f.setAccessible(true);
                         double val = f.getDouble(clamped);
@@ -61,63 +60,46 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.item.custom.HyposprayItem.registerEntityInteraction();
 
         // Strippable Wood
-        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_LOG, ModBlocks.STRIPPED_RUBBER_LOG);
-        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.RUBBER_WOOD, ModBlocks.STRIPPED_RUBBER_WOOD);
-        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.STARFRUIT_LOG, ModBlocks.STRIPPED_STARFRUIT_LOG);
-        net.fabricmc.fabric.api.registry.StrippableBlockRegistry.register(ModBlocks.STARFRUIT_WOOD, ModBlocks.STRIPPED_STARFRUIT_WOOD);
 
-        // 5x-6x Longer Burn Time Fuels + Copper Lava Bucket (1000s = 20000 ticks)
-        FuelRegistryEvents.BUILD.register((builder, context) -> {
-            builder.add(ModItems.ENCHANTED_DUST.asItem(), 8000);
-            builder.add(ModItems.ENCHANTED_COAL.asItem(), 10000);
-            builder.add(ModBlocks.ENCHANTED_COAL_BLOCK.asItem(), 90000);
-            builder.add(ModItems.COKE_COAL.asItem(), 3200);
-            builder.add(ModBlocks.COKE_COAL_BLOCK.asItem(), 28800);
-            builder.add(ModItems.COPPER_LAVA_BUCKET.asItem(), 20000);
-            builder.add(ModItems.ENCHANTED_LAVA_BUCKET.asItem(), 60000);
-            builder.add(ModItems.ENCHANTED_COPPER_LAVA_BUCKET.asItem(), 60000);
-        });
-        // Composting Registrations (Corn seeds, grains, leaves, saplings)
-        net.fabricmc.fabric.api.registry.CompostingChanceRegistry composting = net.fabricmc.fabric.api.registry.CompostingChanceRegistry.INSTANCE;
-        composting.add(ModItems.CORN_SEEDS, 0.3f);
-        composting.add(ModItems.CORN, 0.65f);
-        composting.add(ModItems.ROASTED_CORN, 0.85f);
-        composting.add(ModItems.RICE_SEEDS, 0.3f);
-        composting.add(ModItems.RICE, 0.65f);
-        composting.add(ModItems.SUSHI_RICE, 0.85f);
-        composting.add(ModItems.CUCUMBER_SEEDS, 0.3f);
-        composting.add(ModItems.CUCUMBER, 0.65f);
-        composting.add(ModItems.AVOCADO, 0.65f);
-        composting.add(ModItems.STARFRUIT, 0.65f);
-        composting.add(ModBlocks.RUBBER_LEAVES, 0.3f);
-        composting.add(ModBlocks.STARFRUIT_LEAVES, 0.3f);
-        composting.add(ModBlocks.AVOCADO_LEAVES, 0.3f);
-        composting.add(ModBlocks.RUBBER_SAPLING, 0.3f);
-        composting.add(ModBlocks.STARFRUIT_SAPLING, 0.3f);
-        composting.add(ModBlocks.AVOCADO_SAPLING, 0.3f);
 
-        // Culinary Expansion Composting
-        composting.add(ModItems.TOMATO_SEEDS, 0.3f);
-        composting.add(ModItems.ONION_SEEDS, 0.3f);
-        composting.add(ModItems.LETTUCE_SEEDS, 0.3f);
-        composting.add(ModItems.SOYBEAN_SEEDS, 0.3f);
-        composting.add(ModItems.CHILI_PEPPER_SEEDS, 0.3f);
-        composting.add(ModItems.TOMATO, 0.65f);
-        composting.add(ModItems.ONION, 0.65f);
-        composting.add(ModItems.LETTUCE, 0.65f);
-        composting.add(ModItems.SOYBEANS, 0.65f);
-        composting.add(ModItems.CHILI_PEPPER, 0.65f);
-        composting.add(ModItems.STRAWBERRY, 0.65f);
-        composting.add(ModItems.BLUEBERRY, 0.65f);
-        composting.add(ModBlocks.STRAWBERRY_BUSH, 0.5f);
-        composting.add(ModBlocks.BLUEBERRY_BUSH, 0.5f);
-        composting.add(ModItems.WHEAT_FLOUR, 0.5f);
-        composting.add(ModItems.PIZZA_DOUGH, 0.65f);
-        composting.add(ModItems.BURGER_BUN, 0.85f);
-        composting.add(ModItems.TACO_SHELL, 0.65f);
-        composting.add(ModItems.TOFU, 0.65f);
-        composting.add(ModItems.GARDEN_SALAD, 1.0f);
-        composting.add(ModItems.BERRY_MEDLEY_SALAD, 1.0f);
-    }
+
+// Composting Registrations (Corn seeds, grains, leaves, saplings)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Culinary Expansion Composting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 }
 

@@ -2,22 +2,22 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/super_computer_gui.png");
+public class SuperComputerScreen extends AbstractContainerScreen<SuperComputerScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/super_computer_gui.png");
 
-    private net.minecraft.client.gui.widget.ButtonWidget craftButton;
+    private net.minecraft.client.gui.components.Button craftButton;
 
     private static String lastStatus = "";
     private static long lastStatusTime = 0;
@@ -27,45 +27,43 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
         lastStatusTime = System.currentTimeMillis();
     }
 
-    public SuperComputerScreen(SuperComputerScreenHandler handler, PlayerInventory inventory, Text title) {
+    public SuperComputerScreen(SuperComputerScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
-        this.titleX = 8;
-        this.titleY = 6;
-        this.playerInventoryTitleX = 8;
-        this.playerInventoryTitleY = this.backgroundHeight - 94;
+        this.titleLabelX = 8;
+        this.titleLabelY = 6;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        this.craftButton = net.minecraft.client.gui.widget.ButtonWidget.builder(Text.literal("⚡ Craft"), button -> {
-            if (this.client != null && this.client.interactionManager != null) {
-                net.minecraft.client.util.Window window = this.client.getWindow();
-                boolean shift = net.minecraft.client.util.InputUtil.isKeyPressed(window, org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT)
-                        || net.minecraft.client.util.InputUtil.isKeyPressed(window, org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT);
+        this.craftButton = net.minecraft.client.gui.components.Button.builder(Component.literal("⚡ Craft"), button -> {
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
+                boolean shift = com.mojang.blaze3d.platform.InputConstants.isKeyDown(com.mojang.blaze3d.platform.InputConstants.KEY_LSHIFT) || com.mojang.blaze3d.platform.InputConstants.isKeyDown(com.mojang.blaze3d.platform.InputConstants.KEY_RSHIFT);
                 int buttonId = shift ? 1 : 0;
-                this.client.interactionManager.clickButton(this.handler.syncId, buttonId);
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId);
             }
-        }).dimensions(x + 86, y + 50, 36, 18).build();
+        }).bounds(x + 86, y + 50, 36, 18).build();
 
-        this.addDrawableChild(this.craftButton);
+        this.addRenderableWidget(this.craftButton);
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // Draw Energy Vertical Gauge (x + 8, y + 17, w: 8, h: 31)
-        int energy = this.handler.getEnergy();
-        int maxEnergy = this.handler.getMaxEnergy();
+        int energy = this.menu.getEnergy();
+        int maxEnergy = this.menu.getMaxEnergy();
         if (maxEnergy > 0 && energy > 0) {
             int scaledH = Math.min(31, (int) ((long) energy * 31 / maxEnergy));
             int energyY = (y + 17) + (31 - scaledH);
@@ -73,8 +71,8 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
         }
 
         // Draw Computing / Crafting Progress Bar inside the beveled groove (x + 99, y + 39, w: 15, h: 4)
-        int progress = this.handler.getCraftProgress();
-        int maxProgress = this.handler.getMaxCraftProgress();
+        int progress = this.menu.getCraftProgress();
+        int maxProgress = this.menu.getMaxCraftProgress();
         if (maxProgress > 0 && progress > 0) {
             int progressW = Math.max(1, Math.min(15, (progress * 15) / maxProgress));
             context.fill(x + 99, y + 39, x + 99 + progressW, y + 43, 0xFF00FFCC);
@@ -84,7 +82,7 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
         this.drawLinkSystem(context, x, y, mouseX, mouseY);
     }
 
-    private void drawLinkSystem(DrawContext context, int x, int y, int mouseX, int mouseY) {
+    private void drawLinkSystem(GuiGraphicsExtractor context, int x, int y, int mouseX, int mouseY) {
         int panelX = x + 85;
         int panelY = y + 4;
         int panelW = 87;
@@ -103,13 +101,13 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
             int bh = 12;
 
             boolean online = switch (i) {
-                case 0 -> this.handler.isFurnaceOnline();
-                case 1 -> this.handler.isPressOnline();
-                case 2 -> this.handler.isFabricatorOnline();
-                case 3 -> this.handler.isCasterOnline();
-                case 4 -> this.handler.isWaterPumpOnline();
-                case 5 -> this.handler.isLavaSourceOnline();
-                default -> this.handler.isNetworkOnline();
+                case 0 -> this.menu.isFurnaceOnline();
+                case 1 -> this.menu.isPressOnline();
+                case 2 -> this.menu.isFabricatorOnline();
+                case 3 -> this.menu.isCasterOnline();
+                case 4 -> this.menu.isWaterPumpOnline();
+                case 5 -> this.menu.isLavaSourceOnline();
+                default -> this.menu.isNetworkOnline();
             };
 
             boolean hovered = (mouseX >= bx && mouseX < bx + bw && mouseY >= by && mouseY < by + bh);
@@ -229,180 +227,178 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, 8, 6, 0xFF404040, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF404040, false);
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, 8, 6, 0xFF404040, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF404040, false);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
 
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
         // Render On-Screen Status Notification Banner directly visible while GUI is open
         if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
-            Text statusText = Text.literal(lastStatus);
-            int textW = this.textRenderer.getWidth(statusText);
+            Component statusText = Component.literal(lastStatus);
+            int textW = this.font.width(statusText);
             int bannerX = Math.max(4, (this.width - textW) / 2);
             int bannerY = y - 16;
 
             // Draw dark background box
             context.fill(bannerX - 6, bannerY - 3, bannerX + textW + 6, bannerY + 11, 0xDD111111);
             context.fill(bannerX - 5, bannerY - 2, bannerX + textW + 5, bannerY + 10, 0xEE222222);
-            context.drawText(this.textRenderer, statusText, bannerX, bannerY, 0xFFFFFF, true);
+            context.text(this.font, statusText, bannerX, bannerY, 0xFFFFFF, true);
         }
-
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
 
         // Energy Bar Hover Tooltip (x + 8 .. 16, y + 17 .. 49)
         if (mouseX >= x + 8 && mouseX <= x + 16 && mouseY >= y + 17 && mouseY <= y + 49) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§e⚡ Super Computer Energy"));
-            lines.add(Text.literal(String.format("§f%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())));
-            lines.add(Text.literal("§7Draws from Digital Network Controller or energy grid."));
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§e⚡ Super Computer Energy"));
+            lines.add(Component.literal(String.format("§f%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy())));
+            lines.add(Component.literal("§7Draws from Digital Network Controller or energy grid."));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // Upgrade Slot Tooltip (x + 7 .. 25, y + 52 .. 70)
         if (mouseX >= x + 7 && mouseX <= x + 25 && mouseY >= y + 52 && mouseY <= y + 70) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§d🔥 Overclock Upgrade Socket"));
-            lines.add(Text.literal("§7Accepts: Blaze Overclock Core"));
-            lines.add(Text.literal("§8Boosts computing and synthesis speed!"));
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§d🔥 Overclock Upgrade Socket"));
+            lines.add(Component.literal("§7Accepts: Blaze Overclock Core"));
+            lines.add(Component.literal("§8Boosts computing and synthesis speed!"));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // Craft Button Hover Tooltip (x + 86 .. 122, y + 50 .. 68)
         if (mouseX >= x + 86 && mouseX <= x + 122 && mouseY >= y + 50 && mouseY <= y + 68) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§a⚡ Execute Craft"));
-            lines.add(Text.literal("§7Click: Craft 1 batch"));
-            lines.add(Text.literal("§7Shift-Click: Craft all possible"));
-            lines.add(Text.literal("§8Uses materials from Digital Storage, Tanks & Inventory."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§a⚡ Execute Craft"));
+            lines.add(Component.literal("§7Click: Craft 1 batch"));
+            lines.add(Component.literal("§7Shift-Click: Craft all possible"));
+            lines.add(Component.literal("§8Uses materials from Digital Storage, Tanks & Inventory."));
 
-            lines.add(Text.literal(""));
-            lines.add(Text.literal("§eConnected Machines:"));
-            lines.add(Text.literal(this.handler.isFurnaceOnline() ? " §a✔ Smelter / Furnace: §2ONLINE" : " §8✖ Smelter / Furnace: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isPressOnline() ? " §a✔ Hydraulic Press: §2ONLINE" : " §8✖ Hydraulic Press: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isFabricatorOnline() ? " §a✔ Circuit Fabricator: §2ONLINE" : " §8✖ Circuit Fabricator: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isCasterOnline() ? " §a✔ Molten Metal Caster: §2ONLINE" : " §8✖ Molten Metal Caster: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isWaterPumpOnline() ? " §a✔ Electric Water Pump: §2ONLINE" : " §8✖ Electric Water Pump: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isLavaSourceOnline() ? " §a✔ Lava Pump / Crucible: §2ONLINE" : " §8✖ Lava Pump / Crucible: §cOFFLINE"));
-            lines.add(Text.literal(this.handler.isNetworkOnline() ? " §a✔ Digital Storage: §2ONLINE" : " §c✖ Digital Storage: §cOFFLINE"));
+            lines.add(Component.literal(""));
+            lines.add(Component.literal("§eConnected Machines:"));
+            lines.add(Component.literal(this.menu.isFurnaceOnline() ? " §a✔ Smelter / Furnace: §2ONLINE" : " §8✖ Smelter / Furnace: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isPressOnline() ? " §a✔ Hydraulic Press: §2ONLINE" : " §8✖ Hydraulic Press: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isFabricatorOnline() ? " §a✔ Circuit Fabricator: §2ONLINE" : " §8✖ Circuit Fabricator: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isCasterOnline() ? " §a✔ Molten Metal Caster: §2ONLINE" : " §8✖ Molten Metal Caster: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isWaterPumpOnline() ? " §a✔ Electric Water Pump: §2ONLINE" : " §8✖ Electric Water Pump: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isLavaSourceOnline() ? " §a✔ Lava Pump / Crucible: §2ONLINE" : " §8✖ Lava Pump / Crucible: §cOFFLINE"));
+            lines.add(Component.literal(this.menu.isNetworkOnline() ? " §a✔ Digital Storage: §2ONLINE" : " §c✖ Digital Storage: §cOFFLINE"));
 
             if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
-                lines.add(Text.literal(""));
-                lines.add(Text.literal("§7Latest Status: " + lastStatus));
+                lines.add(Component.literal(""));
+                lines.add(Component.literal("§7Latest Status: " + lastStatus));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 1. Furnace Link Status Tooltip (x + 87 .. 98, y + 4 .. 18)
         if (mouseX >= x + 87 && mouseX < x + 98 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§6♨ Automated Smelter Link"));
-            if (this.handler.isFurnaceOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables automated smelting on-demand for glass,"));
-                lines.add(Text.literal("§7smooth stone, charcoal, and processed ores."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§6♨ Automated Smelter Link"));
+            if (this.menu.isFurnaceOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables automated smelting on-demand for glass,"));
+                lines.add(Component.literal("§7smooth stone, charcoal, and processed ores."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place an Enchanted Furnace within 48 blocks or link with Wrench."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place an Enchanted Furnace within 48 blocks or link with Wrench."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 2. Press Link Status Tooltip (x + 99 .. 110, y + 4 .. 18)
         if (mouseX >= x + 99 && mouseX < x + 110 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§b◆ Hydraulic Press Link"));
-            if (this.handler.isPressOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables automatic stamping on-demand for silicon wafers,"));
-                lines.add(Text.literal("§7metal plates, reinforced casings, and stamped components."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§b◆ Hydraulic Press Link"));
+            if (this.menu.isPressOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables automatic stamping on-demand for silicon wafers,"));
+                lines.add(Component.literal("§7metal plates, reinforced casings, and stamped components."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place a Hydraulic Press within 48 blocks or link with Wrench."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place a Hydraulic Press within 48 blocks or link with Wrench."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 3. Fabricator Link Status Tooltip (x + 111 .. 122, y + 4 .. 18)
         if (mouseX >= x + 111 && mouseX < x + 122 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§d✦ Circuit Fabricator Link"));
-            if (this.handler.isFabricatorOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables automated precision assembly of Basic, Advanced,"));
-                lines.add(Text.literal("§7Quantum, and Metallurgy Integrated Circuits."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§d✦ Circuit Fabricator Link"));
+            if (this.menu.isFabricatorOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables automated precision assembly of Basic, Advanced,"));
+                lines.add(Component.literal("§7Quantum, and Metallurgy Integrated Circuits."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place a Circuit Fabricator within 48 blocks or link with Wrench."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place a Circuit Fabricator within 48 blocks or link with Wrench."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 4. Caster Link Status Tooltip (x + 123 .. 134, y + 4 .. 18)
         if (mouseX >= x + 123 && mouseX < x + 134 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§e⚡ Molten Metal Caster Link"));
-            if (this.handler.isCasterOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables direct on-demand casting from molten metal storage,"));
-                lines.add(Text.literal("§7drastically saving crystalline storage space."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§e⚡ Molten Metal Caster Link"));
+            if (this.menu.isCasterOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables direct on-demand casting from molten metal storage,"));
+                lines.add(Component.literal("§7drastically saving crystalline storage space."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place a Casting Port within 48 blocks to enable fluid casting."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place a Casting Port within 48 blocks to enable fluid casting."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 5. Water Pump Link Status Tooltip (x + 135 .. 146, y + 4 .. 18)
         if (mouseX >= x + 135 && mouseX < x + 146 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§9💧 Electric Water Pump Link"));
-            if (this.handler.isWaterPumpOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables automated fluid pumping and water bucket auto-crafting."));
-                lines.add(Text.literal("§7Draws water on-demand using empty buckets from Digital Storage."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§9💧 Electric Water Pump Link"));
+            if (this.menu.isWaterPumpOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables automated fluid pumping and water bucket auto-crafting."));
+                lines.add(Component.literal("§7Draws water on-demand using empty buckets from Digital Storage."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place an Electric Water Pump (or natural water) within 48 blocks."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place an Electric Water Pump (or natural water) within 48 blocks."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 6. Lava Pump / Crucible Link Status Tooltip (x + 147 .. 158, y + 4 .. 18)
         if (mouseX >= x + 147 && mouseX < x + 158 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§6🔥 Thermal Lava Pump / Crucible Link"));
-            if (this.handler.isLavaSourceOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Enables automated lava extraction and lava bucket auto-crafting."));
-                lines.add(Text.literal("§7Draws lava on-demand using empty buckets from Digital Storage."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§6🔥 Thermal Lava Pump / Crucible Link"));
+            if (this.menu.isLavaSourceOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Enables automated lava extraction and lava bucket auto-crafting."));
+                lines.add(Component.literal("§7Draws lava on-demand using empty buckets from Digital Storage."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place a Magma Crucible or Lava Pump within 48 blocks."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place a Magma Crucible or Lava Pump within 48 blocks."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // 7. Network Status Tooltip (x + 159 .. 170, y + 4 .. 18)
         if (mouseX >= x + 159 && mouseX < x + 170 && mouseY >= y + 4 && mouseY <= y + 18) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§a● Digital Storage Network Link"));
-            if (this.handler.isNetworkOnline()) {
-                lines.add(Text.literal("§a● Status: ONLINE §7(Connected)"));
-                lines.add(Text.literal("§7Direct high-bandwidth bridge to Digital Storage Drives."));
-                lines.add(Text.literal("§7Automatically pulls raw crafting materials from network crystals."));
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§a● Digital Storage Network Link"));
+            if (this.menu.isNetworkOnline()) {
+                lines.add(Component.literal("§a● Status: ONLINE §7(Connected)"));
+                lines.add(Component.literal("§7Direct high-bandwidth bridge to Digital Storage Drives."));
+                lines.add(Component.literal("§7Automatically pulls raw crafting materials from network crystals."));
             } else {
-                lines.add(Text.literal("§c● Status: OFFLINE §7(Disconnected)"));
-                lines.add(Text.literal("§8Place within 48 blocks of a Digital Controller or link with Wrench."));
+                lines.add(Component.literal("§c● Status: OFFLINE §7(Disconnected)"));
+                lines.add(Component.literal("§8Place within 48 blocks of a Digital Controller or link with Wrench."));
             }
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // General Link Panel Summary Tooltip when hovering over panel margins
@@ -414,35 +410,35 @@ public class SuperComputerScreen extends HandledScreen<SuperComputerScreenHandle
                 && !(mouseX >= x + 135 && mouseX < x + 146)
                 && !(mouseX >= x + 147 && mouseX < x + 158)
                 && !(mouseX >= x + 159 && mouseX < x + 170)) {
-            List<Text> lines = new ArrayList<>();
-            lines.add(Text.literal("§b⚡ Automated Machine Links"));
-            lines.add(Text.literal("§7Subsystem link status for integrated auto-crafting."));
-            lines.add(Text.literal("§8Hover over individual icons for machine diagnostics."));
-            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§b⚡ Automated Machine Links"));
+            lines.add(Component.literal("§7Subsystem link status for integrated auto-crafting."));
+            lines.add(Component.literal("§8Hover over individual icons for machine diagnostics."));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 
         // Empty Machine Slot Tooltips
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 15) {
-            if (this.focusedSlot.id < 9) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e🧩 Auto-Crafting Recipe Grid (Slot " + (this.focusedSlot.id + 1) + "/9)"),
-                        Text.literal("§7Place recipe pattern items here to encode an automated craft.")
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 15) {
+            if (this.hoveredSlot.index < 9) {
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§e🧩 Auto-Crafting Recipe Grid (Slot " + (this.hoveredSlot.index + 1) + "/9)"),
+                        Component.literal("§7Place recipe pattern items here to encode an automated craft.")
                 ), mouseX, mouseY);
-            } else if (this.focusedSlot.id == 9) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§d🔥 Overclock Upgrade Socket"),
-                        Text.literal("§7Accepts: §aBlaze Overclock Core"),
-                        Text.literal("§8Boosts computation & rapid synthesis speed.")
+            } else if (this.hoveredSlot.index == 9) {
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§d🔥 Overclock Upgrade Socket"),
+                        Component.literal("§7Accepts: §aBlaze Overclock Core"),
+                        Component.literal("§8Boosts computation & rapid synthesis speed.")
                 ), mouseX, mouseY);
-            } else if (this.focusedSlot.id >= 10 && this.focusedSlot.id <= 13) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§a✨ Synthesized Output Buffer"),
-                        Text.literal("§7Synthesized batch items appear here.")
+            } else if (this.hoveredSlot.index >= 10 && this.hoveredSlot.index <= 13) {
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§a✨ Synthesized Output Buffer"),
+                        Component.literal("§7Synthesized batch items appear here.")
                 ), mouseX, mouseY);
-            } else if (this.focusedSlot.id == 14) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§6🔍 Target Recipe Preview"),
-                        Text.literal("§7Shows the result of the configured 3x3 pattern.")
+            } else if (this.hoveredSlot.index == 14) {
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6🔍 Target Recipe Preview"),
+                        Component.literal("§7Shows the result of the configured 3x3 pattern.")
                 ), mouseX, mouseY);
             }
         }

@@ -2,24 +2,23 @@ package net.enchantedwood.client.renderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.block.entity.model.ChestBlockModel;
-import net.minecraft.client.render.block.entity.state.BlockEntityRenderState;
-import net.minecraft.client.render.command.ModelCommandRenderer;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.state.CameraRenderState;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.object.chest.ChestModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.EnchantedChestBlock;
@@ -27,10 +26,10 @@ import net.enchantedwood.block.entity.EnchantedChestBlockEntity;
 
 @Environment(EnvType.CLIENT)
 public class EnchantedChestBlockEntityRenderer implements BlockEntityRenderer<EnchantedChestBlockEntity, EnchantedChestRenderState> {
-    private final ChestBlockModel chestModel;
+    private final ChestModel chestModel;
 
-    public EnchantedChestBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-        this.chestModel = new ChestBlockModel(ctx.getLayerModelPart(EntityModelLayers.CHEST));
+    public EnchantedChestBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {
+        this.chestModel = new ChestModel(ctx.bakeLayer(ModelLayers.CHEST));
     }
 
     @Override
@@ -39,51 +38,52 @@ public class EnchantedChestBlockEntityRenderer implements BlockEntityRenderer<En
     }
 
     @Override
-    public void updateRenderState(EnchantedChestBlockEntity entity, EnchantedChestRenderState state, float tickDelta, Vec3d cameraPos, ModelCommandRenderer.CrumblingOverlayCommand crumblingOverlayCommand) {
-        BlockEntityRenderState.updateBlockEntityRenderState(entity, state, crumblingOverlayCommand);
-        BlockState blockState = entity.getCachedState();
-        if (blockState.contains(EnchantedChestBlock.FACING)) {
-            state.facing = blockState.get(EnchantedChestBlock.FACING);
+    public void extractRenderState(EnchantedChestBlockEntity entity, EnchantedChestRenderState state, float tickDelta, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay crumblingOverlayCommand) {
+        BlockEntityRenderState.extractBase(entity, state, crumblingOverlayCommand);
+        BlockState blockState = entity.getBlockState();
+        if (blockState.hasProperty(EnchantedChestBlock.FACING)) {
+            state.facing = blockState.getValue(EnchantedChestBlock.FACING);
         } else {
             state.facing = Direction.NORTH;
         }
         state.gearTier = entity.getGearTier();
-        if ((state.gearTier == null || state.gearTier == GearTier.NONE) && blockState.contains(EnchantedChestBlock.GEAR_TIER)) {
-            state.gearTier = blockState.get(EnchantedChestBlock.GEAR_TIER);
+        if ((state.gearTier == null || state.gearTier == GearTier.NONE) && blockState.hasProperty(EnchantedChestBlock.GEAR_TIER)) {
+            state.gearTier = blockState.getValue(EnchantedChestBlock.GEAR_TIER);
         }
-        state.lidProgress = entity.getAnimationProgress(tickDelta);
+        state.lidProgress = entity.getOpenNess(tickDelta);
     }
 
     @Override
-    public void render(EnchantedChestRenderState state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState) {
-        matrices.push();
+    public void submit(EnchantedChestRenderState state, PoseStack matrices, SubmitNodeCollector queue, CameraRenderState cameraState) {
+        matrices.pushPose();
 
         Direction direction = state.facing != null ? state.facing : Direction.NORTH;
-        float rotation = direction.getPositiveHorizontalDegrees();
+        float rotation = direction.toYRot();
         matrices.translate(0.5D, 0.5D, 0.5D);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-rotation));
+        matrices.rotateDegrees(Axis.YP, -rotation);
         matrices.translate(-0.5D, -0.5D, -0.5D);
         float progress = state.lidProgress;
 
         Identifier texture = getTextureForTier(state.gearTier);
-        RenderLayer layer = RenderLayers.entityCutoutNoCull(texture);
+        RenderType layer = RenderTypes.entityCutout(texture, false);
 
-        queue.submitModel(this.chestModel, Float.valueOf(progress), matrices, layer, state.lightmapCoordinates, OverlayTexture.DEFAULT_UV, -1, null, 0, state.crumblingOverlay);
+        queue.submitModel(this.chestModel, Float.valueOf(progress), matrices, layer, state.lightCoords, OverlayTexture.NO_OVERLAY, -1);
+        if (state.breakProgress != null) queue.submitCrumblingOverlay(this.chestModel, Float.valueOf(progress), matrices, layer, state.lightCoords, OverlayTexture.NO_OVERLAY, -1, state.breakProgress);
 
-        matrices.pop();
+        matrices.popPose();
     }
 
     private Identifier getTextureForTier(GearTier tier) {
         if (tier == null || tier == GearTier.NONE) {
-            return Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_none.png");
+            return Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_none.png");
         }
         if (tier == GearTier.IRON || tier == GearTier.ENCHANTED_IRON) {
-            return Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_enchanted_iron.png");
+            return Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_enchanted_iron.png");
         }
         if (tier == GearTier.ALUMINUM || tier == GearTier.STEEL) {
-            return Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_enchanted_iron.png");
+            return Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_enchanted_iron.png");
         }
-        return Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_" + tier.asString() + ".png");
+        return Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/chest/enchanted_chest_" + tier.getSerializedName() + ".png");
     }
 }
 

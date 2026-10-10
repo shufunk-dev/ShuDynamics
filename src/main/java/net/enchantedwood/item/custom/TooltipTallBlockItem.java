@@ -1,28 +1,27 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TallBlockItem;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.DoubleHighBlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.block.Block;
 
-public class TooltipTallBlockItem extends TallBlockItem {
-    private final List<Text> tooltips;
+public class TooltipTallBlockItem extends DoubleHighBlockItem {
+    private final List<Component> tooltips;
 
-    public TooltipTallBlockItem(Block block, Settings settings, Text... tooltips) {
+    public TooltipTallBlockItem(Block block, Properties settings, Component... tooltips) {
         super(block, settings);
         this.tooltips = List.of(tooltips);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        for (Text line : tooltips) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        for (Component line : tooltips) {
             textConsumer.accept(line);
         }
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

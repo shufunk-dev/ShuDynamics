@@ -4,37 +4,37 @@ import net.enchantedwood.block.entity.InductionSmelterBlockEntity;
 import net.enchantedwood.fluid.MoltenMetal;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class InductionSmelterScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class InductionSmelterScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public InductionSmelterScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(InductionSmelterBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(27));
+    public InductionSmelterScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(InductionSmelterBlockEntity.INVENTORY_SIZE), new SimpleContainerData(27));
     }
 
-    public InductionSmelterScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public InductionSmelterScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.INDUCTION_SMELTER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, InductionSmelterBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, InductionSmelterBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Input Slot 1 at x=52, y=26
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.INPUT_SLOT_1, 52, 26) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return InductionSmelterBlockEntity.getYield(stack) != null;
             }
         });
@@ -42,7 +42,7 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
         // Slot 1: Input Slot 2 at x=52, y=46
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.INPUT_SLOT_2, 52, 46) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return InductionSmelterBlockEntity.getYield(stack) != null;
             }
         });
@@ -50,31 +50,31 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
         // Slot 2: Metallurgy Module Slot at x=88, y=18
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.MODULE_SLOT, 88, 18) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.METALLURGY_CONTROLLER_CHIP);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.METALLURGY_CONTROLLER_CHIP);
             }
         });
 
         // Slot 3: Gear Upgrade Slot at x=152, y=8
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
             }
         });
 
         // Slot 4: Lava Bucket In at x=116, y=18
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.LAVA_IN_SLOT, 116, 18) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.LAVA_BUCKET) || stack.isOf(ModItems.COPPER_LAVA_BUCKET) || stack.isOf(ModItems.ENCHANTED_LAVA_BUCKET);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.LAVA_BUCKET) || stack.is(ModItems.COPPER_LAVA_BUCKET) || stack.is(ModItems.ENCHANTED_LAVA_BUCKET);
             }
         });
 
         // Slot 5: Lava Bucket Out at x=116, y=52
         this.addSlot(new Slot(inventory, InductionSmelterBlockEntity.LAVA_OUT_SLOT, 116, 52) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -158,7 +158,7 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
         return this.propertyDelegate.get(10) == 1;
     }
 
-    public Inventory getInventory() {
+    public Container getInventory() {
         return this.inventory;
     }
 
@@ -228,35 +228,35 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < InductionSmelterBlockEntity.INVENTORY_SIZE) {
                 // Machine inventory -> Player inventory
-                if (!this.insertItem(originalStack, InductionSmelterBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, InductionSmelterBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Player inventory -> Machine inventory
-                if (originalStack.getItem() instanceof GearItem || originalStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
-                    if (!this.insertItem(originalStack, InductionSmelterBlockEntity.GEAR_SLOT, InductionSmelterBlockEntity.GEAR_SLOT + 1, false)) {
+                if (originalStack.getItem() instanceof GearItem || originalStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
+                    if (!this.moveItemStackTo(originalStack, InductionSmelterBlockEntity.GEAR_SLOT, InductionSmelterBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(ModItems.METALLURGY_CONTROLLER_CHIP)) {
-                    if (!this.insertItem(originalStack, InductionSmelterBlockEntity.MODULE_SLOT, InductionSmelterBlockEntity.MODULE_SLOT + 1, false)) {
+                } else if (originalStack.is(ModItems.METALLURGY_CONTROLLER_CHIP)) {
+                    if (!this.moveItemStackTo(originalStack, InductionSmelterBlockEntity.MODULE_SLOT, InductionSmelterBlockEntity.MODULE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(Items.LAVA_BUCKET) || originalStack.isOf(ModItems.COPPER_LAVA_BUCKET) || originalStack.isOf(ModItems.ENCHANTED_LAVA_BUCKET)) {
-                    if (!this.insertItem(originalStack, InductionSmelterBlockEntity.LAVA_IN_SLOT, InductionSmelterBlockEntity.LAVA_IN_SLOT + 1, false)) {
+                } else if (originalStack.is(Items.LAVA_BUCKET) || originalStack.is(ModItems.COPPER_LAVA_BUCKET) || originalStack.is(ModItems.ENCHANTED_LAVA_BUCKET)) {
+                    if (!this.moveItemStackTo(originalStack, InductionSmelterBlockEntity.LAVA_IN_SLOT, InductionSmelterBlockEntity.LAVA_IN_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (InductionSmelterBlockEntity.getYield(originalStack) != null) {
-                    if (!this.insertItem(originalStack, InductionSmelterBlockEntity.INPUT_SLOT_1, InductionSmelterBlockEntity.INPUT_SLOT_2 + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, InductionSmelterBlockEntity.INPUT_SLOT_1, InductionSmelterBlockEntity.INPUT_SLOT_2 + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
@@ -265,23 +265,23 @@ public class InductionSmelterScreenHandler extends ScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

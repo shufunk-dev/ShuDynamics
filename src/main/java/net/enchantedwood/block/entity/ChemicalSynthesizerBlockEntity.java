@@ -8,29 +8,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.ChemicalSynthesizerScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class ChemicalSynthesizerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class ChemicalSynthesizerBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 100_000;
     public static final int MAX_RECEIVE = 5_000;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
@@ -42,13 +42,13 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
     public static final int GEAR_SLOT = 4;
     public static final int INVENTORY_SIZE = 5;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 160; // 8 seconds base
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -72,7 +72,7 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -102,7 +102,7 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         };
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, ChemicalSynthesizerBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, ChemicalSynthesizerBlockEntity entity) {
         GearTier tier = entity.getActiveGearTier();
         entity.totalCookTime = getTierCookTime(tier);
 
@@ -114,26 +114,26 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
                 entity.energyStorage.extractEnergy(energyRequired, false);
                 entity.cookTime++;
 
-                if (!state.get(ChemicalSynthesizerBlock.LIT)) {
-                    world.setBlockState(pos, state.with(ChemicalSynthesizerBlock.LIT, true));
+                if (!state.getValue(ChemicalSynthesizerBlock.LIT)) {
+                    world.setBlockAndUpdate(pos, state.setValue(ChemicalSynthesizerBlock.LIT, true));
                 }
 
                 if (entity.cookTime >= entity.totalCookTime) {
                     entity.craft(output);
                     entity.cookTime = 0;
                 }
-                entity.markDirty();
+                entity.setChanged();
                 return;
             }
         }
 
         if (entity.cookTime > 0) {
             entity.cookTime = Math.max(0, entity.cookTime - 2);
-            entity.markDirty();
+            entity.setChanged();
         }
 
-        if (state.get(ChemicalSynthesizerBlock.LIT)) {
-            world.setBlockState(pos, state.with(ChemicalSynthesizerBlock.LIT, false));
+        if (state.getValue(ChemicalSynthesizerBlock.LIT)) {
+            world.setBlockAndUpdate(pos, state.setValue(ChemicalSynthesizerBlock.LIT, false));
         }
     }
 
@@ -145,10 +145,10 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
         if (cartridge.isEmpty() || essence.isEmpty() || catalyst.isEmpty()) return ItemStack.EMPTY;
 
         // 0. Sterile Empty Cartridge Assembly: Glass Pane + Tin Ingot (or Titanium) + Quartz (or Redstone / Glowstone)
-        if ((cartridge.isOf(Items.GLASS_PANE) || cartridge.isOf(Items.GLASS)) &&
-            (essence.isOf(ModItems.TIN_INGOT) || essence.isOf(ModItems.TITANIUM_NUGGET) || essence.isOf(ModItems.TITANIUM_INGOT)) &&
-            (catalyst.isOf(Items.QUARTZ) || catalyst.isOf(Items.REDSTONE) || catalyst.isOf(Items.GLOWSTONE_DUST))) {
-            return new ItemStack(ModItems.EMPTY_CARTRIDGE, essence.isOf(ModItems.TITANIUM_INGOT) ? 8 : 4);
+        if ((cartridge.is(Items.GLASS_PANE) || cartridge.is(Items.GLASS)) &&
+            (essence.is(ModItems.TIN_INGOT) || essence.is(ModItems.TITANIUM_NUGGET) || essence.is(ModItems.TITANIUM_INGOT)) &&
+            (catalyst.is(Items.QUARTZ) || catalyst.is(Items.REDSTONE) || catalyst.is(Items.GLOWSTONE_DUST))) {
+            return new ItemStack(ModItems.EMPTY_CARTRIDGE, essence.is(ModItems.TITANIUM_INGOT) ? 8 : 4);
         }
 
         if (cartridge.getItem() != ModItems.EMPTY_CARTRIDGE) return ItemStack.EMPTY;
@@ -182,7 +182,7 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
             result = new ItemStack(ModItems.ADRENALINE_STIM_CARTRIDGE);
         }
 
-        if (!result.isEmpty() && this.world != null && net.enchantedwood.block.entity.CleanroomManager.isInsideSterileCleanroom(this.world, this.pos)) {
+        if (!result.isEmpty() && this.level != null && net.enchantedwood.block.entity.CleanroomManager.isInsideSterileCleanroom(this.level, this.worldPosition)) {
             net.enchantedwood.item.custom.HyposprayCartridgeItem.setPure(result, true);
         }
 
@@ -192,49 +192,49 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
     private boolean canOutput(ItemStack output) {
         ItemStack currentOut = inventory.get(SLOT_OUTPUT);
         if (currentOut.isEmpty()) return true;
-        if (!ItemStack.areItemsAndComponentsEqual(currentOut, output)) return false;
-        return currentOut.getCount() + output.getCount() <= currentOut.getMaxCount();
+        if (!ItemStack.isSameItemSameComponents(currentOut, output)) return false;
+        return currentOut.getCount() + output.getCount() <= currentOut.getMaxStackSize();
     }
 
     private void craft(ItemStack output) {
-        inventory.get(SLOT_CARTRIDGE).decrement(1);
-        inventory.get(SLOT_ESSENCE).decrement(1);
-        inventory.get(SLOT_CATALYST).decrement(1);
+        inventory.get(SLOT_CARTRIDGE).shrink(1);
+        inventory.get(SLOT_ESSENCE).shrink(1);
+        inventory.get(SLOT_CATALYST).shrink(1);
 
         ItemStack currentOut = inventory.get(SLOT_OUTPUT);
         if (currentOut.isEmpty()) {
             inventory.set(SLOT_OUTPUT, output.copy());
         } else {
-            currentOut.increment(output.getCount());
+            currentOut.grow(output.getCount());
         }
 
-        if (this.world instanceof ServerWorld serverWorld && net.enchantedwood.item.custom.HyposprayCartridgeItem.isPure(output)) {
-            serverWorld.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, net.minecraft.sound.SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, net.minecraft.sound.SoundCategory.BLOCKS, 0.9f, 1.8f);
-            serverWorld.spawnParticles(net.minecraft.particle.ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.03);
+        if (this.level instanceof ServerLevel serverWorld && net.enchantedwood.item.custom.HyposprayCartridgeItem.isPure(output)) {
+            serverWorld.playSound(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, net.minecraft.sounds.SoundSource.BLOCKS, 0.9f, 1.8f);
+            serverWorld.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, worldPosition.getX() + 0.5, worldPosition.getY() + 0.8, worldPosition.getZ() + 0.5, 6, 0.15, 0.15, 0.15, 0.03);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 160);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 160);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{SLOT_OUTPUT};
         if (side == Direction.UP) return new int[]{SLOT_CARTRIDGE, SLOT_ESSENCE, SLOT_CATALYST};
         return new int[]{SLOT_CARTRIDGE, SLOT_ESSENCE, SLOT_CATALYST, SLOT_OUTPUT};
@@ -272,22 +272,22 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == SLOT_OUTPUT) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
-        if (slot == SLOT_CARTRIDGE) return stack.getItem() == ModItems.EMPTY_CARTRIDGE || stack.isOf(Items.GLASS_PANE) || stack.isOf(Items.GLASS);
-        if (slot == SLOT_ESSENCE) return isEssence(stack) || stack.isOf(ModItems.TIN_INGOT) || stack.isOf(ModItems.TITANIUM_NUGGET) || stack.isOf(ModItems.TITANIUM_INGOT);
+        if (slot == SLOT_CARTRIDGE) return stack.getItem() == ModItems.EMPTY_CARTRIDGE || stack.is(Items.GLASS_PANE) || stack.is(Items.GLASS);
+        if (slot == SLOT_ESSENCE) return isEssence(stack) || stack.is(ModItems.TIN_INGOT) || stack.is(ModItems.TITANIUM_NUGGET) || stack.is(ModItems.TITANIUM_INGOT);
         if (slot == SLOT_CATALYST) return isCatalyst(stack);
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == SLOT_OUTPUT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -300,49 +300,49 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > stack.getMaxCount()) {
-            stack.setCount(stack.getMaxCount());
+        if (stack.getCount() > stack.getMaxStackSize()) {
+            stack.setCount(stack.getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.literal("Chemical Synthesizer");
+    public Component getDisplayName() {
+        return Component.literal("Chemical Synthesizer");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new ChemicalSynthesizerScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 

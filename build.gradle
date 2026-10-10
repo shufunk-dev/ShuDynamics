@@ -1,17 +1,7 @@
 plugins {
-    id 'fabric-loom' version '1.13.6'
+    id 'net.fabricmc.fabric-loom' version '1.18.3'
     id 'maven-publish'
 }
-
-
-
-
-
-
-
-
-
-
 
 version = project.mod_version
 group = project.maven_group
@@ -40,17 +30,20 @@ repositories {
     mavenCentral()
 }
 
+loom {
+    runtimeOnlyLwjglGraphics = false
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // EMI Recipe Viewer API
-    modCompileOnly "dev.emi:emi-fabric:1.1.16+1.21.1:api"
+    compileOnly files("C:/Users/shufu/curseforge/minecraft/Instances/Curios/mods/emi-1.1.24-2fb0d30+26.3+fabric.jar")
 }
 
 processResources {
@@ -62,15 +55,15 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.toVersion(25)
+    targetCompatibility = JavaVersion.toVersion(25)
 }
 
 jar {
@@ -80,12 +73,12 @@ jar {
 }
 
 tasks.register('deployMod') {
-    dependsOn remapJar
+    dependsOn jar
     doLast {
-        def src = remapJar.archiveFile.get().asFile
+        def src = jar.archiveFile.get().asFile
         def targetDirs = [
             file("C:/Projects/Minecraft Mod/scratch/mods"),
-            file("C:/Users/shufu/CurseForge/minecraft/Instances/My Mod/mods")
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/Curios/mods")
         ]
         targetDirs.each { dir ->
             if (!dir.exists()) dir.mkdirs()
@@ -95,3 +88,4 @@ tasks.register('deployMod') {
         }
     }
 }
+

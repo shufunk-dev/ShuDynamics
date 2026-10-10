@@ -1,127 +1,121 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.block.entity.CrusherBlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class CrusherBlock extends HorizontalFacingBlock implements BlockEntityProvider {
-    public static final MapCodec<CrusherBlock> CODEC = createCodec(CrusherBlock::new);
-    public static final BooleanProperty LIT = Properties.LIT;
-    public static final EnumProperty<GearTier> GEAR_TIER = EnumProperty.of("gear_tier", GearTier.class);
+public class CrusherBlock extends HorizontalDirectionalBlock implements EntityBlock {
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final EnumProperty<GearTier> GEAR_TIER = EnumProperty.create("gear_tier", GearTier.class);
 
-    public CrusherBlock(Settings settings) {
+    public CrusherBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(FACING, Direction.NORTH)
-                .with(LIT, false)
-                .with(GEAR_TIER, GearTier.NONE));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(LIT, false)
+                .setValue(GEAR_TIER, GearTier.NONE));
     }
 
     @Override
-    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CrusherBlockEntity(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (world instanceof ServerWorld serverWorld && type == ModBlockEntities.CRUSHER_BLOCK_ENTITY) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        if (world instanceof ServerLevel serverWorld && type == ModBlockEntities.CRUSHER_BLOCK_ENTITY) {
             return (w, pos, st, blockEntity) -> CrusherBlockEntity.tick(serverWorld, pos, st, (CrusherBlockEntity) blockEntity);
         }
         return null;
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CrusherBlockEntity crusherEntity) {
-                ItemStack handStack = player.getStackInHand(Hand.MAIN_HAND);
+                ItemStack handStack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
                 if (handStack.getItem() instanceof GearItem gearItem) {
                     GearTier newTier = gearItem.getGearTier();
-                    GearTier currentTier = state.get(GEAR_TIER);
+                    GearTier currentTier = state.getValue(GEAR_TIER);
                     if (newTier.ordinal() > currentTier.ordinal()) {
                         boolean hasRedstone = player.getInventory().contains(new ItemStack(ModItems.ENCHANTED_REDSTONE));
                         if (hasRedstone || player.isCreative()) {
                             if (!player.isCreative()) {
-                                player.getInventory().remove(stack -> stack.isOf(ModItems.ENCHANTED_REDSTONE), 1, player.playerScreenHandler.getCraftingInput());
-                                handStack.decrement(1);
+                                player.getInventory().clearOrCountMatchingItems(stack -> stack.is(ModItems.ENCHANTED_REDSTONE), false, 1, player.inventoryMenu.getCraftSlots());
+                                handStack.shrink(1);
                             }
-                            crusherEntity.setStack(2, new ItemStack(gearItem));
-                            world.setBlockState(pos, state.with(GEAR_TIER, newTier), 3);
-                            player.sendMessage(Text.translatable("message.enchantedwood.upgraded_tier", newTier.asString().replace("_", " ").toUpperCase()), true);
-                            return ActionResult.SUCCESS;
+                            crusherEntity.setItem(2, new ItemStack(gearItem));
+                            world.setBlock(pos, state.setValue(GEAR_TIER, newTier), 3);
+                            player.sendOverlayMessage(Component.translatable("message.enchantedwood.upgraded_tier", newTier.getSerializedName().replace("_", " ").toUpperCase()));
+                            return InteractionResult.SUCCESS;
                         } else {
-                            player.sendMessage(Text.translatable("message.enchantedwood.upgrade_requires_redstone"), true);
-                            return ActionResult.SUCCESS;
+                            player.sendOverlayMessage(Component.translatable("message.enchantedwood.upgrade_requires_redstone"));
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
 
-                if (blockEntity instanceof NamedScreenHandlerFactory factory) {
-                    player.openHandledScreen(factory);
+                if (blockEntity instanceof MenuProvider factory) {
+                    player.openMenu(factory);
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack);
-        if (!world.isClient()) {
-            NbtComponent nbtComponent = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        super.setPlacedBy(world, pos, state, placer, itemStack);
+        if (!world.isClientSide()) {
+            CustomData nbtComponent = itemStack.get(DataComponents.CUSTOM_DATA);
             if (nbtComponent != null) {
-                NbtCompound nbt = nbtComponent.copyNbt();
+                CompoundTag nbt = nbtComponent.copyTag();
                 Optional<String> tierOpt = nbt.getString("GearTier");
                 if (tierOpt.isPresent()) {
                     try {
                         GearTier tier = GearTier.valueOf(tierOpt.get());
                         if (tier != GearTier.NONE) {
-                            world.setBlockState(pos, state.with(GEAR_TIER, tier), 3);
+                            world.setBlock(pos, state.setValue(GEAR_TIER, tier), 3);
                         }
                     } catch (Exception ignored) {}
                 }
@@ -130,46 +124,46 @@ public class CrusherBlock extends HorizontalFacingBlock implements BlockEntityPr
     }
 
     @Override
-    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        if (!world.isClient() && !player.isCreative()) {
-            GearTier currentTier = state.get(GEAR_TIER);
+    public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+        if (!world.isClientSide() && !player.isCreative()) {
+            GearTier currentTier = state.getValue(GEAR_TIER);
             if (currentTier != GearTier.NONE) {
                 ItemStack dropStack = new ItemStack(this);
-                NbtCompound nbt = new NbtCompound();
+                CompoundTag nbt = new CompoundTag();
                 nbt.putString("GearTier", currentTier.name());
-                NbtComponent.set(DataComponentTypes.CUSTOM_DATA, dropStack, nbt);
+                CustomData.set(DataComponents.CUSTOM_DATA, dropStack, nbt);
 
-                String tierName = currentTier.asString().replace("_", " ").toUpperCase();
-                dropStack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(tierName + " Crusher"));
+                String tierName = currentTier.getSerializedName().replace("_", " ").toUpperCase();
+                dropStack.set(DataComponents.CUSTOM_NAME, Component.literal(tierName + " Crusher"));
 
-                Block.dropStack(world, pos, dropStack);
+                Block.popResource(world, pos, dropStack);
 
                 BlockEntity be = world.getBlockEntity(pos);
                 if (be instanceof CrusherBlockEntity crusherEntity) {
-                    ItemScatterer.spawn(world, pos, crusherEntity);
-                    crusherEntity.clear();
+                    Containers.dropContents(world, pos, crusherEntity);
+                    crusherEntity.clearContent();
                 }
 
                 world.removeBlock(pos, false);
                 return state;
             }
         }
-        return super.onBreak(world, pos, state, player);
+        return super.playerWillDestroy(world, pos, state, player);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, LIT, GEAR_TIER);
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
-        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+        if (!state.is(world.getBlockState(pos).getBlock())) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CrusherBlockEntity crusherEntity) {
-                ItemScatterer.spawn(world, pos, crusherEntity);
+                Containers.dropContents(world, pos, crusherEntity);
             }
-            super.onStateReplaced(state, world, pos, moved);
+            super.affectNeighborsAfterRemoval(state, world, pos, moved);
         }
     }
 }

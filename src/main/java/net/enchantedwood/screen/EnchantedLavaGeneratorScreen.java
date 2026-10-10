@@ -2,91 +2,89 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class EnchantedLavaGeneratorScreen extends HandledScreen<EnchantedLavaGeneratorScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/lava_generator_gui.png");
+public class EnchantedLavaGeneratorScreen extends AbstractContainerScreen<EnchantedLavaGeneratorScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/lava_generator_gui.png");
 
-    public EnchantedLavaGeneratorScreen(EnchantedLavaGeneratorScreenHandler handler, PlayerInventory inventory, Text title) {
+    public EnchantedLavaGeneratorScreen(EnchantedLavaGeneratorScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // Draw Fuel Flame
-        if (this.handler.isBurning()) {
-            int fuelHeight = this.handler.getScaledFuelProgress();
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 27, y + 49 - fuelHeight, 176.0f, 14.0f - fuelHeight, 14, fuelHeight + 1, 256, 256);
+        if (this.menu.isBurning()) {
+            int fuelHeight = this.menu.getScaledFuelProgress();
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 27, y + 49 - fuelHeight, 176.0f, 14.0f - fuelHeight, 14, fuelHeight + 1, 256, 256);
         }
 
         // Draw Cook Progress Arrow
-        int cookWidth = this.handler.getScaledCookProgress();
+        int cookWidth = this.menu.getScaledCookProgress();
         if (cookWidth > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 66, y + 19, 176.0f, 14.0f, cookWidth + 1, 17, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 66, y + 19, 176.0f, 14.0f, cookWidth + 1, 17, 256, 256);
         }
 
         // Draw Lava Fluid Reservoir Gauge (x: 140, y: 17, width: 16, height: 52)
-        int lavaHeight = this.handler.getScaledLavaProgress();
+        int lavaHeight = this.menu.getScaledLavaProgress();
         if (lavaHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 140, y + 69 - lavaHeight, 176.0f, 83.0f - lavaHeight, 16, lavaHeight, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 140, y + 69 - lavaHeight, 176.0f, 83.0f - lavaHeight, 16, lavaHeight, 256, 256);
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
+
 
         // Custom Tooltip for Lava Gauge when hovered (x: 140, y: 17, width: 16, height: 52)
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
         if (mouseX >= x + 140 && mouseX <= x + 156 && mouseY >= y + 17 && mouseY <= y + 69) {
-            int lava = this.handler.getLavaAmount();
+            int lava = this.menu.getLavaAmount();
             int buckets = lava / 1000;
-            context.drawTooltip(this.textRenderer, Text.literal("§c🌋 Lava Gauge: §f" + String.format("%,d", lava) + " / 10,000 mB §7(" + buckets + " Bucket" + (buckets == 1 ? "" : "s") + ")"), mouseX, mouseY);
+            context.setTooltipForNextFrame(this.font, Component.literal("§c🌋 Lava Gauge: §f" + String.format("%,d", lava) + " / 10,000 mB §7(" + buckets + " Bucket" + (buckets == 1 ? "" : "s") + ")"), mouseX, mouseY);
         }
 
         // Empty Machine Slot Tooltips
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 5) {
-            switch (this.focusedSlot.id) {
-                case 0 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e📥 Cobblestone Input"),
-                        Text.literal("§7Insert cobblestone to melt down into molten lava.")
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 5) {
+            switch (this.hoveredSlot.index) {
+                case 0 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§e📥 Cobblestone Input"),
+                        Component.literal("§7Insert cobblestone to melt down into molten lava.")
                 ), mouseX, mouseY);
-                case 1 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§d🔥 Enchanted Fuel Slot"),
-                        Text.literal("§fRequired: §aEnchanted Coal Block"),
-                        Text.literal("§7Provides sustained high-temperature thermal power.")
+                case 1 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§d🔥 Enchanted Fuel Slot"),
+                        Component.literal("§fRequired: §aEnchanted Coal Block"),
+                        Component.literal("§7Provides sustained high-temperature thermal power.")
                 ), mouseX, mouseY);
-                case 2 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§6⚙️ Enchanted Gear Upgrade Slot"),
-                        Text.literal("§7Insert an Enchanted Gear or Blaze Overclock Core:"),
-                        Text.literal("§f• Greatly accelerates melting & lava generation speed.")
+                case 2 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6⚙️ Enchanted Gear Upgrade Slot"),
+                        Component.literal("§7Insert an Enchanted Gear or Blaze Overclock Core:"),
+                        Component.literal("§f• Greatly accelerates melting & lava generation speed.")
                 ), mouseX, mouseY);
-                case 3 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§b🪣 Empty Bucket Input"),
-                        Text.literal("§7Insert empty iron or copper buckets to fill.")
+                case 3 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§b🪣 Empty Bucket Input"),
+                        Component.literal("§7Insert empty iron or copper buckets to fill.")
                 ), mouseX, mouseY);
-                case 4 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§c🔥 Lava Bucket Output"),
-                        Text.literal("§7Filled lava buckets appear here.")
+                case 4 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§c🔥 Lava Bucket Output"),
+                        Component.literal("§7Filled lava buckets appear here.")
                 ), mouseX, mouseY);
             }
         }

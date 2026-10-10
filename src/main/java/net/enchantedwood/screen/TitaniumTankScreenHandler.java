@@ -1,45 +1,45 @@
 package net.enchantedwood.screen;
 
 import net.enchantedwood.block.entity.TitaniumTankControllerBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class TitaniumTankScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class TitaniumTankScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public TitaniumTankScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(TitaniumTankControllerBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public TitaniumTankScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(TitaniumTankControllerBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public TitaniumTankScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public TitaniumTankScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.TITANIUM_TANK_SCREEN_HANDLER, syncId);
-        checkSize(inventory, TitaniumTankControllerBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, TitaniumTankControllerBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Bucket Input (Fill or Drain Tank) (x=38, y=26)
         this.addSlot(new Slot(inventory, TitaniumTankControllerBlockEntity.BUCKET_IN_SLOT, 38, 26) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.LAVA_BUCKET) || stack.isOf(Items.BUCKET);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.LAVA_BUCKET) || stack.is(Items.BUCKET);
             }
         });
 
         // Slot 1: Bucket Output (x=38, y=56)
         this.addSlot(new Slot(inventory, TitaniumTankControllerBlockEntity.BUCKET_OUT_SLOT, 38, 56) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -70,7 +70,7 @@ public class TitaniumTankScreenHandler extends ScreenHandler {
     }
 
     public net.enchantedwood.fluid.MoltenMetal getFluidType() {
-        if (propertyDelegate.size() > 5) {
+        if (propertyDelegate.getCount() > 5) {
             int index = propertyDelegate.get(5);
             net.enchantedwood.fluid.MoltenMetal[] metals = net.enchantedwood.fluid.MoltenMetal.values();
             if (index >= 0 && index < metals.length) {
@@ -81,7 +81,7 @@ public class TitaniumTankScreenHandler extends ScreenHandler {
     }
 
     public net.enchantedwood.fluid.MoltenMetal getFilterFluid() {
-        if (propertyDelegate.size() > 6) {
+        if (propertyDelegate.getCount() > 6) {
             int index = propertyDelegate.get(6);
             net.enchantedwood.fluid.MoltenMetal[] metals = net.enchantedwood.fluid.MoltenMetal.values();
             if (index >= 0 && index < metals.length) {
@@ -92,42 +92,42 @@ public class TitaniumTankScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (slotIndex < TitaniumTankControllerBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (originalStack.isOf(Items.LAVA_BUCKET) || originalStack.isOf(Items.BUCKET)) {
-                    if (!this.insertItem(originalStack, TitaniumTankControllerBlockEntity.BUCKET_IN_SLOT, TitaniumTankControllerBlockEntity.BUCKET_IN_SLOT + 1, false)) {
+                if (originalStack.is(Items.LAVA_BUCKET) || originalStack.is(Items.BUCKET)) {
+                    if (!this.moveItemStackTo(originalStack, TitaniumTankControllerBlockEntity.BUCKET_IN_SLOT, TitaniumTankControllerBlockEntity.BUCKET_IN_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (slotIndex < TitaniumTankControllerBlockEntity.INVENTORY_SIZE + 27) {
-                    if (!this.insertItem(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE, TitaniumTankControllerBlockEntity.INVENTORY_SIZE + 27, false)) {
+                } else if (!this.moveItemStackTo(originalStack, TitaniumTankControllerBlockEntity.INVENTORY_SIZE, TitaniumTankControllerBlockEntity.INVENTORY_SIZE + 27, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

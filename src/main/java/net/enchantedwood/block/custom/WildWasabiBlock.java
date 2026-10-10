@@ -1,37 +1,31 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.PlantBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.VegetationBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class WildWasabiBlock extends PlantBlock {
-    public static final MapCodec<WildWasabiBlock> CODEC = createCodec(WildWasabiBlock::new);
-    private static final VoxelShape SHAPE = Block.createCuboidShape(2.0, 0.0, 2.0, 14.0, 10.0, 14.0);
+public class WildWasabiBlock extends VegetationBlock {
+    private static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 10.0, 14.0);
 
-    public WildWasabiBlock(Settings settings) {
+    public WildWasabiBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public MapCodec<WildWasabiBlock> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return super.canPlantOnTop(floor, world, pos)
-                || floor.isOf(net.minecraft.block.Blocks.MUD)
-                || floor.isOf(net.minecraft.block.Blocks.FARMLAND)
-                || floor.isOf(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
+    protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+        return super.mayPlaceOn(floor, world, pos)
+                || floor.is(net.minecraft.world.level.block.Blocks.MUD)
+                || floor.is(net.minecraft.world.level.block.Blocks.FARMLAND)
+                || floor.is(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
     }
 }

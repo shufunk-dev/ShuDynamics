@@ -1,6 +1,6 @@
 package net.enchantedwood.gas;
 
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public interface GasProvider {

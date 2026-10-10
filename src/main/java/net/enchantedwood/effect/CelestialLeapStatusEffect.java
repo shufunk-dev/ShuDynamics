@@ -1,38 +1,38 @@
 package net.enchantedwood.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 
-public class CelestialLeapStatusEffect extends StatusEffect {
+public class CelestialLeapStatusEffect extends MobEffect {
     public CelestialLeapStatusEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0xFFE600); // Starlight Gold
+        super(MobEffectCategory.BENEFICIAL, 0xFFE600); // Starlight Gold
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel world, LivingEntity entity, int amplifier) {
         // Featherweight descent & zero fall damage
         entity.fallDistance = 0.0f;
-        if (!entity.isOnGround() && entity.getVelocity().y < -0.15) {
-            entity.setVelocity(entity.getVelocity().x, Math.max(entity.getVelocity().y, -0.18), entity.getVelocity().z);
+        if (!entity.onGround() && entity.getDeltaMovement().y < -0.15) {
+            entity.setDeltaMovement(entity.getDeltaMovement().x, Math.max(entity.getDeltaMovement().y, -0.18), entity.getDeltaMovement().z);
         }
 
         // Maintain Jump Boost II (3-block leaps)
-        if (!entity.hasStatusEffect(StatusEffects.JUMP_BOOST) || entity.getStatusEffect(StatusEffects.JUMP_BOOST).getDuration() < 30) {
-            entity.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 60, 1, false, false, false));
+        if (!entity.hasEffect(MobEffects.JUMP_BOOST) || entity.getEffect(MobEffects.JUMP_BOOST).getDuration() < 30) {
+            entity.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 60, 1, false, false, false));
         }
 
-        if (world.getTime() % 15 == 0) {
-            world.spawnParticles(
+        if (world.getGameTime() % 15 == 0) {
+            world.sendParticles(
                     ParticleTypes.END_ROD,
                     entity.getX(), entity.getY() + 0.5, entity.getZ(),
                     1, 0.2, 0.2, 0.2, 0.02

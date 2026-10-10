@@ -1,27 +1,5 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.HydraulicPressBlock;
@@ -30,13 +8,34 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.HydraulicPressScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class HydraulicPressBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class HydraulicPressBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int ENERGY_CAPACITY = 50_000;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(3, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 500, 500, 0);
 
     private @Nullable BlockPos boundNetworkPos = null;
@@ -52,7 +51,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     public void bindNetwork(BlockPos pos, String dimension) {
         this.boundNetworkPos = pos;
         this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
-        markDirty();
+        setChanged();
     }
 
     public @Nullable BlockPos getBoundNetworkPos() {
@@ -63,7 +62,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         return this.energyStorage.getEnergy() >= ENERGY_DRAW;
     }
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -89,7 +88,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -113,13 +112,13 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         this.externalOperationTicks = 6;
         this.isExternalProcess = true;
         if (input != null && !input.isEmpty()) {
-            if (this.inventory.get(INPUT_SLOT).isEmpty() || !this.inventory.get(INPUT_SLOT).isOf(input.getItem())) {
+            if (this.inventory.get(INPUT_SLOT).isEmpty() || !this.inventory.get(INPUT_SLOT).is(input.getItem())) {
                 this.inventory.set(INPUT_SLOT, input.copy());
             }
         }
         this.totalCookTime = Math.max(1, maxTicks);
         this.cookTime = Math.min(this.totalCookTime, progressTicks);
-        markDirty();
+        setChanged();
     }
 
     public void clearExternalProcess() {
@@ -127,17 +126,17 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
         this.isExternalProcess = false;
         this.cookTime = 0;
         this.inventory.set(INPUT_SLOT, ItemStack.EMPTY);
-        markDirty();
+        setChanged();
     }
 
-    public static void tick(net.minecraft.world.World world, BlockPos pos, BlockState state, HydraulicPressBlockEntity entity) {
-        if (world.isClient()) return;
+    public static void tick(net.minecraft.world.level.Level world, BlockPos pos, BlockState state, HydraulicPressBlockEntity entity) {
+        if (world.isClientSide()) return;
 
         boolean isCooking = false;
         GearTier gearTier = entity.getActiveGearTier();
 
-        if (state.get(HydraulicPressBlock.GEAR_TIER) != gearTier) {
-            world.setBlockState(pos, state.with(HydraulicPressBlock.GEAR_TIER, gearTier), 3);
+        if (state.getValue(HydraulicPressBlock.GEAR_TIER) != gearTier) {
+            world.setBlock(pos, state.setValue(HydraulicPressBlock.GEAR_TIER, gearTier), 3);
         }
 
         if (entity.isExternalProcess) {
@@ -162,7 +161,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
                     if (entity.cookTime >= entity.totalCookTime) {
                         entity.cookTime = 0;
                         entity.processItem();
-                        world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 0.6f, 0.7f);
+                        world.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.6f, 0.7f);
                     }
                 }
             } else if (entity.externalOperationTicks <= 0) {
@@ -170,10 +169,10 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
             }
         }
 
-        if (state.get(HydraulicPressBlock.LIT) != isCooking) {
-            world.setBlockState(pos, state.with(HydraulicPressBlock.LIT, isCooking), 3);
+        if (state.getValue(HydraulicPressBlock.LIT) != isCooking) {
+            world.setBlock(pos, state.setValue(HydraulicPressBlock.LIT, isCooking), 3);
         }
-        entity.markDirty();
+        entity.setChanged();
     }
 
     private boolean canProcess() {
@@ -185,9 +184,9 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
 
         ItemStack output = this.inventory.get(OUTPUT_SLOT);
         if (output.isEmpty()) return true;
-        if (!ItemStack.areItemsEqual(output, result)) return false;
+        if (!ItemStack.isSameItem(output, result)) return false;
 
-        return output.getCount() + result.getCount() <= output.getMaxCount();
+        return output.getCount() + result.getCount() <= output.getMaxStackSize();
     }
 
     private void processItem() {
@@ -198,10 +197,10 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
             ItemStack output = this.inventory.get(OUTPUT_SLOT);
             if (output.isEmpty()) {
                 this.inventory.set(OUTPUT_SLOT, result.copy());
-            } else if (ItemStack.areItemsEqual(output, result)) {
-                output.increment(result.getCount());
+            } else if (ItemStack.isSameItem(output, result)) {
+                output.grow(result.getCount());
             }
-            input.decrement(1);
+            input.shrink(1);
         }
     }
 
@@ -253,24 +252,24 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 100);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 100);
         if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
-            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
-            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+            this.boundNetworkPos = new BlockPos(view.getIntOr("BoundX", 0), view.getIntOr("BoundY", 0), view.getIntOr("BoundZ", 0));
+            this.boundDimension = view.getStringOr("BoundDim", "minecraft:overworld");
         } else {
             this.boundNetworkPos = null;
         }
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
@@ -283,7 +282,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return this.inventory.size();
     }
 
@@ -294,68 +293,68 @@ public class HydraulicPressBlockEntity extends BlockEntity implements NamedScree
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack res = Inventories.splitStack(this.inventory, slot, amount);
-        if (!res.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack res = ContainerHelper.removeItem(this.inventory, slot, amount);
+        if (!res.isEmpty()) setChanged();
         return res;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack res = Inventories.removeStack(this.inventory, slot);
-        if (!res.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack res = ContainerHelper.takeItem(this.inventory, slot);
+        if (!res.isEmpty()) setChanged();
         return res;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) stack.setCount(getMaxCountPerStack());
-        markDirty();
+        if (stack.getCount() > getMaxStackSize()) stack.setCount(getMaxStackSize());
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT};
         return new int[]{INPUT_SLOT, GEAR_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == OUTPUT_SLOT) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return slot == INPUT_SLOT;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT;
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.hydraulic_press");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.hydraulic_press");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new HydraulicPressScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 

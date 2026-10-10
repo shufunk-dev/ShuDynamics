@@ -7,34 +7,34 @@ import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.BrickOvenScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.SingleStackRecipeInput;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class BrickOvenBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int TOTAL_SLOTS = 3;
     public static final int INPUT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
@@ -48,7 +48,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     private static final int[] BOTTOM_SLOTS = new int[]{OUTPUT_SLOT, FUEL_SLOT};
     private static final int[] SIDE_SLOTS = new int[]{FUEL_SLOT};
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(TOTAL_SLOTS, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(TOTAL_SLOTS, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, MAX_RECEIVE, 0, 0);
 
     private int burnTime = 0;
@@ -57,7 +57,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     private int maxCookProgress = 80; // 4 seconds (2.5x faster than furnace's 200 ticks!)
     private boolean isElectricHeating = false;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -86,7 +86,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -95,10 +95,10 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
         super(ModBlockEntities.BRICK_OVEN_BLOCK_ENTITY, pos, state);
     }
 
-    public static int getFuelBurnTime(@Nullable World world, ItemStack stack) {
+    public static int getFuelBurnTime(@Nullable Level world, ItemStack stack) {
         if (stack.isEmpty()) return 0;
         if (world != null) {
-            int ticks = world.getFuelRegistry().getFuelTicks(stack);
+            int ticks = getFuelBurnTime(stack);
             if (ticks > 0) return ticks;
         }
         Item item = stack.getItem();
@@ -112,12 +112,12 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
         if (item == Items.BLAZE_ROD) return 2400;
         if (item == Items.LAVA_BUCKET || item == ModItems.COPPER_LAVA_BUCKET) return 20000;
         if (item == ModItems.ENCHANTED_LAVA_BUCKET || item == ModItems.ENCHANTED_COPPER_LAVA_BUCKET) return 60000;
-        if (stack.isIn(net.minecraft.registry.tag.ItemTags.LOGS) || stack.isIn(net.minecraft.registry.tag.ItemTags.PLANKS)) return 300;
+        if (stack.is(net.minecraft.tags.ItemTags.LOGS) || stack.is(net.minecraft.tags.ItemTags.PLANKS)) return 300;
         if (item == Items.STICK) return 100;
         return 0;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, BrickOvenBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, BrickOvenBlockEntity entity) {
         boolean dirty = false;
         boolean wasBurning = entity.isBurning();
 
@@ -145,16 +145,16 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
                 if (fuelVal > 0) {
                     entity.burnTime = fuelVal;
                     entity.fuelTime = fuelVal;
-                    if (fuel.isOf(Items.LAVA_BUCKET)) {
+                    if (fuel.is(Items.LAVA_BUCKET)) {
                         entity.inventory.set(FUEL_SLOT, new ItemStack(Items.BUCKET));
-                    } else if (fuel.isOf(ModItems.COPPER_LAVA_BUCKET)) {
+                    } else if (fuel.is(ModItems.COPPER_LAVA_BUCKET)) {
                         entity.inventory.set(FUEL_SLOT, new ItemStack(ModItems.COPPER_BUCKET));
-                    } else if (fuel.isOf(ModItems.ENCHANTED_LAVA_BUCKET)) {
+                    } else if (fuel.is(ModItems.ENCHANTED_LAVA_BUCKET)) {
                         entity.inventory.set(FUEL_SLOT, new ItemStack(Items.BUCKET));
-                    } else if (fuel.isOf(ModItems.ENCHANTED_COPPER_LAVA_BUCKET)) {
+                    } else if (fuel.is(ModItems.ENCHANTED_COPPER_LAVA_BUCKET)) {
                         entity.inventory.set(FUEL_SLOT, new ItemStack(ModItems.COPPER_BUCKET));
                     } else {
-                        fuel.decrement(1);
+                        fuel.shrink(1);
                     }
                     dirty = true;
                 }
@@ -165,7 +165,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
                 if (entity.cookProgress >= entity.maxCookProgress) {
                     entity.craftItem(recipeResult);
                     entity.cookProgress = 0;
-                    world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.4f, 1.2f);
+                    world.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.4f, 1.2f);
                     dirty = true;
                 }
             } else {
@@ -179,12 +179,12 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
 
         boolean isBurningNow = entity.isBurning();
         if (wasBurning != isBurningNow) {
-            world.setBlockState(pos, state.with(BrickOvenBlock.LIT, isBurningNow), 3);
+            world.setBlock(pos, state.setValue(BrickOvenBlock.LIT, isBurningNow), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -192,7 +192,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
         return this.isElectricHeating || this.burnTime > 0;
     }
 
-    private ItemStack getBakingResult(ServerWorld world, ItemStack input) {
+    private ItemStack getBakingResult(ServerLevel world, ItemStack input) {
         if (input.isEmpty()) return ItemStack.EMPTY;
 
         Item item = input.getItem();
@@ -218,21 +218,21 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
         if (item == ModItems.SOY_MILK) return new ItemStack(ModItems.TOFU);
 
         // 5. Vanilla Smoker recipes (all roasted meats, poultry, fish, potatoes, kelp)
-        var smokingMatch = world.getRecipeManager().getFirstMatch(RecipeType.SMOKING, new SingleStackRecipeInput(input), world);
+        var smokingMatch = world.recipeAccess().getRecipeFor(RecipeType.SMOKING, new SingleRecipeInput(input), world);
         if (smokingMatch.isPresent()) {
-            return smokingMatch.get().value().craft(new SingleStackRecipeInput(input), world.getRegistryManager());
+            return smokingMatch.get().value().assemble(new SingleRecipeInput(input));
         }
 
         // 6. Vanilla Campfire recipes
-        var campfireMatch = world.getRecipeManager().getFirstMatch(RecipeType.CAMPFIRE_COOKING, new SingleStackRecipeInput(input), world);
+        var campfireMatch = world.recipeAccess().getRecipeFor(RecipeType.CAMPFIRE_COOKING, new SingleRecipeInput(input), world);
         if (campfireMatch.isPresent()) {
-            return campfireMatch.get().value().craft(new SingleStackRecipeInput(input), world.getRegistryManager());
+            return campfireMatch.get().value().assemble(new SingleRecipeInput(input));
         }
 
         // 7. Vanilla Smelting / Cooking fallback (stones, ores, clay, sand)
-        var smeltingMatch = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SingleStackRecipeInput(input), world);
+        var smeltingMatch = world.recipeAccess().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(input), world);
         if (smeltingMatch.isPresent()) {
-            return smeltingMatch.get().value().craft(new SingleStackRecipeInput(input), world.getRegistryManager());
+            return smeltingMatch.get().value().assemble(new SingleRecipeInput(input));
         }
 
         return ItemStack.EMPTY;
@@ -241,25 +241,25 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     private boolean canAcceptOutput(ItemStack result) {
         ItemStack currentOut = this.inventory.get(OUTPUT_SLOT);
         if (currentOut.isEmpty()) return true;
-        if (!ItemStack.areItemsAndComponentsEqual(currentOut, result)) return false;
-        return currentOut.getCount() + result.getCount() <= currentOut.getMaxCount();
+        if (!ItemStack.isSameItemSameComponents(currentOut, result)) return false;
+        return currentOut.getCount() + result.getCount() <= currentOut.getMaxStackSize();
     }
 
     private void craftItem(ItemStack result) {
         ItemStack input = this.inventory.get(INPUT_SLOT);
-        if (input.isOf(Items.WATER_BUCKET)) {
+        if (input.is(Items.WATER_BUCKET)) {
             this.inventory.set(INPUT_SLOT, new ItemStack(Items.BUCKET));
-        } else if (input.isOf(ModItems.COPPER_WATER_BUCKET)) {
+        } else if (input.is(ModItems.COPPER_WATER_BUCKET)) {
             this.inventory.set(INPUT_SLOT, new ItemStack(ModItems.COPPER_BUCKET));
         } else {
-            input.decrement(1);
+            input.shrink(1);
         }
 
         ItemStack currentOut = this.inventory.get(OUTPUT_SLOT);
         if (currentOut.isEmpty()) {
             this.inventory.set(OUTPUT_SLOT, result.copy());
         } else {
-            currentOut.increment(result.getCount());
+            currentOut.grow(result.getCount());
         }
     }
 
@@ -269,21 +269,21 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
-        this.burnTime = view.getInt("BurnTime", 0);
-        this.fuelTime = view.getInt("FuelTime", 0);
-        this.cookProgress = view.getInt("CookProgress", 0);
-        this.maxCookProgress = view.getInt("MaxCookProgress", 80);
-        this.energyStorage.setEnergy(view.getInt("Energy", 0));
+        ContainerHelper.loadAllItems(view, this.inventory);
+        this.burnTime = view.getIntOr("BurnTime", 0);
+        this.fuelTime = view.getIntOr("FuelTime", 0);
+        this.cookProgress = view.getIntOr("CookProgress", 0);
+        this.maxCookProgress = view.getIntOr("MaxCookProgress", 80);
+        this.energyStorage.setEnergy(view.getIntOr("Energy", 0));
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         view.putInt("BurnTime", this.burnTime);
         view.putInt("FuelTime", this.fuelTime);
         view.putInt("CookProgress", this.cookProgress);
@@ -292,7 +292,7 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return TOTAL_SLOTS;
     }
 
@@ -305,70 +305,104 @@ public class BrickOvenBlockEntity extends BlockEntity implements NamedScreenHand
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(this.inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(this.inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(this.inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) return TOP_SLOTS;
         if (side == Direction.DOWN) return BOTTOM_SLOTS;
         return SIDE_SLOTS;
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == OUTPUT_SLOT) return false;
-        if (slot == FUEL_SLOT) return getFuelBurnTime(this.world, stack) > 0;
+        if (slot == FUEL_SLOT) return getFuelBurnTime(this.level, stack) > 0;
         return true;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         if (dir == Direction.DOWN && slot == FUEL_SLOT) {
-            return stack.isOf(Items.BUCKET) || stack.isOf(ModItems.COPPER_BUCKET);
+            return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
         }
         return slot == OUTPUT_SLOT;
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.brick_oven");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.brick_oven");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new BrickOvenScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
+
+    public static int getFuelBurnTime(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return 0;
+        net.minecraft.world.item.Item item = stack.getItem();
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_DUST) return 8000;
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_COAL) return 10000;
+        if (item == net.enchantedwood.block.ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 90000;
+        if (item == net.enchantedwood.item.ModItems.COKE_COAL) return 3200;
+        if (item == net.enchantedwood.block.ModBlocks.COKE_COAL_BLOCK.asItem()) return 28800;
+        if (item == net.enchantedwood.item.ModItems.COPPER_LAVA_BUCKET) return 20000;
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_LAVA_BUCKET || item == net.enchantedwood.item.ModItems.ENCHANTED_COPPER_LAVA_BUCKET) return 60000;
+        if (item == net.minecraft.world.item.Items.LAVA_BUCKET) return 20000;
+        if (item == net.minecraft.world.item.Items.COAL || item == net.minecraft.world.item.Items.CHARCOAL) return 1600;
+        if (item == net.minecraft.world.item.Items.COAL_BLOCK) return 16000;
+        if (item == net.minecraft.world.item.Items.BLAZE_ROD) return 2400;
+        return net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt.getFromItem(
+                stack,
+                net.minecraft.core.component.DataComponents.COOKING_FUEL,
+                net.minecraft.world.item.component.CookingFuel::burnTime,
+                null,
+                0
+        );
+    }
+
+    public static ItemStack getItemRemainder(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return ItemStack.EMPTY;
+        if (stack.is(net.minecraft.world.item.Items.LAVA_BUCKET)) return new ItemStack(net.minecraft.world.item.Items.BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.COPPER_LAVA_BUCKET)) return new ItemStack(net.enchantedwood.item.ModItems.COPPER_BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.ENCHANTED_LAVA_BUCKET)) return new ItemStack(net.minecraft.world.item.Items.BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.ENCHANTED_COPPER_LAVA_BUCKET)) return new ItemStack(net.enchantedwood.item.ModItems.COPPER_BUCKET);
+        var rem = stack.getItem().getCraftingRemainder();
+        return rem != null ? rem.create() : ItemStack.EMPTY;
+    }
+
 }

@@ -1,71 +1,70 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class InfernalHammerItem extends HammerItem {
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
 
-    public InfernalHammerItem(Settings settings) {
+    public InfernalHammerItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.setOnFireFor(8.0f);
-        super.postHit(stack, target, attacker);
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        target.igniteForSeconds(8.0f);
+        super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§6✦ Nether Thermal Excavator"));
-        textConsumer.accept(Text.literal("§7Mines a §e3×3 area §7of stone, ores, and terrain."));
-        textConsumer.accept(Text.literal("§c✦ Innate Auto-Smelt: §7Smelts mined ores directly into ingots."));
-        textConsumer.accept(Text.literal("§4✦ Fire Aspect: §7Ignites targets on hit & 100% fireproof."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§6✦ Nether Thermal Excavator"));
+        textConsumer.accept(Component.literal("§7Mines a §e3×3 area §7of stone, ores, and terrain."));
+        textConsumer.accept(Component.literal("§c✦ Innate Auto-Smelt: §7Smelts mined ores directly into ingots."));
+        textConsumer.accept(Component.literal("§4✦ Fire Aspect: §7Ignites targets on hit & 100% fireproof."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient() && miner instanceof ServerPlayerEntity player && !IS_MINING_AREA.get()) {
-            if (state.getHardness(world, pos) > 0.0f) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
+        if (!world.isClientSide() && miner instanceof ServerPlayer player && !IS_MINING_AREA.get()) {
+            if (state.getDestroySpeed(world, pos) > 0.0f) {
                 IS_MINING_AREA.set(true);
                 try {
-                    mine3x3AutoSmelt(stack, (ServerWorld) world, pos, player);
+                    mine3x3AutoSmelt(stack, (ServerLevel) world, pos, player);
                 } finally {
                     IS_MINING_AREA.set(false);
                 }
             }
         }
-        return super.postMine(stack, world, state, pos, miner);
+        return super.mineBlock(stack, world, state, pos, miner);
     }
 
-    private void mine3x3AutoSmelt(ItemStack stack, ServerWorld world, BlockPos origin, ServerPlayerEntity player) {
+    private void mine3x3AutoSmelt(ItemStack stack, ServerLevel world, BlockPos origin, ServerPlayer player) {
         Direction side = getTargetedSide(player, origin);
 
         int minX = 0, maxX = 0, minY = 0, maxY = 0, minZ = 0, maxZ = 0;
@@ -93,32 +92,32 @@ public class InfernalHammerItem extends HammerItem {
                 for (int z = minZ; z <= maxZ; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
 
-                    BlockPos targetPos = origin.add(x, y, z);
+                    BlockPos targetPos = origin.offset(x, y, z);
                     BlockState targetState = world.getBlockState(targetPos);
 
                     if (canHarvestBlock(targetState, world, targetPos)) {
                         // Spawn flame particles
-                        world.spawnParticles(ParticleTypes.FLAME, targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.02);
-                        player.interactionManager.tryBreakBlock(targetPos);
+                        world.sendParticles(ParticleTypes.FLAME, targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.02);
+                        player.gameMode.destroyBlock(targetPos);
                         smeltNearbyDrops(world, targetPos);
 
-                        stack.damage(1, player, EquipmentSlot.MAINHAND);
+                        stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                         if (stack.isEmpty()) return;
                     }
                 }
             }
         }
 
-        world.playSound(null, origin, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, 1.8f);
+        world.playSound(null, origin, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5f, 1.8f);
     }
 
-    private void smeltNearbyDrops(ServerWorld world, BlockPos pos) {
-        List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, new net.minecraft.util.math.Box(pos).expand(1.5), e -> true);
+    private void smeltNearbyDrops(ServerLevel world, BlockPos pos) {
+        List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, new net.minecraft.world.phys.AABB(pos).inflate(1.5), e -> true);
         for (ItemEntity itemEntity : items) {
-            ItemStack drop = itemEntity.getStack();
+            ItemStack drop = itemEntity.getItem();
             ItemStack smelted = getSmeltedResult(drop);
             if (!smelted.isEmpty()) {
-                itemEntity.setStack(smelted);
+                itemEntity.setItem(smelted);
             }
         }
     }
@@ -163,40 +162,40 @@ public class InfernalHammerItem extends HammerItem {
         return ItemStack.EMPTY;
     }
 
-    private boolean canHarvestBlock(BlockState state, World world, BlockPos pos) {
-        if (state.isAir() || state.getHardness(world, pos) < 0) return false;
-        if (state.getBlock() instanceof net.minecraft.block.BlockEntityProvider || world.getBlockEntity(pos) != null) return false;
+    private boolean canHarvestBlock(BlockState state, Level world, BlockPos pos) {
+        if (state.isAir() || state.getDestroySpeed(world, pos) < 0) return false;
+        if (state.getBlock() instanceof net.minecraft.world.level.block.EntityBlock || world.getBlockEntity(pos) != null) return false;
 
-        return state.isIn(BlockTags.PICKAXE_MINEABLE)
-                || state.isIn(BlockTags.SHOVEL_MINEABLE)
-                || state.isIn(BlockTags.NEEDS_STONE_TOOL)
-                || state.isIn(BlockTags.NEEDS_IRON_TOOL)
-                || state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)
-                || !state.isToolRequired();
+        return state.is(BlockTags.MINEABLE_WITH_PICKAXE)
+                || state.is(BlockTags.MINEABLE_WITH_SHOVEL)
+                || state.is(BlockTags.NEEDS_STONE_TOOL)
+                || state.is(BlockTags.NEEDS_IRON_TOOL)
+                || state.is(BlockTags.NEEDS_DIAMOND_TOOL)
+                || !state.requiresCorrectToolForDrops();
     }
 
-    private Direction getTargetedSide(PlayerEntity player, BlockPos pos) {
-        if (player.getPitch() > 40.0f) {
+    private Direction getTargetedSide(Player player, BlockPos pos) {
+        if (player.getXRot() > 40.0f) {
             return Direction.UP;
-        } else if (player.getPitch() < -40.0f) {
+        } else if (player.getXRot() < -40.0f) {
             return Direction.DOWN;
         }
 
-        Vec3d eyePos = player.getEyePos();
-        Vec3d rotation = player.getRotationVec(1.0f);
-        Vec3d reachVec = eyePos.add(rotation.x * 5.0, rotation.y * 5.0, rotation.z * 5.0);
+        Vec3 eyePos = player.getEyePosition();
+        Vec3 rotation = player.getViewVector(1.0f);
+        Vec3 reachVec = eyePos.add(rotation.x * 5.0, rotation.y * 5.0, rotation.z * 5.0);
 
-        BlockHitResult hit = player.getEntityWorld().raycast(new RaycastContext(
+        BlockHitResult hit = player.level().clip(new ClipContext(
                 eyePos,
                 reachVec,
-                RaycastContext.ShapeType.OUTLINE,
-                RaycastContext.FluidHandling.NONE,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
                 player
         ));
 
         if (hit.getType() == HitResult.Type.BLOCK) {
-            return hit.getSide();
+            return hit.getDirection();
         }
-        return player.getHorizontalFacing().getOpposite();
+        return player.getDirection().getOpposite();
     }
 }

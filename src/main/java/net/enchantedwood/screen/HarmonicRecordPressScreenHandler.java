@@ -1,47 +1,47 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.entity.HarmonicRecordPressBlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class HarmonicRecordPressScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class HarmonicRecordPressScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public HarmonicRecordPressScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(7));
+    public HarmonicRecordPressScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(4), new SimpleContainerData(7));
     }
 
-    public HarmonicRecordPressScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public HarmonicRecordPressScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.HARMONIC_RECORD_PRESS_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 4);
+        checkContainerSize(inventory, 4);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Blank Vinyl Disc
         this.addSlot(new Slot(inventory, HarmonicRecordPressBlockEntity.SLOT_DISC, 48, 22) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.BLANK_VINYL_DISC);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.BLANK_VINYL_DISC);
             }
         });
 
         // Slot 1: Catalyst Item
         this.addSlot(new Slot(inventory, HarmonicRecordPressBlockEntity.SLOT_CATALYST, 48, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return !HarmonicRecordPressBlockEntity.getPressResult(new ItemStack(ModItems.BLANK_VINYL_DISC), stack).isEmpty();
             }
         });
@@ -49,7 +49,7 @@ public class HarmonicRecordPressScreenHandler extends ScreenHandler {
         // Slot 2: Pressed Music Disc Output
         this.addSlot(new Slot(inventory, HarmonicRecordPressBlockEntity.SLOT_OUTPUT, 116, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -57,7 +57,7 @@ public class HarmonicRecordPressScreenHandler extends ScreenHandler {
         // Slot 3: Overclocking Gear Slot
         this.addSlot(new Slot(inventory, HarmonicRecordPressBlockEntity.SLOT_GEAR, 18, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -98,69 +98,69 @@ public class HarmonicRecordPressScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             // From machine slots to player inventory
             if (invSlot < 4) {
-                if (!this.insertItem(originalStack, 4, 40, true)) {
+                if (!this.moveItemStackTo(originalStack, 4, 40, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(originalStack, newStack);
+                slot.onQuickCraft(originalStack, newStack);
             }
             // From player inventory to machine slots
             else {
                 // 1. Gear Item -> Slot 3
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, 3, 4, false)) {
+                    if (!this.moveItemStackTo(originalStack, 3, 4, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 // 2. Blank Vinyl Disc -> Slot 0
-                else if (originalStack.isOf(ModItems.BLANK_VINYL_DISC)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                else if (originalStack.is(ModItems.BLANK_VINYL_DISC)) {
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 // 3. Catalyst -> Slot 1
                 else if (!HarmonicRecordPressBlockEntity.getPressResult(new ItemStack(ModItems.BLANK_VINYL_DISC), originalStack).isEmpty()) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 // Between player inv & hotbar
                 else if (invSlot >= 4 && invSlot < 31) {
-                    if (!this.insertItem(originalStack, 31, 40, false)) {
+                    if (!this.moveItemStackTo(originalStack, 31, 40, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 31 && invSlot < 40) {
-                    if (!this.insertItem(originalStack, 4, 31, false)) {
+                    if (!this.moveItemStackTo(originalStack, 4, 31, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

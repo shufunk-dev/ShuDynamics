@@ -1,17 +1,16 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class StorageCrystalItem extends Item {
     private final int capacity;
 
-    public StorageCrystalItem(int capacity, Settings settings) {
+    public StorageCrystalItem(int capacity, Properties settings) {
         super(settings);
         this.capacity = capacity;
     }
@@ -21,9 +20,9 @@ public class StorageCrystalItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§7Storage Capacity: §e" + String.format("%,d Items", capacity)));
-        textConsumer.accept(Text.literal("§a✔ Empty Crystal §7(Ready for Installation / Upgrade)"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§7Storage Capacity: §e" + String.format("%,d Items", capacity)));
+        textConsumer.accept(Component.literal("§a✔ Empty Crystal §7(Ready for Installation / Upgrade)"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

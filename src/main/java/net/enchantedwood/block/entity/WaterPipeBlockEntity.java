@@ -1,13 +1,13 @@
 package net.enchantedwood.block.entity;
 
 import net.enchantedwood.fluid.WaterProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
     public static final int BUFFER_CAPACITY = 1000; // 1000 mB
@@ -45,7 +45,7 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
         int toInsert = Math.min(space, amount);
         if (!simulate && toInsert > 0) {
             this.waterAmount += toInsert;
-            markDirty();
+            setChanged();
         }
         return toInsert;
     }
@@ -55,12 +55,12 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
         int toDrain = Math.min(this.waterAmount, amount);
         if (!simulate && toDrain > 0) {
             this.waterAmount -= toDrain;
-            markDirty();
+            setChanged();
         }
         return toDrain;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, WaterPipeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, WaterPipeBlockEntity entity) {
         boolean dirty = false;
 
         // 1. Pull water from adjacent non-pipe producers (e.g. Water Pump)
@@ -68,7 +68,7 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
             int needed = BUFFER_CAPACITY - entity.waterAmount;
             for (Direction dir : Direction.values()) {
                 if (needed <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof WaterProvider provider && !(neighbor instanceof WaterPipeBlockEntity)) {
                     if (provider.canExtractWater()) {
                         int toPull = Math.min(needed, TRANSFER_RATE);
@@ -87,7 +87,7 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
         if (entity.waterAmount > 0) {
             for (Direction dir : Direction.values()) {
                 if (entity.waterAmount <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof WaterProvider consumer && !(neighbor instanceof WaterPipeBlockEntity)) {
                     if (consumer.canInsertWater()) {
                         int toSend = Math.min(TRANSFER_RATE, entity.waterAmount);
@@ -105,7 +105,7 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
         if (entity.waterAmount > 0) {
             for (Direction dir : Direction.values()) {
                 if (entity.waterAmount <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof WaterPipeBlockEntity otherPipe) {
                     if (otherPipe.waterAmount < entity.waterAmount) {
                         int diff = entity.waterAmount - otherPipe.waterAmount;
@@ -121,19 +121,19 @@ public class WaterPipeBlockEntity extends BlockEntity implements WaterProvider {
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        this.waterAmount = view.getInt("WaterAmount", 0);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        this.waterAmount = view.getIntOr("WaterAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         view.putInt("WaterAmount", this.waterAmount);
     }
 }

@@ -3,22 +3,20 @@ package net.enchantedwood.block.entity;
 import net.enchantedwood.fluid.LavaProvider;
 import net.enchantedwood.fluid.MoltenMetal;
 import net.enchantedwood.fluid.MoltenMetalProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaProvider, MoltenMetalProvider, NamedScreenHandlerFactory {
+public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaProvider, MoltenMetalProvider, MenuProvider {
     private BlockPos masterPos = null;
 
     public TitaniumTankCasingBlockEntity(BlockPos pos, BlockState state) {
@@ -27,7 +25,7 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
 
     public void setMasterPos(@Nullable BlockPos pos) {
         this.masterPos = pos;
-        markDirty();
+        setChanged();
     }
 
     public @Nullable BlockPos getMasterPos() {
@@ -35,14 +33,14 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
     }
 
     public @Nullable TitaniumTankControllerBlockEntity getMaster() {
-        if (this.masterPos != null && this.world != null) {
-            BlockEntity be = this.world.getBlockEntity(this.masterPos);
+        if (this.masterPos != null && this.level != null) {
+            BlockEntity be = this.level.getBlockEntity(this.masterPos);
             if (be instanceof TitaniumTankControllerBlockEntity controller && controller.isFormed()) {
                 BlockPos min = controller.getMinPos();
                 if (min != null) {
-                    int rx = this.pos.getX() - min.getX();
-                    int ry = this.pos.getY() - min.getY();
-                    int rz = this.pos.getZ() - min.getZ();
+                    int rx = this.worldPosition.getX() - min.getX();
+                    int ry = this.worldPosition.getY() - min.getY();
+                    int rz = this.worldPosition.getZ() - min.getZ();
                     if (rx >= 0 && rx < 5 && ry >= 0 && ry < 5 && rz >= 0 && rz < 5) {
                         return controller;
                     }
@@ -50,11 +48,11 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
             }
         }
         // Self-healing: locate the true controller governing this casing's coordinates
-        if (this.world != null) {
-            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(this.world, this.pos);
+        if (this.level != null) {
+            TitaniumTankControllerBlockEntity controller = TitaniumTankControllerBlockEntity.findControllerForBlock(this.level, this.worldPosition);
             if (controller != null && controller.isFormed()) {
-                this.masterPos = controller.getPos();
-                markDirty();
+                this.masterPos = controller.getBlockPos();
+                setChanged();
                 return controller;
             }
         }
@@ -64,7 +62,7 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
     public boolean isValidOutboundPort() {
         TitaniumTankControllerBlockEntity master = getMaster();
         if (master == null || !master.isFormed()) return false;
-        return this.pos.getY() < master.getPos().getY();
+        return this.worldPosition.getY() < master.getBlockPos().getY();
     }
 
     // Outbound Lava Provider logic: delegates to master controller
@@ -150,21 +148,21 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
     }
 
     @Override
-    public Text getDisplayName() {
+    public Component getDisplayName() {
         TitaniumTankControllerBlockEntity master = getMaster();
-        return master != null ? master.getDisplayName() : Text.translatable("container.enchantedwood.titanium_tank");
+        return master != null ? master.getDisplayName() : Component.translatable("container.enchantedwood.titanium_tank");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, net.minecraft.entity.player.PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, net.minecraft.world.entity.player.Inventory playerInventory, Player player) {
         TitaniumTankControllerBlockEntity master = getMaster();
         return master != null ? master.createMenu(syncId, playerInventory, player) : null;
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         if (this.masterPos != null) {
             view.putInt("MasterX", this.masterPos.getX());
             view.putInt("MasterY", this.masterPos.getY());
@@ -173,10 +171,10 @@ public class TitaniumTankCasingBlockEntity extends BlockEntity implements LavaPr
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         if (view.contains("MasterX") && view.contains("MasterY") && view.contains("MasterZ")) {
-            this.masterPos = new BlockPos(view.getInt("MasterX", 0), view.getInt("MasterY", 0), view.getInt("MasterZ", 0));
+            this.masterPos = new BlockPos(view.getIntOr("MasterX", 0), view.getIntOr("MasterY", 0), view.getIntOr("MasterZ", 0));
         } else {
             this.masterPos = null;
         }

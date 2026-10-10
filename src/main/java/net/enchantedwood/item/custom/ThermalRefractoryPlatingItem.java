@@ -1,34 +1,27 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class ThermalRefractoryPlatingItem extends Item {
-    public ThermalRefractoryPlatingItem(Settings settings) {
+    public ThermalRefractoryPlatingItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§6⚡ Suit Upgrade Module"));
-        textConsumer.accept(Text.literal("§6✦ Nether Thermal Refractory Matrix"));
-        textConsumer.accept(Text.literal("§7Active cryo-thermal heatsink for Modular Power Exosuit."));
-        textConsumer.accept(Text.literal("§c• 100% Fire & Lava Immunity + Lava Surfing §8(when installed)"));
-        textConsumer.accept(Text.literal("§e• Active Drain: §f5 FE / tick §7in lava, fire or caldera (0 FE idle)"));
-        textConsumer.accept(Text.literal("§8Install into Chestplate or Leggings via Access Panel (V)"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§6⚡ Suit Upgrade Module"));
+        textConsumer.accept(Component.literal("§6✦ Nether Thermal Refractory Matrix"));
+        textConsumer.accept(Component.literal("§7Active cryo-thermal heatsink for Modular Power Exosuit."));
+        textConsumer.accept(Component.literal("§c• 100% Fire & Lava Immunity + Lava Surfing §8(when installed)"));
+        textConsumer.accept(Component.literal("§e• Active Drain: §f5 FE / tick §7in lava, fire or caldera (0 FE idle)"));
+        textConsumer.accept(Component.literal("§8Install into Chestplate or Leggings via Access Panel (V)"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

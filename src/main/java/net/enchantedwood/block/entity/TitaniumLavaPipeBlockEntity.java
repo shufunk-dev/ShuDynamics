@@ -3,13 +3,13 @@ package net.enchantedwood.block.entity;
 import net.enchantedwood.fluid.LavaProvider;
 import net.enchantedwood.fluid.MoltenMetal;
 import net.enchantedwood.fluid.MoltenMetalProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -99,7 +99,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         if (!simulate && insertable > 0) {
             this.fluidType = metal;
             this.lavaAmount += insertable;
-            markDirty();
+            setChanged();
         }
         return insertable;
     }
@@ -114,7 +114,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                 this.lavaAmount = 0;
                 this.fluidType = MoltenMetal.NONE;
             }
-            markDirty();
+            setChanged();
         }
         return extractable;
     }
@@ -124,7 +124,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         return (this.fluidType != MoltenMetal.NONE && this.lavaAmount > 0) ? List.of(this.fluidType) : List.of();
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, TitaniumLavaPipeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, TitaniumLavaPipeBlockEntity entity) {
         boolean dirty = false;
 
         // Auto-sanitize empty state
@@ -141,7 +141,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
             int needed = Math.min(TRANSFER_RATE, BUFFER_CAPACITY - entity.lavaAmount);
             for (Direction dir : Direction.values()) {
                 if (needed <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor == null || neighbor instanceof TitaniumLavaPipeBlockEntity) continue;
 
                 if (neighbor instanceof MoltenMetalProvider metalProvider) {
@@ -190,7 +190,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
 
             for (Direction dir : Direction.values()) {
                 if (entity.lavaAmount <= 0) break;
-                BlockPos neighborPos = pos.offset(dir);
+                BlockPos neighborPos = pos.relative(dir);
                 BlockEntity neighbor = world.getBlockEntity(neighborPos);
                 if (neighbor == null || neighbor instanceof TitaniumLavaPipeBlockEntity) continue;
 
@@ -239,7 +239,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
             }
 
             if (targetDir != null) {
-                BlockEntity nextBe = world.getBlockEntity(pos.offset(targetDir));
+                BlockEntity nextBe = world.getBlockEntity(pos.relative(targetDir));
                 if (nextBe instanceof TitaniumLavaPipeBlockEntity nextPipe) {
                     if (nextPipe.canInsertFluid(entity.fluidType)) {
                         int space = BUFFER_CAPACITY - nextPipe.lavaAmount;
@@ -261,7 +261,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
                 // Fallback: push to any neighboring pipe that has space and matching/empty fluid
                 for (Direction dir : Direction.values()) {
                     if (entity.lavaAmount <= 0) break;
-                    BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                    BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                     if (neighbor instanceof TitaniumLavaPipeBlockEntity otherPipe) {
                         if (otherPipe.canInsertFluid(entity.fluidType) && otherPipe.lavaAmount < entity.lavaAmount) {
                             int diff = entity.lavaAmount - otherPipe.lavaAmount;
@@ -282,13 +282,13 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
-    public static boolean hasDedicatedNeighbor(ServerWorld world, BlockPos pos, MoltenMetal fluidType) {
+    public static boolean hasDedicatedNeighbor(ServerLevel world, BlockPos pos, MoltenMetal fluidType) {
         for (Direction dir : Direction.values()) {
-            BlockEntity be = world.getBlockEntity(pos.offset(dir));
+            BlockEntity be = world.getBlockEntity(pos.relative(dir));
             if (isDedicatedConsumer(be, fluidType, dir)) {
                 return true;
             }
@@ -322,7 +322,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         return false;
     }
 
-    public static @Nullable Direction findDirectionToConsumer(ServerWorld world, BlockPos startPos, MoltenMetal fluidType) {
+    public static @Nullable Direction findDirectionToConsumer(ServerLevel world, BlockPos startPos, MoltenMetal fluidType) {
         Direction dedicated = findDirectionToConsumer(world, startPos, fluidType, true);
         if (dedicated != null) return dedicated;
         return findDirectionToConsumer(world, startPos, fluidType, false);
@@ -332,7 +332,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
      * Breadth-First Search through connected pipes to find the step direction leading to a consumer.
      * @param dedicatedOnly if true, only considers consumers that already hold this fluid or are filtered to it.
      */
-    public static @Nullable Direction findDirectionToConsumer(ServerWorld world, BlockPos startPos, MoltenMetal fluidType, boolean dedicatedOnly) {
+    public static @Nullable Direction findDirectionToConsumer(ServerLevel world, BlockPos startPos, MoltenMetal fluidType, boolean dedicatedOnly) {
         if (fluidType == MoltenMetal.NONE) return null;
 
         Queue<BlockPos> queue = new ArrayDeque<>();
@@ -342,7 +342,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
         visited.add(startPos);
 
         for (Direction dir : Direction.values()) {
-            BlockPos neighborPos = startPos.offset(dir);
+            BlockPos neighborPos = startPos.relative(dir);
             BlockEntity be = world.getBlockEntity(neighborPos);
             if (be instanceof TitaniumLavaPipeBlockEntity pipe) {
                 if (pipe.lavaAmount == 0 || pipe.fluidType == fluidType) {
@@ -362,7 +362,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
             Direction firstStep = firstStepMap.get(current);
 
             for (Direction dir : Direction.values()) {
-                BlockPos targetPos = current.offset(dir);
+                BlockPos targetPos = current.relative(dir);
                 if (targetPos.equals(startPos)) continue;
                 BlockEntity target = world.getBlockEntity(targetPos);
                 if (target == null || target instanceof TitaniumLavaPipeBlockEntity) continue;
@@ -379,7 +379,7 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
             }
 
             for (Direction dir : Direction.values()) {
-                BlockPos nextPos = current.offset(dir);
+                BlockPos nextPos = current.relative(dir);
                 if (!visited.contains(nextPos)) {
                     visited.add(nextPos);
                     BlockEntity nextBe = world.getBlockEntity(nextPos);
@@ -397,21 +397,21 @@ public class TitaniumLavaPipeBlockEntity extends BlockEntity implements LavaProv
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         view.putInt("LavaAmount", this.lavaAmount);
         view.putString("FluidType", this.fluidType.getId());
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
         if (this.lavaAmount <= 0) {
             this.lavaAmount = 0;
             this.fluidType = MoltenMetal.NONE;
         } else {
-            this.fluidType = MoltenMetal.fromId(view.getString("FluidType", "none"));
+            this.fluidType = MoltenMetal.fromId(view.getStringOr("FluidType", "none"));
         }
     }
 }

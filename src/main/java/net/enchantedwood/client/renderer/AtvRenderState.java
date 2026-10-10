@@ -2,8 +2,8 @@ package net.enchantedwood.client.renderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.command.ModelCommandRenderer;
-import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 
 @Environment(EnvType.CLIENT)
 public class AtvRenderState extends EntityRenderState {
@@ -16,5 +16,5 @@ public class AtvRenderState extends EntityRenderState {
     public float drillSpin;
     public boolean headlightsActive;
     public int lightmapCoordinates;
-    public ModelCommandRenderer.CrumblingOverlayCommand crumblingOverlay;
+    public ModelFeatureRenderer.CrumblingOverlay crumblingOverlay;
 }

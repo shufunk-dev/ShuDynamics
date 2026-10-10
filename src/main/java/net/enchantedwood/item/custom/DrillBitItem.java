@@ -1,13 +1,12 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.text.Text;
-
 import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DrillBitItem extends Item {
     public enum DrillTier {
@@ -54,8 +53,8 @@ public class DrillBitItem extends Item {
 
     private final DrillTier tier;
 
-    public DrillBitItem(DrillTier tier, Settings settings) {
-        super(settings.maxDamage(tier.getDurability()));
+    public DrillBitItem(DrillTier tier, Properties settings) {
+        super(settings.durability(tier.getDurability()));
         this.tier = tier;
     }
 
@@ -65,24 +64,24 @@ public class DrillBitItem extends Item {
 
     public boolean canHarvest(BlockState state) {
         if (state.isAir()) return false;
-        if (state.getHardness(null, null) < 0) return false; // Unbreakable (Bedrock, End Portal, etc.)
+        if (state.getDestroySpeed(null, null) < 0) return false; // Unbreakable (Bedrock, End Portal, etc.)
 
         int level = tier.getHarvestLevel();
-        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL) && level < 3) return false;
-        if (state.isIn(BlockTags.NEEDS_IRON_TOOL) && level < 2) return false;
-        if (state.isIn(BlockTags.NEEDS_STONE_TOOL) && level < 1) return false;
+        if (state.is(BlockTags.NEEDS_DIAMOND_TOOL) && level < 3) return false;
+        if (state.is(BlockTags.NEEDS_IRON_TOOL) && level < 2) return false;
+        if (state.is(BlockTags.NEEDS_STONE_TOOL) && level < 1) return false;
 
         return true;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, net.minecraft.component.type.TooltipDisplayComponent displayComponent, java.util.function.Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§7Front-Mounted ATV Mining Drill Bit"));
-        textConsumer.accept(Text.literal("§eTier: " + tier.getColorCode() + tier.getName()));
-        int remaining = stack.getMaxDamage() - stack.getDamage();
-        textConsumer.accept(Text.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " blocks"));
-        textConsumer.accept(Text.literal("§bExcavation Speed: §f" + tier.getSpeedMultiplier() + "x"));
-        textConsumer.accept(Text.literal("§8Install in ATV Drill Slot. Mined blocks auto-route to cargo trunk."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, net.minecraft.world.item.component.TooltipDisplay displayComponent, java.util.function.Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§7Front-Mounted ATV Mining Drill Bit"));
+        textConsumer.accept(Component.literal("§eTier: " + tier.getColorCode() + tier.getName()));
+        int remaining = stack.getMaxDamage() - stack.getDamageValue();
+        textConsumer.accept(Component.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " blocks"));
+        textConsumer.accept(Component.literal("§bExcavation Speed: §f" + tier.getSpeedMultiplier() + "x"));
+        textConsumer.accept(Component.literal("§8Install in ATV Drill Slot. Mined blocks auto-route to cargo trunk."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

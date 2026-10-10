@@ -1,8 +1,8 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum PipeSide implements StringIdentifiable {
+public enum PipeSide implements StringRepresentable {
     NONE("none"),
     CONNECTED("connected"),
     DISCONNECTED("disconnected");
@@ -14,7 +14,7 @@ public enum PipeSide implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 

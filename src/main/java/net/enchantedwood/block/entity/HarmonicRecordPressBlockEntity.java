@@ -1,28 +1,5 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.HarmonicRecordPressBlock;
 import net.enchantedwood.energy.EnergyProvider;
@@ -30,9 +7,32 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.HarmonicRecordPressScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class HarmonicRecordPressBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class HarmonicRecordPressBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 5_000;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
@@ -46,13 +46,13 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     private static final int[] TOP_SIDES_SLOTS = new int[]{SLOT_DISC, SLOT_CATALYST};
     private static final int[] BOTTOM_SLOTS = new int[]{SLOT_OUTPUT};
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 100; // 5 seconds base
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -76,7 +76,7 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -85,12 +85,12 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
         super(ModBlockEntities.HARMONIC_RECORD_PRESS_BLOCK_ENTITY, pos, state);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, HarmonicRecordPressBlockEntity entity) {
-        if (world.isClient()) return;
+    public static void tick(Level world, BlockPos pos, BlockState state, HarmonicRecordPressBlockEntity entity) {
+        if (world.isClientSide()) return;
 
         GearTier gear = entity.getActiveGearTier();
-        if (state.get(HarmonicRecordPressBlock.GEAR_TIER) != gear) {
-            world.setBlockState(pos, state.with(HarmonicRecordPressBlock.GEAR_TIER, gear), 3);
+        if (state.getValue(HarmonicRecordPressBlock.GEAR_TIER) != gear) {
+            world.setBlock(pos, state.setValue(HarmonicRecordPressBlock.GEAR_TIER, gear), 3);
         }
 
         ItemStack disc = entity.inventory.get(SLOT_DISC);
@@ -105,11 +105,11 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
 
             // Subtle vinyl groove cutting scratch sound
             if (entity.cookTime % 25 == 0) {
-                world.playSound(null, pos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 0.35f, 1.6f);
+                world.playSound(null, pos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.35f, 1.6f);
             }
 
-            if (!state.get(HarmonicRecordPressBlock.LIT)) {
-                world.setBlockState(pos, state.with(HarmonicRecordPressBlock.LIT, true), 3);
+            if (!state.getValue(HarmonicRecordPressBlock.LIT)) {
+                world.setBlock(pos, state.setValue(HarmonicRecordPressBlock.LIT, true), 3);
             }
 
             int requiredCookTime = entity.calculateTotalCookTime(gear);
@@ -118,16 +118,16 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
             if (entity.cookTime >= requiredCookTime) {
                 entity.craftItem(result);
                 entity.cookTime = 0;
-                world.playSound(null, pos, SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), SoundCategory.BLOCKS, 0.7f, 1.2f);
+                world.playSound(null, pos, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 0.7f, 1.2f);
             }
-            entity.markDirty();
+            entity.setChanged();
         } else {
             if (entity.cookTime > 0) {
                 entity.cookTime = Math.max(0, entity.cookTime - 2);
-                entity.markDirty();
+                entity.setChanged();
             }
-            if (state.get(HarmonicRecordPressBlock.LIT)) {
-                world.setBlockState(pos, state.with(HarmonicRecordPressBlock.LIT, false), 3);
+            if (state.getValue(HarmonicRecordPressBlock.LIT)) {
+                world.setBlock(pos, state.setValue(HarmonicRecordPressBlock.LIT, false), 3);
             }
         }
     }
@@ -147,22 +147,22 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     private boolean canOutput(ItemStack result) {
         ItemStack out = this.inventory.get(SLOT_OUTPUT);
         if (out.isEmpty()) return true;
-        if (!ItemStack.areItemsEqual(out, result)) return false;
-        return out.getCount() < out.getMaxCount();
+        if (!ItemStack.isSameItem(out, result)) return false;
+        return out.getCount() < out.getMaxStackSize();
     }
 
     private void craftItem(ItemStack result) {
         // Decrement 1 disc
-        this.inventory.get(SLOT_DISC).decrement(1);
+        this.inventory.get(SLOT_DISC).shrink(1);
         // Decrement 1 catalyst
-        this.inventory.get(SLOT_CATALYST).decrement(1);
+        this.inventory.get(SLOT_CATALYST).shrink(1);
 
         // Add output
         ItemStack out = this.inventory.get(SLOT_OUTPUT);
         if (out.isEmpty()) {
             this.inventory.set(SLOT_OUTPUT, result.copy());
         } else {
-            out.increment(1);
+            out.grow(1);
         }
     }
 
@@ -177,7 +177,7 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
         if (!isBlank) return ItemStack.EMPTY;
 
         // If catalyst is already a music disc, duplicate that disc!
-        if (catalyst.contains(DataComponentTypes.JUKEBOX_PLAYABLE)) {
+        if (catalyst.has(DataComponents.JUKEBOX_PLAYABLE)) {
             return new ItemStack(catItem);
         }
 
@@ -237,7 +237,7 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) {
             return BOTTOM_SLOTS;
         }
@@ -245,20 +245,20 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (slot == SLOT_DISC) return stack.isOf(ModItems.BLANK_VINYL_DISC);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (slot == SLOT_DISC) return stack.is(ModItems.BLANK_VINYL_DISC);
         if (slot == SLOT_CATALYST) return true;
         if (slot == SLOT_GEAR) return stack.getItem() instanceof GearItem;
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == SLOT_OUTPUT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -271,47 +271,47 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        if (stack.getCount() > this.getMaxCountPerStack()) {
-            stack.setCount(this.getMaxCountPerStack());
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
-        this.markDirty();
+        this.setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.harmonic_record_press");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.harmonic_record_press");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new HarmonicRecordPressScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -321,20 +321,20 @@ public class HarmonicRecordPressBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
-        Inventories.readData(view, this.inventory);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 100);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 100);
     }
 }

@@ -6,29 +6,29 @@ import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.FuelRefineryScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class FuelRefineryBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int ENERGY_CAPACITY = 32_000;
     public static final int ENERGY_DRAW = 20; // 20 FE/t
 
@@ -38,12 +38,12 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
     public static final int BYPRODUCT_SLOT = 3;
     public static final int BATTERY_SLOT = 4;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(5, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 200, 200, 0);
     private int progress = 0;
     private int maxProgress = 100;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -76,7 +76,7 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 6;
         }
     };
@@ -85,18 +85,18 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
         super(ModBlockEntities.FUEL_REFINERY_BLOCK_ENTITY, pos, state);
     }
 
-    public DefaultedList<ItemStack> getInventory() {
+    public NonNullList<ItemStack> getInventory() {
         return inventory;
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.fuel_refinery");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.fuel_refinery");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new FuelRefineryScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -106,26 +106,26 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.progress = view.getInt("Progress", 0);
-        this.maxProgress = view.getInt("MaxProgress", 100);
+        this.progress = view.getIntOr("Progress", 0);
+        this.maxProgress = view.getIntOr("MaxProgress", 100);
         if (this.maxProgress <= 0) this.maxProgress = 100;
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("Progress", this.progress);
         view.putInt("MaxProgress", this.maxProgress);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, FuelRefineryBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, FuelRefineryBlockEntity entity) {
         boolean stateChanged = false;
 
         // 1. Charge from battery slot if present
@@ -170,13 +170,13 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
             }
         }
 
-        if (state.get(FuelRefineryBlock.LIT) != isRunningNow) {
-            world.setBlockState(pos, state.with(FuelRefineryBlock.LIT, isRunningNow), 3);
+        if (state.getValue(FuelRefineryBlock.LIT) != isRunningNow) {
+            world.setBlock(pos, state.setValue(FuelRefineryBlock.LIT, isRunningNow), 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
@@ -188,32 +188,32 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
         if (feed.isEmpty()) return null;
 
         // 1. Crude Oil Sludge + Empty Canister -> Gasoline Canister + Mineral Tar
-        if (feed.isOf(ModItems.CRUDE_OIL_SLUDGE) && feed.getCount() >= 1 && reagent.isOf(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
+        if (feed.is(ModItems.CRUDE_OIL_SLUDGE) && feed.getCount() >= 1 && reagent.is(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
             return new RefineryRecipe(ModItems.CRUDE_OIL_SLUDGE, 1, ModItems.EMPTY_GAS_CANISTER, 1, new ItemStack(ModItems.GASOLINE_CANISTER), new ItemStack(ModItems.MINERAL_TAR), 100);
         }
 
         // 2. Corn (High Ethanol) + Empty Canister -> Biofuel Canister (Fast: 2 corn)
-        if (feed.isOf(ModItems.CORN) && feed.getCount() >= 2 && reagent.isOf(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
+        if (feed.is(ModItems.CORN) && feed.getCount() >= 2 && reagent.is(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
             return new RefineryRecipe(ModItems.CORN, 2, ModItems.EMPTY_GAS_CANISTER, 1, new ItemStack(ModItems.BIOFUEL_CANISTER), ItemStack.EMPTY, 80);
         }
 
         // 3. Wheat (4) + Empty Canister -> Biofuel Canister
-        if (feed.isOf(Items.WHEAT) && feed.getCount() >= 4 && reagent.isOf(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
+        if (feed.is(Items.WHEAT) && feed.getCount() >= 4 && reagent.is(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
             return new RefineryRecipe(Items.WHEAT, 4, ModItems.EMPTY_GAS_CANISTER, 1, new ItemStack(ModItems.BIOFUEL_CANISTER), ItemStack.EMPTY, 100);
         }
 
         // 4. Sugar Cane (4) + Empty Canister -> Biofuel Canister
-        if (feed.isOf(Items.SUGAR_CANE) && feed.getCount() >= 4 && reagent.isOf(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
+        if (feed.is(Items.SUGAR_CANE) && feed.getCount() >= 4 && reagent.is(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
             return new RefineryRecipe(Items.SUGAR_CANE, 4, ModItems.EMPTY_GAS_CANISTER, 1, new ItemStack(ModItems.BIOFUEL_CANISTER), ItemStack.EMPTY, 100);
         }
 
         // 5. Potatoes (4) + Empty Canister -> Biofuel Canister
-        if (feed.isOf(Items.POTATO) && feed.getCount() >= 4 && reagent.isOf(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
+        if (feed.is(Items.POTATO) && feed.getCount() >= 4 && reagent.is(ModItems.EMPTY_GAS_CANISTER) && reagent.getCount() >= 1) {
             return new RefineryRecipe(Items.POTATO, 4, ModItems.EMPTY_GAS_CANISTER, 1, new ItemStack(ModItems.BIOFUEL_CANISTER), ItemStack.EMPTY, 100);
         }
 
         // 6. Gasoline Canister (1) + Corn (2) -> High-Octane Racing Fuel
-        if (feed.isOf(ModItems.GASOLINE_CANISTER) && feed.getCount() >= 1 && reagent.isOf(ModItems.CORN) && reagent.getCount() >= 2) {
+        if (feed.is(ModItems.GASOLINE_CANISTER) && feed.getCount() >= 1 && reagent.is(ModItems.CORN) && reagent.getCount() >= 2) {
             return new RefineryRecipe(ModItems.GASOLINE_CANISTER, 1, ModItems.CORN, 2, new ItemStack(ModItems.HIGH_OCTANE_FUEL_CANISTER), ItemStack.EMPTY, 120);
         }
 
@@ -225,13 +225,13 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
         ItemStack by = inventory.get(BYPRODUCT_SLOT);
 
         // Check main output
-        if (!out.isEmpty() && (!ItemStack.areItemsEqual(out, recipe.output) || out.getCount() + recipe.output.getCount() > out.getMaxCount())) {
+        if (!out.isEmpty() && (!ItemStack.isSameItem(out, recipe.output) || out.getCount() + recipe.output.getCount() > out.getMaxStackSize())) {
             return false;
         }
 
         // Check byproduct output
         if (!recipe.byproduct.isEmpty()) {
-            if (!by.isEmpty() && (!ItemStack.areItemsEqual(by, recipe.byproduct) || by.getCount() + recipe.byproduct.getCount() > by.getMaxCount())) {
+            if (!by.isEmpty() && (!ItemStack.isSameItem(by, recipe.byproduct) || by.getCount() + recipe.byproduct.getCount() > by.getMaxStackSize())) {
                 return false;
             }
         }
@@ -240,14 +240,14 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     private void craft(RefineryRecipe recipe) {
-        inventory.get(FEEDSTOCK_SLOT).decrement(recipe.feedstockCount);
-        inventory.get(CANISTER_SLOT).decrement(recipe.reagentCount);
+        inventory.get(FEEDSTOCK_SLOT).shrink(recipe.feedstockCount);
+        inventory.get(CANISTER_SLOT).shrink(recipe.reagentCount);
 
         ItemStack out = inventory.get(OUTPUT_SLOT);
         if (out.isEmpty()) {
             inventory.set(OUTPUT_SLOT, recipe.output.copy());
         } else {
-            out.increment(recipe.output.getCount());
+            out.grow(recipe.output.getCount());
         }
 
         if (!recipe.byproduct.isEmpty()) {
@@ -255,26 +255,26 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
             if (by.isEmpty()) {
                 inventory.set(BYPRODUCT_SLOT, recipe.byproduct.copy());
             } else {
-                by.increment(recipe.byproduct.getCount());
+                by.grow(recipe.byproduct.getCount());
             }
         }
     }
 
     // SidedInventory implementation
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[]{0, 1, 2, 3, 4};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == FEEDSTOCK_SLOT) {
-            return stack.isOf(ModItems.CRUDE_OIL_SLUDGE) || stack.isOf(ModItems.CORN) ||
-                    stack.isOf(Items.WHEAT) || stack.isOf(Items.SUGAR_CANE) ||
-                    stack.isOf(Items.POTATO) || stack.isOf(ModItems.GASOLINE_CANISTER);
+            return stack.is(ModItems.CRUDE_OIL_SLUDGE) || stack.is(ModItems.CORN) ||
+                    stack.is(Items.WHEAT) || stack.is(Items.SUGAR_CANE) ||
+                    stack.is(Items.POTATO) || stack.is(ModItems.GASOLINE_CANISTER);
         }
         if (slot == CANISTER_SLOT) {
-            return stack.isOf(ModItems.EMPTY_GAS_CANISTER) || stack.isOf(ModItems.CORN);
+            return stack.is(ModItems.EMPTY_GAS_CANISTER) || stack.is(ModItems.CORN);
         }
         if (slot == BATTERY_SLOT) {
             return stack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider || stack.getItem() instanceof EnergyProvider;
@@ -283,12 +283,12 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT || slot == BYPRODUCT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -301,36 +301,36 @@ public class FuelRefineryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

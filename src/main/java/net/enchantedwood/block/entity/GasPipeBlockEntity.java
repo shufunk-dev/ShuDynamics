@@ -1,17 +1,17 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.custom.GasPipeBlock;
 import net.enchantedwood.gas.GasProvider;
 import net.enchantedwood.gas.GasStorage;
 import net.enchantedwood.gas.GasType;
 import net.enchantedwood.gas.SimpleGasStorage;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class GasPipeBlockEntity extends BlockEntity implements GasProvider {
         return this.gasStorage;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, GasPipeBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, GasPipeBlockEntity entity) {
         GasType type = entity.handledType;
         boolean stateChanged = false;
 
@@ -87,7 +87,7 @@ public class GasPipeBlockEntity extends BlockEntity implements GasProvider {
             int needed = entity.gasStorage.getCapacity() - entity.gasStorage.getAmount();
             for (Direction dir : Direction.values()) {
                 if (needed <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof OxygenGeneratorBlockEntity gen) {
                     GasStorage genStorage = gen.getGasStorage(dir.getOpposite());
                     if (genStorage != null && genStorage.canExtract(type)) {
@@ -103,7 +103,7 @@ public class GasPipeBlockEntity extends BlockEntity implements GasProvider {
         }
 
         if (entity.gasStorage.getAmount() <= 0) {
-            if (stateChanged) markDirty(world, pos, state);
+            if (stateChanged) setChanged(world, pos, state);
             return;
         }
 
@@ -113,7 +113,7 @@ public class GasPipeBlockEntity extends BlockEntity implements GasProvider {
         List<GasStorage> pipeNeighbors = new ArrayList<>();
 
         for (Direction dir : Direction.values()) {
-            BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+            BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
             if (neighbor instanceof GasProvider provider && neighbor != entity) {
                 // Ignore generators to prevent pushing gas back into the generator
                 if (neighbor instanceof OxygenGeneratorBlockEntity) {
@@ -164,20 +164,20 @@ public class GasPipeBlockEntity extends BlockEntity implements GasProvider {
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.gasStorage.readData(view, "Pipe");
         this.gasStorage.setGas(this.handledType, this.gasStorage.getAmount());
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         this.gasStorage.writeData(view, "Pipe");
     }
 }

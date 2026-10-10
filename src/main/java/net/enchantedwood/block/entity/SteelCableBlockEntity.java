@@ -1,7 +1,7 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class SteelCableBlockEntity extends BaseCableBlockEntity {
     public static final int CABLE_TRANSFER_RATE = 12_500; // 12,500 FE/t

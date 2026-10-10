@@ -8,29 +8,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.GeothermalGeneratorScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.enchantedwood.fluid.LavaProvider;
-import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class GeothermalGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider {
+public class GeothermalGeneratorBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, LavaProvider {
     public static final int CAPACITY = 1_000_000;
     public static final int MAX_EXTRACT = 25_000;
     public static final int BASE_GENERATION = 750; // 750 FE/t
@@ -41,14 +41,14 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
     public static final int GEAR_SLOT = 2;
     public static final int INVENTORY_SIZE = 3;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_EXTRACT, MAX_EXTRACT, 0);
 
     private int burnTime = 0;
     private int totalBurnTime = 0;
     private int lavaAmount = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -74,7 +74,7 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -108,7 +108,7 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
         int space = MAX_LAVA - this.lavaAmount;
         int toAdd = Math.min(space, amount);
         this.lavaAmount += toAdd;
-        if (toAdd > 0) markDirty();
+        if (toAdd > 0) setChanged();
         return toAdd;
     }
 
@@ -122,41 +122,41 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.geothermal_generator");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.geothermal_generator");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new GeothermalGeneratorScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, GeothermalGeneratorBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, GeothermalGeneratorBlockEntity entity) {
         boolean dirty = false;
 
         // 1. Drain lava bucket or fuel in FUEL_SLOT
         ItemStack fuelStack = entity.inventory.get(FUEL_SLOT);
         if (!fuelStack.isEmpty()) {
-            if (fuelStack.isOf(Items.LAVA_BUCKET) && entity.lavaAmount + 1000 <= MAX_LAVA) {
+            if (fuelStack.is(Items.LAVA_BUCKET) && entity.lavaAmount + 1000 <= MAX_LAVA) {
                 ItemStack outputStack = entity.inventory.get(BUCKET_OUTPUT_SLOT);
-                if (outputStack.isEmpty() || (outputStack.isOf(Items.BUCKET) && outputStack.getCount() < outputStack.getMaxCount())) {
+                if (outputStack.isEmpty() || (outputStack.is(Items.BUCKET) && outputStack.getCount() < outputStack.getMaxStackSize())) {
                     entity.lavaAmount += 1000;
-                    fuelStack.decrement(1);
+                    fuelStack.shrink(1);
                     if (outputStack.isEmpty()) {
                         entity.inventory.set(BUCKET_OUTPUT_SLOT, new ItemStack(Items.BUCKET));
                     } else {
-                        outputStack.increment(1);
+                        outputStack.grow(1);
                     }
                     dirty = true;
                 }
-            } else if (fuelStack.isOf(Items.MAGMA_BLOCK) && entity.lavaAmount + 250 <= MAX_LAVA) {
+            } else if (fuelStack.is(Items.MAGMA_BLOCK) && entity.lavaAmount + 250 <= MAX_LAVA) {
                 entity.lavaAmount += 250;
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 dirty = true;
-            } else if (fuelStack.isOf(ModItems.FIRE_CRYSTAL) && entity.lavaAmount + 2000 <= MAX_LAVA) {
+            } else if (fuelStack.is(ModItems.FIRE_CRYSTAL) && entity.lavaAmount + 2000 <= MAX_LAVA) {
                 entity.lavaAmount += 2000;
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 dirty = true;
             }
         }
@@ -181,8 +181,8 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
         }
 
         // Update block LIT state
-        if (state.get(GeothermalGeneratorBlock.LIT) != isGenerating) {
-            world.setBlockState(pos, state.with(GeothermalGeneratorBlock.LIT, isGenerating), 3);
+        if (state.getValue(GeothermalGeneratorBlock.LIT) != isGenerating) {
+            world.setBlock(pos, state.setValue(GeothermalGeneratorBlock.LIT, isGenerating), 3);
             dirty = true;
         }
 
@@ -191,7 +191,7 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
             int available = Math.min(entity.energyStorage.getEnergy(), MAX_EXTRACT);
             for (Direction dir : Direction.values()) {
                 if (available <= 0) break;
-                BlockPos targetPos = pos.offset(dir);
+                BlockPos targetPos = pos.relative(dir);
                 BlockEntity targetBe = world.getBlockEntity(targetPos);
                 if (targetBe instanceof EnergyProvider provider) {
                     EnergyStorage targetStorage = provider.getEnergyStorage(dir.getOpposite());
@@ -208,25 +208,25 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.burnTime = view.getInt("BurnTime", 0);
-        this.totalBurnTime = view.getInt("TotalBurnTime", 0);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
+        this.burnTime = view.getIntOr("BurnTime", 0);
+        this.totalBurnTime = view.getIntOr("TotalBurnTime", 0);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("BurnTime", this.burnTime);
         view.putInt("TotalBurnTime", this.totalBurnTime);
@@ -235,26 +235,26 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{BUCKET_OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{FUEL_SLOT};
         return new int[]{FUEL_SLOT, GEAR_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (slot == FUEL_SLOT) return stack.isOf(Items.LAVA_BUCKET) || stack.isOf(Items.MAGMA_BLOCK) || stack.isOf(ModItems.FIRE_CRYSTAL);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (slot == FUEL_SLOT) return stack.is(Items.LAVA_BUCKET) || stack.is(Items.MAGMA_BLOCK) || stack.is(ModItems.FIRE_CRYSTAL);
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == BUCKET_OUTPUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -267,36 +267,36 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
@@ -311,7 +311,7 @@ public class GeothermalGeneratorBlockEntity extends BlockEntity implements Named
         int inserted = Math.min(space, amount);
         if (!simulate && inserted > 0) {
             this.lavaAmount += inserted;
-            markDirty();
+            setChanged();
         }
         return inserted;
     }

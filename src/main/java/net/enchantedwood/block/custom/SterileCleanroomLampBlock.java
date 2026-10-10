@@ -1,27 +1,26 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class SterileCleanroomLampBlock extends Block {
-    public static final MapCodec<SterileCleanroomLampBlock> CODEC = createCodec(SterileCleanroomLampBlock::new);
 
-    public enum Mode implements StringIdentifiable {
+    public enum Mode implements StringRepresentable {
         WHITE("white", 15, "§f✦ Cleanroom Lamp: Daylight LED (Luminance 15)"),
         UV("uv", 11, "§d✦ Cleanroom Lamp: UV-C Germicidal Mode (UV Sterilization)"),
         OFF("off", 0, "§8✦ Cleanroom Lamp: Standby (Off)");
@@ -37,7 +36,7 @@ public class SterileCleanroomLampBlock extends Block {
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
 
@@ -50,53 +49,48 @@ public class SterileCleanroomLampBlock extends Block {
         }
     }
 
-    public static final EnumProperty<Mode> MODE = EnumProperty.of("mode", Mode.class);
+    public static final EnumProperty<Mode> MODE = EnumProperty.create("mode", Mode.class);
 
-    public SterileCleanroomLampBlock(Settings settings) {
+    public SterileCleanroomLampBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(MODE, Mode.WHITE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(MODE, Mode.WHITE));
     }
 
     @Override
-    protected MapCodec<? extends Block> getCodec() {
-        return CODEC;
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(MODE, Mode.WHITE);
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(MODE, Mode.WHITE);
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(MODE);
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        Mode current = state.get(MODE);
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        Mode current = state.getValue(MODE);
         Mode next = current.next();
-        world.setBlockState(pos, state.with(MODE, next), Block.NOTIFY_ALL);
+        world.setBlock(pos, state.setValue(MODE, next), Block.UPDATE_ALL);
 
         float pitch = next == Mode.OFF ? 0.7f : (next == Mode.UV ? 1.4f : 1.1f);
-        world.playSound(null, pos, SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 0.6f, pitch);
+        world.playSound(null, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS, 0.6f, pitch);
 
-        if (!world.isClient()) {
-            player.sendMessage(Text.literal(next.statusMessage), true);
+        if (!world.isClientSide()) {
+            player.sendOverlayMessage(Component.literal(next.statusMessage));
         }
 
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(MODE) == Mode.UV) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        if (state.getValue(MODE) == Mode.UV) {
             // Subtle germicidal ultraviolet sterilization sparkle
             if (random.nextFloat() < 0.25f) {
                 double x = pos.getX() + 0.1 + random.nextDouble() * 0.8;
                 double y = pos.getY() + 0.1 + random.nextDouble() * 0.8;
                 double z = pos.getZ() + 0.1 + random.nextDouble() * 0.8;
-                world.addParticleClient(ParticleTypes.END_ROD, x, y, z, 0.0, -0.01, 0.0);
+                world.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, -0.01, 0.0);
             }
         }
     }

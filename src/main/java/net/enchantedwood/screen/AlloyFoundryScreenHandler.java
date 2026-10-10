@@ -3,31 +3,31 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.AlloyFoundryBlockEntity;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class AlloyFoundryScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class AlloyFoundryScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public AlloyFoundryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(AlloyFoundryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public AlloyFoundryScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(AlloyFoundryBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public AlloyFoundryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public AlloyFoundryScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ALLOY_FOUNDRY_SCREEN_HANDLER, syncId);
-        checkSize(inventory, AlloyFoundryBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, AlloyFoundryBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Input A (x=44, y=35)
         this.addSlot(new Slot(inventory, AlloyFoundryBlockEntity.INPUT_SLOT_A, 44, 35));
@@ -38,7 +38,7 @@ public class AlloyFoundryScreenHandler extends ScreenHandler {
         // Slot 2: Output (x=120, y=35)
         this.addSlot(new Slot(inventory, AlloyFoundryBlockEntity.OUTPUT_SLOT, 120, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -46,7 +46,7 @@ public class AlloyFoundryScreenHandler extends ScreenHandler {
         // Slot 3: Gear Upgrade (x=152, y=8)
         this.addSlot(new Slot(inventory, AlloyFoundryBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -99,43 +99,43 @@ public class AlloyFoundryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < AlloyFoundryBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, AlloyFoundryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, AlloyFoundryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, AlloyFoundryBlockEntity.GEAR_SLOT, AlloyFoundryBlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, AlloyFoundryBlockEntity.GEAR_SLOT, AlloyFoundryBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, AlloyFoundryBlockEntity.INPUT_SLOT_A, AlloyFoundryBlockEntity.INPUT_SLOT_B + 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, AlloyFoundryBlockEntity.INPUT_SLOT_A, AlloyFoundryBlockEntity.INPUT_SLOT_B + 1, false)) {
                     if (invSlot < 4 + 27) {
-                        if (!this.insertItem(originalStack, 4 + 27, this.slots.size(), false)) {
+                        if (!this.moveItemStackTo(originalStack, 4 + 27, this.slots.size(), false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (!this.insertItem(originalStack, 4, 4 + 27, false)) {
+                    } else if (!this.moveItemStackTo(originalStack, 4, 4 + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

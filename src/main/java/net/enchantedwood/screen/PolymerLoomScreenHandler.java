@@ -1,33 +1,33 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.PolymerLoomBlockEntity;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class PolymerLoomScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class PolymerLoomScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public PolymerLoomScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(PolymerLoomBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public PolymerLoomScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(PolymerLoomBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public PolymerLoomScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public PolymerLoomScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.POLYMER_LOOM_SCREEN_HANDLER, syncId);
-        checkSize(inventory, PolymerLoomBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, PolymerLoomBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Raw Polymer / Rubber
         this.addSlot(new Slot(inventory, PolymerLoomBlockEntity.SLOT_POLYMER, 44, 17));
@@ -41,7 +41,7 @@ public class PolymerLoomScreenHandler extends ScreenHandler {
         // Slot 3: Finished Output
         this.addSlot(new Slot(inventory, PolymerLoomBlockEntity.SLOT_OUTPUT, 120, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -49,7 +49,7 @@ public class PolymerLoomScreenHandler extends ScreenHandler {
         // Slot 4: Gear Upgrade
         this.addSlot(new Slot(inventory, PolymerLoomBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -97,45 +97,45 @@ public class PolymerLoomScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < PolymerLoomBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, PolymerLoomBlockEntity.GEAR_SLOT, PolymerLoomBlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, PolymerLoomBlockEntity.GEAR_SLOT, PolymerLoomBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, PolymerLoomBlockEntity.SLOT_POLYMER, PolymerLoomBlockEntity.SLOT_ADDITIVE + 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, PolymerLoomBlockEntity.SLOT_POLYMER, PolymerLoomBlockEntity.SLOT_ADDITIVE + 1, false)) {
                     if (invSlot < PolymerLoomBlockEntity.INVENTORY_SIZE + 27) {
-                        if (!this.insertItem(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                        if (!this.moveItemStackTo(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (!this.insertItem(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE, PolymerLoomBlockEntity.INVENTORY_SIZE + 27, false)) {
+                    } else if (!this.moveItemStackTo(originalStack, PolymerLoomBlockEntity.INVENTORY_SIZE, PolymerLoomBlockEntity.INVENTORY_SIZE + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

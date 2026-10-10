@@ -1,34 +1,36 @@
 package net.enchantedwood.world.gen;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.ResonanceAltarBlock;
 import net.enchantedwood.world.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+public class ResonanceArenaFeature implements Feature {
+    public static final com.mojang.serialization.MapCodec<ResonanceArenaFeature> CODEC = com.mojang.serialization.MapCodec.unit(ResonanceArenaFeature::new);
 
-public class ResonanceArenaFeature extends Feature<DefaultFeatureConfig> {
-
-    public ResonanceArenaFeature(Codec<DefaultFeatureConfig> configCodec) {
-        super(configCodec);
+    public ResonanceArenaFeature() {
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
+    public com.mojang.serialization.MapCodec<? extends Feature> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean place(net.minecraft.world.level.WorldGenLevel world, net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos origin) {
+        
 
         // Strict dimension lock: only generates in The Convergence
-        if (world.toServerWorld().getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) {
+        if (world.getLevel().dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
             return false;
         }
 
-        BlockPos origin = context.getOrigin();
+        
 
         // Deterministic Grid Spacing: Ensure exactly ONE arena per 256x256 block cell
         int cellX = Math.floorDiv(origin.getX(), 256);
@@ -40,8 +42,8 @@ public class ResonanceArenaFeature extends Feature<DefaultFeatureConfig> {
             return false;
         }
 
-        int surfaceY = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
-        if (surfaceY <= world.getBottomY() + 10 || surfaceY >= world.getTopYInclusive() - 20) {
+        int surfaceY = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
+        if (surfaceY <= world.getMinY() + 10 || surfaceY >= world.getMaxY() - 20) {
             return false;
         }
 
@@ -58,41 +60,41 @@ public class ResonanceArenaFeature extends Feature<DefaultFeatureConfig> {
 
                 // Foundation downward to guarantee solid ground on any terrain slope
                 for (int dy = -4; dy <= -1; dy++) {
-                    BlockPos fPos = center.add(dx, dy, dz);
-                    world.setBlockState(fPos, Blocks.POLISHED_DEEPSLATE.getDefaultState(), 2);
+                    BlockPos fPos = center.offset(dx, dy, dz);
+                    world.setBlock(fPos, Blocks.POLISHED_DEEPSLATE.defaultBlockState(), 2);
                 }
 
                 // Arena Surface Floor (Y = 0)
-                BlockPos floorPos = center.add(dx, 0, dz);
+                BlockPos floorPos = center.offset(dx, 0, dz);
                 double dist = Math.sqrt(distSq);
 
                 BlockState floorState;
                 if (dist > 10.0) {
                     // Outer border rim
-                    floorState = Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState();
+                    floorState = Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState();
                 } else if (dist > 8.0) {
                     // Inlay ring
                     floorState = (Math.abs(dx) % 2 == 0 || Math.abs(dz) % 2 == 0)
-                            ? Blocks.CRYING_OBSIDIAN.getDefaultState()
-                            : Blocks.GILDED_BLACKSTONE.getDefaultState();
+                            ? Blocks.CRYING_OBSIDIAN.defaultBlockState()
+                            : Blocks.GILDED_BLACKSTONE.defaultBlockState();
                 } else if (dist > 4.5) {
                     // Middle battle ring
-                    floorState = Blocks.SMOOTH_BASALT.getDefaultState();
+                    floorState = Blocks.SMOOTH_BASALT.defaultBlockState();
                 } else if (dist > 2.0) {
                     // Inner ritual circle
                     floorState = (Math.abs(dx) == Math.abs(dz))
-                            ? Blocks.AMETHYST_BLOCK.getDefaultState()
-                            : Blocks.POLISHED_BLACKSTONE.getDefaultState();
+                            ? Blocks.AMETHYST_BLOCK.defaultBlockState()
+                            : Blocks.POLISHED_BLACKSTONE.defaultBlockState();
                 } else {
                     // Altar Dais Center
-                    floorState = Blocks.CRYING_OBSIDIAN.getDefaultState();
+                    floorState = Blocks.CRYING_OBSIDIAN.defaultBlockState();
                 }
-                world.setBlockState(floorPos, floorState, 2);
+                world.setBlock(floorPos, floorState, 2);
 
                 // Clear unobstructed headroom above arena (Y = 1..10)
                 for (int dy = 1; dy <= 10; dy++) {
-                    BlockPos airPos = center.add(dx, dy, dz);
-                    world.setBlockState(airPos, Blocks.AIR.getDefaultState(), 2);
+                    BlockPos airPos = center.offset(dx, dy, dz);
+                    world.setBlock(airPos, Blocks.AIR.defaultBlockState(), 2);
                 }
             }
         }
@@ -106,23 +108,23 @@ public class ResonanceArenaFeature extends Feature<DefaultFeatureConfig> {
         };
 
         for (int[] p : pillarOffsets) {
-            BlockPos pBase = center.add(p[0], 1, p[1]);
-            world.setBlockState(pBase, Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState(), 2);
-            world.setBlockState(pBase.up(1), Blocks.CRYING_OBSIDIAN.getDefaultState(), 2);
-            world.setBlockState(pBase.up(2), Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState(), 2);
-            world.setBlockState(pBase.up(3), Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(), 2);
-            world.setBlockState(pBase.up(4), Blocks.SOUL_LANTERN.getDefaultState(), 2);
+            BlockPos pBase = center.offset(p[0], 1, p[1]);
+            world.setBlock(pBase, Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+            world.setBlock(pBase.above(1), Blocks.CRYING_OBSIDIAN.defaultBlockState(), 2);
+            world.setBlock(pBase.above(2), Blocks.POLISHED_BLACKSTONE_BRICKS.defaultBlockState(), 2);
+            world.setBlock(pBase.above(3), Blocks.CHISELED_POLISHED_BLACKSTONE.defaultBlockState(), 2);
+            world.setBlock(pBase.above(4), Blocks.SOUL_LANTERN.defaultBlockState(), 2);
         }
 
         // 3. Central Dais: Place the Resonance Altar!
-        BlockPos altarPos = center.up(1);
-        world.setBlockState(altarPos, ModBlocks.RESONANCE_ALTAR.getDefaultState().with(ResonanceAltarBlock.ACTIVE, false), 2);
+        BlockPos altarPos = center.above(1);
+        world.setBlock(altarPos, ModBlocks.RESONANCE_ALTAR.defaultBlockState().setValue(ResonanceAltarBlock.ACTIVE, false), 2);
 
         // Surrounding Rune Blocks around Altar
-        world.setBlockState(altarPos.north(), Blocks.AMETHYST_BLOCK.getDefaultState(), 2);
-        world.setBlockState(altarPos.south(), Blocks.AMETHYST_BLOCK.getDefaultState(), 2);
-        world.setBlockState(altarPos.east(), Blocks.AMETHYST_BLOCK.getDefaultState(), 2);
-        world.setBlockState(altarPos.west(), Blocks.AMETHYST_BLOCK.getDefaultState(), 2);
+        world.setBlock(altarPos.north(), Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
+        world.setBlock(altarPos.south(), Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
+        world.setBlock(altarPos.east(), Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
+        world.setBlock(altarPos.west(), Blocks.AMETHYST_BLOCK.defaultBlockState(), 2);
 
         return true;
     }

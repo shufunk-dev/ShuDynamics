@@ -1,38 +1,38 @@
 package net.enchantedwood.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 
-public class AtmosphericProtectionStatusEffect extends StatusEffect {
+public class AtmosphericProtectionStatusEffect extends MobEffect {
     public AtmosphericProtectionStatusEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0x48CAE4); // Sky Cyan
+        super(MobEffectCategory.BENEFICIAL, 0x48CAE4); // Sky Cyan
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel world, LivingEntity entity, int amplifier) {
         // Continuously replenish air supply underwater and in vacuums
-        entity.setAir(entity.getMaxAir());
+        entity.setAirSupply(entity.getMaxAirSupply());
 
         // Remove vision impairments from vacuum/anomalies
-        if (entity.hasStatusEffect(StatusEffects.DARKNESS)) {
-            entity.removeStatusEffect(StatusEffects.DARKNESS);
+        if (entity.hasEffect(MobEffects.DARKNESS)) {
+            entity.removeEffect(MobEffects.DARKNESS);
         }
-        if (entity.hasStatusEffect(StatusEffects.BLINDNESS)) {
-            entity.removeStatusEffect(StatusEffects.BLINDNESS);
+        if (entity.hasEffect(MobEffects.BLINDNESS)) {
+            entity.removeEffect(MobEffects.BLINDNESS);
         }
 
         // Ambient bubble particles
-        if (world.getTime() % 20 == 0) {
-            world.spawnParticles(
+        if (world.getGameTime() % 20 == 0) {
+            world.sendParticles(
                     ParticleTypes.BUBBLE_POP,
                     entity.getX(), entity.getY() + 1.2, entity.getZ(),
                     2, 0.2, 0.2, 0.2, 0.01

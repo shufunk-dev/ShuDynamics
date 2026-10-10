@@ -1,8 +1,8 @@
 package net.enchantedwood.gas;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum GasType implements StringIdentifiable {
+public enum GasType implements StringRepresentable {
     NONE("none", 0x7E7E7E),
     OXYGEN("oxygen", 0x4AA0E8),
     HYDROGEN("hydrogen", 0xE87E3A);
@@ -16,7 +16,7 @@ public enum GasType implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 

@@ -1,27 +1,30 @@
 package net.enchantedwood.world;
 
-import net.minecraft.block.SaplingGenerator;
-import java.util.Optional;
+import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.level.block.grower.TreeGrower;
 
 public class ModSaplingGenerators {
-    public static final SaplingGenerator RUBBER = new SaplingGenerator(
+    public static final TreeGrower RUBBER = new TreeGrower(
             "rubber",
-            Optional.empty(),
-            Optional.of(ModWorldGeneration.RUBBER_TREE_KEY),
-            Optional.empty()
+            WeightedList.of(ModWorldGeneration.RUBBER_TREE_KEY),
+            WeightedList.of(),
+            WeightedList.of(),
+            ModWorldGeneration.RUBBER_TREE_KEY
     );
 
-    public static final SaplingGenerator AVOCADO = new SaplingGenerator(
+    public static final TreeGrower AVOCADO = new TreeGrower(
             "avocado",
-            Optional.empty(),
-            Optional.of(ModWorldGeneration.AVOCADO_TREE_KEY),
-            Optional.empty()
+            WeightedList.of(ModWorldGeneration.AVOCADO_TREE_KEY),
+            WeightedList.of(),
+            WeightedList.of(),
+            ModWorldGeneration.AVOCADO_TREE_KEY
     );
 
-    public static final SaplingGenerator STARFRUIT = new SaplingGenerator(
+    public static final TreeGrower STARFRUIT = new TreeGrower(
             "starfruit",
-            Optional.empty(),
-            Optional.of(ModWorldGeneration.STARFRUIT_TREE_KEY),
-            Optional.empty()
+            WeightedList.of(ModWorldGeneration.STARFRUIT_TREE_KEY),
+            WeightedList.of(),
+            WeightedList.of(),
+            ModWorldGeneration.STARFRUIT_TREE_KEY
     );
 }

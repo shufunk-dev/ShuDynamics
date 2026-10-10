@@ -3,36 +3,36 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.SoilInfuserBlockEntity;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class SoilInfuserScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class SoilInfuserScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public SoilInfuserScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(SoilInfuserBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public SoilInfuserScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(SoilInfuserBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public SoilInfuserScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public SoilInfuserScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.SOIL_INFUSER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, SoilInfuserBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, SoilInfuserBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Dirt Input (x=44, y=35)
         this.addSlot(new Slot(inventory, SoilInfuserBlockEntity.INPUT_SLOT_DIRT, 44, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return SoilInfuserBlockEntity.isDirtMaterial(stack.getItem());
             }
         });
@@ -40,7 +40,7 @@ public class SoilInfuserScreenHandler extends ScreenHandler {
         // Slot 1: Mineral / Volcanic Ash Input (x=64, y=35)
         this.addSlot(new Slot(inventory, SoilInfuserBlockEntity.INPUT_SLOT_MINERAL, 64, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return SoilInfuserBlockEntity.isMineralMaterial(stack.getItem());
             }
         });
@@ -48,7 +48,7 @@ public class SoilInfuserScreenHandler extends ScreenHandler {
         // Slot 2: Output Soil (x=120, y=35)
         this.addSlot(new Slot(inventory, SoilInfuserBlockEntity.OUTPUT_SLOT, 120, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -56,7 +56,7 @@ public class SoilInfuserScreenHandler extends ScreenHandler {
         // Slot 3: Gear Upgrade (x=152, y=8)
         this.addSlot(new Slot(inventory, SoilInfuserBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -109,49 +109,49 @@ public class SoilInfuserScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < SoilInfuserBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, SoilInfuserBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, SoilInfuserBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, SoilInfuserBlockEntity.GEAR_SLOT, SoilInfuserBlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, SoilInfuserBlockEntity.GEAR_SLOT, SoilInfuserBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (SoilInfuserBlockEntity.isDirtMaterial(originalStack.getItem())) {
-                    if (!this.insertItem(originalStack, SoilInfuserBlockEntity.INPUT_SLOT_DIRT, SoilInfuserBlockEntity.INPUT_SLOT_DIRT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, SoilInfuserBlockEntity.INPUT_SLOT_DIRT, SoilInfuserBlockEntity.INPUT_SLOT_DIRT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (SoilInfuserBlockEntity.isMineralMaterial(originalStack.getItem())) {
-                    if (!this.insertItem(originalStack, SoilInfuserBlockEntity.INPUT_SLOT_MINERAL, SoilInfuserBlockEntity.INPUT_SLOT_MINERAL + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, SoilInfuserBlockEntity.INPUT_SLOT_MINERAL, SoilInfuserBlockEntity.INPUT_SLOT_MINERAL + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot < 4 + 27) {
-                    if (!this.insertItem(originalStack, 4 + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, 4 + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, 4, 4 + 27, false)) {
+                } else if (!this.moveItemStackTo(originalStack, 4, 4 + 27, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

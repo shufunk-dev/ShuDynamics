@@ -2,50 +2,44 @@ package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.enchantedwood.item.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CucumberCropBlock extends CropBlock {
-    public static final MapCodec<CucumberCropBlock> CODEC = createCodec(CucumberCropBlock::new);
     public static final int MAX_AGE = 7;
-    public static final IntProperty AGE = Properties.AGE_7;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_7;
 
     private static final VoxelShape[] AGE_TO_SHAPE = new VoxelShape[]{
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
-            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+            Block.box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 6.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 14.0, 16.0),
+            Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     };
 
-    public CucumberCropBlock(Settings settings) {
+    public CucumberCropBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public MapCodec<CucumberCropBlock> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    protected ItemConvertible getSeedsItem() {
+    protected ItemLike getBaseSeedId() {
         return ModItems.CUCUMBER_SEEDS;
     }
 
     @Override
-    public IntProperty getAgeProperty() {
+    public IntegerProperty getAgeProperty() {
         return AGE;
     }
 
@@ -55,17 +49,17 @@ public class CucumberCropBlock extends CropBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return AGE_TO_SHAPE[this.getAge(state)];
     }
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return floor.isOf(net.minecraft.block.Blocks.FARMLAND) || floor.isOf(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
+    protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+        return floor.is(net.minecraft.world.level.block.Blocks.FARMLAND) || floor.is(net.enchantedwood.block.ModBlocks.VOLCANIC_SOIL);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
 }

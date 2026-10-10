@@ -1,50 +1,50 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.BlockPos;
 import net.enchantedwood.block.entity.LaserQuarryBlockEntity;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class LaserQuarryScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class LaserQuarryScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
     public final BlockPos blockPos;
 
-    public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), BlockPos.ORIGIN);
+    public LaserQuarryScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(LaserQuarryBlockEntity.INVENTORY_SIZE), new SimpleContainerData(10), BlockPos.ZERO);
     }
 
-    public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), pos);
+    public LaserQuarryScreenHandler(int syncId, Inventory playerInventory, BlockPos pos) {
+        this(syncId, playerInventory, new SimpleContainer(LaserQuarryBlockEntity.INVENTORY_SIZE), new SimpleContainerData(10), pos);
     }
 
-    public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
-        this(syncId, playerInventory, inventory, propertyDelegate, BlockPos.ORIGIN);
+    public LaserQuarryScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
+        this(syncId, playerInventory, inventory, propertyDelegate, BlockPos.ZERO);
     }
 
-    public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate, BlockPos pos) {
+    public LaserQuarryScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate, BlockPos pos) {
         super(ModScreenHandlers.LASER_QUARRY_SCREEN_HANDLER, syncId);
-        checkSize(inventory, LaserQuarryBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, LaserQuarryBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
         this.blockPos = pos;
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // 3x3 Output Buffer (Slots 0..8) at x: 80, y: 18
         for (int m = 0; m < 3; ++m) {
             for (int l = 0; l < 3; ++l) {
                 this.addSlot(new Slot(inventory, l + m * 3, 80 + l * 18, 18 + m * 18) {
                     @Override
-                    public boolean canInsert(ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return false;
                     }
                 });
@@ -55,31 +55,31 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
         // Speed Socket (Slot 9)
         this.addSlot(new Slot(inventory, LaserQuarryBlockEntity.SPEED_SLOT, 152, 18) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE) ||
-                        stack.isOf(ModItems.COPPER_GEAR) || stack.isOf(ModItems.ENCHANTED_COPPER_GEAR) ||
-                        stack.isOf(ModItems.IRON_GEAR) || stack.isOf(ModItems.ENCHANTED_IRON_GEAR) ||
-                        stack.isOf(ModItems.GOLD_GEAR) || stack.isOf(ModItems.ENCHANTED_GOLD_GEAR) ||
-                        stack.isOf(ModItems.DIAMOND_GEAR) || stack.isOf(ModItems.ENCHANTED_DIAMOND_GEAR) ||
-                        stack.isOf(ModItems.TITANIUM_GEAR) || stack.isOf(ModItems.ENCHANTED_TITANIUM_GEAR);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.BLAZE_OVERCLOCK_CORE) ||
+                        stack.is(ModItems.COPPER_GEAR) || stack.is(ModItems.ENCHANTED_COPPER_GEAR) ||
+                        stack.is(ModItems.IRON_GEAR) || stack.is(ModItems.ENCHANTED_IRON_GEAR) ||
+                        stack.is(ModItems.GOLD_GEAR) || stack.is(ModItems.ENCHANTED_GOLD_GEAR) ||
+                        stack.is(ModItems.DIAMOND_GEAR) || stack.is(ModItems.ENCHANTED_DIAMOND_GEAR) ||
+                        stack.is(ModItems.TITANIUM_GEAR) || stack.is(ModItems.ENCHANTED_TITANIUM_GEAR);
             }
         });
 
         // Range Socket (Slot 10)
         this.addSlot(new Slot(inventory, LaserQuarryBlockEntity.RANGE_SLOT, 152, 36) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.RANGE_UPGRADE_T1) || stack.isOf(ModItems.RANGE_UPGRADE_T2);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.RANGE_UPGRADE_T1) || stack.is(ModItems.RANGE_UPGRADE_T2);
             }
         });
 
         // Utility / Extraction Socket (Slot 11)
         this.addSlot(new Slot(inventory, LaserQuarryBlockEntity.EXTRACTION_SLOT, 152, 54) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.FORTUNE_CORE) || stack.isOf(ModItems.SILK_TOUCH_CORE) ||
-                        stack.isOf(ModItems.INTERDIMENSIONAL_CARD) || stack.isOf(ModItems.CHUNK_LOADER_MODULE) ||
-                        stack.isOf(ModItems.WIRELESS_STORAGE_CRYSTAL);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.FORTUNE_CORE) || stack.is(ModItems.SILK_TOUCH_CORE) ||
+                        stack.is(ModItems.INTERDIMENSIONAL_CARD) || stack.is(ModItems.CHUNK_LOADER_MODULE) ||
+                        stack.is(ModItems.WIRELESS_STORAGE_CRYSTAL);
             }
         });
 
@@ -89,8 +89,8 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
-        if (player.getEntityWorld().getBlockEntity(this.blockPos) instanceof LaserQuarryBlockEntity quarry) {
+    public boolean clickMenuButton(Player player, int id) {
+        if (player.level().getBlockEntity(this.blockPos) instanceof LaserQuarryBlockEntity quarry) {
             quarry.handleAction(id);
             return true;
         }
@@ -134,30 +134,30 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < LaserQuarryBlockEntity.INVENTORY_SIZE) {
                 // Moving from machine to player inventory
-                if (!this.insertItem(originalStack, LaserQuarryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, LaserQuarryBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from player inventory to upgrade sockets
-                if (this.slots.get(LaserQuarryBlockEntity.SPEED_SLOT).canInsert(originalStack)) {
-                    if (!this.insertItem(originalStack, LaserQuarryBlockEntity.SPEED_SLOT, LaserQuarryBlockEntity.SPEED_SLOT + 1, false)) {
+                if (this.slots.get(LaserQuarryBlockEntity.SPEED_SLOT).mayPlace(originalStack)) {
+                    if (!this.moveItemStackTo(originalStack, LaserQuarryBlockEntity.SPEED_SLOT, LaserQuarryBlockEntity.SPEED_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.slots.get(LaserQuarryBlockEntity.RANGE_SLOT).canInsert(originalStack)) {
-                    if (!this.insertItem(originalStack, LaserQuarryBlockEntity.RANGE_SLOT, LaserQuarryBlockEntity.RANGE_SLOT + 1, false)) {
+                } else if (this.slots.get(LaserQuarryBlockEntity.RANGE_SLOT).mayPlace(originalStack)) {
+                    if (!this.moveItemStackTo(originalStack, LaserQuarryBlockEntity.RANGE_SLOT, LaserQuarryBlockEntity.RANGE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.slots.get(LaserQuarryBlockEntity.EXTRACTION_SLOT).canInsert(originalStack)) {
-                    if (!this.insertItem(originalStack, LaserQuarryBlockEntity.EXTRACTION_SLOT, LaserQuarryBlockEntity.EXTRACTION_SLOT + 1, false)) {
+                } else if (this.slots.get(LaserQuarryBlockEntity.EXTRACTION_SLOT).mayPlace(originalStack)) {
+                    if (!this.moveItemStackTo(originalStack, LaserQuarryBlockEntity.EXTRACTION_SLOT, LaserQuarryBlockEntity.EXTRACTION_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
@@ -166,9 +166,9 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
 
@@ -176,11 +176,11 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
-    private void addPlayerInventory(PlayerInventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
                 this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 84 + i * 18));
@@ -188,7 +188,7 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInventory) {
+    private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }

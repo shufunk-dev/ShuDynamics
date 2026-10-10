@@ -1,17 +1,17 @@
 package net.enchantedwood.network;
 
 import net.enchantedwood.EnchantedWoodMod;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record OpenAtvInventoryPayload() implements CustomPayload {
-    public static final Id<OpenAtvInventoryPayload> ID = new Id<>(Identifier.of(EnchantedWoodMod.MOD_ID, "open_atv_inventory"));
-    public static final PacketCodec<RegistryByteBuf, OpenAtvInventoryPayload> CODEC = PacketCodec.unit(new OpenAtvInventoryPayload());
+public record OpenAtvInventoryPayload() implements CustomPacketPayload {
+    public static final Type<OpenAtvInventoryPayload> ID = new Type<>(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "open_atv_inventory"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, OpenAtvInventoryPayload> CODEC = StreamCodec.unit(new OpenAtvInventoryPayload());
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

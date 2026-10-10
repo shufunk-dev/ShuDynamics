@@ -1,9 +1,9 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class EnchantedCoalBlock extends Block {
-    public EnchantedCoalBlock(Settings settings) {
+    public EnchantedCoalBlock(Properties settings) {
         super(settings);
     }
 }

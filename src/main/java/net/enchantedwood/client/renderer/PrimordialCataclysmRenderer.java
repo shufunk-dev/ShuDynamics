@@ -4,16 +4,16 @@ import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.entity.custom.PrimordialCataclysmEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class PrimordialCataclysmRenderer extends MobEntityRenderer<PrimordialCataclysmEntity, ResonanceColossusRenderState, ResonanceColossusModel> {
-    private static final Identifier TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/primordial_cataclysm.png");
+public class PrimordialCataclysmRenderer extends MobRenderer<PrimordialCataclysmEntity, ResonanceColossusRenderState, ResonanceColossusModel> {
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/primordial_cataclysm.png");
 
-    public PrimordialCataclysmRenderer(EntityRendererFactory.Context context) {
-        super(context, new ResonanceColossusModel(context.getPart(ResonanceColossusModel.MODEL_LAYER)), 2.2F);
+    public PrimordialCataclysmRenderer(EntityRendererProvider.Context context) {
+        super(context, new ResonanceColossusModel(context.bakeLayer(ResonanceColossusModel.MODEL_LAYER)), 2.2F);
     }
 
     @Override
@@ -22,13 +22,13 @@ public class PrimordialCataclysmRenderer extends MobEntityRenderer<PrimordialCat
     }
 
     @Override
-    public void updateRenderState(PrimordialCataclysmEntity entity, ResonanceColossusRenderState state, float tickProgress) {
-        super.updateRenderState(entity, state, tickProgress);
-        state.ageInTicks = entity.age + tickProgress;
+    public void extractRenderState(PrimordialCataclysmEntity entity, ResonanceColossusRenderState state, float tickProgress) {
+        super.extractRenderState(entity, state, tickProgress);
+        state.ageInTicks = entity.tickCount + tickProgress;
     }
 
     @Override
-    public Identifier getTexture(ResonanceColossusRenderState state) {
+    public Identifier getTextureLocation(ResonanceColossusRenderState state) {
         return TEXTURE;
     }
 }

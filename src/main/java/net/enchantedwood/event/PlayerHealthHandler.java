@@ -3,13 +3,13 @@ package net.enchantedwood.event;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.EnchantedHeartItem;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerHealthHandler {
-    public static final Identifier HEART_HEALTH_MODIFIER_ID = Identifier.of(EnchantedWoodMod.MOD_ID, "heart_locket_health");
+    public static final Identifier HEART_HEALTH_MODIFIER_ID = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "heart_locket_health");
 
     private static final Map<UUID, Float> LAST_HEART_HEALTH_BONUS = new HashMap<>();
     private static final Map<UUID, Long> LAST_DAMAGE_TIME = new HashMap<>();
@@ -32,53 +32,53 @@ public class PlayerHealthHandler {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
             // Melee Lifesteal: When attacker is a player with VAMPIRIC_VITALITY
-            if (source.getAttacker() instanceof ServerPlayerEntity attacker) {
-                if (attacker.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.VAMPIRIC_VITALITY)) {
+            if (source.getEntity() instanceof ServerPlayer attacker) {
+                if (attacker.hasEffect(net.enchantedwood.effect.ModStatusEffects.VAMPIRIC_VITALITY)) {
                     float healAmount = Math.max(0.5f, amount * 0.15f);
                     attacker.heal(healAmount);
-                    if (attacker.getEntityWorld() instanceof ServerWorld sw) {
-                        sw.spawnParticles(net.minecraft.particle.ParticleTypes.HEART, attacker.getX(), attacker.getY() + 1.0, attacker.getZ(), 2, 0.3, 0.3, 0.3, 0.02);
+                    if (attacker.level() instanceof ServerLevel sw) {
+                        sw.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, attacker.getX(), attacker.getY() + 1.0, attacker.getZ(), 2, 0.3, 0.3, 0.3, 0.02);
                     }
                 }
             }
 
-            if (entity instanceof ServerPlayerEntity player) {
+            if (entity instanceof ServerPlayer player) {
                 // 1. Acid Protection: Negates magic, poison, wither, and corrosive damage
-                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION)) {
-                    if (source.isOf(net.minecraft.entity.damage.DamageTypes.MAGIC) ||
-                        source.isOf(net.minecraft.entity.damage.DamageTypes.INDIRECT_MAGIC) ||
-                        source.isOf(net.minecraft.entity.damage.DamageTypes.WITHER)) {
+                if (player.hasEffect(net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION)) {
+                    if (source.is(net.minecraft.world.damagesource.DamageTypes.MAGIC) ||
+                        source.is(net.minecraft.world.damagesource.DamageTypes.INDIRECT_MAGIC) ||
+                        source.is(net.minecraft.world.damagesource.DamageTypes.WITHER)) {
                         return false;
                     }
                 }
 
                 // 2. Thermal Protection: Negates all fire, lava, hot floor, and freeze damage
-                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
-                    if (source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_FIRE) ||
-                        source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_FREEZING) ||
-                        source.isOf(net.minecraft.entity.damage.DamageTypes.HOT_FLOOR)) {
-                        player.extinguish();
+                if (player.hasEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
+                    if (source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE) ||
+                        source.is(net.minecraft.tags.DamageTypeTags.IS_FREEZING) ||
+                        source.is(net.minecraft.world.damagesource.DamageTypes.HOT_FLOOR)) {
+                        player.clearFire();
                         return false;
                     }
                 }
 
                 // 3. Atmospheric Protection: Negates drowning, wall suffocation, and vacuum collapse
-                if (player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION)) {
-                    if (source.isIn(net.minecraft.registry.tag.DamageTypeTags.IS_DROWNING) ||
-                        source.isOf(net.minecraft.entity.damage.DamageTypes.IN_WALL)) {
-                        player.setAir(player.getMaxAir());
+                if (player.hasEffect(net.enchantedwood.effect.ModStatusEffects.ATMOSPHERIC_PROTECTION)) {
+                    if (source.is(net.minecraft.tags.DamageTypeTags.IS_DROWNING) ||
+                        source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL)) {
+                        player.setAirSupply(player.getMaxAirSupply());
                         return false;
                     }
                 }
 
-                LAST_DAMAGE_TIME.put(player.getUuid(), System.currentTimeMillis());
+                LAST_DAMAGE_TIME.put(player.getUUID(), System.currentTimeMillis());
             }
             return true;
         });
 
         ServerTickEvents.START_SERVER_TICK.register(server -> {
-            for (ServerWorld world : server.getWorlds()) {
-                for (ServerPlayerEntity player : world.getPlayers()) {
+            for (ServerLevel world : server.getAllLevels()) {
+                for (ServerPlayer player : world.players()) {
                     tickPlayerHeartLocket(player);
                 }
             }
@@ -86,19 +86,19 @@ public class PlayerHealthHandler {
 
         // Instant Heart Container Resync on Respawn (fixes keepInventory modifier persistence)
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            LAST_HEART_HEALTH_BONUS.remove(newPlayer.getUuid());
+            LAST_HEART_HEALTH_BONUS.remove(newPlayer.getUUID());
             tickPlayerHeartLocket(newPlayer);
         });
     }
 
-    private static void tickPlayerHeartLocket(ServerPlayerEntity player) {
+    private static void tickPlayerHeartLocket(ServerPlayer player) {
         if (player.isSpectator()) return;
 
-        UUID uuid = player.getUuid();
+        UUID uuid = player.getUUID();
         float targetBonus = getEquippedHeartHealthBonus(player);
         Float lastBonus = LAST_HEART_HEALTH_BONUS.getOrDefault(uuid, -1.0f);
 
-        EntityAttributeInstance attribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        AttributeInstance attribute = player.getAttribute(Attributes.MAX_HEALTH);
         boolean hasModifier = attribute != null && attribute.getModifier(HEART_HEALTH_MODIFIER_ID) != null;
 
         // Update EntityAttributeModifier for MAX_HEALTH whenever equipped Heart Locket changes OR is missing after respawn
@@ -128,17 +128,17 @@ public class PlayerHealthHandler {
         }
     }
 
-    private static void updateMaxHealthAttribute(ServerPlayerEntity player, float newBonus, float oldBonus) {
-        EntityAttributeInstance attribute = player.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+    private static void updateMaxHealthAttribute(ServerPlayer player, float newBonus, float oldBonus) {
+        AttributeInstance attribute = player.getAttribute(Attributes.MAX_HEALTH);
         if (attribute != null) {
             attribute.removeModifier(HEART_HEALTH_MODIFIER_ID);
             if (newBonus > 0.0f) {
-                EntityAttributeModifier modifier = new EntityAttributeModifier(
+                AttributeModifier modifier = new AttributeModifier(
                         HEART_HEALTH_MODIFIER_ID,
                         newBonus,
-                        EntityAttributeModifier.Operation.ADD_VALUE
+                        AttributeModifier.Operation.ADD_VALUE
                 );
-                attribute.addPersistentModifier(modifier);
+                attribute.addPermanentModifier(modifier);
 
                 // If player's max health expanded, heal up the new health difference on initial equip
                 if (oldBonus >= 0.0f && newBonus > oldBonus) {
@@ -154,14 +154,14 @@ public class PlayerHealthHandler {
         }
     }
 
-    public static void applyHeartAbsorptionImmediate(ServerPlayerEntity player) {
+    public static void applyHeartAbsorptionImmediate(ServerPlayer player) {
         float targetBonus = getEquippedHeartHealthBonus(player);
-        Float lastBonus = LAST_HEART_HEALTH_BONUS.getOrDefault(player.getUuid(), 0.0f);
+        Float lastBonus = LAST_HEART_HEALTH_BONUS.getOrDefault(player.getUUID(), 0.0f);
         updateMaxHealthAttribute(player, targetBonus, lastBonus);
-        LAST_HEART_HEALTH_BONUS.put(player.getUuid(), targetBonus);
+        LAST_HEART_HEALTH_BONUS.put(player.getUUID(), targetBonus);
     }
 
-    public static float getEquippedHeartHealthBonus(ServerPlayerEntity player) {
+    public static float getEquippedHeartHealthBonus(ServerPlayer player) {
         float maxBonus = 0.0f;
 
         // Check native Heart Container Slot
@@ -170,7 +170,7 @@ public class PlayerHealthHandler {
         // Check Trinkets API if present
         try {
             Class<?> trinketsApiClass = Class.forName("dev.emi.trinkets.api.TrinketsApi");
-            Object optionalComp = trinketsApiClass.getMethod("getTrinketComponent", net.minecraft.entity.LivingEntity.class).invoke(null, player);
+            Object optionalComp = trinketsApiClass.getMethod("getTrinketComponent", net.minecraft.world.entity.LivingEntity.class).invoke(null, player);
             if (optionalComp instanceof java.util.Optional<?> opt && opt.isPresent()) {
                 Object comp = opt.get();
                 if (isItemEquippedInTrinkets(comp, ModItems.NETHERITE_ENCHANTED_HEART)) return 20.0f;
@@ -184,9 +184,9 @@ public class PlayerHealthHandler {
         return maxBonus;
     }
 
-    private static boolean isItemEquippedInTrinkets(Object comp, net.minecraft.item.Item item) {
+    private static boolean isItemEquippedInTrinkets(Object comp, net.minecraft.world.item.Item item) {
         try {
-            Object isEq = comp.getClass().getMethod("isEquipped", net.minecraft.item.Item.class).invoke(comp, item);
+            Object isEq = comp.getClass().getMethod("isEquipped", net.minecraft.world.item.Item.class).invoke(comp, item);
             return isEq instanceof Boolean b && b;
         } catch (Throwable ignored) {
             return false;
@@ -198,11 +198,11 @@ public class PlayerHealthHandler {
         if (stack.getItem() instanceof EnchantedHeartItem heartItem) {
             return heartItem.getAbsorptionAmount();
         }
-        if (stack.isOf(ModItems.NETHERITE_ENCHANTED_HEART)) return 20.0f;
-        if (stack.isOf(ModItems.DIAMOND_ENCHANTED_HEART)) return 14.0f;
-        if (stack.isOf(ModItems.GOLD_ENCHANTED_HEART)) return 10.0f;
-        if (stack.isOf(ModItems.IRON_ENCHANTED_HEART)) return 6.0f;
-        if (stack.isOf(ModItems.ENCHANTED_HEART)) return 2.0f;
+        if (stack.is(ModItems.NETHERITE_ENCHANTED_HEART)) return 20.0f;
+        if (stack.is(ModItems.DIAMOND_ENCHANTED_HEART)) return 14.0f;
+        if (stack.is(ModItems.GOLD_ENCHANTED_HEART)) return 10.0f;
+        if (stack.is(ModItems.IRON_ENCHANTED_HEART)) return 6.0f;
+        if (stack.is(ModItems.ENCHANTED_HEART)) return 2.0f;
         return 0.0f;
     }
 }

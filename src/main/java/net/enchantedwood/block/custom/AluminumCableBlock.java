@@ -1,108 +1,106 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.block.WireOrientation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.enchantedwood.block.entity.AluminumCableBlockEntity;
 import net.enchantedwood.block.entity.ModBlockEntities;
 import net.enchantedwood.energy.EnergyProvider;
 import org.jetbrains.annotations.Nullable;
 
-public class AluminumCableBlock extends BlockWithEntity {
-    public static final MapCodec<AluminumCableBlock> CODEC = createCodec(AluminumCableBlock::new);
+public class AluminumCableBlock extends BaseEntityBlock {
 
-    public static final BooleanProperty NORTH = Properties.NORTH;
-    public static final BooleanProperty SOUTH = Properties.SOUTH;
-    public static final BooleanProperty EAST = Properties.EAST;
-    public static final BooleanProperty WEST = Properties.WEST;
-    public static final BooleanProperty UP = Properties.UP;
-    public static final BooleanProperty DOWN = Properties.DOWN;
+    public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
+    public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
+    public static final BooleanProperty EAST = BlockStateProperties.EAST;
+    public static final BooleanProperty WEST = BlockStateProperties.WEST;
+    public static final BooleanProperty UP = BlockStateProperties.UP;
+    public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
 
-    private static final VoxelShape CORE_SHAPE = Block.createCuboidShape(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
-    private static final VoxelShape UP_SHAPE = Block.createCuboidShape(5.0, 11.0, 5.0, 11.0, 16.0, 11.0);
-    private static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 5.0, 11.0);
-    private static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(5.0, 5.0, 0.0, 11.0, 11.0, 5.0);
-    private static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(5.0, 5.0, 11.0, 11.0, 11.0, 16.0);
-    private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0.0, 5.0, 5.0, 5.0, 11.0, 11.0);
-    private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(11.0, 5.0, 5.0, 16.0, 11.0, 11.0);
+    private static final VoxelShape CORE_SHAPE = Block.box(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
+    private static final VoxelShape UP_SHAPE = Block.box(5.0, 11.0, 5.0, 11.0, 16.0, 11.0);
+    private static final VoxelShape DOWN_SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 5.0, 11.0);
+    private static final VoxelShape NORTH_SHAPE = Block.box(5.0, 5.0, 0.0, 11.0, 11.0, 5.0);
+    private static final VoxelShape SOUTH_SHAPE = Block.box(5.0, 5.0, 11.0, 11.0, 11.0, 16.0);
+    private static final VoxelShape WEST_SHAPE = Block.box(0.0, 5.0, 5.0, 5.0, 11.0, 11.0);
+    private static final VoxelShape EAST_SHAPE = Block.box(11.0, 5.0, 5.0, 16.0, 11.0, 11.0);
 
-    public AluminumCableBlock(Settings settings) {
+    public AluminumCableBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState()
-                .with(NORTH, false)
-                .with(SOUTH, false)
-                .with(EAST, false)
-                .with(WEST, false)
-                .with(UP, false)
-                .with(DOWN, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(NORTH, false)
+                .setValue(SOUTH, false)
+                .setValue(EAST, false)
+                .setValue(WEST, false)
+                .setValue(UP, false)
+                .setValue(DOWN, false));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AluminumCableBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (world instanceof ServerWorld serverWorld && type == ModBlockEntities.ALUMINUM_CABLE_BLOCK_ENTITY) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        if (world instanceof ServerLevel serverWorld && type == ModBlockEntities.ALUMINUM_CABLE_BLOCK_ENTITY) {
             return (w, pos, st, blockEntity) -> AluminumCableBlockEntity.tick(serverWorld, pos, st, (AluminumCableBlockEntity) blockEntity);
         }
         return null;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         VoxelShape shape = CORE_SHAPE;
-        if (state.get(UP)) shape = VoxelShapes.union(shape, UP_SHAPE);
-        if (state.get(DOWN)) shape = VoxelShapes.union(shape, DOWN_SHAPE);
-        if (state.get(NORTH)) shape = VoxelShapes.union(shape, NORTH_SHAPE);
-        if (state.get(SOUTH)) shape = VoxelShapes.union(shape, SOUTH_SHAPE);
-        if (state.get(WEST)) shape = VoxelShapes.union(shape, WEST_SHAPE);
-        if (state.get(EAST)) shape = VoxelShapes.union(shape, EAST_SHAPE);
+        if (state.getValue(UP)) shape = Shapes.or(shape, UP_SHAPE);
+        if (state.getValue(DOWN)) shape = Shapes.or(shape, DOWN_SHAPE);
+        if (state.getValue(NORTH)) shape = Shapes.or(shape, NORTH_SHAPE);
+        if (state.getValue(SOUTH)) shape = Shapes.or(shape, SOUTH_SHAPE);
+        if (state.getValue(WEST)) shape = Shapes.or(shape, WEST_SHAPE);
+        if (state.getValue(EAST)) shape = Shapes.or(shape, EAST_SHAPE);
         return shape;
     }
 
-    public boolean canConnectTo(BlockView world, BlockPos pos, Direction direction) {
-        BlockPos neighborPos = pos.offset(direction);
+    public boolean canConnectTo(BlockGetter world, BlockPos pos, Direction direction) {
+        BlockPos neighborPos = pos.relative(direction);
         BlockState neighborState = world.getBlockState(neighborPos);
         if (neighborState.getBlock() instanceof AluminumCableBlock ||
                 neighborState.getBlock() instanceof CopperCableBlock ||
                 neighborState.getBlock() instanceof SteelCableBlock ||
                 neighborState.getBlock() instanceof TungstenCableBlock ||
                 neighborState.getBlock() instanceof BasaltCableBlock ||
-                neighborState.isOf(net.enchantedwood.block.ModBlocks.CRUSHER) ||
-                neighborState.isOf(net.enchantedwood.block.ModBlocks.DUST_SMELTER)) {
+                neighborState.is(net.enchantedwood.block.ModBlocks.CRUSHER) ||
+                neighborState.is(net.enchantedwood.block.ModBlocks.DUST_SMELTER)) {
             return true;
         }
         BlockEntity be = world.getBlockEntity(neighborPos);
@@ -113,32 +111,32 @@ public class AluminumCableBlock extends BlockWithEntity {
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        World world = ctx.getWorld();
-        BlockPos pos = ctx.getBlockPos();
-        return this.getDefaultState()
-                .with(NORTH, canConnectTo(world, pos, Direction.NORTH))
-                .with(SOUTH, canConnectTo(world, pos, Direction.SOUTH))
-                .with(EAST, canConnectTo(world, pos, Direction.EAST))
-                .with(WEST, canConnectTo(world, pos, Direction.WEST))
-                .with(UP, canConnectTo(world, pos, Direction.UP))
-                .with(DOWN, canConnectTo(world, pos, Direction.DOWN));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        Level world = ctx.getLevel();
+        BlockPos pos = ctx.getClickedPos();
+        return this.defaultBlockState()
+                .setValue(NORTH, canConnectTo(world, pos, Direction.NORTH))
+                .setValue(SOUTH, canConnectTo(world, pos, Direction.SOUTH))
+                .setValue(EAST, canConnectTo(world, pos, Direction.EAST))
+                .setValue(WEST, canConnectTo(world, pos, Direction.WEST))
+                .setValue(UP, canConnectTo(world, pos, Direction.UP))
+                .setValue(DOWN, canConnectTo(world, pos, Direction.DOWN));
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
-        if (!world.isClient()) {
+    protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, @Nullable Orientation wireOrientation, boolean notify) {
+        if (!world.isClientSide()) {
             BlockState updated = state
-                    .with(NORTH, canConnectTo(world, pos, Direction.NORTH))
-                    .with(SOUTH, canConnectTo(world, pos, Direction.SOUTH))
-                    .with(EAST, canConnectTo(world, pos, Direction.EAST))
-                    .with(WEST, canConnectTo(world, pos, Direction.WEST))
-                    .with(UP, canConnectTo(world, pos, Direction.UP))
-                    .with(DOWN, canConnectTo(world, pos, Direction.DOWN));
+                    .setValue(NORTH, canConnectTo(world, pos, Direction.NORTH))
+                    .setValue(SOUTH, canConnectTo(world, pos, Direction.SOUTH))
+                    .setValue(EAST, canConnectTo(world, pos, Direction.EAST))
+                    .setValue(WEST, canConnectTo(world, pos, Direction.WEST))
+                    .setValue(UP, canConnectTo(world, pos, Direction.UP))
+                    .setValue(DOWN, canConnectTo(world, pos, Direction.DOWN));
             if (updated != state) {
-                world.setBlockState(pos, updated, 3);
+                world.setBlock(pos, updated, 3);
             }
         }
-        super.neighborUpdate(state, world, pos, sourceBlock, wireOrientation, notify);
+        super.neighborChanged(state, world, pos, sourceBlock, wireOrientation, notify);
     }
 }

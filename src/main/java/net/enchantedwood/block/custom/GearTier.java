@@ -1,8 +1,8 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum GearTier implements StringIdentifiable {
+public enum GearTier implements StringRepresentable {
     NONE("none", 2),
     IRON("iron", 2),
     ENCHANTED_IRON("enchanted_iron", 3),
@@ -33,7 +33,7 @@ public enum GearTier implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 

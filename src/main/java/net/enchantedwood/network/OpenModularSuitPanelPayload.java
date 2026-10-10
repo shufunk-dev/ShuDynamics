@@ -1,17 +1,17 @@
 package net.enchantedwood.network;
 
 import net.enchantedwood.EnchantedWoodMod;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record OpenModularSuitPanelPayload() implements CustomPayload {
-    public static final Id<OpenModularSuitPanelPayload> ID = new Id<>(Identifier.of(EnchantedWoodMod.MOD_ID, "open_modular_suit_panel"));
-    public static final PacketCodec<RegistryByteBuf, OpenModularSuitPanelPayload> CODEC = PacketCodec.unit(new OpenModularSuitPanelPayload());
+public record OpenModularSuitPanelPayload() implements CustomPacketPayload {
+    public static final Type<OpenModularSuitPanelPayload> ID = new Type<>(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "open_modular_suit_panel"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, OpenModularSuitPanelPayload> CODEC = StreamCodec.unit(new OpenModularSuitPanelPayload());
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

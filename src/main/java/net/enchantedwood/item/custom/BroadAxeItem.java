@@ -1,52 +1,51 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import java.util.*;
 import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BroadAxeItem extends Item {
     private static final ThreadLocal<Boolean> IS_FELLING = ThreadLocal.withInitial(() -> false);
     private final int maxLogs;
 
-    public BroadAxeItem(Settings settings) {
+    public BroadAxeItem(Properties settings) {
         this(settings, 384);
     }
 
-    public BroadAxeItem(Settings settings, int maxLogs) {
+    public BroadAxeItem(Properties settings, int maxLogs) {
         super(settings);
         this.maxLogs = maxLogs;
     }
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient() && miner instanceof ServerPlayerEntity player && !IS_FELLING.get()) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
+        if (!world.isClientSide() && miner instanceof ServerPlayer player && !IS_FELLING.get()) {
             // Only trigger tree felling when not sneaking and mining a valid log / wood block
-            if (!player.isSneaking() && isLogBlock(state)) {
+            if (!player.isShiftKeyDown() && isLogBlock(state)) {
                 IS_FELLING.set(true);
                 try {
-                    fellTree(stack, (ServerWorld) world, pos, player);
+                    fellTree(stack, (ServerLevel) world, pos, player);
                 } finally {
                     IS_FELLING.set(false);
                 }
             }
         }
-        return super.postMine(stack, world, state, pos, miner);
+        return super.mineBlock(stack, world, state, pos, miner);
     }
 
-    private void fellTree(ItemStack stack, ServerWorld world, BlockPos origin, ServerPlayerEntity player) {
+    private void fellTree(ItemStack stack, ServerLevel world, BlockPos origin, ServerPlayer player) {
         Queue<BlockPos> queue = new ArrayDeque<>();
         Set<BlockPos> visited = new HashSet<>();
         List<BlockPos> logsToBreak = new ArrayList<>();
@@ -65,7 +64,7 @@ public class BroadAxeItem extends Item {
                     for (int oz = -1; oz <= 1; oz++) {
                         if (ox == 0 && oy == 0 && oz == 0) continue;
 
-                        BlockPos neighbor = current.add(ox, oy, oz);
+                        BlockPos neighbor = current.offset(ox, oy, oz);
                         if (visited.add(neighbor)) {
                             // Keep search within reasonable bounds from origin
                             if (Math.abs(neighbor.getX() - origin.getX()) > 32 ||
@@ -94,8 +93,8 @@ public class BroadAxeItem extends Item {
 
             BlockState st = world.getBlockState(logPos);
             if (isLogBlock(st)) {
-                player.interactionManager.tryBreakBlock(logPos);
-                stack.damage(1, player, EquipmentSlot.MAINHAND);
+                player.gameMode.destroyBlock(logPos);
+                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             }
         }
 
@@ -103,40 +102,40 @@ public class BroadAxeItem extends Item {
         for (BlockPos leafPos : leavesToBreak) {
             BlockState st = world.getBlockState(leafPos);
             if (isLeafBlock(st)) {
-                world.breakBlock(leafPos, true, player);
+                world.destroyBlock(leafPos, true, player);
             }
         }
     }
 
     public static boolean isLogBlock(BlockState state) {
-        return state.isIn(BlockTags.LOGS)
-                || state.isOf(net.minecraft.block.Blocks.MANGROVE_ROOTS)
-                || state.isOf(net.minecraft.block.Blocks.MUDDY_MANGROVE_ROOTS)
-                || state.isOf(net.minecraft.block.Blocks.BAMBOO_BLOCK)
-                || state.isOf(net.minecraft.block.Blocks.STRIPPED_BAMBOO_BLOCK)
-                || state.isOf(net.minecraft.block.Blocks.CRIMSON_STEM)
-                || state.isOf(net.minecraft.block.Blocks.WARPED_STEM)
-                || state.isOf(net.minecraft.block.Blocks.STRIPPED_CRIMSON_STEM)
-                || state.isOf(net.minecraft.block.Blocks.STRIPPED_WARPED_STEM)
-                || state.isOf(net.minecraft.block.Blocks.MUSHROOM_STEM);
+        return state.is(BlockTags.LOGS)
+                || state.is(net.minecraft.world.level.block.Blocks.MANGROVE_ROOTS)
+                || state.is(net.minecraft.world.level.block.Blocks.MUDDY_MANGROVE_ROOTS)
+                || state.is(net.minecraft.world.level.block.Blocks.BAMBOO_BLOCK)
+                || state.is(net.minecraft.world.level.block.Blocks.STRIPPED_BAMBOO_BLOCK)
+                || state.is(net.minecraft.world.level.block.Blocks.CRIMSON_STEM)
+                || state.is(net.minecraft.world.level.block.Blocks.WARPED_STEM)
+                || state.is(net.minecraft.world.level.block.Blocks.STRIPPED_CRIMSON_STEM)
+                || state.is(net.minecraft.world.level.block.Blocks.STRIPPED_WARPED_STEM)
+                || state.is(net.minecraft.world.level.block.Blocks.MUSHROOM_STEM);
     }
 
     public static boolean isLeafBlock(BlockState state) {
-        return state.isIn(BlockTags.LEAVES)
-                || state.isIn(BlockTags.WART_BLOCKS)
-                || state.isOf(net.minecraft.block.Blocks.SHROOMLIGHT)
-                || state.isOf(net.minecraft.block.Blocks.MANGROVE_LEAVES)
-                || state.isOf(net.minecraft.block.Blocks.AZALEA_LEAVES)
-                || state.isOf(net.minecraft.block.Blocks.FLOWERING_AZALEA_LEAVES)
-                || state.isOf(net.minecraft.block.Blocks.CHERRY_LEAVES)
-                || state.isOf(net.minecraft.block.Blocks.VINE);
+        return state.is(BlockTags.LEAVES)
+                || state.is(BlockTags.WART_BLOCKS)
+                || state.is(net.minecraft.world.level.block.Blocks.SHROOMLIGHT)
+                || state.is(net.minecraft.world.level.block.Blocks.MANGROVE_LEAVES)
+                || state.is(net.minecraft.world.level.block.Blocks.AZALEA_LEAVES)
+                || state.is(net.minecraft.world.level.block.Blocks.FLOWERING_AZALEA_LEAVES)
+                || state.is(net.minecraft.world.level.block.Blocks.CHERRY_LEAVES)
+                || state.is(net.minecraft.world.level.block.Blocks.VINE);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§6✦ Heavy Lumber Broad Axe"));
-        textConsumer.accept(Text.literal("§7Fells §eentire connected trees §7and harvests leaves in one strike."));
-        textConsumer.accept(Text.literal("§8(Hold §fShift §8while chopping to harvest a single log)"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§6✦ Heavy Lumber Broad Axe"));
+        textConsumer.accept(Component.literal("§7Fells §eentire connected trees §7and harvests leaves in one strike."));
+        textConsumer.accept(Component.literal("§8(Hold §fShift §8while chopping to harvest a single log)"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

@@ -1,32 +1,32 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class DustSmelterScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class DustSmelterScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public DustSmelterScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(7));
+    public DustSmelterScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(3), new SimpleContainerData(7));
     }
 
-    public DustSmelterScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public DustSmelterScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.DUST_SMELTER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 3);
+        checkContainerSize(inventory, 3);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Machine Slots
         // Slot 0: Dust Input (top center)
@@ -34,25 +34,25 @@ public class DustSmelterScreenHandler extends ScreenHandler {
         // Slot 1: Gear Upgrade Slot (bottom center)
         this.addSlot(new Slot(inventory, 1, 74, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
         // Slot 2: Output Slot (right)
         this.addSlot(new Slot(inventory, 2, 116, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
             @Override
-            public void onTakeItem(PlayerEntity player, ItemStack stack) {
-                if (inventory instanceof net.enchantedwood.block.entity.DustSmelterBlockEntity blockEntity) {
-                    if (blockEntity.getWorld() instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+            public void onTake(Player player, ItemStack stack) {
+                if (container instanceof net.enchantedwood.block.entity.DustSmelterBlockEntity blockEntity) {
+                    if (blockEntity.getLevel() instanceof net.minecraft.server.level.ServerLevel serverWorld) {
                         blockEntity.dropExperience(serverWorld, player);
                     }
                 }
-                super.onTakeItem(player, stack);
+                super.onTake(player, stack);
             }
         });
 
@@ -94,49 +94,49 @@ public class DustSmelterScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (slotIndex == 2) {
-                if (!this.insertItem(originalStack, 3, 39, true)) {
+                if (!this.moveItemStackTo(originalStack, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(originalStack, newStack);
+                slot.onQuickCraft(originalStack, newStack);
             } else if (slotIndex >= 3) {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, 0, 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!this.insertItem(originalStack, 3, 39, false)) {
+                if (!this.moveItemStackTo(originalStack, 3, 39, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

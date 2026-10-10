@@ -1,25 +1,25 @@
 package net.enchantedwood.network;
 
 import net.enchantedwood.EnchantedWoodMod;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record SuperComputerStatusPayload(String message) implements CustomPayload {
-    public static final CustomPayload.Id<SuperComputerStatusPayload> ID =
-            new CustomPayload.Id<>(Identifier.of(EnchantedWoodMod.MOD_ID, "super_computer_status"));
+public record SuperComputerStatusPayload(String message) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<SuperComputerStatusPayload> ID =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "super_computer_status"));
 
-    public static final PacketCodec<RegistryByteBuf, SuperComputerStatusPayload> CODEC =
-            PacketCodec.tuple(
-                    PacketCodecs.STRING,
+    public static final StreamCodec<RegistryFriendlyByteBuf, SuperComputerStatusPayload> CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.STRING_UTF8,
                     SuperComputerStatusPayload::message,
                     SuperComputerStatusPayload::new
             );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

@@ -1,20 +1,19 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class SuitModuleItem extends Item {
     private final String moduleType;
-    private final List<Text> descriptions;
+    private final List<Component> descriptions;
 
-    public SuitModuleItem(Settings settings, String moduleType, List<Text> descriptions) {
-        super(settings.maxCount(16).fireproof());
+    public SuitModuleItem(Properties settings, String moduleType, List<Component> descriptions) {
+        super(settings.stacksTo(16).fireResistant());
         this.moduleType = moduleType;
         this.descriptions = descriptions;
     }
@@ -24,12 +23,12 @@ public class SuitModuleItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§6⚡ Suit Upgrade Module: §f" + this.moduleType));
-        for (Text desc : this.descriptions) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§6⚡ Suit Upgrade Module: §f" + this.moduleType));
+        for (Component desc : this.descriptions) {
             textConsumer.accept(desc);
         }
-        textConsumer.accept(Text.literal("§8Install into Modular Power Suit via Access Panel (V) or Powered Anvil"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        textConsumer.accept(Component.literal("§8Install into Modular Power Suit via Access Panel (V) or Powered Anvil"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

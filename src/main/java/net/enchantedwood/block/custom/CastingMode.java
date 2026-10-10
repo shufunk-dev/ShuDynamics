@@ -1,8 +1,8 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum CastingMode implements StringIdentifiable {
+public enum CastingMode implements StringRepresentable {
     STANDBY("standby", "Standby", 0),
     INGOT("ingot", "Ingot", 90),
     BLOCK("block", "Block", 810),
@@ -19,7 +19,7 @@ public enum CastingMode implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.id;
     }
 

@@ -9,33 +9,31 @@ import net.enchantedwood.fluid.WaterProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.CryoFreezerScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, WaterProvider {
+public class CryoFreezerBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, WaterProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int BASE_ENERGY_DRAW = 25; // 25 FE/t
@@ -48,14 +46,14 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
     public static final int GEAR_SLOT = 4;
     public static final int INVENTORY_SIZE = 5;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int freezeProgress = 0;
     private int totalFreezeTime = 80;
     private int waterAmount = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -81,7 +79,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 8;
         }
     };
@@ -144,7 +142,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         int toInsert = Math.min(space, amount);
         if (!simulate && toInsert > 0) {
             this.waterAmount += toInsert;
-            markDirty();
+            setChanged();
         }
         return toInsert;
     }
@@ -154,7 +152,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         int toDrain = Math.min(this.waterAmount, amount);
         if (!simulate && toDrain > 0) {
             this.waterAmount -= toDrain;
-            markDirty();
+            setChanged();
         }
         return toDrain;
     }
@@ -165,17 +163,17 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.cryo_freezer");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.cryo_freezer");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new CryoFreezerScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, CryoFreezerBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, CryoFreezerBlockEntity entity) {
         boolean dirty = false;
 
         GearTier tier = entity.getActiveGearTier();
@@ -185,8 +183,8 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         // 1. Process Water Buckets into internal tank
         ItemStack bucketIn = entity.inventory.get(WATER_IN_SLOT);
         if (!bucketIn.isEmpty() && entity.waterAmount <= MAX_WATER - 1000) {
-            boolean isVanilla = bucketIn.isOf(Items.WATER_BUCKET);
-            boolean isCopper = bucketIn.isOf(ModItems.COPPER_WATER_BUCKET);
+            boolean isVanilla = bucketIn.is(Items.WATER_BUCKET);
+            boolean isCopper = bucketIn.is(ModItems.COPPER_WATER_BUCKET);
 
             if (isVanilla || isCopper) {
                 ItemStack emptyBucket = isVanilla ? new ItemStack(Items.BUCKET) : new ItemStack(ModItems.COPPER_BUCKET);
@@ -194,13 +192,13 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
 
                 if (bucketOut.isEmpty()) {
                     entity.waterAmount += 1000;
-                    bucketIn.decrement(1);
+                    bucketIn.shrink(1);
                     entity.inventory.set(BUCKET_OUT_SLOT, emptyBucket);
                     dirty = true;
-                } else if (ItemStack.areItemsEqual(bucketOut, emptyBucket) && bucketOut.getCount() < bucketOut.getMaxCount()) {
+                } else if (ItemStack.isSameItem(bucketOut, emptyBucket) && bucketOut.getCount() < bucketOut.getMaxStackSize()) {
                     entity.waterAmount += 1000;
-                    bucketIn.decrement(1);
-                    bucketOut.increment(1);
+                    bucketIn.shrink(1);
+                    bucketOut.grow(1);
                     dirty = true;
                 }
             }
@@ -209,7 +207,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         // 2. Auto-siphon water from adjacent Water Providers (e.g. Water Pump or pipes)
         if (entity.waterAmount < MAX_WATER) {
             for (Direction dir : Direction.values()) {
-                BlockEntity be = world.getBlockEntity(pos.offset(dir));
+                BlockEntity be = world.getBlockEntity(pos.relative(dir));
                 if (be instanceof WaterProvider provider && !(be instanceof CryoFreezerBlockEntity)) {
                     if (provider.canExtractWater()) {
                         int needed = Math.min(MAX_WATER - entity.waterAmount, 250);
@@ -233,7 +231,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         int solidCost = 0;
 
         if (!solidIn.isEmpty()) {
-            if (solidIn.isOf(Items.ICE)) {
+            if (solidIn.is(Items.ICE)) {
                 // Ice + 500 mB Water -> 1x Packed Ice (or 4 Ice dry compression)
                 if (entity.waterAmount >= 500 && solidIn.getCount() >= 1) {
                     recipeResult = new ItemStack(Items.PACKED_ICE);
@@ -244,7 +242,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
                     waterCost = 0;
                     solidCost = 4;
                 }
-            } else if (solidIn.isOf(Items.PACKED_ICE)) {
+            } else if (solidIn.is(Items.PACKED_ICE)) {
                 // Packed Ice + 1000 mB Water -> 1x Blue Ice (or 4 Packed Ice dry compression)
                 if (entity.waterAmount >= 1000 && solidIn.getCount() >= 1) {
                     recipeResult = new ItemStack(Items.BLUE_ICE);
@@ -255,14 +253,14 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
                     waterCost = 0;
                     solidCost = 4;
                 }
-            } else if (solidIn.isOf(Items.SNOWBALL)) {
+            } else if (solidIn.is(Items.SNOWBALL)) {
                 // 4x Snowball -> 1x Snow Block
                 if (solidIn.getCount() >= 4) {
                     recipeResult = new ItemStack(Items.SNOW_BLOCK);
                     waterCost = 0;
                     solidCost = 4;
                 }
-            } else if (solidIn.isOf(ModItems.ICE_CUBES)) {
+            } else if (solidIn.is(ModItems.ICE_CUBES)) {
                 // 4x Ice Cubes + 250 mB Water -> 1x Ice Block
                 if (entity.waterAmount >= 250 && solidIn.getCount() >= 4) {
                     recipeResult = new ItemStack(Items.ICE);
@@ -281,7 +279,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
         }
 
         boolean canFitOutput = !recipeResult.isEmpty() &&
-                (outSlot.isEmpty() || (ItemStack.areItemsEqual(outSlot, recipeResult) && outSlot.getCount() + recipeResult.getCount() <= outSlot.getMaxCount()));
+                (outSlot.isEmpty() || (ItemStack.isSameItem(outSlot, recipeResult) && outSlot.getCount() + recipeResult.getCount() <= outSlot.getMaxStackSize()));
 
         boolean hasEnergy = entity.energyStorage.getEnergy() >= energyDraw;
         boolean isFreezing = false;
@@ -292,24 +290,24 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
             isFreezing = true;
 
             // Ambient frost and vapor particles
-            if (world.getTime() % 5 == 0) {
-                world.spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 3, 0.15, 0.1, 0.15, 0.02);
+            if (world.getGameTime() % 5 == 0) {
+                world.sendParticles(ParticleTypes.SNOWFLAKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 3, 0.15, 0.1, 0.15, 0.02);
             }
 
             if (entity.freezeProgress >= entity.totalFreezeTime) {
                 entity.freezeProgress = 0;
                 if (waterCost > 0) entity.waterAmount -= waterCost;
-                if (solidCost > 0) solidIn.decrement(solidCost);
+                if (solidCost > 0) solidIn.shrink(solidCost);
 
                 if (outSlot.isEmpty()) {
                     entity.inventory.set(OUTPUT_SLOT, recipeResult.copy());
                 } else {
-                    outSlot.increment(recipeResult.getCount());
+                    outSlot.grow(recipeResult.getCount());
                 }
 
-                world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.7f, 1.6f);
-                world.playSound(null, pos, SoundEvents.BLOCK_SNOW_PLACE, SoundCategory.BLOCKS, 0.8f, 1.2f);
-                world.spawnParticles(ParticleTypes.ITEM_SNOWBALL, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 8, 0.2, 0.1, 0.2, 0.05);
+                world.playSound(null, pos, SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 0.7f, 1.6f);
+                world.playSound(null, pos, SoundEvents.SNOW_PLACE, SoundSource.BLOCKS, 0.8f, 1.2f);
+                world.sendParticles(ParticleTypes.ITEM_SNOWBALL, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 8, 0.2, 0.1, 0.2, 0.05);
             }
             dirty = true;
         } else {
@@ -319,31 +317,31 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
             }
         }
 
-        if (state.get(CryoFreezerBlock.LIT) != isFreezing) {
-            world.setBlockState(pos, state.with(CryoFreezerBlock.LIT, isFreezing), 3);
+        if (state.getValue(CryoFreezerBlock.LIT) != isFreezing) {
+            world.setBlock(pos, state.setValue(CryoFreezerBlock.LIT, isFreezing), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.freezeProgress = view.getInt("FreezeProgress", 0);
-        this.totalFreezeTime = view.getInt("TotalFreezeTime", 80);
-        this.waterAmount = view.getInt("WaterAmount", 0);
+        this.freezeProgress = view.getIntOr("FreezeProgress", 0);
+        this.totalFreezeTime = view.getIntOr("TotalFreezeTime", 80);
+        this.waterAmount = view.getIntOr("WaterAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("FreezeProgress", this.freezeProgress);
         view.putInt("TotalFreezeTime", this.totalFreezeTime);
@@ -352,19 +350,19 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{BUCKET_OUT_SLOT, OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{WATER_IN_SLOT, SOLID_IN_SLOT};
         return new int[]{SOLID_IN_SLOT, GEAR_SLOT, OUTPUT_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == WATER_IN_SLOT) {
-            return stack.isOf(Items.WATER_BUCKET) || stack.isOf(ModItems.COPPER_WATER_BUCKET);
+            return stack.is(Items.WATER_BUCKET) || stack.is(ModItems.COPPER_WATER_BUCKET);
         }
         if (slot == SOLID_IN_SLOT) {
-            return stack.isOf(Items.ICE) || stack.isOf(Items.PACKED_ICE) || stack.isOf(Items.SNOWBALL) || stack.isOf(ModItems.ICE_CUBES);
+            return stack.is(Items.ICE) || stack.is(Items.PACKED_ICE) || stack.is(Items.SNOWBALL) || stack.is(ModItems.ICE_CUBES);
         }
         if (slot == GEAR_SLOT) {
             return stack.getItem() instanceof GearItem;
@@ -373,12 +371,12 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == BUCKET_OUT_SLOT || slot == OUTPUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -391,35 +389,35 @@ public class CryoFreezerBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(this.inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 }

@@ -2,27 +2,25 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/coke_oven_gui.png");
+public class CokeOvenScreen extends AbstractContainerScreen<CokeOvenScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/coke_oven_gui.png");
 
-    public CokeOvenScreen(CokeOvenScreenHandler handler, PlayerInventory inventory, Text title) {
+    public CokeOvenScreen(CokeOvenScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
     }
 
-    private void drawSlotBox(DrawContext context, int boxX, int boxY) {
+    private void drawSlotBox(GuiGraphicsExtractor context, int boxX, int boxY) {
         context.fill(boxX, boxY, boxX + 18, boxY + 1, 0xFF373737);
         context.fill(boxX, boxY, boxX + 1, boxY + 18, 0xFF373737);
         context.fill(boxX + 1, boxY + 1, boxX + 17, boxY + 17, 0xFF8B8B8B);
@@ -31,50 +29,50 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // Draw Mineral Tar slot frame at (142, 35) -> box at (141, 34)
         drawSlotBox(context, x + 141, y + 34);
 
         // Cook Progress Arrow at (79, 34, 24, 17)
-        int cookWidth = this.handler.getScaledCookProgress(24);
+        int cookWidth = this.menu.getScaledCookProgress(24);
         if (cookWidth > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, cookWidth, 17, 256, 256);
         }
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, Text.literal("§8Tar"), 142, 23, 0x555555, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+        context.text(this.font, Component.literal("§8Tar"), 142, 23, 0x555555, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
+
 
         // Empty Machine Slot Tooltips
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 3) {
-            switch (this.focusedSlot.id) {
-                case 0 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e📥 Raw Carbon Input"),
-                        Text.literal("§7Insert Coal, Charcoal, or Logs:"),
-                        Text.literal("§7Bakes carbon in oxygen-free pyrolysis.")
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 3) {
+            switch (this.hoveredSlot.index) {
+                case 0 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§e📥 Raw Carbon Input"),
+                        Component.literal("§7Insert Coal, Charcoal, or Logs:"),
+                        Component.literal("§7Bakes carbon in oxygen-free pyrolysis.")
                 ), mouseX, mouseY);
-                case 1 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§8🔥 Coke Coal Output"),
-                        Text.literal("§7High-efficiency industrial fuel appears here.")
+                case 1 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§8🔥 Coke Coal Output"),
+                        Component.literal("§7High-efficiency industrial fuel appears here.")
                 ), mouseX, mouseY);
-                case 2 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§6🛢️ Mineral Tar Byproduct"),
-                        Text.literal("§7Recovered condensate from coal pyrolysis.")
+                case 2 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6🛢️ Mineral Tar Byproduct"),
+                        Component.literal("§7Recovered condensate from coal pyrolysis.")
                 ), mouseX, mouseY);
             }
         }

@@ -1,61 +1,59 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class PlasmaFlamethrowerItem extends Item {
-    public PlasmaFlamethrowerItem(Settings settings) {
+    public PlasmaFlamethrowerItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
 
-        if (!world.isClient()) {
-            ServerWorld serverWorld = (ServerWorld) world;
-            Vec3d eyePos = user.getEyePos();
-            Vec3d lookVec = user.getRotationVec(1.0f);
+        if (!world.isClientSide()) {
+            ServerLevel serverWorld = (ServerLevel) world;
+            Vec3 eyePos = user.getEyePosition();
+            Vec3 lookVec = user.getViewVector(1.0f);
             double range = 12.0;
 
             // Project continuous plasma stream particles
             for (double d = 0.8; d <= range; d += 0.5) {
-                Vec3d point = eyePos.add(lookVec.multiply(d));
+                Vec3 point = eyePos.add(lookVec.scale(d));
                 double spread = 0.05 * (d / 2.0);
-                serverWorld.spawnParticles(
+                serverWorld.sendParticles(
                         ParticleTypes.FLAME,
                         point.x, point.y - 0.15, point.z,
                         4, spread, spread, spread, 0.03
                 );
-                serverWorld.spawnParticles(
+                serverWorld.sendParticles(
                         ParticleTypes.SMOKE,
                         point.x, point.y - 0.15, point.z,
                         1, spread, spread, spread, 0.01
                 );
                 if (d > 6.0 && d % 1.0 == 0) {
-                    serverWorld.spawnParticles(
+                    serverWorld.sendParticles(
                             ParticleTypes.LAVA,
                             point.x, point.y - 0.15, point.z,
                             1, spread, spread, spread, 0.01
@@ -64,49 +62,49 @@ public class PlasmaFlamethrowerItem extends Item {
             }
 
             // Damage and ignite mobs along the cone
-            Vec3d targetEnd = eyePos.add(lookVec.multiply(range));
-            Box coneBox = new Box(eyePos, targetEnd).expand(1.5);
-            List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class, coneBox, e -> e != user && e.isAlive());
+            Vec3 targetEnd = eyePos.add(lookVec.scale(range));
+            AABB coneBox = new AABB(eyePos, targetEnd).inflate(1.5);
+            List<LivingEntity> targets = world.getEntitiesOfClass(LivingEntity.class, coneBox, e -> e != user && e.isAlive());
 
             for (LivingEntity target : targets) {
-                Vec3d toTarget = target.getEyePos().subtract(eyePos).normalize();
-                double dot = lookVec.dotProduct(toTarget);
+                Vec3 toTarget = target.getEyePosition().subtract(eyePos).normalize();
+                double dot = lookVec.dot(toTarget);
                 if (dot > 0.70) { // inside 45-degree frontal cone
-                    target.setOnFireFor(8.0f);
-                    target.damage(serverWorld, world.getDamageSources().onFire(), 7.0f);
-                    target.takeKnockback(0.4, -lookVec.x, -lookVec.z);
+                    target.igniteForSeconds(8.0f);
+                    target.hurtServer(serverWorld, world.damageSources().onFire(), 7.0f);
+                    target.knockback(0.4, -lookVec.x, -lookVec.z, world.damageSources().onFire(), 0.0f);
                 }
             }
 
             // Block hit igniting
-            BlockHitResult hit = world.raycast(new RaycastContext(
+            BlockHitResult hit = world.clip(new ClipContext(
                     eyePos, targetEnd,
-                    RaycastContext.ShapeType.COLLIDER,
-                    RaycastContext.FluidHandling.NONE,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
                     user
             ));
 
             if (hit.getType() == HitResult.Type.BLOCK) {
-                net.minecraft.util.math.BlockPos firePos = hit.getBlockPos().offset(hit.getSide());
+                net.minecraft.core.BlockPos firePos = hit.getBlockPos().relative(hit.getDirection());
                 if (world.getBlockState(firePos).isAir()) {
-                    world.setBlockState(firePos, net.minecraft.block.Blocks.FIRE.getDefaultState());
+                    world.setBlockAndUpdate(firePos, net.minecraft.world.level.block.Blocks.FIRE.defaultBlockState());
                 }
             }
 
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.8f, 1.2f);
-            stack.damage(1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 0.8f, 1.2f);
+            stack.hurtAndBreak(1, user, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
 
-        user.getItemCooldownManager().set(stack, 6);
-        return ActionResult.SUCCESS;
+        user.getCooldowns().addCooldown(stack, 6);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§6✦ High-Energy Plasma Projector"));
-        textConsumer.accept(Text.literal("§7Right-click to unleash a 12-block streaming beam of superheated plasma."));
-        textConsumer.accept(Text.literal("§c✦ Ignites targets for 8s and pierces through mobs."));
-        textConsumer.accept(Text.literal("§8Durability: 850 Uses"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§6✦ High-Energy Plasma Projector"));
+        textConsumer.accept(Component.literal("§7Right-click to unleash a 12-block streaming beam of superheated plasma."));
+        textConsumer.accept(Component.literal("§c✦ Ignites targets for 8s and pierces through mobs."));
+        textConsumer.accept(Component.literal("§8Durability: 850 Uses"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

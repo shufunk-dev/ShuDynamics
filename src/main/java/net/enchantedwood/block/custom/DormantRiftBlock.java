@@ -1,32 +1,35 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.world.dimension.ConvergencePortalManager;
 import net.enchantedwood.world.dimension.ModDimensions;
@@ -37,103 +40,94 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DormantRiftBlock extends Block {
-    public static final MapCodec<DormantRiftBlock> CODEC = createCodec(DormantRiftBlock::new);
-    public static final EnumProperty<Direction.Axis> AXIS = Properties.HORIZONTAL_AXIS;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
-    private static final Identifier RIFTWOOD_HAVEN_ID = Identifier.of("enchantedwood", "riftwood_haven");
-    private static final Identifier CHERRY_GROVE_ID = Identifier.of("minecraft", "cherry_grove");
+    private static final Identifier RIFTWOOD_HAVEN_ID = Identifier.fromNamespaceAndPath("enchantedwood", "riftwood_haven");
+    private static final Identifier CHERRY_GROVE_ID = Identifier.fromNamespaceAndPath("minecraft", "cherry_grove");
 
-    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
-    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
+    protected static final VoxelShape X_SHAPE = Block.box(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
+    protected static final VoxelShape Z_SHAPE = Block.box(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
 
-    public DormantRiftBlock(Settings settings) {
+    public DormantRiftBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
     }
 
     @Override
-    protected MapCodec<? extends Block> getCodec() {
-        return CODEC;
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return state.getValue(AXIS) == Direction.Axis.Z ? Z_SHAPE : X_SHAPE;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return state.get(AXIS) == Direction.Axis.Z ? Z_SHAPE : X_SHAPE;
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.empty();
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AXIS);
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
-            player.sendMessage(
-                    Text.literal("§5✦ Gateway of Resonance: §aSynchronized §7— Step through to enter §dThe Convergence§7."),
-                    true
-            );
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide()) {
+            player.sendOverlayMessage(Component.literal("§5✦ Gateway of Resonance: §aSynchronized §7— Step through to enter §dThe Convergence§7."));
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
         ConvergencePortalManager.unregisterGateway(world, pos);
-        super.onStateReplaced(state, world, pos, moved);
+        super.affectNeighborsAfterRemoval(state, world, pos, moved);
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean isInside) {
-        if (world.isClient() || entity.hasVehicle() || entity.hasPassengers() || !entity.canUsePortals(false)) {
+    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean isInside) {
+        if (world.isClientSide() || entity.isPassenger() || entity.isVehicle() || !entity.canUsePortal(false)) {
             return;
         }
 
-        if (entity instanceof ServerPlayerEntity player) {
-            if (player.hasPortalCooldown()) {
+        if (entity instanceof ServerPlayer player) {
+            if (player.isOnPortalCooldown()) {
                 return;
             }
 
-            ServerWorld currentWorld = (ServerWorld) world;
-            ServerWorld targetWorld;
-            boolean toConvergence = currentWorld.getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY;
+            ServerLevel currentWorld = (ServerLevel) world;
+            ServerLevel targetWorld;
+            boolean toConvergence = currentWorld.dimension() != ModDimensions.CONVERGENCE_WORLD_KEY;
 
             if (toConvergence) {
-                targetWorld = currentWorld.getServer().getWorld(ModDimensions.CONVERGENCE_WORLD_KEY);
+                targetWorld = currentWorld.getServer().getLevel(ModDimensions.CONVERGENCE_WORLD_KEY);
             } else {
-                targetWorld = currentWorld.getServer().getWorld(World.OVERWORLD);
+                targetWorld = currentWorld.getServer().getLevel(Level.OVERWORLD);
             }
 
             if (targetWorld == null) {
-                player.sendMessage(Text.literal("§c⚠️ Dimension Link Error: Target world unavailable."), true);
+                player.sendSystemMessage(Component.literal("§c⚠️ Dimension Link Error: Target world unavailable."));
                 return;
             }
 
-            teleportPlayer(player, targetWorld, pos, state.get(AXIS), toConvergence);
+            teleportPlayer(player, targetWorld, pos, state.getValue(AXIS), toConvergence);
         }
     }
 
-    private void teleportPlayer(ServerPlayerEntity player, ServerWorld targetWorld, BlockPos portalPos, Direction.Axis axis, boolean toConvergence) {
+    private void teleportPlayer(ServerPlayer player, ServerLevel targetWorld, BlockPos portalPos, Direction.Axis axis, boolean toConvergence) {
         int targetX = portalPos.getX();
         int targetZ = portalPos.getZ();
-        int targetY = Math.max(targetWorld.getBottomY() + 10, Math.min(targetWorld.getTopYInclusive() - 20, portalPos.getY()));
+        int targetY = Math.max(targetWorld.getMinY() + 10, Math.min(targetWorld.getMaxY() - 20, portalPos.getY()));
 
         if (toConvergence) {
             // Save the exact Overworld entry portal to persistent storage so the player returns home cleanly
-            ConvergencePortalManager.setPlayerReturnPoint(targetWorld.getServer(), player.getUuid(), portalPos);
+            ConvergencePortalManager.setPlayerReturnPoint(targetWorld.getServer(), player.getUUID(), portalPos);
 
             // Check if there is already an existing active gateway in Convergence
-            BlockPos existingSanctuary = ConvergencePortalManager.findExistingPortal(targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUuid(), false);
+            BlockPos existingSanctuary = ConvergencePortalManager.findExistingPortal(targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUUID(), false);
             if (existingSanctuary != null) {
                 targetX = existingSanctuary.getX();
                 targetZ = existingSanctuary.getZ();
@@ -145,7 +139,7 @@ public class DormantRiftBlock extends Block {
             }
         } else {
             // Returning to Overworld: retrieve saved return portal from persistent storage
-            BlockPos savedReturn = ConvergencePortalManager.getPlayerReturnPoint(targetWorld.getServer(), player.getUuid());
+            BlockPos savedReturn = ConvergencePortalManager.getPlayerReturnPoint(targetWorld.getServer(), player.getUUID());
             if (savedReturn != null) {
                 targetX = savedReturn.getX();
                 targetZ = savedReturn.getZ();
@@ -155,7 +149,7 @@ public class DormantRiftBlock extends Block {
 
         // Search for existing portal in target world (persistent registry + 128-block radius)
         BlockPos existingPortalPos = ConvergencePortalManager.findExistingPortal(
-                targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUuid(), !toConvergence);
+                targetWorld, new BlockPos(targetX, targetY, targetZ), player.getUUID(), !toConvergence);
 
         double spawnX;
         double spawnY;
@@ -164,17 +158,17 @@ public class DormantRiftBlock extends Block {
 
         if (existingPortalPos != null) {
             BlockState existingState = targetWorld.getBlockState(existingPortalPos);
-            Direction.Axis foundAxis = existingState.contains(AXIS) ? existingState.get(AXIS) : axis;
+            Direction.Axis foundAxis = existingState.hasProperty(AXIS) ? existingState.getValue(AXIS) : axis;
             Direction frontDir = foundAxis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
-            spawnX = existingPortalPos.getX() + 0.5 + frontDir.getOffsetX() * 1.2;
+            spawnX = existingPortalPos.getX() + 0.5 + frontDir.getStepX() * 1.2;
             spawnY = existingPortalPos.getY();
-            spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+            spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
             sanctuaryBase = existingPortalPos;
         } else {
             // Find surface or safe height
-            int surfaceY = targetWorld.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
-            int safeY = (surfaceY > targetWorld.getBottomY() + 10 && surfaceY < targetWorld.getTopYInclusive() - 10)
+            int surfaceY = targetWorld.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
+            int safeY = (surfaceY > targetWorld.getMinY() + 10 && surfaceY < targetWorld.getMaxY() - 10)
                     ? surfaceY
                     : Math.max(64, Math.min(100, targetY));
 
@@ -183,31 +177,31 @@ public class DormantRiftBlock extends Block {
             sanctuaryBase = basePos;
 
             Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-            spawnX = basePos.getX() + 0.5 + frontDir.getOffsetX() * 1.2;
+            spawnX = basePos.getX() + 0.5 + frontDir.getStepX() * 1.2;
             spawnY = basePos.getY() + 1.0;
-            spawnZ = basePos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+            spawnZ = basePos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
         }
 
         player.setPortalCooldown(100);
-        player.teleport(targetWorld, spawnX, spawnY, spawnZ, Set.of(), player.getYaw(), player.getPitch(), true);
+        player.teleportTo(targetWorld, spawnX, spawnY, spawnZ, Set.of(), player.getYRot(), player.getXRot(), true);
 
         if (toConvergence) {
             // Provide arrival hazard buffer (45s Acid Protection buffer) and register sanctuary
-            player.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     net.enchantedwood.effect.ModStatusEffects.ACID_PROTECTION, 900, 0, false, false, true));
-            player.setAir(player.getMaxAir());
+            player.setAirSupply(player.getMaxAirSupply());
             if (sanctuaryBase != null) {
                 net.enchantedwood.event.ConvergenceHazardHandler.registerSanctuary(sanctuaryBase);
             }
-            player.sendMessage(Text.literal("§5✦ §dEntering The Convergence... §a[Sanctuary Outpost: Riftwood Haven]"), true);
+            player.sendOverlayMessage(Component.literal("§5✦ §dEntering The Convergence... §a[Sanctuary Outpost: Riftwood Haven]"));
         } else {
-            player.sendMessage(Text.literal("§a✦ Returned safely to the Overworld."), true);
+            player.sendOverlayMessage(Component.literal("§a✦ Returned safely to the Overworld."));
         }
 
-        targetWorld.playSound(null, spawnX, spawnY, spawnZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.8f, 1.2f);
+        targetWorld.playSound(null, spawnX, spawnY, spawnZ, SoundEvents.PORTAL_TRAVEL, SoundSource.PLAYERS, 0.8f, 1.2f);
     }
 
-    private BlockPos findSafeConvergenceSpawn(ServerWorld world, int originX, int originZ) {
+    private BlockPos findSafeConvergenceSpawn(ServerLevel world, int originX, int originZ) {
         // 1. If origin coordinate is already deep in Riftwood Haven, use it
         if (isDeepSafeHaven(world, originX, originZ, RIFTWOOD_HAVEN_ID)) {
             return new BlockPos(originX, 64, originZ);
@@ -242,7 +236,7 @@ public class DormantRiftBlock extends Block {
         return new BlockPos(0, 64, 0);
     }
 
-    private BlockPos searchForDeepBiome(ServerWorld world, int centerX, int centerZ, int maxRadius, int step, Identifier targetBiomeId) {
+    private BlockPos searchForDeepBiome(ServerLevel world, int centerX, int centerZ, int maxRadius, int step, Identifier targetBiomeId) {
         for (int r = step; r <= maxRadius; r += step) {
             for (int i = -r; i <= r; i += step) {
                 if (isDeepSafeHaven(world, centerX + i, centerZ - r, targetBiomeId)) {
@@ -262,7 +256,7 @@ public class DormantRiftBlock extends Block {
         return null;
     }
 
-    private static boolean isDeepSafeHaven(ServerWorld world, int x, int z, Identifier biomeId) {
+    private static boolean isDeepSafeHaven(ServerLevel world, int x, int z, Identifier biomeId) {
         int[] d = {-64, 0, 64};
         for (int dx : d) {
             for (int dz : d) {
@@ -274,7 +268,7 @@ public class DormantRiftBlock extends Block {
         return true;
     }
 
-    private BlockPos searchForBiome(ServerWorld world, int centerX, int centerZ, int maxRadius, int step, Identifier targetBiomeId) {
+    private BlockPos searchForBiome(ServerLevel world, int centerX, int centerZ, int maxRadius, int step, Identifier targetBiomeId) {
         for (int r = step; r <= maxRadius; r += step) {
             for (int i = -r; i <= r; i += step) {
                 if (isBiome(world, centerX + i, centerZ - r, targetBiomeId)) {
@@ -294,15 +288,15 @@ public class DormantRiftBlock extends Block {
         return null;
     }
 
-    private static boolean isBiome(ServerWorld world, int x, int z, Identifier biomeId) {
-        var key = world.getBiome(new BlockPos(x, 64, z)).getKey();
-        return key.isPresent() && key.get().getValue().equals(biomeId);
+    private static boolean isBiome(ServerLevel world, int x, int z, Identifier biomeId) {
+        var key = world.getBiome(new BlockPos(x, 64, z)).unwrapKey();
+        return key.isPresent() && key.get().identifier().equals(biomeId);
     }
 
-    private static boolean isDangerousOrNetherBiome(ServerWorld world, int x, int z) {
-        var key = world.getBiome(new BlockPos(x, 64, z)).getKey();
+    private static boolean isDangerousOrNetherBiome(ServerLevel world, int x, int z) {
+        var key = world.getBiome(new BlockPos(x, 64, z)).unwrapKey();
         if (key.isEmpty()) return true;
-        Identifier id = key.get().getValue();
+        Identifier id = key.get().identifier();
         if (id.getNamespace().equals("minecraft") && (
                 id.getPath().contains("crimson") ||
                 id.getPath().contains("warped") ||
@@ -311,13 +305,13 @@ public class DormantRiftBlock extends Block {
                 id.getPath().contains("nether"))) {
             return true;
         }
-        return id.equals(Identifier.of("enchantedwood", "caustic_mire")) ||
-                id.equals(Identifier.of("enchantedwood", "scorched_caldera")) ||
-                id.equals(Identifier.of("enchantedwood", "resonance_sanctum")) ||
-                id.equals(Identifier.of("enchantedwood", "anoxic_barrens"));
+        return id.equals(Identifier.fromNamespaceAndPath("enchantedwood", "caustic_mire")) ||
+                id.equals(Identifier.fromNamespaceAndPath("enchantedwood", "scorched_caldera")) ||
+                id.equals(Identifier.fromNamespaceAndPath("enchantedwood", "resonance_sanctum")) ||
+                id.equals(Identifier.fromNamespaceAndPath("enchantedwood", "anoxic_barrens"));
     }
 
-    private void buildSafeResonanceGateway(ServerWorld world, BlockPos basePos, Direction.Axis axis) {
+    private void buildSafeResonanceGateway(ServerLevel world, BlockPos basePos, Direction.Axis axis) {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
         Direction depthDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
@@ -338,64 +332,64 @@ public class DormantRiftBlock extends Block {
         for (int w = -3; w <= 4; w++) {
             for (int d = -3; d <= 3; d++) {
                 for (int h = -1; h <= 5; h++) {
-                    BlockPos current = basePos.offset(widthDir, w).offset(depthDir, d).up(h);
+                    BlockPos current = basePos.relative(widthDir, w).relative(depthDir, d).above(h);
 
                     if (h == -1) {
                         // Sturdy solid foundation
                         BlockState floorState = (Math.abs(w) % 2 == 0 || Math.abs(d) % 2 == 0)
-                                ? Blocks.CRYING_OBSIDIAN.getDefaultState()
-                                : Blocks.SMOOTH_BASALT.getDefaultState();
-                        world.setBlockState(current, floorState);
+                                ? Blocks.CRYING_OBSIDIAN.defaultBlockState()
+                                : Blocks.SMOOTH_BASALT.defaultBlockState();
+                        world.setBlockAndUpdate(current, floorState);
                     } else if (h == 4 || h == 5) {
                         // Weather-proof protective roof (shields completely from rain and sky hazards)
-                        world.setBlockState(current, Blocks.CRYING_OBSIDIAN.getDefaultState());
+                        world.setBlockAndUpdate(current, Blocks.CRYING_OBSIDIAN.defaultBlockState());
                     } else if (d == 0 && (w >= -1 && w <= 2) && h <= 3) {
                         // Portal structure itself
                         boolean isBorder = (w == -1 || w == 2 || h == 0 || h == 3);
                         if (isBorder) {
                             if (w == -1 && h == 1) {
-                                world.setBlockState(current, anchors[0].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[0].defaultBlockState());
                             } else if (w == -1 && h == 2) {
-                                world.setBlockState(current, anchors[1].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[1].defaultBlockState());
                             } else if (w == 2 && h == 1) {
-                                world.setBlockState(current, anchors[2].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[2].defaultBlockState());
                             } else if (w == 2 && h == 2) {
-                                world.setBlockState(current, anchors[3].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[3].defaultBlockState());
                             } else if (h == 3 && w == 0) {
-                                world.setBlockState(current, anchors[4].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[4].defaultBlockState());
                             } else if (h == 3 && w == 1) {
-                                world.setBlockState(current, anchors[5].getDefaultState());
+                                world.setBlockAndUpdate(current, anchors[5].defaultBlockState());
                             } else {
-                                world.setBlockState(current, Blocks.CRYING_OBSIDIAN.getDefaultState());
+                                world.setBlockAndUpdate(current, Blocks.CRYING_OBSIDIAN.defaultBlockState());
                             }
                         } else {
-                            world.setBlockState(current, ModBlocks.DORMANT_RIFT.getDefaultState().with(AXIS, axis));
+                            world.setBlockAndUpdate(current, ModBlocks.DORMANT_RIFT.defaultBlockState().setValue(AXIS, axis));
                         }
                     } else if (w == -3 || w == 4 || d == -3 || d == 3) {
                         // Outer walls with observation windows and doorway
                         boolean isDoorway = (d == 3 && (w == 0 || w == 1) && h <= 2);
                         boolean isCorner = (w == -3 || w == 4) && (d == -3 || d == 3);
                         if (isDoorway) {
-                            world.setBlockState(current, Blocks.AIR.getDefaultState());
+                            world.setBlockAndUpdate(current, Blocks.AIR.defaultBlockState());
                         } else if (isCorner || h == 0 || h == 3) {
-                            world.setBlockState(current, Blocks.SMOOTH_BASALT.getDefaultState());
+                            world.setBlockAndUpdate(current, Blocks.SMOOTH_BASALT.defaultBlockState());
                         } else {
                             // Observation window
-                            world.setBlockState(current, Blocks.TINTED_GLASS.getDefaultState());
+                            world.setBlockAndUpdate(current, Blocks.TINTED_GLASS.defaultBlockState());
                         }
                     } else {
                         // Interior space: clear air
-                        world.setBlockState(current, Blocks.AIR.getDefaultState());
+                        world.setBlockAndUpdate(current, Blocks.AIR.defaultBlockState());
                     }
                 }
             }
         }
 
         // Place protective sanctuary lanterns inside for lighting
-        BlockPos lightPos = basePos.offset(widthDir, -2).offset(depthDir, 2).up(0);
-        world.setBlockState(lightPos, Blocks.LANTERN.getDefaultState());
-        BlockPos lightPos2 = basePos.offset(widthDir, 3).offset(depthDir, 2).up(0);
-        world.setBlockState(lightPos2, Blocks.LANTERN.getDefaultState());
+        BlockPos lightPos = basePos.relative(widthDir, -2).relative(depthDir, 2).above(0);
+        world.setBlockAndUpdate(lightPos, Blocks.LANTERN.defaultBlockState());
+        BlockPos lightPos2 = basePos.relative(widthDir, 3).relative(depthDir, 2).above(0);
+        world.setBlockAndUpdate(lightPos2, Blocks.LANTERN.defaultBlockState());
 
         // Register sanctuary center and gateway
         net.enchantedwood.event.ConvergenceHazardHandler.registerSanctuary(basePos);
@@ -403,31 +397,31 @@ public class DormantRiftBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, net.minecraft.world.tick.ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+    public BlockState updateShape(BlockState state, LevelReader world, net.minecraft.world.level.ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         // If the frame around this rift breaks, collapse the rift
-        BlockPos below = pos.down();
-        BlockPos above = pos.up();
-        boolean hasSupport = world.getBlockState(below).isOf(this) || !world.isAir(below);
-        boolean hasRoof = world.getBlockState(above).isOf(this) || !world.isAir(above);
+        BlockPos below = pos.below();
+        BlockPos above = pos.above();
+        boolean hasSupport = world.getBlockState(below).is(this) || !world.isEmptyBlock(below);
+        boolean hasRoof = world.getBlockState(above).is(this) || !world.isEmptyBlock(above);
         if (!hasSupport || !hasRoof) {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         }
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (random.nextInt(80) == 0) {
             world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 0.5f, 1.9f);
+                    SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 0.5f, 1.9f);
         }
 
         double x = pos.getX() + random.nextDouble();
         double y = pos.getY() + random.nextDouble();
         double z = pos.getZ() + random.nextDouble();
-        world.addParticleClient(ParticleTypes.REVERSE_PORTAL, x, y, z, 0, 0.05, 0);
+        world.addParticle(ParticleTypes.REVERSE_PORTAL, x, y, z, 0, 0.05, 0);
         if (random.nextBoolean()) {
-            world.addParticleClient(ParticleTypes.END_ROD, x, y, z, 0, 0.02, 0);
+            world.addParticle(ParticleTypes.END_ROD, x, y, z, 0, 0.02, 0);
         }
     }
 }

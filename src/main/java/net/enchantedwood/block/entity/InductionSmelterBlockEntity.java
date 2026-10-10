@@ -12,33 +12,31 @@ import net.enchantedwood.fluid.MoltenMetalProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.InductionSmelterScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class InductionSmelterBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, LavaProvider, MoltenMetalProvider {
+public class InductionSmelterBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, LavaProvider, MoltenMetalProvider {
     public static final int ENERGY_CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 45; // 45 FE/t
@@ -94,7 +92,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         registerYield(Items.IRON_DOOR, MoltenMetal.IRON, 180, 80);
         registerYield(Items.IRON_TRAPDOOR, MoltenMetal.IRON, 360, 120);
         registerYield(Items.IRON_BARS, MoltenMetal.IRON, 33, 30);
-        Item chainItem = net.minecraft.registry.Registries.ITEM.get(net.minecraft.util.Identifier.of("minecraft", "chain"));
+        Item chainItem = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.fromNamespaceAndPath("minecraft", "chain"));
         if (chainItem != null && chainItem != Items.AIR) {
             registerYield(chainItem, MoltenMetal.IRON, 110, 60);
         }
@@ -139,15 +137,15 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         // --- COPPER ---
         registerYield(Items.COPPER_INGOT, MoltenMetal.COPPER, 90, 50);
         registerYield(ModItems.COPPER_NUGGET, MoltenMetal.COPPER, 10, 15);
-        registerYield(Items.COPPER_BLOCK, MoltenMetal.COPPER, 810, 200);
+        registerYield(Items.COPPER_BLOCK.weathering().unaffected(), MoltenMetal.COPPER, 810, 200);
         registerYield(Items.RAW_COPPER, MoltenMetal.COPPER, 90, 60);
         registerYield(Items.RAW_COPPER_BLOCK, MoltenMetal.COPPER, 810, 240);
         registerYield(ModItems.COPPER_DUST, MoltenMetal.COPPER, 90, 50);
         registerYield(ModItems.COPPER_BROAD_AXE, MoltenMetal.COPPER, 540, 140);
-        registerYield(Items.COPPER_DOOR, MoltenMetal.COPPER, 180, 80);
-        registerYield(Items.COPPER_TRAPDOOR, MoltenMetal.COPPER, 360, 120);
-        registerYield(Items.COPPER_GRATE, MoltenMetal.COPPER, 360, 120);
-        registerYield(Items.LIGHTNING_ROD, MoltenMetal.COPPER, 270, 90);
+        Items.COPPER_DOOR.asList().forEach(item -> registerYield(item, MoltenMetal.COPPER, 180, 80));
+        Items.COPPER_TRAPDOOR.asList().forEach(item -> registerYield(item, MoltenMetal.COPPER, 360, 120));
+        Items.COPPER_GRATE.asList().forEach(item -> registerYield(item, MoltenMetal.COPPER, 360, 120));
+        Items.LIGHTNING_ROD.asList().forEach(item -> registerYield(item, MoltenMetal.COPPER, 270, 90));
         registerYield(Items.SPYGLASS, MoltenMetal.COPPER, 180, 70);
         registerYield(Items.COPPER_ORE, MoltenMetal.COPPER, 90, 80);
         registerYield(Items.DEEPSLATE_COPPER_ORE, MoltenMetal.COPPER, 90, 80);
@@ -343,7 +341,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         return SMELT_RECIPES.get(stack.getItem());
     }
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, MAX_RECEIVE, 0, 0);
     private final Map<MoltenMetal, Integer> moltenFluids = new EnumMap<>(MoltenMetal.class);
 
@@ -363,7 +361,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
 
     public GearTier getActiveGearTier() {
         ItemStack gearStack = inventory.get(GEAR_SLOT);
-        if (gearStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
+        if (gearStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
             return GearTier.BLAZE_OVERCLOCK;
         }
         if (gearStack.getItem() instanceof GearItem gearItem) {
@@ -385,7 +383,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     }
 
     public boolean hasMetallurgyChip() {
-        return inventory.get(MODULE_SLOT).isOf(ModItems.METALLURGY_CONTROLLER_CHIP);
+        return inventory.get(MODULE_SLOT).is(ModItems.METALLURGY_CONTROLLER_CHIP);
     }
 
     public boolean isAlloyingEnabled() {
@@ -394,7 +392,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
 
     public void setAlloyingEnabled(boolean enabled) {
         this.alloyingEnabled = enabled;
-        markDirty();
+        setChanged();
     }
 
     public MoltenMetal getTank1Metal() {
@@ -423,13 +421,13 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         this.tank2Amount = 0;
         this.tank2Metal = MoltenMetal.NONE;
         this.isEjectingHoldingTanks = false;
-        markDirty();
+        setChanged();
     }
 
     public void toggleEjectHoldingTanks() {
         if (this.tank1Amount > 0 || this.tank2Amount > 0) {
             this.isEjectingHoldingTanks = !this.isEjectingHoldingTanks;
-            markDirty();
+            setChanged();
         } else {
             this.isEjectingHoldingTanks = false;
         }
@@ -455,7 +453,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         return top;
     }
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -503,7 +501,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 27;
         }
     };
@@ -512,21 +510,21 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         super(ModBlockEntities.INDUCTION_SMELTER_BE, pos, state);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, InductionSmelterBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, InductionSmelterBlockEntity entity) {
         boolean dirty = false;
 
         // 1. Manual Lava Bucket Filling & Draining
         ItemStack lavaIn = entity.inventory.get(LAVA_IN_SLOT);
         ItemStack lavaOut = entity.inventory.get(LAVA_OUT_SLOT);
         if (!lavaIn.isEmpty()) {
-            if (lavaIn.isOf(Items.LAVA_BUCKET) || lavaIn.isOf(ModItems.COPPER_LAVA_BUCKET) || lavaIn.isOf(ModItems.ENCHANTED_LAVA_BUCKET)) {
-                if (entity.lavaAmount + 1000 <= LAVA_CAPACITY && (lavaOut.isEmpty() || (lavaOut.isOf(Items.BUCKET) && lavaOut.getCount() < lavaOut.getMaxCount()))) {
+            if (lavaIn.is(Items.LAVA_BUCKET) || lavaIn.is(ModItems.COPPER_LAVA_BUCKET) || lavaIn.is(ModItems.ENCHANTED_LAVA_BUCKET)) {
+                if (entity.lavaAmount + 1000 <= LAVA_CAPACITY && (lavaOut.isEmpty() || (lavaOut.is(Items.BUCKET) && lavaOut.getCount() < lavaOut.getMaxStackSize()))) {
                     entity.lavaAmount += 1000;
-                    lavaIn.decrement(1);
+                    lavaIn.shrink(1);
                     if (lavaOut.isEmpty()) {
                         entity.inventory.set(LAVA_OUT_SLOT, new ItemStack(Items.BUCKET));
                     } else {
-                        lavaOut.increment(1);
+                        lavaOut.grow(1);
                     }
                     dirty = true;
                 }
@@ -601,7 +599,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
                 if (entity.cookTime1 >= entity.totalCookTime1) {
                     entity.cookTime1 = 0;
                     entity.lavaAmount -= LAVA_PER_SMELT;
-                    in1.decrement(1);
+                    in1.shrink(1);
                     if (hasChip) {
                         entity.insertHoldingTank1(y1.metal(), y1.amountMb());
                     } else {
@@ -631,7 +629,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
                 if (entity.cookTime2 >= entity.totalCookTime2) {
                     entity.cookTime2 = 0;
                     entity.lavaAmount -= LAVA_PER_SMELT;
-                    in2.decrement(1);
+                    in2.shrink(1);
                     if (hasChip) {
                         entity.insertHoldingTank2(y2.metal(), y2.amountMb());
                     } else {
@@ -649,15 +647,15 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
 
         // Update block LIT state
         boolean isSmelting = isSmelting1 || isSmelting2;
-        boolean isLit = state.get(InductionSmelterBlock.LIT);
+        boolean isLit = state.getValue(InductionSmelterBlock.LIT);
         if (isLit != isSmelting) {
-            world.setBlockState(pos, state.with(InductionSmelterBlock.LIT, isSmelting), 3);
+            world.setBlock(pos, state.setValue(InductionSmelterBlock.LIT, isSmelting), 3);
         }
 
         // 4. Auto-Eject Fluid into Connected Pipes or Tanks (ONLY Internal Tank 3!)
-        if (world.getTime() % 2 == 0 && entity.getTotalMoltenVolume() > 0) {
+        if (world.getGameTime() % 2 == 0 && entity.getTotalMoltenVolume() > 0) {
             for (Direction dir : Direction.values()) {
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof MoltenMetalProvider targetProvider && !(neighbor instanceof InductionSmelterBlockEntity)) {
                     for (MoltenMetal metal : MoltenMetal.values()) {
                         int available = entity.getFluidAmount(metal);
@@ -683,7 +681,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
                 dirty = true;
             } else {
                 for (Direction dir : Direction.values()) {
-                    BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                    BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                     if (neighbor instanceof MoltenMetalProvider targetProvider && !(neighbor instanceof InductionSmelterBlockEntity)) {
                         // Eject from Tank 1
                         if (entity.tank1Amount > 0 && entity.tank1Metal != MoltenMetal.NONE && targetProvider.canInsertFluid(entity.tank1Metal)) {
@@ -717,7 +715,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -746,13 +744,13 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     public void insertHoldingTank1(MoltenMetal metal, int amount) {
         this.tank1Metal = metal;
         this.tank1Amount = Math.min(HOLDING_TANK_CAPACITY, this.tank1Amount + amount);
-        markDirty();
+        setChanged();
     }
 
     public void insertHoldingTank2(MoltenMetal metal, int amount) {
         this.tank2Metal = metal;
         this.tank2Amount = Math.min(HOLDING_TANK_CAPACITY, this.tank2Amount + amount);
-        markDirty();
+        setChanged();
     }
 
     // ==========================================
@@ -781,7 +779,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         if (!simulate && insertable > 0) {
             int current = moltenFluids.getOrDefault(metal, 0);
             moltenFluids.put(metal, current + insertable);
-            markDirty();
+            setChanged();
         }
         return insertable;
     }
@@ -822,7 +820,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
             } else {
                 moltenFluids.put(metal, remaining);
             }
-            markDirty();
+            setChanged();
         }
         return extractable;
     }
@@ -854,7 +852,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
         int insertable = Math.min(space, amount);
         if (!simulate && insertable > 0) {
             this.lavaAmount += insertable;
-            markDirty();
+            setChanged();
         }
         return insertable;
     }
@@ -873,18 +871,18 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     // INVENTORY & SIDED INVENTORY
     // ==========================================
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.induction_smelter");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.induction_smelter");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new InductionSmelterScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) {
             return new int[]{ INPUT_SLOT_1, INPUT_SLOT_2 };
         } else if (side == Direction.DOWN) {
@@ -895,26 +893,26 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT_1 || slot == INPUT_SLOT_2) {
             return getYield(stack) != null;
         } else if (slot == GEAR_SLOT) {
-            return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
         } else if (slot == MODULE_SLOT) {
-            return stack.isOf(ModItems.METALLURGY_CONTROLLER_CHIP);
+            return stack.is(ModItems.METALLURGY_CONTROLLER_CHIP);
         } else if (slot == LAVA_IN_SLOT) {
-            return stack.isOf(Items.LAVA_BUCKET) || stack.isOf(ModItems.COPPER_LAVA_BUCKET) || stack.isOf(ModItems.ENCHANTED_LAVA_BUCKET);
+            return stack.is(Items.LAVA_BUCKET) || stack.is(ModItems.COPPER_LAVA_BUCKET) || stack.is(ModItems.ENCHANTED_LAVA_BUCKET);
         }
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == LAVA_OUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -927,69 +925,69 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.lavaAmount = view.getInt("LavaAmount", 0);
-        this.cookTime1 = view.getInt("CookTime1", view.getInt("CookTime", 0));
-        this.totalCookTime1 = view.getInt("TotalCookTime1", view.getInt("TotalCookTime", 100));
-        this.cookTime2 = view.getInt("CookTime2", 0);
-        this.totalCookTime2 = view.getInt("TotalCookTime2", 100);
-        this.alloyingEnabled = view.getBoolean("AlloyingEnabled", false);
-        this.isEjectingHoldingTanks = view.getBoolean("IsEjectingHoldingTanks", false);
+        this.lavaAmount = view.getIntOr("LavaAmount", 0);
+        this.cookTime1 = view.getIntOr("CookTime1", view.getIntOr("CookTime", 0));
+        this.totalCookTime1 = view.getIntOr("TotalCookTime1", view.getIntOr("TotalCookTime", 100));
+        this.cookTime2 = view.getIntOr("CookTime2", 0);
+        this.totalCookTime2 = view.getIntOr("TotalCookTime2", 100);
+        this.alloyingEnabled = view.getBooleanOr("AlloyingEnabled", false);
+        this.isEjectingHoldingTanks = view.getBooleanOr("IsEjectingHoldingTanks", false);
 
-        this.tank1Metal = MoltenMetal.fromId(view.getString("Tank1Metal", "none"));
-        this.tank1Amount = view.getInt("Tank1Amount", 0);
+        this.tank1Metal = MoltenMetal.fromId(view.getStringOr("Tank1Metal", "none"));
+        this.tank1Amount = view.getIntOr("Tank1Amount", 0);
         if (this.tank1Amount <= 0) this.tank1Metal = MoltenMetal.NONE;
 
-        this.tank2Metal = MoltenMetal.fromId(view.getString("Tank2Metal", "none"));
-        this.tank2Amount = view.getInt("Tank2Amount", 0);
+        this.tank2Metal = MoltenMetal.fromId(view.getStringOr("Tank2Metal", "none"));
+        this.tank2Amount = view.getIntOr("Tank2Amount", 0);
         if (this.tank2Amount <= 0) this.tank2Metal = MoltenMetal.NONE;
 
         this.moltenFluids.clear();
         for (MoltenMetal metal : MoltenMetal.values()) {
             if (metal != MoltenMetal.NONE) {
-                int amt = view.getInt("Fluid_" + metal.getId(), 0);
+                int amt = view.getIntOr("Fluid_" + metal.getId(), 0);
                 if (amt > 0) {
                     if (metal == MoltenMetal.LAVA) {
                         this.lavaAmount = Math.min(LAVA_CAPACITY, this.lavaAmount + amt);
@@ -1002,9 +1000,9 @@ public class InductionSmelterBlockEntity extends BlockEntity implements NamedScr
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("LavaAmount", this.lavaAmount);
         view.putInt("CookTime1", this.cookTime1);

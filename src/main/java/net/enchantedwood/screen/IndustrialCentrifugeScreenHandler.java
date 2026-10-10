@@ -3,31 +3,31 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.IndustrialCentrifugeBlockEntity;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class IndustrialCentrifugeScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public IndustrialCentrifugeScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(IndustrialCentrifugeBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public IndustrialCentrifugeScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(IndustrialCentrifugeBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public IndustrialCentrifugeScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public IndustrialCentrifugeScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.INDUSTRIAL_CENTRIFUGE_SCREEN_HANDLER, syncId);
-        checkSize(inventory, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Raw Input
         this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.INPUT_SLOT, 48, 35));
@@ -35,7 +35,7 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
         // Slot 1: Output Essence
         this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_1, 106, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -43,7 +43,7 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
         // Slot 2: Output Byproduct
         this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.OUTPUT_SLOT_2, 134, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -51,7 +51,7 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
         // Slot 3: Gear Upgrade Slot
         this.addSlot(new Slot(inventory, IndustrialCentrifugeBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -95,46 +95,46 @@ public class IndustrialCentrifugeScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < IndustrialCentrifugeBlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.GEAR_SLOT, IndustrialCentrifugeBlockEntity.GEAR_SLOT + 1, false)) {
-                        if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.GEAR_SLOT, IndustrialCentrifugeBlockEntity.GEAR_SLOT + 1, false)) {
+                        if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
-                } else if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.INPUT_SLOT, IndustrialCentrifugeBlockEntity.INPUT_SLOT + 1, false)) {
                     if (invSlot < IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27) {
-                        if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                        if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (!this.insertItem(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, false)) {
+                    } else if (!this.moveItemStackTo(originalStack, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE, IndustrialCentrifugeBlockEntity.INVENTORY_SIZE + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

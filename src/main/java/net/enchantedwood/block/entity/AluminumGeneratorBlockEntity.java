@@ -1,42 +1,42 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.custom.AluminumGeneratorBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.screen.AluminumGeneratorScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class AluminumGeneratorBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int BUFFER_CAPACITY = 1_000_000;
     public static final int GENERATION_RATE = 300; // 300 FE/t
     public static final int MAX_OUTPUT = 2_500;    // 2,500 FE/t
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(1, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(BUFFER_CAPACITY, GENERATION_RATE, MAX_OUTPUT, 0);
 
     private int burnTime = 0;
     private int totalBurnTime = 0;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -60,7 +60,7 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -70,13 +70,13 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.aluminum_generator");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.aluminum_generator");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new AluminumGeneratorScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -85,7 +85,7 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
         return this.energyStorage;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, AluminumGeneratorBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, AluminumGeneratorBlockEntity entity) {
         boolean originallyBurning = entity.burnTime > 0;
         boolean stateChanged = false;
 
@@ -106,8 +106,8 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
                 if (fuelValue > 0) {
                     entity.burnTime = fuelValue;
                     entity.totalBurnTime = fuelValue;
-                    ItemStack remainder = fuelStack.getRecipeRemainder();
-                    fuelStack.decrement(1);
+                    ItemStack remainder = getItemRemainder(fuelStack);
+                    fuelStack.shrink(1);
                     if (fuelStack.isEmpty() && !remainder.isEmpty()) {
                         entity.inventory.set(0, remainder.copy());
                     }
@@ -121,7 +121,7 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
             int availableToOutput = Math.min(entity.energyStorage.getEnergy(), MAX_OUTPUT);
             for (Direction dir : Direction.values()) {
                 if (availableToOutput <= 0) break;
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof EnergyProvider provider) {
                     EnergyStorage receiver = provider.getEnergyStorage(dir.getOpposite());
                     if (receiver != null && receiver.canInsert()) {
@@ -139,30 +139,30 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
         // 4. Update block LIT state
         boolean isBurningNow = entity.burnTime > 0;
         if (originallyBurning != isBurningNow) {
-            state = state.with(AluminumGeneratorBlock.LIT, isBurningNow);
-            world.setBlockState(pos, state, 3);
+            state = state.setValue(AluminumGeneratorBlock.LIT, isBurningNow);
+            world.setBlock(pos, state, 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.burnTime = view.getInt("BurnTime", 0);
-        this.totalBurnTime = view.getInt("TotalBurnTime", 0);
+        this.burnTime = view.getIntOr("BurnTime", 0);
+        this.totalBurnTime = view.getIntOr("TotalBurnTime", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("BurnTime", this.burnTime);
         view.putInt("TotalBurnTime", this.totalBurnTime);
@@ -170,43 +170,77 @@ public class AluminumGeneratorBlockEntity extends BlockEntity implements NamedSc
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) { return new int[]{0}; }
+    public int[] getSlotsForFace(Direction side) { return new int[]{0}; }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        return CopperGeneratorBlockEntity.getFuelTime(this.getWorld(), stack) > 0;
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        return CopperGeneratorBlockEntity.getFuelTime(this.getLevel(), stack) > 0;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) { return false; }
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) { return false; }
 
     @Override
-    public int size() { return inventory.size(); }
+    public int getContainerSize() { return inventory.size(); }
 
     @Override
     public boolean isEmpty() { return inventory.get(0).isEmpty(); }
 
     @Override
-    public ItemStack getStack(int slot) { return inventory.get(slot); }
+    public ItemStack getItem(int slot) { return inventory.get(slot); }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) { return Inventories.splitStack(inventory, slot, amount); }
+    public ItemStack removeItem(int slot, int amount) { return ContainerHelper.removeItem(inventory, slot, amount); }
 
     @Override
-    public ItemStack removeStack(int slot) { return Inventories.removeStack(inventory, slot); }
+    public ItemStack removeItemNoUpdate(int slot) { return ContainerHelper.takeItem(inventory, slot); }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) { return Inventory.canPlayerUse(this, player); }
+    public boolean stillValid(Player player) { return Container.stillValidBlockEntity(this, player); }
 
     @Override
-    public void clear() { inventory.clear(); }
+    public void clearContent() { inventory.clear(); }
+
+    public static int getFuelBurnTime(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return 0;
+        net.minecraft.world.item.Item item = stack.getItem();
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_DUST) return 8000;
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_COAL) return 10000;
+        if (item == net.enchantedwood.block.ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) return 90000;
+        if (item == net.enchantedwood.item.ModItems.COKE_COAL) return 3200;
+        if (item == net.enchantedwood.block.ModBlocks.COKE_COAL_BLOCK.asItem()) return 28800;
+        if (item == net.enchantedwood.item.ModItems.COPPER_LAVA_BUCKET) return 20000;
+        if (item == net.enchantedwood.item.ModItems.ENCHANTED_LAVA_BUCKET || item == net.enchantedwood.item.ModItems.ENCHANTED_COPPER_LAVA_BUCKET) return 60000;
+        if (item == net.minecraft.world.item.Items.LAVA_BUCKET) return 20000;
+        if (item == net.minecraft.world.item.Items.COAL || item == net.minecraft.world.item.Items.CHARCOAL) return 1600;
+        if (item == net.minecraft.world.item.Items.COAL_BLOCK) return 16000;
+        if (item == net.minecraft.world.item.Items.BLAZE_ROD) return 2400;
+        return net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt.getFromItem(
+                stack,
+                net.minecraft.core.component.DataComponents.COOKING_FUEL,
+                net.minecraft.world.item.component.CookingFuel::burnTime,
+                null,
+                0
+        );
+    }
+
+    public static ItemStack getItemRemainder(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return ItemStack.EMPTY;
+        if (stack.is(net.minecraft.world.item.Items.LAVA_BUCKET)) return new ItemStack(net.minecraft.world.item.Items.BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.COPPER_LAVA_BUCKET)) return new ItemStack(net.enchantedwood.item.ModItems.COPPER_BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.ENCHANTED_LAVA_BUCKET)) return new ItemStack(net.minecraft.world.item.Items.BUCKET);
+        if (stack.is(net.enchantedwood.item.ModItems.ENCHANTED_COPPER_LAVA_BUCKET)) return new ItemStack(net.enchantedwood.item.ModItems.COPPER_BUCKET);
+        var rem = stack.getItem().getCraftingRemainder();
+        return rem != null ? rem.create() : ItemStack.EMPTY;
+    }
+
 }

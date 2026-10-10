@@ -1,25 +1,25 @@
 package net.enchantedwood.network;
 
 import net.enchantedwood.EnchantedWoodMod;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record ToggleInductionSmelterAlloyPayload(BlockPos pos) implements CustomPayload {
-    public static final CustomPayload.Id<ToggleInductionSmelterAlloyPayload> ID =
-            new CustomPayload.Id<>(Identifier.of(EnchantedWoodMod.MOD_ID, "toggle_induction_smelter_alloy"));
+public record ToggleInductionSmelterAlloyPayload(BlockPos pos) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ToggleInductionSmelterAlloyPayload> ID =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "toggle_induction_smelter_alloy"));
 
-    public static final PacketCodec<RegistryByteBuf, ToggleInductionSmelterAlloyPayload> CODEC =
-            PacketCodec.tuple(
-                    BlockPos.PACKET_CODEC,
+    public static final StreamCodec<RegistryFriendlyByteBuf, ToggleInductionSmelterAlloyPayload> CODEC =
+            StreamCodec.composite(
+                    BlockPos.STREAM_CODEC,
                     ToggleInductionSmelterAlloyPayload::pos,
                     ToggleInductionSmelterAlloyPayload::new
             );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

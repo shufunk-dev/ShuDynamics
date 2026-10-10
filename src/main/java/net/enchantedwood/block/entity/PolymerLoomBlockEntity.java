@@ -1,25 +1,5 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.custom.PolymerLoomBlock;
 import net.enchantedwood.energy.EnergyProvider;
@@ -28,9 +8,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.PolymerLoomScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class PolymerLoomBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 100_000;
     public static final int MAX_RECEIVE = 5_000;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
@@ -42,13 +42,13 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
     public static final int GEAR_SLOT = 4;
     public static final int INVENTORY_SIZE = 5;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 140; // 7 seconds base
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -72,7 +72,7 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -102,7 +102,7 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
         };
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, PolymerLoomBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, PolymerLoomBlockEntity entity) {
         GearTier tier = entity.getActiveGearTier();
         entity.totalCookTime = getTierCookTime(tier);
 
@@ -114,26 +114,26 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
                 entity.energyStorage.extractEnergy(energyRequired, false);
                 entity.cookTime++;
 
-                if (!state.get(PolymerLoomBlock.LIT)) {
-                    world.setBlockState(pos, state.with(PolymerLoomBlock.LIT, true));
+                if (!state.getValue(PolymerLoomBlock.LIT)) {
+                    world.setBlockAndUpdate(pos, state.setValue(PolymerLoomBlock.LIT, true));
                 }
 
                 if (entity.cookTime >= entity.totalCookTime) {
                     entity.craft(output);
                     entity.cookTime = 0;
                 }
-                entity.markDirty();
+                entity.setChanged();
                 return;
             }
         }
 
         if (entity.cookTime > 0) {
             entity.cookTime = Math.max(0, entity.cookTime - 2);
-            entity.markDirty();
+            entity.setChanged();
         }
 
-        if (state.get(PolymerLoomBlock.LIT)) {
-            world.setBlockState(pos, state.with(PolymerLoomBlock.LIT, false));
+        if (state.getValue(PolymerLoomBlock.LIT)) {
+            world.setBlockAndUpdate(pos, state.setValue(PolymerLoomBlock.LIT, false));
         }
     }
 
@@ -189,66 +189,66 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
     private boolean canOutput(ItemStack output) {
         ItemStack currentOut = inventory.get(SLOT_OUTPUT);
         if (currentOut.isEmpty()) return true;
-        if (!ItemStack.areItemsAndComponentsEqual(currentOut, output)) return false;
-        return currentOut.getCount() + output.getCount() <= currentOut.getMaxCount();
+        if (!ItemStack.isSameItemSameComponents(currentOut, output)) return false;
+        return currentOut.getCount() + output.getCount() <= currentOut.getMaxStackSize();
     }
 
     private void craft(ItemStack output) {
-        inventory.get(SLOT_POLYMER).decrement(1);
-        inventory.get(SLOT_FIBER).decrement(1);
-        inventory.get(SLOT_ADDITIVE).decrement(1);
+        inventory.get(SLOT_POLYMER).shrink(1);
+        inventory.get(SLOT_FIBER).shrink(1);
+        inventory.get(SLOT_ADDITIVE).shrink(1);
 
         ItemStack currentOut = inventory.get(SLOT_OUTPUT);
         if (currentOut.isEmpty()) {
             inventory.set(SLOT_OUTPUT, output.copy());
         } else {
-            currentOut.increment(output.getCount());
+            currentOut.grow(output.getCount());
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 140);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 140);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{SLOT_OUTPUT};
         if (side == Direction.UP) return new int[]{SLOT_POLYMER, SLOT_FIBER, SLOT_ADDITIVE};
         return new int[]{SLOT_POLYMER, SLOT_FIBER, SLOT_ADDITIVE, SLOT_OUTPUT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == SLOT_OUTPUT) return false;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
-        if (slot == SLOT_POLYMER) return stack.isOf(ModItems.RUBBER) || stack.isOf(ModItems.STERILE_POLYMER_FABRIC);
-        if (slot == SLOT_FIBER) return stack.isOf(Items.STRING) || stack.isOf(Items.WHITE_WOOL) || stack.isOf(Items.GLASS_PANE) || stack.isOf(ModItems.ALUMINUM_INGOT) || stack.isOf(ModItems.RUBBER);
-        if (slot == SLOT_ADDITIVE) return stack.isOf(ModItems.SILICON) || stack.isOf(ModItems.SILICON_WAFER) || stack.isOf(ModItems.TITANIUM_NUGGET) || stack.isOf(ModItems.RUBBER);
+        if (slot == SLOT_POLYMER) return stack.is(ModItems.RUBBER) || stack.is(ModItems.STERILE_POLYMER_FABRIC);
+        if (slot == SLOT_FIBER) return stack.is(Items.STRING) || stack.is(Items.WOOL.white()) || stack.is(Items.GLASS_PANE) || stack.is(ModItems.ALUMINUM_INGOT) || stack.is(ModItems.RUBBER);
+        if (slot == SLOT_ADDITIVE) return stack.is(ModItems.SILICON) || stack.is(ModItems.SILICON_WAFER) || stack.is(ModItems.TITANIUM_NUGGET) || stack.is(ModItems.RUBBER);
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == SLOT_OUTPUT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -261,51 +261,51 @@ public class PolymerLoomBlockEntity extends BlockEntity implements NamedScreenHa
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.literal("Polymer Loom");
+    public Component getDisplayName() {
+        return Component.literal("Polymer Loom");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new PolymerLoomScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 

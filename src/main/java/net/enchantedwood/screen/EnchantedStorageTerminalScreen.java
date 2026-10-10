@@ -2,16 +2,16 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.ArrayList;
@@ -19,72 +19,70 @@ import java.util.List;
 import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStorageTerminalScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/enchanted_chest_gui.png");
-    private TextFieldWidget searchBox;
-    private ButtonWidget prevButton;
-    private ButtonWidget nextButton;
+public class EnchantedStorageTerminalScreen extends AbstractContainerScreen<EnchantedStorageTerminalScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/enchanted_chest_gui.png");
+    private EditBox searchBox;
+    private Button prevButton;
+    private Button nextButton;
 
-    public EnchantedStorageTerminalScreen(EnchantedStorageTerminalScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 222;
-        this.titleX = 8;
-        this.titleY = 6;
-        this.playerInventoryTitleX = 8;
-        this.playerInventoryTitleY = this.backgroundHeight - 94;
+    public EnchantedStorageTerminalScreen(EnchantedStorageTerminalScreenHandler handler, Inventory inventory, Component title) {
+        super(handler, inventory, title, 176, 222);
+        this.titleLabelX = 8;
+        this.titleLabelY = 6;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
     protected void init() {
         super.init();
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        this.searchBox = new TextFieldWidget(this.textRenderer, x + 98, y + 4, 70, 11, Text.literal("Search..."));
+        this.searchBox = new EditBox(this.font, x + 98, y + 4, 70, 11, Component.literal("Search..."));
         this.searchBox.setMaxLength(30);
-        this.searchBox.setDrawsBackground(true);
-        this.searchBox.setFocusUnlocked(true);
-        this.searchBox.setPlaceholder(Text.literal("Search...").formatted(net.minecraft.util.Formatting.DARK_GRAY));
-        this.searchBox.setText(this.handler.getSearchQuery());
-        this.searchBox.setChangedListener(query -> {
-            this.handler.setSearchFilter(query);
+        this.searchBox.setBordered(true);
+        this.searchBox.setCanLoseFocus(true);
+        this.searchBox.setHint(Component.literal("Search...").withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
+        this.searchBox.setValue(this.menu.getSearchQuery());
+        this.searchBox.setResponder(query -> {
+            this.menu.setSearchFilter(query);
             if (net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.canSend(net.enchantedwood.network.SetStorageTerminalSearchPayload.ID)) {
                 net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(new net.enchantedwood.network.SetStorageTerminalSearchPayload(query));
             }
         });
-        this.addDrawableChild(this.searchBox);
+        this.addRenderableWidget(this.searchBox);
 
         // Previous Page Button
-        this.prevButton = ButtonWidget.builder(Text.literal("◀"), button -> {
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 0);
+        this.prevButton = Button.builder(Component.literal("◀"), button -> {
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
             }
-        }).dimensions(x + 48, y + 3, 14, 12).build();
+        }).bounds(x + 48, y + 3, 14, 12).build();
 
         // Next Page Button
-        this.nextButton = ButtonWidget.builder(Text.literal("▶"), button -> {
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 1);
+        this.nextButton = Button.builder(Component.literal("▶"), button -> {
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 1);
             }
-        }).dimensions(x + 80, y + 3, 14, 12).build();
+        }).bounds(x + 80, y + 3, 14, 12).build();
 
-        this.addDrawableChild(this.prevButton);
-        this.addDrawableChild(this.nextButton);
+        this.addRenderableWidget(this.prevButton);
+        this.addRenderableWidget(this.nextButton);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (verticalAmount > 0) {
             // Scroll Up -> Previous Page
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 0);
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
                 return true;
             }
         } else if (verticalAmount < 0) {
             // Scroll Down -> Next Page
-            if (this.client != null && this.client.interactionManager != null) {
-                this.client.interactionManager.clickButton(this.handler.syncId, 1);
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 1);
                 return true;
             }
         }
@@ -92,10 +90,10 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     }
 
     @Override
-    public boolean keyPressed(net.minecraft.client.input.KeyInput input) {
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent input) {
         if (this.searchBox != null && this.searchBox.isFocused()) {
             if (input.key() == 256) { // GLFW_KEY_ESCAPE
-                this.close();
+                this.onClose();
                 return true;
             }
             if (this.searchBox.keyPressed(input)) {
@@ -108,7 +106,7 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     }
 
     @Override
-    public boolean charTyped(net.minecraft.client.input.CharInput input) {
+    public boolean charTyped(net.minecraft.client.input.CharacterEvent input) {
         if (this.searchBox != null && this.searchBox.isFocused()) {
             return this.searchBox.charTyped(input);
         }
@@ -116,35 +114,36 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        super.drawForeground(context, mouseX, mouseY);
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractLabels(context, mouseX, mouseY);
 
         // Network telemetry in header
-        int totalCap = this.handler.getTotalCapacity();
-        boolean online = this.handler.isOnline();
+        int totalCap = this.menu.getTotalCapacity();
+        boolean online = this.menu.isOnline();
 
         if (!online) {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.RED), 38, 6, 0xFF5555, false);
+            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.RED), 38, 6, 0xFF5555, false);
         } else if (totalCap <= 0) {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GOLD), 38, 6, 0xFFAA00, false);
+            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.GOLD), 38, 6, 0xFFAA00, false);
         } else {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GREEN), 38, 6, 0x55FF55, false);
+            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.GREEN), 38, 6, 0x55FF55, false);
         }
 
         // Page Indicator between ◀ and ▶ buttons
-        int curPage = this.handler.getCurrentPage() + 1;
-        int totalPages = this.handler.getTotalPages();
+        int curPage = this.menu.getCurrentPage() + 1;
+        int totalPages = this.menu.getTotalPages();
         String pageStr = curPage + "/" + totalPages;
-        int strWidth = this.textRenderer.getWidth(pageStr);
-        context.drawText(this.textRenderer, Text.literal(pageStr).formatted(net.minecraft.util.Formatting.DARK_GRAY), 71 - (strWidth / 2), 6, 0x3F3F3F, false);
+        int strWidth = this.font.width(pageStr);
+        context.text(this.font, Component.literal(pageStr).withStyle(net.minecraft.ChatFormatting.DARK_GRAY), 71 - (strWidth / 2), 6, 0x3F3F3F, false);
     }
 
     public static String formatCount(int count) {
@@ -156,80 +155,74 @@ public class EnchantedStorageTerminalScreen extends HandledScreen<EnchantedStora
     }
 
     @Override
-    protected void drawSlot(DrawContext context, Slot slot, int mouseX, int mouseY) {
-        if (slot.id < 54) {
-            ItemStack stack = slot.getStack();
+    protected void extractSlot(GuiGraphicsExtractor context, Slot slot, int mouseX, int mouseY) {
+        if (slot.index < 54) {
+            ItemStack stack = slot.getItem();
             if (!stack.isEmpty()) {
                 int x = slot.x;
                 int y = slot.y;
-                context.drawItem(stack, x, y);
-                context.drawStackOverlay(this.textRenderer, stack, x, y, "");
+                context.item(stack, x, y);
+                context.itemDecorations(this.font, stack, x, y, "");
 
                 String countText = formatCount(stack.getCount());
                 if (!countText.isEmpty()) {
                     float scale = 0.75f;
-                    int textWidth = this.textRenderer.getWidth(countText);
+                    int textWidth = this.font.width(countText);
                     float posX = (x + 16.5f) - (textWidth * scale);
                     float posY = (y + 16.5f) - (8.5f * scale);
 
-                    var matrices = context.getMatrices();
+                    var matrices = context.pose();
                     matrices.pushMatrix();
                     matrices.translate(posX, posY);
                     matrices.scale(scale);
-                    context.drawText(this.textRenderer, countText, 0, 0, 0xFFFFFF, true);
+                    context.text(this.font, countText, 0, 0, 0xFFFFFF, true);
                     matrices.popMatrix();
                 }
                 return;
             }
         }
-        super.drawSlot(context, slot, mouseX, mouseY);
+        super.extractSlot(context, slot, mouseX, mouseY);
     }
 
     @Override
-    protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
-        if (this.focusedSlot != null && this.focusedSlot.hasStack() && this.focusedSlot.id < 54) {
-            ItemStack stack = this.focusedSlot.getStack();
-            List<Text> tooltip = new ArrayList<>(getTooltipFromItem(stack));
-            tooltip.add(Text.literal("§6📦 Stored in Network: §e" + String.format(Locale.ROOT, "%,d", stack.getCount())));
-            context.drawTooltip(this.textRenderer, tooltip, stack.getTooltipData(), x, y);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        if (this.hoveredSlot != null && this.hoveredSlot.hasItem() && this.hoveredSlot.index < 54) {
+            ItemStack stack = this.hoveredSlot.getItem();
+            List<Component> tooltip = new ArrayList<>(getTooltipFromContainerItem(stack));
+            tooltip.add(Component.literal("§6📦 Stored in Network: §e" + String.format(Locale.ROOT, "%,d", stack.getCount())));
+            context.setTooltipForNextFrame(this.font, tooltip, stack.getTooltipImage(), mouseX, mouseY);
             return;
         }
-        super.drawMouseoverTooltip(context, x, y);
-    }
+        super.extractTooltip(context, mouseX, mouseY);
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
 
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
         // Hover Tooltip for Network Status (x + 34 .. 48, y + 4 .. 16)
         if (mouseX >= x + 34 && mouseX <= x + 48 && mouseY >= y + 4 && mouseY <= y + 16) {
-            int totalCap = this.handler.getTotalCapacity();
-            int stored = this.handler.getStoredCount();
-            boolean online = this.handler.isOnline();
+            int totalCap = this.menu.getTotalCapacity();
+            int stored = this.menu.getStoredCount();
+            boolean online = this.menu.isOnline();
 
             if (!online) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§c⚡ Storage Network: OFFLINE"),
-                        Text.literal("§7Connect power to the Enchanted Storage Controller.")
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§c⚡ Storage Network: OFFLINE"),
+                        Component.literal("§7Connect power to the Enchanted Storage Controller.")
                 ), mouseX, mouseY);
             } else if (totalCap <= 0) {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§6💾 Digital Storage Network"),
-                        Text.literal("§eStatus: §6NO DRIVES INSTALLED"),
-                        Text.literal("§7Install 1k, 4k, 16k, or 64k Storage Crystals"),
-                        Text.literal("§7in a nearby Drive Bay to store items.")
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6💾 Digital Storage Network"),
+                        Component.literal("§eStatus: §6NO DRIVES INSTALLED"),
+                        Component.literal("§7Install 1k, 4k, 16k, or 64k Storage Crystals"),
+                        Component.literal("§7in a nearby Drive Bay to store items.")
                 ), mouseX, mouseY);
             } else {
-                context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§6💾 Digital Storage Network"),
-                        Text.literal("§eItems Stored: §f" + String.format(Locale.ROOT, "%,d / %,d", stored, totalCap)),
-                        Text.literal("§aStatus: ONLINE"),
-                        Text.literal("§7Use Mouse Wheel or ◀ ▶ buttons to cycle pages.")
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6💾 Digital Storage Network"),
+                        Component.literal("§eItems Stored: §f" + String.format(Locale.ROOT, "%,d / %,d", stored, totalCap)),
+                        Component.literal("§aStatus: ONLINE"),
+                        Component.literal("§7Use Mouse Wheel or ◀ ▶ buttons to cycle pages.")
                 ), mouseX, mouseY);
             }
         }

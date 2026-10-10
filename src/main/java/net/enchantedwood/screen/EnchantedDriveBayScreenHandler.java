@@ -1,35 +1,35 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class EnchantedDriveBayScreenHandler extends ScreenHandler {
+public class EnchantedDriveBayScreenHandler extends AbstractContainerMenu {
     private static final int[] SLOT_COLS = {36, 76, 116};
     private static final int[] SLOT_ROWS = {24, 48};
 
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public EnchantedDriveBayScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(6), new ArrayPropertyDelegate(8));
+    public EnchantedDriveBayScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(6), new SimpleContainerData(8));
     }
 
-    public EnchantedDriveBayScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public EnchantedDriveBayScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ENCHANTED_DRIVE_BAY_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 6);
+        checkContainerSize(inventory, 6);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // 6 Drive Slots (2 rows x 3 columns) placed at exact socket locations
         for (int row = 0; row < 2; ++row) {
@@ -37,15 +37,15 @@ public class EnchantedDriveBayScreenHandler extends ScreenHandler {
                 final int slotIndex = col + row * 3;
                 this.addSlot(new Slot(inventory, slotIndex, SLOT_COLS[col], SLOT_ROWS[row]) {
                     @Override
-                    public boolean canInsert(ItemStack stack) {
-                        return stack.isOf(ModItems.STORAGE_CRYSTAL_1K)
-                                || stack.isOf(ModItems.STORAGE_CRYSTAL_4K)
-                                || stack.isOf(ModItems.STORAGE_CRYSTAL_16K)
-                                || stack.isOf(ModItems.STORAGE_CRYSTAL_64K);
+                    public boolean mayPlace(ItemStack stack) {
+                        return stack.is(ModItems.STORAGE_CRYSTAL_1K)
+                                || stack.is(ModItems.STORAGE_CRYSTAL_4K)
+                                || stack.is(ModItems.STORAGE_CRYSTAL_16K)
+                                || stack.is(ModItems.STORAGE_CRYSTAL_64K);
                     }
 
                     @Override
-                    public boolean canTakeItems(PlayerEntity playerEntity) {
+                    public boolean mayPickup(Player playerEntity) {
                         return canTakeDrive(slotIndex);
                     }
                 });
@@ -67,11 +67,11 @@ public class EnchantedDriveBayScreenHandler extends ScreenHandler {
 
     public int getDriveCapacity(int slot) {
         if (slot < 0 || slot >= 6) return 0;
-        ItemStack stack = this.inventory.getStack(slot);
-        if (stack.isOf(ModItems.STORAGE_CRYSTAL_1K)) return 1000;
-        if (stack.isOf(ModItems.STORAGE_CRYSTAL_4K)) return 4000;
-        if (stack.isOf(ModItems.STORAGE_CRYSTAL_16K)) return 16000;
-        if (stack.isOf(ModItems.STORAGE_CRYSTAL_64K)) return 64000;
+        ItemStack stack = this.inventory.getItem(slot);
+        if (stack.is(ModItems.STORAGE_CRYSTAL_1K)) return 1000;
+        if (stack.is(ModItems.STORAGE_CRYSTAL_4K)) return 4000;
+        if (stack.is(ModItems.STORAGE_CRYSTAL_16K)) return 16000;
+        if (stack.is(ModItems.STORAGE_CRYSTAL_64K)) return 64000;
         return 0;
     }
 
@@ -90,7 +90,7 @@ public class EnchantedDriveBayScreenHandler extends ScreenHandler {
 
     public int getDriveState(int slotIndex) {
         if (slotIndex >= 0 && slotIndex < 6) {
-            if (this.inventory.getStack(slotIndex).isEmpty()) return -1;
+            if (this.inventory.getItem(slotIndex).isEmpty()) return -1;
             return this.propertyDelegate.get(slotIndex + 2);
         }
         return -1;
@@ -98,23 +98,23 @@ public class EnchantedDriveBayScreenHandler extends ScreenHandler {
 
     public boolean hasDrive(int slotIndex) {
         if (slotIndex >= 0 && slotIndex < 6) {
-            return !this.inventory.getStack(slotIndex).isEmpty();
+            return !this.inventory.getItem(slotIndex).isEmpty();
         }
         return false;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (slotIndex < 6) {
@@ -123,26 +123,26 @@ public class EnchantedDriveBayScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
 
-                if (!this.insertItem(originalStack, 6, 42, true)) {
+                if (!this.moveItemStackTo(originalStack, 6, 42, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (!this.insertItem(originalStack, 0, 6, false)) {
+                if (!this.moveItemStackTo(originalStack, 0, 6, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

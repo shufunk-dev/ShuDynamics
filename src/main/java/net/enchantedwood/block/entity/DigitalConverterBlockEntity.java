@@ -2,28 +2,28 @@ package net.enchantedwood.block.entity;
 
 import net.enchantedwood.block.custom.DigitalConverterBlock;
 import net.enchantedwood.block.custom.EnchantedStorageControllerBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class DigitalConverterBlockEntity extends BlockEntity implements SidedInventory {
+public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyContainer {
     public static final int BUFFER_SIZE = 4;
-    private final DefaultedList<ItemStack> buffer = DefaultedList.ofSize(BUFFER_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> buffer = NonNullList.withSize(BUFFER_SIZE, ItemStack.EMPTY);
     private int checkTimer = 0;
 
     // Remote network binding via Wrench
@@ -37,12 +37,12 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     public void bindNetwork(BlockPos pos, String dimension) {
         this.boundNetworkPos = pos;
         this.boundDimension = dimension;
-        markDirty();
+        setChanged();
     }
 
     public void unbindNetwork() {
         this.boundNetworkPos = null;
-        markDirty();
+        setChanged();
     }
 
     public @Nullable BlockPos getBoundNetworkPos() {
@@ -58,19 +58,19 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     }
 
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
-        if (this.world == null) return null;
+        if (this.level == null) return null;
 
         // 1. Check bound remote network
-        if (this.boundNetworkPos != null && this.world.getServer() != null) {
-            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
-            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
-            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+        if (this.boundNetworkPos != null && this.level.getServer() != null) {
+            ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Identifier.parse(this.boundDimension));
+            ServerLevel targetWorld = this.level.getServer().getLevel(dimKey);
+            if (targetWorld != null && targetWorld.hasChunk(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
                 BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
                 if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
                     return terminal;
                 } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
                     // Search near controller for terminal
-                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
                     for (int dx = -16; dx <= 16; dx++) {
                         for (int dy = -8; dy <= 8; dy++) {
                             for (int dz = -16; dz <= 16; dz++) {
@@ -87,12 +87,12 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
         }
 
         // 2. Fallback to local 16-block proximity
-        BlockPos.Mutable mut = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
                 for (int dz = -16; dz <= 16; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
+                    mut.set(this.worldPosition.getX() + dx, this.worldPosition.getY() + dy, this.worldPosition.getZ() + dz);
+                    BlockEntity be = this.level.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal) {
                         return terminal;
                     }
@@ -103,19 +103,19 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     }
 
     public @Nullable EnchantedStorageControllerBlockEntity getNetworkController() {
-        if (this.world == null) return null;
+        if (this.level == null) return null;
 
         // 1. Check bound remote network
-        if (this.boundNetworkPos != null && this.world.getServer() != null) {
-            RegistryKey<World> dimKey = RegistryKey.of(RegistryKeys.WORLD, Identifier.of(this.boundDimension));
-            ServerWorld targetWorld = this.world.getServer().getWorld(dimKey);
-            if (targetWorld != null && targetWorld.isChunkLoaded(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
+        if (this.boundNetworkPos != null && this.level.getServer() != null) {
+            ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Identifier.parse(this.boundDimension));
+            ServerLevel targetWorld = this.level.getServer().getLevel(dimKey);
+            if (targetWorld != null && targetWorld.hasChunk(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
                 BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
                 if (be instanceof EnchantedStorageControllerBlockEntity controller) {
                     return controller;
                 } else if (be instanceof EnchantedStorageTerminalBlockEntity) {
                     // Search near terminal for controller
-                    BlockPos.Mutable mut = new BlockPos.Mutable();
+                    BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
                     for (int dx = -16; dx <= 16; dx++) {
                         for (int dy = -8; dy <= 8; dy++) {
                             for (int dz = -16; dz <= 16; dz++) {
@@ -132,12 +132,12 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
         }
 
         // 2. Fallback to local 16-block proximity
-        BlockPos.Mutable mut = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
                 for (int dz = -16; dz <= 16; dz++) {
-                    mut.set(this.pos.getX() + dx, this.pos.getY() + dy, this.pos.getZ() + dz);
-                    BlockEntity be = this.world.getBlockEntity(mut);
+                    mut.set(this.worldPosition.getX() + dx, this.worldPosition.getY() + dy, this.worldPosition.getZ() + dz);
+                    BlockEntity be = this.level.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageControllerBlockEntity controller) {
                         return controller;
                     }
@@ -148,7 +148,7 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     }
 
     public boolean isNetworkOnline() {
-        if (this.world == null) return false;
+        if (this.level == null) return false;
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
         if (terminal == null) return false;
         return terminal.isNetworkOnline();
@@ -164,13 +164,13 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
         return terminal != null ? terminal.getNetworkCapacity() : 0;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, DigitalConverterBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, DigitalConverterBlockEntity entity) {
         boolean dirty = false;
-        boolean wasLit = state.get(DigitalConverterBlock.LIT);
+        boolean wasLit = state.getValue(DigitalConverterBlock.LIT);
         boolean isOnline = entity.isNetworkOnline();
 
         if (wasLit != isOnline) {
-            world.setBlockState(pos, state.with(DigitalConverterBlock.LIT, isOnline), 3);
+            world.setBlock(pos, state.setValue(DigitalConverterBlock.LIT, isOnline), 3);
         }
 
         if (isOnline) {
@@ -191,12 +191,12 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return BUFFER_SIZE;
     }
 
@@ -209,75 +209,75 @@ public class DigitalConverterBlockEntity extends BlockEntity implements SidedInv
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.buffer.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(this.buffer, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(this.buffer, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(this.buffer, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(this.buffer, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.buffer.set(slot, stack);
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.buffer.clear();
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[]{0, 1, 2, 3};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
         if (terminal == null || !terminal.isNetworkOnline()) return false;
         return terminal.getStoredItemCount() + stack.getCount() <= terminal.getNetworkCapacity();
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return true;
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.buffer.clear();
-        Inventories.readData(view, this.buffer);
+        ContainerHelper.loadAllItems(view, this.buffer);
         if (view.contains("BoundX")) {
-            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
-            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+            this.boundNetworkPos = new BlockPos(view.getIntOr("BoundX", 0), view.getIntOr("BoundY", 0), view.getIntOr("BoundZ", 0));
+            this.boundDimension = view.getStringOr("BoundDim", "minecraft:overworld");
         } else {
             this.boundNetworkPos = null;
         }
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.buffer);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.buffer);
         if (this.boundNetworkPos != null) {
             view.putInt("BoundX", this.boundNetworkPos.getX());
             view.putInt("BoundY", this.boundNetworkPos.getY());

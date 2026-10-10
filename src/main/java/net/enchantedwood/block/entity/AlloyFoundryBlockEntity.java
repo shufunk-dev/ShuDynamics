@@ -8,29 +8,29 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.AlloyFoundryScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class AlloyFoundryBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
@@ -41,14 +41,14 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
     public static final int GEAR_SLOT = 3;
     public static final int INVENTORY_SIZE = 4;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 160;
     private float experience = 0.0f;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -72,7 +72,7 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -108,17 +108,17 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.alloy_foundry");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.alloy_foundry");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new AlloyFoundryScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, AlloyFoundryBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, AlloyFoundryBlockEntity entity) {
         boolean dirty = false;
 
         entity.totalCookTime = getTierCookTime(entity.getActiveGearTier());
@@ -147,21 +147,21 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
             }
         }
 
-        if (state.get(AlloyFoundryBlock.LIT) != isCooking) {
-            world.setBlockState(pos, state.with(AlloyFoundryBlock.LIT, isCooking), 3);
+        if (state.getValue(AlloyFoundryBlock.LIT) != isCooking) {
+            world.setBlock(pos, state.setValue(AlloyFoundryBlock.LIT, isCooking), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
     private boolean canAcceptOutput(AlloyRecipe recipe) {
         ItemStack currentOut = inventory.get(OUTPUT_SLOT);
         if (currentOut.isEmpty()) return true;
-        if (!currentOut.isOf(recipe.resultItem)) return false;
-        return currentOut.getCount() + recipe.resultCount <= currentOut.getMaxCount();
+        if (!currentOut.is(recipe.resultItem)) return false;
+        return currentOut.getCount() + recipe.resultCount <= currentOut.getMaxStackSize();
     }
 
     private void processAlloy(AlloyRecipe recipe) {
@@ -169,13 +169,13 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
         ItemStack stackB = inventory.get(INPUT_SLOT_B);
         ItemStack currentOut = inventory.get(OUTPUT_SLOT);
 
-        stackA.decrement(1);
-        stackB.decrement(1);
+        stackA.shrink(1);
+        stackB.shrink(1);
 
         if (currentOut.isEmpty()) {
             inventory.set(OUTPUT_SLOT, new ItemStack(recipe.resultItem, recipe.resultCount));
         } else {
-            currentOut.increment(recipe.resultCount);
+            currentOut.grow(recipe.resultCount);
         }
 
         this.experience += 1.5f;
@@ -292,20 +292,20 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 160);
-        this.experience = view.getFloat("Experience", 0.0f);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 160);
+        this.experience = view.getFloatOr("Experience", 0.0f);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
@@ -314,26 +314,26 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.DOWN) return new int[]{OUTPUT_SLOT};
         if (side == Direction.UP) return new int[]{INPUT_SLOT_A, INPUT_SLOT_B};
         return new int[]{INPUT_SLOT_A, INPUT_SLOT_B, GEAR_SLOT, OUTPUT_SLOT};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT_A || slot == INPUT_SLOT_B) return true;
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         return slot == OUTPUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -346,36 +346,36 @@ public class AlloyFoundryBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }

@@ -6,31 +6,31 @@ import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.IceCreamMachineScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class IceCreamMachineBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int TOTAL_SLOTS = 6;
     public static final int REFRIGERANT_SLOT = 0;
     public static final int BASE_SLOT = 1;
@@ -47,7 +47,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     private static final int[] BOTTOM_SLOTS = new int[]{OUTPUT_SLOT, RETURN_SLOT};
     private static final int[] SIDE_SLOTS = new int[]{REFRIGERANT_SLOT, BASE_SLOT, SWEETENER_SLOT, FLAVOR_SLOT};
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(TOTAL_SLOTS, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(TOTAL_SLOTS, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_INSERT, 0, 0);
 
     private int refrigerationTime = 0;
@@ -55,7 +55,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     private int churnProgress = 0;
     private int maxChurnProgress = 100; // 5 seconds per batch
 
-    private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    private final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -78,7 +78,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 6;
         }
     };
@@ -95,7 +95,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
                 if (time > 0) {
                     this.refrigerationTime = time;
                     this.maxRefrigerationTime = time;
-                    refStack.decrement(1);
+                    refStack.shrink(1);
                 }
             }
 
@@ -106,14 +106,14 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
                     finishBatch();
                     this.churnProgress = 0;
                 }
-                markDirty();
+                setChanged();
                 return true;
             }
         }
         return false;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, IceCreamMachineBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, IceCreamMachineBlockEntity entity) {
         boolean dirty = false;
 
         boolean canWork = entity.canChurn();
@@ -128,7 +128,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
                 if (time > 0) {
                     entity.refrigerationTime = time;
                     entity.maxRefrigerationTime = time;
-                    refStack.decrement(1);
+                    refStack.shrink(1);
                     dirty = true;
                 }
             }
@@ -142,7 +142,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
                 if (entity.churnProgress >= entity.maxChurnProgress) {
                     entity.finishBatch();
                     entity.churnProgress = 0;
-                    world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.7f, 1.2f);
+                    world.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.7f, 1.2f);
                 }
                 dirty = true;
             }
@@ -155,13 +155,13 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
         }
 
         boolean isRunning = (canWork && hasPower && entity.refrigerationTime > 0);
-        if (state.get(IceCreamMachineBlock.LIT) != isRunning) {
-            world.setBlockState(pos, state.with(IceCreamMachineBlock.LIT, isRunning), 3);
+        if (state.getValue(IceCreamMachineBlock.LIT) != isRunning) {
+            world.setBlock(pos, state.setValue(IceCreamMachineBlock.LIT, isRunning), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -182,15 +182,15 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
 
         ItemStack currentOut = this.inventory.get(OUTPUT_SLOT);
         if (!currentOut.isEmpty()) {
-            if (!ItemStack.areItemsAndComponentsEqual(currentOut, result)) return false;
-            if (currentOut.getCount() + result.getCount() > currentOut.getMaxCount()) return false;
+            if (!ItemStack.isSameItemSameComponents(currentOut, result)) return false;
+            if (currentOut.getCount() + result.getCount() > currentOut.getMaxStackSize()) return false;
         }
 
         ItemStack currentReturn = this.inventory.get(RETURN_SLOT);
         ItemStack returnItem = getContainerReturnItem(base);
         if (!returnItem.isEmpty() && !currentReturn.isEmpty()) {
-            if (!ItemStack.areItemsAndComponentsEqual(currentReturn, returnItem)) return false;
-            if (currentReturn.getCount() + returnItem.getCount() > currentReturn.getMaxCount()) return false;
+            if (!ItemStack.isSameItemSameComponents(currentReturn, returnItem)) return false;
+            if (currentReturn.getCount() + returnItem.getCount() > currentReturn.getMaxStackSize()) return false;
         }
 
         return true;
@@ -206,10 +206,10 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
 
         ItemStack returnItem = getContainerReturnItem(base);
 
-        base.decrement(1);
-        sweet.decrement(1);
+        base.shrink(1);
+        sweet.shrink(1);
         if (!flavor.isEmpty()) {
-            flavor.decrement(1);
+            flavor.shrink(1);
         }
 
         // Output ice cream
@@ -217,7 +217,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
         if (currentOut.isEmpty()) {
             this.inventory.set(OUTPUT_SLOT, result.copy());
         } else {
-            currentOut.increment(result.getCount());
+            currentOut.grow(result.getCount());
         }
 
         // Return empty container
@@ -226,7 +226,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
             if (currentReturn.isEmpty()) {
                 this.inventory.set(RETURN_SLOT, returnItem.copy());
             } else {
-                currentReturn.increment(returnItem.getCount());
+                currentReturn.grow(returnItem.getCount());
             }
         }
     }
@@ -245,44 +245,44 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     }
 
     private static ItemStack getContainerReturnItem(ItemStack base) {
-        if (base.isOf(Items.MILK_BUCKET)) return new ItemStack(Items.BUCKET);
+        if (base.is(Items.MILK_BUCKET)) return new ItemStack(Items.BUCKET);
         return ItemStack.EMPTY;
     }
 
     private static int getRefrigerationDuration(ItemStack stack) {
-        if (stack.isOf(Items.ICE)) return 600;
-        if (stack.isOf(ModItems.ICE_CUBES)) return 400;
-        if (stack.isOf(Items.PACKED_ICE)) return 1400;
-        if (stack.isOf(Items.BLUE_ICE)) return 3600;
-        if (stack.isOf(Items.SNOW_BLOCK)) return 600;
-        if (stack.isOf(Items.SNOWBALL)) return 150;
-        if (stack.isOf(ModItems.SALT)) return 800;
+        if (stack.is(Items.ICE)) return 600;
+        if (stack.is(ModItems.ICE_CUBES)) return 400;
+        if (stack.is(Items.PACKED_ICE)) return 1400;
+        if (stack.is(Items.BLUE_ICE)) return 3600;
+        if (stack.is(Items.SNOW_BLOCK)) return 600;
+        if (stack.is(Items.SNOWBALL)) return 150;
+        if (stack.is(ModItems.SALT)) return 800;
         return 0;
     }
 
     private static boolean isBaseLiquid(ItemStack stack) {
-        return stack.isOf(Items.MILK_BUCKET) || stack.isOf(ModItems.SOY_MILK);
+        return stack.is(Items.MILK_BUCKET) || stack.is(ModItems.SOY_MILK);
     }
 
     private static boolean isSweetener(ItemStack stack) {
-        return stack.isOf(Items.SUGAR) || stack.isOf(Items.HONEY_BOTTLE);
+        return stack.is(Items.SUGAR) || stack.is(Items.HONEY_BOTTLE);
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.refrigerationTime = view.getInt("RefrigTime", 0);
-        this.maxRefrigerationTime = view.getInt("MaxRefrigTime", 0);
-        this.churnProgress = view.getInt("ChurnProgress", 0);
+        this.refrigerationTime = view.getIntOr("RefrigTime", 0);
+        this.maxRefrigerationTime = view.getIntOr("MaxRefrigTime", 0);
+        this.churnProgress = view.getIntOr("ChurnProgress", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("RefrigTime", this.refrigerationTime);
         view.putInt("MaxRefrigTime", this.maxRefrigerationTime);
@@ -290,7 +290,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return TOTAL_SLOTS;
     }
 
@@ -301,47 +301,47 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(this.inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(this.inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(this.inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(this.inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         this.inventory.set(slot, stack);
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.inventory.clear();
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) return TOP_SLOTS;
         if (side == Direction.DOWN) return BOTTOM_SLOTS;
         return SIDE_SLOTS;
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == OUTPUT_SLOT || slot == RETURN_SLOT) return false;
         if (slot == REFRIGERANT_SLOT) return getRefrigerationDuration(stack) > 0;
         if (slot == BASE_SLOT) return isBaseLiquid(stack);
@@ -350,18 +350,18 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT || slot == RETURN_SLOT;
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.ice_cream_machine");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.ice_cream_machine");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new IceCreamMachineScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -383,7 +383,7 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
         return this.maxChurnProgress;
     }
 
-    public DefaultedList<ItemStack> getInventory() {
+    public NonNullList<ItemStack> getInventory() {
         return this.inventory;
     }
 }

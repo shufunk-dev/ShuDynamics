@@ -7,33 +7,33 @@ import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.ItemSalvagerScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class ItemSalvagerBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 40; // 40 FE/t
@@ -62,7 +62,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(Items.DIAMOND_HORSE_ARMOR, 1, 260, new ItemStack(Items.DIAMOND, 6), new ItemStack(Items.LEATHER, 1));
 
         // Netherite Horse Armor (if present in item registry)
-        Item netheriteHorseArmor = Registries.ITEM.get(Identifier.of("minecraft", "netherite_horse_armor"));
+        Item netheriteHorseArmor = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("minecraft", "netherite_horse_armor"));
         if (netheriteHorseArmor != Items.AIR) {
             registerRecipe(netheriteHorseArmor, 1, 400,
                     new ItemStack(Items.DIAMOND_HORSE_ARMOR, 1),
@@ -71,7 +71,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         }
 
         // Copper Horse Armor (if present in item registry)
-        Item copperHorseArmor = Registries.ITEM.get(Identifier.of("minecraft", "copper_horse_armor"));
+        Item copperHorseArmor = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("minecraft", "copper_horse_armor"));
         if (copperHorseArmor != Items.AIR) {
             registerRecipe(copperHorseArmor, 1, 120, new ItemStack(Items.COPPER_INGOT, 6), new ItemStack(Items.LEATHER, 1));
         }
@@ -397,7 +397,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     private static void registerModVehicleRecipes() {
-        registerRecipe(net.enchantedwood.item.ModItems.ATV_SEAT, 1, 80, new ItemStack(Items.LEATHER, 2), new ItemStack(Items.BLACK_WOOL, 2), new ItemStack(Items.IRON_INGOT, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.ATV_SEAT, 1, 80, new ItemStack(Items.LEATHER, 2), new ItemStack(Items.WOOL.black(), 2), new ItemStack(Items.IRON_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.RUBBER_TIRE, 2, 80, new ItemStack(net.enchantedwood.item.ModItems.RUBBER, 4), new ItemStack(Items.IRON_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.STEEL_RIM_TIRE, 1, 100, new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 1), new ItemStack(net.enchantedwood.item.ModItems.STEEL_INGOT, 1));
         registerRecipe(net.enchantedwood.item.ModItems.TITANIUM_STUDDED_TIRE, 1, 120, new ItemStack(net.enchantedwood.item.ModItems.RUBBER_TIRE, 1), new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 1));
@@ -518,7 +518,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         registerRecipe(net.enchantedwood.item.ModItems.HYPOSPRAY, 1, 140, new ItemStack(net.enchantedwood.item.ModItems.TITANIUM_INGOT, 2), new ItemStack(net.enchantedwood.item.ModItems.ALUMINUM_INGOT, 1), new ItemStack(Items.REDSTONE, 1), new ItemStack(Items.GLASS, 1));
         registerRecipe(net.enchantedwood.item.ModItems.EMPTY_CARTRIDGE, 4, 80, new ItemStack(Items.GLASS_PANE, 1), new ItemStack(net.enchantedwood.item.ModItems.TIN_INGOT, 1), new ItemStack(Items.QUARTZ, 1));
         registerRecipe(net.enchantedwood.item.ModItems.BASALT_FLUX_CATALYST, 1, 160, new ItemStack(Items.BASALT, 4), new ItemStack(net.enchantedwood.item.ModItems.VOLCANIC_ASH, 2), new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL, 1));
-        registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_CAPE, 1, 100, new ItemStack(Items.WHITE_WOOL, 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 1));
+        registerRecipe(net.enchantedwood.item.ModItems.ENCHANTED_CAPE, 1, 100, new ItemStack(Items.WOOL.white(), 4), new ItemStack(net.enchantedwood.item.ModItems.ENCHANTED_DUST, 1));
         registerRecipe(net.enchantedwood.item.ModItems.COPPER_BUCKET, 1, 80, new ItemStack(Items.COPPER_INGOT, 3));
         registerRecipe(Items.MAGMA_BLOCK, 1, 100, new ItemStack(Items.MAGMA_CREAM, 4));
 
@@ -670,7 +670,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         if (stack.isEmpty()) return false;
         if (RECIPES.containsKey(stack.getItem())) return true;
 
-        Identifier id = Registries.ITEM.getId(stack.getItem());
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (id != null) {
             String path = id.getPath();
             if (path.equals("copper_horse_armor")) {
@@ -693,7 +693,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         SalvageRecipe recipe = RECIPES.get(stack.getItem());
         if (recipe != null) return recipe;
 
-        Identifier id = Registries.ITEM.getId(stack.getItem());
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (id != null) {
             String path = id.getPath();
             if (path.equals("copper_horse_armor")) {
@@ -716,13 +716,13 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return null;
     }
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
     private int cookTime = 0;
     private int totalCookTime = 120;
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -746,7 +746,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -794,7 +794,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return null;
     }
 
-    public static List<ItemStack> calculateScaledOutputs(SalvageRecipe recipe, int consumeCount, @Nullable net.minecraft.util.math.random.Random random) {
+    public static List<ItemStack> calculateScaledOutputs(SalvageRecipe recipe, int consumeCount, @Nullable net.minecraft.util.RandomSource random) {
         if (consumeCount >= recipe.inputCount()) {
             return recipe.outputs().stream().map(ItemStack::copy).toList();
         }
@@ -861,11 +861,11 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return result;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, ItemSalvagerBlockEntity salvager) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, ItemSalvagerBlockEntity salvager) {
         ItemStack input = salvager.inventory.get(INPUT_SLOT);
         SalvageRecipe recipe = getRecipe(input);
 
-        boolean originallyWorking = state.get(ItemSalvagerBlock.LIT);
+        boolean originallyWorking = state.getValue(ItemSalvagerBlock.LIT);
         boolean isWorking = false;
 
         if (recipe != null && !input.isEmpty()) {
@@ -886,23 +886,23 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
                         salvager.cookTime = 0;
                         salvager.craftSalvage(recipe, consumeCount, world.getRandom());
                     }
-                    markDirty(world, pos, state);
+                    setChanged(world, pos, state);
                 }
             } else {
                 if (salvager.cookTime > 0) {
                     salvager.cookTime = 0;
-                    markDirty(world, pos, state);
+                    setChanged(world, pos, state);
                 }
             }
         } else {
             if (salvager.cookTime > 0) {
                 salvager.cookTime = 0;
-                markDirty(world, pos, state);
+                setChanged(world, pos, state);
             }
         }
 
         if (originallyWorking != isWorking) {
-            world.setBlockState(pos, state.with(ItemSalvagerBlock.LIT, isWorking), 3);
+            world.setBlock(pos, state.setValue(ItemSalvagerBlock.LIT, isWorking), 3);
         }
     }
 
@@ -917,10 +917,10 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
             int remaining = toInsert.getCount();
             // Try merge with existing stacks
             for (int i = 0; i < 4; i++) {
-                if (ItemStack.areItemsAndComponentsEqual(simulated[i], toInsert)) {
-                    int space = simulated[i].getMaxCount() - simulated[i].getCount();
+                if (ItemStack.isSameItemSameComponents(simulated[i], toInsert)) {
+                    int space = simulated[i].getMaxStackSize() - simulated[i].getCount();
                     int add = Math.min(space, remaining);
-                    simulated[i].increment(add);
+                    simulated[i].grow(add);
                     remaining -= add;
                     if (remaining <= 0) break;
                 }
@@ -940,9 +940,9 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
         return true;
     }
 
-    private void craftSalvage(SalvageRecipe recipe, int consumeCount, net.minecraft.util.math.random.Random random) {
+    private void craftSalvage(SalvageRecipe recipe, int consumeCount, net.minecraft.util.RandomSource random) {
         ItemStack input = inventory.get(INPUT_SLOT);
-        input.decrement(consumeCount);
+        input.shrink(consumeCount);
 
         List<ItemStack> outputs = calculateScaledOutputs(recipe, consumeCount, random);
 
@@ -952,10 +952,10 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
             // First merge
             for (int i = 0; i < 4; i++) {
                 ItemStack current = inventory.get(OUTPUT_SLOT_1 + i);
-                if (ItemStack.areItemsAndComponentsEqual(current, toInsert)) {
-                    int space = current.getMaxCount() - current.getCount();
+                if (ItemStack.isSameItemSameComponents(current, toInsert)) {
+                    int space = current.getMaxStackSize() - current.getCount();
                     int add = Math.min(space, remaining);
-                    current.increment(add);
+                    current.grow(add);
                     remaining -= add;
                     if (remaining <= 0) break;
                 }
@@ -975,26 +975,26 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 120);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 120);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) {
             return new int[]{INPUT_SLOT};
         }
@@ -1002,7 +1002,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT) {
             return isSalvageable(stack);
         }
@@ -1013,12 +1013,12 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot >= OUTPUT_SLOT_1 && slot <= OUTPUT_SLOT_4;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -1031,40 +1031,40 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
@@ -1074,13 +1074,13 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements NamedScreenH
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.item_salvager");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.item_salvager");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new ItemSalvagerScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 }

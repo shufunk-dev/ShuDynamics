@@ -1,15 +1,15 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class EnchantedRedstoneItem extends Item {
-    public EnchantedRedstoneItem(Settings settings) {
+    public EnchantedRedstoneItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return true;
     }
 }

@@ -1,59 +1,59 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class AluminumRefinerScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class AluminumRefinerScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public AluminumRefinerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(8));
+    public AluminumRefinerScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(4), new SimpleContainerData(8));
     }
 
-    public AluminumRefinerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public AluminumRefinerScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ALUMINUM_REFINER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 4);
+        checkContainerSize(inventory, 4);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Bauxite Input (x=48, y=34)
         this.addSlot(new Slot(inventory, 0, 48, 34) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.RAW_BAUXITE) || stack.isOf(ModItems.BAUXITE_DUST);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.RAW_BAUXITE) || stack.is(ModItems.BAUXITE_DUST);
             }
         });
 
         // Slot 1: O2 Canister in (x=80, y=17)
         this.addSlot(new Slot(inventory, 1, 80, 17) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.OXYGEN_CANISTER);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.OXYGEN_CANISTER);
             }
         });
 
         // Slot 2: Empty Canister out (x=80, y=53)
         this.addSlot(new Slot(inventory, 2, 80, 53) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
 
         // Slot 3: Ingot Output (x=116, y=34)
         this.addSlot(new Slot(inventory, 3, 116, 34) {
             @Override
-            public boolean canInsert(ItemStack stack) { return false; }
+            public boolean mayPlace(ItemStack stack) { return false; }
         });
 
         // Player Inventory
@@ -99,53 +99,53 @@ public class AluminumRefinerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < 4) {
-                if (!this.insertItem(originalStack, 4, 40, true)) {
+                if (!this.moveItemStackTo(originalStack, 4, 40, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (originalStack.isOf(ModItems.RAW_BAUXITE) || originalStack.isOf(ModItems.BAUXITE_DUST)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
+                if (originalStack.is(ModItems.RAW_BAUXITE) || originalStack.is(ModItems.BAUXITE_DUST)) {
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(ModItems.OXYGEN_CANISTER)) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                } else if (originalStack.is(ModItems.OXYGEN_CANISTER)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 4 && invSlot < 31) {
-                    if (!this.insertItem(originalStack, 31, 40, false)) {
+                    if (!this.moveItemStackTo(originalStack, 31, 40, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot >= 31 && invSlot < 40) {
-                    if (!this.insertItem(originalStack, 4, 31, false)) {
+                    if (!this.moveItemStackTo(originalStack, 4, 31, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

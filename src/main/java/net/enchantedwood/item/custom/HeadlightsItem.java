@@ -1,12 +1,11 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-
 import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class HeadlightsItem extends Item {
     public enum LightTier {
@@ -45,7 +44,7 @@ public class HeadlightsItem extends Item {
 
     private final LightTier tier;
 
-    public HeadlightsItem(LightTier tier, Settings settings) {
+    public HeadlightsItem(LightTier tier, Properties settings) {
         super(settings);
         this.tier = tier;
     }
@@ -55,12 +54,12 @@ public class HeadlightsItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§7ATV Automotive Headlights Module"));
-        textConsumer.accept(Text.literal("§eTier: " + tier.getColorCode() + tier.getName()));
-        textConsumer.accept(Text.literal("§bLuminance: §fLevel " + tier.getLightLevel()));
-        textConsumer.accept(Text.literal("§8" + tier.getDescription()));
-        textConsumer.accept(Text.literal("§6Required component for ATV assembly in the Vehicle Fabricator."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§7ATV Automotive Headlights Module"));
+        textConsumer.accept(Component.literal("§eTier: " + tier.getColorCode() + tier.getName()));
+        textConsumer.accept(Component.literal("§bLuminance: §fLevel " + tier.getLightLevel()));
+        textConsumer.accept(Component.literal("§8" + tier.getDescription()));
+        textConsumer.accept(Component.literal("§6Required component for ATV assembly in the Vehicle Fabricator."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

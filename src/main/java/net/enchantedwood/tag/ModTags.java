@@ -1,10 +1,10 @@
 package net.enchantedwood.tag;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 public class ModTags {
     public static class Items {
@@ -26,7 +26,7 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_MODULAR_POWER = of("repairs_modular_power");
 
         private static TagKey<Item> of(String id) {
-            return TagKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, id));
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, id));
         }
     }
 }

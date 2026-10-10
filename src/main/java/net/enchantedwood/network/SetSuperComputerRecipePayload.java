@@ -1,28 +1,27 @@
 package net.enchantedwood.network;
 
 import net.enchantedwood.EnchantedWoodMod;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
-public record SetSuperComputerRecipePayload(List<ItemStack> pattern) implements CustomPayload {
-    public static final CustomPayload.Id<SetSuperComputerRecipePayload> ID =
-            new CustomPayload.Id<>(Identifier.of(EnchantedWoodMod.MOD_ID, "set_super_computer_recipe"));
+public record SetSuperComputerRecipePayload(List<ItemStack> pattern) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<SetSuperComputerRecipePayload> ID =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "set_super_computer_recipe"));
 
-    public static final PacketCodec<RegistryByteBuf, SetSuperComputerRecipePayload> CODEC =
-            PacketCodec.tuple(
-                    ItemStack.OPTIONAL_PACKET_CODEC.collect(PacketCodecs.toList()),
+    public static final StreamCodec<RegistryFriendlyByteBuf, SetSuperComputerRecipePayload> CODEC =
+            StreamCodec.composite(
+                    ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()),
                     SetSuperComputerRecipePayload::pattern,
                     SetSuperComputerRecipePayload::new
             );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

@@ -1,49 +1,52 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.entity.EnchantedChestBlockEntity;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class EnchantedChestScreenHandler extends ScreenHandler {
-    private final Inventory masterInventory;
-    private final SimpleInventory visibleInventory = new SimpleInventory(54);
-    private final PropertyDelegate propertyDelegate;
+public class EnchantedChestScreenHandler extends AbstractContainerMenu {
+    private final Container masterInventory;
+    private final SimpleContainer visibleInventory = new SimpleContainer(54) {
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            if (!EnchantedChestScreenHandler.this.isUpdating) {
+                EnchantedChestScreenHandler.this.saveVisibleSlots();
+            }
+        }
+    };
+    private final ContainerData propertyDelegate;
     private int scrollRow = 0;
     private boolean isUpdating = false;
 
-    public Inventory getInventory() {
+    public Container getInventory() {
         return this.masterInventory;
     }
 
-    public EnchantedChestScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(162), new ArrayPropertyDelegate(3));
+    public EnchantedChestScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(162), new SimpleContainerData(3));
     }
 
-    public EnchantedChestScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public EnchantedChestScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ENCHANTED_CHEST_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 162);
+        checkContainerSize(inventory, 162);
         this.masterInventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        masterInventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        masterInventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Populate initial visible slots from master inventory
         this.updateVisibleSlots();
 
-        // Listen for any changes on visible slots to save back to master inventory
-        this.visibleInventory.addListener(inv -> {
-            if (!this.isUpdating) {
-                this.saveVisibleSlots();
-            }
-        });
+        // Visible slots automatically sync via visibleInventory setChanged
 
         // 54 Visible Chest Slots (6 rows x 9 columns: slots 0..53)
         for (int row = 0; row < 6; ++row) {
@@ -51,12 +54,12 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
                 final int slotIndex = col + row * 9;
                 this.addSlot(new Slot(this.visibleInventory, slotIndex, 8 + col * 18, 18 + row * 18) {
                     @Override
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return (scrollRow * 9 + slotIndex) < getMaxSlots();
                     }
 
                     @Override
-                    public boolean canInsert(ItemStack stack) {
+                    public boolean mayPlace(ItemStack stack) {
                         return (scrollRow * 9 + slotIndex) < getMaxSlots();
                     }
                 });
@@ -81,9 +84,9 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
         for (int i = 0; i < 54; i++) {
             int realIndex = this.scrollRow * 9 + i;
             if (realIndex < getMaxSlots()) {
-                this.visibleInventory.setStack(i, this.masterInventory.getStack(realIndex).copy());
+                this.visibleInventory.setItem(i, this.masterInventory.getItem(realIndex).copy());
             } else {
-                this.visibleInventory.setStack(i, ItemStack.EMPTY);
+                this.visibleInventory.setItem(i, ItemStack.EMPTY);
             }
         }
         this.isUpdating = false;
@@ -93,10 +96,10 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
         for (int i = 0; i < 54; i++) {
             int realIndex = this.scrollRow * 9 + i;
             if (realIndex < getMaxSlots()) {
-                this.masterInventory.setStack(realIndex, this.visibleInventory.getStack(i).copy());
+                this.masterInventory.setItem(realIndex, this.visibleInventory.getItem(i).copy());
             }
         }
-        this.masterInventory.markDirty();
+        this.masterInventory.setChanged();
     }
 
     public void setScrollRow(int newScrollRow) {
@@ -104,7 +107,7 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
         this.scrollRow = Math.max(0, Math.min(newScrollRow, getMaxScrollRows()));
         this.propertyDelegate.set(1, this.scrollRow);
         updateVisibleSlots();
-        this.sendContentUpdates();
+        this.broadcastChanges();
     }
 
     public int getScrollRow() {
@@ -121,13 +124,13 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean clickMenuButton(Player player, int id) {
         if (id == 2) { // Auto-Sort
             if (masterInventory instanceof EnchantedChestBlockEntity chestEntity) {
                 saveVisibleSlots();
                 chestEntity.sortInventory();
                 updateVisibleSlots();
-                this.sendContentUpdates();
+                this.broadcastChanges();
             }
             return true;
         }
@@ -140,29 +143,29 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public void onClosed(PlayerEntity player) {
+    public void removed(Player player) {
         saveVisibleSlots();
-        super.onClosed(player);
-        this.masterInventory.onClose(player);
+        super.removed(player);
+        this.masterInventory.stopOpen(player);
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.masterInventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.masterInventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < 54) {
                 // Moving from visible chest slot to player inventory (slots 54..89)
-                if (!this.insertItem(originalStack, 54, 90, true)) {
+                if (!this.moveItemStackTo(originalStack, 54, 90, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
@@ -170,16 +173,16 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
                 saveVisibleSlots();
                 boolean inserted = false;
                 for (int i = 0; i < getMaxSlots(); i++) {
-                    ItemStack target = masterInventory.getStack(i);
+                    ItemStack target = masterInventory.getItem(i);
                     if (target.isEmpty()) {
-                        masterInventory.setStack(i, originalStack.copy());
+                        masterInventory.setItem(i, originalStack.copy());
                         originalStack.setCount(0);
                         inserted = true;
                         break;
-                    } else if (ItemStack.areItemsAndComponentsEqual(target, originalStack) && target.getCount() < target.getMaxCount()) {
-                        int transfer = Math.min(originalStack.getCount(), target.getMaxCount() - target.getCount());
-                        target.increment(transfer);
-                        originalStack.decrement(transfer);
+                    } else if (ItemStack.isSameItemSameComponents(target, originalStack) && target.getCount() < target.getMaxStackSize()) {
+                        int transfer = Math.min(originalStack.getCount(), target.getMaxStackSize() - target.getCount());
+                        target.grow(transfer);
+                        originalStack.shrink(transfer);
                         if (originalStack.isEmpty()) {
                             inserted = true;
                             break;
@@ -191,20 +194,20 @@ public class EnchantedChestScreenHandler extends ScreenHandler {
                     return ItemStack.EMPTY;
                 }
                 updateVisibleSlots();
-                this.sendContentUpdates();
+                this.broadcastChanges();
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

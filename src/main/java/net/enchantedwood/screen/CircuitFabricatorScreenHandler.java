@@ -3,31 +3,31 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.entity.CircuitFabricatorBlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class CircuitFabricatorScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class CircuitFabricatorScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public CircuitFabricatorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(CircuitFabricatorBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public CircuitFabricatorScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(CircuitFabricatorBlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public CircuitFabricatorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public CircuitFabricatorScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.CIRCUIT_FABRICATOR_SCREEN_HANDLER, syncId);
-        checkSize(inventory, CircuitFabricatorBlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, CircuitFabricatorBlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Substrate Slot (Silicon Wafer or Base Chip) at x=34, y=35
         this.addSlot(new Slot(inventory, CircuitFabricatorBlockEntity.SUBSTRATE_SLOT, 34, 35));
@@ -44,7 +44,7 @@ public class CircuitFabricatorScreenHandler extends ScreenHandler {
         // Slot 4: Output Slot at x=124, y=35
         this.addSlot(new Slot(inventory, CircuitFabricatorBlockEntity.OUTPUT_SLOT, 124, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -52,8 +52,8 @@ public class CircuitFabricatorScreenHandler extends ScreenHandler {
         // Slot 5: Gear Upgrade Slot at x=152, y=8
         this.addSlot(new Slot(inventory, CircuitFabricatorBlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
             }
         });
 
@@ -98,54 +98,54 @@ public class CircuitFabricatorScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < CircuitFabricatorBlockEntity.INVENTORY_SIZE) {
                 // Moving from machine inventory to player inventory
-                if (!this.insertItem(originalStack, CircuitFabricatorBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, CircuitFabricatorBlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from player inventory into machine
-                if (originalStack.getItem() instanceof GearItem || originalStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
-                    if (!this.insertItem(originalStack, CircuitFabricatorBlockEntity.GEAR_SLOT, CircuitFabricatorBlockEntity.GEAR_SLOT + 1, false)) {
+                if (originalStack.getItem() instanceof GearItem || originalStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
+                    if (!this.moveItemStackTo(originalStack, CircuitFabricatorBlockEntity.GEAR_SLOT, CircuitFabricatorBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.isOf(ModItems.SILICON_WAFER) || originalStack.isOf(ModItems.BASIC_COMPUTER_CHIP) || originalStack.isOf(ModItems.ADVANCED_COMPUTER_CHIP)) {
-                    if (!this.insertItem(originalStack, CircuitFabricatorBlockEntity.SUBSTRATE_SLOT, CircuitFabricatorBlockEntity.SUBSTRATE_SLOT + 1, false)) {
-                        if (!this.insertItem(originalStack, CircuitFabricatorBlockEntity.COMPONENT_SLOT_1, CircuitFabricatorBlockEntity.COMPONENT_SLOT_3 + 1, false)) {
+                } else if (originalStack.is(ModItems.SILICON_WAFER) || originalStack.is(ModItems.BASIC_COMPUTER_CHIP) || originalStack.is(ModItems.ADVANCED_COMPUTER_CHIP)) {
+                    if (!this.moveItemStackTo(originalStack, CircuitFabricatorBlockEntity.SUBSTRATE_SLOT, CircuitFabricatorBlockEntity.SUBSTRATE_SLOT + 1, false)) {
+                        if (!this.moveItemStackTo(originalStack, CircuitFabricatorBlockEntity.COMPONENT_SLOT_1, CircuitFabricatorBlockEntity.COMPONENT_SLOT_3 + 1, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
-                } else if (!this.insertItem(originalStack, CircuitFabricatorBlockEntity.COMPONENT_SLOT_1, CircuitFabricatorBlockEntity.COMPONENT_SLOT_3 + 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, CircuitFabricatorBlockEntity.COMPONENT_SLOT_1, CircuitFabricatorBlockEntity.COMPONENT_SLOT_3 + 1, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

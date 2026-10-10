@@ -1,57 +1,57 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.item.ModItems;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class EnchantedStorageControllerScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class EnchantedStorageControllerScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public EnchantedStorageControllerScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(3), new ArrayPropertyDelegate(10));
+    public EnchantedStorageControllerScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(3), new SimpleContainerData(10));
     }
 
-    public EnchantedStorageControllerScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public EnchantedStorageControllerScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ENCHANTED_STORAGE_CONTROLLER_SCREEN_HANDLER, syncId);
-        checkSize(inventory, 3);
+        checkContainerSize(inventory, 3);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Slot 0: Emergency Backup Fuel Slot (Center)
         this.addSlot(new Slot(inventory, 0, 80, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())
-                        || stack.isOf(ModItems.ENCHANTED_LAVA_BUCKET)
-                        || stack.isOf(ModItems.ENCHANTED_COPPER_LAVA_BUCKET);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())
+                        || stack.is(ModItems.ENCHANTED_LAVA_BUCKET)
+                        || stack.is(ModItems.ENCHANTED_COPPER_LAVA_BUCKET);
             }
         });
 
         // Slot 1: Chunk Loader Module (Left)
         this.addSlot(new Slot(inventory, 1, 36, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.CHUNK_LOADER_MODULE);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.CHUNK_LOADER_MODULE);
             }
         });
 
         // Slot 2: Interdimensional Card (Right)
         this.addSlot(new Slot(inventory, 2, 124, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.INTERDIMENSIONAL_CARD);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.INTERDIMENSIONAL_CARD);
             }
         });
 
@@ -125,44 +125,44 @@ public class EnchantedStorageControllerScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (slotIndex < 3) {
-                if (!this.insertItem(originalStack, 3, 39, true)) {
+                if (!this.moveItemStackTo(originalStack, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (originalStack.isOf(ModItems.CHUNK_LOADER_MODULE)) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
-                } else if (originalStack.isOf(ModItems.INTERDIMENSIONAL_CARD)) {
-                    if (!this.insertItem(originalStack, 2, 3, false)) return ItemStack.EMPTY;
-                } else if (!this.insertItem(originalStack, 0, 1, false)) {
+                if (originalStack.is(ModItems.CHUNK_LOADER_MODULE)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) return ItemStack.EMPTY;
+                } else if (originalStack.is(ModItems.INTERDIMENSIONAL_CARD)) {
+                    if (!this.moveItemStackTo(originalStack, 2, 3, false)) return ItemStack.EMPTY;
+                } else if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;

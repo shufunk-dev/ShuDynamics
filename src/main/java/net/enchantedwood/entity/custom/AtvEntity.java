@@ -10,50 +10,54 @@ import net.enchantedwood.item.custom.CropHarvesterItem;
 import net.enchantedwood.item.custom.DrillBitItem;
 import net.enchantedwood.item.custom.HeadlightsItem;
 import net.enchantedwood.item.custom.TreeSawItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CocoaBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inventory {
+public class AtvEntity extends Entity implements MenuProvider, Container {
 
     // 8 Core Slots: 0:Engine, 1:Tires, 2:Suspension, 3:Chassis, 4:Headlights, 5:Trunk, 6:Fuel/Battery, 7:Tool (Drill/Saw/Harvester)
     public static final int ENGINE_SLOT = 0;
@@ -75,14 +79,14 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     public static final int MAX_TRUNK_SLOTS = 27;
     public static final int TOTAL_INVENTORY_SIZE = MODULE_SLOTS_COUNT + MAX_TRUNK_SLOTS;
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(TOTAL_INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(TOTAL_INVENTORY_SIZE, ItemStack.EMPTY);
 
     // Synced Data
-    private static final TrackedData<Float> SPEED = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.FLOAT);
-    private static final TrackedData<Integer> FUEL_LEVEL = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> MAX_FUEL = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> ATTACHMENT_TYPE = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> HEADLIGHTS_ACTIVE = DataTracker.registerData(AtvEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(AtvEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> FUEL_LEVEL = SynchedEntityData.defineId(AtvEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MAX_FUEL = SynchedEntityData.defineId(AtvEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ATTACHMENT_TYPE = SynchedEntityData.defineId(AtvEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> HEADLIGHTS_ACTIVE = SynchedEntityData.defineId(AtvEntity.class, EntityDataSerializers.BOOLEAN);
 
     // Movement & Physics
     private float targetSpeed = 0.0f;
@@ -94,34 +98,34 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     private int toolCooldown = 0;
     private BlockPos dynamicLightPos = null;
 
-    public AtvEntity(EntityType<? extends Entity> type, World world) {
+    public AtvEntity(EntityType<? extends Entity> type, Level world) {
         super(type, world);
-        this.intersectionChecked = true;
+        this.blocksBuilding = true;
     }
 
-    public AtvEntity(World world, double x, double y, double z) {
+    public AtvEntity(Level world, double x, double y, double z) {
         this(ModEntities.ATV, world);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
     }
 
     @Override
-    public float getStepHeight() {
+    public float maxUpStep() {
         // Tiered Step Height based on installed Tires & Suspension
         float step = 1.25f; // Base Rubber Tires climb dirt paths & 1-block steps
 
         ItemStack tires = inventory.get(TIRE_SLOT);
-        if (tires.isOf(ModItems.STEEL_RIM_TIRE)) {
+        if (tires.is(ModItems.STEEL_RIM_TIRE)) {
             step = 1.5f;
-        } else if (tires.isOf(ModItems.TITANIUM_STUDDED_TIRE)) {
+        } else if (tires.is(ModItems.TITANIUM_STUDDED_TIRE)) {
             step = 1.75f;
         }
 
         ItemStack suspension = inventory.get(SUSPENSION_SLOT);
-        if (suspension.isOf(ModItems.ALUMINUM_SUSPENSION)) {
+        if (suspension.is(ModItems.ALUMINUM_SUSPENSION)) {
             step += 0.05f;
-        } else if (suspension.isOf(ModItems.STEEL_SUSPENSION)) {
+        } else if (suspension.is(ModItems.STEEL_SUSPENSION)) {
             step += 0.1f;
-        } else if (suspension.isOf(ModItems.TITANIUM_SUSPENSION)) {
+        } else if (suspension.is(ModItems.TITANIUM_SUSPENSION)) {
             step += 0.25f; // Up to 2.0 blocks clearance with Titanium Tires + Suspension
         }
 
@@ -129,40 +133,40 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        builder.add(SPEED, 0.0f);
-        builder.add(FUEL_LEVEL, 0);
-        builder.add(MAX_FUEL, 1000);
-        builder.add(ATTACHMENT_TYPE, ATTACHMENT_NONE);
-        builder.add(HEADLIGHTS_ACTIVE, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SPEED, 0.0f);
+        builder.define(FUEL_LEVEL, 0);
+        builder.define(MAX_FUEL, 1000);
+        builder.define(ATTACHMENT_TYPE, ATTACHMENT_NONE);
+        builder.define(HEADLIGHTS_ACTIVE, false);
     }
 
     public float getDisplaySpeed() {
-        return this.dataTracker.get(SPEED);
+        return this.entityData.get(SPEED);
     }
 
     public int getFuelLevel() {
-        return this.dataTracker.get(FUEL_LEVEL);
+        return this.entityData.get(FUEL_LEVEL);
     }
 
     public int getMaxFuel() {
-        return this.dataTracker.get(MAX_FUEL);
+        return this.entityData.get(MAX_FUEL);
     }
 
     public void setFuelLevel(int fuel, int max) {
-        this.dataTracker.set(FUEL_LEVEL, Math.max(0, fuel));
-        this.dataTracker.set(MAX_FUEL, Math.max(1, max));
+        this.entityData.set(FUEL_LEVEL, Math.max(0, fuel));
+        this.entityData.set(MAX_FUEL, Math.max(1, max));
     }
 
     public boolean isEnvironmentalCockpitSealed() {
         ItemStack chassis = this.inventory.get(CHASSIS_SLOT);
         // Steel or Titanium Chassis provides a sealed cabin frame
-        if (!chassis.isEmpty() && (chassis.isOf(ModItems.TITANIUM_ATV_CHASSIS) || chassis.isOf(ModItems.STEEL_ATV_CHASSIS))) {
+        if (!chassis.isEmpty() && (chassis.is(ModItems.TITANIUM_ATV_CHASSIS) || chassis.is(ModItems.STEEL_ATV_CHASSIS))) {
             return true;
         }
         // Check if a dedicated Sealed Hazard Canopy is installed in ATV inventory
         for (int i = 0; i < TOTAL_INVENTORY_SIZE; i++) {
-            if (this.inventory.get(i).isOf(ModItems.SEALED_HAZARD_CANOPY)) {
+            if (this.inventory.get(i).is(ModItems.SEALED_HAZARD_CANOPY)) {
                 return true;
             }
         }
@@ -175,12 +179,12 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    public boolean canHit() {
+    public boolean isPickable() {
         return !this.isRemoved();
     }
 
     @Override
-    public boolean isCollidable(Entity other) {
+    public boolean canBeCollidedWith(Entity other) {
         return true;
     }
 
@@ -190,22 +194,22 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    public boolean collidesWith(Entity other) {
-        return (other.isCollidable(this) || other.isPushable()) && !this.isConnectedThroughVehicle(other);
+    public boolean canCollideWith(Entity other) {
+        return (other.canBeCollidedWith(this) || other.isPushable()) && !this.isPassengerOfSameVehicle(other);
     }
 
     @Override
-    protected Vec3d getPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scale) {
-        return new Vec3d(0.0, 0.78 * scale, -0.1 * scale);
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scale) {
+        return new Vec3(0.0, 0.78 * scale, -0.1 * scale);
     }
 
     @Override
-    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel world, DamageSource source, float amount) {
         if (this.isInvulnerable()) return false;
         if (!this.isRemoved()) {
             ItemStack drop = new ItemStack(ModItems.ATV_ITEM);
             writeInventoryToItem(drop);
-            this.dropStack(world, drop);
+            this.spawnAtLocation(world, drop);
             this.discard();
             return true;
         }
@@ -220,71 +224,71 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
-        World world = this.getEntityWorld();
-        ItemStack held = player.getStackInHand(hand);
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        Level world = this.level();
+        ItemStack held = player.getItemInHand(hand);
 
-        if (player.isSneaking()) {
-            if (!world.isClient()) {
+        if (player.isShiftKeyDown()) {
+            if (!world.isClientSide()) {
                 // Only dismantle if holding a Wrench or Gear
-                if (held.isOf(ModItems.WRENCH) || held.isOf(ModItems.COPPER_GEAR) || held.isOf(ModItems.STEEL_GEAR)) {
+                if (held.is(ModItems.WRENCH) || held.is(ModItems.COPPER_GEAR) || held.is(ModItems.STEEL_GEAR)) {
                     ItemStack atvDrop = new ItemStack(ModItems.ATV_ITEM);
                     writeInventoryToItem(atvDrop);
-                    this.dropStack((ServerWorld) world, atvDrop);
+                    this.spawnAtLocation((ServerLevel) world, atvDrop);
                     this.discard();
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
                 // Shift + Right-Click with empty hand or other items -> Open ATV Dashboard GUI!
-                player.openHandledScreen(this);
+                player.openMenu(this);
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        if (!world.isClient()) {
+        if (!world.isClientSide()) {
             net.enchantedwood.item.custom.AtvItem.triggerAnomaly2Unlock(player, world);
-            if (!this.hasPassengers()) {
+            if (!this.isVehicle()) {
                 player.startRiding(this);
             } else {
-                player.openHandledScreen(this);
+                player.openMenu(this);
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void onRemoved() {
-        if (!this.getEntityWorld().isClient() && this.dynamicLightPos != null) {
-            removeDynamicLight(this.getEntityWorld(), this.dynamicLightPos);
+    public void onClientRemoval() {
+        if (!this.level().isClientSide() && this.dynamicLightPos != null) {
+            removeDynamicLight(this.level(), this.dynamicLightPos);
             this.dynamicLightPos = null;
         }
-        super.onRemoved();
+        super.onClientRemoval();
     }
 
     public void writeInventoryToItem(ItemStack stack) {
-        NbtCompound tag = new NbtCompound();
+        CompoundTag tag = new CompoundTag();
         tag.putInt("FuelLevel", getFuelLevel());
         tag.putInt("MaxFuel", getMaxFuel());
 
         for (int i = 0; i < TOTAL_INVENTORY_SIZE; i++) {
             ItemStack s = this.inventory.get(i);
             if (!s.isEmpty()) {
-                tag.putString("Slot_" + i, Registries.ITEM.getId(s.getItem()).toString());
+                tag.putString("Slot_" + i, BuiltInRegistries.ITEM.getKey(s.getItem()).toString());
                 tag.putInt("Count_" + i, s.getCount());
-                if (s.isDamageable() && s.getDamage() > 0) {
-                    tag.putInt("Damage_" + i, s.getDamage());
+                if (s.isDamageableItem() && s.getDamageValue() > 0) {
+                    tag.putInt("Damage_" + i, s.getDamageValue());
                 }
             }
         }
 
-        stack.set(net.minecraft.component.DataComponentTypes.CUSTOM_DATA, net.minecraft.component.type.NbtComponent.of(tag));
+        stack.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.of(tag));
     }
 
     public void readInventoryFromItem(ItemStack stack) {
-        net.minecraft.component.type.NbtComponent component = stack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+        net.minecraft.world.item.component.CustomData component = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
         if (component != null) {
-            NbtCompound tag = component.copyNbt();
-            int fuel = tag.getInt("FuelLevel", 0);
-            int max = tag.getInt("MaxFuel", 1000);
+            CompoundTag tag = component.copyTag();
+            int fuel = tag.getIntOr("FuelLevel", 0);
+            int max = tag.getIntOr("MaxFuel", 1000);
             setFuelLevel(fuel, max);
 
             this.inventory.clear();
@@ -292,15 +296,15 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 if (tag.contains("Slot_" + i)) {
                     String itemId = tag.getString("Slot_" + i).orElse("");
                     if (!itemId.isEmpty()) {
-                        net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(itemId);
-                        if (Registries.ITEM.containsId(id)) {
+                        net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.parse(itemId);
+                        if (BuiltInRegistries.ITEM.containsKey(id)) {
                             int count = tag.getInt("Count_" + i).orElse(1);
                             if (i == SUSPENSION_SLOT || i == TIRE_SLOT) {
                                 count = Math.max(4, count);
                             }
-                            ItemStack restored = new ItemStack(Registries.ITEM.get(id), Math.max(1, count));
+                            ItemStack restored = new ItemStack(BuiltInRegistries.ITEM.getValue(id), Math.max(1, count));
                             if (tag.contains("Damage_" + i)) {
-                                restored.setDamage(tag.getInt("Damage_" + i).orElse(0));
+                                restored.setDamageValue(tag.getInt("Damage_" + i).orElse(0));
                             }
                             this.inventory.set(i, restored);
                         }
@@ -312,16 +316,16 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             if (this.inventory.get(HEADLIGHT_SLOT).isEmpty() && tag.contains("Headlights")) {
                 String lightId = tag.getString("Headlights").orElse("");
                 if (!lightId.isEmpty()) {
-                    net.minecraft.util.Identifier id = net.minecraft.util.Identifier.of(lightId);
-                    if (Registries.ITEM.containsId(id)) {
-                        this.inventory.set(HEADLIGHT_SLOT, new ItemStack(Registries.ITEM.get(id), 1));
+                    net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.parse(lightId);
+                    if (BuiltInRegistries.ITEM.containsKey(id)) {
+                        this.inventory.set(HEADLIGHT_SLOT, new ItemStack(BuiltInRegistries.ITEM.getValue(id), 1));
                     }
                 }
             }
 
             // If Slot_4 contained a trunk in an older save, move it to Slot_5 (TRUNK_SLOT)
             ItemStack slot4 = this.inventory.get(HEADLIGHT_SLOT);
-            if (slot4.isOf(ModItems.SMALL_CARGO_TRUNK) || slot4.isOf(ModItems.MEDIUM_CARGO_TRUNK) || slot4.isOf(ModItems.LARGE_CARGO_TRUNK)) {
+            if (slot4.is(ModItems.SMALL_CARGO_TRUNK) || slot4.is(ModItems.MEDIUM_CARGO_TRUNK) || slot4.is(ModItems.LARGE_CARGO_TRUNK)) {
                 this.inventory.set(TRUNK_SLOT, slot4);
                 this.inventory.set(HEADLIGHT_SLOT, new ItemStack(ModItems.HALOGEN_HEADLIGHTS, 1));
             }
@@ -334,22 +338,22 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
         LivingEntity rider = this.getControllingPassenger();
 
-        if (this.isLogicalSideForUpdatingMovement()) {
+        if (this.isLocalInstanceAuthoritative()) {
             // Player Driving on Client / Unoccupied Vehicle on Server
-            if (rider instanceof PlayerEntity player) {
+            if (rider instanceof Player player) {
                 handleRiderControl(player);
             } else {
-                this.currentSpeed = MathHelper.lerp(0.1f, this.currentSpeed, 0.0f);
+                this.currentSpeed = Mth.lerp(0.1f, this.currentSpeed, 0.0f);
                 this.targetSpeed = 0.0f;
             }
 
             applyMovementPhysics();
         } else {
-            this.setVelocity(Vec3d.ZERO);
+            this.setDeltaMovement(Vec3.ZERO);
         }
 
-        World world = this.getEntityWorld();
-        if (world.isClient()) {
+        Level world = this.level();
+        if (world.isClientSide()) {
             this.wheelRotation += this.currentSpeed * 25.0f;
             if (getAttachmentType() != ATTACHMENT_NONE) {
                 this.toolSpin += 30.0f;
@@ -362,7 +366,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             if (tool.getItem() instanceof DrillBitItem) att = ATTACHMENT_DRILL;
             else if (tool.getItem() instanceof TreeSawItem) att = ATTACHMENT_TREE_SAW;
             else if (tool.getItem() instanceof CropHarvesterItem) att = ATTACHMENT_CROP_HARVESTER;
-            this.dataTracker.set(ATTACHMENT_TYPE, att);
+            this.entityData.set(ATTACHMENT_TYPE, att);
 
             ItemStack lightsStack = this.inventory.get(HEADLIGHT_SLOT);
             boolean hasLights = lightsStack.getItem() instanceof HeadlightsItem;
@@ -372,36 +376,36 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 lightTier = hItem.getTier();
                 lightLevel = lightTier.getLightLevel();
             }
-            int skyLight = world.getLightLevel(net.minecraft.world.LightType.SKY, this.getBlockPos()) - world.getAmbientDarkness();
+            int skyLight = world.getBrightness(net.minecraft.world.level.LightLayer.SKY, this.blockPosition()) - world.getSkyDarken();
             boolean dark = hasLights && skyLight <= 7;
-            this.dataTracker.set(HEADLIGHTS_ACTIVE, dark);
+            this.entityData.set(HEADLIGHTS_ACTIVE, dark);
 
             if (dark && rider != null) {
-                Vec3d origin = this.getEntityPos().add(0, 0.8, 0);
-                Vec3d forward = this.getRotationVector().normalize();
+                Vec3 origin = this.position().add(0, 0.8, 0);
+                Vec3 forward = this.getLookAngle().normalize();
                 double projectionDist = (lightTier == HeadlightsItem.LightTier.XENON) ? 4.5 : (lightTier == HeadlightsItem.LightTier.LED ? 3.2 : 2.0);
-                Vec3d reachVec = origin.add(forward.multiply(projectionDist));
+                Vec3 reachVec = origin.add(forward.scale(projectionDist));
 
-                BlockHitResult hit = world.raycast(new RaycastContext(
+                BlockHitResult hit = world.clip(new ClipContext(
                         origin,
                         reachVec,
-                        RaycastContext.ShapeType.COLLIDER,
-                        RaycastContext.FluidHandling.NONE,
+                        ClipContext.Block.COLLIDER,
+                        ClipContext.Fluid.NONE,
                         this
                 ));
 
                 BlockPos targetLight;
                 if (hit.getType() == HitResult.Type.BLOCK) {
-                    targetLight = hit.getBlockPos().offset(hit.getSide());
+                    targetLight = hit.getBlockPos().relative(hit.getDirection());
                 } else {
-                    targetLight = BlockPos.ofFloored(reachVec);
+                    targetLight = BlockPos.containing(reachVec);
                 }
 
                 // Fallback: If target block cannot hold light, step back towards vehicle
                 if (!canHoldDynamicLight(world, targetLight)) {
-                    targetLight = BlockPos.ofFloored(origin.add(forward.multiply(1.0)));
+                    targetLight = BlockPos.containing(origin.add(forward.scale(1.0)));
                     if (!canHoldDynamicLight(world, targetLight)) {
-                        targetLight = BlockPos.ofFloored(origin);
+                        targetLight = BlockPos.containing(origin);
                     }
                 }
 
@@ -411,20 +415,20 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 }
 
                 if (canHoldDynamicLight(world, targetLight)) {
-                    if (!world.getBlockState(targetLight).isOf(net.minecraft.block.Blocks.LIGHT)) {
+                    if (!world.getBlockState(targetLight).is(net.minecraft.world.level.block.Blocks.LIGHT)) {
                         placeDynamicLight(world, targetLight, lightLevel);
                     }
                     this.dynamicLightPos = targetLight;
                 }
 
                 // Xenon High-Beams: Highlight distant obstacles & mobs in the forward 32m cone
-                if (lightTier == HeadlightsItem.LightTier.XENON && this.age % 10 == 0) {
-                    net.minecraft.util.math.Box highBeamCone = this.getBoundingBox().stretch(forward.multiply(32.0)).expand(6.0, 3.0, 6.0);
-                    List<net.minecraft.entity.mob.HostileEntity> hostiles = world.getEntitiesByClass(net.minecraft.entity.mob.HostileEntity.class, highBeamCone, e -> e.isAlive());
+                if (lightTier == HeadlightsItem.LightTier.XENON && this.tickCount % 10 == 0) {
+                    net.minecraft.world.phys.AABB highBeamCone = this.getBoundingBox().expandTowards(forward.scale(32.0)).inflate(6.0, 3.0, 6.0);
+                    List<net.minecraft.world.entity.monster.Monster> hostiles = world.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, highBeamCone, e -> e.isAlive());
                     for (var mob : hostiles) {
-                        Vec3d toMob = mob.getEntityPos().subtract(this.getEntityPos()).normalize();
-                        if (forward.dotProduct(toMob) > 0.5) { // In forward view cone
-                            mob.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.GLOWING, 30, 0, false, false, false));
+                        Vec3 toMob = mob.position().subtract(this.position()).normalize();
+                        if (forward.dot(toMob) > 0.5) { // In forward view cone
+                            mob.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.GLOWING, 30, 0, false, false, false));
                         }
                     }
                 }
@@ -440,59 +444,59 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 if (Math.abs(this.currentSpeed) > 0.05f) {
                     consumeFuel(1);
                     if (this.random.nextInt(3) == 0) {
-                        Vec3d exhaustPos = this.getEntityPos().subtract(this.getRotationVector().multiply(0.9)).add(0, 0.4, 0);
-                        ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
+                        Vec3 exhaustPos = this.position().subtract(this.getLookAngle().scale(0.9)).add(0, 0.4, 0);
+                        ((ServerLevel) world).sendParticles(ParticleTypes.SMOKE, exhaustPos.x, exhaustPos.y, exhaustPos.z, 2, 0.1, 0.1, 0.1, 0.02);
                     }
                 }
-                if (att == ATTACHMENT_DRILL) processDrilling((ServerWorld) world, rider);
-                else if (att == ATTACHMENT_TREE_SAW) processTreeSawing((ServerWorld) world, rider);
-                else if (att == ATTACHMENT_CROP_HARVESTER) processCropHarvesting((ServerWorld) world, rider);
+                if (att == ATTACHMENT_DRILL) processDrilling((ServerLevel) world, rider);
+                else if (att == ATTACHMENT_TREE_SAW) processTreeSawing((ServerLevel) world, rider);
+                else if (att == ATTACHMENT_CROP_HARVESTER) processCropHarvesting((ServerLevel) world, rider);
             }
-            this.dataTracker.set(SPEED, this.currentSpeed * 72.0f);
+            this.entityData.set(SPEED, this.currentSpeed * 72.0f);
         }
     }
 
     private boolean getForwardInput(LivingEntity rider) {
-        if (rider instanceof ServerPlayerEntity sp) {
-            return sp.getPlayerInput().forward();
+        if (rider instanceof ServerPlayer sp) {
+            return sp.getLastClientInput().forward();
         }
-        if (rider instanceof PlayerEntity p) {
-            return p.forwardSpeed > 0.1f;
+        if (rider instanceof Player p) {
+            return p.zza > 0.1f;
         }
         return false;
     }
 
     private boolean getBackwardInput(LivingEntity rider) {
-        if (rider instanceof ServerPlayerEntity sp) {
-            return sp.getPlayerInput().backward();
+        if (rider instanceof ServerPlayer sp) {
+            return sp.getLastClientInput().backward();
         }
-        if (rider instanceof PlayerEntity p) {
-            return p.forwardSpeed < -0.1f;
+        if (rider instanceof Player p) {
+            return p.zza < -0.1f;
         }
         return false;
     }
 
     private boolean getLeftInput(LivingEntity rider) {
-        if (rider instanceof ServerPlayerEntity sp) {
-            return sp.getPlayerInput().left();
+        if (rider instanceof ServerPlayer sp) {
+            return sp.getLastClientInput().left();
         }
-        if (rider instanceof PlayerEntity p) {
-            return p.sidewaysSpeed > 0.1f;
+        if (rider instanceof Player p) {
+            return p.xxa > 0.1f;
         }
         return false;
     }
 
     private boolean getRightInput(LivingEntity rider) {
-        if (rider instanceof ServerPlayerEntity sp) {
-            return sp.getPlayerInput().right();
+        if (rider instanceof ServerPlayer sp) {
+            return sp.getLastClientInput().right();
         }
-        if (rider instanceof PlayerEntity p) {
-            return p.sidewaysSpeed < -0.1f;
+        if (rider instanceof Player p) {
+            return p.xxa < -0.1f;
         }
         return false;
     }
 
-    private void handleRiderControl(PlayerEntity player) {
+    private void handleRiderControl(Player player) {
         float forward = 0.0f;
         float sideways = 0.0f;
 
@@ -509,20 +513,20 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         // 1. Steering sensitivity based on installed Tires
         float turnSpeed = 3.5f;
         ItemStack tires = inventory.get(TIRE_SLOT);
-        if (tires.isOf(ModItems.STEEL_RIM_TIRE)) {
+        if (tires.is(ModItems.STEEL_RIM_TIRE)) {
             turnSpeed = 4.2f;
-        } else if (tires.isOf(ModItems.TITANIUM_STUDDED_TIRE)) {
+        } else if (tires.is(ModItems.TITANIUM_STUDDED_TIRE)) {
             turnSpeed = 5.0f;
         }
 
         if (pressLeft) {
-            this.setYaw(this.getYaw() - turnSpeed);
+            this.setYRot(this.getYRot() - turnSpeed);
         }
         if (pressRight) {
-            this.setYaw(this.getYaw() + turnSpeed);
+            this.setYRot(this.getYRot() + turnSpeed);
         }
         if (forward != 0) {
-            this.setYaw(MathHelper.lerpAngleDegrees(0.15f, this.getYaw(), player.getYaw()));
+            this.setYRot(Mth.rotLerp(0.15f, this.getYRot(), player.getYRot()));
         }
 
         // 2. Engine max speed and acceleration calculation
@@ -530,32 +534,32 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         float accelRate = 0.04f;
 
         ItemStack engine = inventory.get(ENGINE_SLOT);
-        if (engine.isOf(ModItems.COPPER_ATV_ENGINE)) {
+        if (engine.is(ModItems.COPPER_ATV_ENGINE)) {
             maxForwardSpeed = 0.40f;
             accelRate = 0.035f;
-        } else if (engine.isOf(ModItems.ALUMINUM_ATV_ENGINE)) {
+        } else if (engine.is(ModItems.ALUMINUM_ATV_ENGINE)) {
             maxForwardSpeed = 0.55f;
             accelRate = 0.05f;
-        } else if (engine.isOf(ModItems.STEEL_ATV_ENGINE)) {
+        } else if (engine.is(ModItems.STEEL_ATV_ENGINE)) {
             maxForwardSpeed = 0.75f;
             accelRate = 0.04f;
-        } else if (engine.isOf(ModItems.TITANIUM_ATV_ENGINE)) {
+        } else if (engine.is(ModItems.TITANIUM_ATV_ENGINE)) {
             maxForwardSpeed = 1.05f;
             accelRate = 0.07f;
         }
 
         // 3. Chassis weight & performance modifiers
         ItemStack chassis = inventory.get(CHASSIS_SLOT);
-        if (chassis.isOf(ModItems.ALUMINUM_ATV_CHASSIS)) {
+        if (chassis.is(ModItems.ALUMINUM_ATV_CHASSIS)) {
             accelRate *= 1.20f; // Lightweight aluminum accelerates 20% faster
-        } else if (chassis.isOf(ModItems.TITANIUM_ATV_CHASSIS)) {
+        } else if (chassis.is(ModItems.TITANIUM_ATV_CHASSIS)) {
             maxForwardSpeed *= 1.10f; // Titanium gives +10% top speed & +25% acceleration
             accelRate *= 1.25f;
         }
 
         // 4. Asphalt speed bonus (+25%)
-        BlockPos below = this.getBlockPos().down();
-        if (this.getEntityWorld().getBlockState(below).isOf(ModBlocks.ASPHALT_BLOCK) || this.getEntityWorld().getBlockState(this.getBlockPos()).isOf(ModBlocks.ASPHALT_SLAB)) {
+        BlockPos below = this.blockPosition().below();
+        if (this.level().getBlockState(below).is(ModBlocks.ASPHALT_BLOCK) || this.level().getBlockState(this.blockPosition()).is(ModBlocks.ASPHALT_SLAB)) {
             maxForwardSpeed *= 1.25f;
         }
 
@@ -570,48 +574,48 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         }
 
         // Smooth acceleration & braking
-        this.currentSpeed = MathHelper.lerp(accelRate, this.currentSpeed, this.targetSpeed);
+        this.currentSpeed = Mth.lerp(accelRate, this.currentSpeed, this.targetSpeed);
     }
 
     private void applyMovementPhysics() {
-        Vec3d look = this.getRotationVector();
-        Vec3d horizontalMovement = new Vec3d(look.x * this.currentSpeed, 0, look.z * this.currentSpeed);
+        Vec3 look = this.getLookAngle();
+        Vec3 horizontalMovement = new Vec3(look.x * this.currentSpeed, 0, look.z * this.currentSpeed);
 
-        Vec3d velocity = this.getVelocity();
-        double gravity = this.hasNoGravity() ? 0.0 : (this.isOnGround() ? 0.0 : -0.05);
+        Vec3 velocity = this.getDeltaMovement();
+        double gravity = this.isNoGravity() ? 0.0 : (this.onGround() ? 0.0 : -0.05);
 
-        this.setVelocity(horizontalMovement.x, velocity.y + gravity, horizontalMovement.z);
-        this.move(MovementType.SELF, this.getVelocity());
+        this.setDeltaMovement(horizontalMovement.x, velocity.y + gravity, horizontalMovement.z);
+        this.move(MoverType.SELF, this.getDeltaMovement());
 
         // Apply ground friction
-        this.setVelocity(this.getVelocity().multiply(0.85, 0.98, 0.85));
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0.85, 0.98, 0.85));
     }
 
     private void processFuel() {
         ItemStack fuelStack = inventory.get(FUEL_SLOT);
         if (!fuelStack.isEmpty() && getFuelLevel() <= getMaxFuel() - 200) {
             // 1. Refuel from Gasoline Canister (+1,000 Fuel)
-            if (fuelStack.isOf(ModItems.GASOLINE_CANISTER)) {
+            if (fuelStack.is(ModItems.GASOLINE_CANISTER)) {
                 setFuelLevel(getFuelLevel() + 1000, 2000);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.dropOrStoreEmptyCanister();
             }
             // 2. Refuel from Biofuel Canister (+600 Fuel)
-            else if (fuelStack.isOf(ModItems.BIOFUEL_CANISTER)) {
+            else if (fuelStack.is(ModItems.BIOFUEL_CANISTER)) {
                 setFuelLevel(getFuelLevel() + 600, 2000);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.dropOrStoreEmptyCanister();
             }
             // 3. Refuel from High-Octane Canister (+1,500 Fuel)
-            else if (fuelStack.isOf(ModItems.HIGH_OCTANE_FUEL_CANISTER)) {
+            else if (fuelStack.is(ModItems.HIGH_OCTANE_FUEL_CANISTER)) {
                 setFuelLevel(getFuelLevel() + 1500, 3000);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
                 this.dropOrStoreEmptyCanister();
             }
             // 4. Solid Fuel (Coal / Charcoal) (+200 Fuel)
-            else if (fuelStack.isOf(net.minecraft.item.Items.COAL) || fuelStack.isOf(net.minecraft.item.Items.CHARCOAL)) {
+            else if (fuelStack.is(net.minecraft.world.item.Items.COAL) || fuelStack.is(net.minecraft.world.item.Items.CHARCOAL)) {
                 setFuelLevel(getFuelLevel() + 200, 1000);
-                fuelStack.decrement(1);
+                fuelStack.shrink(1);
             }
             // 5. Battery Charge
             else if (fuelStack.getItem() instanceof net.enchantedwood.energy.ItemEnergyProvider itemProvider) {
@@ -633,7 +637,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     private void dropOrStoreEmptyCanister() {
         ItemStack empty = new ItemStack(ModItems.EMPTY_GAS_CANISTER);
         if (!this.inventory.get(FUEL_SLOT).isEmpty()) {
-            this.dropStack((ServerWorld) this.getEntityWorld(), empty);
+            this.spawnAtLocation((ServerLevel) this.level(), empty);
         } else {
             this.inventory.set(FUEL_SLOT, empty);
         }
@@ -650,8 +654,8 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     public int getAttachmentType() {
-        if (this.getEntityWorld().isClient()) {
-            return this.dataTracker.get(ATTACHMENT_TYPE);
+        if (this.level().isClientSide()) {
+            return this.entityData.get(ATTACHMENT_TYPE);
         }
         ItemStack tool = this.inventory.get(TOOL_SLOT);
         if (tool.getItem() instanceof DrillBitItem) return ATTACHMENT_DRILL;
@@ -665,14 +669,14 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     public boolean areHeadlightsActive() {
-        return this.dataTracker.get(HEADLIGHTS_ACTIVE);
+        return this.entityData.get(HEADLIGHTS_ACTIVE);
     }
 
     public int getTrunkCapacity() {
         ItemStack trunk = this.inventory.get(TRUNK_SLOT);
-        if (trunk.isOf(ModItems.LARGE_CARGO_TRUNK)) return 27;
-        if (trunk.isOf(ModItems.MEDIUM_CARGO_TRUNK)) return 18;
-        if (trunk.isOf(ModItems.SMALL_CARGO_TRUNK)) return 9;
+        if (trunk.is(ModItems.LARGE_CARGO_TRUNK)) return 27;
+        if (trunk.is(ModItems.MEDIUM_CARGO_TRUNK)) return 18;
+        if (trunk.is(ModItems.SMALL_CARGO_TRUNK)) return 9;
         return 0;
     }
 
@@ -684,11 +688,11 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         for (int i = 0; i < cap; i++) {
             int slot = MODULE_SLOTS_COUNT + i;
             ItemStack current = this.inventory.get(slot);
-            if (ItemStack.areItemsAndComponentsEqual(current, stack)) {
-                int space = current.getMaxCount() - current.getCount();
+            if (ItemStack.isSameItemSameComponents(current, stack)) {
+                int space = current.getMaxStackSize() - current.getCount();
                 int add = Math.min(space, stack.getCount());
-                current.increment(add);
-                stack.decrement(add);
+                current.grow(add);
+                stack.shrink(add);
                 if (stack.isEmpty()) return ItemStack.EMPTY;
             }
         }
@@ -706,7 +710,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         return stack;
     }
 
-    private void processDrilling(ServerWorld world, LivingEntity rider) {
+    private void processDrilling(ServerLevel world, LivingEntity rider) {
         if (this.toolCooldown > 0) {
             this.toolCooldown--;
             return;
@@ -721,26 +725,26 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             return;
         }
 
-        float yawRad = (float) Math.toRadians(this.getYaw());
+        float yawRad = (float) Math.toRadians(this.getYRot());
         double dx = -Math.sin(yawRad);
         double dz = Math.cos(yawRad);
-        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
+        Vec3 forwardVec = new Vec3(dx, 0, dz).normalize();
 
-        Vec3d drillCenter = this.getEntityPos().add(forwardVec.multiply(1.3)).add(0, 0.5, 0);
-        BlockPos basePos = BlockPos.ofFloored(drillCenter);
+        Vec3 drillCenter = this.position().add(forwardVec.scale(1.3)).add(0, 0.5, 0);
+        BlockPos basePos = BlockPos.containing(drillCenter);
 
-        Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
+        Vec3 rightVec = new Vec3(-dz, 0, dx).normalize();
 
         List<BlockPos> targetPositions = new ArrayList<>();
         int y0 = (int) Math.floor(this.getY());
         int y1 = y0 + 1;
 
-        BlockPos p1 = basePos.withY(y0);
-        BlockPos p2 = basePos.withY(y1);
-        BlockPos p3 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y0);
-        BlockPos p4 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y1);
-        BlockPos p5 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y0);
-        BlockPos p6 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y1);
+        BlockPos p1 = basePos.atY(y0);
+        BlockPos p2 = basePos.atY(y1);
+        BlockPos p3 = BlockPos.containing(drillCenter.add(rightVec.scale(0.55))).atY(y0);
+        BlockPos p4 = BlockPos.containing(drillCenter.add(rightVec.scale(0.55))).atY(y1);
+        BlockPos p5 = BlockPos.containing(drillCenter.subtract(rightVec.scale(0.55))).atY(y0);
+        BlockPos p6 = BlockPos.containing(drillCenter.subtract(rightVec.scale(0.55))).atY(y1);
 
         for (BlockPos p : List.of(p1, p2, p3, p4, p5, p6)) {
             if (!targetPositions.contains(p)) {
@@ -755,31 +759,31 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             if (state.isAir() || !state.getFluidState().isEmpty()) continue;
             if (!drillBit.canHarvest(state)) continue;
 
-            List<ItemStack> drops = Block.getDroppedStacks(state, world, targetPos, world.getBlockEntity(targetPos), rider, drillStack);
+            List<ItemStack> drops = Block.getDrops(state, world, targetPos, world.getBlockEntity(targetPos), rider, drillStack);
 
-            world.breakBlock(targetPos, false, rider);
+            world.destroyBlock(targetPos, false, rider);
 
             for (ItemStack drop : drops) {
                 ItemStack remaining = insertIntoTrunk(drop);
                 if (!remaining.isEmpty()) {
-                    Block.dropStack(world, targetPos, remaining);
+                    Block.popResource(world, targetPos, remaining);
                 }
             }
 
-            world.playSound(null, targetPos, SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.BLOCKS, 0.5f, 1.2f);
-            world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+            world.playSound(null, targetPos, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 0.5f, 1.2f);
+            world.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
                     targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5,
                     6, 0.2, 0.2, 0.2, 0.05);
 
-            if (rider instanceof PlayerEntity player && !player.isCreative()) {
-                int newDamage = drillStack.getDamage() + 1;
+            if (rider instanceof Player player && !player.isCreative()) {
+                int newDamage = drillStack.getDamageValue() + 1;
                 if (newDamage >= drillStack.getMaxDamage()) {
                     this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
-                    world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    player.sendMessage(Text.literal("§c[ATV] Drill bit broke!"), true);
+                    world.playSound(null, this.blockPosition(), SoundEvents.ITEM_BREAK.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                    player.sendOverlayMessage(Component.literal("§c[ATV] Drill bit broke!"));
                     break;
                 } else {
-                    drillStack.setDamage(newDamage);
+                    drillStack.setDamageValue(newDamage);
                 }
             }
 
@@ -793,7 +797,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         }
     }
 
-    private void processTreeSawing(ServerWorld world, LivingEntity rider) {
+    private void processTreeSawing(ServerLevel world, LivingEntity rider) {
         if (this.toolCooldown > 0) {
             this.toolCooldown--;
             return;
@@ -808,17 +812,17 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             return;
         }
 
-        float yawRad = (float) Math.toRadians(this.getYaw());
+        float yawRad = (float) Math.toRadians(this.getYRot());
         double dx = -Math.sin(yawRad);
         double dz = Math.cos(yawRad);
-        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
+        Vec3 forwardVec = new Vec3(dx, 0, dz).normalize();
 
-        Vec3d sawCenter = this.getEntityPos().add(forwardVec.multiply(1.3)).add(0, 0.5, 0);
-        BlockPos basePos = BlockPos.ofFloored(sawCenter);
+        Vec3 sawCenter = this.position().add(forwardVec.scale(1.3)).add(0, 0.5, 0);
+        BlockPos basePos = BlockPos.containing(sawCenter);
 
         BlockPos startLog = null;
         for (int dy = 0; dy <= 2; dy++) {
-            BlockPos check = basePos.up(dy);
+            BlockPos check = basePos.above(dy);
             if (treeSaw.canHarvest(world.getBlockState(check))) {
                 startLog = check;
                 break;
@@ -842,9 +846,9 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             BlockPos current = queue.poll();
             BlockState st = world.getBlockState(current);
 
-            boolean isLog = st.isIn(BlockTags.LOGS) || st.isOf(net.minecraft.block.Blocks.BAMBOO)
-                    || st.isOf(net.minecraft.block.Blocks.BAMBOO_SAPLING) || st.isOf(net.minecraft.block.Blocks.SUGAR_CANE)
-                    || st.isOf(net.minecraft.block.Blocks.CACTUS);
+            boolean isLog = st.is(BlockTags.LOGS) || st.is(net.minecraft.world.level.block.Blocks.BAMBOO)
+                    || st.is(net.minecraft.world.level.block.Blocks.BAMBOO_SAPLING) || st.is(net.minecraft.world.level.block.Blocks.SUGAR_CANE)
+                    || st.is(net.minecraft.world.level.block.Blocks.CACTUS);
 
             if (isLog) {
                 logsToBreak.add(current);
@@ -856,7 +860,7 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             for (int ox = -1; ox <= 1; ox++) {
                 for (int oy = -1; oy <= 3; oy++) {
                     for (int oz = -1; oz <= 1; oz++) {
-                        BlockPos neighbor = current.add(ox, oy, oz);
+                        BlockPos neighbor = current.offset(ox, oy, oz);
                         if (!visited.contains(neighbor)) {
                             visited.add(neighbor);
                             BlockState nState = world.getBlockState(neighbor);
@@ -874,44 +878,44 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         int chopped = 0;
         for (BlockPos logPos : logsToBreak) {
             BlockState state = world.getBlockState(logPos);
-            List<ItemStack> drops = Block.getDroppedStacks(state, world, logPos, world.getBlockEntity(logPos), rider, toolStack);
-            world.breakBlock(logPos, false, rider);
+            List<ItemStack> drops = Block.getDrops(state, world, logPos, world.getBlockEntity(logPos), rider, toolStack);
+            world.destroyBlock(logPos, false, rider);
 
             for (ItemStack drop : drops) {
                 ItemStack rem = insertIntoTrunk(drop);
-                if (!rem.isEmpty()) Block.dropStack(world, logPos, rem);
+                if (!rem.isEmpty()) Block.popResource(world, logPos, rem);
             }
             chopped++;
         }
 
         for (BlockPos leafPos : leavesToBreak) {
             BlockState state = world.getBlockState(leafPos);
-            List<ItemStack> drops = Block.getDroppedStacks(state, world, leafPos, world.getBlockEntity(leafPos), rider, toolStack);
-            world.breakBlock(leafPos, false, rider);
+            List<ItemStack> drops = Block.getDrops(state, world, leafPos, world.getBlockEntity(leafPos), rider, toolStack);
+            world.destroyBlock(leafPos, false, rider);
 
             for (ItemStack drop : drops) {
                 ItemStack rem = insertIntoTrunk(drop);
-                if (!rem.isEmpty()) Block.dropStack(world, leafPos, rem);
+                if (!rem.isEmpty()) Block.popResource(world, leafPos, rem);
             }
         }
 
-        world.playSound(null, startLog, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 0.8f, 0.9f);
+        world.playSound(null, startLog, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 0.8f, 0.9f);
 
-        if (rider instanceof PlayerEntity player && !player.isCreative()) {
-            int newDamage = toolStack.getDamage() + chopped;
+        if (rider instanceof Player player && !player.isCreative()) {
+            int newDamage = toolStack.getDamageValue() + chopped;
             if (newDamage >= toolStack.getMaxDamage()) {
                 this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
-                world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-                player.sendMessage(Text.literal("§c[ATV] Tree saw blade broke!"), true);
+                world.playSound(null, this.blockPosition(), SoundEvents.ITEM_BREAK.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                player.sendOverlayMessage(Component.literal("§c[ATV] Tree saw blade broke!"));
             } else {
-                toolStack.setDamage(newDamage);
+                toolStack.setDamageValue(newDamage);
             }
         }
 
         this.toolCooldown = Math.max(2, (int) (12 / treeSaw.getTier().getSpeedMultiplier()));
     }
 
-    private void processCropHarvesting(ServerWorld world, LivingEntity rider) {
+    private void processCropHarvesting(ServerLevel world, LivingEntity rider) {
         ItemStack toolStack = this.inventory.get(TOOL_SLOT);
         if (!(toolStack.getItem() instanceof CropHarvesterItem cropHarvester)) {
             return;
@@ -921,11 +925,11 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             return;
         }
 
-        float yawRad = (float) Math.toRadians(this.getYaw());
+        float yawRad = (float) Math.toRadians(this.getYRot());
         double dx = -Math.sin(yawRad);
         double dz = Math.cos(yawRad);
-        Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
-        Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
+        Vec3 forwardVec = new Vec3(dx, 0, dz).normalize();
+        Vec3 rightVec = new Vec3(-dz, 0, dx).normalize();
 
         int radius = cropHarvester.getTier().getRadius();
         Set<BlockPos> uniquePositions = new HashSet<>();
@@ -933,11 +937,11 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         // Sample along front bumper across full swath width in fine 0.5-block steps
         for (double offset = -radius; offset <= radius; offset += 0.5) {
             for (double fwd = 0.5; fwd <= 1.8; fwd += 0.6) {
-                Vec3d samplePoint = this.getEntityPos().add(forwardVec.multiply(fwd)).add(rightVec.multiply(offset));
-                BlockPos base = BlockPos.ofFloored(samplePoint);
+                Vec3 samplePoint = this.position().add(forwardVec.scale(fwd)).add(rightVec.scale(offset));
+                BlockPos base = BlockPos.containing(samplePoint);
                 uniquePositions.add(base);
-                uniquePositions.add(base.down());
-                uniquePositions.add(base.up());
+                uniquePositions.add(base.below());
+                uniquePositions.add(base.above());
             }
         }
 
@@ -946,24 +950,24 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         for (BlockPos p : uniquePositions) {
             BlockState state = world.getBlockState(p);
             if (cropHarvester.isMatureCrop(state)) {
-                List<ItemStack> drops = Block.getDroppedStacks(state, world, p, world.getBlockEntity(p), rider, toolStack);
+                List<ItemStack> drops = Block.getDrops(state, world, p, world.getBlockEntity(p), rider, toolStack);
 
                 if (state.getBlock() instanceof CropBlock crop) {
-                    world.setBlockState(p, crop.withAge(0), Block.NOTIFY_ALL);
+                    world.setBlock(p, crop.getStateForAge(0), Block.UPDATE_ALL);
                 } else if (state.getBlock() instanceof CocoaBlock) {
-                    world.setBlockState(p, state.with(CocoaBlock.AGE, 0), Block.NOTIFY_ALL);
+                    world.setBlock(p, state.setValue(CocoaBlock.AGE, 0), Block.UPDATE_ALL);
                 } else if (state.getBlock() instanceof NetherWartBlock) {
-                    world.setBlockState(p, state.with(NetherWartBlock.AGE, 0), Block.NOTIFY_ALL);
+                    world.setBlock(p, state.setValue(NetherWartBlock.AGE, 0), Block.UPDATE_ALL);
                 } else {
-                    world.breakBlock(p, false, rider);
+                    world.destroyBlock(p, false, rider);
                 }
 
                 for (ItemStack drop : drops) {
                     ItemStack rem = insertIntoTrunk(drop);
-                    if (!rem.isEmpty()) Block.dropStack(world, p, rem);
+                    if (!rem.isEmpty()) Block.popResource(world, p, rem);
                 }
 
-                world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+                world.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
                         p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.05);
 
                 harvestedCount++;
@@ -971,15 +975,15 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         }
 
         if (harvestedCount > 0) {
-            world.playSound(null, this.getBlockPos(), SoundEvents.BLOCK_CROP_BREAK, SoundCategory.BLOCKS, 0.6f, 1.1f);
-            if (rider instanceof PlayerEntity player && !player.isCreative()) {
-                int newDamage = toolStack.getDamage() + harvestedCount;
+            world.playSound(null, this.blockPosition(), SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 0.6f, 1.1f);
+            if (rider instanceof Player player && !player.isCreative()) {
+                int newDamage = toolStack.getDamageValue() + harvestedCount;
                 if (newDamage >= toolStack.getMaxDamage()) {
                     this.inventory.set(TOOL_SLOT, ItemStack.EMPTY);
-                    world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_ITEM_BREAK.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    player.sendMessage(Text.literal("§c[ATV] Crop harvester reel broke!"), true);
+                    world.playSound(null, this.blockPosition(), SoundEvents.ITEM_BREAK.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                    player.sendOverlayMessage(Component.literal("§c[ATV] Crop harvester reel broke!"));
                 } else {
-                    toolStack.setDamage(newDamage);
+                    toolStack.setDamageValue(newDamage);
                 }
             }
         }
@@ -987,32 +991,32 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new AtvScreenHandler(syncId, playerInventory, this);
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("entity.enchantedwood.atv");
+    public Component getDisplayName() {
+        return Component.translatable("entity.enchantedwood.atv");
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
+    protected void readAdditionalSaveData(ValueInput view) {
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
-        setFuelLevel(view.getInt("FuelLevel", 0), view.getInt("MaxFuel", 1000));
+        ContainerHelper.loadAllItems(view, this.inventory);
+        setFuelLevel(view.getIntOr("FuelLevel", 0), view.getIntOr("MaxFuel", 1000));
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
-        Inventories.writeData(view, this.inventory);
+    protected void addAdditionalSaveData(ValueOutput view) {
+        ContainerHelper.saveAllItems(view, this.inventory);
         view.putInt("FuelLevel", getFuelLevel());
         view.putInt("MaxFuel", getMaxFuel());
     }
 
     // Inventory Implementation
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -1025,61 +1029,61 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public void markDirty() {}
+    public void setChanged() {}
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return !this.isRemoved() && player.squaredDistanceTo(this) <= 64.0;
+    public boolean stillValid(Player player) {
+        return !this.isRemoved() && player.distanceToSqr(this) <= 64.0;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
-    private boolean canHoldDynamicLight(World world, BlockPos pos) {
+    private boolean canHoldDynamicLight(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        return state.isAir() || state.isOf(net.minecraft.block.Blocks.LIGHT) || state.getFluidState().isIn(net.minecraft.registry.tag.FluidTags.WATER);
+        return state.isAir() || state.is(net.minecraft.world.level.block.Blocks.LIGHT) || state.getFluidState().is(net.minecraft.tags.FluidTags.WATER);
     }
 
-    private void placeDynamicLight(World world, BlockPos pos, int lightLevel) {
+    private void placeDynamicLight(Level world, BlockPos pos, int lightLevel) {
         BlockState state = world.getBlockState(pos);
-        boolean isWater = state.getFluidState().isIn(net.minecraft.registry.tag.FluidTags.WATER);
-        BlockState lightState = net.minecraft.block.Blocks.LIGHT.getDefaultState()
-                .with(net.minecraft.block.LightBlock.LEVEL_15, lightLevel)
-                .with(net.minecraft.state.property.Properties.WATERLOGGED, isWater);
-        world.setBlockState(pos, lightState, net.minecraft.block.Block.NOTIFY_ALL);
+        boolean isWater = state.getFluidState().is(net.minecraft.tags.FluidTags.WATER);
+        BlockState lightState = net.minecraft.world.level.block.Blocks.LIGHT.defaultBlockState()
+                .setValue(net.minecraft.world.level.block.LightBlock.LEVEL, lightLevel)
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, isWater);
+        world.setBlock(pos, lightState, net.minecraft.world.level.block.Block.UPDATE_ALL);
     }
 
-    private void removeDynamicLight(World world, BlockPos pos) {
-        if (pos != null && world.getBlockState(pos).isOf(net.minecraft.block.Blocks.LIGHT)) {
+    private void removeDynamicLight(Level world, BlockPos pos) {
+        if (pos != null && world.getBlockState(pos).is(net.minecraft.world.level.block.Blocks.LIGHT)) {
             BlockState state = world.getBlockState(pos);
-            if (state.contains(net.minecraft.state.property.Properties.WATERLOGGED) && state.get(net.minecraft.state.property.Properties.WATERLOGGED)) {
-                world.setBlockState(pos, net.minecraft.block.Blocks.WATER.getDefaultState(), net.minecraft.block.Block.NOTIFY_ALL);
+            if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED) && state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)) {
+                world.setBlock(pos, net.minecraft.world.level.block.Blocks.WATER.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
             } else {
                 world.removeBlock(pos, false);
             }

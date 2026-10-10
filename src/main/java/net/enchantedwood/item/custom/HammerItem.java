@@ -1,52 +1,52 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class HammerItem extends Item {
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
 
-    public HammerItem(Settings settings) {
+    public HammerItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, net.minecraft.component.type.TooltipDisplayComponent displayComponent, java.util.function.Consumer<net.minecraft.text.Text> textConsumer, net.minecraft.item.tooltip.TooltipType type) {
-        textConsumer.accept(net.minecraft.text.Text.literal("§7Mines a §e3×3 area §7centered on targeted block."));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, net.minecraft.world.item.component.TooltipDisplay displayComponent, java.util.function.Consumer<net.minecraft.network.chat.Component> textConsumer, net.minecraft.world.item.TooltipFlag type) {
+        textConsumer.accept(net.minecraft.network.chat.Component.literal("§7Mines a §e3×3 area §7centered on targeted block."));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 
 
     @Override
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient() && miner instanceof ServerPlayerEntity player && !IS_MINING_AREA.get()) {
-            if (state.getHardness(world, pos) > 0.0f) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
+        if (!world.isClientSide() && miner instanceof ServerPlayer player && !IS_MINING_AREA.get()) {
+            if (state.getDestroySpeed(world, pos) > 0.0f) {
                 IS_MINING_AREA.set(true);
                 try {
-                    mine3x3Area(stack, (ServerWorld) world, pos, player);
+                    mine3x3Area(stack, (ServerLevel) world, pos, player);
                 } finally {
                     IS_MINING_AREA.set(false);
                 }
             }
         }
-        return super.postMine(stack, world, state, pos, miner);
+        return super.mineBlock(stack, world, state, pos, miner);
     }
 
-    private void mine3x3Area(ItemStack stack, ServerWorld world, BlockPos origin, ServerPlayerEntity player) {
+    private void mine3x3Area(ItemStack stack, ServerLevel world, BlockPos origin, ServerPlayer player) {
         Direction side = getTargetedSide(player, origin);
 
         int minX = 0, maxX = 0, minY = 0, maxY = 0, minZ = 0, maxZ = 0;
@@ -71,12 +71,12 @@ public class HammerItem extends Item {
                 for (int z = minZ; z <= maxZ; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
 
-                    BlockPos targetPos = origin.add(x, y, z);
+                    BlockPos targetPos = origin.offset(x, y, z);
                     BlockState targetState = world.getBlockState(targetPos);
 
                     if (canHarvestBlock(targetState, world, targetPos)) {
-                        player.interactionManager.tryBreakBlock(targetPos);
-                        stack.damage(1, player, EquipmentSlot.MAINHAND);
+                        player.gameMode.destroyBlock(targetPos);
+                        stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                         if (stack.isEmpty()) return;
                     }
                 }
@@ -84,41 +84,41 @@ public class HammerItem extends Item {
         }
     }
 
-    private boolean canHarvestBlock(BlockState state, World world, BlockPos pos) {
-        if (state.isAir() || state.getHardness(world, pos) < 0) return false;
+    private boolean canHarvestBlock(BlockState state, Level world, BlockPos pos) {
+        if (state.isAir() || state.getDestroySpeed(world, pos) < 0) return false;
         // Do not mine machines / BlockEntities in 3x3 area so machines are picked up 1 at a time!
-        if (state.getBlock() instanceof net.minecraft.block.BlockEntityProvider || world.getBlockEntity(pos) != null) return false;
+        if (state.getBlock() instanceof net.minecraft.world.level.block.EntityBlock || world.getBlockEntity(pos) != null) return false;
 
-        return state.isIn(BlockTags.PICKAXE_MINEABLE)
-                || state.isIn(BlockTags.SHOVEL_MINEABLE)
-                || state.isIn(BlockTags.NEEDS_STONE_TOOL)
-                || state.isIn(BlockTags.NEEDS_IRON_TOOL)
-                || state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)
-                || !state.isToolRequired();
+        return state.is(BlockTags.MINEABLE_WITH_PICKAXE)
+                || state.is(BlockTags.MINEABLE_WITH_SHOVEL)
+                || state.is(BlockTags.NEEDS_STONE_TOOL)
+                || state.is(BlockTags.NEEDS_IRON_TOOL)
+                || state.is(BlockTags.NEEDS_DIAMOND_TOOL)
+                || !state.requiresCorrectToolForDrops();
     }
 
-    private Direction getTargetedSide(PlayerEntity player, BlockPos pos) {
-        if (player.getPitch() > 40.0f) {
+    private Direction getTargetedSide(Player player, BlockPos pos) {
+        if (player.getXRot() > 40.0f) {
             return Direction.UP;
-        } else if (player.getPitch() < -40.0f) {
+        } else if (player.getXRot() < -40.0f) {
             return Direction.DOWN;
         }
 
-        Vec3d eyePos = player.getEyePos();
-        Vec3d rotation = player.getRotationVec(1.0f);
-        Vec3d reachVec = eyePos.add(rotation.x * 5.0, rotation.y * 5.0, rotation.z * 5.0);
+        Vec3 eyePos = player.getEyePosition();
+        Vec3 rotation = player.getViewVector(1.0f);
+        Vec3 reachVec = eyePos.add(rotation.x * 5.0, rotation.y * 5.0, rotation.z * 5.0);
 
-        BlockHitResult hit = player.getEntityWorld().raycast(new RaycastContext(
+        BlockHitResult hit = player.level().clip(new ClipContext(
                 eyePos,
                 reachVec,
-                RaycastContext.ShapeType.OUTLINE,
-                RaycastContext.FluidHandling.NONE,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
                 player
         ));
 
         if (hit.getType() == HitResult.Type.BLOCK) {
-            return hit.getSide();
+            return hit.getDirection();
         }
-        return player.getHorizontalFacing().getOpposite();
+        return player.getDirection().getOpposite();
     }
 }

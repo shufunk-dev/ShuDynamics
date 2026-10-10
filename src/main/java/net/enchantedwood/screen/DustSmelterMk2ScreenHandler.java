@@ -4,32 +4,32 @@ import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.DustSmelterMk2BlockEntity;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class DustSmelterMk2ScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class DustSmelterMk2ScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public DustSmelterMk2ScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(DustSmelterMk2BlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(7));
+    public DustSmelterMk2ScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(DustSmelterMk2BlockEntity.INVENTORY_SIZE), new SimpleContainerData(7));
     }
 
-    public DustSmelterMk2ScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public DustSmelterMk2ScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.DUST_SMELTER_MK2_SCREEN_HANDLER, syncId);
-        checkSize(inventory, DustSmelterMk2BlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, DustSmelterMk2BlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Input A (x=52, y=24)
         this.addSlot(new Slot(inventory, DustSmelterMk2BlockEntity.INPUT_SLOT_A, 52, 24));
@@ -40,44 +40,44 @@ public class DustSmelterMk2ScreenHandler extends ScreenHandler {
         // Slot 2: Output A (x=112, y=24)
         this.addSlot(new Slot(inventory, DustSmelterMk2BlockEntity.OUTPUT_SLOT_A, 112, 24) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
             @Override
-            public void onTakeItem(PlayerEntity player, ItemStack stack) {
-                if (inventory instanceof DustSmelterMk2BlockEntity blockEntity) {
-                    if (blockEntity.getWorld() instanceof ServerWorld serverWorld) {
+            public void onTake(Player player, ItemStack stack) {
+                if (container instanceof DustSmelterMk2BlockEntity blockEntity) {
+                    if (blockEntity.getLevel() instanceof ServerLevel serverWorld) {
                         blockEntity.dropExperience(serverWorld, player);
                     }
                 }
-                super.onTakeItem(player, stack);
+                super.onTake(player, stack);
             }
         });
 
         // Slot 3: Output B (x=112, y=48)
         this.addSlot(new Slot(inventory, DustSmelterMk2BlockEntity.OUTPUT_SLOT_B, 112, 48) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
             @Override
-            public void onTakeItem(PlayerEntity player, ItemStack stack) {
-                if (inventory instanceof DustSmelterMk2BlockEntity blockEntity) {
-                    if (blockEntity.getWorld() instanceof ServerWorld serverWorld) {
+            public void onTake(Player player, ItemStack stack) {
+                if (container instanceof DustSmelterMk2BlockEntity blockEntity) {
+                    if (blockEntity.getLevel() instanceof ServerLevel serverWorld) {
                         blockEntity.dropExperience(serverWorld, player);
                     }
                 }
-                super.onTakeItem(player, stack);
+                super.onTake(player, stack);
             }
         });
 
         // Slot 4: Gear Upgrade (x=152, y=8)
         this.addSlot(new Slot(inventory, DustSmelterMk2BlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
             }
         });
 
@@ -129,41 +129,41 @@ public class DustSmelterMk2ScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < DustSmelterMk2BlockEntity.INVENTORY_SIZE) {
                 // Moving from machine to player inventory
-                if (!this.insertItem(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from player inventory to machine
-                if (originalStack.getItem() instanceof GearItem || originalStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
-                    if (!this.insertItem(originalStack, DustSmelterMk2BlockEntity.GEAR_SLOT, DustSmelterMk2BlockEntity.GEAR_SLOT + 1, false)) {
+                if (originalStack.getItem() instanceof GearItem || originalStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
+                    if (!this.moveItemStackTo(originalStack, DustSmelterMk2BlockEntity.GEAR_SLOT, DustSmelterMk2BlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (DustSmelterMk2BlockEntity.getOutputItem(originalStack.getItem()) != null) {
-                    if (!this.insertItem(originalStack, DustSmelterMk2BlockEntity.INPUT_SLOT_A, DustSmelterMk2BlockEntity.INPUT_SLOT_B + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, DustSmelterMk2BlockEntity.INPUT_SLOT_A, DustSmelterMk2BlockEntity.INPUT_SLOT_B + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (invSlot < DustSmelterMk2BlockEntity.INVENTORY_SIZE + 27) {
-                    if (!this.insertItem(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
+                    if (!this.moveItemStackTo(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE + 27, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE, DustSmelterMk2BlockEntity.INVENTORY_SIZE + 27, false)) {
+                } else if (!this.moveItemStackTo(originalStack, DustSmelterMk2BlockEntity.INVENTORY_SIZE, DustSmelterMk2BlockEntity.INVENTORY_SIZE + 27, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
 
@@ -171,7 +171,7 @@ public class DustSmelterMk2ScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

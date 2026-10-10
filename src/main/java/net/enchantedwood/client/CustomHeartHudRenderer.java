@@ -2,41 +2,41 @@ package net.enchantedwood.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 import net.enchantedwood.EnchantedWoodMod;
 
 @Environment(EnvType.CLIENT)
 public class CustomHeartHudRenderer {
 
-    private static final Identifier ENCHANTED_FULL = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/enchanted_full.png");
-    private static final Identifier ENCHANTED_HALF = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/enchanted_half.png");
+    private static final Identifier ENCHANTED_FULL = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/enchanted_full.png");
+    private static final Identifier ENCHANTED_HALF = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/enchanted_half.png");
 
-    private static final Identifier IRON_FULL = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/iron_full.png");
-    private static final Identifier IRON_HALF = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/iron_half.png");
+    private static final Identifier IRON_FULL = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/iron_full.png");
+    private static final Identifier IRON_HALF = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/iron_half.png");
 
-    private static final Identifier GOLD_FULL = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/gold_full.png");
-    private static final Identifier GOLD_HALF = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/gold_half.png");
+    private static final Identifier GOLD_FULL = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/gold_full.png");
+    private static final Identifier GOLD_HALF = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/gold_half.png");
 
-    private static final Identifier DIAMOND_FULL = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/diamond_full.png");
-    private static final Identifier DIAMOND_HALF = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/diamond_half.png");
+    private static final Identifier DIAMOND_FULL = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/diamond_full.png");
+    private static final Identifier DIAMOND_HALF = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/diamond_half.png");
 
-    private static final Identifier NETHERITE_FULL = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/netherite_full.png");
-    private static final Identifier NETHERITE_HALF = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/netherite_half.png");
+    private static final Identifier NETHERITE_FULL = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/netherite_full.png");
+    private static final Identifier NETHERITE_HALF = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/sprites/hud/heart/netherite_half.png");
 
     public static void register() {
-        HudRenderCallback.EVENT.register(CustomHeartHudRenderer::onRenderHud);
+        HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "heart_hud"), CustomHeartHudRenderer::onRenderHud);
     }
 
-    private static void onRenderHud(DrawContext context, RenderTickCounter renderTickCounter) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.options.hudHidden) return;
-        PlayerEntity player = client.player;
+    private static void onRenderHud(GuiGraphicsExtractor context, DeltaTracker renderTickCounter) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.gui.hud.isHidden()) return;
+        Player player = client.player;
         if (player == null || player.isSpectator() || player.isCreative()) return;
 
         float maxHealth = player.getMaxHealth();
@@ -63,8 +63,8 @@ public class CustomHeartHudRenderer {
             halfTexture = ENCHANTED_HALF;
         }
 
-        int width = context.getScaledWindowWidth();
-        int height = context.getScaledWindowHeight();
+        int width = context.guiWidth();
+        int height = context.guiHeight();
 
         int left = width / 2 - 91;
         int top = height - 39;
@@ -83,9 +83,9 @@ public class CustomHeartHudRenderer {
             float prevHp = heartIdx * 2.0f;
 
             if (currentHealth >= heartHp) {
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, fullTexture, hx, hy, 0.0f, 0.0f, 9, 9, 9, 9);
+                context.blit(RenderPipelines.GUI_TEXTURED, fullTexture, hx, hy, 0.0f, 0.0f, 9, 9, 9, 9);
             } else if (currentHealth > prevHp) {
-                context.drawTexture(RenderPipelines.GUI_TEXTURED, halfTexture, hx, hy, 0.0f, 0.0f, 9, 9, 9, 9);
+                context.blit(RenderPipelines.GUI_TEXTURED, halfTexture, hx, hy, 0.0f, 0.0f, 9, 9, 9, 9);
             }
         }
     }

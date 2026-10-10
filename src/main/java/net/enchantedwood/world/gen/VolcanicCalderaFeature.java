@@ -1,52 +1,52 @@
 package net.enchantedwood.world.gen;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.world.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+public class VolcanicCalderaFeature implements Feature {
+    public static final com.mojang.serialization.MapCodec<VolcanicCalderaFeature> CODEC = com.mojang.serialization.MapCodec.unit(VolcanicCalderaFeature::new);
 
-public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
-
-    public VolcanicCalderaFeature(Codec<DefaultFeatureConfig> configCodec) {
-        super(configCodec);
+    public VolcanicCalderaFeature() {
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
+    public com.mojang.serialization.MapCodec<? extends Feature> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean place(net.minecraft.world.level.WorldGenLevel world, net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos origin) {
+        
 
         // Strictly generate in The Convergence dimension
-        if (world.toServerWorld().getRegistryKey() != ModDimensions.CONVERGENCE_WORLD_KEY) {
+        if (world.getLevel().dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
             return false;
         }
 
-        BlockPos origin = context.getOrigin();
-        Random random = context.getRandom();
+        
+        
 
         // Verify this is Scorched Caldera biome
-        var biomeKey = world.getBiome(origin).getKey();
-        if (biomeKey.isEmpty() || !biomeKey.get().getValue().equals(Identifier.of(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
+        var biomeKey = world.getBiome(origin).unwrapKey();
+        if (biomeKey.isEmpty() || !biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
             return false;
         }
 
-        int originSurfaceY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, origin.getX(), origin.getZ()) - 1;
+        int originSurfaceY = world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, origin.getX(), origin.getZ()) - 1;
         if (originSurfaceY < 50) {
             return false;
         }
 
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         boolean placedAny = false;
 
         // 1. Transform Surface & Subsurface into Volcanic Strata (16x16 chunk radius)
@@ -56,12 +56,12 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
                 int z = origin.getZ() + dz;
 
                 mutablePos.set(x, 0, z);
-                var colBiome = world.getBiome(mutablePos).getKey();
-                if (colBiome.isEmpty() || !colBiome.get().getValue().equals(Identifier.of(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
+                var colBiome = world.getBiome(mutablePos).unwrapKey();
+                if (colBiome.isEmpty() || !colBiome.get().identifier().equals(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
                     continue;
                 }
 
-                int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) - 1;
+                int topY = world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
                 if (topY < 50) continue;
 
                 mutablePos.set(x, topY, z);
@@ -72,38 +72,38 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
                     BlockState volcanicSurface;
                     float roll = random.nextFloat();
                     if (roll < 0.50f) {
-                        volcanicSurface = Blocks.BASALT.getDefaultState();
+                        volcanicSurface = Blocks.BASALT.defaultBlockState();
                     } else if (roll < 0.75f) {
-                        volcanicSurface = Blocks.BLACKSTONE.getDefaultState();
+                        volcanicSurface = Blocks.BLACKSTONE.defaultBlockState();
                     } else if (roll < 0.90f) {
-                        volcanicSurface = Blocks.MAGMA_BLOCK.getDefaultState();
+                        volcanicSurface = Blocks.MAGMA_BLOCK.defaultBlockState();
                     } else {
-                        volcanicSurface = Blocks.SMOOTH_BASALT.getDefaultState();
+                        volcanicSurface = Blocks.SMOOTH_BASALT.defaultBlockState();
                     }
 
-                    world.setBlockState(mutablePos, volcanicSurface, 2);
+                    world.setBlock(mutablePos, volcanicSurface, 2);
                     placedAny = true;
 
                     // Subsurface volcanic rock layers (2 to 5 blocks deep)
                     int depth = 2 + random.nextInt(4);
                     for (int d = 1; d <= depth; d++) {
-                        BlockPos under = mutablePos.down(d);
+                        BlockPos under = mutablePos.below(d);
                         BlockState underState = world.getBlockState(under);
                         if (isReplaceableTerrain(underState)) {
                             BlockState subState = (random.nextFloat() < 0.65f)
-                                    ? Blocks.BLACKSTONE.getDefaultState()
-                                    : (random.nextBoolean() ? Blocks.BASALT.getDefaultState() : Blocks.NETHERRACK.getDefaultState());
-                            world.setBlockState(under, subState, 2);
+                                    ? Blocks.BLACKSTONE.defaultBlockState()
+                                    : (random.nextBoolean() ? Blocks.BASALT.defaultBlockState() : Blocks.NETHERRACK.defaultBlockState());
+                            world.setBlock(under, subState, 2);
                         }
                     }
 
                     // Basalt columns & Spires protruding on the surface
-                    if (volcanicSurface.isOf(Blocks.BASALT) && random.nextInt(18) == 0 && world.isAir(mutablePos.up())) {
+                    if (volcanicSurface.is(Blocks.BASALT) && random.nextInt(18) == 0 && world.isEmptyBlock(mutablePos.above())) {
                         int spireHeight = 2 + random.nextInt(4);
                         for (int h = 1; h <= spireHeight; h++) {
-                            BlockPos spirePos = mutablePos.up(h);
-                            if (world.isAir(spirePos)) {
-                                world.setBlockState(spirePos, Blocks.BASALT.getDefaultState(), 2);
+                            BlockPos spirePos = mutablePos.above(h);
+                            if (world.isEmptyBlock(spirePos)) {
+                                world.setBlock(spirePos, Blocks.BASALT.defaultBlockState(), 2);
                             } else {
                                 break;
                             }
@@ -111,8 +111,8 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
                     }
 
                     // Magma block ambient fire
-                    if (volcanicSurface.isOf(Blocks.MAGMA_BLOCK) && random.nextInt(8) == 0 && world.isAir(mutablePos.up())) {
-                        world.setBlockState(mutablePos.up(), Blocks.FIRE.getDefaultState(), 2);
+                    if (volcanicSurface.is(Blocks.MAGMA_BLOCK) && random.nextInt(8) == 0 && world.isEmptyBlock(mutablePos.above())) {
+                        world.setBlock(mutablePos.above(), Blocks.FIRE.defaultBlockState(), 2);
                     }
                 }
             }
@@ -127,13 +127,13 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
         return placedAny;
     }
 
-    private void generateCalderaCrater(StructureWorldAccess world, BlockPos origin, int centerSurfaceY, Random random) {
+    private void generateCalderaCrater(WorldGenLevel world, BlockPos origin, int centerSurfaceY, RandomSource random) {
         int craterRadius = 6 + random.nextInt(6); // 6 to 11 block radius crater bowl
         int craterDepth = 4 + random.nextInt(3);  // 4 to 6 blocks deep into the mountain
         int rimTopY = centerSurfaceY + 1;
         int lavaLevelY = centerSurfaceY - (craterDepth / 2);
 
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
         // 1. Carve circular bowl & build fortified basalt/magma rim
         for (int rx = -craterRadius - 2; rx <= craterRadius + 2; rx++) {
@@ -152,35 +152,35 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
                     for (int y = rimTopY + 3; y > lavaLevelY; y--) {
                         mutablePos.set(x, y, z);
                         if (!world.getBlockState(mutablePos).isAir()) {
-                            world.setBlockState(mutablePos, Blocks.AIR.getDefaultState(), 2);
+                            world.setBlock(mutablePos, Blocks.AIR.defaultBlockState(), 2);
                         }
                     }
 
                     // Fill lava lake in the bottom
                     for (int y = lavaLevelY; y >= bowlBottomY; y--) {
                         mutablePos.set(x, y, z);
-                        world.setBlockState(mutablePos, Blocks.LAVA.getDefaultState(), 2);
+                        world.setBlock(mutablePos, Blocks.LAVA.defaultBlockState(), 2);
                     }
 
                     // Magma & Obsidian lining at the crater floor
                     mutablePos.set(x, bowlBottomY - 1, z);
                     BlockState floorState = (random.nextFloat() < 0.60f)
-                            ? Blocks.MAGMA_BLOCK.getDefaultState()
-                            : Blocks.OBSIDIAN.getDefaultState();
-                    world.setBlockState(mutablePos, floorState, 2);
+                            ? Blocks.MAGMA_BLOCK.defaultBlockState()
+                            : Blocks.OBSIDIAN.defaultBlockState();
+                    world.setBlock(mutablePos, floorState, 2);
                     mutablePos.set(x, bowlBottomY - 2, z);
-                    world.setBlockState(mutablePos, Blocks.BLACKSTONE.getDefaultState(), 2);
+                    world.setBlock(mutablePos, Blocks.BLACKSTONE.defaultBlockState(), 2);
 
                 } else if (distSq <= (craterRadius + 2) * (craterRadius + 2)) {
                     // Rim ridge: build up basalt and blackstone rim
-                    int currentTop = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) - 1;
+                    int currentTop = world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
                     if (currentTop < rimTopY) {
                         for (int y = currentTop + 1; y <= rimTopY; y++) {
                             mutablePos.set(x, y, z);
                             BlockState rimState = (random.nextFloat() < 0.7f)
-                                    ? Blocks.BASALT.getDefaultState()
-                                    : Blocks.BLACKSTONE.getDefaultState();
-                            world.setBlockState(mutablePos, rimState, 2);
+                                    ? Blocks.BASALT.defaultBlockState()
+                                    : Blocks.BLACKSTONE.defaultBlockState();
+                            world.setBlock(mutablePos, rimState, 2);
                         }
                     }
 
@@ -189,8 +189,8 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
                         int spireHeight = 2 + random.nextInt(4);
                         for (int h = 1; h <= spireHeight; h++) {
                             mutablePos.set(x, rimTopY + h, z);
-                            if (world.isAir(mutablePos)) {
-                                world.setBlockState(mutablePos, Blocks.BASALT.getDefaultState(), 2);
+                            if (world.isEmptyBlock(mutablePos)) {
+                                world.setBlock(mutablePos, Blocks.BASALT.defaultBlockState(), 2);
                             }
                         }
                     }
@@ -208,28 +208,28 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
             // Cut a channel through the rim and place an active lava source
             for (int y = rimTopY + 1; y >= lavaLevelY; y--) {
                 mutablePos.set(breachX, y, breachZ);
-                world.setBlockState(mutablePos, (y == lavaLevelY) ? Blocks.LAVA.getDefaultState() : Blocks.AIR.getDefaultState(), 2);
+                world.setBlock(mutablePos, (y == lavaLevelY) ? Blocks.LAVA.defaultBlockState() : Blocks.AIR.defaultBlockState(), 2);
             }
         }
     }
 
     private boolean isReplaceableTerrain(BlockState state) {
-        if (state.isAir() || state.isOf(Blocks.BEDROCK) || state.isOf(Blocks.BARRIER)) {
+        if (state.isAir() || state.is(Blocks.BEDROCK) || state.is(Blocks.BARRIER)) {
             return false;
         }
-        return state.isIn(BlockTags.DIRT) ||
-                state.isIn(BlockTags.BASE_STONE_OVERWORLD) ||
-                state.isIn(BlockTags.TERRACOTTA) ||
-                state.isIn(BlockTags.SAND) ||
-                state.isOf(Blocks.GRAVEL) ||
-                state.isOf(Blocks.STONE) ||
-                state.isOf(Blocks.COBBLESTONE) ||
-                state.isOf(Blocks.ANDESITE) ||
-                state.isOf(Blocks.DIORITE) ||
-                state.isOf(Blocks.GRANITE) ||
-                state.isOf(Blocks.TUFF) ||
-                state.isOf(Blocks.DEEPSLATE) ||
-                state.isOf(Blocks.SANDSTONE) ||
-                state.isOf(Blocks.RED_SANDSTONE);
+        return state.is(BlockTags.DIRT) ||
+                state.is(BlockTags.BASE_STONE_OVERWORLD) ||
+                state.is(BlockTags.TERRACOTTA) ||
+                state.is(BlockTags.SAND) ||
+                state.is(Blocks.GRAVEL) ||
+                state.is(Blocks.STONE) ||
+                state.is(Blocks.COBBLESTONE) ||
+                state.is(Blocks.ANDESITE) ||
+                state.is(Blocks.DIORITE) ||
+                state.is(Blocks.GRANITE) ||
+                state.is(Blocks.TUFF) ||
+                state.is(Blocks.DEEPSLATE) ||
+                state.is(Blocks.SANDSTONE) ||
+                state.is(Blocks.RED_SANDSTONE);
     }
 }

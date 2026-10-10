@@ -1,104 +1,102 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.enchantedwood.item.ModItems;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 public class OxyHydrogenTorchItem extends Item {
     public static final int MAX_FUEL = 2_000; // 2,000 mB
 
-    public OxyHydrogenTorchItem(Settings settings) {
-        super(settings.maxCount(1));
+    public OxyHydrogenTorchItem(Properties settings) {
+        super(settings.stacksTo(1));
     }
 
     public static int getFuel(ItemStack stack) {
-        NbtComponent nbtComponent = stack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = stack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent != null) {
-            return nbtComponent.copyNbt().getInt("TorchFuel", 0);
+            return nbtComponent.copyTag().getIntOr("TorchFuel", 0);
         }
         return 0;
     }
 
     public static void setFuel(ItemStack stack, int amount) {
         int clamped = Math.max(0, Math.min(amount, MAX_FUEL));
-        NbtCompound nbt = new NbtCompound();
-        NbtComponent nbtComponent = stack.get(DataComponentTypes.CUSTOM_DATA);
+        CompoundTag nbt = new CompoundTag();
+        CustomData nbtComponent = stack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent != null) {
-            nbt = nbtComponent.copyNbt();
+            nbt = nbtComponent.copyTag();
         }
         nbt.putInt("TorchFuel", clamped);
-        NbtComponent.set(DataComponentTypes.CUSTOM_DATA, stack, nbt);
+        CustomData.set(DataComponents.CUSTOM_DATA, stack, nbt);
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
-        ItemStack offhand = user.getOffHandStack();
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
+        ItemStack offhand = user.getOffhandItem();
 
         // Refuel with Oxygen or Hydrogen
-        if (offhand.isOf(ModItems.OXYGEN_CANISTER) || offhand.isOf(ModItems.HYDROGEN_CANISTER)) {
+        if (offhand.is(ModItems.OXYGEN_CANISTER) || offhand.is(ModItems.HYDROGEN_CANISTER)) {
             int current = getFuel(stack);
             if (current < MAX_FUEL) {
                 setFuel(stack, current + 500);
-                offhand.decrement(1);
-                user.getInventory().offerOrDrop(new ItemStack(ModItems.EMPTY_GAS_CANISTER));
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.5f);
-                user.sendMessage(Text.literal("§bTorch refueled (+500 mB Oxy-Hydrogen)"), true);
-                return ActionResult.SUCCESS;
+                offhand.shrink(1);
+                user.getInventory().placeItemBackInInventory(new ItemStack(ModItems.EMPTY_GAS_CANISTER), net.minecraft.util.Prediction.SERVER_ONLY);
+                world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0f, 1.5f);
+                user.sendOverlayMessage(Component.literal("§bTorch refueled (+500 mB Oxy-Hydrogen)"));
+                return InteractionResult.SUCCESS;
             }
         }
         return super.use(world, user, hand);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getBlockPos();
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
-        PlayerEntity player = context.getPlayer();
-        ItemStack stack = context.getStack();
+        Player player = context.getPlayer();
+        ItemStack stack = context.getItemInHand();
 
-        if (player != null && player.isSneaking()) {
+        if (player != null && player.isShiftKeyDown()) {
             int fuel = getFuel(stack);
             if (fuel >= 10 || (player.isCreative())) {
                 // Instant dismantle modded machine / block
-                if (!world.isClient()) {
+                if (!world.isClientSide()) {
                     if (!player.isCreative()) {
                         setFuel(stack, fuel - 10);
                     }
                     BlockEntity be = world.getBlockEntity(pos);
                     ItemStack drop = new ItemStack(state.getBlock().asItem());
-                    world.breakBlock(pos, false);
-                    ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), drop);
-                    world.playSound(null, pos, SoundEvents.BLOCK_NETHERITE_BLOCK_BREAK, SoundCategory.BLOCKS, 1.0f, 1.4f);
-                    player.sendMessage(Text.literal("§aDismantled block with Oxy-Hydrogen Torch!"), true);
+                    world.destroyBlock(pos, false);
+                    Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), drop);
+                    world.playSound(null, pos, SoundEvents.NETHERITE_BLOCK_BREAK, SoundSource.BLOCKS, 1.0f, 1.4f);
+                    player.sendOverlayMessage(Component.literal("§aDismantled block with Oxy-Hydrogen Torch!"));
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
-                if (world.isClient()) {
-                    player.sendMessage(Text.literal("§cTorch is out of Oxy-Hydrogen fuel!"), true);
+                if (world.isClientSide()) {
+                    player.sendOverlayMessage(Component.literal("§cTorch is out of Oxy-Hydrogen fuel!"));
                 }
-                return ActionResult.FAIL;
+                return InteractionResult.FAIL;
             }
         }
-        return super.useOnBlock(context);
+        return super.useOn(context);
     }
 }

@@ -1,115 +1,112 @@
 package net.enchantedwood.block.custom;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.world.dimension.ModDimensions;
 
 import java.util.Set;
 
 public class MiningPortalBlock extends Block {
-    public static final MapCodec<MiningPortalBlock> CODEC = createCodec(MiningPortalBlock::new);
-    public static final EnumProperty<Direction.Axis> AXIS = Properties.HORIZONTAL_AXIS;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
-    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
-    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
+    protected static final VoxelShape X_SHAPE = Block.box(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
+    protected static final VoxelShape Z_SHAPE = Block.box(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
 
-    public MiningPortalBlock(Settings settings) {
+    public MiningPortalBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.X));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
     }
 
     @Override
-    protected MapCodec<? extends Block> getCodec() {
-        return CODEC;
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return state.getValue(AXIS) == Direction.Axis.Z ? Z_SHAPE : X_SHAPE;
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return state.get(AXIS) == Direction.Axis.Z ? Z_SHAPE : X_SHAPE;
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AXIS);
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, net.minecraft.world.tick.ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        Direction.Axis axis = state.get(AXIS);
+    public BlockState updateShape(BlockState state, LevelReader world, net.minecraft.world.level.ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+        Direction.Axis axis = state.getValue(AXIS);
         Direction.Axis dirAxis = direction.getAxis();
         if (dirAxis != axis && direction.getAxis().isHorizontal()) {
-            return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+            return super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
         }
         
-        BlockPos below = pos.down();
+        BlockPos below = pos.below();
         BlockState belowState = world.getBlockState(below);
-        if (!belowState.isOf(this) && !belowState.isOf(ModBlocks.ENCHANTED_COBBLESTONE)) {
-            return Blocks.AIR.getDefaultState();
+        if (!belowState.is(this) && !belowState.is(ModBlocks.ENCHANTED_COBBLESTONE)) {
+            return Blocks.AIR.defaultBlockState();
         }
-        BlockPos above = pos.up();
+        BlockPos above = pos.above();
         BlockState aboveState = world.getBlockState(above);
-        if (!aboveState.isOf(this) && !aboveState.isOf(ModBlocks.ENCHANTED_COBBLESTONE)) {
-            return Blocks.AIR.getDefaultState();
+        if (!aboveState.is(this) && !aboveState.is(ModBlocks.ENCHANTED_COBBLESTONE)) {
+            return Blocks.AIR.defaultBlockState();
         }
         
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
+    public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean isInside) {
-        if (world.isClient() || entity.hasVehicle() || entity.hasPassengers() || !entity.canUsePortals(false)) {
+    protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier handler, boolean isInside) {
+        if (world.isClientSide() || entity.isPassenger() || entity.isVehicle() || !entity.canUsePortal(false)) {
             return;
         }
 
-        if (entity instanceof ServerPlayerEntity player) {
-            if (player.hasPortalCooldown()) {
+        if (entity instanceof ServerPlayer player) {
+            if (player.isOnPortalCooldown()) {
                 return;
             }
 
-            ServerWorld currentWorld = (ServerWorld) world;
-            ServerWorld targetWorld;
-            if (currentWorld.getRegistryKey() == ModDimensions.MINING_DIMENSION_WORLD_KEY) {
-                targetWorld = currentWorld.getServer().getWorld(World.OVERWORLD);
+            ServerLevel currentWorld = (ServerLevel) world;
+            ServerLevel targetWorld;
+            if (currentWorld.dimension() == ModDimensions.MINING_DIMENSION_WORLD_KEY) {
+                targetWorld = currentWorld.getServer().getLevel(Level.OVERWORLD);
             } else {
-                targetWorld = currentWorld.getServer().getWorld(ModDimensions.MINING_DIMENSION_WORLD_KEY);
+                targetWorld = currentWorld.getServer().getLevel(ModDimensions.MINING_DIMENSION_WORLD_KEY);
             }
 
             if (targetWorld == null) {
                 return;
             }
 
-            teleportPlayer(player, targetWorld, pos, state.get(AXIS));
+            teleportPlayer(player, targetWorld, pos, state.getValue(AXIS));
         }
     }
 
-    private void teleportPlayer(ServerPlayerEntity player, ServerWorld targetWorld, BlockPos portalPos, Direction.Axis axis) {
+    private void teleportPlayer(ServerPlayer player, ServerLevel targetWorld, BlockPos portalPos, Direction.Axis axis) {
         int targetX = portalPos.getX();
         int targetZ = portalPos.getZ();
-        int targetY = Math.max(targetWorld.getBottomY() + 10, Math.min(targetWorld.getTopYInclusive() - 20, portalPos.getY()));
+        int targetY = Math.max(targetWorld.getMinY() + 10, Math.min(targetWorld.getMaxY() - 20, portalPos.getY()));
 
         // 1. Search for existing portal in target world within 16 blocks
         BlockPos existingPortalPos = null;
@@ -117,8 +114,8 @@ public class MiningPortalBlock extends Block {
             for (int dz = -16; dz <= 16; dz++) {
                 for (int dy = -16; dy <= 16; dy++) {
                     BlockPos check = new BlockPos(targetX + dx, targetY + dy, targetZ + dz);
-                    if (targetWorld.isChunkLoaded(check.getX() >> 4, check.getZ() >> 4)) {
-                        if (targetWorld.getBlockState(check).isOf(this)) {
+                    if (targetWorld.hasChunk(check.getX() >> 4, check.getZ() >> 4)) {
+                        if (targetWorld.getBlockState(check).is(this)) {
                             existingPortalPos = check;
                             break;
                         }
@@ -136,12 +133,12 @@ public class MiningPortalBlock extends Block {
         if (existingPortalPos != null) {
             // Re-use existing portal without modifying anything!
             BlockState existingState = targetWorld.getBlockState(existingPortalPos);
-            Direction.Axis foundAxis = existingState.contains(AXIS) ? existingState.get(AXIS) : axis;
+            Direction.Axis foundAxis = existingState.hasProperty(AXIS) ? existingState.getValue(AXIS) : axis;
             Direction frontDir = foundAxis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
-            spawnX = existingPortalPos.getX() + 0.5 + frontDir.getOffsetX() * 1.2;
+            spawnX = existingPortalPos.getX() + 0.5 + frontDir.getStepX() * 1.2;
             spawnY = existingPortalPos.getY();
-            spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+            spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
         } else {
             // Only create new portal if none exists
             int safeY = Math.max(64, Math.min(100, targetY));
@@ -149,16 +146,16 @@ public class MiningPortalBlock extends Block {
             buildSafePortalDestination(targetWorld, basePos, axis);
 
             Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-            spawnX = basePos.getX() + 1.5 + frontDir.getOffsetX() * 1.2;
+            spawnX = basePos.getX() + 1.5 + frontDir.getStepX() * 1.2;
             spawnY = basePos.getY() + 1.0;
-            spawnZ = basePos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+            spawnZ = basePos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
         }
 
         player.setPortalCooldown(100);
-        player.teleport(targetWorld, spawnX, spawnY, spawnZ, Set.of(), player.getYaw(), player.getPitch(), true);
+        player.teleportTo(targetWorld, spawnX, spawnY, spawnZ, Set.of(), player.getYRot(), player.getXRot(), true);
     }
 
-    private void buildSafePortalDestination(ServerWorld world, BlockPos basePos, Direction.Axis axis) {
+    private void buildSafePortalDestination(ServerLevel world, BlockPos basePos, Direction.Axis axis) {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
         Direction depthDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
@@ -166,21 +163,21 @@ public class MiningPortalBlock extends Block {
         for (int w = -1; w <= 4; w++) {
             for (int d = -2; d <= 2; d++) {
                 for (int h = -1; h <= 5; h++) {
-                    BlockPos current = basePos.offset(widthDir, w).offset(depthDir, d).up(h);
+                    BlockPos current = basePos.relative(widthDir, w).relative(depthDir, d).above(h);
                     if (h == -1) {
                         // Solid platform below
-                        world.setBlockState(current, ModBlocks.ENCHANTED_COBBLESTONE.getDefaultState());
+                        world.setBlockAndUpdate(current, ModBlocks.ENCHANTED_COBBLESTONE.defaultBlockState());
                     } else if (h >= 0 && h <= 4 && d == 0 && (w >= 0 && w <= 3)) {
                         // Portal Frame / Portal Blocks
                         if (w == 0 || w == 3 || h == 0 || h == 4) {
-                            world.setBlockState(current, ModBlocks.ENCHANTED_COBBLESTONE.getDefaultState());
+                            world.setBlockAndUpdate(current, ModBlocks.ENCHANTED_COBBLESTONE.defaultBlockState());
                         } else {
-                            world.setBlockState(current, ModBlocks.MINING_PORTAL.getDefaultState().with(AXIS, axis));
+                            world.setBlockAndUpdate(current, ModBlocks.MINING_PORTAL.defaultBlockState().setValue(AXIS, axis));
                         }
                     } else {
                         // Clear air around the portal for safe entry/exit
-                        if (!world.isAir(current)) {
-                            world.setBlockState(current, Blocks.AIR.getDefaultState());
+                        if (!world.isEmptyBlock(current)) {
+                            world.setBlockAndUpdate(current, Blocks.AIR.defaultBlockState());
                         }
                     }
                 }
@@ -189,11 +186,11 @@ public class MiningPortalBlock extends Block {
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (random.nextInt(100) == 0) {
             world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_PORTAL_AMBIENT,
-                    SoundCategory.BLOCKS, 0.4f, random.nextFloat() * 0.4f + 0.8f);
+                    SoundEvents.PORTAL_AMBIENT,
+                    SoundSource.BLOCKS, 0.4f, random.nextFloat() * 0.4f + 0.8f);
         }
 
         double d = pos.getX() + random.nextDouble();
@@ -203,6 +200,6 @@ public class MiningPortalBlock extends Block {
         double h = (random.nextFloat() - 0.5) * 0.5;
         double j = (random.nextFloat() - 0.5) * 0.5;
         
-        world.addParticleClient(new DustParticleEffect(0x10B981, 1.0f), d, e, f, g, h, j);
+        world.addParticle(new DustParticleOptions(0x10B981, 1.0f), d, e, f, g, h, j);
     }
 }

@@ -1,16 +1,16 @@
 package net.enchantedwood.screen;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class IceCreamMachineScreenHandler extends ScreenHandler {
+public class IceCreamMachineScreenHandler extends AbstractContainerMenu {
     public static final int TOTAL_SLOTS = 6;
     public static final int REFRIGERANT_SLOT = 0;
     public static final int BASE_SLOT = 1;
@@ -19,21 +19,21 @@ public class IceCreamMachineScreenHandler extends ScreenHandler {
     public static final int OUTPUT_SLOT = 4;
     public static final int RETURN_SLOT = 5;
 
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public IceCreamMachineScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(TOTAL_SLOTS), new ArrayPropertyDelegate(6));
+    public IceCreamMachineScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(TOTAL_SLOTS), new SimpleContainerData(6));
     }
 
-    public IceCreamMachineScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public IceCreamMachineScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.ICE_CREAM_MACHINE_SCREEN_HANDLER, syncId);
-        checkSize(inventory, TOTAL_SLOTS);
+        checkContainerSize(inventory, TOTAL_SLOTS);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
 
-        inventory.onOpen(playerInventory.player);
-        this.addProperties(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
 
         // Machine Slots
         this.addSlot(new Slot(inventory, REFRIGERANT_SLOT, 34, 20));
@@ -42,13 +42,13 @@ public class IceCreamMachineScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(inventory, FLAVOR_SLOT, 56, 48));
         this.addSlot(new Slot(inventory, OUTPUT_SLOT, 124, 34) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
         this.addSlot(new Slot(inventory, RETURN_SLOT, 148, 34) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -97,82 +97,82 @@ public class IceCreamMachineScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
 
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot == OUTPUT_SLOT || invSlot == RETURN_SLOT) {
-                if (!this.insertItem(originalStack, TOTAL_SLOTS, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, TOTAL_SLOTS, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(originalStack, newStack);
+                slot.onQuickCraft(originalStack, newStack);
             } else if (invSlot < TOTAL_SLOTS) {
-                if (!this.insertItem(originalStack, TOTAL_SLOTS, this.slots.size(), false)) {
+                if (!this.moveItemStackTo(originalStack, TOTAL_SLOTS, this.slots.size(), false)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Route player items into appropriate slots
                 if (isRefrigerant(originalStack)) {
-                    if (!this.insertItem(originalStack, REFRIGERANT_SLOT, REFRIGERANT_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, REFRIGERANT_SLOT, REFRIGERANT_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (isBaseLiquid(originalStack)) {
-                    if (!this.insertItem(originalStack, BASE_SLOT, BASE_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, BASE_SLOT, BASE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (isSweetener(originalStack)) {
-                    if (!this.insertItem(originalStack, SWEETENER_SLOT, SWEETENER_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, SWEETENER_SLOT, SWEETENER_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
-                    if (!this.insertItem(originalStack, FLAVOR_SLOT, FLAVOR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, FLAVOR_SLOT, FLAVOR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
 
             if (originalStack.getCount() == newStack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            slot.onTake(player, originalStack);
         }
 
         return newStack;
     }
 
     private static boolean isRefrigerant(ItemStack stack) {
-        return stack.isOf(net.minecraft.item.Items.ICE)
-                || stack.isOf(net.enchantedwood.item.ModItems.ICE_CUBES)
-                || stack.isOf(net.minecraft.item.Items.PACKED_ICE)
-                || stack.isOf(net.minecraft.item.Items.BLUE_ICE)
-                || stack.isOf(net.minecraft.item.Items.SNOWBALL)
-                || stack.isOf(net.minecraft.item.Items.SNOW_BLOCK)
-                || stack.isOf(net.enchantedwood.item.ModItems.SALT);
+        return stack.is(net.minecraft.world.item.Items.ICE)
+                || stack.is(net.enchantedwood.item.ModItems.ICE_CUBES)
+                || stack.is(net.minecraft.world.item.Items.PACKED_ICE)
+                || stack.is(net.minecraft.world.item.Items.BLUE_ICE)
+                || stack.is(net.minecraft.world.item.Items.SNOWBALL)
+                || stack.is(net.minecraft.world.item.Items.SNOW_BLOCK)
+                || stack.is(net.enchantedwood.item.ModItems.SALT);
     }
 
     private static boolean isBaseLiquid(ItemStack stack) {
-        return stack.isOf(net.minecraft.item.Items.MILK_BUCKET)
-                || stack.isOf(net.enchantedwood.item.ModItems.SOY_MILK);
+        return stack.is(net.minecraft.world.item.Items.MILK_BUCKET)
+                || stack.is(net.enchantedwood.item.ModItems.SOY_MILK);
     }
 
     private static boolean isSweetener(ItemStack stack) {
-        return stack.isOf(net.minecraft.item.Items.SUGAR)
-                || stack.isOf(net.minecraft.item.Items.HONEY_BOTTLE);
+        return stack.is(net.minecraft.world.item.Items.SUGAR)
+                || stack.is(net.minecraft.world.item.Items.HONEY_BOTTLE);
     }
 }

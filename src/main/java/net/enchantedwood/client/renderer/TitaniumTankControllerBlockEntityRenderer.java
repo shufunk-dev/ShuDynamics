@@ -1,31 +1,31 @@
 package net.enchantedwood.client.renderer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.enchantedwood.block.entity.TitaniumTankControllerBlockEntity;
 import net.enchantedwood.fluid.MoltenMetal;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.block.entity.state.BlockEntityRenderState;
-import net.minecraft.client.render.command.ModelCommandRenderer;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.state.CameraRenderState;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.world.phys.Vec3;
 
 @Environment(EnvType.CLIENT)
 public class TitaniumTankControllerBlockEntityRenderer implements BlockEntityRenderer<TitaniumTankControllerBlockEntity, TitaniumTankRenderState> {
-    private final Sprite waterSprite;
-    private final Sprite lavaSprite;
+    private final TextureAtlasSprite waterSprite;
+    private final TextureAtlasSprite lavaSprite;
 
-    public TitaniumTankControllerBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
-        this.waterSprite = ctx.spriteHolder().getSprite(TexturedRenderLayers.BLOCK_SPRITE_MAPPER.mapVanilla("water_still"));
-        this.lavaSprite = ctx.spriteHolder().getSprite(TexturedRenderLayers.BLOCK_SPRITE_MAPPER.mapVanilla("lava_still"));
+    public TitaniumTankControllerBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {
+        this.waterSprite = ctx.sprites().get(Sheets.BLOCKS_MAPPER.defaultNamespaceApply("water_still"));
+        this.lavaSprite = ctx.sprites().get(Sheets.BLOCKS_MAPPER.defaultNamespaceApply("lava_still"));
     }
 
     @Override
@@ -34,8 +34,8 @@ public class TitaniumTankControllerBlockEntityRenderer implements BlockEntityRen
     }
 
     @Override
-    public void updateRenderState(TitaniumTankControllerBlockEntity entity, TitaniumTankRenderState state, float tickDelta, Vec3d cameraPos, ModelCommandRenderer.CrumblingOverlayCommand crumblingOverlayCommand) {
-        BlockEntityRenderState.updateBlockEntityRenderState(entity, state, crumblingOverlayCommand);
+    public void extractRenderState(TitaniumTankControllerBlockEntity entity, TitaniumTankRenderState state, float tickDelta, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay crumblingOverlayCommand) {
+        BlockEntityRenderState.extractBase(entity, state, crumblingOverlayCommand);
         state.isFormed = entity.isFormed();
         state.lavaAmount = entity.getStoredFluidAmount();
         state.currentFluid = entity.getFluidType();
@@ -43,12 +43,12 @@ public class TitaniumTankControllerBlockEntityRenderer implements BlockEntityRen
     }
 
     @Override
-    public boolean rendersOutsideBoundingBox() {
+    public boolean shouldRenderOffScreen() {
         return true;
     }
 
     @Override
-    public void render(TitaniumTankRenderState state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState) {
+    public void submit(TitaniumTankRenderState state, PoseStack matrices, SubmitNodeCollector queue, CameraRenderState cameraState) {
         if (!state.isFormed || state.lavaAmount <= 0 || state.currentFluid == null || state.currentFluid == MoltenMetal.NONE) {
             return;
         }
@@ -59,25 +59,25 @@ public class TitaniumTankControllerBlockEntityRenderer implements BlockEntityRen
         float yBottom = -3.0f + 0.002f;
         float yTop = yBottom + fluidHeight;
 
-        Sprite sprite = (state.currentFluid == MoltenMetal.LAVA) ? this.lavaSprite : this.waterSprite;
+        TextureAtlasSprite sprite = (state.currentFluid == MoltenMetal.LAVA) ? this.lavaSprite : this.waterSprite;
         int color = (state.currentFluid == MoltenMetal.LAVA) ? 0xFFFFFFFF : state.currentFluid.getColor();
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
         int a = 250;
 
-        queue.submitCustom(matrices, TexturedRenderLayers.getBlockTranslucentCull(), (entry, vertexConsumer) -> {
+        queue.submitCustomGeometry(matrices, Sheets.translucentBlockItemSheet(), (entry, vertexConsumer) -> {
             renderFluidInterior(entry, vertexConsumer, sprite, r, g, b, a, yBottom, yTop);
         });
     }
 
-    private void renderFluidInterior(MatrixStack.Entry entry, VertexConsumer vertexConsumer,
-                                     Sprite sprite, int r, int g, int b, int a,
+    private void renderFluidInterior(PoseStack.Pose entry, VertexConsumer vertexConsumer,
+                                     TextureAtlasSprite sprite, int r, int g, int b, int a,
                                      float yBottom, float yTop) {
-        float minU = sprite.getMinU();
-        float maxU = sprite.getMaxU();
-        float minV = sprite.getMinV();
-        float maxV = sprite.getMaxV();
+        float minU = sprite.getU0();
+        float maxU = sprite.getU1();
+        float minV = sprite.getV0();
+        float maxV = sprite.getV1();
 
         // 1. Top Face & Underside (3x3 grid)
         for (int bx = 0; bx < 3; bx++) {
@@ -194,16 +194,16 @@ public class TitaniumTankControllerBlockEntityRenderer implements BlockEntityRen
         }
     }
 
-    private static void vertex(MatrixStack.Entry entry, VertexConsumer vertexConsumer,
+    private static void vertex(PoseStack.Pose entry, VertexConsumer vertexConsumer,
                                float x, float y, float z,
                                float u, float v,
                                int r, int g, int b, int a,
                                float nx, float ny, float nz) {
-        vertexConsumer.vertex(entry, x, y, z)
-                .color(r, g, b, a)
-                .texture(u, v)
-                .overlay(OverlayTexture.DEFAULT_UV)
-                .light(LightmapTextureManager.MAX_LIGHT_COORDINATE)
-                .normal(entry, nx, ny, nz);
+        vertexConsumer.addVertex(entry, x, y, z)
+                .setColor(r, g, b, a)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightCoordsUtil.FULL_BRIGHT)
+                .setNormal(entry, nx, ny, nz);
     }
 }

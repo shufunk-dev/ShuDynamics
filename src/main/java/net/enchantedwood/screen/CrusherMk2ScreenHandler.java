@@ -3,31 +3,31 @@ package net.enchantedwood.screen;
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.CrusherMk2BlockEntity;
 import net.enchantedwood.item.custom.GearItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class CrusherMk2ScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
-    private final PropertyDelegate propertyDelegate;
+public class CrusherMk2ScreenHandler extends AbstractContainerMenu {
+    private final Container inventory;
+    private final ContainerData propertyDelegate;
 
-    public CrusherMk2ScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(CrusherMk2BlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(8));
+    public CrusherMk2ScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(CrusherMk2BlockEntity.INVENTORY_SIZE), new SimpleContainerData(8));
     }
 
-    public CrusherMk2ScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
+    public CrusherMk2ScreenHandler(int syncId, Inventory playerInventory, Container inventory, ContainerData propertyDelegate) {
         super(ModScreenHandlers.CRUSHER_MK2_SCREEN_HANDLER, syncId);
-        checkSize(inventory, CrusherMk2BlockEntity.INVENTORY_SIZE);
+        checkContainerSize(inventory, CrusherMk2BlockEntity.INVENTORY_SIZE);
         this.inventory = inventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-        inventory.onOpen(playerInventory.player);
+        this.addDataSlots(propertyDelegate);
+        inventory.startOpen(playerInventory.player);
 
         // Slot 0: Ore Input (x=48, y=35)
         this.addSlot(new Slot(inventory, CrusherMk2BlockEntity.INPUT_SLOT, 48, 35));
@@ -35,7 +35,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
         // Slot 1: Primary Output (x=106, y=35)
         this.addSlot(new Slot(inventory, CrusherMk2BlockEntity.PRIMARY_OUTPUT_SLOT, 106, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -43,7 +43,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
         // Slot 2: Secondary Byproduct Output (x=134, y=35)
         this.addSlot(new Slot(inventory, CrusherMk2BlockEntity.BYPRODUCT_OUTPUT_SLOT, 134, 35) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
@@ -51,7 +51,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
         // Slot 3: Gear Upgrade (x=152, y=8)
         this.addSlot(new Slot(inventory, CrusherMk2BlockEntity.GEAR_SLOT, 152, 8) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof GearItem;
             }
         });
@@ -104,7 +104,7 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
     }
 
     public boolean isGearEnchanted() {
-        return propertyDelegate.size() > 7 && propertyDelegate.get(7) == 1;
+        return propertyDelegate.getCount() > 7 && propertyDelegate.get(7) == 1;
     }
 
     public int getTierYield() {
@@ -121,43 +121,43 @@ public class CrusherMk2ScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
             if (invSlot < CrusherMk2BlockEntity.INVENTORY_SIZE) {
-                if (!this.insertItem(originalStack, CrusherMk2BlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, CrusherMk2BlockEntity.INVENTORY_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 if (originalStack.getItem() instanceof GearItem) {
-                    if (!this.insertItem(originalStack, CrusherMk2BlockEntity.GEAR_SLOT, CrusherMk2BlockEntity.GEAR_SLOT + 1, false)) {
+                    if (!this.moveItemStackTo(originalStack, CrusherMk2BlockEntity.GEAR_SLOT, CrusherMk2BlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.insertItem(originalStack, CrusherMk2BlockEntity.INPUT_SLOT, CrusherMk2BlockEntity.INPUT_SLOT + 1, false)) {
+                } else if (!this.moveItemStackTo(originalStack, CrusherMk2BlockEntity.INPUT_SLOT, CrusherMk2BlockEntity.INPUT_SLOT + 1, false)) {
                     if (invSlot < 4 + 27) {
-                        if (!this.insertItem(originalStack, 4 + 27, this.slots.size(), false)) {
+                        if (!this.moveItemStackTo(originalStack, 4 + 27, this.slots.size(), false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (!this.insertItem(originalStack, 4, 4 + 27, false)) {
+                    } else if (!this.moveItemStackTo(originalStack, 4, 4 + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+    public boolean stillValid(Player player) {
+        return this.inventory.stillValid(player);
     }
 }

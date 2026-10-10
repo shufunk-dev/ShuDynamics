@@ -1,14 +1,14 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.enchantedwood.block.custom.GearTier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class GearItem extends Item {
     private final GearTier gearTier;
     private final boolean enchanted;
 
-    public GearItem(GearTier gearTier, boolean enchanted, Settings settings) {
+    public GearItem(GearTier gearTier, boolean enchanted, Properties settings) {
         super(settings);
         this.gearTier = gearTier;
         this.enchanted = enchanted;
@@ -23,7 +23,7 @@ public class GearItem extends Item {
     }
 
     @Override
-    public boolean hasGlint(ItemStack stack) {
-        return enchanted || super.hasGlint(stack);
+    public boolean isFoil(ItemStack stack) {
+        return enchanted || super.isFoil(stack);
     }
 }

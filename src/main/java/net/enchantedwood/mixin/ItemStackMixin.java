@@ -1,12 +1,12 @@
 package net.enchantedwood.mixin;
 
 import net.enchantedwood.item.custom.ModularPowerArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,35 +19,33 @@ import java.util.function.Consumer;
 public abstract class ItemStackMixin {
 
     @Shadow public abstract Item getItem();
-    @Shadow public abstract boolean isDamageable();
+    @Shadow public abstract boolean isDamageableItem();
     @Shadow public abstract int getMaxDamage();
-    @Shadow public abstract void setDamage(int damage);
-    @Shadow public abstract int getDamage();
-    @Shadow public abstract Text getName();
+    @Shadow public abstract void setDamageValue(int damage);
+    @Shadow public abstract int getDamageValue();
+    @Shadow public abstract Component getHoverName();
 
-    @Inject(method = "onDurabilityChange", at = @At("HEAD"), cancellable = true)
-    private void enforceEmergencyChassisLock(int damage, ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo ci) {
-        if (this.getItem() instanceof ModularPowerArmorItem && this.isDamageable()) {
+    @Inject(method = "applyDamage", at = @At("HEAD"), cancellable = true)
+    private void enforceEmergencyChassisLock(int damage, ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo ci) {
+        if (this.getItem() instanceof ModularPowerArmorItem && this.isDamageableItem()) {
             int maxDmg = this.getMaxDamage();
             if (damage >= maxDmg) {
                 // Lock at maxDamage - 1 (1 HP remaining)
                 int lockedDamage = Math.max(0, maxDmg - 1);
-                boolean wasAlreadyLocked = this.getDamage() >= lockedDamage;
-                this.setDamage(lockedDamage);
+                boolean wasAlreadyLocked = this.getDamageValue() >= lockedDamage;
+                this.setDamageValue(lockedDamage);
 
                 if (player != null && !wasAlreadyLocked) {
-                    player.sendMessage(
-                            Text.literal("§c§l[EMERGENCY CHASSIS LOCK] §e" + this.getName().getString() + " §7integrity critical! Modules entered safety shutdown."),
-                            true
-                    );
-                    if (player.getEntityWorld() != null) {
-                        player.getEntityWorld().playSound(
+                    player.sendOverlayMessage(
+                            Component.literal("§c§l[EMERGENCY CHASSIS LOCK] §e" + this.getHoverName().getString() + " §7integrity critical! Modules entered safety shutdown."));
+                    if (player.level() != null) {
+                        player.level().playSound(
                                 null, player.getX(), player.getY(), player.getZ(),
-                                SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.2f, 0.5f
+                                SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.2f, 0.5f
                         );
-                        player.getEntityWorld().playSound(
+                        player.level().playSound(
                                 null, player.getX(), player.getY(), player.getZ(),
-                                SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.PLAYERS, 1.0f, 1.8f
+                                SoundEvents.RESPAWN_ANCHOR_DEPLETE.value(), SoundSource.PLAYERS, 1.0f, 1.8f
                         );
                     }
                 }

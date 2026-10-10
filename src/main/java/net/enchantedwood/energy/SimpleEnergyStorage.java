@@ -1,7 +1,7 @@
 package net.enchantedwood.energy;
 
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class SimpleEnergyStorage implements EnergyStorage {
     protected int energy;
@@ -69,14 +69,14 @@ public class SimpleEnergyStorage implements EnergyStorage {
         return Math.max(this.maxInsert, this.maxExtract);
     }
 
-    public void readData(ReadView view) {
-        this.energy = view.getInt("StoredEnergy", 0);
+    public void readData(ValueInput view) {
+        this.energy = view.getIntOr("StoredEnergy", 0);
         if (this.energy > this.maxEnergy) {
             this.energy = this.maxEnergy;
         }
     }
 
-    public void writeData(WriteView view) {
+    public void writeData(ValueOutput view) {
         view.putInt("StoredEnergy", this.energy);
     }
 }

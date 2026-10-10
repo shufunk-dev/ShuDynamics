@@ -1,1802 +1,1802 @@
 package net.enchantedwood.block;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.block.custom.EnchantedFurnaceBlock;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ModBlocks {
 
     public static final Block ENCHANTED_COBBLESTONE = registerBlock("enchanted_cobblestone",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_cobblestone")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_cobblestone")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ENCHANTED_FURNACE = registerBlockWithTooltip("enchanted_furnace",
-            new EnchantedFurnaceBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_furnace")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.5f)
-                    .resistance(3.5f)
-                    .requiresTool()
-                    .luminance(state -> state.get(AbstractFurnaceBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Enchanted Mystical Furnace"),
-            Text.literal("§7High-efficiency furnace with accelerated smelting speed & dust support."));
+            new EnchantedFurnaceBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_furnace")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.5f)
+                    .explosionResistance(3.5f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractFurnaceBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Enchanted Mystical Furnace"),
+            Component.literal("§7High-efficiency furnace with accelerated smelting speed & dust support."));
 
     public static final Block HARMONIC_RECORD_PRESS = registerBlockWithTooltip("harmonic_record_press",
-            new net.enchantedwood.block.custom.HarmonicRecordPressBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "harmonic_record_press")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.HarmonicRecordPressBlock.LIT) ? 11 : 0)),
-            Text.literal("§6Harmonic Record Press"),
-            Text.literal("§7Acoustic turntable press for cutting & duplicating Music Discs."),
-            Text.literal("§e • Consumes Blank Vinyl Discs + Thematic Catalysts"),
-            Text.literal("§8 • Overclockable with Gears. Draws 40 FE/t."));
+            new net.enchantedwood.block.custom.HarmonicRecordPressBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "harmonic_record_press")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.HarmonicRecordPressBlock.LIT) ? 11 : 0)),
+            Component.literal("§6Harmonic Record Press"),
+            Component.literal("§7Acoustic turntable press for cutting & duplicating Music Discs."),
+            Component.literal("§e • Consumes Blank Vinyl Discs + Thematic Catalysts"),
+            Component.literal("§8 • Overclockable with Gears. Draws 40 FE/t."));
 
     public static final Block BRICK_OVEN = registerBlockWithTooltip("brick_oven",
-            new net.enchantedwood.block.custom.BrickOvenBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "brick_oven")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.5f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.BrickOvenBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Traditional Brick Oven"),
-            Text.literal("§7Artisan masonry oven for high-speed baking & culinary crafting."),
-            Text.literal("§b • Dual Heating: Connect FE Energy Cables (20 FE/t) or Solid Fuels"),
-            Text.literal("§e • Top Slot: Flour, Pizza Dough, Raw Pizzas, Meats, Water Buckets"),
-            Text.literal("§6 • Bottom Slot: Coal, Charcoal, Wood Logs, Planks, Lava Buckets"),
-            Text.literal("§a • Bakes 2.5x faster than standard furnaces (4 sec per item)"));
+            new net.enchantedwood.block.custom.BrickOvenBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "brick_oven")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.5f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.BrickOvenBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Traditional Brick Oven"),
+            Component.literal("§7Artisan masonry oven for high-speed baking & culinary crafting."),
+            Component.literal("§b • Dual Heating: Connect FE Energy Cables (20 FE/t) or Solid Fuels"),
+            Component.literal("§e • Top Slot: Flour, Pizza Dough, Raw Pizzas, Meats, Water Buckets"),
+            Component.literal("§6 • Bottom Slot: Coal, Charcoal, Wood Logs, Planks, Lava Buckets"),
+            Component.literal("§a • Bakes 2.5x faster than standard furnaces (4 sec per item)"));
 
     public static final Block ICE_CREAM_MACHINE = registerBlockWithTooltip("ice_cream_machine",
-            new net.enchantedwood.block.custom.IceCreamMachineBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ice_cream_machine")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(3.5f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§bCulinary Ice Cream Churner"),
-            Text.literal("§7Churns chilled ice, salt, milk, and toppings into gourmet ice creams."),
-            Text.literal("§e • Dual Powered: Manual right-click hand-crank or FE Energy (20 FE/t)"),
-            Text.literal("§b • Accepts Ice, Packed Ice, Blue Ice, and Salt as coolant"));
+            new net.enchantedwood.block.custom.IceCreamMachineBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "ice_cream_machine")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(3.5f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§bCulinary Ice Cream Churner"),
+            Component.literal("§7Churns chilled ice, salt, milk, and toppings into gourmet ice creams."),
+            Component.literal("§e • Dual Powered: Manual right-click hand-crank or FE Energy (20 FE/t)"),
+            Component.literal("§b • Accepts Ice, Packed Ice, Blue Ice, and Salt as coolant"));
 
 
     public static final Block CRUSHER = registerBlockWithTooltip("crusher",
-            new net.enchantedwood.block.custom.CrusherBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CrusherBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Industrial Ore Crusher"),
-            Text.literal("§7Pulverizes raw ores into dust (2x yield). Overclockable with Gears."));
+            new net.enchantedwood.block.custom.CrusherBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "crusher")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CrusherBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Industrial Ore Crusher"),
+            Component.literal("§7Pulverizes raw ores into dust (2x yield). Overclockable with Gears."));
 
     public static final Block DUST_SMELTER = registerBlockWithTooltip("dust_smelter",
-            new net.enchantedwood.block.custom.DustSmelterBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dust_smelter")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.DustSmelterBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Induction Dust Smelter"),
-            Text.literal("§7Smelts metal dusts into pure ingots. Overclockable with Gears."));
+            new net.enchantedwood.block.custom.DustSmelterBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "dust_smelter")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.DustSmelterBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Induction Dust Smelter"),
+            Component.literal("§7Smelts metal dusts into pure ingots. Overclockable with Gears."));
 
     public static final Block HYDRAULIC_PRESS = registerBlockWithTooltip("hydraulic_press",
-            new net.enchantedwood.block.custom.HydraulicPressBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hydraulic_press")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.HydraulicPressBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Hydraulic Plate Press"),
-            Text.literal("§7High-tonnage stamping press for industrial metal plates. Overclockable with Gears."));
+            new net.enchantedwood.block.custom.HydraulicPressBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "hydraulic_press")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.HydraulicPressBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Hydraulic Plate Press"),
+            Component.literal("§7High-tonnage stamping press for industrial metal plates. Overclockable with Gears."));
 
     public static final Block ENCHANTED_CHEST = registerBlockWithTooltip("enchanted_chest",
-            new net.enchantedwood.block.custom.EnchantedChestBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_chest")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(3.0f)
-                    .resistance(6.0f)
-                    .nonOpaque()),
-            Text.literal("§6Enchanted Storage Chest"),
-            Text.literal("§7Expansive multi-tier dimensional chest with auto-sorting & scrolling."));
+            new net.enchantedwood.block.custom.EnchantedChestBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_chest")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(3.0f)
+                    .explosionResistance(6.0f)
+                    .noOcclusion()),
+            Component.literal("§6Enchanted Storage Chest"),
+            Component.literal("§7Expansive multi-tier dimensional chest with auto-sorting & scrolling."));
 
 
     public static final Block ENCHANTED_STORAGE_CONTROLLER = registerBlockWithTooltip("enchanted_storage_controller",
-            new net.enchantedwood.block.custom.EnchantedStorageControllerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_storage_controller")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.EnchantedStorageControllerBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Digital Storage Network Controller"),
-            Text.literal("§7Central power hub & coordinator for Drive Bays, Terminals & Auto-Crafters."));
+            new net.enchantedwood.block.custom.EnchantedStorageControllerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_storage_controller")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.EnchantedStorageControllerBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Digital Storage Network Controller"),
+            Component.literal("§7Central power hub & coordinator for Drive Bays, Terminals & Auto-Crafters."));
 
     public static final Block ENCHANTED_DRIVE_BAY = registerBlockWithTooltip("enchanted_drive_bay",
-            new net.enchantedwood.block.custom.EnchantedDriveBayBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_drive_bay")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()),
-            Text.literal("§6Digital Drive Bay"),
-            Text.literal("§7Houses up to 6 Digital Storage Crystals with dynamic status telemetry."));
+            new net.enchantedwood.block.custom.EnchantedDriveBayBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_drive_bay")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Digital Drive Bay"),
+            Component.literal("§7Houses up to 6 Digital Storage Crystals with dynamic status telemetry."));
 
     public static final Block ENCHANTED_STORAGE_TERMINAL = registerBlockWithTooltip("enchanted_storage_terminal",
-            new net.enchantedwood.block.custom.EnchantedStorageTerminalBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_storage_terminal")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()),
-            Text.literal("§6Digital Storage Terminal"),
-            Text.literal("§7Interactive search & retrieval terminal for all linked Drive Bay storage."));
+            new net.enchantedwood.block.custom.EnchantedStorageTerminalBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_storage_terminal")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Digital Storage Terminal"),
+            Component.literal("§7Interactive search & retrieval terminal for all linked Drive Bay storage."));
 
     public static final Block DIGITAL_CONVERTER = registerBlockWithTooltip("digital_converter",
-            new net.enchantedwood.block.custom.DigitalConverterBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "digital_converter")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.DigitalConverterBlock.LIT) ? 12 : 0)),
-            Text.literal("§6Digital Inventory Converter"),
-            Text.literal("§7Bridges physical item pipes, hoppers & chests with the Digital Storage Network."));
+            new net.enchantedwood.block.custom.DigitalConverterBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "digital_converter")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.DigitalConverterBlock.LIT) ? 12 : 0)),
+            Component.literal("§6Digital Inventory Converter"),
+            Component.literal("§7Bridges physical item pipes, hoppers & chests with the Digital Storage Network."));
 
     public static final Block SUPER_COMPUTER = registerBlockWithTooltip("super_computer",
-            new net.enchantedwood.block.custom.SuperComputerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "super_computer")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.SuperComputerBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Quantum Super Computer (Auto-Crafter)"),
-            Text.literal("§8Pulls ingredients from Digital Storage Network crystals & auto-crafts recipes at high speed."));
+            new net.enchantedwood.block.custom.SuperComputerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "super_computer")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.SuperComputerBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Quantum Super Computer (Auto-Crafter)"),
+            Component.literal("§8Pulls ingredients from Digital Storage Network crystals & auto-crafts recipes at high speed."));
 
     public static final Block LASER_QUARRY = registerBlockWithTooltip("laser_quarry",
-            new net.enchantedwood.block.custom.LaserQuarryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "laser_quarry")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.LaserQuarryBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Digital Laser Quarry"),
-            Text.literal("§8Autonomous chunk-based precision ore extraction & excavation rig."));
+            new net.enchantedwood.block.custom.LaserQuarryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "laser_quarry")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.LaserQuarryBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Digital Laser Quarry"),
+            Component.literal("§8Autonomous chunk-based precision ore extraction & excavation rig."));
 
     public static final Block POWERED_ANVIL = registerBlockWithTooltip("powered_anvil",
-            new net.enchantedwood.block.custom.PoweredAnvilBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "powered_anvil")))
-                    .sounds(BlockSoundGroup.ANVIL)
-                    .hardness(5.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.PoweredAnvilBlock.LIT) ? 7 : 0)),
-            Text.literal("§6Electromagnetic Powered Anvil"),
-            Text.literal("§7Grid-powered anvil repairs (0 XP cost) & Modular Power Suit terminal."));
+            new net.enchantedwood.block.custom.PoweredAnvilBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "powered_anvil")))
+                    .sound(SoundType.ANVIL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.PoweredAnvilBlock.LIT) ? 7 : 0)),
+            Component.literal("§6Electromagnetic Powered Anvil"),
+            Component.literal("§7Grid-powered anvil repairs (0 XP cost) & Modular Power Suit terminal."));
 
     public static final Block ENCHANTED_COAL_BLOCK = registerBlock("enchanted_coal_block",
-            new net.enchantedwood.block.custom.EnchantedCoalBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_coal_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.EnchantedCoalBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_coal_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ENCHANTED_LAVA_GENERATOR = registerBlockWithTooltip("enchanted_lava_generator",
-            new net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_lava_generator")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Enchanted Magmatic Generator"),
-            Text.literal("§7Melts cobblestone into fluid lava using Enchanted Coal fuel. Overclockable with Gears."));
+            new net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_lava_generator")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.EnchantedLavaGeneratorBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Enchanted Magmatic Generator"),
+            Component.literal("§7Melts cobblestone into fluid lava using Enchanted Coal fuel. Overclockable with Gears."));
 
     public static final Block TIN_ORE = registerBlock("tin_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tin_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tin_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_TIN_ORE = registerBlock("deepslate_tin_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tin_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(4.5f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_tin_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_TIN_BLOCK = registerBlock("raw_tin_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_tin_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_tin_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block TIN_BLOCK = registerBlock("tin_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tin_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tin_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block TITANIUM_ORE = registerBlock("titanium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(4.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "titanium_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(4.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_TITANIUM_ORE = registerBlock("deepslate_titanium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_titanium_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(5.5f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_titanium_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(5.5f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_TITANIUM_BLOCK = registerBlock("raw_titanium_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_titanium_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_titanium_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block TITANIUM_BLOCK = registerBlock("titanium_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(6.0f)
-                    .resistance(7.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "titanium_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(6.0f)
+                    .explosionResistance(7.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block COPPER_GENERATOR = registerBlockWithTooltip("copper_generator",
-            new net.enchantedwood.block.custom.CopperGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "copper_generator")))
-                    .sounds(BlockSoundGroup.COPPER)
-                    .hardness(3.5f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CopperGeneratorBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Tier 1 Copper Solid Fuel Generator"),
-            Text.literal("§7Generates §e20 FE/t§7 from coal, charcoal, wood, and solid combustibles."));
+            new net.enchantedwood.block.custom.CopperGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "copper_generator")))
+                    .sound(SoundType.COPPER)
+                    .destroyTime(3.5f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CopperGeneratorBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Tier 1 Copper Solid Fuel Generator"),
+            Component.literal("§7Generates §e20 FE/t§7 from coal, charcoal, wood, and solid combustibles."));
 
     public static final Block COPPER_BATTERY = registerBlockWithTooltip("copper_battery",
-            new net.enchantedwood.block.custom.CopperBatteryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "copper_battery")))
-                    .sounds(BlockSoundGroup.COPPER)
-                    .hardness(3.5f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§6Tier 1 Copper Energy Cell (500,000 FE)"),
-            Text.literal("§7Max Transfer: §e500 FE/t§7. Recharges tools & stores grid power."));
+            new net.enchantedwood.block.custom.CopperBatteryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "copper_battery")))
+                    .sound(SoundType.COPPER)
+                    .destroyTime(3.5f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Tier 1 Copper Energy Cell (500,000 FE)"),
+            Component.literal("§7Max Transfer: §e500 FE/t§7. Recharges tools & stores grid power."));
 
     public static final Block COPPER_CABLE = registerBlockWithTooltip("copper_cable",
-            new net.enchantedwood.block.custom.CopperCableBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "copper_cable")))
-                    .sounds(BlockSoundGroup.COPPER)
-                    .hardness(1.0f)
-                    .resistance(2.0f)
-                    .nonOpaque()),
-            Text.literal("§6Tier 1 Copper Cable"),
-            Text.literal("§7Max Transfer: §e500 FE/t§7. Basic electrical distribution cable."));
+            new net.enchantedwood.block.custom.CopperCableBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "copper_cable")))
+                    .sound(SoundType.COPPER)
+                    .destroyTime(1.0f)
+                    .explosionResistance(2.0f)
+                    .noOcclusion()),
+            Component.literal("§6Tier 1 Copper Cable"),
+            Component.literal("§7Max Transfer: §e500 FE/t§7. Basic electrical distribution cable."));
 
     // Phase 2: Aluminum Metallurgy & Gas Transport
     public static final Block BAUXITE_ORE = registerBlock("bauxite_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "bauxite_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "bauxite_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_BAUXITE_ORE = registerBlock("deepslate_bauxite_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_bauxite_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(4.5f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_bauxite_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_BAUXITE_BLOCK = registerBlock("raw_bauxite_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_bauxite_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_bauxite_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ALUMINUM_BLOCK = registerBlock("aluminum_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aluminum_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aluminum_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block GAS_PIPE = registerBlockWithTooltip("gas_pipe",
-            new net.enchantedwood.block.custom.GasPipeBlock(net.enchantedwood.gas.GasType.OXYGEN, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "gas_pipe")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(1.0f)
-                    .resistance(2.0f)
-                    .nonOpaque()),
-            Text.literal("§bPressurized Gas Pipe (O₂)"),
-            Text.literal("§7Transfers Oxygen gas between generators, refiners & canisters."));
+            new net.enchantedwood.block.custom.GasPipeBlock(net.enchantedwood.gas.GasType.OXYGEN, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "gas_pipe")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(1.0f)
+                    .explosionResistance(2.0f)
+                    .noOcclusion()),
+            Component.literal("§bPressurized Gas Pipe (O₂)"),
+            Component.literal("§7Transfers Oxygen gas between generators, refiners & canisters."));
 
     public static final Block HYDROGEN_PIPE = registerBlockWithTooltip("hydrogen_pipe",
-            new net.enchantedwood.block.custom.GasPipeBlock(net.enchantedwood.gas.GasType.HYDROGEN, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hydrogen_pipe")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(1.0f)
-                    .resistance(2.0f)
-                    .nonOpaque()),
-            Text.literal("§6Pressurized Gas Pipe (H₂)"),
-            Text.literal("§7Transfers Hydrogen gas to blast furnaces & canisters."));
+            new net.enchantedwood.block.custom.GasPipeBlock(net.enchantedwood.gas.GasType.HYDROGEN, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "hydrogen_pipe")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(1.0f)
+                    .explosionResistance(2.0f)
+                    .noOcclusion()),
+            Component.literal("§6Pressurized Gas Pipe (H₂)"),
+            Component.literal("§7Transfers Hydrogen gas to blast furnaces & canisters."));
 
     public static final Block OXYGEN_GENERATOR = registerBlockWithTooltip("oxygen_generator",
-            new net.enchantedwood.block.custom.OxygenGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oxygen_generator")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.OxygenGeneratorBlock.LIT) ? 12 : 0)),
-            Text.literal("§6Electrolytic Gas Generator"),
-            Text.literal("§7Splits water into pressurized Oxygen (O₂) and Hydrogen (H₂) gas."));
+            new net.enchantedwood.block.custom.OxygenGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "oxygen_generator")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.OxygenGeneratorBlock.LIT) ? 12 : 0)),
+            Component.literal("§6Electrolytic Gas Generator"),
+            Component.literal("§7Splits water into pressurized Oxygen (O₂) and Hydrogen (H₂) gas."));
 
     public static final Block ALUMINUM_REFINER = registerBlockWithTooltip("aluminum_refiner",
-            new net.enchantedwood.block.custom.AluminumRefinerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aluminum_refiner")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.AluminumRefinerBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Tier 2 Aluminum Reduction Cell"),
-            Text.literal("§7Bayer reduction cell. Uses pressurized O₂ to refine Bauxite into Aluminum."));
+            new net.enchantedwood.block.custom.AluminumRefinerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aluminum_refiner")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.AluminumRefinerBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Tier 2 Aluminum Reduction Cell"),
+            Component.literal("§7Bayer reduction cell. Uses pressurized O₂ to refine Bauxite into Aluminum."));
 
     public static final Block ALUMINUM_GENERATOR = registerBlockWithTooltip("aluminum_generator",
-            new net.enchantedwood.block.custom.AluminumGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aluminum_generator")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.AluminumGeneratorBlock.LIT) ? 14 : 0)),
-            Text.literal("§bTier 2 Aluminum Solid Fuel Generator"),
-            Text.literal("§7Generates §e40 FE/t§7 with doubled thermal efficiency from solid fuel."));
+            new net.enchantedwood.block.custom.AluminumGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aluminum_generator")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.AluminumGeneratorBlock.LIT) ? 14 : 0)),
+            Component.literal("§bTier 2 Aluminum Solid Fuel Generator"),
+            Component.literal("§7Generates §e40 FE/t§7 with doubled thermal efficiency from solid fuel."));
 
     public static final Block ALUMINUM_BATTERY = registerBlockWithTooltip("aluminum_battery",
-            new net.enchantedwood.block.custom.AluminumBatteryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aluminum_battery")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§bTier 2 Aluminum Energy Cell (2,000,000 FE)"),
-            Text.literal("§7Max Transfer: §e2,000 FE/t§7. Lightweight intermediate grid storage."));
+            new net.enchantedwood.block.custom.AluminumBatteryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aluminum_battery")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§bTier 2 Aluminum Energy Cell (2,000,000 FE)"),
+            Component.literal("§7Max Transfer: §e2,000 FE/t§7. Lightweight intermediate grid storage."));
 
     public static final Block ALUMINUM_CABLE = registerBlockWithTooltip("aluminum_cable",
-            new net.enchantedwood.block.custom.AluminumCableBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aluminum_cable")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(1.0f)
-                    .resistance(2.0f)
-                    .nonOpaque()),
-            Text.literal("§bTier 2 Aluminum Cable"),
-            Text.literal("§7Max Transfer: §e2,000 FE/t§7. Low-resistance intermediate distribution."));
+            new net.enchantedwood.block.custom.AluminumCableBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aluminum_cable")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(1.0f)
+                    .explosionResistance(2.0f)
+                    .noOcclusion()),
+            Component.literal("§bTier 2 Aluminum Cable"),
+            Component.literal("§7Max Transfer: §e2,000 FE/t§7. Low-resistance intermediate distribution."));
 
     // Phase 3: Coke Coal & Steel Metallurgy
     public static final Block STEEL_BLOCK = registerBlock("steel_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_block")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(7.0f)
-                    .resistance(10.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "steel_block")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(7.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block COKE_OVEN = registerBlockWithTooltip("coke_oven",
-            new net.enchantedwood.block.custom.CokeOvenBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "coke_oven")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(4.5f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CokeOvenBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Pyrolysis Coke Oven"),
-            Text.literal("§7Bakes coal into high-energy Coke Coal and recovers Mineral Tar byproduct."));
+            new net.enchantedwood.block.custom.CokeOvenBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "coke_oven")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CokeOvenBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Pyrolysis Coke Oven"),
+            Component.literal("§7Bakes coal into high-energy Coke Coal and recovers Mineral Tar byproduct."));
 
     public static final Block STEEL_BLAST_FURNACE = registerBlockWithTooltip("steel_blast_furnace",
-            new net.enchantedwood.block.custom.SteelBlastFurnaceBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_blast_furnace")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.5f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.SteelBlastFurnaceBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Industrial Steel Blast Furnace"),
-            Text.literal("§7High-carbon reduction furnace. Smelts Iron + Coke Coal (or H₂) into Steel."));
+            new net.enchantedwood.block.custom.SteelBlastFurnaceBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "steel_blast_furnace")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.5f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.SteelBlastFurnaceBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Industrial Steel Blast Furnace"),
+            Component.literal("§7High-carbon reduction furnace. Smelts Iron + Coke Coal (or H₂) into Steel."));
 
     public static final Block STEEL_GENERATOR = registerBlockWithTooltip("steel_generator",
-            new net.enchantedwood.block.custom.SteelGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_generator")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.5f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.SteelGeneratorBlock.LIT) ? 15 : 0)),
-            Text.literal("§3Tier 3 Steel Heavy Generator"),
-            Text.literal("§7Generates §e80 FE/t§7 from high-temperature industrial coke coal & fuel."));
+            new net.enchantedwood.block.custom.SteelGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "steel_generator")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.5f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.SteelGeneratorBlock.LIT) ? 15 : 0)),
+            Component.literal("§3Tier 3 Steel Heavy Generator"),
+            Component.literal("§7Generates §e80 FE/t§7 from high-temperature industrial coke coal & fuel."));
 
     public static final Block STEEL_BATTERY = registerBlockWithTooltip("steel_battery",
-            new net.enchantedwood.block.custom.SteelBatteryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_battery")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.5f)
-                    .resistance(10.0f)
-                    .requiresTool()),
-            Text.literal("§3Tier 3 Steel Energy Cell (10,000,000 FE)"),
-            Text.literal("§7Max Transfer: §e10,000 FE/t§7. High-capacity structural industrial storage."));
+            new net.enchantedwood.block.custom.SteelBatteryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "steel_battery")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.5f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§3Tier 3 Steel Energy Cell (10,000,000 FE)"),
+            Component.literal("§7Max Transfer: §e10,000 FE/t§7. High-capacity structural industrial storage."));
 
     public static final Block STEEL_CABLE = registerBlockWithTooltip("steel_cable",
-            new net.enchantedwood.block.custom.SteelCableBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "steel_cable")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(1.5f)
-                    .resistance(3.0f)
-                    .nonOpaque()),
-            Text.literal("§3Tier 3 Steel Cable"),
-            Text.literal("§7Max Transfer: §e10,000 FE/t§7. Heavy reinforced electrical transmission cable."));
+            new net.enchantedwood.block.custom.SteelCableBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "steel_cable")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(1.5f)
+                    .explosionResistance(3.0f)
+                    .noOcclusion()),
+            Component.literal("§3Tier 3 Steel Cable"),
+            Component.literal("§7Max Transfer: §e10,000 FE/t§7. Heavy reinforced electrical transmission cable."));
 
     public static final Block BRONZE_BLOCK = registerBlock("bronze_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "bronze_block")))
-                    .sounds(BlockSoundGroup.COPPER)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "bronze_block")))
+                    .sound(SoundType.COPPER)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block COKE_COAL_BLOCK = registerBlock("coke_coal_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "coke_coal_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.0f)
-                    .resistance(6.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "coke_coal_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ENCHANTED_NETHERITE_BLOCK = registerBlock("enchanted_netherite_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_netherite_block")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(50.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_netherite_block")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(50.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     // Rubber Tree Blocks
     public static final Block RUBBER_LOG = registerBlock("rubber_log",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_log")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_log")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block RUBBER_WOOD = registerBlock("rubber_wood",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_wood")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_wood")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STRIPPED_RUBBER_LOG = registerBlock("stripped_rubber_log",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_rubber_log")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "stripped_rubber_log")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STRIPPED_RUBBER_WOOD = registerBlock("stripped_rubber_wood",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_rubber_wood")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "stripped_rubber_wood")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block RUBBER_PLANKS = registerBlock("rubber_planks",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_planks")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(3.0f)));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_planks")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(3.0f)));
 
     public static final Block RUBBER_LEAVES = registerBlock("rubber_leaves",
-            new net.enchantedwood.block.custom.RubberLeavesBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_leaves")))
-                    .sounds(BlockSoundGroup.GRASS)
-                    .hardness(0.2f)
-                    .resistance(0.2f)
-                    .nonOpaque()
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+            new net.enchantedwood.block.custom.RubberLeavesBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_leaves")))
+                    .sound(SoundType.GRASS)
+                    .destroyTime(0.2f)
+                    .explosionResistance(0.2f)
+                    .noOcclusion()
+                    .isSuffocating((state, world, pos) -> false)
+                    ));
 
     public static final Block RUBBER_SAPLING = registerBlock("rubber_sapling",
-            new net.minecraft.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.RUBBER, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rubber_sapling")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.minecraft.world.level.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.RUBBER, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_sapling")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()));
+                    .instabreak()));
 
     public static final Block ENCHANTED_LAMP = registerBlock("enchanted_lamp",
-            new net.enchantedwood.block.custom.EnchantedLampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "enchanted_lamp")))
-                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.EnchantedLampBlock.LIT) ? 15 : 0)
-                    .hardness(0.5f)
-                    .resistance(3.0f)
-                    .nonOpaque()));
+            new net.enchantedwood.block.custom.EnchantedLampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "enchanted_lamp")))
+                    .sound(SoundType.AMETHYST)
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.EnchantedLampBlock.LIT) ? 15 : 0)
+                    .destroyTime(0.5f)
+                    .explosionResistance(3.0f)
+                    .noOcclusion()));
 
     public static final Block MINING_PORTAL = registerBlockWithoutItem("mining_portal",
-            new net.enchantedwood.block.custom.MiningPortalBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "mining_portal")))
+            new net.enchantedwood.block.custom.MiningPortalBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "mining_portal")))
                     .noCollision()
                     .strength(-1.0F)
-                    .sounds(BlockSoundGroup.GLASS)
-                    .luminance(state -> 11)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
-                    .nonOpaque()));
+                    .sound(SoundType.GLASS)
+                    .lightLevel(state -> 11)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE)
+                    .noOcclusion()));
 
     public static final Block DORMANT_RIFT = registerBlockWithoutItem("dormant_rift",
-            new net.enchantedwood.block.custom.DormantRiftBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dormant_rift")))
+            new net.enchantedwood.block.custom.DormantRiftBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "dormant_rift")))
                     .noCollision()
                     .strength(-1.0F)
-                    .sounds(BlockSoundGroup.GLASS)
-                    .luminance(state -> 12)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.BLOCK)
-                    .nonOpaque()));
+                    .sound(SoundType.GLASS)
+                    .lightLevel(state -> 12)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE)
+                    .noOcclusion()));
 
     public static final Block ATMOSPHERIC_ANCHOR = registerBlock("atmospheric_anchor",
-            new net.enchantedwood.block.custom.AtmosphericAnchorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "atmospheric_anchor")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.AtmosphericAnchorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "atmospheric_anchor")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block KINETIC_ANCHOR = registerBlock("kinetic_anchor",
-            new net.enchantedwood.block.custom.KineticAnchorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "kinetic_anchor")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.KineticAnchorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "kinetic_anchor")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block THERMAL_ANCHOR = registerBlock("thermal_anchor",
-            new net.enchantedwood.block.custom.ThermalAnchorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "thermal_anchor")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.ThermalAnchorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "thermal_anchor")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block METALLURGICAL_ANCHOR = registerBlock("metallurgical_anchor",
-            new net.enchantedwood.block.custom.MetallurgicalAnchorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "metallurgical_anchor")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.MetallurgicalAnchorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "metallurgical_anchor")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block PLASMA_ANCHOR = registerBlock("plasma_anchor",
-            new net.enchantedwood.block.custom.PlasmaAnchorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "plasma_anchor")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()));
+            new net.enchantedwood.block.custom.PlasmaAnchorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "plasma_anchor")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DIMENSIONAL_SINGULARITY = registerBlock("dimensional_singularity",
-            new net.enchantedwood.block.custom.DimensionalSingularityBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dimensional_singularity")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(10.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()
-                    .luminance(state -> 15)));
+            new net.enchantedwood.block.custom.DimensionalSingularityBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "dimensional_singularity")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(10.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 15)));
 
     // Fractured Incursion Nether Overworld Ores
     public static final Block NETHER_IRON_ORE = registerBlock("nether_iron_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_iron_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_iron_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NETHER_COAL_ORE = registerBlock("nether_coal_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_coal_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_coal_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NETHER_COPPER_ORE = registerBlock("nether_copper_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_copper_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_copper_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NETHER_TIN_ORE = registerBlock("nether_tin_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_tin_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_tin_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NETHER_REDSTONE_ORE = registerBlock("nether_redstone_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_redstone_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()
-                    .luminance(state -> 9)));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_redstone_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 9)));
 
     public static final Block NETHER_LAPIS_ORE = registerBlock("nether_lapis_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_lapis_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_lapis_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_diamond_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(4.0f)
-                    .resistance(4.0f)
-                    .requiresTool()
-                    .luminance(state -> 4)));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_diamond_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(4.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 4)));
 
     // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
     public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "nether_tungsten_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(3.5f)
-                    .resistance(3.5f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "nether_tungsten_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(3.5f)
+                    .explosionResistance(3.5f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_TUNGSTEN_ORE = registerBlock("deepslate_tungsten_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tungsten_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(5.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_tungsten_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_TUNGSTEN_BLOCK = registerBlock("raw_tungsten_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_tungsten_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(6.0f)
-                    .resistance(7.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_tungsten_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(6.0f)
+                    .explosionResistance(7.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block TUNGSTEN_BLOCK = registerBlock("tungsten_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_block")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(8.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tungsten_block")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block COBALT_ORE = registerBlock("cobalt_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cobalt_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(4.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cobalt_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(4.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_COBALT_BLOCK = registerBlock("raw_cobalt_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_cobalt_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.5f)
-                    .resistance(6.5f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_cobalt_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.5f)
+                    .explosionResistance(6.5f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block COBALT_BLOCK = registerBlock("cobalt_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cobalt_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(7.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cobalt_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(7.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ARDITE_ORE = registerBlock("ardite_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ardite_ore")))
-                    .sounds(BlockSoundGroup.NETHERRACK)
-                    .hardness(4.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "ardite_ore")))
+                    .sound(SoundType.NETHERRACK)
+                    .destroyTime(4.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block RAW_ARDITE_BLOCK = registerBlock("raw_ardite_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "raw_ardite_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(5.5f)
-                    .resistance(6.5f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "raw_ardite_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(5.5f)
+                    .explosionResistance(6.5f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ARDITE_BLOCK = registerBlock("ardite_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "ardite_block")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(7.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "ardite_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(7.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block MANYULLYN_BLOCK = registerBlock("manyullyn_block",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "manyullyn_block")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(7.0f)
-                    .resistance(12.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "manyullyn_block")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(7.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))
-                    .sounds(BlockSoundGroup.SAND)
-                    .hardness(0.8f)
-                    .resistance(0.8f)),
-            Text.literal("§7Mine with a shovel in deserts/badlands to gather §6Crude Oil Sludge§7."));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "oil_sand")))
+                    .sound(SoundType.SAND)
+                    .destroyTime(0.8f)
+                    .explosionResistance(0.8f)),
+            Component.literal("§7Mine with a shovel in deserts/badlands to gather §6Crude Oil Sludge§7."));
 
     public static final Block ASPHALT_BLOCK = registerBlockWithTooltip("asphalt_block",
-            new net.enchantedwood.block.custom.AsphaltBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_block")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
+            new net.enchantedwood.block.custom.AsphaltBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "asphalt_block")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
     public static final Block ASPHALT_SLAB = registerBlockWithTooltip("asphalt_slab",
-            new net.enchantedwood.block.custom.AsphaltSlabBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_slab")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
+            new net.enchantedwood.block.custom.AsphaltSlabBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "asphalt_slab")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§a+25% Speed Multiplier §7for players and All-Terrain Vehicles."));
 
     public static final Block CONCRETE_CURB = registerBlockWithTooltip("concrete_curb",
-            new net.enchantedwood.block.custom.ConcreteCurbBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "concrete_curb")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§7Flanks 5-wide highways with raised outer edge barriers."));
+            new net.enchantedwood.block.custom.ConcreteCurbBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "concrete_curb")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Flanks 5-wide highways with raised outer edge barriers."));
 
     public static final Block ROAD_TRANSITION_RAMP = registerBlockWithTooltip("road_transition_ramp",
-            new net.enchantedwood.block.custom.RoadTransitionRampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_transition_ramp")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§7Smooth 0-to-8px concrete curb slope connecting terrain to roadway."));
+            new net.enchantedwood.block.custom.RoadTransitionRampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "road_transition_ramp")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Smooth 0-to-8px concrete curb slope connecting terrain to roadway."));
 
     public static final Block ASPHALT_TRANSITION_RAMP = registerBlockWithTooltip("asphalt_transition_ramp",
-            new net.enchantedwood.block.custom.AsphaltTransitionRampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_transition_ramp")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§7Smooth 0-to-8px asphalt slope connecting terrain to asphalt pavement."),
-            Text.literal("§8Grants continuous speed boost when traversed."));
+            new net.enchantedwood.block.custom.AsphaltTransitionRampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "asphalt_transition_ramp")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Smooth 0-to-8px asphalt slope connecting terrain to asphalt pavement."),
+            Component.literal("§8Grants continuous speed boost when traversed."));
 
     public static final Block ASPHALT_RAMP = registerBlockWithTooltip("asphalt_ramp",
-            new net.enchantedwood.block.custom.AsphaltRampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "asphalt_ramp")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§7Full 1-block high smooth slope for highway off-ramps."),
-            Text.literal("§8Grants continuous speed boost when traversed."));
+            new net.enchantedwood.block.custom.AsphaltRampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "asphalt_ramp")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Full 1-block high smooth slope for highway off-ramps."),
+            Component.literal("§8Grants continuous speed boost when traversed."));
 
     public static final Block CONCRETE_CURB_RAMP = registerBlockWithTooltip("concrete_curb_ramp",
-            new net.enchantedwood.block.custom.ConcreteCurbRampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "concrete_curb_ramp")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§7Full 1-block high smooth curb barrier for highway off-ramps."));
+            new net.enchantedwood.block.custom.ConcreteCurbRampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "concrete_curb_ramp")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Full 1-block high smooth curb barrier for highway off-ramps."));
 
     public static final Block FUEL_REFINERY = registerBlockWithTooltip("fuel_refinery",
-            new net.enchantedwood.block.custom.FuelRefineryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fuel_refinery")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.FuelRefineryBlock.LIT) ? 13 : 0)),
-            Text.literal("§7Fractional distillation chamber. Consumes §e20 FE/t§7."),
-            Text.literal("§8Distills Crude Sludge into Gasoline & crops into Biofuel."));
+            new net.enchantedwood.block.custom.FuelRefineryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "fuel_refinery")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.FuelRefineryBlock.LIT) ? 13 : 0)),
+            Component.literal("§7Fractional distillation chamber. Consumes §e20 FE/t§7."),
+            Component.literal("§8Distills Crude Sludge into Gasoline & crops into Biofuel."));
 
     public static final Block ROAD_PAVER = registerBlockWithTooltip("road_paver",
-            new net.enchantedwood.block.custom.RoadPaverBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverBlock.PAVING) ? 10 : 0)),
-            Text.literal("§7Autonomous highway construction crawler. Consumes §e50 FE/step§7."),
-            Text.literal("§8Clears a 3-wide path, lays Asphalt foundation, and advances forward."));
+            new net.enchantedwood.block.custom.RoadPaverBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "road_paver")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.RoadPaverBlock.PAVING) ? 10 : 0)),
+            Component.literal("§7Autonomous highway construction crawler. Consumes §e50 FE/step§7."),
+            Component.literal("§8Clears a 3-wide path, lays Asphalt foundation, and advances forward."));
 
     public static final Block ROAD_PAVER_MK2 = registerBlockWithTooltip("road_paver_mk2",
-            new net.enchantedwood.block.custom.RoadPaverMk2Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "road_paver_mk2")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.RoadPaverMk2Block.PAVING) ? 12 : 0)),
-            Text.literal("§bHeavy Bridge & Viaduct Paver. Consumes §e80 FE/step §7+ §6Gasoline§7."),
-            Text.literal("§8Paves a 5-wide roadway and casts automatic support pillars over chasms & water."));
+            new net.enchantedwood.block.custom.RoadPaverMk2Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "road_paver_mk2")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.RoadPaverMk2Block.PAVING) ? 12 : 0)),
+            Component.literal("§bHeavy Bridge & Viaduct Paver. Consumes §e80 FE/step §7+ §6Gasoline§7."),
+            Component.literal("§8Paves a 5-wide roadway and casts automatic support pillars over chasms & water."));
 
     public static final Block VEHICLE_FABRICATOR = registerBlockWithTooltip("vehicle_fabricator",
-            new net.enchantedwood.block.custom.VehicleFabricatorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "vehicle_fabricator")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()),
-            Text.literal("§7Vehicle workshop for fabricating & modifying Modular ATVs."),
-            Text.literal("§8Assemble custom engines, chassis, tires, suspensions & trunks."));
+            new net.enchantedwood.block.custom.VehicleFabricatorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "vehicle_fabricator")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§7Vehicle workshop for fabricating & modifying Modular ATVs."),
+            Component.literal("§8Assemble custom engines, chassis, tires, suspensions & trunks."));
 
     // Phase 2: Nether Factory & Tier 4 Power Grid
     public static final Block TUNGSTEN_BATTERY = registerBlockWithTooltip("tungsten_battery",
-            new net.enchantedwood.block.custom.TungstenBatteryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_battery")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(12.0f)
-                    .requiresTool()),
-            Text.literal("§6Tier 4 Heavy Energy Storage (100,000,000 FE)"),
-            Text.literal("§8Max Transfer: §e25,000 FE/t§8. Refractory insulation."));
+            new net.enchantedwood.block.custom.TungstenBatteryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tungsten_battery")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Tier 4 Heavy Energy Storage (100,000,000 FE)"),
+            Component.literal("§8Max Transfer: §e25,000 FE/t§8. Refractory insulation."));
 
     public static final Block TUNGSTEN_CABLE = registerBlockWithTooltip("tungsten_cable",
-            new net.enchantedwood.block.custom.TungstenCableBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tungsten_cable")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(2.5f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§6Tier 4 Heavy Energy Cable"),
-            Text.literal("§8Max Transfer: §e25,000 FE/t§8. Lava & blast proof."));
+            new net.enchantedwood.block.custom.TungstenCableBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tungsten_cable")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(2.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§6Tier 4 Heavy Energy Cable"),
+            Component.literal("§8Max Transfer: §e25,000 FE/t§8. Lava & blast proof."));
 
     public static final Block GEOTHERMAL_GENERATOR = registerBlockWithTooltip("geothermal_generator",
-            new net.enchantedwood.block.custom.GeothermalGeneratorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "geothermal_generator")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.GeothermalGeneratorBlock.LIT) ? 14 : 0)),
-            Text.literal("§6Tier 4 Geothermal Thermal Generator"),
-            Text.literal("§8Generates §e750 FE/t§8 from Lava and Nether heat sources."));
+            new net.enchantedwood.block.custom.GeothermalGeneratorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "geothermal_generator")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.GeothermalGeneratorBlock.LIT) ? 14 : 0)),
+            Component.literal("§6Tier 4 Geothermal Thermal Generator"),
+            Component.literal("§8Generates §e750 FE/t§8 from Lava and Nether heat sources."));
 
     public static final Block ALLOY_FOUNDRY = registerBlockWithTooltip("alloy_foundry",
-            new net.enchantedwood.block.custom.AlloyFoundryBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "alloy_foundry")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.AlloyFoundryBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Industrial Alloy Induction Foundry"),
-            Text.literal("§8Dual-induction melting & casting for Manyullyn & Tungsten Carbide."));
+            new net.enchantedwood.block.custom.AlloyFoundryBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "alloy_foundry")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.AlloyFoundryBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Industrial Alloy Induction Foundry"),
+            Component.literal("§8Dual-induction melting & casting for Manyullyn & Tungsten Carbide."));
 
     public static final Block ITEM_SALVAGER = registerBlockWithTooltip("item_salvager",
-            new net.enchantedwood.block.custom.ItemSalvagerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_salvager")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.ItemSalvagerBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Automated Item Salvager & Recycler"),
-            Text.literal("§8Deconstructs uncraftables, horse armor, chainmail, minecarts & rails."));
+            new net.enchantedwood.block.custom.ItemSalvagerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "item_salvager")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.ItemSalvagerBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Automated Item Salvager & Recycler"),
+            Component.literal("§8Deconstructs uncraftables, horse armor, chainmail, minecarts & rails."));
 
     public static final Block MAGMA_CRUCIBLE = registerBlockWithTooltip("magma_crucible",
-            new net.enchantedwood.block.custom.MagmaCrucibleBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "magma_crucible")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.MagmaCrucibleBlock.LIT) ? 13 : 0)),
-            Text.literal("§6Magma Crucible & Mineral Extractor"),
-            Text.literal("§8Melts Basalt, Blackstone & Magma into Lava, Sulfur & Volcanic Ash."));
+            new net.enchantedwood.block.custom.MagmaCrucibleBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "magma_crucible")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.MagmaCrucibleBlock.LIT) ? 13 : 0)),
+            Component.literal("§6Magma Crucible & Mineral Extractor"),
+            Component.literal("§8Melts Basalt, Blackstone & Magma into Lava, Sulfur & Volcanic Ash."));
 
     public static final Block LAVA_PUMP = registerBlockWithTooltip("lava_pump",
-            new net.enchantedwood.block.custom.LavaPumpBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "lava_pump")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.LavaPumpBlock.LIT) ? 12 : 0)),
-            Text.literal("§6Submersible Thermal Lava Pump"),
-            Text.literal("§8Pumps liquid lava from Nether seas into adjacent pipes and generators."));
+            new net.enchantedwood.block.custom.LavaPumpBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "lava_pump")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.LavaPumpBlock.LIT) ? 12 : 0)),
+            Component.literal("§6Submersible Thermal Lava Pump"),
+            Component.literal("§8Pumps liquid lava from Nether seas into adjacent pipes and generators."));
 
     public static final Block WATER_PUMP = registerBlockWithTooltip("water_pump",
-            new net.enchantedwood.block.custom.WaterPumpBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "water_pump")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.WaterPumpBlock.LIT) ? 10 : 0)),
-            Text.literal("§6Electric Water Pump"),
-            Text.literal("§7Pumps water, fills water buckets (stacks up to 16), & auto-feeds machines."),
-            Text.literal("§b • Dual Source: Rapid from water source (500 mB) or atmospheric aquifer (250 mB)"),
-            Text.literal("§e • Automation: Auto-pulls empty buckets from top, auto-ejects filled buckets below/sides"),
-            Text.literal("§a • Super Computer: Program with an Empty Bucket to auto-craft Water Buckets!"),
-            Text.literal("§8 • Overclockable with Gears. Draws 20 FE/t."));
+            new net.enchantedwood.block.custom.WaterPumpBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "water_pump")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.WaterPumpBlock.LIT) ? 10 : 0)),
+            Component.literal("§6Electric Water Pump"),
+            Component.literal("§7Pumps water, fills water buckets (stacks up to 16), & auto-feeds machines."),
+            Component.literal("§b • Dual Source: Rapid from water source (500 mB) or atmospheric aquifer (250 mB)"),
+            Component.literal("§e • Automation: Auto-pulls empty buckets from top, auto-ejects filled buckets below/sides"),
+            Component.literal("§a • Super Computer: Program with an Empty Bucket to auto-craft Water Buckets!"),
+            Component.literal("§8 • Overclockable with Gears. Draws 20 FE/t."));
 
     public static final Block CRYO_FREEZER = registerBlockWithTooltip("cryo_freezer",
-            new net.enchantedwood.block.custom.CryoFreezerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cryo_freezer")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CryoFreezerBlock.LIT) ? 12 : 0)),
-            Text.literal("§bElectric Cryo-Freezer"),
-            Text.literal("§7Freezes water into ice, packed ice & blue ice. Overclockable with Gears."),
-            Text.literal("§b • Dual Inflow: Accepts water buckets or siphons directly from Water Pumps"),
-            Text.literal("§f • Cryo Chilling: Transforms water into Ice, and compresses Ice -> Packed -> Blue Ice"),
-            Text.literal("§8 • Overclockable with Gears. Draws 25 FE/t."));
+            new net.enchantedwood.block.custom.CryoFreezerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cryo_freezer")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CryoFreezerBlock.LIT) ? 12 : 0)),
+            Component.literal("§bElectric Cryo-Freezer"),
+            Component.literal("§7Freezes water into ice, packed ice & blue ice. Overclockable with Gears."),
+            Component.literal("§b • Dual Inflow: Accepts water buckets or siphons directly from Water Pumps"),
+            Component.literal("§f • Cryo Chilling: Transforms water into Ice, and compresses Ice -> Packed -> Blue Ice"),
+            Component.literal("§8 • Overclockable with Gears. Draws 25 FE/t."));
 
     public static final Block CRUSHER_MK2 = registerBlockWithTooltip("crusher_mk2",
-            new net.enchantedwood.block.custom.CrusherMk2Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "crusher_mk2")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CrusherMk2Block.LIT) ? 13 : 0)),
-            Text.literal("§6Industrial Crusher MK2"),
-            Text.literal("§83x-6x Ore Yield Multiplier + Secondary Mineral Byproducts."));
+            new net.enchantedwood.block.custom.CrusherMk2Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "crusher_mk2")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CrusherMk2Block.LIT) ? 13 : 0)),
+            Component.literal("§6Industrial Crusher MK2"),
+            Component.literal("§83x-6x Ore Yield Multiplier + Secondary Mineral Byproducts."));
 
     public static final Block DUST_SMELTER_MK2 = registerBlockWithTooltip("dust_smelter_mk2",
-            new net.enchantedwood.block.custom.DustSmelterMk2Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "dust_smelter_mk2")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(6.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.DustSmelterMk2Block.LIT) ? 13 : 0)),
-            Text.literal("§6Automated Dust Smelter MK2"),
-            Text.literal("§8Dual high-speed smelting chambers for mineral dusts and raw metal chunks."));
+            new net.enchantedwood.block.custom.DustSmelterMk2Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "dust_smelter_mk2")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(6.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.DustSmelterMk2Block.LIT) ? 13 : 0)),
+            Component.literal("§6Automated Dust Smelter MK2"),
+            Component.literal("§8Dual high-speed smelting chambers for mineral dusts and raw metal chunks."));
 
     public static final Block CIRCUIT_FABRICATOR = registerBlockWithTooltip("circuit_fabricator",
-            new net.enchantedwood.block.custom.CircuitFabricatorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "circuit_fabricator")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CircuitFabricatorBlock.LIT) ? 13 : 0)),
-            Text.literal("§b✦ Circuit Fabricator ✦"),
-            Text.literal("§7Semiconductor laser sintering & microchip workstation."),
-            Text.literal("§e• Energy: §f50,000 FE buffer (35 FE/t draw)"),
-            Text.literal("§6• Gear Socket: §fAccepts Copper..Diamond Gears & Blaze Overclock (up to 4.0×)"),
-            Text.literal("§a• Slot Layout: §fSubstrate (Wafer/Chip) + 3 Components ➔ Output Chip"),
-            Text.literal("§d• Works independently in or outside Cleanroom facilities."),
-            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
+            new net.enchantedwood.block.custom.CircuitFabricatorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "circuit_fabricator")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CircuitFabricatorBlock.LIT) ? 13 : 0)),
+            Component.literal("§b✦ Circuit Fabricator ✦"),
+            Component.literal("§7Semiconductor laser sintering & microchip workstation."),
+            Component.literal("§e• Energy: §f50,000 FE buffer (35 FE/t draw)"),
+            Component.literal("§6• Gear Socket: §fAccepts Copper..Diamond Gears & Blaze Overclock (up to 4.0×)"),
+            Component.literal("§a• Slot Layout: §fSubstrate (Wafer/Chip) + 3 Components ➔ Output Chip"),
+            Component.literal("§d• Works independently in or outside Cleanroom facilities."),
+            Component.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block INDUCTION_SMELTER = registerBlockWithTooltip("induction_smelter",
-            new net.enchantedwood.block.custom.InductionSmelterBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "induction_smelter")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.InductionSmelterBlock.LIT) ? 14 : 0)),
-            Text.literal("§c✦ Dual-Powered Induction Smeltery ✦"),
-            Text.literal("§7100% Zero-loss metal liquefaction & metallurgical alloyer."),
-            Text.literal("§c• Dual-Power: §f10,000 mB Lava (5 mB/cycle) + 50,000 FE (45 FE/t)"),
-            Text.literal("§e• 100% Reclaim: §fNugget=10 mB | Ingot=90 mB | Block=810 mB"),
-            Text.literal("§d• Multi-Fluid Reservoir: §fHolds 32,400 mB molten metals simultaneously"),
-            Text.literal("§6• Chip Socket: §fInstall Metallurgy Controller Chip for [ALLOY: ON/OFF]"),
-            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
+            new net.enchantedwood.block.custom.InductionSmelterBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "induction_smelter")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.InductionSmelterBlock.LIT) ? 14 : 0)),
+            Component.literal("§c✦ Dual-Powered Induction Smeltery ✦"),
+            Component.literal("§7100% Zero-loss metal liquefaction & metallurgical alloyer."),
+            Component.literal("§c• Dual-Power: §f10,000 mB Lava (5 mB/cycle) + 50,000 FE (45 FE/t)"),
+            Component.literal("§e• 100% Reclaim: §fNugget=10 mB | Ingot=90 mB | Block=810 mB"),
+            Component.literal("§d• Multi-Fluid Reservoir: §fHolds 32,400 mB molten metals simultaneously"),
+            Component.literal("§6• Chip Socket: §fInstall Metallurgy Controller Chip for [ALLOY: ON/OFF]"),
+            Component.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block CASTING_PORT = registerBlockWithTooltip("casting_port",
-            new net.enchantedwood.block.custom.CastingPortBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "casting_port")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()),
-            Text.literal("§6✦ Automated Casting Access Port ✦"),
-            Text.literal("§7Direct-attach mold solidifier for Smelters, Tanks & Pipes."),
-            Text.literal("§b• Fluid Intake: §f2,000 mB molten metal buffer"),
-            Text.literal("§e• Mold Selector: §fCycle Ingot (90 mB), Block (810 mB), or Nugget (10 mB)"),
-            Text.literal("§a• Auto-Extraction: §fPassively pushes products into adjacent containers"),
-            Text.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
+            new net.enchantedwood.block.custom.CastingPortBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "casting_port")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6✦ Automated Casting Access Port ✦"),
+            Component.literal("§7Direct-attach mold solidifier for Smelters, Tanks & Pipes."),
+            Component.literal("§b• Fluid Intake: §f2,000 mB molten metal buffer"),
+            Component.literal("§e• Mold Selector: §fCycle Ingot (90 mB), Block (810 mB), or Nugget (10 mB)"),
+            Component.literal("§a• Auto-Extraction: §fPassively pushes products into adjacent containers"),
+            Component.literal("§8Shift-Right-Click with Wrench to dismantle cleanly."));
 
     public static final Block CORN_CROP = registerBlockWithoutItem("corn_crop",
-            new net.enchantedwood.block.custom.CornCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "corn_crop")))
+            new net.enchantedwood.block.custom.CornCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "corn_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque()));
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion()));
 
     // Convergence Agriculture & Flora
     public static final Block RICE_CROP = registerBlockWithoutItem("rice_crop",
-            new net.enchantedwood.block.custom.RiceCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "rice_crop")))
+            new net.enchantedwood.block.custom.RiceCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rice_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque()));
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion()));
 
     public static final Block CUCUMBER_CROP = registerBlockWithoutItem("cucumber_crop",
-            new net.enchantedwood.block.custom.CucumberCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cucumber_crop")))
+            new net.enchantedwood.block.custom.CucumberCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cucumber_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque()));
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion()));
 
     public static final Block WILD_RICE = registerBlockWithTooltip("wild_rice",
-            new net.enchantedwood.block.custom.WildRiceBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_rice")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.enchantedwood.block.custom.WildRiceBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_rice")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()
-                    .nonOpaque()),
-            Text.literal("§aWild Rice Plant"),
-            Text.literal("§7Native flora of §dThe Convergence§7. Harvest for Rice & Seeds."));
+                    .instabreak()
+                    .noOcclusion()),
+            Component.literal("§aWild Rice Plant"),
+            Component.literal("§7Native flora of §dThe Convergence§7. Harvest for Rice & Seeds."));
 
     public static final Block WILD_CUCUMBER = registerBlockWithTooltip("wild_cucumber",
-            new net.enchantedwood.block.custom.WildCucumberBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_cucumber")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.enchantedwood.block.custom.WildCucumberBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_cucumber")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()
-                    .nonOpaque()),
-            Text.literal("§aWild Cucumber Shrub"),
-            Text.literal("§7Native flora of §dThe Convergence§7. Harvest for Cucumbers & Seeds."));
+                    .instabreak()
+                    .noOcclusion()),
+            Component.literal("§aWild Cucumber Shrub"),
+            Component.literal("§7Native flora of §dThe Convergence§7. Harvest for Cucumbers & Seeds."));
 
     public static final Block TOMATO_CROP = registerBlockWithoutItem("tomato_crop",
-            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tomato_crop")))
+            new net.enchantedwood.block.custom.GenericCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tomato_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque(),
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.TOMATO,
                     () -> net.enchantedwood.item.ModItems.TOMATO_SEEDS));
 
     public static final Block ONION_CROP = registerBlockWithoutItem("onion_crop",
-            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "onion_crop")))
+            new net.enchantedwood.block.custom.GenericCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "onion_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque(),
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.ONION,
                     () -> net.enchantedwood.item.ModItems.ONION_SEEDS));
 
     public static final Block LETTUCE_CROP = registerBlockWithoutItem("lettuce_crop",
-            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "lettuce_crop")))
+            new net.enchantedwood.block.custom.GenericCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "lettuce_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque(),
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.LETTUCE,
                     () -> net.enchantedwood.item.ModItems.LETTUCE_SEEDS));
 
     public static final Block SOYBEAN_CROP = registerBlockWithoutItem("soybean_crop",
-            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "soybean_crop")))
+            new net.enchantedwood.block.custom.GenericCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "soybean_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque(),
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.SOYBEANS,
                     () -> net.enchantedwood.item.ModItems.SOYBEAN_SEEDS));
 
     public static final Block CHILI_PEPPER_CROP = registerBlockWithoutItem("chili_pepper_crop",
-            new net.enchantedwood.block.custom.GenericCropBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "chili_pepper_crop")))
+            new net.enchantedwood.block.custom.GenericCropBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "chili_pepper_crop")))
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
-                    .pistonBehavior(net.minecraft.block.piston.PistonBehavior.DESTROY)
-                    .nonOpaque(),
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.CHILI_PEPPER,
                     () -> net.enchantedwood.item.ModItems.CHILI_PEPPER_SEEDS));
 
     public static final Block STRAWBERRY_BUSH = registerBlockWithTooltip("strawberry_bush",
-            new net.enchantedwood.block.custom.BerryBushBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "strawberry_bush")))
-                    .ticksRandomly()
+            new net.enchantedwood.block.custom.BerryBushBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "strawberry_bush")))
+                    .randomTicks()
                     .noCollision()
-                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH)
-                    .nonOpaque(),
+                    .sound(SoundType.SWEET_BERRY_BUSH)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.STRAWBERRY),
-            Text.literal("§cStrawberry Bush"),
-            Text.literal("§7Produces sweet juicy strawberries. Right-click to harvest."));
+            Component.literal("§cStrawberry Bush"),
+            Component.literal("§7Produces sweet juicy strawberries. Right-click to harvest."));
 
     public static final Block BLUEBERRY_BUSH = registerBlockWithTooltip("blueberry_bush",
-            new net.enchantedwood.block.custom.BerryBushBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "blueberry_bush")))
-                    .ticksRandomly()
+            new net.enchantedwood.block.custom.BerryBushBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "blueberry_bush")))
+                    .randomTicks()
                     .noCollision()
-                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH)
-                    .nonOpaque(),
+                    .sound(SoundType.SWEET_BERRY_BUSH)
+                    .noOcclusion(),
                     () -> net.enchantedwood.item.ModItems.BLUEBERRY),
-            Text.literal("§9Blueberry Bush"),
-            Text.literal("§7Produces antioxidant blueberries. Right-click to harvest."));
+            Component.literal("§9Blueberry Bush"),
+            Component.literal("§7Produces antioxidant blueberries. Right-click to harvest."));
 
 
     public static final Block AVOCADO_LOG = registerBlock("avocado_log",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_log")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_log")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block AVOCADO_WOOD = registerBlock("avocado_wood",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_wood")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_wood")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block AVOCADO_LEAVES = registerBlock("avocado_leaves",
-            new net.enchantedwood.block.custom.AvocadoLeavesBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_leaves")))
-                    .sounds(BlockSoundGroup.GRASS)
-                    .hardness(0.2f)
-                    .resistance(0.2f)
-                    .nonOpaque()
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+            new net.enchantedwood.block.custom.AvocadoLeavesBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_leaves")))
+                    .sound(SoundType.GRASS)
+                    .destroyTime(0.2f)
+                    .explosionResistance(0.2f)
+                    .noOcclusion()
+                    .isSuffocating((state, world, pos) -> false)
+                    ));
 
     public static final Block AVOCADO_SAPLING = registerBlockWithTooltip("avocado_sapling",
-            new net.minecraft.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.AVOCADO, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_sapling")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.minecraft.world.level.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.AVOCADO, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_sapling")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()),
-            Text.literal("§aAvocado Sapling"),
-            Text.literal("§7Grows into a fruit-bearing Avocado Tree. Found in §dThe Convergence§7."));
+                    .instabreak()),
+            Component.literal("§aAvocado Sapling"),
+            Component.literal("§7Grows into a fruit-bearing Avocado Tree. Found in §dThe Convergence§7."));
 
     public static final Block WILD_WASABI = registerBlockWithTooltip("wild_wasabi",
-            new net.enchantedwood.block.custom.WildWasabiBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_wasabi")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.enchantedwood.block.custom.WildWasabiBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_wasabi")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()
-                    .nonOpaque()),
-            Text.literal("§aWild Wasabi Plant"),
-            Text.literal("§7Grows along water banks in §dThe Convergence§7. Harvest for Wasabi Root."));
+                    .instabreak()
+                    .noOcclusion()),
+            Component.literal("§aWild Wasabi Plant"),
+            Component.literal("§7Grows along water banks in §dThe Convergence§7. Harvest for Wasabi Root."));
 
     public static final Block WILD_DRAGON_FRUIT = registerBlockWithTooltip("wild_dragon_fruit",
-            new net.enchantedwood.block.custom.WildDragonFruitBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "wild_dragon_fruit")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.enchantedwood.block.custom.WildDragonFruitBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_dragon_fruit")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()
-                    .nonOpaque()),
-            Text.literal("§dWild Dragon Fruit Cactus"),
-            Text.literal("§7Exotic flora of §dThe Convergence§7. Harvest for Dragon Fruit."));
+                    .instabreak()
+                    .noOcclusion()),
+            Component.literal("§dWild Dragon Fruit Cactus"),
+            Component.literal("§7Exotic flora of §dThe Convergence§7. Harvest for Dragon Fruit."));
 
     public static final Block STARFRUIT_LOG = registerBlock("starfruit_log",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_log")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_log")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STARFRUIT_WOOD = registerBlock("starfruit_wood",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_wood")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_wood")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STRIPPED_STARFRUIT_LOG = registerBlock("stripped_starfruit_log",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_starfruit_log")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "stripped_starfruit_log")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STRIPPED_STARFRUIT_WOOD = registerBlock("stripped_starfruit_wood",
-            new net.minecraft.block.PillarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "stripped_starfruit_wood")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(2.0f)));
+            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "stripped_starfruit_wood")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(2.0f)));
 
     public static final Block STARFRUIT_PLANKS = registerBlock("starfruit_planks",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_planks")))
-                    .sounds(BlockSoundGroup.WOOD)
-                    .hardness(2.0f)
-                    .resistance(3.0f)));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_planks")))
+                    .sound(SoundType.WOOD)
+                    .destroyTime(2.0f)
+                    .explosionResistance(3.0f)));
 
     public static final Block STARFRUIT_LEAVES = registerBlock("starfruit_leaves",
-            new net.enchantedwood.block.custom.StarfruitLeavesBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_leaves")))
-                    .sounds(BlockSoundGroup.GRASS)
-                    .hardness(0.2f)
-                    .resistance(0.2f)
-                    .nonOpaque()
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)));
+            new net.enchantedwood.block.custom.StarfruitLeavesBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_leaves")))
+                    .sound(SoundType.GRASS)
+                    .destroyTime(0.2f)
+                    .explosionResistance(0.2f)
+                    .noOcclusion()
+                    .isSuffocating((state, world, pos) -> false)
+                    ));
 
     public static final Block STARFRUIT_SAPLING = registerBlockWithTooltip("starfruit_sapling",
-            new net.minecraft.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.STARFRUIT, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "starfruit_sapling")))
-                    .sounds(BlockSoundGroup.GRASS)
+            new net.minecraft.world.level.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.STARFRUIT, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_sapling")))
+                    .sound(SoundType.GRASS)
                     .noCollision()
-                    .breakInstantly()),
-            Text.literal("§eStarfruit Sapling"),
-            Text.literal("§7Grows into a fruit-bearing Starfruit Tree. Found in §dThe Convergence§7."));
+                    .instabreak()),
+            Component.literal("§eStarfruit Sapling"),
+            Component.literal("§7Grows into a fruit-bearing Starfruit Tree. Found in §dThe Convergence§7."));
 
     public static final Block RESONANCE_ALTAR = registerBlockWithTooltip("resonance_altar",
-            new net.enchantedwood.block.custom.ResonanceAltarBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "resonance_altar")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(50.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()),
-            Text.literal("§5✦ Resonance Altar ✦"),
-            Text.literal("§dSacred dais at the heart of The Convergence Boss Arena."),
-            Text.literal("§7Right-click with a §eCore of Awakening §7inside The Convergence to summon"),
-            Text.literal("§7or revive §5The Resonance Colossus§7."),
-            Text.literal("§8 • Protected by Arena Leash & Retreat Safety Protocol"));
+            new net.enchantedwood.block.custom.ResonanceAltarBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "resonance_altar")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(50.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§5✦ Resonance Altar ✦"),
+            Component.literal("§dSacred dais at the heart of The Convergence Boss Arena."),
+            Component.literal("§7Right-click with a §eCore of Awakening §7inside The Convergence to summon"),
+            Component.literal("§7or revive §5The Resonance Colossus§7."),
+            Component.literal("§8 • Protected by Arena Leash & Retreat Safety Protocol"));
 
     public static final Block TROPHY_OF_OMNIPOTENCE = registerBlockWithTooltip("trophy_of_omnipotence",
-            new net.enchantedwood.block.custom.TrophyOfOmnipotenceBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "trophy_of_omnipotence")))
-                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
-                    .hardness(5.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()
-                    .luminance(state -> 15)),
-            Text.literal("§d✦ Trophy of Omnipotence ✦"),
-            Text.literal("§eThe ultimate symbol of solo mastery in ShuDynamics."),
-            Text.literal("§7Awarded upon vanquishing The Primordial Cataclysm."));
+            new net.enchantedwood.block.custom.TrophyOfOmnipotenceBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "trophy_of_omnipotence")))
+                    .sound(SoundType.AMETHYST)
+                    .destroyTime(5.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 15)),
+            Component.literal("§d✦ Trophy of Omnipotence ✦"),
+            Component.literal("§eThe ultimate symbol of solo mastery in ShuDynamics."),
+            Component.literal("§7Awarded upon vanquishing The Primordial Cataclysm."));
 
     public static final Block INDUSTRIAL_CENTRIFUGE = registerBlockWithTooltip("industrial_centrifuge",
-            new net.enchantedwood.block.custom.IndustrialCentrifugeBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "industrial_centrifuge")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.5f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.IndustrialCentrifugeBlock.LIT) ? 10 : 0)),
-            Text.literal("§bIndustrial Centrifuge"),
-            Text.literal("§7High-speed separation chamber for biological & mineral matter."),
-            Text.literal("§8Extracts concentrated chemical essences for Hypospray compounding."));
+            new net.enchantedwood.block.custom.IndustrialCentrifugeBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "industrial_centrifuge")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.IndustrialCentrifugeBlock.LIT) ? 10 : 0)),
+            Component.literal("§bIndustrial Centrifuge"),
+            Component.literal("§7High-speed separation chamber for biological & mineral matter."),
+            Component.literal("§8Extracts concentrated chemical essences for Hypospray compounding."));
 
     public static final Block CHEMICAL_SYNTHESIZER = registerBlockWithTooltip("chemical_synthesizer",
-            new net.enchantedwood.block.custom.ChemicalSynthesizerBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "chemical_synthesizer")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.5f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.ChemicalSynthesizerBlock.LIT) ? 12 : 0)),
-            Text.literal("§dChemical Synthesizer"),
-            Text.literal("§7Pressurized medical compounding workstation."),
-            Text.literal("§8Combines Empty Cartridges, Essences, and Catalysts into Hypospray Inoculants."));
+            new net.enchantedwood.block.custom.ChemicalSynthesizerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "chemical_synthesizer")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.5f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.ChemicalSynthesizerBlock.LIT) ? 12 : 0)),
+            Component.literal("§dChemical Synthesizer"),
+            Component.literal("§7Pressurized medical compounding workstation."),
+            Component.literal("§8Combines Empty Cartridges, Essences, and Catalysts into Hypospray Inoculants."));
 
     public static final Block VOLCANIC_SOIL = registerBlockWithTooltip("volcanic_soil",
-            new net.enchantedwood.block.custom.VolcanicSoilBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_soil")))
-                    .sounds(BlockSoundGroup.MUD)
-                    .hardness(0.8f)
-                    .resistance(0.8f)
-                    .ticksRandomly()),
-            Text.literal("§6Volcanic Mineral Soil"),
-            Text.literal("§8Self-hydrating fertile soil that accelerates crop and sapling growth automatically."));
+            new net.enchantedwood.block.custom.VolcanicSoilBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "volcanic_soil")))
+                    .sound(SoundType.MUD)
+                    .destroyTime(0.8f)
+                    .explosionResistance(0.8f)
+                    .randomTicks()),
+            Component.literal("§6Volcanic Mineral Soil"),
+            Component.literal("§8Self-hydrating fertile soil that accelerates crop and sapling growth automatically."));
 
     public static final Block SOIL_INFUSER = registerBlockWithTooltip("soil_infuser",
-            new net.enchantedwood.block.custom.SoilInfuserBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "soil_infuser")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(10.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.SoilInfuserBlock.LIT) ? 11 : 0)),
-            Text.literal("§6Volcanic Soil Infuser"),
-            Text.literal("§8Synthesizes hyper-fertile Volcanic Mineral Soil from Dirt and Volcanic Ash."));
+            new net.enchantedwood.block.custom.SoilInfuserBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "soil_infuser")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.SoilInfuserBlock.LIT) ? 11 : 0)),
+            Component.literal("§6Volcanic Soil Infuser"),
+            Component.literal("§8Synthesizes hyper-fertile Volcanic Mineral Soil from Dirt and Volcanic Ash."));
 
     public static final Block POZZOLANIC_ASPHALT = registerBlockWithTooltip("pozzolanic_asphalt",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "pozzolanic_asphalt")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()),
-            Text.literal("§6Pozzolanic Roman Asphalt"),
-            Text.literal("§8Ultra-durable ancient Roman pavement made with volcanic ash."));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "pozzolanic_asphalt")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Pozzolanic Roman Asphalt"),
+            Component.literal("§8Ultra-durable ancient Roman pavement made with volcanic ash."));
 
     public static final Block VOLCANIC_BRICKS = registerBlock("volcanic_bricks",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_bricks")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.5f)
-                    .resistance(8.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "volcanic_bricks")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block VOLCANIC_BRICK_STAIRS = registerBlock("volcanic_brick_stairs",
-            new StairsBlock(VOLCANIC_BRICKS.getDefaultState(), AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_brick_stairs")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.5f)
-                    .resistance(8.0f)
-                    .requiresTool()));
+            new StairBlock(VOLCANIC_BRICKS.defaultBlockState(), BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "volcanic_brick_stairs")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block VOLCANIC_BRICK_SLAB = registerBlock("volcanic_brick_slab",
-            new SlabBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_brick_slab")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(2.5f)
-                    .resistance(8.0f)
-                    .requiresTool()));
+            new SlabBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "volcanic_brick_slab")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(2.5f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()));
 
     // 5x5 Multiblock Titanium Lava Reservoir & Titanium Lava Pipes
     public static final Block TITANIUM_LAVA_PIPE = registerBlockWithTooltip("titanium_lava_pipe",
-            new net.enchantedwood.block.custom.TitaniumLavaPipeBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_lava_pipe")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(2.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§6Titanium Lava Pipe"),
-            Text.literal("§8High-temp titanium alloy pipe (1,668°C rating). Transfers 500 mB/t."));
+            new net.enchantedwood.block.custom.TitaniumLavaPipeBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "titanium_lava_pipe")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(2.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§6Titanium Lava Pipe"),
+            Component.literal("§8High-temp titanium alloy pipe (1,668°C rating). Transfers 500 mB/t."));
 
     public static final Block TITANIUM_TANK_CASING = registerBlockWithTooltip("titanium_tank_casing",
-            new net.enchantedwood.block.custom.TitaniumTankCasingBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_casing")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(18.0f)
-                    .requiresTool()),
-            Text.literal("§6Titanium Tank Casing"),
-            Text.literal("§85x5x5 Multiblock structural frame. Acts as Outbound Valve when formed."));
+            new net.enchantedwood.block.custom.TitaniumTankCasingBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "titanium_tank_casing")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(18.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Titanium Tank Casing"),
+            Component.literal("§85x5x5 Multiblock structural frame. Acts as Outbound Valve when formed."));
 
     public static final Block REINFORCED_TANK_GLASS = registerBlockWithTooltip("reinforced_tank_glass",
-            new net.enchantedwood.block.custom.ReinforcedTankGlassBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "reinforced_tank_glass")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(3.0f)
-                    .resistance(18.0f)
-                    .requiresTool()
-                    .nonOpaque()
-                    .solidBlock((state, world, pos) -> true)),
-            Text.literal("§6Reinforced Tank Glass"),
-            Text.literal("§8Pressure-treated quartz viewing glass. Drops itself when mined."));
+            new net.enchantedwood.block.custom.ReinforcedTankGlassBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "reinforced_tank_glass")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(3.0f)
+                    .explosionResistance(18.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .isRedstoneConductor((state, world, pos) -> true)),
+            Component.literal("§6Reinforced Tank Glass"),
+            Component.literal("§8Pressure-treated quartz viewing glass. Drops itself when mined."));
 
     public static final Block TITANIUM_TANK_INBOUND_PORT = registerBlockWithTooltip("titanium_tank_inbound_port",
-            new net.enchantedwood.block.custom.TitaniumTankInboundPortBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "titanium_tank_inbound_port")))
-                    .sounds(BlockSoundGroup.NETHERITE)
-                    .hardness(5.0f)
-                    .resistance(18.0f)
-                    .requiresTool()),
-            Text.literal("§6Titanium Tank Inbound Port"),
-            Text.literal("§8Top-center 5x5 Multiblock Valve. Inbound lava pipes connect here."));
+            new net.enchantedwood.block.custom.TitaniumTankInboundPortBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "titanium_tank_inbound_port")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(5.0f)
+                    .explosionResistance(18.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Titanium Tank Inbound Port"),
+            Component.literal("§8Top-center 5x5 Multiblock Valve. Inbound lava pipes connect here."));
 
     public static final Block WATER_PIPE = registerBlockWithTooltip("water_pipe",
-            new net.enchantedwood.block.custom.WaterPipeBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "water_pipe")))
-                    .sounds(BlockSoundGroup.COPPER)
-                    .hardness(2.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§bCopper Water Pipe"),
-            Text.literal("§7Fluid conduit for pressurized water transport. Transfers 500 mB/t."),
-            Text.literal("§8Connects Water Pumps to Freezers, Oxygen Generators & Tanks."));
+            new net.enchantedwood.block.custom.WaterPipeBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "water_pipe")))
+                    .sound(SoundType.COPPER)
+                    .destroyTime(2.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§bCopper Water Pipe"),
+            Component.literal("§7Fluid conduit for pressurized water transport. Transfers 500 mB/t."),
+            Component.literal("§8Connects Water Pumps to Freezers, Oxygen Generators & Tanks."));
 
     // Universal Item Logistics System
     public static final Block ITEM_PIPE = registerBlockWithTooltip("item_pipe",
-            new net.enchantedwood.block.custom.ItemPipeBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_pipe")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(1.5f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§6Item Transport Pipe"),
-            Text.literal("§8Modular 6-way item conduit for routing items between extractors and inserters."));
+            new net.enchantedwood.block.custom.ItemPipeBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "item_pipe")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(1.5f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§6Item Transport Pipe"),
+            Component.literal("§8Modular 6-way item conduit for routing items between extractors and inserters."));
 
     public static final Block ITEM_EXTRACTOR = registerBlockWithTooltip("item_extractor",
-            new net.enchantedwood.block.custom.ItemExtractorBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_extractor")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§6Item Extractor"),
-            Text.literal("§8Actively pulls items from machine outputs and chests into the pipe network."));
+            new net.enchantedwood.block.custom.ItemExtractorBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "item_extractor")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§6Item Extractor"),
+            Component.literal("§8Actively pulls items from machine outputs and chests into the pipe network."));
 
     public static final Block ITEM_INSERTER = registerBlockWithTooltip("item_inserter",
-            new net.enchantedwood.block.custom.ItemInserterBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "item_inserter")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(2.0f)
-                    .resistance(6.0f)
-                    .requiresTool()
-                    .nonOpaque()),
-            Text.literal("§6Item Inserter"),
-            Text.literal("§8Actively injects routed items from the pipe network into target containers and machines."));
+            new net.enchantedwood.block.custom.ItemInserterBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "item_inserter")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(2.0f)
+                    .explosionResistance(6.0f)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()),
+            Component.literal("§6Item Inserter"),
+            Component.literal("§8Actively injects routed items from the pipe network into target containers and machines."));
 
     // Nether Metallurgy & Heavy Infrastructure
     public static final Block BASALT_CABLE = registerBlockWithTooltip("basalt_cable",
-            new net.enchantedwood.block.custom.BasaltCableBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "basalt_cable")))
-                    .sounds(BlockSoundGroup.BASALT)
-                    .hardness(3.0f)
-                    .resistance(1200.0f)
-                    .nonOpaque()),
-            Text.literal("§6Basalt Super Energy Cable"),
-            Text.literal("§e25,600 FE/t Energy Transfer §7• 100% Explosion-Proof & Fireproof."));
+            new net.enchantedwood.block.custom.BasaltCableBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "basalt_cable")))
+                    .sound(SoundType.BASALT)
+                    .destroyTime(3.0f)
+                    .explosionResistance(1200.0f)
+                    .noOcclusion()),
+            Component.literal("§6Basalt Super Energy Cable"),
+            Component.literal("§e25,600 FE/t Energy Transfer §7• 100% Explosion-Proof & Fireproof."));
 
     public static final Block REINFORCED_OBSIDIAN = registerBlockWithTooltip("reinforced_obsidian",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "reinforced_obsidian")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(50.0f)
-                    .resistance(1200.0f)
-                    .requiresTool()),
-            Text.literal("§6Reinforced Obsidian"),
-            Text.literal("§8Wither-proof and immune to all explosions."));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "reinforced_obsidian")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(50.0f)
+                    .explosionResistance(1200.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6Reinforced Obsidian"),
+            Component.literal("§8Wither-proof and immune to all explosions."));
 
     public static final Block VOLCANIC_GLASS = registerBlockWithTooltip("volcanic_glass",
-            new net.minecraft.block.TransparentBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_glass")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(2.5f)
-                    .resistance(600.0f)
-                    .nonOpaque()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)),
-            Text.literal("§6Tough Volcanic Glass"),
-            Text.literal("§8Blast-resistant crystal glass. Drops itself when mined."));
+            new net.minecraft.world.level.block.TransparentBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "volcanic_glass")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(2.5f)
+                    .explosionResistance(600.0f)
+                    .noOcclusion()
+                    .isValidSpawn((state, world, pos, type) -> false)
+                    .isRedstoneConductor((state, world, pos) -> false)
+                    .isSuffocating((state, world, pos) -> false)
+                    ),
+            Component.literal("§6Tough Volcanic Glass"),
+            Component.literal("§8Blast-resistant crystal glass. Drops itself when mined."));
 
     // Convergence Cave Ores & Minerals
     public static final Block FLUORITE_ORE = registerBlock("fluorite_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "fluorite_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "fluorite_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_FLUORITE_ORE = registerBlock("deepslate_fluorite_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_fluorite_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(4.5f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_fluorite_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block ZIRCONIA_ORE = registerBlock("zirconia_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "zirconia_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.5f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "zirconia_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.5f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_ZIRCONIA_ORE = registerBlock("deepslate_zirconia_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_zirconia_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(5.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_zirconia_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block TANTALUM_ORE = registerBlock("tantalum_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tantalum_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(4.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tantalum_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(4.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_TANTALUM_ORE = registerBlock("deepslate_tantalum_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_tantalum_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(5.5f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_tantalum_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(5.5f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block HAFNIUM_ORE = registerBlock("hafnium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hafnium_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(4.5f)
-                    .resistance(5.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "hafnium_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(5.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_HAFNIUM_ORE = registerBlock("deepslate_hafnium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_hafnium_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(6.0f)
-                    .resistance(5.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_hafnium_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(6.0f)
+                    .explosionResistance(5.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block NEODYMIUM_ORE = registerBlock("neodymium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "neodymium_ore")))
-                    .sounds(BlockSoundGroup.STONE)
-                    .hardness(3.5f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "neodymium_ore")))
+                    .sound(SoundType.STONE)
+                    .destroyTime(3.5f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_NEODYMIUM_ORE = registerBlock("deepslate_neodymium_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_neodymium_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(5.0f)
-                    .resistance(4.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_neodymium_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(5.0f)
+                    .explosionResistance(4.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block AEROGEL_ORE = registerBlock("aerogel_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_ore")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(3.0f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aerogel_ore")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(3.0f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block DEEPSLATE_AEROGEL_ORE = registerBlock("deepslate_aerogel_ore",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "deepslate_aerogel_ore")))
-                    .sounds(BlockSoundGroup.DEEPSLATE)
-                    .hardness(4.5f)
-                    .resistance(3.0f)
-                    .requiresTool()));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "deepslate_aerogel_ore")))
+                    .sound(SoundType.DEEPSLATE)
+                    .destroyTime(4.5f)
+                    .explosionResistance(3.0f)
+                    .requiresCorrectToolForDrops()));
 
     public static final Block AEROGEL_GLASS = registerBlockWithTooltip("aerogel_glass",
-            new Block(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "aerogel_glass")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(2.5f)
-                    .resistance(30.0f)
-                    .nonOpaque()
-                    .allowsSpawning((state, world, pos, type) -> false)
-                    .solidBlock((state, world, pos) -> false)
-                    .suffocates((state, world, pos) -> false)
-                    .blockVision((state, world, pos) -> false)),
-            Text.literal("§bReinforced Aerogel Glass"),
-            Text.literal("§7Nanostructured insulating composite glass."));
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "aerogel_glass")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(2.5f)
+                    .explosionResistance(30.0f)
+                    .noOcclusion()
+                    .isValidSpawn((state, world, pos, type) -> false)
+                    .isRedstoneConductor((state, world, pos) -> false)
+                    .isSuffocating((state, world, pos) -> false)
+                    ),
+            Component.literal("§bReinforced Aerogel Glass"),
+            Component.literal("§7Nanostructured insulating composite glass."));
 
     // Cleanroom Industrial Suite & Polymer Loom
     public static final Block POLYMER_LOOM = registerBlockWithTooltip("polymer_loom",
-            new net.enchantedwood.block.custom.PolymerLoomBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "polymer_loom")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(8.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.PolymerLoomBlock.LIT) ? 13 : 0)),
-            Text.literal("§6High-Speed Polymer Loom"),
-            Text.literal("§7Spins raw polymer & synthetic fibers into Sterile Cleanroom Fabrics & Suits."));
+            new net.enchantedwood.block.custom.PolymerLoomBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "polymer_loom")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(8.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.PolymerLoomBlock.LIT) ? 13 : 0)),
+            Component.literal("§6High-Speed Polymer Loom"),
+            Component.literal("§7Spins raw polymer & synthetic fibers into Sterile Cleanroom Fabrics & Suits."));
 
     public static final Block CLEANROOM_CASING = registerBlockWithTooltip("cleanroom_casing",
-            new net.enchantedwood.block.custom.CleanroomCasingBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_casing")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(3.5f)
-                    .resistance(12.0f)
-                    .requiresTool()),
-            Text.literal("§fCleanroom Sanitary Casing"),
-            Text.literal("§7Airtight non-porous composite wall & floor panel."),
-            Text.literal("§8Used to construct sterile cleanroom enclosures."));
+            new net.enchantedwood.block.custom.CleanroomCasingBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cleanroom_casing")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(3.5f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§fCleanroom Sanitary Casing"),
+            Component.literal("§7Airtight non-porous composite wall & floor panel."),
+            Component.literal("§8Used to construct sterile cleanroom enclosures."));
 
     public static final Block CLEANROOM_FILTER_CASING = registerBlockWithTooltip("cleanroom_filter_casing",
-            new net.enchantedwood.block.custom.CleanroomFilterCasingBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_filter_casing")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(3.5f)
-                    .resistance(12.0f)
-                    .requiresTool()),
-            Text.literal("§bCleanroom HEPA Filter Casing"),
-            Text.literal("§7High-efficiency particulate air intake grille."),
-            Text.literal("§8Removes 99.97% of airborne contaminants."));
+            new net.enchantedwood.block.custom.CleanroomFilterCasingBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cleanroom_filter_casing")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(3.5f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§bCleanroom HEPA Filter Casing"),
+            Component.literal("§7High-efficiency particulate air intake grille."),
+            Component.literal("§8Removes 99.97% of airborne contaminants."));
 
     public static final Block CLEANROOM_AIR_SCRUBBER = registerBlockWithTooltip("cleanroom_air_scrubber",
-            new net.enchantedwood.block.custom.CleanroomAirScrubberBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "cleanroom_air_scrubber")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(4.0f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.CleanroomAirScrubberBlock.STERILE) ? 14 : 4)),
-            Text.literal("§a✦ Cleanroom Air Scrubber & Controller ✦"),
-            Text.literal("§7Draws 20 FE/t to maintain positive sterile air pressure."),
-            Text.literal("§7Scans room boundary for leaks up to 2,500 blocks."),
-            Text.literal("§e⚡ Wireless Power Grid: Broadcasts external FE to all interior machines!"),
-            Text.literal("§b• Right-click to inspect sterility status, machines, or leak coordinates."),
-            Text.literal("§d• Upgrades Chemical Synthesizer output to GRADE-A PURE!"));
+            new net.enchantedwood.block.custom.CleanroomAirScrubberBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cleanroom_air_scrubber")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(4.0f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.CleanroomAirScrubberBlock.STERILE) ? 14 : 4)),
+            Component.literal("§a✦ Cleanroom Air Scrubber & Controller ✦"),
+            Component.literal("§7Draws 20 FE/t to maintain positive sterile air pressure."),
+            Component.literal("§7Scans room boundary for leaks up to 2,500 blocks."),
+            Component.literal("§e⚡ Wireless Power Grid: Broadcasts external FE to all interior machines!"),
+            Component.literal("§b• Right-click to inspect sterility status, machines, or leak coordinates."),
+            Component.literal("§d• Upgrades Chemical Synthesizer output to GRADE-A PURE!"));
 
     public static final Block DECONTAMINATION_AIRLOCK_DOOR = registerDoorWithTooltip("decontamination_airlock_door",
-            new net.enchantedwood.block.custom.DecontaminationAirlockDoorBlock(net.minecraft.block.BlockSetType.IRON, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "decontamination_airlock_door")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(20.0f)
-                    .nonOpaque()
-                    .requiresTool()),
-            Text.literal("§b✦ Decontamination Airlock Door ✦"),
-            Text.literal("§7Motorized hermetic cleanroom security door."),
-            Text.literal("§e• Proximity Scanner: §fDetects full Cleanroom Bunny Suit"),
-            Text.literal("§a• Decontaminates with steam mist & auto-slides open"),
-            Text.literal("§c• Rejects unsuited personnel to prevent contamination"),
-            Text.literal("§d• Shift-Right-Click: §fToggle Cleanroom (Suit) vs Anteroom (Open)"),
-            Text.literal("§7• Click interior face to open for exit."));
+            new net.enchantedwood.block.custom.DecontaminationAirlockDoorBlock(net.minecraft.world.level.block.state.properties.BlockSetType.IRON, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "decontamination_airlock_door")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(20.0f)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§b✦ Decontamination Airlock Door ✦"),
+            Component.literal("§7Motorized hermetic cleanroom security door."),
+            Component.literal("§e• Proximity Scanner: §fDetects full Cleanroom Bunny Suit"),
+            Component.literal("§a• Decontaminates with steam mist & auto-slides open"),
+            Component.literal("§c• Rejects unsuited personnel to prevent contamination"),
+            Component.literal("§d• Shift-Right-Click: §fToggle Cleanroom (Suit) vs Anteroom (Open)"),
+            Component.literal("§7• Click interior face to open for exit."));
 
     public static final Block GOWNING_AIRLOCK_DOOR = registerDoorWithTooltip("gowning_airlock_door",
-            new net.enchantedwood.block.custom.GowningAirlockDoorBlock(net.minecraft.block.BlockSetType.IRON, AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "gowning_airlock_door")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(5.0f)
-                    .resistance(20.0f)
-                    .nonOpaque()
-                    .requiresTool()),
-            Text.literal("§6✦ Gowning Airlock Door ✦"),
-            Text.literal("§7Motorized anteroom personnel access door."),
-            Text.literal("§e• Proximity Sensor: §fAuto-slides open for all approaching personnel"),
-            Text.literal("§b• Ideal for outer entry into suit-up & gowning anterooms"),
-            Text.literal("§a• Certified Airtight: Seals cleanroom walls and anterooms"),
-            Text.literal("§7• Click interior face to open for exit."));
+            new net.enchantedwood.block.custom.GowningAirlockDoorBlock(net.minecraft.world.level.block.state.properties.BlockSetType.IRON, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "gowning_airlock_door")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(5.0f)
+                    .explosionResistance(20.0f)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§6✦ Gowning Airlock Door ✦"),
+            Component.literal("§7Motorized anteroom personnel access door."),
+            Component.literal("§e• Proximity Sensor: §fAuto-slides open for all approaching personnel"),
+            Component.literal("§b• Ideal for outer entry into suit-up & gowning anterooms"),
+            Component.literal("§a• Certified Airtight: Seals cleanroom walls and anterooms"),
+            Component.literal("§7• Click interior face to open for exit."));
 
     public static final Block STERILE_CLEANROOM_LAMP = registerBlockWithTooltip("sterile_cleanroom_lamp",
-            new net.enchantedwood.block.custom.SterileCleanroomLampBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_cleanroom_lamp")))
-                    .sounds(BlockSoundGroup.GLASS)
-                    .hardness(2.5f)
-                    .resistance(12.0f)
-                    .requiresTool()
-                    .luminance(state -> state.get(net.enchantedwood.block.custom.SterileCleanroomLampBlock.MODE).luminance)),
-            Text.literal("§e✦ Sterile Cleanroom Lamp ✦"),
-            Text.literal("§7Flush-mount hermetic LED cleanroom light."),
-            Text.literal("§b• Right-click to toggle:"),
-            Text.literal("§f  [1] Daylight White LED (Luminance 15)"),
-            Text.literal("§d  [2] UV-C Germicidal Sterilization Mode (Luminance 11)"),
-            Text.literal("§8  [3] Standby (Off)"),
-            Text.literal("§a• Certified Airtight: Seals cleanroom walls and ceilings!"));
+            new net.enchantedwood.block.custom.SterileCleanroomLampBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "sterile_cleanroom_lamp")))
+                    .sound(SoundType.GLASS)
+                    .destroyTime(2.5f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(net.enchantedwood.block.custom.SterileCleanroomLampBlock.MODE).luminance)),
+            Component.literal("§e✦ Sterile Cleanroom Lamp ✦"),
+            Component.literal("§7Flush-mount hermetic LED cleanroom light."),
+            Component.literal("§b• Right-click to toggle:"),
+            Component.literal("§f  [1] Daylight White LED (Luminance 15)"),
+            Component.literal("§d  [2] UV-C Germicidal Sterilization Mode (Luminance 11)"),
+            Component.literal("§8  [3] Standby (Off)"),
+            Component.literal("§a• Certified Airtight: Seals cleanroom walls and ceilings!"));
 
     public static final Block STERILE_MEDICAL_CABINET = registerBlockWithTooltip("sterile_medical_cabinet",
-            new net.enchantedwood.block.custom.SterileMedicalCabinetBlock(AbstractBlock.Settings.create()
-                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet")))
-                    .sounds(BlockSoundGroup.METAL)
-                    .hardness(3.5f)
-                    .resistance(12.0f)
-                    .requiresTool()),
-            Text.literal("§b✦ Sterile Medical Cabinet ✦"),
-            Text.literal("§7Hermetic cleanroom dispensary & supply storage."),
-            Text.literal("§e• 36 Controlled Storage Compartments:"),
-            Text.literal("§f  - Hypospray & Cartridge Fabrication"),
-            Text.literal("§d  - Extracted Chemical Essences"),
-            Text.literal("§a  - Catalysts & Biological Feedstocks"),
-            Text.literal("§b  - Finished Standard & ✦ Pure Hypospray Cartridges"),
-            Text.literal("§c• Strictly rejects non-medical items"));
+            new net.enchantedwood.block.custom.SterileMedicalCabinetBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "sterile_medical_cabinet")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(3.5f)
+                    .explosionResistance(12.0f)
+                    .requiresCorrectToolForDrops()),
+            Component.literal("§b✦ Sterile Medical Cabinet ✦"),
+            Component.literal("§7Hermetic cleanroom dispensary & supply storage."),
+            Component.literal("§e• 36 Controlled Storage Compartments:"),
+            Component.literal("§f  - Hypospray & Cartridge Fabrication"),
+            Component.literal("§d  - Extracted Chemical Essences"),
+            Component.literal("§a  - Catalysts & Biological Feedstocks"),
+            Component.literal("§b  - Finished Standard & ✦ Pure Hypospray Cartridges"),
+            Component.literal("§c• Strictly rejects non-medical items"));
 
     private static Block registerBlockWithoutItem(String name, Block block) {
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
-        return Registry.register(Registries.BLOCK, blockKey, block);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
     }
 
-    private static Block registerDoorWithTooltip(String name, Block block, Text... tooltips) {
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+    private static Block registerDoorWithTooltip(String name, Block block, Component... tooltips) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
 
-        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
-        Registry.register(Registries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipTallBlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey(), tooltips));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipTallBlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix(), tooltips));
 
         return registeredBlock;
     }
 
     private static Block registerBlock(String name, Block block) {
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
 
-        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
-        Registry.register(Registries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey()));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
 
         return registeredBlock;
     }
 
-    private static Block registerBlockWithTooltip(String name, Block block, Text... tooltips) {
-        RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, name));
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, name));
+    private static Block registerBlockWithTooltip(String name, Block block, Component... tooltips) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
 
-        Block registeredBlock = Registry.register(Registries.BLOCK, blockKey, block);
-        Registry.register(Registries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipBlockItem(registeredBlock, new Item.Settings().registryKey(itemKey).useBlockPrefixedTranslationKey(), tooltips));
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipBlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix(), tooltips));
 
         return registeredBlock;
     }

@@ -1,20 +1,19 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.enchantedwood.block.ModBlocks;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +30,10 @@ public class ResonanceFrameValidator {
             ModBlocks.DIMENSIONAL_SINGULARITY
     );
 
-    public static boolean tryActivateGateway(World world, BlockPos clickedPos, ServerPlayerEntity player) {
+    public static boolean tryActivateGateway(Level world, BlockPos clickedPos, ServerPlayer player) {
         for (Direction dir : Direction.values()) {
-            BlockPos airPos = clickedPos.offset(dir);
-            if (world.isAir(airPos) || world.getBlockState(airPos).isOf(ModBlocks.DORMANT_RIFT)) {
+            BlockPos airPos = clickedPos.relative(dir);
+            if (world.isEmptyBlock(airPos) || world.getBlockState(airPos).is(ModBlocks.DORMANT_RIFT)) {
                 if (checkAndActivateOnAxis(world, airPos, Direction.Axis.X, player)) return true;
                 if (checkAndActivateOnAxis(world, airPos, Direction.Axis.Z, player)) return true;
             }
@@ -42,19 +41,19 @@ public class ResonanceFrameValidator {
         return false;
     }
 
-    private static boolean checkAndActivateOnAxis(World world, BlockPos startPos, Direction.Axis axis, ServerPlayerEntity player) {
+    private static boolean checkAndActivateOnAxis(Level world, BlockPos startPos, Direction.Axis axis, ServerPlayer player) {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
 
         // Find bottom-left of candidate interior
-        BlockPos.Mutable current = startPos.mutableCopy();
-        while ((world.isAir(current.down()) || world.getBlockState(current.down()).isOf(ModBlocks.DORMANT_RIFT)) && current.getY() > world.getBottomY()) {
+        BlockPos.MutableBlockPos current = startPos.mutable();
+        while ((world.isEmptyBlock(current.below()) || world.getBlockState(current.below()).is(ModBlocks.DORMANT_RIFT)) && current.getY() > world.getMinY()) {
             current.move(Direction.DOWN);
         }
-        while (world.isAir(current.offset(widthDir.getOpposite())) || world.getBlockState(current.offset(widthDir.getOpposite())).isOf(ModBlocks.DORMANT_RIFT)) {
+        while (world.isEmptyBlock(current.relative(widthDir.getOpposite())) || world.getBlockState(current.relative(widthDir.getOpposite())).is(ModBlocks.DORMANT_RIFT)) {
             current.move(widthDir.getOpposite());
         }
 
-        BlockPos bottomLeft = current.toImmutable();
+        BlockPos bottomLeft = current.immutable();
 
         // Must be exactly 2 wide and 3 high
         int width = 2;
@@ -66,14 +65,14 @@ public class ResonanceFrameValidator {
 
         for (int w = -1; w <= width; w++) {
             for (int h = -1; h <= height; h++) {
-                BlockPos pos = bottomLeft.offset(widthDir, w).up(h);
+                BlockPos pos = bottomLeft.relative(widthDir, w).above(h);
                 boolean isBorder = (w == -1 || w == width || h == -1 || h == height);
                 boolean isCorner = (w == -1 || w == width) && (h == -1 || h == height);
 
                 if (isBorder) {
                     if (!isCorner) {
                         BlockState state = world.getBlockState(pos);
-                        if (state.isOf(Blocks.CRYING_OBSIDIAN)) {
+                        if (state.is(Blocks.CRYING_OBSIDIAN)) {
                             cryingObsidianCount++;
                         } else if (REQUIRED_KEYSTONES.contains(state.getBlock())) {
                             foundKeystones.add(state.getBlock());
@@ -84,7 +83,7 @@ public class ResonanceFrameValidator {
                     }
                 } else {
                     // Interior must be air or already dormant rift
-                    if (!world.isAir(pos) && !world.getBlockState(pos).isOf(ModBlocks.DORMANT_RIFT)) {
+                    if (!world.isEmptyBlock(pos) && !world.getBlockState(pos).is(ModBlocks.DORMANT_RIFT)) {
                         return false;
                     }
                     interiorPositions.add(pos);
@@ -97,7 +96,7 @@ public class ResonanceFrameValidator {
             // Check if already fully activated to prevent duplicate sound/message spam
             boolean alreadyIgnited = true;
             for (BlockPos pos : interiorPositions) {
-                if (!world.getBlockState(pos).isOf(ModBlocks.DORMANT_RIFT)) {
+                if (!world.getBlockState(pos).is(ModBlocks.DORMANT_RIFT)) {
                     alreadyIgnited = false;
                     break;
                 }
@@ -108,37 +107,37 @@ public class ResonanceFrameValidator {
 
             // Fill interior with Dormant Rift blocks
             for (BlockPos pos : interiorPositions) {
-                world.setBlockState(pos, ModBlocks.DORMANT_RIFT.getDefaultState().with(DormantRiftBlock.AXIS, axis));
+                world.setBlockAndUpdate(pos, ModBlocks.DORMANT_RIFT.defaultBlockState().setValue(DormantRiftBlock.AXIS, axis));
             }
 
-            if (!world.isClient() && world instanceof ServerWorld serverWorld) {
+            if (!world.isClientSide() && world instanceof ServerLevel serverWorld) {
                 net.enchantedwood.world.dimension.ConvergencePortalManager.registerGateway(serverWorld, bottomLeft);
                 for (BlockPos pos : interiorPositions) {
-                    serverWorld.spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 12, 0.3, 0.4, 0.3, 0.05);
-                    serverWorld.spawnParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 15, 0.4, 0.5, 0.4, 0.1);
+                    serverWorld.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 12, 0.3, 0.4, 0.3, 0.05);
+                    serverWorld.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 15, 0.4, 0.5, 0.4, 0.1);
                 }
 
-                world.playSound(null, bottomLeft, SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.BLOCKS, 1.2f, 0.9f);
-                world.playSound(null, bottomLeft, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1.5f, 1.8f);
+                world.playSound(null, bottomLeft, SoundEvents.END_PORTAL_SPAWN, SoundSource.BLOCKS, 1.2f, 0.9f);
+                world.playSound(null, bottomLeft, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.5f, 1.8f);
 
                 if (serverWorld.getServer() != null) {
-                    serverWorld.getServer().getPlayerManager().broadcast(
-                            Text.literal("§5✦ [Spatial Sensors] §dThe 6 Keystones achieve critical harmonic resonance! The dimensional barrier ruptures—the Gateway to The Convergence is OPEN!"),
+                    serverWorld.getServer().getPlayerList().broadcastSystemMessage(
+                            Component.literal("§5✦ [Spatial Sensors] §dThe 6 Keystones achieve critical harmonic resonance! The dimensional barrier ruptures—the Gateway to The Convergence is OPEN!"),
                             false
                     );
 
                     if (player != null) {
-                        var advEntry = serverWorld.getServer().getAdvancementLoader().get(net.minecraft.util.Identifier.of("enchantedwood", "anomalies/gateway_of_resonance"));
+                        var advEntry = serverWorld.getServer().getAdvancements().get(net.minecraft.resources.Identifier.fromNamespaceAndPath("enchantedwood", "anomalies/gateway_of_resonance"));
                         if (advEntry != null) {
-                            player.getAdvancementTracker().grantCriterion(advEntry, "activated_gateway");
+                            player.getAdvancements().award(advEntry, "activated_gateway");
                         }
 
                         // Award Music Disc: Rip the Sky Wide (Convergence)!
                         ItemStack disc = new ItemStack(net.enchantedwood.item.ModItems.MUSIC_DISC_CONVERGENCE);
-                        if (!player.getInventory().insertStack(disc)) {
-                            player.dropItem(disc, false);
+                        if (!player.getInventory().add(disc)) {
+                            player.drop(disc, false, net.minecraft.util.Prediction.SERVER_ONLY);
                         }
-                        player.sendMessage(Text.literal("§5✦ The dimensional rift frequency crystallized into a Music Disc (Convergence)! ✦"), false);
+                        player.sendSystemMessage(Component.literal("§5✦ The dimensional rift frequency crystallized into a Music Disc (Convergence)! ✦"));
                     }
                 }
             }

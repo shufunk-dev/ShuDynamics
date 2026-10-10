@@ -9,31 +9,31 @@ import net.enchantedwood.energy.SimpleEnergyStorage;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.enchantedwood.screen.CircuitFabricatorScreenHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider {
+public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider {
     public static final int CAPACITY = 50_000;
     public static final int MAX_RECEIVE = 2_500;
     public static final int ENERGY_DRAW = 35; // 35 FE/t
@@ -76,7 +76,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         return Collections.unmodifiableList(RECIPES);
     }
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(INVENTORY_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(CAPACITY, MAX_RECEIVE, 0, 0);
 
     private @Nullable BlockPos boundNetworkPos = null;
@@ -88,7 +88,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     public void bindNetwork(BlockPos pos, String dimension) {
         this.boundNetworkPos = pos;
         this.boundDimension = dimension != null ? dimension : "minecraft:overworld";
-        markDirty();
+        setChanged();
     }
 
     public @Nullable BlockPos getBoundNetworkPos() {
@@ -101,7 +101,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
 
     public GearTier getActiveGearTier() {
         ItemStack gearStack = inventory.get(GEAR_SLOT);
-        if (gearStack.isOf(ModItems.BLAZE_OVERCLOCK_CORE)) {
+        if (gearStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) {
             return GearTier.BLAZE_OVERCLOCK;
         }
         if (gearStack.getItem() instanceof net.enchantedwood.item.custom.GearItem gearItem) {
@@ -122,7 +122,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         };
     }
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -146,7 +146,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -170,13 +170,13 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         this.externalOperationTicks = 6;
         this.isExternalProcess = true;
         if (substrate != null && !substrate.isEmpty()) {
-            if (this.inventory.get(SUBSTRATE_SLOT).isEmpty() || !this.inventory.get(SUBSTRATE_SLOT).isOf(substrate.getItem())) {
+            if (this.inventory.get(SUBSTRATE_SLOT).isEmpty() || !this.inventory.get(SUBSTRATE_SLOT).is(substrate.getItem())) {
                 this.inventory.set(SUBSTRATE_SLOT, substrate.copy());
             }
         }
         this.totalCookTime = Math.max(1, maxTicks);
         this.cookTime = Math.min(this.totalCookTime, progressTicks);
-        markDirty();
+        setChanged();
     }
 
     public void clearExternalProcess() {
@@ -184,10 +184,10 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         this.isExternalProcess = false;
         this.cookTime = 0;
         this.inventory.set(SUBSTRATE_SLOT, ItemStack.EMPTY);
-        markDirty();
+        setChanged();
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, CircuitFabricatorBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, CircuitFabricatorBlockEntity entity) {
         boolean dirty = false;
 
         if (entity.isExternalProcess) {
@@ -240,13 +240,13 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
             dirty = true;
         }
 
-        if (state.get(CircuitFabricatorBlock.LIT) != isLit) {
-            world.setBlockState(pos, state.with(CircuitFabricatorBlock.LIT, isLit), 3);
+        if (state.getValue(CircuitFabricatorBlock.LIT) != isLit) {
+            world.setBlock(pos, state.setValue(CircuitFabricatorBlock.LIT, isLit), 3);
             dirty = true;
         }
 
         if (dirty) {
-            entity.markDirty();
+            entity.setChanged();
         }
     }
 
@@ -263,7 +263,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         }
 
         for (FabricatorRecipe recipe : RECIPES) {
-            if (!substrate.isOf(recipe.substrate())) continue;
+            if (!substrate.is(recipe.substrate())) continue;
             if (recipe.components().size() != currentComponents.size()) continue;
 
             List<Item> required = new ArrayList<>(recipe.components());
@@ -284,19 +284,19 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     private boolean canAcceptOutput(ItemStack recipeOutput) {
         ItemStack currentOut = inventory.get(OUTPUT_SLOT);
         if (currentOut.isEmpty()) return true;
-        if (!ItemStack.areItemsEqual(currentOut, recipeOutput)) return false;
-        return currentOut.getCount() + recipeOutput.getCount() <= currentOut.getMaxCount();
+        if (!ItemStack.isSameItem(currentOut, recipeOutput)) return false;
+        return currentOut.getCount() + recipeOutput.getCount() <= currentOut.getMaxStackSize();
     }
 
     private void craftRecipe(FabricatorRecipe recipe) {
-        inventory.get(SUBSTRATE_SLOT).decrement(1);
+        inventory.get(SUBSTRATE_SLOT).shrink(1);
 
         // Decrement one of each component
         List<Item> toConsume = new ArrayList<>(recipe.components());
         for (int i = COMPONENT_SLOT_1; i <= COMPONENT_SLOT_3; i++) {
             ItemStack stack = inventory.get(i);
             if (!stack.isEmpty() && toConsume.remove(stack.getItem())) {
-                stack.decrement(1);
+                stack.shrink(1);
             }
         }
 
@@ -304,18 +304,18 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
         if (out.isEmpty()) {
             inventory.set(OUTPUT_SLOT, recipe.output().copy());
         } else {
-            out.increment(recipe.output().getCount());
+            out.grow(recipe.output().getCount());
         }
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("block.enchantedwood.circuit_fabricator");
+    public Component getDisplayName() {
+        return Component.translatable("block.enchantedwood.circuit_fabricator");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new CircuitFabricatorScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -325,7 +325,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     }
 
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         if (side == Direction.UP) {
             return new int[]{ SUBSTRATE_SLOT };
         } else if (side == Direction.DOWN) {
@@ -336,21 +336,21 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == OUTPUT_SLOT) return false;
         if (slot == GEAR_SLOT) {
-            return stack.getItem() instanceof GearItem || stack.isOf(ModItems.BLAZE_OVERCLOCK_CORE);
+            return stack.getItem() instanceof GearItem || stack.is(ModItems.BLAZE_OVERCLOCK_CORE);
         }
         return true;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == OUTPUT_SLOT;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return INVENTORY_SIZE;
     }
 
@@ -363,63 +363,63 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements NamedSc
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack result = ContainerHelper.removeItem(inventory, slot, amount);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack result = ContainerHelper.takeItem(inventory, slot);
+        if (!result.isEmpty()) setChanged();
         return result;
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
-        this.cookTime = view.getInt("CookTime", 0);
-        this.totalCookTime = view.getInt("TotalCookTime", 140);
+        this.cookTime = view.getIntOr("CookTime", 0);
+        this.totalCookTime = view.getIntOr("TotalCookTime", 140);
         if (view.contains("BoundX") && view.contains("BoundY") && view.contains("BoundZ")) {
-            this.boundNetworkPos = new BlockPos(view.getInt("BoundX", 0), view.getInt("BoundY", 0), view.getInt("BoundZ", 0));
-            this.boundDimension = view.getString("BoundDim", "minecraft:overworld");
+            this.boundNetworkPos = new BlockPos(view.getIntOr("BoundX", 0), view.getIntOr("BoundY", 0), view.getIntOr("BoundZ", 0));
+            this.boundDimension = view.getStringOr("BoundDim", "minecraft:overworld");
         } else {
             this.boundNetworkPos = null;
         }
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         view.putInt("CookTime", this.cookTime);
         view.putInt("TotalCookTime", this.totalCookTime);

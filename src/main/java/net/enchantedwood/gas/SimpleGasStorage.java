@@ -1,7 +1,7 @@
 package net.enchantedwood.gas;
 
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class SimpleGasStorage implements GasStorage {
     private GasType gasType = GasType.NONE;
@@ -76,22 +76,22 @@ public class SimpleGasStorage implements GasStorage {
         return type != GasType.NONE && (this.amount == 0 || this.gasType == type) && this.amount < this.capacity;
     }
 
-    public void readData(ReadView view, String prefix) {
-        String typeName = view.getString(prefix + "_GasType", "none");
+    public void readData(ValueInput view, String prefix) {
+        String typeName = view.getStringOr(prefix + "_GasType", "none");
         for (GasType t : GasType.values()) {
-            if (t.asString().equalsIgnoreCase(typeName)) {
+            if (t.getSerializedName().equalsIgnoreCase(typeName)) {
                 this.gasType = t;
                 break;
             }
         }
-        this.amount = view.getInt(prefix + "_GasAmount", 0);
+        this.amount = view.getIntOr(prefix + "_GasAmount", 0);
         if (this.amount <= 0) {
             this.gasType = GasType.NONE;
         }
     }
 
-    public void writeData(WriteView view, String prefix) {
-        view.putString(prefix + "_GasType", this.gasType.asString());
+    public void writeData(ValueOutput view, String prefix) {
+        view.putString(prefix + "_GasType", this.gasType.getSerializedName());
         view.putInt(prefix + "_GasAmount", this.amount);
     }
 }

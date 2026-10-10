@@ -3,21 +3,21 @@ package net.enchantedwood.client.renderer;
 import net.enchantedwood.EnchantedWoodMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.SpiderEntityRenderer;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.SpiderRenderer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
-public class ConvergenceSpiderRenderer extends SpiderEntityRenderer {
-    private static final Identifier TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/entity/convergence_spider.png");
+public class ConvergenceSpiderRenderer extends SpiderRenderer {
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/entity/convergence_spider.png");
 
-    public ConvergenceSpiderRenderer(EntityRendererFactory.Context context) {
+    public ConvergenceSpiderRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    public Identifier getTexture(LivingEntityRenderState state) {
+    public Identifier getTextureLocation(LivingEntityRenderState state) {
         return TEXTURE;
     }
 }

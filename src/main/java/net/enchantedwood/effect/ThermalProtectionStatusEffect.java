@@ -1,39 +1,39 @@
 package net.enchantedwood.effect;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
-public class ThermalProtectionStatusEffect extends StatusEffect {
+public class ThermalProtectionStatusEffect extends MobEffect {
     public ThermalProtectionStatusEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0xFF5400); // Blazing Orange
+        super(MobEffectCategory.BENEFICIAL, 0xFF5400); // Blazing Orange
     }
 
     @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel world, LivingEntity entity, int amplifier) {
         // Extinguish flames immediately
         if (entity.isOnFire()) {
-            entity.extinguish();
+            entity.clearFire();
         }
 
         // Prevent freezing in powder snow
-        if (entity.getFrozenTicks() > 0) {
-            entity.setFrozenTicks(0);
+        if (entity.getTicksFrozen() > 0) {
+            entity.setTicksFrozen(0);
         }
 
         // Lava buoyancy & mobility
         if (entity.isInLava()) {
             entity.fallDistance = 0.0f;
-            entity.setVelocity(entity.getVelocity().x * 1.15, Math.max(entity.getVelocity().y, 0.08), entity.getVelocity().z * 1.15);
-            if (world.getTime() % 10 == 0) {
-                world.spawnParticles(
+            entity.setDeltaMovement(entity.getDeltaMovement().x * 1.15, Math.max(entity.getDeltaMovement().y, 0.08), entity.getDeltaMovement().z * 1.15);
+            if (world.getGameTime() % 10 == 0) {
+                world.sendParticles(
                         ParticleTypes.FLAME,
                         entity.getX(), entity.getY() + 0.2, entity.getZ(),
                         2, 0.2, 0.1, 0.2, 0.01

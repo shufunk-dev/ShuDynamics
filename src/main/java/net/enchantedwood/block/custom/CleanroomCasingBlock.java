@@ -1,9 +1,9 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class CleanroomCasingBlock extends Block {
-    public CleanroomCasingBlock(Settings settings) {
+    public CleanroomCasingBlock(Properties settings) {
         super(settings);
     }
 }

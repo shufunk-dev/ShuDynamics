@@ -1,7 +1,7 @@
 package net.enchantedwood.item.custom;
 
 public class EnchantedCobblestoneArmorItem extends EnchantedArmorItem {
-    public EnchantedCobblestoneArmorItem(Settings settings) {
+    public EnchantedCobblestoneArmorItem(Properties settings) {
         super(settings);
     }
 }

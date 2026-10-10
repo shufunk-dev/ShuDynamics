@@ -1,18 +1,17 @@
 package net.enchantedwood.item.custom;
 
 import net.enchantedwood.effect.ModStatusEffects;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
 
 public class HyposprayCartridgeItem extends Item {
@@ -39,7 +38,7 @@ public class HyposprayCartridgeItem extends Item {
 
     private final Type type;
 
-    public HyposprayCartridgeItem(Settings settings, Type type) {
+    public HyposprayCartridgeItem(Properties settings, Type type) {
         super(settings);
         this.type = type;
     }
@@ -49,41 +48,41 @@ public class HyposprayCartridgeItem extends Item {
     }
 
     public static boolean isPure(ItemStack stack) {
-        if (stack == null || stack.isEmpty() || !stack.contains(DataComponentTypes.CUSTOM_DATA)) return false;
-        return stack.get(DataComponentTypes.CUSTOM_DATA).copyNbt().getBoolean(NBT_PURE_KEY, false);
+        if (stack == null || stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) return false;
+        return stack.get(DataComponents.CUSTOM_DATA).copyTag().getBooleanOr(NBT_PURE_KEY, false);
     }
 
     public static void setPure(ItemStack stack, boolean pure) {
         if (stack == null || stack.isEmpty()) return;
-        NbtCompound nbt = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+        CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (pure) {
             nbt.putBoolean(NBT_PURE_KEY, true);
         } else {
             nbt.remove(NBT_PURE_KEY);
         }
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
 
     @Override
-    public Text getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         if (isPure(stack)) {
-            return Text.literal("§d✦ Pure §r").append(super.getName(stack));
+            return Component.literal("§d✦ Pure §r").append(super.getName(stack));
         }
         return super.getName(stack);
     }
 
     @Override
-    public net.minecraft.util.ActionResult use(net.minecraft.world.World world, net.minecraft.entity.player.PlayerEntity user, net.minecraft.util.Hand hand) {
-        ItemStack cartridgeStack = user.getStackInHand(hand);
+    public net.minecraft.world.InteractionResult use(net.minecraft.world.level.Level world, net.minecraft.world.entity.player.Player user, net.minecraft.world.InteractionHand hand) {
+        ItemStack cartridgeStack = user.getItemInHand(hand);
 
         // Look for an empty Hypospray: check offhand first, then player inventory
-        ItemStack offhand = user.getOffHandStack();
+        ItemStack offhand = user.getOffhandItem();
         ItemStack hyposprayStack = ItemStack.EMPTY;
         if (!offhand.isEmpty() && offhand.getItem() instanceof HyposprayItem && !HyposprayItem.isLoaded(offhand)) {
             hyposprayStack = offhand;
         } else {
-            for (int i = 0; i < user.getInventory().size(); i++) {
-                ItemStack candidate = user.getInventory().getStack(i);
+            for (int i = 0; i < user.getInventory().getContainerSize(); i++) {
+                ItemStack candidate = user.getInventory().getItem(i);
                 if (!candidate.isEmpty() && candidate.getItem() instanceof HyposprayItem && !HyposprayItem.isLoaded(candidate)) {
                     hyposprayStack = candidate;
                     break;
@@ -93,20 +92,20 @@ public class HyposprayCartridgeItem extends Item {
 
         if (!hyposprayStack.isEmpty()) {
             boolean pure = isPure(cartridgeStack);
-            if (!world.isClient()) {
+            if (!world.isClientSide()) {
                 HyposprayItem.setLoadedCartridge(hyposprayStack, this.type, pure);
-                cartridgeStack.decrement(1);
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), net.minecraft.sound.SoundEvents.ITEM_CROSSBOW_LOADING_END.value(), net.minecraft.sound.SoundCategory.PLAYERS, 0.9f, 1.7f);
-                user.sendMessage(Text.literal("§e✦ Loaded into Hypospray: " + (pure ? "§d✦ Pure " : "") + this.type.title + " ✦"), true);
+                cartridgeStack.shrink(1);
+                world.playSound(null, user.getX(), user.getY(), user.getZ(), net.minecraft.sounds.SoundEvents.CROSSBOW_LOADING_END.value(), net.minecraft.sounds.SoundSource.PLAYERS, 0.9f, 1.7f);
+                user.sendOverlayMessage(Component.literal("§e✦ Loaded into Hypospray: " + (pure ? "§d✦ Pure " : "") + this.type.title + " ✦"));
             }
-            user.swingHand(hand);
-            return net.minecraft.util.ActionResult.SUCCESS;
+            user.swing(hand, net.minecraft.world.item.component.SwingAnimation.DEFAULT, false);
+            return net.minecraft.world.InteractionResult.SUCCESS;
         }
 
-        if (!world.isClient()) {
-            user.sendMessage(Text.literal("§e[Ampoule] No empty Hypospray in inventory to load into."), true);
+        if (!world.isClientSide()) {
+            user.sendOverlayMessage(Component.literal("§e[Ampoule] No empty Hypospray in inventory to load into."));
         }
-        return net.minecraft.util.ActionResult.FAIL;
+        return net.minecraft.world.InteractionResult.FAIL;
     }
 
     /**
@@ -124,64 +123,64 @@ public class HyposprayCartridgeItem extends Item {
         switch (this.type) {
             case ACID_NEUTRALIZING -> {
                 int duration = (int) (20 * 60 * (isPure ? 12 : 6) * factor);
-                target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.ACID_PROTECTION, duration, 0));
+                target.addEffect(new MobEffectInstance(ModStatusEffects.ACID_PROTECTION, duration, 0));
                 if (isPure) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 100, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.SATURATION, 100, 0));
                 }
             }
             case HEAT_BUFFER -> {
                 int duration = (int) (20 * 60 * (isPure ? 12 : 6) * factor);
-                target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.THERMAL_PROTECTION, duration, 0));
+                target.addEffect(new MobEffectInstance(ModStatusEffects.THERMAL_PROTECTION, duration, 0));
                 if (isPure) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, duration, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, duration, 0));
                 }
             }
             case HYPER_OXYGENATION -> {
                 int duration = (int) (20 * 60 * (isPure ? 12 : 6) * factor);
-                target.addStatusEffect(new StatusEffectInstance(ModStatusEffects.ATMOSPHERIC_PROTECTION, duration, 0));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, duration, 0));
+                target.addEffect(new MobEffectInstance(ModStatusEffects.ATMOSPHERIC_PROTECTION, duration, 0));
+                target.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, duration, 0));
                 if (isPure) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, duration, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, duration, 0));
                 }
             }
             case NANITE_TRAUMA -> {
                 target.heal(isPure ? (diminished ? 10.0f : 20.0f) : (diminished ? 4.0f : 8.0f));
                 int duration = (int) (20 * (isPure ? 40 : 20) * factor);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, duration, isPure ? 2 : 1));
+                target.addEffect(new MobEffectInstance(MobEffects.REGENERATION, duration, isPure ? 2 : 1));
                 if (isPure) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 20 * 120, 1));
+                    target.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 120, 1));
                 }
                 // Cleanse harmful negative effects
-                target.removeStatusEffect(StatusEffects.POISON);
-                target.removeStatusEffect(StatusEffects.WITHER);
-                target.removeStatusEffect(StatusEffects.SLOWNESS);
-                target.removeStatusEffect(StatusEffects.WEAKNESS);
-                target.removeStatusEffect(StatusEffects.NAUSEA);
+                target.removeEffect(MobEffects.POISON);
+                target.removeEffect(MobEffects.WITHER);
+                target.removeEffect(MobEffects.SLOWNESS);
+                target.removeEffect(MobEffects.WEAKNESS);
+                target.removeEffect(MobEffects.NAUSEA);
             }
             case ADRENALINE_STIM -> {
                 int duration = (int) (20 * 60 * (isPure ? 6 : 3) * factor);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, duration, isPure ? 2 : 1));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, duration, isPure ? 2 : 1));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, duration, isPure ? 1 : 0));
+                target.addEffect(new MobEffectInstance(MobEffects.SPEED, duration, isPure ? 2 : 1));
+                target.addEffect(new MobEffectInstance(MobEffects.HASTE, duration, isPure ? 2 : 1));
+                target.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, duration, isPure ? 1 : 0));
                 if (isPure) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, duration, 0));
+                    target.addEffect(new MobEffectInstance(MobEffects.STRENGTH, duration, 0));
                 }
             }
         }
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-        textConsumer.accept(Text.literal("§9✦ Hypospray Medical Ampoule ✦"));
-        textConsumer.accept(Text.literal(this.type.title));
-        textConsumer.accept(Text.literal(this.type.description));
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
+        textConsumer.accept(Component.literal("§9✦ Hypospray Medical Ampoule ✦"));
+        textConsumer.accept(Component.literal(this.type.title));
+        textConsumer.accept(Component.literal(this.type.description));
         if (isPure(stack)) {
-            textConsumer.accept(Text.literal("§d✦ GRADE-A PURE CLEANROOM SYNTHESIS ✦"));
-            textConsumer.accept(Text.literal("§a • 2x Duration (12 Minutes)"));
-            textConsumer.accept(Text.literal("§a • Amplified Potency & Cleansing Buffs"));
+            textConsumer.accept(Component.literal("§d✦ GRADE-A PURE CLEANROOM SYNTHESIS ✦"));
+            textConsumer.accept(Component.literal("§a • 2x Duration (12 Minutes)"));
+            textConsumer.accept(Component.literal("§a • Amplified Potency & Cleansing Buffs"));
         }
-        textConsumer.accept(Text.literal("§e • Right-Click: §7Snap-load directly into an empty Hypospray"));
-        textConsumer.accept(Text.literal("§b • Offhand: §7Hold in offhand & Right-Click with Hypospray to load"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        textConsumer.accept(Component.literal("§e • Right-Click: §7Snap-load directly into an empty Hypospray"));
+        textConsumer.accept(Component.literal("§b • Offhand: §7Hold in offhand & Right-Click with Hypospray to load"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

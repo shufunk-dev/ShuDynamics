@@ -3,8 +3,8 @@ package net.enchantedwood.client.renderer;
 import net.enchantedwood.fluid.MoltenMetal;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.block.entity.state.BlockEntityRenderState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.core.BlockPos;
 
 @Environment(EnvType.CLIENT)
 public class TitaniumTankRenderState extends BlockEntityRenderState {

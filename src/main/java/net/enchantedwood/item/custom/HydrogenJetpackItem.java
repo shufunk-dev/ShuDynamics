@@ -1,36 +1,35 @@
 package net.enchantedwood.item.custom;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
 import net.enchantedwood.item.ModItems;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.Level;
 import java.util.function.Consumer;
 
 public class HydrogenJetpackItem extends Item {
     public static final int MAX_HYDROGEN = 5_000; // 5,000 mB = 5 Canisters
 
-    public HydrogenJetpackItem(Settings settings) {
-        super(settings.maxCount(1));
+    public HydrogenJetpackItem(Properties settings) {
+        super(settings.stacksTo(1));
     }
 
     public static int getHydrogen(ItemStack stack) {
-        NbtComponent nbtComponent = stack.get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbtComponent = stack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent != null) {
-            NbtCompound nbt = nbtComponent.copyNbt();
+            CompoundTag nbt = nbtComponent.copyTag();
             if (nbt.contains("Hydrogen")) {
-                return nbt.getInt("Hydrogen", 0);
+                return nbt.getIntOr("Hydrogen", 0);
             }
         }
         // Newly crafted/spawned jetpacks come pre-fueled with 2,000 mB from the 2 crafting canisters
@@ -39,81 +38,81 @@ public class HydrogenJetpackItem extends Item {
 
     public static void setHydrogen(ItemStack stack, int amount) {
         int clamped = Math.max(0, Math.min(amount, MAX_HYDROGEN));
-        NbtCompound nbt = new NbtCompound();
-        NbtComponent nbtComponent = stack.get(DataComponentTypes.CUSTOM_DATA);
+        CompoundTag nbt = new CompoundTag();
+        CustomData nbtComponent = stack.get(DataComponents.CUSTOM_DATA);
         if (nbtComponent != null) {
-            nbt = nbtComponent.copyNbt();
+            nbt = nbtComponent.copyTag();
         }
         nbt.putInt("Hydrogen", clamped);
-        stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
 
     @Override
-    public boolean isItemBarVisible(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getItemBarStep(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         return Math.round((float) getHydrogen(stack) * 13.0f / (float) MAX_HYDROGEN);
     }
 
     @Override
-    public int getItemBarColor(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         return 0x00E5FF; // Electric Cyan
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
-        ItemStack offhand = user.getOffHandStack();
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
+        ItemStack offhand = user.getOffhandItem();
 
         // Creative mode instant top-off
-        if (user.isCreative() && user.isSneaking()) {
-            if (!world.isClient()) {
+        if (user.isCreative() && user.isShiftKeyDown()) {
+            if (!world.isClientSide()) {
                 setHydrogen(stack, MAX_HYDROGEN);
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0f, 1.5f);
-                user.sendMessage(Text.literal("§b⚡ Jetpack fully charged (5,000 mB Hydrogen)!"), true);
+                world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.PLAYERS, 1.0f, 1.5f);
+                user.sendOverlayMessage(Component.literal("§b⚡ Jetpack fully charged (5,000 mB Hydrogen)!"));
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         // 1. Refuel from offhand canister
-        if (offhand.isOf(ModItems.HYDROGEN_CANISTER)) {
+        if (offhand.is(ModItems.HYDROGEN_CANISTER)) {
             int current = getHydrogen(stack);
             if (current < MAX_HYDROGEN) {
-                if (!world.isClient()) {
+                if (!world.isClientSide()) {
                     int next = Math.min(current + 1000, MAX_HYDROGEN);
                     setHydrogen(stack, next);
-                    offhand.decrement(1);
-                    user.getInventory().offerOrDrop(new ItemStack(ModItems.EMPTY_GAS_CANISTER));
-                    world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.2f);
-                    user.sendMessage(Text.literal(String.format("§6⚡ Jetpack refueled (+1,000 mB) [%,d / %,d mB]", next, MAX_HYDROGEN)), true);
+                    offhand.shrink(1);
+                    user.getInventory().placeItemBackInInventory(new ItemStack(ModItems.EMPTY_GAS_CANISTER), net.minecraft.util.Prediction.SERVER_ONLY);
+                    world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0f, 1.2f);
+                    user.sendOverlayMessage(Component.literal(String.format("§6⚡ Jetpack refueled (+1,000 mB) [%,d / %,d mB]", next, MAX_HYDROGEN)));
                 }
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
-                if (!world.isClient()) {
-                    user.sendMessage(Text.literal("§a✔ Jetpack is already full on Hydrogen!"), true);
+                if (!world.isClientSide()) {
+                    user.sendOverlayMessage(Component.literal("§a✔ Jetpack is already full on Hydrogen!"));
                 }
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
 
         // 2. Refuel from canister anywhere in inventory
-        for (int i = 0; i < user.getInventory().size(); i++) {
-            ItemStack invStack = user.getInventory().getStack(i);
-            if (invStack.isOf(ModItems.HYDROGEN_CANISTER)) {
+        for (int i = 0; i < user.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = user.getInventory().getItem(i);
+            if (invStack.is(ModItems.HYDROGEN_CANISTER)) {
                 int current = getHydrogen(stack);
                 if (current < MAX_HYDROGEN) {
-                    if (!world.isClient()) {
+                    if (!world.isClientSide()) {
                         int next = Math.min(current + 1000, MAX_HYDROGEN);
                         setHydrogen(stack, next);
-                        invStack.decrement(1);
-                        user.getInventory().offerOrDrop(new ItemStack(ModItems.EMPTY_GAS_CANISTER));
-                        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.2f);
-                        user.sendMessage(Text.literal(String.format("§6⚡ Jetpack refueled (+1,000 mB) [%,d / %,d mB]", next, MAX_HYDROGEN)), true);
+                        invStack.shrink(1);
+                        user.getInventory().placeItemBackInInventory(new ItemStack(ModItems.EMPTY_GAS_CANISTER), net.minecraft.util.Prediction.SERVER_ONLY);
+                        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0f, 1.2f);
+                        user.sendOverlayMessage(Component.literal(String.format("§6⚡ Jetpack refueled (+1,000 mB) [%,d / %,d mB]", next, MAX_HYDROGEN)));
                     }
-                    return ActionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -122,17 +121,17 @@ public class HydrogenJetpackItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay displayComponent, Consumer<Component> textConsumer, TooltipFlag type) {
         int fuel = getHydrogen(stack);
-        textConsumer.accept(Text.literal(String.format("§b⚡ Hydrogen Fuel: §f%,d / %,d mB", fuel, MAX_HYDROGEN)));
+        textConsumer.accept(Component.literal(String.format("§b⚡ Hydrogen Fuel: §f%,d / %,d mB", fuel, MAX_HYDROGEN)));
         if (fuel > 0) {
-            textConsumer.accept(Text.literal("§a● Flight Propulsion: ONLINE"));
-            textConsumer.accept(Text.literal("§7Equip in Chest slot & double-tap Space to fly!"));
+            textConsumer.accept(Component.literal("§a● Flight Propulsion: ONLINE"));
+            textConsumer.accept(Component.literal("§7Equip in Chest slot & double-tap Space to fly!"));
         } else {
-            textConsumer.accept(Text.literal("§c○ Flight Propulsion: OFFLINE (Empty)"));
-            textConsumer.accept(Text.literal("§eRefuel: §7Right-Click with Hydrogen Canister."));
+            textConsumer.accept(Component.literal("§c○ Flight Propulsion: OFFLINE (Empty)"));
+            textConsumer.accept(Component.literal("§eRefuel: §7Right-Click with Hydrogen Canister."));
         }
-        textConsumer.accept(Text.literal("§d✨ Built-in parachute fall dampener"));
-        super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+        textConsumer.accept(Component.literal("§d✨ Built-in parachute fall dampener"));
+        super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }

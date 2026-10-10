@@ -2,44 +2,43 @@ package net.enchantedwood.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
 
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler> {
-    private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/titanium_tank_gui.png");
+public class TitaniumTankScreen extends AbstractContainerScreen<TitaniumTankScreenHandler> {
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/titanium_tank_gui.png");
 
-    public TitaniumTankScreen(TitaniumTankScreenHandler handler, PlayerInventory inventory, Text title) {
+    public TitaniumTankScreen(TitaniumTankScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
         // Base GUI background
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
         // Massive Multi-Fluid Reservoir Gauge (width = 36, height = 52, at x + 70, y + 20)
-        int currentLava = this.handler.getLavaAmount();
-        int maxLava = this.handler.getMaxLava();
+        int currentLava = this.menu.getLavaAmount();
+        int maxLava = this.menu.getMaxLava();
         if (maxLava > 0 && currentLava > 0) {
             int fluidHeight = (int) ((long) currentLava * 52 / maxLava);
             if (fluidHeight > 0) {
-                net.enchantedwood.fluid.MoltenMetal fluid = this.handler.getFluidType();
+                net.enchantedwood.fluid.MoltenMetal fluid = this.menu.getFluidType();
                 if (fluid == net.enchantedwood.fluid.MoltenMetal.LAVA || fluid == net.enchantedwood.fluid.MoltenMetal.NONE) {
                     // UV for fluid texture at (176, 52 - fluidHeight) with width 36
-                    context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 70, y + 72 - fluidHeight, 176.0f, 52.0f - fluidHeight, 36, fluidHeight, 256, 256);
+                    context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 70, y + 72 - fluidHeight, 176.0f, 52.0f - fluidHeight, 36, fluidHeight, 256, 256);
                 } else {
                     int color = fluid.getColor() | 0xFF000000;
                     context.fill(x + 70, y + 72 - fluidHeight, x + 70 + 36, y + 72, color);
@@ -49,77 +48,76 @@ public class TitaniumTankScreen extends HandledScreen<TitaniumTankScreenHandler>
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, 8, 6, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, 8, this.backgroundHeight - 94, 4210752, false);
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, 8, 6, 4210752, false);
+        context.text(this.font, this.playerInventoryTitle, 8, this.imageHeight - 94, 4210752, false);
 
         // Status string
-        String statusText = this.handler.isFormed() ? "§a✔ 5x5 Formed" : "§c✖ Incomplete";
-        context.drawText(this.textRenderer, Text.literal(statusText), 114, 6, 0xFFFFFF, true);
+        String statusText = this.menu.isFormed() ? "§a✔ 5x5 Formed" : "§c✖ Incomplete";
+        context.text(this.font, Component.literal(statusText), 114, 6, 0xFFFFFF, true);
 
         // Fluid Filter / Lock Status Badge
-        net.enchantedwood.fluid.MoltenMetal filter = this.handler.getFilterFluid();
+        net.enchantedwood.fluid.MoltenMetal filter = this.menu.getFilterFluid();
         if (filter != null && filter != net.enchantedwood.fluid.MoltenMetal.NONE) {
-            context.drawText(this.textRenderer, Text.literal("§6🔒 " + filter.getDisplayName()), 114, 16, 0xFFFFFF, false);
+            context.text(this.font, Component.literal("§6🔒 " + filter.getDisplayName()), 114, 16, 0xFFFFFF, false);
         } else {
-            context.drawText(this.textRenderer, Text.literal("§7🔓 Any Fluid"), 114, 16, 0x888888, false);
+            context.text(this.font, Component.literal("§7🔓 Any Fluid"), 114, 16, 0x888888, false);
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(context, mouseX, mouseY);
+    protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        super.extractTooltip(context, mouseX, mouseY);
 
-        int x = (this.width - this.backgroundWidth) / 2;
-        int y = (this.height - this.backgroundHeight) / 2;
+
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
         // Tooltip for Reservoir (x + 70 to x + 106, y + 20 to y + 72)
         if (mouseX >= x + 70 && mouseX <= x + 106 && mouseY >= y + 20 && mouseY <= y + 72) {
-            int current = this.handler.getLavaAmount();
-            int max = this.handler.getMaxLava();
+            int current = this.menu.getLavaAmount();
+            int max = this.menu.getMaxLava();
             int buckets = current / 1000;
             int maxBuckets = max / 1000;
-            net.enchantedwood.fluid.MoltenMetal fluid = this.handler.getFluidType();
+            net.enchantedwood.fluid.MoltenMetal fluid = this.menu.getFluidType();
             String title = (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE)
                     ? "§6" + fluid.getDisplayName() + " Reservoir"
                     : "§6Titanium Multi-Fluid Reservoir (Empty)";
-            List<Text> tooltip = new java.util.ArrayList<>();
-            tooltip.add(Text.literal(title));
-            tooltip.add(Text.literal(String.format("§e%,d / %,d mB", current, max)));
-            tooltip.add(Text.literal(String.format("§7(%d / %d Buckets)", buckets, maxBuckets)));
+            List<Component> tooltip = new java.util.ArrayList<>();
+            tooltip.add(Component.literal(title));
+            tooltip.add(Component.literal(String.format("§e%,d / %,d mB", current, max)));
+            tooltip.add(Component.literal(String.format("§7(%d / %d Buckets)", buckets, maxBuckets)));
             if (fluid != null && fluid != net.enchantedwood.fluid.MoltenMetal.NONE) {
-                tooltip.add(Text.literal("§dFluid Stored: §f" + fluid.getDisplayName()));
+                tooltip.add(Component.literal("§dFluid Stored: §f" + fluid.getDisplayName()));
             } else {
-                tooltip.add(Text.literal("§7Accepts Lava or any of 14 Molten Metals"));
+                tooltip.add(Component.literal("§7Accepts Lava or any of 14 Molten Metals"));
             }
 
-            net.enchantedwood.fluid.MoltenMetal activeFilter = this.handler.getFilterFluid();
+            net.enchantedwood.fluid.MoltenMetal activeFilter = this.menu.getFilterFluid();
             if (activeFilter != null && activeFilter != net.enchantedwood.fluid.MoltenMetal.NONE) {
-                tooltip.add(Text.literal("§a🔒 Filter Locked: §f" + activeFilter.getDisplayName()));
+                tooltip.add(Component.literal("§a🔒 Filter Locked: §f" + activeFilter.getDisplayName()));
             } else {
-                tooltip.add(Text.literal("§7🔓 Filter: Unlocked (Accepts any fluid)"));
+                tooltip.add(Component.literal("§7🔓 Filter: Unlocked (Accepts any fluid)"));
             }
-            tooltip.add(Text.literal("§8Sneak-click with an ingot to lock fluid"));
-            tooltip.add(Text.literal("§8Sneak-click with empty hand to unlock"));
-            tooltip.add(Text.literal("§8Inbound: Top Center Valve"));
-            tooltip.add(Text.literal("§8Outbound: All Outer Casings"));
-            context.drawTooltip(this.textRenderer, tooltip, mouseX, mouseY);
+            tooltip.add(Component.literal("§8Sneak-click with an ingot to lock fluid"));
+            tooltip.add(Component.literal("§8Sneak-click with empty hand to unlock"));
+            tooltip.add(Component.literal("§8Inbound: Top Center Valve"));
+            tooltip.add(Component.literal("§8Outbound: All Outer Casings"));
+            context.setComponentTooltipForNextFrame(this.font, tooltip, mouseX, mouseY);
         }
 
         // Empty Machine Slot Tooltips
-        if (this.focusedSlot != null && !this.focusedSlot.hasStack() && this.focusedSlot.id < 2) {
-            switch (this.focusedSlot.id) {
-                case 0 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§e🪣 Lava Bucket Fill / Drain Input"),
-                        Text.literal("§7Insert empty buckets to drain lava, or"),
-                        Text.literal("§7insert filled lava buckets to fill the reservoir."),
-                        Text.literal("§8(Molten metals are piped in/out via Titanium Pipes)")
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 2) {
+            switch (this.hoveredSlot.index) {
+                case 0 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§e🪣 Lava Bucket Fill / Drain Input"),
+                        Component.literal("§7Insert empty buckets to drain lava, or"),
+                        Component.literal("§7insert filled lava buckets to fill the reservoir."),
+                        Component.literal("§8(Molten metals are piped in/out via Titanium Pipes)")
                 ), mouseX, mouseY);
-                case 1 -> context.drawTooltip(this.textRenderer, List.of(
-                        Text.literal("§a✨ Processed Bucket Output"),
-                        Text.literal("§7Filled or emptied buckets appear here.")
+                case 1 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§a✨ Processed Bucket Output"),
+                        Component.literal("§7Filled or emptied buckets appear here.")
                 ), mouseX, mouseY);
             }
         }

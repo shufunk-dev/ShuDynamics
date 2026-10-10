@@ -3,56 +3,56 @@ package net.enchantedwood.screen;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.BatteryItem;
 import net.enchantedwood.item.custom.ModularPowerArmorItem;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.enchantedwood.block.entity.PoweredAnvilBlockEntity;
 
-public class ModularSuitScreenHandler extends ScreenHandler {
-    private final PlayerInventory playerInventory;
-    private final Inventory suitInventory;
-    private final PropertyDelegate propertyDelegate;
+public class ModularSuitScreenHandler extends AbstractContainerMenu {
+    private final Inventory playerInventory;
+    private final Container suitInventory;
+    private final ContainerData propertyDelegate;
     private final BlockPos anvilPos;
 
     private int activeTab = 0; // 0=Head, 1=Chest, 2=Legs, 3=Boots
     private boolean isUpdating = false;
 
-    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(10), BlockPos.ORIGIN);
+    public ModularSuitScreenHandler(int syncId, Inventory playerInventory) {
+        this(syncId, playerInventory, new SimpleContainer(4), new SimpleContainerData(10), BlockPos.ZERO);
     }
 
-    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos anvilPos) {
-        this(syncId, playerInventory, new SimpleInventory(4), new ArrayPropertyDelegate(10), anvilPos);
+    public ModularSuitScreenHandler(int syncId, Inventory playerInventory, BlockPos anvilPos) {
+        this(syncId, playerInventory, new SimpleContainer(4), new SimpleContainerData(10), anvilPos);
     }
 
-    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, Inventory suitInventory, PropertyDelegate propertyDelegate) {
-        this(syncId, playerInventory, suitInventory, propertyDelegate, BlockPos.ORIGIN);
+    public ModularSuitScreenHandler(int syncId, Inventory playerInventory, Container suitInventory, ContainerData propertyDelegate) {
+        this(syncId, playerInventory, suitInventory, propertyDelegate, BlockPos.ZERO);
     }
 
-    public ModularSuitScreenHandler(int syncId, PlayerInventory playerInventory, Inventory suitInventory, PropertyDelegate propertyDelegate, BlockPos anvilPos) {
+    public ModularSuitScreenHandler(int syncId, Inventory playerInventory, Container suitInventory, ContainerData propertyDelegate, BlockPos anvilPos) {
         super(ModScreenHandlers.MODULAR_SUIT_SCREEN_HANDLER, syncId);
         this.playerInventory = playerInventory;
         this.suitInventory = suitInventory;
         this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
+        this.addDataSlots(propertyDelegate);
 
-        BlockPos resolvedPos = anvilPos != null ? anvilPos : BlockPos.ORIGIN;
-        if (resolvedPos.equals(BlockPos.ORIGIN) && playerInventory.player != null && playerInventory.player.getEntityWorld() != null) {
-            BlockPos pPos = playerInventory.player.getBlockPos();
-            for (BlockPos testPos : BlockPos.iterateOutwards(pPos, 4, 3, 4)) {
-                if (playerInventory.player.getEntityWorld().getBlockEntity(testPos) instanceof PoweredAnvilBlockEntity) {
-                    resolvedPos = testPos.toImmutable();
+        BlockPos resolvedPos = anvilPos != null ? anvilPos : BlockPos.ZERO;
+        if (resolvedPos.equals(BlockPos.ZERO) && playerInventory.player != null && playerInventory.player.level() != null) {
+            BlockPos pPos = playerInventory.player.blockPosition();
+            for (BlockPos testPos : BlockPos.withinManhattan(pPos, 4)) {
+                if (playerInventory.player.level().getBlockEntity(testPos) instanceof PoweredAnvilBlockEntity) {
+                    resolvedPos = testPos.immutable();
                     break;
                 }
             }
@@ -62,18 +62,18 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         // Slot 0: Battery Slot
         this.addSlot(new Slot(suitInventory, 0, 44, 45) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof BatteryItem;
             }
 
             @Override
-            public int getMaxItemCount() {
+            public int getMaxStackSize() {
                 return 1;
             }
 
             @Override
-            public void markDirty() {
-                super.markDirty();
+            public void setChanged() {
+                super.setChanged();
                 syncToActivePiece();
             }
         });
@@ -81,20 +81,20 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         // Slot 1: Logic Chip Slot
         this.addSlot(new Slot(suitInventory, 1, 72, 45) {
             @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.isOf(ModItems.BASIC_COMPUTER_CHIP)
-                        || stack.isOf(ModItems.ADVANCED_COMPUTER_CHIP)
-                        || stack.isOf(ModItems.QUANTUM_COMPUTER_CHIP);
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(ModItems.BASIC_COMPUTER_CHIP)
+                        || stack.is(ModItems.ADVANCED_COMPUTER_CHIP)
+                        || stack.is(ModItems.QUANTUM_COMPUTER_CHIP);
             }
 
             @Override
-            public int getMaxItemCount() {
+            public int getMaxStackSize() {
                 return 1;
             }
 
             @Override
-            public void markDirty() {
-                super.markDirty();
+            public void setChanged() {
+                super.setChanged();
                 syncToActivePiece();
             }
         });
@@ -102,18 +102,18 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         // Slot 2: Module Slot A
         this.addSlot(new Slot(suitInventory, 2, 104, 45) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isModuleAllowed(getActiveTab(), stack);
             }
 
             @Override
-            public int getMaxItemCount() {
+            public int getMaxStackSize() {
                 return 1;
             }
 
             @Override
-            public void markDirty() {
-                super.markDirty();
+            public void setChanged() {
+                super.setChanged();
                 syncToActivePiece();
             }
         });
@@ -121,18 +121,18 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         // Slot 3: Module Slot B
         this.addSlot(new Slot(suitInventory, 3, 132, 45) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isModuleAllowed(getActiveTab(), stack);
             }
 
             @Override
-            public int getMaxItemCount() {
+            public int getMaxStackSize() {
                 return 1;
             }
 
             @Override
-            public void markDirty() {
-                super.markDirty();
+            public void setChanged() {
+                super.setChanged();
                 syncToActivePiece();
             }
         });
@@ -165,7 +165,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
     }
 
     public ItemStack getEquippedPiece(int tab) {
-        return this.playerInventory.player.getEquippedStack(getSlotForTab(tab));
+        return this.playerInventory.player.getItemBySlot(getSlotForTab(tab));
     }
 
     public void loadTab(int newTab) {
@@ -177,43 +177,43 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             // Load Battery
             String batteryId = ModularPowerArmorItem.getInstalledBatteryId(piece);
             if (!batteryId.isEmpty()) {
-                Item item = Registries.ITEM.get(Identifier.tryParse(batteryId));
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.tryParse(batteryId));
                 ItemStack bat = new ItemStack(item, 1);
                 BatteryItem.setStoredEnergy(bat, ModularPowerArmorItem.getStoredEnergy(piece));
-                this.suitInventory.setStack(0, bat);
+                this.suitInventory.setItem(0, bat);
             } else {
-                this.suitInventory.setStack(0, ItemStack.EMPTY);
+                this.suitInventory.setItem(0, ItemStack.EMPTY);
             }
 
             // Load Chip
             String chipId = ModularPowerArmorItem.getInstalledChipId(piece);
             if (!chipId.isEmpty()) {
-                Item item = Registries.ITEM.get(Identifier.tryParse(chipId));
-                this.suitInventory.setStack(1, new ItemStack(item, 1));
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.tryParse(chipId));
+                this.suitInventory.setItem(1, new ItemStack(item, 1));
             } else {
-                this.suitInventory.setStack(1, ItemStack.EMPTY);
+                this.suitInventory.setItem(1, ItemStack.EMPTY);
             }
 
             // Load Module 0
             String mod0 = ModularPowerArmorItem.getInstalledModuleId(piece, 0);
             if (!mod0.isEmpty()) {
-                Item item = Registries.ITEM.get(Identifier.tryParse(mod0));
-                this.suitInventory.setStack(2, new ItemStack(item, 1));
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.tryParse(mod0));
+                this.suitInventory.setItem(2, new ItemStack(item, 1));
             } else {
-                this.suitInventory.setStack(2, ItemStack.EMPTY);
+                this.suitInventory.setItem(2, ItemStack.EMPTY);
             }
 
             // Load Module 1
             String mod1 = ModularPowerArmorItem.getInstalledModuleId(piece, 1);
             if (!mod1.isEmpty()) {
-                Item item = Registries.ITEM.get(Identifier.tryParse(mod1));
-                this.suitInventory.setStack(3, new ItemStack(item, 1));
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.tryParse(mod1));
+                this.suitInventory.setItem(3, new ItemStack(item, 1));
             } else {
-                this.suitInventory.setStack(3, ItemStack.EMPTY);
+                this.suitInventory.setItem(3, ItemStack.EMPTY);
             }
         } else {
             for (int i = 0; i < 4; i++) {
-                this.suitInventory.setStack(i, ItemStack.EMPTY);
+                this.suitInventory.setItem(i, ItemStack.EMPTY);
             }
         }
 
@@ -227,9 +227,9 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         ItemStack piece = getEquippedPiece(this.activeTab);
         if (!piece.isEmpty() && piece.getItem() instanceof ModularPowerArmorItem) {
             // Sync Battery
-            ItemStack bat = this.suitInventory.getStack(0);
+            ItemStack bat = this.suitInventory.getItem(0);
             if (!bat.isEmpty() && bat.getItem() instanceof BatteryItem bi) {
-                ModularPowerArmorItem.setInstalledBatteryId(piece, Registries.ITEM.getId(bat.getItem()).toString());
+                ModularPowerArmorItem.setInstalledBatteryId(piece, BuiltInRegistries.ITEM.getKey(bat.getItem()).toString());
                 ModularPowerArmorItem.setMaxEnergy(piece, BatteryItem.getStoredEnergy(bat) > 0 || bi.getEnergyStorage(bat) != null ? bi.getEnergyStorage(bat).getMaxEnergy() : 100_000);
                 ModularPowerArmorItem.setStoredEnergy(piece, BatteryItem.getStoredEnergy(bat));
             } else {
@@ -239,25 +239,25 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             }
 
             // Sync Chip
-            ItemStack chip = this.suitInventory.getStack(1);
+            ItemStack chip = this.suitInventory.getItem(1);
             if (!chip.isEmpty()) {
-                ModularPowerArmorItem.setInstalledChipId(piece, Registries.ITEM.getId(chip.getItem()).toString());
+                ModularPowerArmorItem.setInstalledChipId(piece, BuiltInRegistries.ITEM.getKey(chip.getItem()).toString());
             } else {
                 ModularPowerArmorItem.setInstalledChipId(piece, "");
             }
 
             // Sync Module 0
-            ItemStack mod0 = this.suitInventory.getStack(2);
+            ItemStack mod0 = this.suitInventory.getItem(2);
             if (!mod0.isEmpty()) {
-                ModularPowerArmorItem.setInstalledModuleId(piece, 0, Registries.ITEM.getId(mod0.getItem()).toString());
+                ModularPowerArmorItem.setInstalledModuleId(piece, 0, BuiltInRegistries.ITEM.getKey(mod0.getItem()).toString());
             } else {
                 ModularPowerArmorItem.setInstalledModuleId(piece, 0, "");
             }
 
             // Sync Module 1
-            ItemStack mod1 = this.suitInventory.getStack(3);
+            ItemStack mod1 = this.suitInventory.getItem(3);
             if (!mod1.isEmpty()) {
-                ModularPowerArmorItem.setInstalledModuleId(piece, 1, Registries.ITEM.getId(mod1.getItem()).toString());
+                ModularPowerArmorItem.setInstalledModuleId(piece, 1, BuiltInRegistries.ITEM.getKey(mod1.getItem()).toString());
             } else {
                 ModularPowerArmorItem.setInstalledModuleId(piece, 1, "");
             }
@@ -283,25 +283,25 @@ public class ModularSuitScreenHandler extends ScreenHandler {
             this.propertyDelegate.set(5 + t, hasIt ? 1 : 0);
         }
 
-        boolean hasAnvil = this.anvilPos != null && !this.anvilPos.equals(BlockPos.ORIGIN)
+        boolean hasAnvil = this.anvilPos != null && !this.anvilPos.equals(BlockPos.ZERO)
                 && this.playerInventory.player != null
-                && this.playerInventory.player.squaredDistanceTo(this.anvilPos.toCenterPos()) <= 36.0
-                && this.playerInventory.player.getEntityWorld().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity;
+                && this.playerInventory.player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(this.anvilPos)) <= 36.0
+                && this.playerInventory.player.level().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity;
         this.propertyDelegate.set(9, hasAnvil ? 1 : 0);
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
+    public boolean clickMenuButton(Player player, int id) {
         if (id >= 0 && id <= 3) {
             syncToActivePiece();
             loadTab(id);
             return true;
         } else if (id == 4) {
             syncToActivePiece();
-            if (this.anvilPos != null && !this.anvilPos.equals(BlockPos.ORIGIN)
-                    && player.squaredDistanceTo(this.anvilPos.toCenterPos()) <= 36.0
-                    && player.getEntityWorld().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity anvil) {
-                player.openHandledScreen(anvil);
+            if (this.anvilPos != null && !this.anvilPos.equals(BlockPos.ZERO)
+                    && player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(this.anvilPos)) <= 36.0
+                    && player.level().getBlockEntity(this.anvilPos) instanceof PoweredAnvilBlockEntity anvil) {
+                player.openMenu(anvil);
                 return true;
             }
         }
@@ -309,7 +309,7 @@ public class ModularSuitScreenHandler extends ScreenHandler {
     }
 
     public boolean hasAnvilLinked() {
-        return this.propertyDelegate.size() > 9 && this.propertyDelegate.get(9) == 1;
+        return this.propertyDelegate.getCount() > 9 && this.propertyDelegate.get(9) == 1;
     }
 
     public int getActiveTab() {
@@ -329,40 +329,40 @@ public class ModularSuitScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+    public ItemStack quickMoveStack(Player player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
+        if (slot != null && slot.hasItem()) {
+            ItemStack originalStack = slot.getItem();
             newStack = originalStack.copy();
 
             if (invSlot < 4) {
                 // Moving from suit slots to player inventory
-                if (!this.insertItem(originalStack, 4, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, 4, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Moving from player inventory to suit slots
                 if (originalStack.getItem() instanceof BatteryItem) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) return ItemStack.EMPTY;
-                } else if (originalStack.isOf(ModItems.BASIC_COMPUTER_CHIP) || originalStack.isOf(ModItems.ADVANCED_COMPUTER_CHIP) || originalStack.isOf(ModItems.QUANTUM_COMPUTER_CHIP)) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 0, 1, false)) return ItemStack.EMPTY;
+                } else if (originalStack.is(ModItems.BASIC_COMPUTER_CHIP) || originalStack.is(ModItems.ADVANCED_COMPUTER_CHIP) || originalStack.is(ModItems.QUANTUM_COMPUTER_CHIP)) {
+                    if (!this.moveItemStackTo(originalStack, 1, 2, false)) return ItemStack.EMPTY;
                 } else if (isModuleAllowed(getActiveTab(), originalStack)) {
-                    if (!this.insertItem(originalStack, 2, 4, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(originalStack, 2, 4, false)) return ItemStack.EMPTY;
                 } else {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
-                slot.markDirty();
+                slot.setChanged();
             }
         }
         return newStack;
@@ -372,27 +372,27 @@ public class ModularSuitScreenHandler extends ScreenHandler {
         if (stack.getItem() instanceof net.enchantedwood.item.custom.NaniteRepairMatrixItem) {
             return true; // Nanites work across all suit pieces
         }
-        if (stack.isOf(ModItems.NIGHT_VISION_MODULE)) {
+        if (stack.is(ModItems.NIGHT_VISION_MODULE)) {
             return tab == 0; // Helmet only
         }
-        if (stack.isOf(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.isOf(ModItems.ION_REPULSOR_MODULE)) {
+        if (stack.is(ModItems.HYDROGEN_THRUSTER_MODULE) || stack.is(ModItems.ION_REPULSOR_MODULE)) {
             return tab == 1; // Chestplate only
         }
-        if (stack.isOf(ModItems.ACID_PROOF_PLATING) || stack.isOf(ModItems.THERMAL_REFRACTORY_PLATING)) {
+        if (stack.is(ModItems.ACID_PROOF_PLATING) || stack.is(ModItems.THERMAL_REFRACTORY_PLATING)) {
             return tab == 1 || tab == 2; // Chestplate or Leggings
         }
-        if (stack.isOf(ModItems.SPEED_SERVO_MODULE)) {
+        if (stack.is(ModItems.SPEED_SERVO_MODULE)) {
             return tab == 2; // Leggings only
         }
-        if (stack.isOf(ModItems.STEP_ASSIST_MODULE) || stack.isOf(ModItems.HIGH_JUMP_MODULE)) {
+        if (stack.is(ModItems.STEP_ASSIST_MODULE) || stack.is(ModItems.HIGH_JUMP_MODULE)) {
             return tab == 3; // Boots only
         }
         return false;
     }
 
     @Override
-    public void onClosed(PlayerEntity player) {
+    public void removed(Player player) {
         syncToActivePiece();
-        super.onClosed(player);
+        super.removed(player);
     }
 }

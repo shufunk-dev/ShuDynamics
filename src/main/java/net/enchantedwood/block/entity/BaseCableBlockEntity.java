@@ -3,14 +3,14 @@ package net.enchantedwood.block.entity;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -58,8 +58,8 @@ public abstract class BaseCableBlockEntity extends BlockEntity implements Energy
         return this.energyStorage;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, BaseCableBlockEntity entity) {
-        long currentTick = world.getTime();
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, BaseCableBlockEntity entity) {
+        long currentTick = world.getGameTime();
         if (entity.lastNetworkTickTime == currentTick) {
             return;
         }
@@ -90,7 +90,7 @@ public abstract class BaseCableBlockEntity extends BlockEntity implements Energy
             networkTransferRate = Math.min(networkTransferRate, cableBe.getTransferRate());
 
             for (Direction dir : Direction.values()) {
-                BlockPos neighborPos = currentPos.offset(dir);
+                BlockPos neighborPos = currentPos.relative(dir);
                 if (visitedCables.contains(neighborPos)) continue;
 
                 BlockEntity neighbor = world.getBlockEntity(neighborPos);
@@ -146,7 +146,7 @@ public abstract class BaseCableBlockEntity extends BlockEntity implements Energy
                         int extracted = cable.energyStorage.extractEnergy(toTake, false);
                         if (extracted > 0) {
                             collected += extracted;
-                            cable.markDirty();
+                            cable.setChanged();
                         }
                     }
                 }
@@ -210,7 +210,7 @@ public abstract class BaseCableBlockEntity extends BlockEntity implements Energy
                     int extracted = cable.energyStorage.extractEnergy(toTake, false);
                     if (extracted > 0) {
                         surplusCollected += extracted;
-                        cable.markDirty();
+                        cable.setChanged();
                     }
                 }
             }
@@ -243,14 +243,14 @@ public abstract class BaseCableBlockEntity extends BlockEntity implements Energy
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.energyStorage.readData(view);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
         this.energyStorage.writeData(view);
     }
 }

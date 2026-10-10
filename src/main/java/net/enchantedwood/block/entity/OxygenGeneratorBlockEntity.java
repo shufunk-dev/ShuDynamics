@@ -1,24 +1,5 @@
 package net.enchantedwood.block.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.enchantedwood.block.custom.OxygenGeneratorBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
@@ -30,16 +11,35 @@ import net.enchantedwood.gas.SimpleGasStorage;
 import net.enchantedwood.fluid.WaterProvider;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.OxygenGeneratorScreenHandler;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, SidedInventory, EnergyProvider, GasProvider, WaterProvider {
+public class OxygenGeneratorBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer, EnergyProvider, GasProvider, WaterProvider {
     public static final int ENERGY_CAPACITY = 100_000;
     public static final int MAX_ENERGY_DRAW = 60; // 60 FE/t
     public static final int WATER_CAPACITY = 10_000; // 10,000 mB (10 Buckets)
     public static final int OXYGEN_CAPACITY = 4_000;  // 4,000 mB
     public static final int HYDROGEN_CAPACITY = 8_000; // 8,000 mB
 
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(6, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(6, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(ENERGY_CAPACITY, 500, 500, 0);
     private final SimpleGasStorage oxygenTank = new SimpleGasStorage(OXYGEN_CAPACITY, 100) {
         @Override
@@ -121,7 +121,7 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
     private int progress = 0;
     private final int maxProgress = 10; // 10 ticks per cycle
 
-    protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+    protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
@@ -146,7 +146,7 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 12;
         }
     };
@@ -156,13 +156,13 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
     }
 
     @Override
-    public Text getDisplayName() {
-        return Text.translatable("container.enchantedwood.oxygen_generator");
+    public Component getDisplayName() {
+        return Component.translatable("container.enchantedwood.oxygen_generator");
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new OxygenGeneratorScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
     }
 
@@ -245,7 +245,7 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         int toInsert = Math.min(space, amount);
         if (!simulate && toInsert > 0) {
             this.waterAmount += toInsert;
-            markDirty();
+            setChanged();
         }
         return toInsert;
     }
@@ -255,25 +255,25 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         int toExtract = Math.min(this.waterAmount, amount);
         if (!simulate && toExtract > 0) {
             this.waterAmount -= toExtract;
-            markDirty();
+            setChanged();
         }
         return toExtract;
     }
 
-    public static void tick(ServerWorld world, BlockPos pos, BlockState state, OxygenGeneratorBlockEntity entity) {
+    public static void tick(ServerLevel world, BlockPos pos, BlockState state, OxygenGeneratorBlockEntity entity) {
         boolean stateChanged = false;
 
         // 1. Process Water Buckets into internal tank
         ItemStack waterInput = entity.inventory.get(0);
         ItemStack waterOutput = entity.inventory.get(1);
-        if (waterInput.isOf(Items.WATER_BUCKET) && entity.waterAmount <= WATER_CAPACITY - 1000) {
-            if (waterOutput.isEmpty() || (waterOutput.isOf(Items.BUCKET) && waterOutput.getCount() < waterOutput.getMaxCount())) {
+        if (waterInput.is(Items.WATER_BUCKET) && entity.waterAmount <= WATER_CAPACITY - 1000) {
+            if (waterOutput.isEmpty() || (waterOutput.is(Items.BUCKET) && waterOutput.getCount() < waterOutput.getMaxStackSize())) {
                 entity.waterAmount += 1000;
-                waterInput.decrement(1);
+                waterInput.shrink(1);
                 if (waterOutput.isEmpty()) {
                     entity.inventory.set(1, new ItemStack(Items.BUCKET));
                 } else {
-                    waterOutput.increment(1);
+                    waterOutput.grow(1);
                 }
                 stateChanged = true;
             }
@@ -306,14 +306,14 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         // Oxygen Canister (slot 2 -> 3)
         ItemStack emptyO2 = entity.inventory.get(2);
         ItemStack fullO2 = entity.inventory.get(3);
-        if (emptyO2.isOf(ModItems.EMPTY_GAS_CANISTER) && entity.oxygenTank.getAmount() >= 1000) {
-            if (fullO2.isEmpty() || (fullO2.isOf(ModItems.OXYGEN_CANISTER) && fullO2.getCount() < fullO2.getMaxCount())) {
+        if (emptyO2.is(ModItems.EMPTY_GAS_CANISTER) && entity.oxygenTank.getAmount() >= 1000) {
+            if (fullO2.isEmpty() || (fullO2.is(ModItems.OXYGEN_CANISTER) && fullO2.getCount() < fullO2.getMaxStackSize())) {
                 entity.oxygenTank.extractGas(GasType.OXYGEN, 1000, false);
-                emptyO2.decrement(1);
+                emptyO2.shrink(1);
                 if (fullO2.isEmpty()) {
                     entity.inventory.set(3, new ItemStack(ModItems.OXYGEN_CANISTER));
                 } else {
-                    fullO2.increment(1);
+                    fullO2.grow(1);
                 }
                 stateChanged = true;
             }
@@ -322,14 +322,14 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         // Hydrogen Canister (slot 4 -> 5)
         ItemStack emptyH2 = entity.inventory.get(4);
         ItemStack fullH2 = entity.inventory.get(5);
-        if (emptyH2.isOf(ModItems.EMPTY_GAS_CANISTER) && entity.hydrogenTank.getAmount() >= 1000) {
-            if (fullH2.isEmpty() || (fullH2.isOf(ModItems.HYDROGEN_CANISTER) && fullH2.getCount() < fullH2.getMaxCount())) {
+        if (emptyH2.is(ModItems.EMPTY_GAS_CANISTER) && entity.hydrogenTank.getAmount() >= 1000) {
+            if (fullH2.isEmpty() || (fullH2.is(ModItems.HYDROGEN_CANISTER) && fullH2.getCount() < fullH2.getMaxStackSize())) {
                 entity.hydrogenTank.extractGas(GasType.HYDROGEN, 1000, false);
-                emptyH2.decrement(1);
+                emptyH2.shrink(1);
                 if (fullH2.isEmpty()) {
                     entity.inventory.set(5, new ItemStack(ModItems.HYDROGEN_CANISTER));
                 } else {
-                    fullH2.increment(1);
+                    fullH2.grow(1);
                 }
                 stateChanged = true;
             }
@@ -338,7 +338,7 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
         // 4. Push Gas to adjacent Gas Pipes or consumers
         if (entity.oxygenTank.getAmount() > 0 || entity.hydrogenTank.getAmount() > 0) {
             for (Direction dir : Direction.values()) {
-                BlockEntity neighbor = world.getBlockEntity(pos.offset(dir));
+                BlockEntity neighbor = world.getBlockEntity(pos.relative(dir));
                 if (neighbor instanceof GasProvider provider && neighbor != entity) {
                     GasStorage receiver = provider.getGasStorage(dir.getOpposite());
                     if (receiver != null) {
@@ -365,31 +365,31 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
 
         // 5. Update block LIT state
         boolean isRunningNow = canRun;
-        if (state.get(OxygenGeneratorBlock.LIT) != isRunningNow) {
-            world.setBlockState(pos, state.with(OxygenGeneratorBlock.LIT, isRunningNow), 3);
+        if (state.getValue(OxygenGeneratorBlock.LIT) != isRunningNow) {
+            world.setBlock(pos, state.setValue(OxygenGeneratorBlock.LIT, isRunningNow), 3);
             stateChanged = true;
         }
 
         if (stateChanged) {
-            markDirty(world, pos, state);
+            setChanged(world, pos, state);
         }
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
         this.inventory.clear();
-        Inventories.readData(view, this.inventory);
+        ContainerHelper.loadAllItems(view, this.inventory);
         this.energyStorage.readData(view);
         this.oxygenTank.readData(view, "Oxygen");
         this.hydrogenTank.readData(view, "Hydrogen");
-        this.waterAmount = view.getInt("WaterAmount", 0);
+        this.waterAmount = view.getIntOr("WaterAmount", 0);
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
+        ContainerHelper.saveAllItems(view, this.inventory);
         this.energyStorage.writeData(view);
         this.oxygenTank.writeData(view, "Oxygen");
         this.hydrogenTank.writeData(view, "Hydrogen");
@@ -398,24 +398,24 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
 
     // SidedInventory
     @Override
-    public int[] getAvailableSlots(Direction side) {
+    public int[] getSlotsForFace(Direction side) {
         return new int[]{0, 1, 2, 3, 4, 5};
     }
 
     @Override
-    public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (slot == 0) return stack.isOf(Items.WATER_BUCKET);
-        if (slot == 2 || slot == 4) return stack.isOf(ModItems.EMPTY_GAS_CANISTER);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (slot == 0) return stack.is(Items.WATER_BUCKET);
+        if (slot == 2 || slot == 4) return stack.is(ModItems.EMPTY_GAS_CANISTER);
         return false;
     }
 
     @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == 1 || slot == 3 || slot == 5;
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return inventory.size();
     }
 
@@ -428,36 +428,36 @@ public class OxygenGeneratorBlockEntity extends BlockEntity implements NamedScre
     }
 
     @Override
-    public ItemStack getStack(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(inventory, slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return Inventories.removeStack(inventory, slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
-        if (stack.getCount() > getMaxCountPerStack()) {
-            stack.setCount(getMaxCountPerStack());
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return Inventory.canPlayerUse(this, player);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         inventory.clear();
     }
 }
