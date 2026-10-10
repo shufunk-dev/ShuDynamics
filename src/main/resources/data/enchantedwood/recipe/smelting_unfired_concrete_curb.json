@@ -1,6 +1,6 @@
 {
   "type": "minecraft:smelting",
-  "category": "building",
+  "category": "blocks",
   "cookingtime": 200,
   "experience": 0.2,
   "ingredient": "enchantedwood:unfired_concrete_curb",

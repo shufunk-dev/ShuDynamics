@@ -20,7 +20,11 @@
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
-          "type": "enchantedwood:primordial_cataclysm"
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "enchantedwood:primordial_cataclysm"
+          }
         }
       }
     }
