@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:block/orientable",
     "textures": {
-        "top": "enchantedwood:block/enchanted_furnace_top",
+        "top": "enchantedwood:block/digital_converter_top",
         "front": "enchantedwood:block/digital_converter_front_on",
         "side": "enchantedwood:block/dust_smelter_side_diamond"
     }
