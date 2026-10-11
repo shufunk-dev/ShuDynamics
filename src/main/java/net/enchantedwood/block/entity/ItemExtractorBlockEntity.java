@@ -63,7 +63,7 @@ public class ItemExtractorBlockEntity extends BlockEntity {
             ItemStack stack = entity.buffer.get(i);
             if (stack.isEmpty()) continue;
 
-            // Direct check for adjacent inserters / digital converters (distance = 0)
+            // Direct check for adjacent inserters (distance = 0)
             boolean inserted = false;
             for (Direction dir : Direction.values()) {
                 if (dir == facing) continue; // Don't push back into the source
@@ -83,23 +83,12 @@ public class ItemExtractorBlockEntity extends BlockEntity {
                             }
                         }
                     }
-                } else if (neighbor instanceof DigitalConverterBlockEntity converter && converter.isNetworkOnline()) {
-                    ItemStack remaining = ItemTransportHelper.insertItem(converter, stack, dir.getOpposite());
-                    if (remaining.getCount() != stack.getCount()) {
-                        entity.buffer.set(i, remaining);
-                        stack = remaining;
-                        dirty = true;
-                        if (stack.isEmpty()) {
-                            inserted = true;
-                            break;
-                        }
-                    }
                 }
             }
 
             if (inserted || stack.isEmpty()) continue;
 
-            // Use BFS to route towards nearest reachable Inserter or Digital Converter through the pipe network
+            // Use BFS to route towards nearest reachable Inserter through the pipe network
             Direction bestRoute = findBestRouteFromExtractor(world, pos, entity, facing, stack);
             if (bestRoute != null) {
                 BlockEntity target = world.getBlockEntity(pos.offset(bestRoute));
@@ -111,12 +100,6 @@ public class ItemExtractorBlockEntity extends BlockEntity {
                     }
                 } else if (target instanceof ItemInserterBlockEntity inserter) {
                     ItemStack remaining = inserter.receiveItemFromPipe(stack);
-                    if (remaining.getCount() != stack.getCount()) {
-                        entity.buffer.set(i, remaining);
-                        dirty = true;
-                    }
-                } else if (target instanceof DigitalConverterBlockEntity converter) {
-                    ItemStack remaining = ItemTransportHelper.insertItem(converter, stack, bestRoute.getOpposite());
                     if (remaining.getCount() != stack.getCount()) {
                         entity.buffer.set(i, remaining);
                         dirty = true;
@@ -240,10 +223,6 @@ public class ItemExtractorBlockEntity extends BlockEntity {
                 if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
                     return dir;
                 }
-            } else if (neighbor instanceof DigitalConverterBlockEntity converter) {
-                if (converter.isNetworkOnline()) {
-                    return dir;
-                }
             } else if (neighbor instanceof ItemPipeBlockEntity nextPipe) {
                 if (!nextPipe.isDisconnected(dir.getOpposite()) && nextPipe.canAccept(stack)) {
                     queue.add(neighborPos);
@@ -284,10 +263,6 @@ public class ItemExtractorBlockEntity extends BlockEntity {
                 BlockEntity nextBe = world.getBlockEntity(nextPos);
                 if (nextBe instanceof ItemInserterBlockEntity inserter) {
                     if (!inserter.isDisconnected(dir.getOpposite()) && inserter.canAccept(stack)) {
-                        return firstStep;
-                    }
-                } else if (nextBe instanceof DigitalConverterBlockEntity converter) {
-                    if (converter.isNetworkOnline()) {
                         return firstStep;
                     }
                 } else if (nextBe instanceof ItemPipeBlockEntity nextPipe) {
