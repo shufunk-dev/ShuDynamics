@@ -2057,6 +2057,82 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         }
     }
 
+    private static boolean isCircularOrContainsActiveRecursion(java.util.Map<String, Integer> candidateMissing,
+                                                               net.minecraft.world.item.Item targetItem,
+                                                               java.util.Set<net.minecraft.world.item.Item> activeRecursion) {
+        if (candidateMissing == null || candidateMissing.isEmpty()) return true;
+        if (candidateMissing.containsKey(targetItem.getName(targetItem.getDefaultInstance()).getString())) return true;
+        for (net.minecraft.world.item.Item item : activeRecursion) {
+            if (candidateMissing.containsKey(item.getName(item.getDefaultInstance()).getString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isCompactionOrDecompactionRecipe(CraftingRecipe recipe, net.minecraft.world.item.Item targetItem) {
+        if (recipe == null || targetItem == null) return false;
+
+        MetalCastInfo castInfo = getMetalCastInfo(targetItem);
+        if (castInfo != null) {
+            net.enchantedwood.fluid.MoltenMetal metal = castInfo.metal;
+            net.minecraft.world.item.Item nugget = metal.getNuggetItem();
+            net.minecraft.world.item.Item ingot = metal.getIngotItem();
+            net.minecraft.world.item.Item block = metal.getBlockItem();
+
+            try {
+                List<net.minecraft.world.item.crafting.Ingredient> ings = recipe.placementInfo().ingredients();
+                for (net.minecraft.world.item.crafting.Ingredient ing : ings) {
+                    if (ing == null || ing.isEmpty()) continue;
+                    for (net.minecraft.world.item.Item opt : ing.items().map(net.minecraft.core.Holder::value).toList()) {
+                        if (targetItem == ingot && (opt == nugget || opt == block)) return true;
+                        if (targetItem == nugget && (opt == ingot || opt == block)) return true;
+                        if (targetItem == block && (opt == ingot || opt == nugget)) return true;
+                    }
+                }
+            } catch (Throwable ignored) {}
+        }
+
+        try {
+            List<net.minecraft.world.item.crafting.Ingredient> ings = recipe.placementInfo().ingredients();
+            List<net.minecraft.world.item.crafting.Ingredient> nonEmpty = ings.stream().filter(i -> i != null && !i.isEmpty()).toList();
+            if (nonEmpty.size() == 9 || nonEmpty.size() == 4) {
+                net.minecraft.item.Item first = null;
+                boolean allSame = true;
+                for (net.minecraft.world.item.crafting.Ingredient ing : nonEmpty) {
+                    List<net.minecraft.world.item.Item> opts = ing.items().map(net.minecraft.core.Holder::value).toList();
+                    if (opts.size() == 1) {
+                        if (first == null) first = opts.get(0);
+                        else if (first != opts.get(0)) { allSame = false; break; }
+                    } else {
+                        allSame = false;
+                        break;
+                    }
+                }
+                if (allSame && first != null) {
+                    String targetKey = targetItem.getDescriptionId();
+                    String srcKey = first.getDescriptionId();
+                    if ((targetKey.contains("ingot") && srcKey.contains("nugget")) ||
+                        (targetKey.contains("block") && (srcKey.contains("ingot") || srcKey.contains("nugget") || srcKey.contains("gem") || srcKey.contains("dust")))) {
+                        return true;
+                    }
+                }
+            } else if (nonEmpty.size() == 1) {
+                List<net.minecraft.world.item.Item> opts = nonEmpty.get(0).items().map(net.minecraft.core.Holder::value).toList();
+                if (opts.size() == 1) {
+                    String targetKey = targetItem.getDescriptionId();
+                    String srcKey = opts.get(0).getDescriptionId();
+                    if ((targetKey.contains("ingot") && srcKey.contains("block")) ||
+                        (targetKey.contains("nugget") && srcKey.contains("ingot"))) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        return false;
+    }
+
     private boolean resolveItemRequirement(ServerLevel world, net.minecraft.world.item.Item targetItem,
                                            java.util.Map<net.minecraft.world.item.Item, Integer> available,
                                            java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten,
@@ -2181,7 +2257,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         }
 
         // 4. Prevent infinite loops or deep recursion
-        if (depth >= 8 || activeRecursion.contains(targetItem)) {
+        if (activeRecursion.contains(targetItem)) {
+            return false;
+        }
+        if (depth >= 8) {
             missingItems.put(targetItem.getName(targetItem.getDefaultInstance()).getString(), missingItems.getOrDefault(targetItem.getName(targetItem.getDefaultInstance()).getString(), 0) + 1);
             return false;
         }
@@ -2213,7 +2292,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         }
                         return true;
                     } else {
-                        if (!pressMissing.isEmpty() && (bestCandidateMissing == null || pressMissing.size() < bestCandidateMissing.size())) {
+                        if (!pressMissing.isEmpty() && !isCircularOrContainsActiveRecursion(pressMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || pressMissing.size() < bestCandidateMissing.size())) {
                             bestCandidateMissing = pressMissing;
                         }
                         available.clear(); available.putAll(backupAvailable);
@@ -2260,7 +2339,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                             }
                             return true;
                         } else {
-                            if (!fabMissing.isEmpty() && (bestCandidateMissing == null || fabMissing.size() < bestCandidateMissing.size())) {
+                            if (!fabMissing.isEmpty() && !isCircularOrContainsActiveRecursion(fabMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || fabMissing.size() < bestCandidateMissing.size())) {
                                 bestCandidateMissing = fabMissing;
                             }
                             available.clear(); available.putAll(backupAvailable);
@@ -2319,7 +2398,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         }
                         return true;
                     } else {
-                        if (!craftCandidateMissing.isEmpty() && (bestCandidateMissing == null || craftCandidateMissing.size() < bestCandidateMissing.size())) {
+                        if (!craftCandidateMissing.isEmpty()
+                                && !isCompactionOrDecompactionRecipe(craftingRecipe, targetItem)
+                                && !isCircularOrContainsActiveRecursion(craftCandidateMissing, targetItem, activeRecursion)
+                                && (bestCandidateMissing == null || craftCandidateMissing.size() < bestCandidateMissing.size())) {
                             bestCandidateMissing = craftCandidateMissing;
                         }
                         // Rollback and try the next recipe candidate
@@ -2362,7 +2444,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         plan.steps.add(new CraftStep(StepType.SMELT, dustCandidate, targetItem));
                         return true;
                     } else {
-                        if (!dustMissing.isEmpty() && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
+                        if (!dustMissing.isEmpty() && !isCircularOrContainsActiveRecursion(dustMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
                             bestCandidateMissing = dustMissing;
                         }
                         available.clear(); available.putAll(backupAvailable);
@@ -2423,7 +2505,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                             }
                             return true;
                         } else {
-                            if (!smeltMissing.isEmpty() && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
+                            if (!smeltMissing.isEmpty() && !isCircularOrContainsActiveRecursion(smeltMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
                                 bestCandidateMissing = smeltMissing;
                             }
                             available.clear(); available.putAll(backupAvailable);
@@ -2520,7 +2602,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, candidateMissing, activeRecursion, depth)) {
                 return true;
             }
-            if (!candidateMissing.isEmpty() && (bestSubMissing == null || candidateMissing.size() < bestSubMissing.size())) {
+            if (!candidateMissing.isEmpty() && !isCircularOrContainsActiveRecursion(candidateMissing, opt, activeRecursion) && (bestSubMissing == null || candidateMissing.size() < bestSubMissing.size())) {
                 bestSubMissing = candidateMissing;
             }
         }
