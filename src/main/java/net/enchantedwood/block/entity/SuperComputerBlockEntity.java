@@ -2097,7 +2097,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             List<net.minecraft.world.item.crafting.Ingredient> ings = recipe.placementInfo().ingredients();
             List<net.minecraft.world.item.crafting.Ingredient> nonEmpty = ings.stream().filter(i -> i != null && !i.isEmpty()).toList();
             if (nonEmpty.size() == 9 || nonEmpty.size() == 4) {
-                net.minecraft.item.Item first = null;
+                net.minecraft.world.item.Item first = null;
                 boolean allSame = true;
                 for (net.minecraft.world.item.crafting.Ingredient ing : nonEmpty) {
                     List<net.minecraft.world.item.Item> opts = ing.items().map(net.minecraft.core.Holder::value).toList();
