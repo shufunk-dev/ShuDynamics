@@ -783,6 +783,30 @@ public class ModBlocks {
                     .explosionResistance(12.0f)
                     .requiresCorrectToolForDrops()));
 
+    public static final Block TAN_TI_BLOCK = registerBlock("tan_ti_block",
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "tan_ti_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(6.0f)
+                    .explosionResistance(9.0f)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Block NEO_TITANIUM_BLOCK = registerBlock("neo_titanium_block",
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "neo_titanium_block")))
+                    .sound(SoundType.METAL)
+                    .destroyTime(6.5f)
+                    .explosionResistance(10.0f)
+                    .requiresCorrectToolForDrops()));
+
+    public static final Block HAFNIUM_TUNGSTEN_CARBIDE_BLOCK = registerBlock("hafnium_tungsten_carbide_block",
+            new Block(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "hafnium_tungsten_carbide_block")))
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .destroyTime(8.0f)
+                    .explosionResistance(15.0f)
+                    .requiresCorrectToolForDrops()));
+
     public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
             new Block(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "oil_sand")))

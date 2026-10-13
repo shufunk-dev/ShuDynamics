@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "enchantedwood:block/tan_ti_block"
+                 },
+    "parent":  "minecraft:block/cube_all"
+}

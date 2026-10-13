@@ -13,6 +13,9 @@
     "enchantedwood:hafnium_ore",
     "enchantedwood:deepslate_hafnium_ore",
     "enchantedwood:aerogel_ore",
-    "enchantedwood:deepslate_aerogel_ore"
+    "enchantedwood:deepslate_aerogel_ore",
+    "enchantedwood:tan_ti_block",
+    "enchantedwood:neo_titanium_block",
+    "enchantedwood:hafnium_tungsten_carbide_block"
   ]
 }

@@ -1,0 +1,16 @@
+{
+    "key":  {
+                "#":  "enchantedwood:hafnium_tungsten_carbide_ingot"
+            },
+    "category":  "building",
+    "pattern":  [
+                    "###",
+                    "###",
+                    "###"
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:hafnium_tungsten_carbide_block"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

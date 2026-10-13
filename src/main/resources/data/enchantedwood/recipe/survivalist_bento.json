@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
+  "category": "food",
   "ingredients": [
     "enchantedwood:alkaline_detox_roll",
     "enchantedwood:volcanic_dragon_roll",

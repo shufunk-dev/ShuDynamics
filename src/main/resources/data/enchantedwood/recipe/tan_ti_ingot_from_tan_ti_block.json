@@ -1,0 +1,11 @@
+{
+    "ingredients":  [
+                        "enchantedwood:tan_ti_block"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "count":  9,
+                   "id":  "enchantedwood:tan_ti_ingot"
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

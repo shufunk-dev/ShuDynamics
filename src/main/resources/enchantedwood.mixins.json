@@ -9,7 +9,9 @@
     "TopologicalSortsMixin",
     "ClampedEntityAttributeMixin",
     "ItemStackMixin",
-    "CraftingMenuMixin"
+    "NetherFortressStructureMixin",
+    "JigsawStructureMixin",
+    "CraftingScreenHandlerMixin"
   ],
   "client": [],
   "injectors": {

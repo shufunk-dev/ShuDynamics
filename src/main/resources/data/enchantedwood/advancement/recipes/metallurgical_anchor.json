@@ -24,7 +24,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipes": "enchantedwood:metallurgical_anchor"
+        "recipe": "enchantedwood:metallurgical_anchor"
       }
     }
   },

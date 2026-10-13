@@ -2374,6 +2374,9 @@ public class ModItems {
                 entries.accept(TAN_TI_INGOT);
                 entries.accept(HAFNIUM_TUNGSTEN_CARBIDE_INGOT);
                 entries.accept(NEO_TITANIUM_INGOT);
+                entries.accept(net.enchantedwood.block.ModBlocks.TAN_TI_BLOCK);
+                entries.accept(net.enchantedwood.block.ModBlocks.HAFNIUM_TUNGSTEN_CARBIDE_BLOCK);
+                entries.accept(net.enchantedwood.block.ModBlocks.NEO_TITANIUM_BLOCK);
 
                 // Record Press & Music Discs
                 entries.accept(net.enchantedwood.block.ModBlocks.HARMONIC_RECORD_PRESS);
