@@ -56,12 +56,12 @@ public abstract class CraftingScreenHandlerMixin {
                 );
             }
         }
-        // 3. Keystone #3: Thermal Anchor (Locked until mastering extreme Nether temperatures)
+        // 3. Keystone #3: Thermal Anchor (Locked until forging Fire Crystal and bringing it to the Nether)
         else if (result.isOf(ModBlocks.THERMAL_ANCHOR.asItem())) {
             if (!player.getCommandTags().contains("unlocked_thermal_anchor")) {
                 resultInventory.setStack(0, ItemStack.EMPTY);
                 player.sendMessage(
-                        Text.literal("§c🔒 Anomaly Keystone #3 is locked! Master extreme Nether temperatures with Thermal Protection first."),
+                        Text.literal("§c🔒 Anomaly Keystone #3 is locked! Forge a Fire Crystal and bring it into the Nether first."),
                         true
                 );
             }

@@ -337,8 +337,9 @@ public class OverworldAnomalyEventHandler {
     }
 
     private static void checkKeystoneUnlocks(ServerWorld world, ServerPlayerEntity player, boolean isNether) {
-        // Keystone #3: Thermal Anchor (Master extreme Nether temperatures with Thermal Protection)
-        if (isNether && player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
+        // Keystone #3: Thermal Anchor (Forge a Fire Crystal and bring it into the Nether)
+        if (isNether && (player.getInventory().contains(new ItemStack(net.enchantedwood.item.ModItems.FIRE_CRYSTAL))
+                || player.hasStatusEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION))) {
             triggerKeystone3Unlock(player, world);
         }
 
@@ -364,7 +365,7 @@ public class OverworldAnomalyEventHandler {
 
             player.sendMessage(Text.literal(""), false);
             player.sendMessage(Text.literal("§5✦ §d§l[DIMENSIONAL RESONANCE DETECTED] §5✦"), false);
-            player.sendMessage(Text.literal("§fBy mastering extreme Nether temperatures, you have unlocked the blueprint for:"), false);
+            player.sendMessage(Text.literal("§fBy forging a Fire Crystal and channeling the Nether's thermal core, you have unlocked the blueprint for:"), false);
             player.sendMessage(Text.literal("§b⚙ §e§lAnomaly Keystone #3: §cThermal Anchor"), false);
             player.sendMessage(Text.literal("§8(Craft with Tungsten Carbide Ingot, Fire Crystal, Crying Obsidian & Infused Heartwood)"), false);
             player.sendMessage(Text.literal(""), false);
