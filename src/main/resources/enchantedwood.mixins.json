@@ -9,8 +9,6 @@
     "TopologicalSortsMixin",
     "ClampedEntityAttributeMixin",
     "ItemStackMixin",
-    "NetherFortressStructureMixin",
-    "JigsawStructureMixin",
     "CraftingMenuMixin"
   ],
   "client": [],
