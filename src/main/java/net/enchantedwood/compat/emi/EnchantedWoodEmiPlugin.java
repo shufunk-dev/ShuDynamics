@@ -1233,20 +1233,20 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
     public static class CastingPortEmiRecipe implements EmiRecipe {
         private final Identifier id;
-        private final EmiIngredient fluidInput;
+        private final net.enchantedwood.fluid.MoltenMetal metal;
         private final EmiStack output;
-        private final String cost;
+        private final int fluidCostMb;
 
-        public CastingPortEmiRecipe(Identifier id, EmiIngredient fluidInput, EmiStack output, String cost) {
+        public CastingPortEmiRecipe(Identifier id, net.enchantedwood.fluid.MoltenMetal metal, EmiStack output, int fluidCostMb) {
             this.id = id;
-            this.fluidInput = fluidInput;
+            this.metal = metal;
             this.output = output;
-            this.cost = cost;
+            this.fluidCostMb = fluidCostMb;
         }
 
         @Override public EmiRecipeCategory getCategory() { return CASTING_PORT; }
         @Override public Identifier getId() { return id; }
-        @Override public List<EmiIngredient> getInputs() { return List.of(fluidInput); }
+        @Override public List<EmiIngredient> getInputs() { return List.of(); }
         @Override public List<EmiStack> getOutputs() { return List.of(output); }
         @Override public int getDisplayWidth() { return 142; }
         @Override public int getDisplayHeight() { return 56; }
@@ -1254,47 +1254,56 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
         @Override
         public void addWidgets(WidgetHolder widgets) {
             widgets.addTexture(CASTING_PORT_GUI, 0, 0, 142, 56, 25, 14);
-            // Solidify progress
+            // Solidify progress arrow
             widgets.addAnimatedTexture(CASTING_PORT_GUI, 47, 20, 24, 17, 176, 0, 1000, true, false, false);
-            widgets.addSlot(fluidInput, 11, 20).drawBack(false);
-            widgets.addSlot(output, 90, 20).recipeContext(this).drawBack(false);
-            widgets.addText(Component.literal("§b" + cost), 40, 42, 0x00BCD4, false);
+            // Output slot aligned to authentic GUI
+            widgets.addSlot(output, 91, 20).recipeContext(this).drawBack(false);
+
+            // Render authentic Molten Metal fluid level in buffer intake
+            int fluidColor = (metal != null && metal != net.enchantedwood.fluid.MoltenMetal.NONE)
+                    ? (metal.getColor() | 0xFF000000)
+                    : 0xFFD8D8D8;
+            widgets.addDrawable(11, 8, 16, 36, (draw, mouseX, mouseY, delta) -> {
+                draw.fill(11, 8, 27, 44, fluidColor);
+            });
+
+            String metalName = metal != null ? metal.getDisplayName() : "Molten Metal";
+            widgets.addText(Component.literal("§b" + fluidCostMb + " mB " + metalName), 34, 42, 0x00BCD4, false);
+
+            widgets.addTooltipText(List.of(
+                    Component.literal("§d💧 Molten Metal Intake"),
+                    Component.literal("§f" + metalName),
+                    Component.literal("§7Volume: §b" + fluidCostMb + " mB"),
+                    Component.literal("§8(Supplied via pipes from Induction Smelter)")
+            ), 11, 8, 16, 36);
         }
     }
 
     private static void registerCastingPortRecipes(EmiRegistry registry) {
-        int idx = 0;
-        // Nuggets (10 mB)
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.IRON_INGOT), EmiStack.of(Items.IRON_NUGGET), "10 mB Molten Iron -> Nugget"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.GOLD_INGOT), EmiStack.of(Items.GOLD_NUGGET), "10 mB Molten Gold -> Nugget"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.COPPER_INGOT), EmiStack.of(ModItems.COPPER_NUGGET), "10 mB Molten Copper -> Nugget"));
-        // Ingots (90 mB)
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.IRON_NUGGET), EmiStack.of(Items.IRON_INGOT), "90 mB Molten Iron -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.GOLD_NUGGET), EmiStack.of(Items.GOLD_INGOT), "90 mB Molten Gold -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.COPPER_NUGGET), EmiStack.of(Items.COPPER_INGOT), "90 mB Molten Copper -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.TIN_NUGGET), EmiStack.of(ModItems.TIN_INGOT), "90 mB Molten Tin -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.BRONZE_NUGGET), EmiStack.of(ModItems.BRONZE_INGOT), "90 mB Molten Bronze -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.STEEL_NUGGET), EmiStack.of(ModItems.STEEL_INGOT), "90 mB Molten Steel -> Ingot"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.TITANIUM_NUGGET), EmiStack.of(ModItems.TITANIUM_INGOT), "90 mB Molten Titanium -> Ingot"));
-        // Blocks (810 mB)
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.IRON_INGOT), EmiStack.of(Items.IRON_BLOCK), "810 mB Molten Iron -> Block"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.GOLD_INGOT), EmiStack.of(Items.GOLD_BLOCK), "810 mB Molten Gold -> Block"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(Items.COPPER_INGOT), EmiStack.of(Items.COPPER_BLOCK.weathering().unaffected()), "810 mB Molten Copper -> Block"));
-        registry.addRecipe(new CastingPortEmiRecipe(Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_" + idx++),
-                EmiStack.of(ModItems.BRONZE_INGOT), EmiStack.of(ModBlocks.BRONZE_BLOCK), "810 mB Molten Bronze -> Block"));
+        for (net.enchantedwood.fluid.MoltenMetal metal : net.enchantedwood.fluid.MoltenMetal.values()) {
+            if (metal == net.enchantedwood.fluid.MoltenMetal.NONE || metal == net.enchantedwood.fluid.MoltenMetal.LAVA) continue;
+
+            // Ingots (90 mB)
+            if (metal.getIngotItem() != null) {
+                registry.addRecipe(new CastingPortEmiRecipe(
+                        Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_ingot_" + metal.getId()),
+                        metal, EmiStack.of(metal.getIngotItem()), 90));
+            }
+
+            // Nuggets (10 mB)
+            if (metal.getNuggetItem() != null) {
+                registry.addRecipe(new CastingPortEmiRecipe(
+                        Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_nugget_" + metal.getId()),
+                        metal, EmiStack.of(metal.getNuggetItem()), 10));
+            }
+
+            // Blocks (810 mB)
+            if (metal.getBlockItem() != null) {
+                registry.addRecipe(new CastingPortEmiRecipe(
+                        Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "cast_block_" + metal.getId()),
+                        metal, EmiStack.of(metal.getBlockItem()), 810));
+            }
+        }
     }
 
     private static void registerHarmonicRecordPressRecipes(EmiRegistry registry) {
