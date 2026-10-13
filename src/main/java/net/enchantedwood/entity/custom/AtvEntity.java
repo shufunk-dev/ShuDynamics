@@ -731,12 +731,18 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         Set<BlockPos> uniquePositions = new LinkedHashSet<>();
 
         // True 3x3 Tunnel Bore: 3 blocks wide (-1, 0, +1), 3 blocks tall (y0, y0+1, y0+2 for rider clearance)
-        for (double fwd = 1.0; fwd <= 1.6; fwd += 0.5) {
+        for (double fwd = 0.9; fwd <= 1.4; fwd += 0.5) {
             for (double lat = -1.1; lat <= 1.1; lat += 0.55) {
                 Vec3d p = this.getEntityPos().add(forwardVec.multiply(fwd)).add(rightVec.multiply(lat));
                 BlockPos base = BlockPos.ofFloored(p);
                 for (int dy = 0; dy <= 2; dy++) {
                     uniquePositions.add(base.withY(y0 + dy));
+                }
+
+                // If approaching a 1-block terrain step, pre-clear y0 + 3 so rider has full clearance when entering tunnels
+                BlockPos stepCheck = base.withY(y0);
+                if (!isPassable(world, stepCheck) && isPassable(world, stepCheck.up()) && isPassable(world, stepCheck.up(2))) {
+                    uniquePositions.add(base.withY(y0 + 3));
                 }
             }
         }
@@ -752,6 +758,16 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             BlockState state = world.getBlockState(targetPos);
             if (state.isAir() || !state.getFluidState().isEmpty()) continue;
             if (!drillBit.canHarvest(state) || state.getHardness(world, targetPos) < 0) continue;
+
+            // Preserve 1-block terrain ledges: if a floor block at y0 has open headroom above (y0+1 and y0+2),
+            // do not drill it so the ATV's step-assist naturally climbs the ledge instead of chewing the ground away.
+            if (targetPos.getY() == y0) {
+                BlockPos above = targetPos.up();
+                BlockPos head = targetPos.up(2);
+                if (isPassable(world, above) && isPassable(world, head)) {
+                    continue;
+                }
+            }
 
             List<ItemStack> drops = Block.getDroppedStacks(state, world, targetPos, world.getBlockEntity(targetPos), rider, drillStack);
 
@@ -1085,5 +1101,10 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
                 world.removeBlock(pos, false);
             }
         }
+    }
+
+    private boolean isPassable(World world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        return state.isAir() || state.getCollisionShape(world, pos).isEmpty();
     }
 }
