@@ -59,47 +59,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.event.ConvergenceHazardHandler.register();
         net.enchantedwood.item.custom.HyposprayItem.registerEntityInteraction();
 
-        // Strippable Wood
-
-
-
-// Composting Registrations (Corn seeds, grains, leaves, saplings)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Culinary Expansion Composting
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // Mystical Agriculture / Mystical Customization Compatibility
+        net.enchantedwood.compat.mysticalagriculture.MysticalAgricultureCompat.register();
+    }
 }
-}
-

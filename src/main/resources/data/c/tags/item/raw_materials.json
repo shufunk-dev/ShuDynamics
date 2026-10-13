@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:raw_iron",
+    "minecraft:raw_copper",
+    "minecraft:raw_gold",
+    "enchantedwood:raw_tin",
+    "enchantedwood:raw_titanium",
+    "enchantedwood:raw_bauxite",
+    "enchantedwood:raw_tungsten",
+    "enchantedwood:raw_cobalt",
+    "enchantedwood:raw_ardite",
+    "enchantedwood:raw_fluorite",
+    "enchantedwood:raw_zirconia",
+    "enchantedwood:raw_tantalum",
+    "enchantedwood:raw_hafnium",
+    "enchantedwood:raw_neodymium",
+    "enchantedwood:raw_aerogel"
+  ]
+}

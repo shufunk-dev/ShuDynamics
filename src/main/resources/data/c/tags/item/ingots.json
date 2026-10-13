@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:iron_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:netherite_ingot",
+    "enchantedwood:tin_ingot",
+    "enchantedwood:bronze_ingot",
+    "enchantedwood:aluminum_ingot",
+    "enchantedwood:steel_ingot",
+    "enchantedwood:titanium_ingot",
+    "enchantedwood:tungsten_ingot",
+    "enchantedwood:tungsten_carbide_ingot",
+    "enchantedwood:cobalt_ingot",
+    "enchantedwood:ardite_ingot",
+    "enchantedwood:manyullyn_ingot",
+    "enchantedwood:tantalum_ingot",
+    "enchantedwood:hafnium_ingot",
+    "enchantedwood:tan_ti_ingot",
+    "enchantedwood:hafnium_tungsten_carbide_ingot",
+    "enchantedwood:neo_titanium_ingot",
+    "enchantedwood:enchanted_netherite_ingot"
+  ]
+}

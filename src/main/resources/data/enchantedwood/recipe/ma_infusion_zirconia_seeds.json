@@ -1,0 +1,28 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mysticalagriculture"
+      ]
+    }
+  ],
+  "type": "mysticalagriculture:infusion",
+  "input": {
+    "item": "mysticalagriculture:supremium_seed_base"
+  },
+  "ingredients": [
+    { "item": "mysticalagriculture:supremium_essence" },
+    { "item": "enchantedwood:zirconia_nodule" },
+    { "item": "mysticalagriculture:supremium_essence" },
+    { "item": "enchantedwood:zirconia_nodule" },
+    { "item": "mysticalagriculture:supremium_essence" },
+    { "item": "enchantedwood:zirconia_nodule" },
+    { "item": "mysticalagriculture:supremium_essence" },
+    { "item": "enchantedwood:zirconia_nodule" }
+  ],
+  "result": {
+    "id": "mysticalagriculture:zirconia_seeds",
+    "count": 1
+  }
+}
