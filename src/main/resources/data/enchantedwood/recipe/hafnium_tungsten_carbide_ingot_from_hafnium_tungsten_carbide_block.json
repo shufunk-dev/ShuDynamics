@@ -1,0 +1,11 @@
+{
+    "ingredients":  [
+                        "enchantedwood:hafnium_tungsten_carbide_block"
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "count":  9,
+                   "id":  "enchantedwood:hafnium_tungsten_carbide_ingot"
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

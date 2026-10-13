@@ -783,6 +783,30 @@ public class ModBlocks {
                     .resistance(12.0f)
                     .requiresTool()));
 
+    public static final Block TAN_TI_BLOCK = registerBlock("tan_ti_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "tan_ti_block")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(6.0f)
+                    .resistance(9.0f)
+                    .requiresTool()));
+
+    public static final Block NEO_TITANIUM_BLOCK = registerBlock("neo_titanium_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "neo_titanium_block")))
+                    .sounds(BlockSoundGroup.METAL)
+                    .hardness(6.5f)
+                    .resistance(10.0f)
+                    .requiresTool()));
+
+    public static final Block HAFNIUM_TUNGSTEN_CARBIDE_BLOCK = registerBlock("hafnium_tungsten_carbide_block",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "hafnium_tungsten_carbide_block")))
+                    .sounds(BlockSoundGroup.NETHERITE)
+                    .hardness(8.0f)
+                    .resistance(15.0f)
+                    .requiresTool()));
+
     public static final Block OIL_SAND = registerBlockWithTooltip("oil_sand",
             new Block(AbstractBlock.Settings.create()
                     .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "oil_sand")))

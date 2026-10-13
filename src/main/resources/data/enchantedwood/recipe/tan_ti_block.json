@@ -1,0 +1,16 @@
+{
+    "key":  {
+                "#":  "enchantedwood:tan_ti_ingot"
+            },
+    "category":  "building",
+    "pattern":  [
+                    "###",
+                    "###",
+                    "###"
+                ],
+    "result":  {
+                   "count":  1,
+                   "id":  "enchantedwood:tan_ti_block"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

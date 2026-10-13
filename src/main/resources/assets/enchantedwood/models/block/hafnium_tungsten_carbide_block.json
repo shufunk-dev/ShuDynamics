@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "all":  "enchantedwood:block/hafnium_tungsten_carbide_block"
+                 },
+    "parent":  "minecraft:block/cube_all"
+}

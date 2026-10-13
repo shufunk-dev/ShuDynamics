@@ -139,6 +139,9 @@
     "enchantedwood:harmonic_record_press",
     "enchantedwood:water_pump",
     "enchantedwood:cryo_freezer",
-    "enchantedwood:water_pipe"
+    "enchantedwood:water_pipe",
+    "enchantedwood:tan_ti_block",
+    "enchantedwood:neo_titanium_block",
+    "enchantedwood:hafnium_tungsten_carbide_block"
   ]
 }
