@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,8 +34,17 @@ public abstract class CraftingMenuMixin {
         ItemStack result = resultSlots.getItem(0);
         if (result.isEmpty()) return;
 
-        // 1. Keystone #2: Kinetic Anchor (Locked until ATV is constructed and driven)
-        if (result.is(ModBlocks.KINETIC_ANCHOR.asItem())) {
+        // 1. Keystone #1: Atmospheric Anchor (Locked until Scuba Gear ocean depth exploration)
+        if (result.is(ModBlocks.ATMOSPHERIC_ANCHOR.asItem())) {
+            if (!player.entityTags().contains("unlocked_atmospheric_anchor")) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                player.sendOverlayMessage(
+                        Component.literal("§c🔒 Anomaly Keystone #1 is locked! Explore ocean depths in Scuba Gear first.")
+                );
+            }
+        }
+        // 2. Keystone #2: Kinetic Anchor (Locked until ATV is constructed and driven)
+        else if (result.is(ModBlocks.KINETIC_ANCHOR.asItem())) {
             boolean hasUnlockedAtv = player.entityTags().contains("unlocked_kinetic_anchor")
                     || player.getInventory().contains(new ItemStack(net.enchantedwood.item.ModItems.ATV_ITEM));
             if (!hasUnlockedAtv) {
@@ -44,14 +54,38 @@ public abstract class CraftingMenuMixin {
                 );
             }
         }
-        // 2. Keystone #1: Atmospheric Anchor (Locked until Scuba Gear ocean depth exploration)
-        else if (result.is(ModBlocks.ATMOSPHERIC_ANCHOR.asItem())) {
-            if (!player.entityTags().contains("unlocked_atmospheric_anchor")) {
+        // 3. Keystone #3: Thermal Anchor (Locked until mastering extreme Nether temperatures)
+        else if (result.is(ModBlocks.THERMAL_ANCHOR.asItem())) {
+            if (!player.entityTags().contains("unlocked_thermal_anchor")) {
                 resultSlots.setItem(0, ItemStack.EMPTY);
                 player.sendOverlayMessage(
-                        Component.literal("§c🔒 Anomaly Keystone #1 is locked! Explore ocean depths in Scuba Gear first.")
+                        Component.literal("§c🔒 Anomaly Keystone #3 is locked! Master extreme Nether temperatures with Thermal Protection first.")
                 );
             }
         }
+        // 4. Keystone #4: Metallurgical Anchor (Locked until smelting Manyullyn Alloy)
+        else if (result.is(ModBlocks.METALLURGICAL_ANCHOR.asItem())) {
+            boolean hasUnlockedManyullyn = player.entityTags().contains("unlocked_metallurgical_anchor")
+                    || player.getInventory().contains(new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_INGOT));
+            if (!hasUnlockedManyullyn) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                player.sendOverlayMessage(
+                        Component.literal("§c🔒 Anomaly Keystone #4 is locked! Smelt Cobalt and Ardite into Manyullyn Alloy first.")
+                );
+            }
+        }
+        // 5. Keystone #5: Plasma Anchor (Locked until witnessing Solar Plasma Wave or acquiring a Nether Star)
+        else if (result.is(ModBlocks.PLASMA_ANCHOR.asItem())) {
+            boolean hasUnlockedPlasma = player.entityTags().contains("unlocked_plasma_anchor")
+                    || player.entityTags().contains("sd_anomaly_plasma")
+                    || player.getInventory().contains(new ItemStack(Items.NETHER_STAR));
+            if (!hasUnlockedPlasma) {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                player.sendOverlayMessage(
+                        Component.literal("§c🔒 Anomaly Keystone #5 is locked! Harness energized Solar Plasma in the Nether first.")
+                );
+            }
+        }
+        // Keystone #6: Dimensional Singularity is deliberately unlocked/unrestricted as per specifications
     }
 }

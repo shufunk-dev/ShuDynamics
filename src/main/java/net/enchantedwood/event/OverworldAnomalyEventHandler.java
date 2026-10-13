@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.enchantedwood.EnchantedWoodMod;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import java.util.List;
+
 public class OverworldAnomalyEventHandler {
 
     public enum AnomalyType {
@@ -75,6 +82,9 @@ public class OverworldAnomalyEventHandler {
 
         // 2. Check triggers only once every second (20 ticks)
         if (world.getGameTime() % 20 != (Math.abs(uuid.hashCode()) % 20)) return;
+
+        // Check Keystone progression unlocks
+        checkKeystoneUnlocks(world, player, isNether);
 
         // --- NETHER ANOMALY ---
         if (isNether) {
@@ -182,6 +192,7 @@ public class OverworldAnomalyEventHandler {
             }
             case PLASMA_FLARE -> {
                 player.addTag("sd_anomaly_plasma");
+                triggerKeystone5Unlock(player, world);
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.2f, 0.6f);
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -323,6 +334,88 @@ public class OverworldAnomalyEventHandler {
                         SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, 1.0f, 1.2f);
                 player.sendSystemMessage(Component.literal("§e...The thermal wave dissipates. A solar flare leaked through a rift from an alien star system."));
             }
+        }
+    }
+
+    private static void checkKeystoneUnlocks(ServerLevel world, ServerPlayer player, boolean isNether) {
+        // Keystone #3: Thermal Anchor (Master extreme Nether temperatures with Thermal Protection)
+        if (isNether && player.hasEffect(net.enchantedwood.effect.ModStatusEffects.THERMAL_PROTECTION)) {
+            triggerKeystone3Unlock(player, world);
+        }
+
+        // Keystone #4: Metallurgical Anchor (Smelt / obtain Manyullyn Alloy)
+        if (player.getInventory().contains(new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_INGOT))
+                || player.getInventory().contains(new ItemStack(net.enchantedwood.item.ModItems.MANYULLYN_PLATE))) {
+            triggerKeystone4Unlock(player, world);
+        }
+
+        // Keystone #5: Plasma Anchor (Witness Solar Plasma Flare or acquire Nether Star)
+        if (player.entityTags().contains("sd_anomaly_plasma")
+                || player.getInventory().contains(new ItemStack(Items.NETHER_STAR))) {
+            triggerKeystone5Unlock(player, world);
+        }
+    }
+
+    public static void triggerKeystone3Unlock(ServerPlayer player, Level world) {
+        if (player.addTag("unlocked_thermal_anchor")) {
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1.0f, 1.0f);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.PLAYERS, 0.8f, 1.4f);
+
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§5✦ §d§l[DIMENSIONAL RESONANCE DETECTED] §5✦"));
+            player.sendSystemMessage(Component.literal("§fBy mastering extreme Nether temperatures, you have unlocked the blueprint for:"));
+            player.sendSystemMessage(Component.literal("§b⚙ §e§lAnomaly Keystone #3: §cThermal Anchor"));
+            player.sendSystemMessage(Component.literal("§8(Craft with Tungsten Carbide Ingot, Fire Crystal, Crying Obsidian & Infused Heartwood)"));
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§a✔ Anomaly Keystone #3 Unlocked: Thermal Anchor"));
+
+            try {
+                player.awardRecipesByKey(List.of(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "thermal_anchor"))));
+            } catch (Exception ignored) {}
+        }
+    }
+
+    public static void triggerKeystone4Unlock(ServerPlayer player, Level world) {
+        if (player.addTag("unlocked_metallurgical_anchor")) {
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1.0f, 1.0f);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.PLAYERS, 0.8f, 1.4f);
+
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§5✦ §d§l[DIMENSIONAL RESONANCE DETECTED] §5✦"));
+            player.sendSystemMessage(Component.literal("§fBy smelting Cobalt and Ardite to cast Manyullyn Alloy, you have unlocked the blueprint for:"));
+            player.sendSystemMessage(Component.literal("§b⚙ §e§lAnomaly Keystone #4: §eMetallurgical Anchor"));
+            player.sendSystemMessage(Component.literal("§8(Craft with Manyullyn Ingot, Manyullyn Plate, Enchanted Lava Bucket & Infused Heartwood)"));
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§a✔ Anomaly Keystone #4 Unlocked: Metallurgical Anchor"));
+
+            try {
+                player.awardRecipesByKey(List.of(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "metallurgical_anchor"))));
+            } catch (Exception ignored) {}
+        }
+    }
+
+    public static void triggerKeystone5Unlock(ServerPlayer player, Level world) {
+        if (player.addTag("unlocked_plasma_anchor")) {
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1.0f, 1.0f);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.PLAYERS, 0.8f, 1.4f);
+
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§5✦ §d§l[DIMENSIONAL RESONANCE DETECTED] §5✦"));
+            player.sendSystemMessage(Component.literal("§fBy harnessing energized solar plasma streams, you have unlocked the blueprint for:"));
+            player.sendSystemMessage(Component.literal("§b⚙ §e§lAnomaly Keystone #5: §dPlasma Anchor"));
+            player.sendSystemMessage(Component.literal("§8(Craft with Manyullyn Plate, Blaze Rod, Nether Star & Infused Heartwood)"));
+            player.sendSystemMessage(Component.literal(""));
+            player.sendSystemMessage(Component.literal("§a✔ Anomaly Keystone #5 Unlocked: Plasma Anchor"));
+
+            try {
+                player.awardRecipesByKey(List.of(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "plasma_anchor"))));
+            } catch (Exception ignored) {}
         }
     }
 }
