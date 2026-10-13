@@ -17,17 +17,15 @@ import java.util.Map;
 public class MysticalAgricultureCompat {
 
     public static void register() {
-        boolean isMaLoaded = FabricLoader.getInstance().isModLoaded("mysticalagriculture")
-                || FabricLoader.getInstance().isModLoaded("mysticalcustomization");
+        if (!FabricLoader.getInstance().isModLoaded("mysticalcustomization")) {
+            return;
+        }
 
         Path configDir = FabricLoader.getInstance().getConfigDir();
         Path mcDir = configDir.resolve("mysticalcustomization");
         Path cropsDir = mcDir.resolve("crops");
 
-        // Export crops if Mystical Agriculture/Customization is present or config dir already exists
-        if (isMaLoaded || Files.exists(mcDir)) {
-            exportDefaultCrops(cropsDir);
-        }
+        exportDefaultCrops(cropsDir);
     }
 
     private static void exportDefaultCrops(Path cropsDir) {
