@@ -1,7 +1,7 @@
 {
   "ultrawarm": false,
   "natural": true,
-  "coordinate_scale": 1.0,
+  "coordinate_scale": 1,
   "has_skylight": true,
   "has_ceiling": false,
   "ambient_light": 0.25,
@@ -19,5 +19,6 @@
   "min_y": -64,
   "height": 384,
   "infiniburn": "#minecraft:infiniburn_overworld",
-  "effects": "minecraft:overworld"
+  "effects": "minecraft:overworld",
+  "has_ender_dragon_fight": false
 }
