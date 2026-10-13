@@ -81,7 +81,7 @@ public class DrillBitItem extends Item {
         int remaining = stack.getMaxDamage() - stack.getDamageValue();
         textConsumer.accept(Component.literal("§eDurability: §f" + remaining + " §7/ " + stack.getMaxDamage() + " blocks"));
         textConsumer.accept(Component.literal("§bExcavation Speed: §f" + tier.getSpeedMultiplier() + "x"));
-        textConsumer.accept(Component.literal("§8Install in ATV Drill Slot. Mined blocks auto-route to cargo trunk."));
+        textConsumer.accept(Component.literal("§8Install in ATV Drill Slot. Excavates a 3x3 tunnel into cargo trunk."));
         super.appendHoverText(stack, context, displayComponent, textConsumer, type);
     }
 }
