@@ -45,84 +45,117 @@ public class AtvEntityModel extends EntityModel<AtvRenderState> {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition root = modelData.getRoot();
 
-        // 1. Main Body / Chassis Frame
+        // 1. Detailed Chassis, Body Panels, Suspension & Cockpit
         root.addOrReplaceChild("body", CubeListBuilder.create()
-                // Lower Chassis Base (16x4x24)
-                .texOffs(0, 0).addBox(-8.0F, -6.0F, -12.0F, 16.0F, 4.0F, 24.0F)
-                // Driver Seat (12x4x10)
-                .texOffs(0, 28).addBox(-6.0F, -10.0F, -4.0F, 12.0F, 4.0F, 10.0F)
-                // Front Hood / Engine Block (12x6x8)
-                .texOffs(0, 42).addBox(-6.0F, -12.0F, -12.0F, 12.0F, 6.0F, 8.0F)
-                // Handlebars Column (2x8x2)
-                .texOffs(40, 42).addBox(-1.0F, -18.0F, -8.0F, 2.0F, 6.0F, 2.0F)
-                // Handlebars Bar (16x2x2)
-                .texOffs(0, 56).addBox(-8.0F, -19.0F, -8.0F, 16.0F, 2.0F, 2.0F)
-                // Front Bull-Bar (14x6x2)
-                .texOffs(36, 56).addBox(-7.0F, -8.0F, -14.0F, 14.0F, 6.0F, 2.0F)
-                // Rear Cargo Rack (14x4x6)
-                .texOffs(0, 60).addBox(-7.0F, -8.0F, 7.0F, 14.0F, 2.0F, 6.0F),
+                // Lower Tubular Frame Rails
+                .texOffs(0, 0).addBox(-5.0F, -6.0F, -11.0F, 10.0F, 3.0F, 22.0F)
+                // Heavy Steel Skid Plate
+                .texOffs(0, 25).addBox(-4.0F, -3.0F, -10.0F, 8.0F, 1.0F, 20.0F)
+                // Front & Rear Differential Gearboxes
+                .texOffs(56, 25).addBox(-3.0F, -5.0F, -9.0F, 6.0F, 3.0F, 4.0F)
+                .texOffs(56, 25).addBox(-3.0F, -5.0F, 5.0F, 6.0F, 3.0F, 4.0F)
+                // Double Wishbone Suspension A-Arms
+                .texOffs(56, 32).addBox(4.0F, -6.0F, -9.0F, 4.0F, 2.0F, 2.0F)
+                .texOffs(56, 32).addBox(-8.0F, -6.0F, -9.0F, 4.0F, 2.0F, 2.0F)
+                .texOffs(56, 32).addBox(4.0F, -6.0F, 7.0F, 4.0F, 2.0F, 2.0F)
+                .texOffs(56, 32).addBox(-8.0F, -6.0F, 7.0F, 4.0F, 2.0F, 2.0F)
+                // Coilover Shock Springs (Vibrant Yellow Springs)
+                .texOffs(68, 32).addBox(3.5F, -8.0F, -8.5F, 2.0F, 3.0F, 2.0F)
+                .texOffs(68, 32).addBox(-5.5F, -8.0F, -8.5F, 2.0F, 3.0F, 2.0F)
+                .texOffs(68, 32).addBox(3.5F, -8.0F, 6.5F, 2.0F, 3.0F, 2.0F)
+                .texOffs(68, 32).addBox(-5.5F, -8.0F, 6.5F, 2.0F, 3.0F, 2.0F)
+                // High-Performance Engine Block & Transmission
+                .texOffs(0, 46).addBox(-4.5F, -9.5F, -6.0F, 9.0F, 5.0F, 6.0F)
+                // Dual Stainless Exhaust Mufflers & Tailpipes
+                .texOffs(30, 46).addBox(2.5F, -8.5F, 7.0F, 2.0F, 2.0F, 6.0F)
+                .texOffs(30, 46).addBox(-4.5F, -8.5F, 7.0F, 2.0F, 2.0F, 6.0F)
+                // Diamond-Grip Nerf Bars / Floorboards
+                .texOffs(46, 46).addBox(5.0F, -4.0F, -4.0F, 5.0F, 1.0F, 8.0F)
+                .texOffs(46, 46).addBox(-10.0F, -4.0F, -4.0F, 5.0F, 1.0F, 8.0F)
+                // Aerodynamic Front Cowl & Radiator Intake
+                .texOffs(0, 57).addBox(-5.0F, -11.0F, -12.0F, 10.0F, 5.0F, 6.0F)
+                // Aggressive Flared Front Fenders
+                .texOffs(32, 57).addBox(4.0F, -10.0F, -13.0F, 7.0F, 2.0F, 9.0F)
+                .texOffs(32, 57).addBox(-11.0F, -10.0F, -13.0F, 7.0F, 2.0F, 9.0F)
+                // Wide Flared Rear Mudguard Fenders
+                .texOffs(64, 57).addBox(4.0F, -9.5F, 3.5F, 7.0F, 2.0F, 10.0F)
+                .texOffs(64, 57).addBox(-11.0F, -9.5F, 3.5F, 7.0F, 2.0F, 10.0F)
+                // Sport Fuel Tank & Billet Gas Cap
+                .texOffs(0, 68).addBox(-4.0F, -12.0F, -6.5F, 8.0F, 4.0F, 5.0F)
+                .texOffs(26, 68).addBox(-1.5F, -13.0F, -5.5F, 3.0F, 1.0F, 3.0F)
+                // Ergonomic Sport Saddle Seat & Raised Passenger Tail
+                .texOffs(38, 68).addBox(-4.5F, -10.0F, -2.0F, 9.0F, 3.0F, 10.0F)
+                .texOffs(76, 68).addBox(-4.0F, -11.0F, 5.5F, 8.0F, 2.0F, 4.0F)
+                // Steering Column Riser & Crossbar Handlebars
+                .texOffs(0, 77).addBox(-1.0F, -16.0F, -8.0F, 2.0F, 5.0F, 2.0F)
+                .texOffs(8, 77).addBox(-8.0F, -17.0F, -8.5F, 16.0F, 2.0F, 2.0F)
+                // Ergonomic Handguards (Bark Busters)
+                .texOffs(44, 77).addBox(6.5F, -17.5F, -9.5F, 2.0F, 3.0F, 3.0F)
+                .texOffs(44, 77).addBox(-8.5F, -17.5F, -9.5F, 2.0F, 3.0F, 3.0F)
+                // Digital Instrument Gauge Cluster / HUD
+                .texOffs(54, 77).addBox(-2.0F, -16.5F, -9.0F, 4.0F, 2.0F, 2.0F)
+                // Heavy Tubular Front Bull-Bar & Winch
+                .texOffs(66, 77).addBox(-7.0F, -9.0F, -14.0F, 14.0F, 6.0F, 2.0F)
+                .texOffs(98, 77).addBox(-2.0F, -7.0F, -15.0F, 4.0F, 2.0F, 1.0F)
+                // Rear Cargo Rack with Tie-Down Perimeter Rails
+                .texOffs(0, 84).addBox(-6.5F, -9.5F, 7.0F, 13.0F, 2.0F, 7.0F)
+                .texOffs(40, 84).addBox(-7.0F, -11.5F, 6.5F, 14.0F, 2.0F, 8.0F)
+                // Integrated Rear LED Taillight Bar
+                .texOffs(84, 84).addBox(-4.0F, -8.0F, 14.0F, 8.0F, 2.0F, 1.0F),
                 PartPose.offsetAndRotation(0.0F, 20.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
-        // 2. 4 Heavy All-Terrain Rubber Wheels (4x8x8 each)
-        CubeDeformation wheelDilation = new CubeDeformation(0.0F);
+        // 2. 4 Deep-Dish All-Terrain Wheels with Knobby Lugs and Alloy Rims
+        CubeListBuilder wheelBuilder = CubeListBuilder.create()
+                // Knobby Rubber Main Tire
+                .texOffs(24, 93).addBox(-2.5F, -4.5F, -4.5F, 5.0F, 9.0F, 9.0F)
+                // Vertical Tread Lugs
+                .texOffs(52, 93).addBox(-2.0F, -5.0F, -3.5F, 4.0F, 10.0F, 7.0F)
+                // Horizontal Tread Lugs
+                .texOffs(74, 93).addBox(-2.0F, -3.5F, -5.0F, 4.0F, 7.0F, 10.0F)
+                // Deep-Dish Alloy Rim & Wheel Hub
+                .texOffs(102, 93).addBox(-2.75F, -2.5F, -2.5F, 5.5F, 5.0F, 5.0F);
 
-        root.addOrReplaceChild("front_left_wheel", CubeListBuilder.create()
-                .texOffs(56, 0).addBox(-2.0F, -4.0F, -4.0F, 4.0F, 8.0F, 8.0F, wheelDilation),
-                PartPose.offsetAndRotation(9.0F, 20.0F, -8.0F, 0.0F, 0.0F, 0.0F));
+        root.addOrReplaceChild("front_left_wheel", wheelBuilder,
+                PartPose.offsetAndRotation(9.5F, 19.5F, -8.0F, 0.0F, 0.0F, 0.0F));
 
-        root.addOrReplaceChild("front_right_wheel", CubeListBuilder.create()
-                .texOffs(56, 0).addBox(-2.0F, -4.0F, -4.0F, 4.0F, 8.0F, 8.0F, wheelDilation),
-                PartPose.offsetAndRotation(-9.0F, 20.0F, -8.0F, 0.0F, 0.0F, 0.0F));
+        root.addOrReplaceChild("front_right_wheel", wheelBuilder,
+                PartPose.offsetAndRotation(-9.5F, 19.5F, -8.0F, 0.0F, 0.0F, 0.0F));
 
-        root.addOrReplaceChild("back_left_wheel", CubeListBuilder.create()
-                .texOffs(56, 16).addBox(-2.0F, -4.0F, -4.0F, 4.0F, 8.0F, 8.0F, wheelDilation),
-                PartPose.offsetAndRotation(9.0F, 20.0F, 8.0F, 0.0F, 0.0F, 0.0F));
+        root.addOrReplaceChild("back_left_wheel", wheelBuilder,
+                PartPose.offsetAndRotation(9.5F, 19.5F, 8.0F, 0.0F, 0.0F, 0.0F));
 
-        root.addOrReplaceChild("back_right_wheel", CubeListBuilder.create()
-                .texOffs(56, 16).addBox(-2.0F, -4.0F, -4.0F, 4.0F, 8.0F, 8.0F, wheelDilation),
-                PartPose.offsetAndRotation(-9.0F, 20.0F, 8.0F, 0.0F, 0.0F, 0.0F));
+        root.addOrReplaceChild("back_right_wheel", wheelBuilder,
+                PartPose.offsetAndRotation(-9.5F, 19.5F, 8.0F, 0.0F, 0.0F, 0.0F));
 
-        // 3. Front Mining Drill Bit (Cone attached to front bumper)
+        // 3. Front Mining Drill Bit (Mounted cleanly on front bull-bar)
         root.addOrReplaceChild("drill", CubeListBuilder.create()
-                // Base drill cylinder (8x8x6)
-                .texOffs(0, 68).addBox(-4.0F, -4.0F, -6.0F, 8.0F, 8.0F, 6.0F)
-                // Mid taper (6x6x4)
-                .texOffs(28, 68).addBox(-3.0F, -3.0F, -10.0F, 6.0F, 6.0F, 4.0F)
-                // Sharp cone tip (4x4x4)
-                .texOffs(48, 68).addBox(-2.0F, -2.0F, -14.0F, 4.0F, 4.0F, 4.0F)
-                // Center drill spindle (2x2x2)
-                .texOffs(64, 68).addBox(-1.0F, -1.0F, -16.0F, 2.0F, 2.0F, 2.0F),
+                .texOffs(0, 111).addBox(-4.0F, -4.0F, -6.0F, 8.0F, 8.0F, 6.0F)
+                .texOffs(28, 111).addBox(-3.0F, -3.0F, -10.0F, 6.0F, 6.0F, 4.0F)
+                .texOffs(48, 111).addBox(-2.0F, -2.0F, -14.0F, 4.0F, 4.0F, 4.0F)
+                .texOffs(64, 111).addBox(-1.0F, -1.0F, -16.0F, 2.0F, 2.0F, 2.0F),
                 PartPose.offsetAndRotation(0.0F, 16.0F, -14.0F, 0.0F, 0.0F, 0.0F));
 
-        // 4. Front Lumberjack Tree Saw Blade (Large circular blade)
+        // 4. Front Lumberjack Tree Saw Blade
         root.addOrReplaceChild("tree_saw", CubeListBuilder.create()
-                // Center Hub (4x4x4)
-                .texOffs(0, 82).addBox(-2.0F, -2.0F, -3.0F, 4.0F, 4.0F, 4.0F)
-                // Circular Saw Blade (14x14x1)
-                .texOffs(16, 82).addBox(-7.0F, -7.0F, -1.0F, 14.0F, 14.0F, 1.0F)
-                // Cross cutting teeth (16x16x1)
-                .texOffs(46, 82).addBox(-8.0F, -8.0F, -0.5F, 16.0F, 16.0F, 0.5F),
+                .texOffs(0, 120).addBox(-2.0F, -2.0F, -3.0F, 4.0F, 4.0F, 4.0F)
+                .texOffs(16, 120).addBox(-7.0F, -7.0F, -1.0F, 14.0F, 14.0F, 1.0F)
+                .texOffs(46, 120).addBox(-8.0F, -8.0F, -0.5F, 16.0F, 16.0F, 0.5F),
                 PartPose.offsetAndRotation(0.0F, 16.0F, -15.0F, 0.0F, 0.0F, 0.0F));
 
-        // 5. Front Agricultural Crop Harvester (Wide combine cylinder reel)
+        // 5. Front Agricultural Crop Harvester Reel
         root.addOrReplaceChild("crop_harvester", CubeListBuilder.create()
-                // Central Reel Axle (22x2x2)
-                .texOffs(0, 98).addBox(-11.0F, -1.0F, -1.0F, 22.0F, 2.0F, 2.0F)
-                // Outer Left Wheel (1x8x8)
-                .texOffs(48, 98).addBox(-11.0F, -4.0F, -4.0F, 1.0F, 8.0F, 8.0F)
-                // Outer Right Wheel (1x8x8)
-                .texOffs(48, 98).addBox(10.0F, -4.0F, -4.0F, 1.0F, 8.0F, 8.0F)
-                // Combine Reel Slats (20x1x6)
-                .texOffs(0, 102).addBox(-10.0F, -3.0F, -3.0F, 20.0F, 1.0F, 6.0F)
-                .texOffs(0, 102).addBox(-10.0F, 2.0F, -3.0F, 20.0F, 1.0F, 6.0F),
+                .texOffs(46, 120).addBox(-11.0F, -1.0F, -1.0F, 22.0F, 2.0F, 2.0F)
+                .texOffs(66, 120).addBox(-11.0F, -4.0F, -4.0F, 1.0F, 8.0F, 8.0F)
+                .texOffs(66, 120).addBox(10.0F, -4.0F, -4.0F, 1.0F, 8.0F, 8.0F)
+                .texOffs(46, 120).addBox(-10.0F, -3.0F, -3.0F, 20.0F, 1.0F, 6.0F)
+                .texOffs(46, 120).addBox(-10.0F, 2.0F, -3.0F, 20.0F, 1.0F, 6.0F),
                 PartPose.offsetAndRotation(0.0F, 18.0F, -15.0F, 0.0F, 0.0F, 0.0F));
 
-        // 6. Dual Automotive Headlights
+        // 6. Dual Projector Headlights & Auxiliary LED Bar
         root.addOrReplaceChild("headlights", CubeListBuilder.create()
-                // Left Light (3x3x2)
-                .texOffs(0, 110).addBox(-6.0F, -10.0F, -14.5F, 3.0F, 3.0F, 2.0F)
-                // Right Light (3x3x2)
-                .texOffs(0, 110).addBox(3.0F, -10.0F, -14.5F, 3.0F, 3.0F, 2.0F),
+                .texOffs(0, 93).addBox(-6.0F, -10.0F, -13.5F, 4.0F, 3.0F, 2.0F)
+                .texOffs(0, 93).addBox(2.0F, -10.0F, -13.5F, 4.0F, 3.0F, 2.0F)
+                .texOffs(12, 93).addBox(-2.0F, -11.0F, -13.5F, 4.0F, 2.0F, 2.0F),
                 PartPose.offsetAndRotation(0.0F, 20.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(modelData, 128, 128);
