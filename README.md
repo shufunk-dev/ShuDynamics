@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.3.4--26.3%20%7C%20v2.3.4--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.3.6--v2--26.3%20%7C%20v2.3.6--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -19,8 +19,8 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.3.4-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
-| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.3.4-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.3.6-v2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.3.6-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
@@ -29,6 +29,35 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
+
+---
+
+## 🌟 What's New in v2.3.6 (Release 2.3.6)
+
+* 🏎️ **Modular ATV Geometric Overhaul & $3\times3$ Tunnel Bore**:
+  * **Realistic Vehicle Geometry**: Custom 3D chassis, protective roll cage, suspension shocks, dual round headlights, exhaust pipes, and rugged knobby tires.
+  * **$3\times3$ Continuous Excavation**: Upgraded vehicle mining drill from 1x2 to a continuous $3\times3$ vehicle-sized tunnel bore through solid rock.
+  * **Terrain Step-Assist Ledge Protection**: Adjusted drill raycasting to preserve 1-block ground steps in front of the tires, preventing the vehicle from getting caught in its own dig trenches.
+  * **Leaf-Connected Tree Harvesting**: Automatic felling of connected leaf networks in dense forests with automatic cargo trunk collection.
+* 🌌 **Anomaly Keystone Natural Progression & Anti-Sequence-Breaking**:
+  * **Hard Crafting Locks**: Keystones #1–#5 cannot be crafted in the 3×3 Crafting Table or synthesized in the Super Computer prior to legitimate discovery.
+  * **Natural Blueprint Milestones**:
+    * **Keystone #1 (Atmospheric Anchor)**: Equip the complete 4-piece Scuba Suit and submerge underwater.
+    * **Keystone #2 (Kinetic Anchor)**: Assemble, place, and drive a Modular ATV.
+    * **Keystone #3 (Thermal Anchor)**: Forge a Fire Crystal and enter the Nether.
+    * **Keystone #4 (Metallurgical Anchor)**: Smelt or acquire Manyullyn Alloy.
+    * **Keystone #5 (Plasma Anchor)**: Acquire a Nether Star from the Wither or witness a deep Nether Solar Flare event.
+    * **Keystone #6 (Dimensional Singularity)**: Unconstrained endgame sandbox catalyst.
+* 🧱 **New Alloy Storage Blocks**:
+  * Added **Block of Tan-Ti**, **Block of Neo-Titanium** (recolored to vibrant **Neon Jade / Electric Mint Green** `#1DD1A1`), and **Block of Hafnium-Tungsten Carbide**.
+  * Full $9\text{ ingots} \leftrightarrow 1\text{ block}$ crafting/uncrafting, pickaxe mining tags, and loot tables.
+* 🌾 **Special Mod Support: Mystical Agriculture & Agradditions (*Minecraft 26.3 Only*)**:
+  * Added Tier 6 custom crop compatibility (`mysticalagradditions:6`).
+  * Mapped Tan-Ti, Neo-Titanium, Hafnium-Tungsten Carbide, and Enchanted Netherite blocks as required crux blocks beneath Tier 6 crops.
+* ⚙️ **Factory & Automation Fixes**:
+  * Resolved EMI phantom nugget-to-ingot conversions on casting tables and basins.
+  * Fixed item pipes bypassing Item Inserter filters on Digital Converters.
+  * Resolved Super Computer recursive solver edge cases.
 
 ---
 
