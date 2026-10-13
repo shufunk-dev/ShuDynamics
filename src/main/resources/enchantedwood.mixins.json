@@ -8,7 +8,8 @@
     "AttachedStemBlockMixin",
     "TopologicalSortsMixin",
     "ClampedEntityAttributeMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "CraftingMenuMixin"
   ],
   "client": [],
   "injectors": {
