@@ -10,7 +10,8 @@
     "ClampedEntityAttributeMixin",
     "ItemStackMixin",
     "NetherFortressStructureMixin",
-    "JigsawStructureMixin"
+    "JigsawStructureMixin",
+    "CraftingScreenHandlerMixin"
   ],
   "client": [],
   "injectors": {
