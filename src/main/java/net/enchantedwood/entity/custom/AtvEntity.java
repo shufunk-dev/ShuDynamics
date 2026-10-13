@@ -725,35 +725,33 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
         double dx = -Math.sin(yawRad);
         double dz = Math.cos(yawRad);
         Vec3d forwardVec = new Vec3d(dx, 0, dz).normalize();
-
-        Vec3d drillCenter = this.getEntityPos().add(forwardVec.multiply(1.3)).add(0, 0.5, 0);
-        BlockPos basePos = BlockPos.ofFloored(drillCenter);
-
         Vec3d rightVec = new Vec3d(-dz, 0, dx).normalize();
 
-        List<BlockPos> targetPositions = new ArrayList<>();
-        int y0 = (int) Math.floor(this.getY());
-        int y1 = y0 + 1;
+        int y0 = (int) Math.floor(this.getY() + 0.1);
+        Set<BlockPos> uniquePositions = new LinkedHashSet<>();
 
-        BlockPos p1 = basePos.withY(y0);
-        BlockPos p2 = basePos.withY(y1);
-        BlockPos p3 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y0);
-        BlockPos p4 = BlockPos.ofFloored(drillCenter.add(rightVec.multiply(0.55))).withY(y1);
-        BlockPos p5 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y0);
-        BlockPos p6 = BlockPos.ofFloored(drillCenter.subtract(rightVec.multiply(0.55))).withY(y1);
-
-        for (BlockPos p : List.of(p1, p2, p3, p4, p5, p6)) {
-            if (!targetPositions.contains(p)) {
-                targetPositions.add(p);
+        // True 3x3 Tunnel Bore: 3 blocks wide (-1, 0, +1), 3 blocks tall (y0, y0+1, y0+2 for rider clearance)
+        for (double fwd = 1.0; fwd <= 1.6; fwd += 0.5) {
+            for (double lat = -1.1; lat <= 1.1; lat += 0.55) {
+                Vec3d p = this.getEntityPos().add(forwardVec.multiply(fwd)).add(rightVec.multiply(lat));
+                BlockPos base = BlockPos.ofFloored(p);
+                for (int dy = 0; dy <= 2; dy++) {
+                    uniquePositions.add(base.withY(y0 + dy));
+                }
             }
         }
 
+        List<BlockPos> targetPositions = new ArrayList<>(uniquePositions);
+        targetPositions.sort(Comparator.comparingDouble(p -> p.getSquaredDistance(this.getEntityPos())));
+
         boolean drilledAny = false;
+        int blocksBroken = 0;
+        int maxPerCycle = Math.max(1, (int) Math.ceil(drillBit.getTier().getSpeedMultiplier()));
 
         for (BlockPos targetPos : targetPositions) {
             BlockState state = world.getBlockState(targetPos);
             if (state.isAir() || !state.getFluidState().isEmpty()) continue;
-            if (!drillBit.canHarvest(state)) continue;
+            if (!drillBit.canHarvest(state) || state.getHardness(world, targetPos) < 0) continue;
 
             List<ItemStack> drops = Block.getDroppedStacks(state, world, targetPos, world.getBlockEntity(targetPos), rider, drillStack);
 
@@ -784,7 +782,10 @@ public class AtvEntity extends Entity implements NamedScreenHandlerFactory, Inve
             }
 
             drilledAny = true;
-            break;
+            blocksBroken++;
+            if (blocksBroken >= maxPerCycle) {
+                break;
+            }
         }
 
         if (drilledAny) {
