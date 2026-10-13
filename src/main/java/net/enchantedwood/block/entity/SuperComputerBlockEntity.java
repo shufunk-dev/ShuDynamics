@@ -7,6 +7,7 @@ import net.enchantedwood.block.custom.MagmaCrucibleBlock;
 import net.enchantedwood.energy.EnergyProvider;
 import net.enchantedwood.energy.EnergyStorage;
 import net.enchantedwood.energy.SimpleEnergyStorage;
+import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.item.ModItems;
 import net.enchantedwood.screen.SuperComputerScreenHandler;
 import net.enchantedwood.util.ItemTransportHelper;
@@ -1374,6 +1375,41 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
         ItemStack resultStack = match.get().value().assemble(recipeInput);
         if (resultStack.isEmpty()) return;
+
+        // Enforce Anomaly Keystone progression locks (Keystones 1-5)
+        if (resultStack.is(ModBlocks.ATMOSPHERIC_ANCHOR.asItem())) {
+            if (!player.entityTags().contains("unlocked_atmospheric_anchor")) {
+                sendFeedback(player, "§c[Super Computer] 🔒 Anomaly Keystone #1 is locked! Explore ocean depths in Scuba Gear first.");
+                return;
+            }
+        } else if (resultStack.is(ModBlocks.KINETIC_ANCHOR.asItem())) {
+            boolean hasUnlockedAtv = player.entityTags().contains("unlocked_kinetic_anchor")
+                    || player.getInventory().contains(new ItemStack(ModItems.ATV_ITEM));
+            if (!hasUnlockedAtv) {
+                sendFeedback(player, "§c[Super Computer] 🔒 Anomaly Keystone #2 is locked! Build and ride an ATV first.");
+                return;
+            }
+        } else if (resultStack.is(ModBlocks.THERMAL_ANCHOR.asItem())) {
+            if (!player.entityTags().contains("unlocked_thermal_anchor")) {
+                sendFeedback(player, "§c[Super Computer] 🔒 Anomaly Keystone #3 is locked! Forge a Fire Crystal and bring it into the Nether first.");
+                return;
+            }
+        } else if (resultStack.is(ModBlocks.METALLURGICAL_ANCHOR.asItem())) {
+            boolean hasUnlockedManyullyn = player.entityTags().contains("unlocked_metallurgical_anchor")
+                    || player.getInventory().contains(new ItemStack(ModItems.MANYULLYN_INGOT));
+            if (!hasUnlockedManyullyn) {
+                sendFeedback(player, "§c[Super Computer] 🔒 Anomaly Keystone #4 is locked! Smelt Cobalt and Ardite into Manyullyn Alloy first.");
+                return;
+            }
+        } else if (resultStack.is(ModBlocks.PLASMA_ANCHOR.asItem())) {
+            boolean hasUnlockedPlasma = player.entityTags().contains("unlocked_plasma_anchor")
+                    || player.entityTags().contains("sd_anomaly_plasma")
+                    || player.getInventory().contains(new ItemStack(Items.NETHER_STAR));
+            if (!hasUnlockedPlasma) {
+                sendFeedback(player, "§c[Super Computer] 🔒 Anomaly Keystone #5 is locked! Harness energized Solar Plasma in the Nether first.");
+                return;
+            }
+        }
 
         if (!canAcceptOutput(resultStack)) {
             sendFeedback(player, "§c[Super Computer] Output buffer & digital storage are full!");
