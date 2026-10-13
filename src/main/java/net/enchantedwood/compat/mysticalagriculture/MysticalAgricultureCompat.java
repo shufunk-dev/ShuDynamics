@@ -119,13 +119,33 @@ public class MysticalAgricultureCompat {
                     null
             ));
 
-            crops.put("neodymium", createCropJson(
-                    "Neodymium",
+            crops.put("ardite", createCropJson(
+                    "Ardite",
+                    "mysticalagriculture:4",
+                    "enchantedwood:ardite_ingot",
+                    "d84315",
+                    "mysticalagriculture:block/flower_ingot",
+                    "mysticalagriculture:item/essence_ingot",
+                    null
+            ));
+
+            crops.put("titanium", createCropJson(
+                    "Titanium",
                     "mysticalagriculture:5",
-                    "enchantedwood:neodymium_magnet",
-                    "a55eea",
-                    "mysticalagriculture:block/flower_rock",
-                    "mysticalagriculture:item/essence_rock",
+                    "enchantedwood:titanium_ingot",
+                    "b0bec5",
+                    "mysticalagriculture:block/flower_ingot",
+                    "mysticalagriculture:item/essence_ingot",
+                    null
+            ));
+
+            crops.put("tungsten", createCropJson(
+                    "Tungsten",
+                    "mysticalagriculture:5",
+                    "enchantedwood:tungsten_ingot",
+                    "455a64",
+                    "mysticalagriculture:block/flower_ingot",
+                    "mysticalagriculture:item/essence_ingot",
                     null
             ));
 
