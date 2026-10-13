@@ -90,13 +90,9 @@ public class ScubaArmorItem extends Item {
                 && legs.isOf(ModItems.WETSUIT_LEGGINGS)
                 && feet.isOf(ModItems.DIVING_FLIPPERS);
 
-        // Also check if player has all 4 pieces across their inventory
-        boolean hasAllPieces = wearingFullSet || (player.getInventory().contains(new ItemStack(ModItems.DIVING_MASK))
-                && player.getInventory().contains(new ItemStack(ModItems.SCUBA_CHESTPLATE))
-                && player.getInventory().contains(new ItemStack(ModItems.WETSUIT_LEGGINGS))
-                && player.getInventory().contains(new ItemStack(ModItems.DIVING_FLIPPERS)));
+        boolean inWater = player.isSubmergedIn(FluidTags.WATER) || player.isTouchingWater();
 
-        if (hasAllPieces) {
+        if (wearingFullSet && inWater) {
             if (player.addCommandTag("unlocked_atmospheric_anchor")) {
                 world.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1.0f, 1.0f);
