@@ -11,7 +11,7 @@
     "ItemStackMixin",
     "NetherFortressStructureMixin",
     "JigsawStructureMixin",
-    "CraftingScreenHandlerMixin"
+    "CraftingMenuMixin"
   ],
   "client": [],
   "injectors": {
