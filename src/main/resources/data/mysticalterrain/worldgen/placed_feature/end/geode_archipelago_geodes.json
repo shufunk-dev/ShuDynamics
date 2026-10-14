@@ -1,0 +1,86 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "geode",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 7
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:smooth_basalt"
+          }
+        },
+        "shell": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:calcite"
+          }
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 5
+            },
+            {
+              "data": {
+                "Name": "minecraft:budding_amethyst"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 40
+        },
+        "max_inclusive": {
+          "absolute": 100
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

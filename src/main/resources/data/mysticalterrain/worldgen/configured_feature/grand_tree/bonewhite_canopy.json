@@ -1,0 +1,94 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 65,
+      "max_inclusive": 82
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.91,
+      "max_exclusive": 4.78
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18.3,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.21,
+    "gnarl": 0.31,
+    "density": 0.83,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stripped_pale_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "cover": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_moss_carpet",
+          "Properties": {
+            "bottom": "true",
+            "east": "none",
+            "north": "none",
+            "south": "none",
+            "west": "none"
+          }
+        }
+      },
+      "hanging_chance": 0.35,
+      "cover_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 14
+      }
+    },
+    "growth": {
+      "lobes": 5,
+      "spread": 0.4,
+      "flat": 0.9,
+      "tiers": 0.6,
+      "lopside": 0.41,
+      "bends": 0.82,
+      "swing": 0.12,
+      "split": 0.7,
+      "sprout": 0.73,
+      "tropism": -0.02,
+      "twig": 1.37,
+      "drip": 0.47,
+      "hollow": 0.35,
+      "buttress": 0.6,
+      "jitter": 0.11,
+      "forks": 1
+    }
+  }
+}

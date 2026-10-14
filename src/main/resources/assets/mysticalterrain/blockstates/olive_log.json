@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "mysticalterrain:block/olive_log_x"
+    },
+    "axis=y": {
+      "model": "mysticalterrain:block/olive_log_y"
+    },
+    "axis=z": {
+      "model": "mysticalterrain:block/olive_log_z"
+    }
+  }
+}

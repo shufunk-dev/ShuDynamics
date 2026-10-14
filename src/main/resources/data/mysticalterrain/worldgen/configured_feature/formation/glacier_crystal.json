@@ -1,0 +1,98 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "spires",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 75
+    },
+    "count": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_inclusive": 7
+    },
+    "lean": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.4,
+      "max_exclusive": 0.8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:snow_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:packed_ice"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:packed_ice"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_ice"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_stained_glass"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:blue_ice"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "tip": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:light_blue_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:white_stained_glass"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_ice"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

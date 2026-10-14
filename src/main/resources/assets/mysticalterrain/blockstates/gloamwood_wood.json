@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "mysticalterrain:block/gloamwood_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "mysticalterrain:block/gloamwood_wood"
+    },
+    "axis=z": {
+      "model": "mysticalterrain:block/gloamwood_wood",
+      "x": 90
+    }
+  }
+}

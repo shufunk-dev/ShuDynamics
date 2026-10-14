@@ -1,0 +1,123 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "spires",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 10
+      },
+      "lean": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 0.6,
+        "max_exclusive": 1.2
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:calcite"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:smooth_basalt"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 2
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 6
+            },
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 2
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:amethyst_block"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:pearlescent_froglight",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:magenta_stained_glass"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 45
+        },
+        "max_inclusive": {
+          "absolute": 100
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

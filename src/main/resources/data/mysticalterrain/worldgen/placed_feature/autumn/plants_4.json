@@ -1,0 +1,231 @@
+{
+  "feature": {
+    "type": "minecraft:random_patch",
+    "config": {
+      "tries": 32,
+      "xz_spread": 7,
+      "y_spread": 3,
+      "feature": {
+        "feature": {
+          "type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:weighted_state_provider",
+              "entries": [
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "north",
+                      "segment_amount": "1"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "east",
+                      "segment_amount": "1"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "south",
+                      "segment_amount": "1"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "west",
+                      "segment_amount": "1"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "north",
+                      "segment_amount": "2"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "east",
+                      "segment_amount": "2"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "south",
+                      "segment_amount": "2"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "west",
+                      "segment_amount": "2"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "north",
+                      "segment_amount": "3"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "east",
+                      "segment_amount": "3"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "south",
+                      "segment_amount": "3"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "west",
+                      "segment_amount": "3"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "north",
+                      "segment_amount": "4"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "east",
+                      "segment_amount": "4"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "south",
+                      "segment_amount": "4"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:leaf_litter",
+                    "Properties": {
+                      "facing": "west",
+                      "segment_amount": "4"
+                    }
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:bush"
+                  },
+                  "weight": 8
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:fern"
+                  },
+                  "weight": 4
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:short_grass"
+                  },
+                  "weight": 8
+                },
+                {
+                  "data": {
+                    "Name": "mysticalterrain:autumn_fern"
+                  },
+                  "weight": 8
+                }
+              ]
+            }
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+              "type": "minecraft:matching_blocks",
+              "blocks": "minecraft:air"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mysticalterrain:item/magma_brute_spawn_egg"
+  }
+}

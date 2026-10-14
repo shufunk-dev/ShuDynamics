@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:badlands",
+    "minecraft:eroded_badlands",
+    "minecraft:wooded_badlands",
+    "mysticalterrain:badlands_scrub",
+    "mysticalterrain:dense_wooded_acacia_badlands",
+    "mysticalterrain:dense_wooded_autumn_badlands",
+    "mysticalterrain:dense_wooded_badlands",
+    "mysticalterrain:dense_wooded_dry_badlands",
+    "mysticalterrain:dense_wooded_rocky_badlands",
+    "mysticalterrain:ember_wastes",
+    "mysticalterrain:gravelly_badlands",
+    "mysticalterrain:rocky_badlands",
+    "mysticalterrain:rocky_eroded_badlands",
+    "mysticalterrain:sandy_badlands",
+    "mysticalterrain:sandy_eroded_badlands",
+    "mysticalterrain:sparse_wooded_acacia_badlands",
+    "mysticalterrain:sparse_wooded_badlands",
+    "mysticalterrain:sparse_wooded_shrubby_badlands",
+    "mysticalterrain:windswept_badlands",
+    "mysticalterrain:wooded_acacia_badlands",
+    "mysticalterrain:wooded_autumn_badlands",
+    "mysticalterrain:wooded_dry_badlands",
+    "mysticalterrain:wooded_rocky_badlands",
+    "mysticalterrain:wooded_shrubby_badlands"
+  ]
+}

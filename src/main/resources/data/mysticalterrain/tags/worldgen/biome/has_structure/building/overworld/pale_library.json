@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:pale_garden",
+    "mysticalterrain:dense_mossy_pale_garden",
+    "mysticalterrain:dense_pale_garden",
+    "mysticalterrain:dense_snowy_pale_garden",
+    "mysticalterrain:flowering_pale_garden",
+    "mysticalterrain:mossy_pale_garden",
+    "mysticalterrain:old_growth_pale_garden",
+    "mysticalterrain:pale_marsh",
+    "mysticalterrain:rocky_pale_garden",
+    "mysticalterrain:snowy_old_growth_pale_garden",
+    "mysticalterrain:snowy_pale_garden",
+    "mysticalterrain:sparse_flowering_pale_garden",
+    "mysticalterrain:sparse_pale_garden"
+  ]
+}

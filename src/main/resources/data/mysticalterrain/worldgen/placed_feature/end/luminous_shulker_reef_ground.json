@@ -1,0 +1,70 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:luminous_shulker_reef",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:purpur_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:ochre_froglight",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pearlescent_froglight",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:verdant_froglight",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.72
+    }
+  },
+  "placement": []
+}

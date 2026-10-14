@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/mycelial_maul"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.72,
+        -0.83,
+        2.36
+      ],
+      "scale": [
+        0.588,
+        0.588,
+        0.588
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.79,
+        -2.51,
+        -16.59
+      ],
+      "scale": [
+        0.498,
+        0.498,
+        0.498
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.82,
+        -4.74,
+        0
+      ],
+      "scale": [
+        0.399,
+        0.399,
+        0.399
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.26666666666666666,
+        0.26666666666666666,
+        0.26666666666666666
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.82,
+        -4.74,
+        0
+      ],
+      "scale": [
+        0.399,
+        0.399,
+        0.399
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.82,
+        -4.74,
+        0
+      ],
+      "scale": [
+        0.399,
+        0.399,
+        0.399
+      ]
+    }
+  }
+}

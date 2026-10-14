@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:chanterelle_grove",
+    "mysticalterrain:crimson_mycowood",
+    "mysticalterrain:fairy_ring_fields",
+    "mysticalterrain:frostcap_taiga",
+    "mysticalterrain:ghostcap_garden",
+    "mysticalterrain:lichen_steppe",
+    "mysticalterrain:morel_taiga",
+    "mysticalterrain:mycelium_flats",
+    "mysticalterrain:mycojungle",
+    "mysticalterrain:pinkcap_glade",
+    "mysticalterrain:puffball_meadow",
+    "mysticalterrain:spore_marsh",
+    "mysticalterrain:sporecap_isles",
+    "mysticalterrain:sporewind_forest",
+    "mysticalterrain:stinkhorn_thicket",
+    "mysticalterrain:toadstool_forest",
+    "mysticalterrain:truffle_woods",
+    "mysticalterrain:warped_mycowood"
+  ]
+}

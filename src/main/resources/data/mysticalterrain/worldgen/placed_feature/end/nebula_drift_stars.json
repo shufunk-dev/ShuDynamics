@@ -1,0 +1,129 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "star",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      },
+      "materials": {
+        "light": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:sea_lantern"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:glowstone"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:pearlescent_froglight",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 2
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:magenta_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:light_blue_stained_glass"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:air"
+              },
+              "weight": 3
+            }
+          ]
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:light_blue_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "accent": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:purpur_block"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 40
+        },
+        "max_inclusive": {
+          "absolute": 110
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 33,
+      "max_inclusive": 42
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.05,
+      "max_exclusive": 2.51
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.2,
+      "max_exclusive": 12.6
+    },
+    "lean": 0.39,
+    "gnarl": 0.31,
+    "density": 0.83,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cave_vines",
+          "Properties": {
+            "age": "0",
+            "berries": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.15,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 8
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.76,
+      "flat": 0.17,
+      "tiers": 0.22,
+      "lopside": 0.41,
+      "bends": 0.81,
+      "swing": 0.32,
+      "split": 0.47,
+      "sprout": 0.64,
+      "tropism": 0.4,
+      "twig": 1.38,
+      "drip": 0.8,
+      "hollow": 0.58,
+      "buttress": 0.5,
+      "jitter": 0.42,
+      "forks": 2
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "shrine",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 9
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:purpur_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone_bricks"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_pillar",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:amethyst_block"
+        }
+      },
+      "tip": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:purple_stained_glass"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:magenta_stained_glass"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:amethyst_block"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      }
+    },
+    "loot": "minecraft:chests/end_city_treasure"
+  }
+}

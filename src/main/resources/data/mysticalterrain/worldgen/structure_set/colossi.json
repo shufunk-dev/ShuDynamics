@@ -1,0 +1,118 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:arcane_nexus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:autumn_king",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:bayou_queen",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:burning_throne",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:desert_oracle",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:drowned_queen",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:eternal_sakura",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:fae_queen",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:first_tree",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:gloom_titan",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:grandfather_spruce",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:ice_crown",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:jungle_throne",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:mountain_pine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:mycelium_crown",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:night_warden",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:oak_of_ages",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:old_guardian",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:pale_sovereign",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:paradise_titan",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:savanna_throne",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:sky_liana",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:spore_titan",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:sprawling_oak",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:white_matriarch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:winter_titan",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:wishing_titan",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 18,
+    "separation": 6,
+    "salt": 27723777
+  }
+}

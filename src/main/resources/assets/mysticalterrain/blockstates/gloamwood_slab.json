@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/gloamwood_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/gloamwood_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/gloamwood_slab_top"
+    }
+  }
+}

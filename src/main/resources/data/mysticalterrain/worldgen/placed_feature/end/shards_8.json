@@ -1,0 +1,100 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "shards",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 14
+      },
+      "girth": 1.2,
+      "sides": 4,
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:oxidized_copper"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:weathered_copper"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:oxidized_cut_copper"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:weathered_cut_copper"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:oxidized_copper"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:copper_bulb",
+            "Properties": {
+              "lit": "false",
+              "powered": "false"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:lightning_rod",
+            "Properties": {
+              "facing": "up",
+              "powered": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        "accent": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:exposed_copper"
+          }
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

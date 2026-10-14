@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "mysticalterrain:starstone",
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:starstone_bricks"
+  }
+}

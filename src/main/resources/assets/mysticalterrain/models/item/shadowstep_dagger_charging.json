@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/shadowstep_dagger"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.62,
+        -0.83,
+        2.6
+      ],
+      "scale": [
+        0.71,
+        0.71,
+        0.71
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.78,
+        -2.52,
+        -16.57
+      ],
+      "scale": [
+        0.591,
+        0.591,
+        0.591
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -2.94,
+        -3.78,
+        0
+      ],
+      "scale": [
+        0.7459,
+        0.7459,
+        0.7459
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        2.94,
+        -3.78,
+        0
+      ],
+      "scale": [
+        0.7459,
+        0.7459,
+        0.7459
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        2.94,
+        -3.78,
+        0
+      ],
+      "scale": [
+        0.7459,
+        0.7459,
+        0.7459
+      ]
+    }
+  }
+}

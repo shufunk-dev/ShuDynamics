@@ -1,0 +1,44 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:shattered_rim",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 6
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:calcite"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.5
+    }
+  },
+  "placement": []
+}

@@ -1,0 +1,93 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "blossom",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 22,
+        "max_inclusive": 32
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.8,
+        "max_exclusive": 2.6
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 13.0,
+        "max_exclusive": 17.0
+      },
+      "reach": 21,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "mysticalterrain:silverbark_wood",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "mysticalterrain:silverbark_leaves",
+                "Properties": {
+                  "distance": "7",
+                  "persistent": "false",
+                  "waterlogged": "false"
+                }
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "mysticalterrain:wisteria_blossoms",
+                "Properties": {
+                  "distance": "7",
+                  "persistent": "false",
+                  "waterlogged": "false"
+                }
+              },
+              "weight": 3
+            }
+          ]
+        },
+        "hanging": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:pale_hanging_moss",
+            "Properties": {
+              "tip": "true"
+            }
+          }
+        },
+        "hanging_chance": 0.15,
+        "hanging_length": {
+          "type": "minecraft:uniform",
+          "min_inclusive": 2,
+          "max_inclusive": 5
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

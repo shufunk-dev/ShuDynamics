@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:barrow_hills",
+    "mysticalterrain:dusk_plains",
+    "mysticalterrain:duskwood",
+    "mysticalterrain:ghostbirch_forest",
+    "mysticalterrain:gloamwood",
+    "mysticalterrain:gloom_marsh",
+    "mysticalterrain:hollow_garden",
+    "mysticalterrain:nightshade_meadow",
+    "mysticalterrain:violet_hollow",
+    "mysticalterrain:wraithbirch_wood"
+  ]
+}

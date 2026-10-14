@@ -1,0 +1,100 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 31,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.62,
+      "max_exclusive": 3.2
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.8,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.27,
+    "gnarl": 0.63,
+    "density": 0.84,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:jungle_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:mango_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:jungle_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.15,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 8
+      }
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.8,
+      "flat": 0.81,
+      "tiers": 0.36,
+      "lopside": 0.59,
+      "bends": 1.06,
+      "swing": 0.3,
+      "split": 0.48,
+      "sprout": 0.71,
+      "tropism": -0.07,
+      "twig": 1.26,
+      "drip": 1.0,
+      "hollow": 0.21,
+      "buttress": 0.06,
+      "jitter": 0.26,
+      "forks": 2
+    }
+  }
+}

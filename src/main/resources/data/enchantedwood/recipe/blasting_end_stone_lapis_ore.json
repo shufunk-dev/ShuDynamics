@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "end_ore_blasting",
+  "ingredient": "enchantedwood:end_stone_lapis_ore",
+  "result": {
+    "id": "minecraft:lapis_lazuli",
+    "count": 1
+  }
+}

@@ -139,6 +139,15 @@
     "enchantedwood:harmonic_record_press",
     "enchantedwood:water_pump",
     "enchantedwood:cryo_freezer",
-    "enchantedwood:water_pipe"
+    "enchantedwood:water_pipe",
+    "enchantedwood:end_stone_coal_ore",
+    "enchantedwood:end_stone_iron_ore",
+    "enchantedwood:end_stone_gold_ore",
+    "enchantedwood:end_stone_redstone_ore",
+    "enchantedwood:end_stone_lapis_ore",
+    "enchantedwood:end_stone_diamond_ore",
+    "enchantedwood:void_crystal_ore",
+    "enchantedwood:astral_shard_ore",
+    "enchantedwood:resonant_gem_ore"
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:building",
+  "biomes": "#mysticalterrain:has_structure/building/nether/red_nether_brick_library",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "building": "mysticalterrain:building/nether/red_nether_brick_library"
+}

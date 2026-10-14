@@ -1,0 +1,71 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "monoliths",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_inclusive": 11
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:stone_bricks"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:mossy_stone_bricks"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobblestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:andesite"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stone"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mossy_cobblestone"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stone"
+        }
+      }
+    }
+  }
+}

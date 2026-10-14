@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:silverbark_log",
+    "mysticalterrain:silverbark_wood",
+    "mysticalterrain:stripped_silverbark_log",
+    "mysticalterrain:stripped_silverbark_wood"
+  ]
+}

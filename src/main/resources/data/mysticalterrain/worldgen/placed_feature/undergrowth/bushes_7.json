@@ -1,0 +1,212 @@
+{
+  "feature": {
+    "type": "minecraft:random_selector",
+    "config": {
+      "features": [
+        {
+          "chance": 0.6,
+          "feature": {
+            "feature": {
+              "type": "minecraft:tree",
+              "config": {
+                "decorators": [],
+                "dirt_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:dirt"
+                  }
+                },
+                "force_dirt": false,
+                "ignore_vines": true,
+                "foliage_placer": {
+                  "type": "minecraft:bush_foliage_placer",
+                  "height": 2,
+                  "offset": 1,
+                  "radius": 1
+                },
+                "foliage_provider": {
+                  "type": "minecraft:weighted_state_provider",
+                  "entries": [
+                    {
+                      "data": {
+                        "Name": "mysticalterrain:maple_leaves",
+                        "Properties": {
+                          "distance": "7",
+                          "persistent": "false",
+                          "waterlogged": "false"
+                        }
+                      },
+                      "weight": 3
+                    },
+                    {
+                      "data": {
+                        "Name": "mysticalterrain:golden_maple_leaves",
+                        "Properties": {
+                          "distance": "7",
+                          "persistent": "false",
+                          "waterlogged": "false"
+                        }
+                      },
+                      "weight": 1
+                    }
+                  ]
+                },
+                "minimum_size": {
+                  "type": "minecraft:two_layers_feature_size",
+                  "limit": 0,
+                  "lower_size": 0,
+                  "upper_size": 0
+                },
+                "trunk_placer": {
+                  "type": "minecraft:straight_trunk_placer",
+                  "base_height": 1,
+                  "height_rand_a": 0,
+                  "height_rand_b": 0
+                },
+                "trunk_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "mysticalterrain:maple_log",
+                    "Properties": {
+                      "axis": "y"
+                    }
+                  }
+                }
+              }
+            },
+            "placement": [
+              {
+                "type": "minecraft:block_predicate_filter",
+                "predicate": {
+                  "type": "minecraft:would_survive",
+                  "state": {
+                    "Name": "minecraft:oak_sapling",
+                    "Properties": {
+                      "stage": "0"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "default": {
+        "feature": {
+          "type": "minecraft:tree",
+          "config": {
+            "decorators": [],
+            "dirt_provider": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:dirt"
+              }
+            },
+            "force_dirt": false,
+            "ignore_vines": true,
+            "foliage_placer": {
+              "type": "minecraft:bush_foliage_placer",
+              "height": 2,
+              "offset": 1,
+              "radius": 2
+            },
+            "foliage_provider": {
+              "type": "minecraft:weighted_state_provider",
+              "entries": [
+                {
+                  "data": {
+                    "Name": "mysticalterrain:maple_leaves",
+                    "Properties": {
+                      "distance": "7",
+                      "persistent": "false",
+                      "waterlogged": "false"
+                    }
+                  },
+                  "weight": 3
+                },
+                {
+                  "data": {
+                    "Name": "mysticalterrain:golden_maple_leaves",
+                    "Properties": {
+                      "distance": "7",
+                      "persistent": "false",
+                      "waterlogged": "false"
+                    }
+                  },
+                  "weight": 1
+                }
+              ]
+            },
+            "minimum_size": {
+              "type": "minecraft:two_layers_feature_size",
+              "limit": 0,
+              "lower_size": 0,
+              "upper_size": 0
+            },
+            "trunk_placer": {
+              "type": "minecraft:straight_trunk_placer",
+              "base_height": 1,
+              "height_rand_a": 0,
+              "height_rand_b": 0
+            },
+            "trunk_provider": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "mysticalterrain:maple_log",
+                "Properties": {
+                  "axis": "y"
+                }
+              }
+            }
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+              "type": "minecraft:would_survive",
+              "state": {
+                "Name": "minecraft:oak_sapling",
+                "Properties": {
+                  "stage": "0"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "minecraft:oak_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -49,6 +49,26 @@ public class ModItems {
     public static final Item RESIN = registerItem("resin", Item::new);
     public static final Item RUBBER = registerItem("rubber", Item::new);
 
+    // End Biome Materials & Celestial Crystals
+    public static final Item VOID_CRYSTAL = registerItem("void_crystal", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.RARE),
+            Text.literal("§5Void Crystal"),
+            Text.literal("§7A dark, pulsating crystalline mineral mined from End biomes."),
+            Text.literal("§8Resonates with null energy and dimensional gravity.")
+    ));
+    public static final Item ASTRAL_SHARD = registerItem("astral_shard", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.UNCOMMON),
+            Text.literal("§bAstral Shard"),
+            Text.literal("§7Luminous starlight fragment embedded within End Stone."),
+            Text.literal("§8Glows with celestial luminescence.")
+    ));
+    public static final Item RESONANT_GEM = registerItem("resonant_gem", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.RARE),
+            Text.literal("§6Resonant Gem"),
+            Text.literal("§7An amber-gold gem that hums at harmonic frequencies."),
+            Text.literal("§8Used for high-tier Convergence acoustic crafting.")
+    ));
+
     // Agriculture & Crops
     public static final Item CORN = registerItem("corn", settings -> new net.enchantedwood.item.custom.TooltipItem(
             settings.food(new FoodComponent.Builder().nutrition(3).saturationModifier(0.6f).build()),
@@ -1742,6 +1762,18 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.DEEPSLATE_TIN_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.RAW_TIN_BLOCK);
                 entries.add(net.enchantedwood.block.ModBlocks.TIN_BLOCK);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_COAL_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_IRON_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_GOLD_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_REDSTONE_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_LAPIS_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.END_STONE_DIAMOND_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.VOID_CRYSTAL_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.ASTRAL_SHARD_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.RESONANT_GEM_ORE);
+                entries.add(VOID_CRYSTAL);
+                entries.add(ASTRAL_SHARD);
+                entries.add(RESONANT_GEM);
                 entries.add(TIN_INGOT);
                 entries.add(TIN_NUGGET);
                 entries.add(BRONZE_INGOT);

@@ -1,0 +1,53 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "crater",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12,
+      "max_inclusive": 20
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 2
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 31,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.63,
+      "max_exclusive": 3.21
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.0,
+      "max_exclusive": 13.5
+    },
+    "lean": 0.19,
+    "gnarl": 0.33,
+    "density": 0.78,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:silverbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:wisteria_blossoms",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:silverbark_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.51,
+      "flat": 0.08,
+      "tiers": 0.41,
+      "lopside": 0.7,
+      "bends": 0.45,
+      "swing": 0.17,
+      "split": 0.36,
+      "sprout": 0.7,
+      "tropism": 0.45,
+      "twig": 1.33,
+      "drip": 1.3,
+      "hollow": 0.28,
+      "buttress": 0.27,
+      "jitter": 0.27,
+      "forks": 1
+    }
+  }
+}

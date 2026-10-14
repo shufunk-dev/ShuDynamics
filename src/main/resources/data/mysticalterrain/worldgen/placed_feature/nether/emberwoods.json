@@ -1,0 +1,94 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "elder",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 18,
+        "max_inclusive": 28
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.8,
+        "max_exclusive": 2.6
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 10.0,
+        "max_exclusive": 13.0
+      },
+      "veins": 4,
+      "reach": 14,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crimson_hyphae",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:nether_wart_block"
+              },
+              "weight": 6
+            },
+            {
+              "data": {
+                "Name": "minecraft:shroomlight"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "vein": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:magma_block"
+          }
+        },
+        "hanging": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:weeping_vines",
+            "Properties": {
+              "age": "0"
+            }
+          }
+        },
+        "cover": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crimson_roots"
+          }
+        },
+        "hanging_chance": 0.25,
+        "cover_chance": 0.15,
+        "hanging_length": {
+          "type": "minecraft:uniform",
+          "min_inclusive": 2,
+          "max_inclusive": 6
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

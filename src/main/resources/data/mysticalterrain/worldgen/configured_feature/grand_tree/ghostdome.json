@@ -1,0 +1,80 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 29,
+      "max_inclusive": 36
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.51,
+      "max_exclusive": 3.07
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.0,
+      "max_exclusive": 12.4
+    },
+    "lean": 0.4,
+    "gnarl": 0.38,
+    "density": 0.94,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 10
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.92,
+      "flat": 0.52,
+      "tiers": 0.53,
+      "lopside": 0.08,
+      "bends": 0.04,
+      "swing": 0.34,
+      "split": 0.55,
+      "sprout": 0.65,
+      "tropism": 0.03,
+      "twig": 0.88,
+      "drip": 0.72,
+      "hollow": 0.76,
+      "buttress": 0.34,
+      "jitter": 0.24,
+      "forks": 2
+    }
+  }
+}

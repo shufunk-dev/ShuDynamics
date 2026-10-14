@@ -1,0 +1,75 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "island",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 6
+      },
+      "materials": {
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:obsidian"
+          }
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:crying_obsidian"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crying_obsidian"
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crying_obsidian"
+          }
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 45
+        },
+        "max_inclusive": {
+          "absolute": 105
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:starfall_craters",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobbled_deepslate"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.4
+    }
+  },
+  "placement": []
+}

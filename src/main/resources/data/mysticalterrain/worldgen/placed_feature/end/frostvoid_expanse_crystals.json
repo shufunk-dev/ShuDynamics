@@ -1,0 +1,111 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "spires",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 18
+      },
+      "lean": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 0.3,
+        "max_exclusive": 0.7
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:snow_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:packed_ice"
+              },
+              "weight": 3
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:packed_ice"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:blue_ice"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:light_blue_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:blue_ice"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:sea_lantern"
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:light_blue_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:blue_ice"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

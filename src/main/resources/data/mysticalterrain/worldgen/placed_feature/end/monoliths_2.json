@@ -1,0 +1,83 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "monoliths",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7,
+        "max_inclusive": 11
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:obsidian"
+          }
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:crying_obsidian"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crying_obsidian"
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crying_obsidian"
+          }
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 12
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

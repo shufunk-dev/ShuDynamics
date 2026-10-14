@@ -1,0 +1,80 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 62,
+      "max_inclusive": 78
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.28,
+      "max_exclusive": 2.78
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18.0,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.37,
+    "gnarl": 0.52,
+    "density": 0.82,
+    "reach": 21,
+    "aquatic": true,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mangrove_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mangrove_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mangrove_propagule",
+          "Properties": {
+            "age": "4",
+            "hanging": "true",
+            "stage": "0",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.05,
+      "hanging_length": 1
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.63,
+      "flat": 0.51,
+      "tiers": 0.98,
+      "lopside": 0.06,
+      "bends": 1.58,
+      "swing": 0.46,
+      "split": 0.37,
+      "sprout": 0.28,
+      "tropism": -0.21,
+      "twig": 1.37,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.27,
+      "jitter": 0.28,
+      "forks": 1
+    }
+  }
+}

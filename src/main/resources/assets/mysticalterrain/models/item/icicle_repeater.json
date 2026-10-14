@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/icicle_repeater"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -7.98,
+        0.56,
+        -3.96
+      ],
+      "translation": [
+        -0.09,
+        -2.35,
+        1.69
+      ],
+      "scale": [
+        0.684,
+        0.684,
+        0.684
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -80,
+        -8,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        -2
+      ],
+      "scale": [
+        0.622,
+        0.622,
+        0.622
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.7,
+        -4.3,
+        0
+      ],
+      "scale": [
+        0.6135,
+        0.6135,
+        0.6135
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.7,
+        -4.3,
+        0
+      ],
+      "scale": [
+        0.6135,
+        0.6135,
+        0.6135
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.7,
+        -4.3,
+        0
+      ],
+      "scale": [
+        0.6135,
+        0.6135,
+        0.6135
+      ]
+    }
+  }
+}

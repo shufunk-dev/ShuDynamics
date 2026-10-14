@@ -1,0 +1,79 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 29,
+      "max_inclusive": 37
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.41,
+      "max_exclusive": 2.95
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10.7,
+      "max_exclusive": 12.0
+    },
+    "lean": 0.2,
+    "gnarl": 0.63,
+    "density": 0.84,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:olive_wood",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:stripped_olive_wood",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:olive_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.62,
+      "flat": 0.13,
+      "tiers": 0.41,
+      "lopside": 0.53,
+      "bends": 0.36,
+      "swing": 0.21,
+      "split": 0.41,
+      "sprout": 0.61,
+      "tropism": 0.02,
+      "twig": 0.99,
+      "drip": 0.5,
+      "hollow": 0.29,
+      "buttress": 0.43,
+      "jitter": 0.46,
+      "forks": 2
+    }
+  }
+}

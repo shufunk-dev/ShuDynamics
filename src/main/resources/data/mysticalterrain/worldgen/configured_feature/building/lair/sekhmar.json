@@ -1,0 +1,79 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_pyramid",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sandstone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:smooth_sandstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:chiseled_sandstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "wall": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:sandrock_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cut_sandstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:gold_block"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:blue_terracotta"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:soul_lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sekhmar_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_sekhmar",
+    "treasure": "mysticalterrain:chests/lair_sekhmar"
+  }
+}

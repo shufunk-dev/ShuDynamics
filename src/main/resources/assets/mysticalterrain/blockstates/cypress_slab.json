@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/cypress_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/cypress_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/cypress_slab_top"
+    }
+  }
+}

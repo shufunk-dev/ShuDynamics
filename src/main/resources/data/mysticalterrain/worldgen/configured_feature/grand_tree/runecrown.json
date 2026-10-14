@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 57,
+      "max_inclusive": 72
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.72,
+      "max_exclusive": 4.55
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 17.8,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.36,
+    "gnarl": 0.65,
+    "density": 0.85,
+    "veins": 5,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_pillar",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starbark_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      }
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.47,
+      "flat": 0.33,
+      "tiers": 0.71,
+      "lopside": 0.46,
+      "bends": 1.38,
+      "swing": 0.35,
+      "split": 0.69,
+      "sprout": 0.67,
+      "tropism": -0.0,
+      "twig": 1.31,
+      "drip": 0.63,
+      "hollow": 0.58,
+      "buttress": 0.33,
+      "jitter": 0.22,
+      "forks": 1
+    }
+  }
+}

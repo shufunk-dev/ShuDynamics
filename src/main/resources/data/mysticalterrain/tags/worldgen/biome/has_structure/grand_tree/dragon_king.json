@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:butte_country",
+    "mysticalterrain:dust_devil_crags",
+    "mysticalterrain:juniper_mesa",
+    "mysticalterrain:sagebrush_meadow",
+    "mysticalterrain:thornbush_steppe"
+  ]
+}

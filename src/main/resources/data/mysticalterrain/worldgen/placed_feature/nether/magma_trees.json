@@ -1,0 +1,63 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "spiral",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 14,
+        "max_inclusive": 22
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.4,
+        "max_exclusive": 2.0
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7.0,
+        "max_exclusive": 10.0
+      },
+      "shape": 0.5,
+      "reach": 12,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:magma_block"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:shroomlight"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

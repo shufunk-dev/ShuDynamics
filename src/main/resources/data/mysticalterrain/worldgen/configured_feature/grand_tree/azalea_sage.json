@@ -1,0 +1,88 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 35,
+      "max_inclusive": 45
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.75,
+      "max_exclusive": 2.14
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.9,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.05,
+    "gnarl": 0.39,
+    "density": 0.82,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:moss_carpet"
+        }
+      },
+      "cover_chance": 0.3
+    },
+    "growth": {
+      "lobes": 8,
+      "spread": 0.99,
+      "flat": 0.31,
+      "tiers": 0.05,
+      "lopside": 0.43,
+      "bends": 0.51,
+      "swing": 0.84,
+      "split": 0.41,
+      "sprout": 0.51,
+      "tropism": -0.29,
+      "twig": 0.93,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.06,
+      "jitter": 0.23,
+      "forks": 2
+    }
+  }
+}

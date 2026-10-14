@@ -1,0 +1,62 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "snag",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 12,
+        "max_inclusive": 20
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.2,
+        "max_exclusive": 1.8
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5.0,
+        "max_exclusive": 8.0
+      },
+      "reach": 10,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:bone_block",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:basalt",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

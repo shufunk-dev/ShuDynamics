@@ -1,0 +1,55 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "spiral",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 34,
+      "max_inclusive": 50
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.0,
+      "max_exclusive": 2.8
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 13.0,
+      "max_exclusive": 17.0
+    },
+    "shape": 0.6,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_pillar",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starbark_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit_chance": 0.01
+    }
+  }
+}

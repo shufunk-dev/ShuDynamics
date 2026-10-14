@@ -694,6 +694,102 @@ public class ModBlocks {
                     .requiresTool()
                     .luminance(state -> 4)));
 
+    // End Stone Ore Variants & Celestial Minerals
+    public static final Block END_STONE_COAL_ORE = registerBlockWithTooltip("end_stone_coal_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_coal_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(9.0f)
+                    .requiresTool()),
+            Text.literal("§7End Stone Coal Ore"),
+            Text.literal("§8Dense carbon deposits trapped inside celestial End Stone."));
+
+    public static final Block END_STONE_IRON_ORE = registerBlockWithTooltip("end_stone_iron_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_iron_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(9.0f)
+                    .requiresTool()),
+            Text.literal("§fEnd Stone Iron Ore"),
+            Text.literal("§8Metallic veins interwoven through celestial End Stone."));
+
+    public static final Block END_STONE_GOLD_ORE = registerBlockWithTooltip("end_stone_gold_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_gold_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(9.0f)
+                    .requiresTool()),
+            Text.literal("§6End Stone Gold Ore"),
+            Text.literal("§8Gleaming auric veins set within celestial End Stone."));
+
+    public static final Block END_STONE_REDSTONE_ORE = registerBlockWithTooltip("end_stone_redstone_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_redstone_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(9.0f)
+                    .requiresTool()
+                    .luminance(state -> 9)),
+            Text.literal("§cEnd Stone Redstone Ore"),
+            Text.literal("§8Electrically charged crystals pulsing within End Stone."));
+
+    public static final Block END_STONE_LAPIS_ORE = registerBlockWithTooltip("end_stone_lapis_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_lapis_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(3.0f)
+                    .resistance(9.0f)
+                    .requiresTool()),
+            Text.literal("§9End Stone Lapis Lazuli Ore"),
+            Text.literal("§8Deep blue mystical pigments embedded in celestial End Stone."));
+
+    public static final Block END_STONE_DIAMOND_ORE = registerBlockWithTooltip("end_stone_diamond_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "end_stone_diamond_ore")))
+                    .sounds(BlockSoundGroup.STONE)
+                    .hardness(4.5f)
+                    .resistance(9.0f)
+                    .requiresTool()),
+            Text.literal("§bEnd Stone Diamond Ore"),
+            Text.literal("§8Pressurized gemstone crystals embedded in celestial stone."));
+
+    public static final Block VOID_CRYSTAL_ORE = registerBlockWithTooltip("void_crystal_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "void_crystal_ore")))
+                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
+                    .hardness(4.5f)
+                    .resistance(9.0f)
+                    .requiresTool()
+                    .luminance(state -> 5)),
+            Text.literal("§5Void Crystal Ore"),
+            Text.literal("§7Rare dark crystals resonating with dimensional void energy."));
+
+    public static final Block ASTRAL_SHARD_ORE = registerBlockWithTooltip("astral_shard_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "astral_shard_ore")))
+                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
+                    .hardness(3.5f)
+                    .resistance(9.0f)
+                    .requiresTool()
+                    .luminance(state -> 7)),
+            Text.literal("§bAstral Shard Ore"),
+            Text.literal("§7Starlight-infused mineral shards that shimmer with celestial light."));
+
+    public static final Block RESONANT_GEM_ORE = registerBlockWithTooltip("resonant_gem_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "resonant_gem_ore")))
+                    .sounds(BlockSoundGroup.AMETHYST_BLOCK)
+                    .hardness(4.5f)
+                    .resistance(9.0f)
+                    .requiresTool()
+                    .luminance(state -> 8)),
+            Text.literal("§6Resonant Gem Ore"),
+            Text.literal("§7Harmonic amber crystals that hum with acoustic resonance."));
+
+
     // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
     public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",
             new Block(AbstractBlock.Settings.create()

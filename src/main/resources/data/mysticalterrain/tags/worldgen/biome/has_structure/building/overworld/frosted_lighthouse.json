@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:snowy_beach",
+    "mysticalterrain:icy_beach",
+    "mysticalterrain:rocky_snowy_beach",
+    "mysticalterrain:snowy_pebble_beach"
+  ]
+}

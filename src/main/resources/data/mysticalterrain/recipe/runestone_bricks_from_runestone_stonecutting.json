@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "mysticalterrain:runestone",
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:runestone_bricks"
+  }
+}

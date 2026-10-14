@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BAB",
+    "AMA",
+    "BAB"
+  ],
+  "key": {
+    "B": "minecraft:blaze_powder",
+    "A": "mysticalterrain:ashstone",
+    "M": "minecraft:magma_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:cinder_heart"
+  }
+}

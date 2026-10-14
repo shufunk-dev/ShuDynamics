@@ -1,0 +1,71 @@
+{
+  "feature": {
+    "type": "mysticalterrain:spire",
+    "config": {
+      "core": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:deepslate",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:cobbled_deepslate"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:polished_deepslate"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:gloomstone"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 12,
+        "max_inclusive": 34
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 4
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 7
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

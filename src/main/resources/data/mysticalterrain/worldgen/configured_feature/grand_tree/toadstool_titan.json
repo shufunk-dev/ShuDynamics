@@ -1,0 +1,73 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 51,
+      "max_inclusive": 65
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4.12,
+      "max_exclusive": 5.04
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 16.0,
+      "max_exclusive": 18.1
+    },
+    "lean": 0.26,
+    "gnarl": 0.4,
+    "density": 0.79,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mushroom_stem",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_mushroom_block",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.46,
+      "flat": 0.71,
+      "tiers": 0.06,
+      "lopside": 0.29,
+      "bends": 0.41,
+      "swing": 0.22,
+      "split": 0.68,
+      "sprout": 0.64,
+      "tropism": 0.02,
+      "twig": 1.0,
+      "drip": 0.3,
+      "hollow": 0.45,
+      "buttress": 0.1,
+      "jitter": 0.37,
+      "forks": 1
+    }
+  }
+}

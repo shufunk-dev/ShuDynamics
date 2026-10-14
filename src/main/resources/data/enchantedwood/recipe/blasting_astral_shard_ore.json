@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "end_ore_blasting",
+  "ingredient": "enchantedwood:astral_shard_ore",
+  "result": {
+    "id": "enchantedwood:astral_shard",
+    "count": 1
+  }
+}

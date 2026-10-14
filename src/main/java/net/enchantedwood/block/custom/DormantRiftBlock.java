@@ -172,13 +172,8 @@ public class DormantRiftBlock extends Block {
             spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
             sanctuaryBase = existingPortalPos;
         } else {
-            // Find surface or safe height
-            int surfaceY = targetWorld.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
-            int safeY = (surfaceY > targetWorld.getBottomY() + 10 && surfaceY < targetWorld.getTopYInclusive() - 10)
-                    ? surfaceY
-                    : Math.max(64, Math.min(100, targetY));
-
-            BlockPos basePos = new BlockPos(targetX, safeY, targetZ);
+            // Find true ground surface in a genuine open clearing
+            BlockPos basePos = findOpenClearing(targetWorld, targetX, targetZ, targetY);
             buildSafeResonanceGateway(targetWorld, basePos, axis);
             sanctuaryBase = basePos;
 
@@ -330,7 +325,27 @@ public class DormantRiftBlock extends Block {
                 ModBlocks.DIMENSIONAL_SINGULARITY
         };
 
-        // Build fully enclosed Resonance Sanctuary Outpost:
+        // 1. Clear a wide glade/perimeter around the entire outpost (width -7 to 8, depth -7 to 7, height 0 to 10)
+        // so no leaves, vines, or stray trunks clip through windows or hang over the building
+        for (int w = -7; w <= 8; w++) {
+            for (int d = -7; d <= 7; d++) {
+                for (int h = 0; h <= 10; h++) {
+                    BlockPos p = basePos.offset(widthDir, w).offset(depthDir, d).up(h);
+                    BlockState s = world.getBlockState(p);
+                    if (isDenseTrunk(s) || isCanopyOrVegetation(s) || s.isIn(net.minecraft.registry.tag.BlockTags.LEAVES)) {
+                        world.setBlockState(p, Blocks.AIR.getDefaultState());
+                    }
+                }
+                // If the ground under cleared vegetation was carved away, establish nice grass lawn
+                BlockPos floorP = basePos.offset(widthDir, w).offset(depthDir, d).down();
+                BlockState s = world.getBlockState(floorP);
+                if (isDenseTrunk(s) || isCanopyOrVegetation(s)) {
+                    world.setBlockState(floorP, Blocks.GRASS_BLOCK.getDefaultState());
+                }
+            }
+        }
+
+        // 2. Build fully enclosed Resonance Sanctuary Outpost:
         // Floor: h == -1
         // Interior: h == 0..3
         // Roof: h == 4..5
@@ -391,15 +406,254 @@ public class DormantRiftBlock extends Block {
             }
         }
 
-        // Place protective sanctuary lanterns inside for lighting
+        // 3. Extend sturdy solid foundation downwards to the terrain floor to prevent floating outposts
+        for (int w = -3; w <= 4; w++) {
+            for (int d = -3; d <= 3; d++) {
+                for (int down = -2; down >= -24; down--) {
+                    BlockPos suppPos = basePos.offset(widthDir, w).offset(depthDir, d).up(down);
+                    BlockState existing = world.getBlockState(suppPos);
+                    if (existing.isAir() || isCanopyOrVegetation(existing) || isDenseTrunk(existing)) {
+                        world.setBlockState(suppPos, Blocks.SMOOTH_BASALT.getDefaultState());
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 4. Exterior walkway, descending steps and ground access outside the doorway (d == 3, w == 0, 1)
+        // Extend 10 blocks out into open terrain so player has a clean paved exit path
+        for (int step = 1; step <= 10; step++) {
+            for (int w = -1; w <= 2; w++) {
+                BlockPos walkPos = basePos.offset(widthDir, w).offset(depthDir, 3 + step);
+                // Clear 5 blocks of air for generous open walking space and view
+                for (int h = 0; h <= 4; h++) {
+                    world.setBlockState(walkPos.up(h), Blocks.AIR.getDefaultState());
+                }
+
+                // Path surface and support
+                if (w == 0 || w == 1) {
+                    for (int down = -1; down >= -24; down--) {
+                        BlockPos stepSupp = walkPos.up(down);
+                        BlockState existing = world.getBlockState(stepSupp);
+                        if (existing.isAir() || isCanopyOrVegetation(existing) || isDenseTrunk(existing)) {
+                            world.setBlockState(stepSupp, (down == -1) ? ((step % 2 == 0) ? Blocks.CRYING_OBSIDIAN.getDefaultState() : Blocks.SMOOTH_BASALT.getDefaultState()) : Blocks.SMOOTH_BASALT.getDefaultState());
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 5. Pathway gate posts and lanterns at the end of the walkway
+        BlockPos gatePostL = basePos.offset(widthDir, -1).offset(depthDir, 13);
+        BlockPos gatePostR = basePos.offset(widthDir, 2).offset(depthDir, 13);
+        world.setBlockState(gatePostL, Blocks.SMOOTH_BASALT.getDefaultState());
+        world.setBlockState(gatePostL.up(1), Blocks.LANTERN.getDefaultState());
+        world.setBlockState(gatePostR, Blocks.SMOOTH_BASALT.getDefaultState());
+        world.setBlockState(gatePostR.up(1), Blocks.LANTERN.getDefaultState());
+
+        // 6. Exterior emergency rescue ladder along the wall next to the door
+        BlockPos ladderWall = basePos.offset(widthDir, -1).offset(depthDir, 3);
+        Direction ladderFacing = depthDir; // Facing outwards into the walkway space
+        for (int down = 0; down >= -24; down--) {
+            BlockPos ladderPos = basePos.offset(widthDir, -1).offset(depthDir, 4).up(down);
+            BlockPos wallPos = ladderWall.up(down);
+            BlockState current = world.getBlockState(ladderPos);
+            if (current.isAir() || isCanopyOrVegetation(current) || isDenseTrunk(current)) {
+                // Ensure wall behind ladder exists
+                world.setBlockState(wallPos, Blocks.SMOOTH_BASALT.getDefaultState());
+                world.setBlockState(ladderPos, Blocks.LADDER.getDefaultState().with(LadderBlock.FACING, ladderFacing));
+            } else {
+                break;
+            }
+        }
+
+        // 7. Place protective sanctuary lanterns inside for lighting
         BlockPos lightPos = basePos.offset(widthDir, -2).offset(depthDir, 2).up(0);
         world.setBlockState(lightPos, Blocks.LANTERN.getDefaultState());
         BlockPos lightPos2 = basePos.offset(widthDir, 3).offset(depthDir, 2).up(0);
         world.setBlockState(lightPos2, Blocks.LANTERN.getDefaultState());
 
-        // Register sanctuary center and gateway
+        // 8. Register sanctuary center and gateway
         net.enchantedwood.event.ConvergenceHazardHandler.registerSanctuary(basePos);
         ConvergencePortalManager.registerGateway(world, basePos);
+    }
+
+    private BlockPos findOpenClearing(ServerWorld world, int originX, int originZ, int defaultY) {
+        int step = 4;
+        int maxRadius = 96;
+
+        BlockPos bestCandidate = null;
+        int minTrunks = Integer.MAX_VALUE;
+
+        // Spiral/concentric search outward from origin
+        for (int r = 0; r <= maxRadius; r += step) {
+            for (int i = -r; i <= r; i += step) {
+                int[][] candidateCoords = (r == 0)
+                        ? new int[][]{{originX, originZ}}
+                        : new int[][]{
+                                {originX + i, originZ - r},
+                                {originX + i, originZ + r},
+                                {originX - r, originZ + i},
+                                {originX + r, originZ + i}
+                        };
+
+                for (int[] coord : candidateCoords) {
+                    int cx = coord[0];
+                    int cz = coord[1];
+
+                    // Check if candidate is in safe haven (Riftwood Haven or Cherry Grove)
+                    if (!isDeepSafeHaven(world, cx, cz, RIFTWOOD_HAVEN_ID)
+                            && !isBiome(world, cx, cz, RIFTWOOD_HAVEN_ID)
+                            && !isBiome(world, cx, cz, CHERRY_GROVE_ID)) {
+                        continue;
+                    }
+
+                    int groundY = evaluateClearingGround(world, cx, cz);
+                    if (groundY <= 0) continue;
+
+                    int trunks = countSurroundingTrunks(world, cx, groundY, cz, 6);
+                    if (trunks == 0) {
+                        // Perfect open clearing with no trees in the immediate vicinity!
+                        return new BlockPos(cx, groundY, cz);
+                    }
+
+                    if (trunks < minTrunks) {
+                        minTrunks = trunks;
+                        bestCandidate = new BlockPos(cx, groundY, cz);
+                    }
+                }
+            }
+        }
+
+        if (bestCandidate != null) {
+            return bestCandidate;
+        }
+
+        // Fallback: search at origin
+        int fallbackY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, originX, originZ);
+        if (fallbackY <= world.getBottomY() + 10) fallbackY = defaultY;
+        return new BlockPos(originX, fallbackY, originZ);
+    }
+
+    private static int evaluateClearingGround(ServerWorld world, int x, int z) {
+        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
+        if (topY <= world.getBottomY() + 10 || topY >= world.getTopYInclusive() - 15) {
+            return -1;
+        }
+
+        // Check from topY down a few blocks (past leaves/vines/grass) to find the solid surface
+        BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
+        while (scan.getY() > world.getBottomY() + 10) {
+            BlockState s = world.getBlockState(scan);
+            if (s.isAir() || isAirOrFoliage(s)) {
+                scan.move(Direction.DOWN);
+                continue;
+            }
+            // If it hits a log or mushroom stem or liquid, this spot is NOT open ground
+            if (isDenseTrunk(s) || s.isLiquid()) {
+                return -1;
+            }
+            if (s.isOpaqueFullCube()) {
+                // Found genuine solid terrain (dirt, grass, stone, sand, etc.)
+                int groundY = scan.getY() + 1;
+                // Verify terrain consistency in immediate 3x3 footprint
+                int maxDelta = 0;
+                int[][] checks = {{-3, 0}, {3, 0}, {0, -3}, {0, 3}, {-3, -3}, {3, 3}};
+                for (int[] offset : checks) {
+                    int neighborTop = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x + offset[0], z + offset[1]);
+                    maxDelta = Math.max(maxDelta, Math.abs(neighborTop - groundY));
+                }
+                if (maxDelta > 6) {
+                    return -1; // Too steep/cliff
+                }
+                return groundY;
+            }
+            scan.move(Direction.DOWN);
+        }
+        return -1;
+    }
+
+    private static int countSurroundingTrunks(ServerWorld world, int cx, int groundY, int cz, int radius) {
+        int count = 0;
+        BlockPos.Mutable scan = new BlockPos.Mutable();
+        for (int dx = -radius; dx <= radius; dx += 2) {
+            for (int dz = -radius; dz <= radius; dz += 2) {
+                for (int dy = 0; dy <= 8; dy += 2) {
+                    scan.set(cx + dx, groundY + dy, cz + dz);
+                    BlockState s = world.getBlockState(scan);
+                    if (isDenseTrunk(s)) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    private static boolean isDenseTrunk(BlockState state) {
+        if (state == null || state.isAir()) return false;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LOGS)) return true;
+        Block b = state.getBlock();
+        return b == Blocks.MUSHROOM_STEM
+                || b == Blocks.BROWN_MUSHROOM_BLOCK
+                || b == Blocks.RED_MUSHROOM_BLOCK
+                || b == Blocks.SHROOMLIGHT
+                || b == Blocks.MANGROVE_ROOTS
+                || b == Blocks.MUDDY_MANGROVE_ROOTS;
+    }
+
+    private static boolean isAirOrFoliage(BlockState state) {
+        if (state == null || state.isAir()) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LEAVES)) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.FLOWERS)) return true;
+        Block b = state.getBlock();
+        return b == Blocks.VINE
+                || b == Blocks.SHORT_GRASS
+                || b == Blocks.TALL_GRASS
+                || b == Blocks.FERN
+                || b == Blocks.LARGE_FERN
+                || b == Blocks.BROWN_MUSHROOM
+                || b == Blocks.RED_MUSHROOM;
+    }
+
+    private static boolean isCanopyOrVegetation(BlockState state) {
+        if (state == null || state.isAir()) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LEAVES)) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LOGS)) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.FLOWERS)) return true;
+        Block b = state.getBlock();
+        return b == Blocks.BROWN_MUSHROOM_BLOCK
+                || b == Blocks.RED_MUSHROOM_BLOCK
+                || b == Blocks.MUSHROOM_STEM
+                || b == Blocks.SHROOMLIGHT
+                || b == Blocks.MANGROVE_ROOTS
+                || b == Blocks.MUDDY_MANGROVE_ROOTS
+                || b == Blocks.VINE
+                || b == Blocks.SHORT_GRASS
+                || b == Blocks.TALL_GRASS
+                || b == Blocks.FERN
+                || b == Blocks.LARGE_FERN
+                || b == Blocks.BROWN_MUSHROOM
+                || b == Blocks.RED_MUSHROOM;
+    }
+
+    private static int findTrueGroundSurfaceY(ServerWorld world, int x, int z, int defaultY) {
+        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
+        BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
+        while (scan.getY() > world.getBottomY() + 10) {
+            BlockState state = world.getBlockState(scan);
+            if (isAirOrFoliage(state)) {
+                scan.move(Direction.DOWN);
+            } else if (!state.isOpaqueFullCube()) {
+                scan.move(Direction.DOWN);
+            } else {
+                return scan.getY() + 1;
+            }
+        }
+        return Math.max(64, Math.min(100, defaultY));
     }
 
     @Override

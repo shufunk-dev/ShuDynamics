@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:butte_country",
+    "mysticalterrain:date_palm_oasis",
+    "mysticalterrain:desert_bloom",
+    "mysticalterrain:dust_devil_crags",
+    "mysticalterrain:gravel_barrens",
+    "mysticalterrain:juniper_mesa",
+    "mysticalterrain:olive_grove",
+    "mysticalterrain:sage_hills",
+    "mysticalterrain:sagebrush_meadow",
+    "mysticalterrain:scrub_oasis",
+    "mysticalterrain:thornbush_steppe",
+    "mysticalterrain:tumbleweed_plains"
+  ]
+}

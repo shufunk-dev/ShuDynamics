@@ -1,0 +1,57 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "bonsai",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 70,
+      "max_inclusive": 95
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5.5,
+      "max_exclusive": 7.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40.0,
+      "max_exclusive": 52.0
+    },
+    "lean": 0.75,
+    "droop": 0.55,
+    "reach": 73,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:rimewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:rimewood_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 6
+          },
+          {
+            "data": {
+              "Name": "minecraft:packed_ice"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

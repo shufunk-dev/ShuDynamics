@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 58,
+      "max_inclusive": 74
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.73,
+      "max_exclusive": 3.33
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 17.6,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.45,
+    "gnarl": 0.42,
+    "density": 0.89,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:stripped_palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:mango_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cherry_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.55,
+      "flat": 0.72,
+      "tiers": 0.6,
+      "lopside": 0.36,
+      "bends": 2.47,
+      "swing": 0.78,
+      "split": 0.41,
+      "sprout": 0.37,
+      "tropism": -0.03,
+      "twig": 1.36,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.24,
+      "jitter": 0.52,
+      "forks": 1
+    }
+  }
+}

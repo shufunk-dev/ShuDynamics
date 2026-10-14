@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 53,
+      "max_inclusive": 68
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.86,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 17.0,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.33,
+    "gnarl": 0.23,
+    "density": 0.92,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stripped_birch_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:birch_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:pale_oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 8,
+      "spread": 0.74,
+      "flat": 0.69,
+      "tiers": 0.72,
+      "lopside": 0.35,
+      "bends": 0.82,
+      "swing": 0.74,
+      "split": 0.4,
+      "sprout": 0.22,
+      "tropism": 0.27,
+      "twig": 0.82,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.23,
+      "jitter": 0.3,
+      "forks": 2
+    }
+  }
+}

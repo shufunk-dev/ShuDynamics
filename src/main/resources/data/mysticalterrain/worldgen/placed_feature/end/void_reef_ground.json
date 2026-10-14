@@ -1,0 +1,33 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:void_reef",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:warped_nylium"
+        }
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 0,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.45
+    }
+  },
+  "placement": []
+}

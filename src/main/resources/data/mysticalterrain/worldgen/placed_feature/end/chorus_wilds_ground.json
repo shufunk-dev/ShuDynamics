@@ -1,0 +1,44 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:chorus_wilds",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone_bricks"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:purpur_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 8.0,
+      "accent_threshold": 0.55
+    }
+  },
+  "placement": []
+}

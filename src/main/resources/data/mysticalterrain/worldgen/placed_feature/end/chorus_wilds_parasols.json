@@ -1,0 +1,85 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "umbrella",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 22,
+        "max_inclusive": 32
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.6,
+        "max_exclusive": 2.4
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 14.0,
+        "max_exclusive": 18.0
+      },
+      "shape": 0.3,
+      "reach": 21,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:purpur_pillar",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:purpur_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:magenta_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "fruit": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:end_rod",
+            "Properties": {
+              "facing": "up"
+            }
+          }
+        },
+        "fruit_chance": 0.03
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

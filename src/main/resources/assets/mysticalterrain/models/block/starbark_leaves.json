@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "mysticalterrain:block/starbark_leaves"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_prismarine_shoals",
+    "mysticalterrain:barren_prismarine_shoals",
+    "mysticalterrain:luminous_prismarine_shoals",
+    "mysticalterrain:overgrown_prismarine_shoals",
+    "mysticalterrain:prismarine_shoals",
+    "mysticalterrain:scorched_prismarine_shoals",
+    "mysticalterrain:sculked_prismarine_shoals",
+    "mysticalterrain:shattered_prismarine_shoals",
+    "mysticalterrain:verdant_prismarine_shoals",
+    "mysticalterrain:void_reef",
+    "mysticalterrain:voidscarred_prismarine_shoals"
+  ]
+}

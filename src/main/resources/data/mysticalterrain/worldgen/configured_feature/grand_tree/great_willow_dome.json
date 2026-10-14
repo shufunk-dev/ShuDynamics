@@ -1,0 +1,101 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 51,
+      "max_inclusive": 65
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4.06,
+      "max_exclusive": 4.96
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 17.4,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.09,
+    "gnarl": 0.45,
+    "density": 0.82,
+    "reach": 21,
+    "aquatic": true,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:cypress_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:cypress_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.35,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 16
+      }
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.66,
+      "flat": 0.05,
+      "tiers": 0.26,
+      "lopside": 0.05,
+      "bends": 0.72,
+      "swing": 0.32,
+      "split": 0.62,
+      "sprout": 0.77,
+      "tropism": -0.08,
+      "twig": 1.27,
+      "drip": 1.3,
+      "hollow": 0.48,
+      "buttress": 0.4,
+      "jitter": 0.17,
+      "forks": 1
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/sigil_hammer"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.75,
+        -0.84,
+        2.33
+      ],
+      "scale": [
+        0.564,
+        0.564,
+        0.564
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.79,
+        -2.5,
+        -16.6
+      ],
+      "scale": [
+        0.477,
+        0.477,
+        0.477
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -5.29,
+        -5.29,
+        0
+      ],
+      "scale": [
+        0.4163,
+        0.4163,
+        0.4163
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.2608695652173913,
+        0.2608695652173913,
+        0.2608695652173913
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.29,
+        -5.29,
+        0
+      ],
+      "scale": [
+        0.4163,
+        0.4163,
+        0.4163
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.29,
+        -5.29,
+        0
+      ],
+      "scale": [
+        0.4163,
+        0.4163,
+        0.4163
+      ]
+    }
+  }
+}

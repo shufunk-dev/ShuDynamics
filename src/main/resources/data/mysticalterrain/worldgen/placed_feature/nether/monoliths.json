@@ -1,0 +1,86 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "monoliths",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7,
+        "max_inclusive": 11
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:polished_blackstone"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:polished_blackstone"
+          }
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:polished_blackstone_bricks"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:cracked_polished_blackstone_bricks"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "accent": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:gilded_blackstone"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:shroomlight"
+          }
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 6
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

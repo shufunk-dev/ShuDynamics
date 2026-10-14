@@ -1,0 +1,28 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_fields",
+    "mysticalterrain:chanterelle_grove",
+    "mysticalterrain:crimson_mycowood",
+    "mysticalterrain:faerie_ring_isles",
+    "mysticalterrain:fairy_ring_fields",
+    "mysticalterrain:frostcap_taiga",
+    "mysticalterrain:ghostcap_garden",
+    "mysticalterrain:lichen_steppe",
+    "mysticalterrain:mooshroom_atoll",
+    "mysticalterrain:morel_taiga",
+    "mysticalterrain:mycelium_flats",
+    "mysticalterrain:mycojungle",
+    "mysticalterrain:pinkcap_glade",
+    "mysticalterrain:puffball_meadow",
+    "mysticalterrain:rocky_mushroom_fields",
+    "mysticalterrain:spore_marsh",
+    "mysticalterrain:sporecap_isles",
+    "mysticalterrain:sporewind_forest",
+    "mysticalterrain:stinkhorn_thicket",
+    "mysticalterrain:toadstool_forest",
+    "mysticalterrain:truffle_woods",
+    "mysticalterrain:warped_mycowood",
+    "mysticalterrain:wooded_mushroom_fields"
+  ]
+}

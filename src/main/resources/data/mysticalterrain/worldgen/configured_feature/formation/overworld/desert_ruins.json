@@ -1,0 +1,64 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "ruins",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 13
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:sandstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:smooth_sandstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:sandstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cut_sandstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:chiseled_sandstone"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/overworld_supplies"
+  }
+}

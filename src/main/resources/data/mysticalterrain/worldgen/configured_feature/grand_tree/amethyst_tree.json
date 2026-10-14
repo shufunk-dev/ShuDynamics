@@ -1,0 +1,36 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "crystal",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 26,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.0,
+      "max_exclusive": 3.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.0,
+      "max_exclusive": 16.0
+    },
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:calcite"
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:amethyst_block"
+        }
+      }
+    }
+  }
+}

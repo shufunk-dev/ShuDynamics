@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "mysticalterrain:item/fossil_greataxe",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

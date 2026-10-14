@@ -1,0 +1,50 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:weeping_peaks",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:blackstone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:obsidian"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.4
+    }
+  },
+  "placement": []
+}

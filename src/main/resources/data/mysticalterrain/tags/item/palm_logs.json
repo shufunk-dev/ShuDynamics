@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:palm_log",
+    "mysticalterrain:palm_wood",
+    "mysticalterrain:stripped_palm_log",
+    "mysticalterrain:stripped_palm_wood"
+  ]
+}

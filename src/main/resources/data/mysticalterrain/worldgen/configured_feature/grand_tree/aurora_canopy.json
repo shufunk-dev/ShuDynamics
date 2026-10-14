@@ -1,0 +1,75 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 34,
+      "max_inclusive": 44
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.02,
+      "max_exclusive": 2.47
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.3,
+      "max_exclusive": 12.7
+    },
+    "lean": 0.14,
+    "gnarl": 0.33,
+    "density": 0.8,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:packed_ice"
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:packed_ice"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:blue_ice"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "fruit_chance": 0.02
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.9,
+      "flat": 0.68,
+      "tiers": 0.56,
+      "lopside": 0.23,
+      "bends": 1.28,
+      "swing": 0.45,
+      "split": 0.45,
+      "sprout": 0.7,
+      "tropism": 0.19,
+      "twig": 1.37,
+      "drip": 0.28,
+      "hollow": 0.38,
+      "buttress": 0.39,
+      "jitter": 0.22,
+      "forks": 2
+    }
+  }
+}

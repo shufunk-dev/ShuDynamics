@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/mystwood_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/mystwood_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/mystwood_slab_top"
+    }
+  }
+}

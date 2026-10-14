@@ -1,0 +1,71 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "palm",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 22,
+      "max_inclusive": 32
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.13,
+      "max_exclusive": 1.38
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 9.2,
+      "max_exclusive": 10.3
+    },
+    "lean": 0.2,
+    "gnarl": 0.36,
+    "droop": 0.5,
+    "shape": 0.35,
+    "density": 0.92,
+    "branches": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 14,
+      "max_inclusive": 16
+    },
+    "veins": 1,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:palm_fronds",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:acacia_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:honeycomb_block"
+        }
+      },
+      "fruit_chance": 0.0
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "geode",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10,
+      "max_inclusive": 14
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:smooth_basalt"
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:calcite"
+        }
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:budding_amethyst"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "tip": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:purple_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "anchor": "float",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 55,
+      "max_inclusive": 100
+    }
+  }
+}

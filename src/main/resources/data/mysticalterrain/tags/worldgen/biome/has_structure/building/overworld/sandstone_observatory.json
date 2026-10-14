@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:beach",
+    "minecraft:desert",
+    "mysticalterrain:blooming_desert",
+    "mysticalterrain:blooming_red_desert",
+    "mysticalterrain:desert_oasis",
+    "mysticalterrain:desert_scrub",
+    "mysticalterrain:gravelly_desert",
+    "mysticalterrain:muddy_beach",
+    "mysticalterrain:pebble_beach",
+    "mysticalterrain:red_beach",
+    "mysticalterrain:red_desert",
+    "mysticalterrain:red_pebble_beach",
+    "mysticalterrain:rocky_beach",
+    "mysticalterrain:rocky_desert",
+    "mysticalterrain:rocky_red_beach",
+    "mysticalterrain:rocky_red_desert",
+    "mysticalterrain:salt_marsh",
+    "mysticalterrain:windswept_beach",
+    "mysticalterrain:windswept_desert",
+    "mysticalterrain:windswept_gravelly_desert",
+    "mysticalterrain:windswept_pebble_beach",
+    "mysticalterrain:windswept_red_desert",
+    "mysticalterrain:windswept_rocky_beach",
+    "mysticalterrain:windswept_rocky_desert"
+  ]
+}

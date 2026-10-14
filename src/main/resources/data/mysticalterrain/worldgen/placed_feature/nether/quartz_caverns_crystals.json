@@ -1,0 +1,102 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "spires",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 12
+      },
+      "lean": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 0.3,
+        "max_exclusive": 0.8
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:netherrack"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:smooth_quartz"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:smooth_quartz"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:quartz_block"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:glowstone"
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

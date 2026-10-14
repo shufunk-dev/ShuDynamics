@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "N N",
+    "E E"
+  ],
+  "key": {
+    "E": "mysticalterrain:sekhmar_essence",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:pharaoh_regalia_boots"
+  }
+}

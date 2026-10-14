@@ -1,0 +1,1562 @@
+[
+  {
+    "biome": "mysticalterrain:amethyst_spires",
+    "zone": "highlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:chorus_wilds",
+    "zone": "highlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:weeping_peaks",
+    "zone": "highlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:starfall_craters",
+    "zone": "highlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:pearlbloom_glades",
+    "zone": "midlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:frostvoid_expanse",
+    "zone": "midlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:void_reef",
+    "zone": "midlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:echoing_hollows",
+    "zone": "midlands",
+    "weight": 4
+  },
+  {
+    "biome": "mysticalterrain:shattered_rim",
+    "zone": "edge",
+    "weight": 6
+  },
+  {
+    "biome": "mysticalterrain:leviathan_barrens",
+    "zone": "edge",
+    "weight": 6
+  },
+  {
+    "biome": "mysticalterrain:nebula_drift",
+    "zone": "islands",
+    "weight": 6
+  },
+  {
+    "biome": "mysticalterrain:geode_archipelago",
+    "zone": "islands",
+    "weight": 6
+  },
+  {
+    "biome": "mysticalterrain:purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_purpur_mesas",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_starstone_heights",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_runic_plateau",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_basalt_columns",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_chorus_jungle",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_amethyst_canyons",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_prismatic_fields",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_obsidian_bluffs",
+    "zone": "highlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_violet_moors",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_umbral_fen",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_moonstone_terraces",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_rime_plateau",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_spore_rift",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_sculk_barrens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_pale_meadows",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_verdigris_expanse",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_shulker_reef",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_ender_gardens",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_ashen_void",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_dragonbone_fields",
+    "zone": "midlands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_voidglass_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_obsidian_shelf",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_prismarine_shoals",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_nebula_barrens",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:barren_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_quartz_flats",
+    "zone": "edge",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_drifting_gardens",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:voidscarred_star_nursery",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_crystal_drift",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:luminous_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:verdant_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:shattered_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_obsidian_motes",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:sculked_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:towering_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:frozen_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:ancient_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:overgrown_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:cratered_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:crystal_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:bleached_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  },
+  {
+    "biome": "mysticalterrain:scorched_aurora_veil",
+    "zone": "islands",
+    "weight": 3
+  }
+]

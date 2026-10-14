@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ginkgo_log",
+    "mysticalterrain:ginkgo_wood",
+    "mysticalterrain:stripped_ginkgo_log",
+    "mysticalterrain:stripped_ginkgo_wood"
+  ]
+}

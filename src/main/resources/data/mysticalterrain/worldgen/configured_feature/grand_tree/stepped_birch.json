@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 28,
+      "max_inclusive": 35
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.15,
+      "max_exclusive": 2.63
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 13.0,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.45,
+    "gnarl": 0.36,
+    "density": 0.89,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:birch_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:birch_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.96,
+      "flat": 0.36,
+      "tiers": 1.0,
+      "lopside": 0.67,
+      "bends": 0.15,
+      "swing": 0.85,
+      "split": 0.36,
+      "sprout": 0.43,
+      "tropism": 0.31,
+      "twig": 1.05,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.26,
+      "jitter": 0.63,
+      "forks": 1
+    }
+  }
+}

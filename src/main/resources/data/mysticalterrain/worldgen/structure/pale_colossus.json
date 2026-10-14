@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "biomes": "#mysticalterrain:has_structure/grand_tree/pale_colossus",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "tree": "mysticalterrain:grand_tree/pale_colossus"
+}

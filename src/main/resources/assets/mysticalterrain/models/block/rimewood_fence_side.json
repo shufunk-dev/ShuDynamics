@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_side",
+  "textures": {
+    "texture": "mysticalterrain:block/rimewood_planks"
+  }
+}

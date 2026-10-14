@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/bogspitter"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.73,
+        -1.61,
+        0.75
+      ],
+      "scale": [
+        0.616,
+        0.616,
+        0.616
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -15,
+        -90,
+        20
+      ],
+      "translation": [
+        2,
+        -3,
+        -1
+      ],
+      "scale": [
+        0.586,
+        0.586,
+        0.586
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -3.53,
+        -3.79,
+        0
+      ],
+      "scale": [
+        0.5641,
+        0.5641,
+        0.5641
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        3.53,
+        -3.79,
+        0
+      ],
+      "scale": [
+        0.5641,
+        0.5641,
+        0.5641
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        3.53,
+        -3.79,
+        0
+      ],
+      "scale": [
+        0.5641,
+        0.5641,
+        0.5641
+      ]
+    }
+  }
+}

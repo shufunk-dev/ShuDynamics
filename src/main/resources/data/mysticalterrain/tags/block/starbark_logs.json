@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:starbark_log",
+    "mysticalterrain:starbark_wood",
+    "mysticalterrain:stripped_starbark_log",
+    "mysticalterrain:stripped_starbark_wood"
+  ]
+}

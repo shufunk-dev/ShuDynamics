@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:stony_shore",
+    "mysticalterrain:andesite_shore",
+    "mysticalterrain:chalk_cliffs",
+    "mysticalterrain:diorite_shore",
+    "mysticalterrain:granite_shore",
+    "mysticalterrain:gravelly_shore",
+    "mysticalterrain:mossy_shore",
+    "mysticalterrain:sandy_shore",
+    "mysticalterrain:snowy_shore",
+    "mysticalterrain:tuff_shore"
+  ]
+}

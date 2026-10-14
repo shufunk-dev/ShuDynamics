@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "mysticalterrain:item/icicle_repeater",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

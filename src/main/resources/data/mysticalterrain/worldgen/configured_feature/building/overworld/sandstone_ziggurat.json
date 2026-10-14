@@ -1,0 +1,312 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "ziggurat",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_inclusive": 14
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.05,
+      "max_exclusive": 0.35
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sandstone_wall",
+          "Properties": {
+            "east": "none",
+            "north": "none",
+            "south": "none",
+            "up": "true",
+            "waterlogged": "false",
+            "west": "none"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:orange_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:yellow_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:smooth_sandstone"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:smooth_sandstone"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:ladder",
+          "Properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "path": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:sand"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:smooth_sandstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "roof": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cut_sandstone"
+        }
+      },
+      "roof_slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:smooth_sandstone_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof_stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:smooth_sandstone_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sandstone_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sandstone_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:barrel",
+          "Properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cut_sandstone"
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:sandstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cut_sandstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:chiseled_sandstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:orange_stained_glass_pane",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:crafting_table"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:furnace",
+              "Properties": {
+                "facing": "north",
+                "lit": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:smithing_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:anvil",
+              "Properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:loom",
+              "Properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:cartography_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:fletching_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:stonecutter",
+              "Properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:lectern",
+              "Properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/overworld_supplies",
+    "treasure": "mysticalterrain:chests/overworld_treasure",
+    "spawners": [
+      "minecraft:husk",
+      "minecraft:skeleton",
+      "minecraft:spider"
+    ]
+  }
+}

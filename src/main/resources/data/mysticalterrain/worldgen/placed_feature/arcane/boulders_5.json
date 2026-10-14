@@ -1,0 +1,57 @@
+{
+  "feature": {
+    "type": "mysticalterrain:boulder",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:purpur_block"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:starstone"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 4
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

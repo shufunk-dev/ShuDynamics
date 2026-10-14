@@ -1,0 +1,76 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "ruins",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 9,
+      "max_inclusive": 13
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cracked_polished_blackstone_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:gilded_blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:chiseled_polished_blackstone"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    },
+    "loot": "mysticalterrain:chests/nether_supplies"
+  }
+}

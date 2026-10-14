@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MNM",
+    "NSN",
+    "MNM"
+  ],
+  "key": {
+    "M": "mysticalterrain:mirestone",
+    "N": "minecraft:nautilus_shell",
+    "S": "minecraft:heart_of_the_sea"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:drowned_idol"
+  }
+}

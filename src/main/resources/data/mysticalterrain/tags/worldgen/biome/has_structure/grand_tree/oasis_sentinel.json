@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:date_palm_oasis",
+    "mysticalterrain:desert_bloom",
+    "mysticalterrain:dune_coast",
+    "mysticalterrain:olive_grove",
+    "mysticalterrain:scrub_oasis",
+    "mysticalterrain:wadi"
+  ]
+}

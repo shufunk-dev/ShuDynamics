@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/rimebreaker_axe"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.78,
+        -0.84,
+        2.29
+      ],
+      "scale": [
+        0.541,
+        0.541,
+        0.541
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.79,
+        -2.5,
+        -16.61
+      ],
+      "scale": [
+        0.458,
+        0.458,
+        0.458
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -5.4,
+        -4.46,
+        0
+      ],
+      "scale": [
+        0.3611,
+        0.3611,
+        0.3611
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.4,
+        -4.46,
+        0
+      ],
+      "scale": [
+        0.3611,
+        0.3611,
+        0.3611
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.4,
+        -4.46,
+        0
+      ],
+      "scale": [
+        0.3611,
+        0.3611,
+        0.3611
+      ]
+    }
+  }
+}

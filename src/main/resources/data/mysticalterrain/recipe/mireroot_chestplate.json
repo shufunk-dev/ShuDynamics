@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "E E",
+    "ENE",
+    "EEE"
+  ],
+  "key": {
+    "E": "mysticalterrain:bogrot_essence",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:mireroot_chestplate"
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "forge",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_inclusive": 6
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.15,
+      "max_exclusive": 0.5
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_copper_bars",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:cyan_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:orange_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_cut_copper"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_copper"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_copper_lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:ladder",
+          "Properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_copper_bulb",
+          "Properties": {
+            "lit": "false",
+            "powered": "false"
+          }
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:small_amethyst_bud",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_copper"
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_cut_copper_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_cut_copper_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:barrel",
+          "Properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_chiseled_copper"
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:waxed_oxidized_cut_copper"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:waxed_weathered_cut_copper"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:waxed_oxidized_copper"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:waxed_oxidized_copper_grate",
+          "Properties": {
+            "waterlogged": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:enchanting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:brewing_stand",
+              "Properties": {
+                "has_bottle_0": "false",
+                "has_bottle_1": "false",
+                "has_bottle_2": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:lectern",
+              "Properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:crafting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:cauldron"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/end_supplies",
+    "treasure": "mysticalterrain:chests/end_treasure",
+    "spawners": [
+      "minecraft:enderman",
+      "minecraft:endermite"
+    ]
+  }
+}

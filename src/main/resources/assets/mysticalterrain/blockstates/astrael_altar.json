@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "mysticalterrain:block/astrael_altar"
+    },
+    "stage=1": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    },
+    "stage=2": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    },
+    "stage=3": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    },
+    "stage=4": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    },
+    "stage=5": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    },
+    "stage=6": {
+      "model": "mysticalterrain:block/astrael_altar_active"
+    }
+  }
+}

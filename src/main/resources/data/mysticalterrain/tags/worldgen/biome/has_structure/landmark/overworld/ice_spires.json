@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ice_spikes",
+    "minecraft:snowy_plains",
+    "minecraft:snowy_slopes",
+    "mysticalterrain:dense_ice_spikes",
+    "mysticalterrain:first_snow_fields",
+    "mysticalterrain:frostveil_glacier",
+    "mysticalterrain:frozen_marsh",
+    "mysticalterrain:glacial_expanse",
+    "mysticalterrain:gravelly_snowy_plains",
+    "mysticalterrain:gravelly_snowy_slopes",
+    "mysticalterrain:ice_plains",
+    "mysticalterrain:icy_slopes",
+    "mysticalterrain:powder_slopes",
+    "mysticalterrain:rocky_ice_spikes",
+    "mysticalterrain:rocky_snowy_plains",
+    "mysticalterrain:rocky_snowy_slopes",
+    "mysticalterrain:shardfield",
+    "mysticalterrain:shrubby_snowy_plains",
+    "mysticalterrain:snowy_berry_plains",
+    "mysticalterrain:snowy_birch_plains",
+    "mysticalterrain:snowy_pine_plains",
+    "mysticalterrain:sparse_ice_spikes",
+    "mysticalterrain:windswept_snowy_plains",
+    "mysticalterrain:wooded_snowy_plains",
+    "mysticalterrain:wooded_snowy_slopes"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 50,
+      "max_inclusive": 63
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.31,
+      "max_exclusive": 2.82
+    },
+    "crown": 19.0,
+    "lean": 0.15,
+    "gnarl": 0.54,
+    "density": 0.78,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cave_vines",
+          "Properties": {
+            "age": "0",
+            "berries": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.15,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 8
+      }
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.71,
+      "flat": 0.78,
+      "tiers": 0.97,
+      "lopside": 0.04,
+      "bends": 2.28,
+      "swing": 0.42,
+      "split": 0.53,
+      "sprout": 0.48,
+      "tropism": -0.4,
+      "twig": 1.22,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.14,
+      "jitter": 0.61,
+      "forks": 1
+    }
+  }
+}

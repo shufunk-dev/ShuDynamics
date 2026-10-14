@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "charged=false": {
+      "model": "mysticalterrain:block/rune_pillar"
+    },
+    "charged=true": {
+      "model": "mysticalterrain:block/rune_pillar_charged"
+    }
+  }
+}

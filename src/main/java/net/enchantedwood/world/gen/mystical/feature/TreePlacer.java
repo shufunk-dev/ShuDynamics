@@ -27,7 +27,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
-final class TreePlacer implements Sink {
+public final class TreePlacer implements Sink {
     private static final Direction.Axis[] AXES = new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Y, Direction.Axis.Z};
     private final StructureWorldAccess level;
     private final TreeBlocks blocks;
@@ -50,7 +50,7 @@ final class TreePlacer implements Sink {
         this.foot = foot;
     }
 
-    static void place(StructureWorldAccess level, GrandTreeConfiguration config, Tree tree, BlockPos base, long seed, BlockBox box) {
+    public static void place(StructureWorldAccess level, GrandTreeConfiguration config, Tree tree, BlockPos base, long seed, BlockBox box) {
         TreePlacer placer = new TreePlacer(level, config.blocks(), base, seed, box, tree.foot());
         tree.rasterize(
             box.getMinX() - base.getX(),
@@ -263,7 +263,12 @@ final class TreePlacer implements Sink {
     }
 
     static boolean isTree(BlockState state) {
-        return state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES);
+        return state.isIn(BlockTags.LOGS)
+            || state.isIn(BlockTags.LEAVES)
+            || state.isOf(Blocks.BROWN_MUSHROOM_BLOCK)
+            || state.isOf(Blocks.RED_MUSHROOM_BLOCK)
+            || state.isOf(Blocks.MUSHROOM_STEM)
+            || state.isOf(Blocks.SHROOMLIGHT);
     }
 
     private static boolean isSoft(BlockState state) {
@@ -271,6 +276,10 @@ final class TreePlacer implements Sink {
             || state.isIn(BlockTags.REPLACEABLE_BY_TREES)
             || state.isIn(BlockTags.LEAVES)
             || state.isIn(BlockTags.FLOWERS)
-            || state.isIn(BlockTags.DIRT);
+            || state.isIn(BlockTags.DIRT)
+            || state.isOf(Blocks.BROWN_MUSHROOM_BLOCK)
+            || state.isOf(Blocks.RED_MUSHROOM_BLOCK)
+            || state.isOf(Blocks.MUSHROOM_STEM)
+            || state.isOf(Blocks.SHROOMLIGHT);
     }
 }

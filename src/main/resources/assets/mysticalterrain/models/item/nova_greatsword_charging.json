@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/nova_greatsword"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.78,
+        -1.53,
+        0.89
+      ],
+      "scale": [
+        0.542,
+        0.542,
+        0.542
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -131.84,
+        -13.28,
+        -151.82
+      ],
+      "translation": [
+        6.12,
+        -3.95,
+        -3.41
+      ],
+      "scale": [
+        0.502,
+        0.502,
+        0.502
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.71,
+        -4.45,
+        0
+      ],
+      "scale": [
+        0.3926,
+        0.3926,
+        0.3926
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.71,
+        -4.45,
+        0
+      ],
+      "scale": [
+        0.3926,
+        0.3926,
+        0.3926
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.71,
+        -4.45,
+        0
+      ],
+      "scale": [
+        0.3926,
+        0.3926,
+        0.3926
+      ]
+    }
+  }
+}

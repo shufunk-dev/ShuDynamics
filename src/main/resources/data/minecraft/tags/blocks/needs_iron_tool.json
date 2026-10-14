@@ -62,6 +62,12 @@
     "enchantedwood:steel_generator",
     "enchantedwood:enchanted_storage_controller",
     "enchantedwood:enchanted_drive_bay",
-    "enchantedwood:enchanted_storage_terminal"
+    "enchantedwood:enchanted_storage_terminal",
+    "enchantedwood:end_stone_iron_ore",
+    "enchantedwood:end_stone_gold_ore",
+    "enchantedwood:end_stone_redstone_ore",
+    "enchantedwood:end_stone_lapis_ore",
+    "enchantedwood:end_stone_diamond_ore",
+    "enchantedwood:astral_shard_ore"
   ]
 }

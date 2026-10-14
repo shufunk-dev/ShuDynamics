@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/raptor_talons"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.72,
+        -1.62,
+        0.74
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -15,
+        -90,
+        20
+      ],
+      "translation": [
+        2,
+        -3,
+        -1
+      ],
+      "scale": [
+        0.555,
+        0.555,
+        0.555
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -0.5,
+        -2.48,
+        0
+      ],
+      "scale": [
+        0.5078,
+        0.5078,
+        0.5078
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        0.5,
+        -2.48,
+        0
+      ],
+      "scale": [
+        0.5078,
+        0.5078,
+        0.5078
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        0.5,
+        -2.48,
+        0
+      ],
+      "scale": [
+        0.5078,
+        0.5078,
+        0.5078
+      ]
+    }
+  }
+}

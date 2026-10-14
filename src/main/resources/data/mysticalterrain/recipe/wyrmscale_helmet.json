@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ENE",
+    "E E"
+  ],
+  "key": {
+    "E": "mysticalterrain:hrimthane_essence",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:wyrmscale_helmet"
+  }
+}

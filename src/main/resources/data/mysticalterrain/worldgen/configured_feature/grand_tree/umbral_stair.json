@@ -1,0 +1,91 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 65,
+      "max_inclusive": 82
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.03,
+      "max_exclusive": 3.71
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 17.7,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.11,
+    "gnarl": 0.47,
+    "density": 0.95,
+    "veins": 4,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:gloamwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:gloamwood_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:pale_oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 8,
+      "spread": 0.91,
+      "flat": 0.94,
+      "tiers": 1.0,
+      "lopside": 0.08,
+      "bends": 0.79,
+      "swing": 0.26,
+      "split": 0.4,
+      "sprout": 0.45,
+      "tropism": -0.07,
+      "twig": 1.23,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.47,
+      "jitter": 0.52,
+      "forks": 1
+    }
+  }
+}

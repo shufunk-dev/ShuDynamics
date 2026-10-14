@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "eye=false": {
+      "model": "mysticalterrain:block/void_pedestal"
+    },
+    "eye=true": {
+      "model": "mysticalterrain:block/void_pedestal_eye"
+    }
+  }
+}

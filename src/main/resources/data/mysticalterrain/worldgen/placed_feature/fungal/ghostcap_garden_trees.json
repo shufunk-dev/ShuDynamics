@@ -1,0 +1,117 @@
+{
+  "feature": {
+    "type": "minecraft:random_selector",
+    "config": {
+      "features": [
+        {
+          "chance": 0.3333,
+          "feature": {
+            "feature": {
+              "type": "minecraft:tree",
+              "config": {
+                "decorators": [],
+                "dirt_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:dirt"
+                  }
+                },
+                "foliage_placer": {
+                  "type": "minecraft:dark_oak_foliage_placer",
+                  "offset": 0,
+                  "radius": 0
+                },
+                "foliage_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:brown_mushroom_block",
+                    "Properties": {
+                      "down": "true",
+                      "east": "true",
+                      "north": "true",
+                      "south": "true",
+                      "up": "true",
+                      "west": "true"
+                    }
+                  }
+                },
+                "force_dirt": false,
+                "ignore_vines": true,
+                "minimum_size": {
+                  "type": "minecraft:three_layers_feature_size",
+                  "limit": 1,
+                  "lower_size": 0,
+                  "middle_size": 1,
+                  "upper_limit": 1,
+                  "upper_size": 2
+                },
+                "trunk_placer": {
+                  "type": "minecraft:dark_oak_trunk_placer",
+                  "base_height": 6,
+                  "height_rand_a": 2,
+                  "height_rand_b": 1
+                },
+                "trunk_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:pale_oak_log",
+                    "Properties": {
+                      "axis": "y"
+                    }
+                  }
+                }
+              }
+            },
+            "placement": [
+              {
+                "type": "minecraft:block_predicate_filter",
+                "predicate": {
+                  "type": "minecraft:would_survive",
+                  "state": {
+                    "Name": "minecraft:oak_sapling",
+                    "Properties": {
+                      "stage": "0"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "default": "minecraft:pale_oak_checked"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 14
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "minecraft:oak_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

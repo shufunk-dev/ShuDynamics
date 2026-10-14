@@ -1,0 +1,57 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "conifer",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 64
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.2,
+      "max_exclusive": 3.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 9.0,
+      "max_exclusive": 12.0
+    },
+    "droop": 0.4,
+    "shape": 0.3,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stripped_warped_hyphae",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:spruce_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:warped_wart_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

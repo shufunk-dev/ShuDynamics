@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:nether_wastes",
+    "mysticalterrain:ashen_quartz_crags",
+    "mysticalterrain:blighted_quartz_crags",
+    "mysticalterrain:crystalline_basalt_organs",
+    "mysticalterrain:crystalline_blackstone_badlands",
+    "mysticalterrain:crystalline_brimstone_flats",
+    "mysticalterrain:crystalline_cinder_wastes",
+    "mysticalterrain:crystalline_crimson_cathedral",
+    "mysticalterrain:crystalline_ember_thicket",
+    "mysticalterrain:crystalline_glowcap_hollows",
+    "mysticalterrain:crystalline_glowstone_grotto",
+    "mysticalterrain:crystalline_infernal_spires",
+    "mysticalterrain:crystalline_mingled_wilds",
+    "mysticalterrain:crystalline_molten_fields",
+    "mysticalterrain:crystalline_scarlet_bog",
+    "mysticalterrain:crystalline_soulglass_dunes",
+    "mysticalterrain:crystalline_warped_reef",
+    "mysticalterrain:crystalline_wartbloom_fields",
+    "mysticalterrain:crystalline_weeping_rift",
+    "mysticalterrain:fungal_quartz_crags",
+    "mysticalterrain:gilded_quartz_crags",
+    "mysticalterrain:molten_quartz_crags",
+    "mysticalterrain:ossified_quartz_crags",
+    "mysticalterrain:overgrown_quartz_crags",
+    "mysticalterrain:quartz_caverns",
+    "mysticalterrain:quartz_crags",
+    "mysticalterrain:soulburnt_quartz_crags",
+    "mysticalterrain:weeping_quartz_crags"
+  ]
+}

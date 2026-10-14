@@ -1,0 +1,75 @@
+{
+  "feature": {
+    "type": "minecraft:random_patch",
+    "config": {
+      "tries": 32,
+      "xz_spread": 7,
+      "y_spread": 3,
+      "feature": {
+        "feature": {
+          "type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:weighted_state_provider",
+              "entries": [
+                {
+                  "data": {
+                    "Name": "minecraft:fern"
+                  },
+                  "weight": 12
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:large_fern",
+                    "Properties": {
+                      "half": "lower"
+                    }
+                  },
+                  "weight": 4
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:pale_moss_carpet",
+                    "Properties": {
+                      "bottom": "true",
+                      "east": "none",
+                      "north": "none",
+                      "south": "none",
+                      "west": "none"
+                    }
+                  },
+                  "weight": 4
+                }
+              ]
+            }
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+              "type": "minecraft:matching_blocks",
+              "blocks": "minecraft:air"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

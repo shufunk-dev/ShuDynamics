@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/runeblade"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.83,
+        -0.87,
+        2.34
+      ],
+      "scale": [
+        0.541,
+        0.541,
+        0.541
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.79,
+        -2.5,
+        -16.6
+      ],
+      "scale": [
+        0.495,
+        0.495,
+        0.495
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.98,
+        -4.93,
+        0
+      ],
+      "scale": [
+        0.4684,
+        0.4684,
+        0.4684
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.2727272727272727,
+        0.2727272727272727,
+        0.2727272727272727
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.98,
+        -4.93,
+        0
+      ],
+      "scale": [
+        0.4684,
+        0.4684,
+        0.4684
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.98,
+        -4.93,
+        0
+      ],
+      "scale": [
+        0.4684,
+        0.4684,
+        0.4684
+      ]
+    }
+  }
+}

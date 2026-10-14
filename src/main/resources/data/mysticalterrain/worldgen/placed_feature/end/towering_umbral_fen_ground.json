@@ -1,0 +1,44 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:towering_umbral_fen",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:gloam_moss"
+        }
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 0,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:mud"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:gloomstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.45
+    }
+  },
+  "placement": []
+}

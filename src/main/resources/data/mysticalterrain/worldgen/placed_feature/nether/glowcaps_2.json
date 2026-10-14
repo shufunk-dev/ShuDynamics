@@ -1,0 +1,61 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "mushroom",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 12,
+        "max_inclusive": 18
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.2,
+        "max_exclusive": 1.8
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6.0,
+        "max_exclusive": 9.0
+      },
+      "reach": 12,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "mysticalterrain:sporewood_wood",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "mysticalterrain:glowcap_block"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:shroomlight"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:amethyst_block",
+    "minecraft:basalt",
+    "minecraft:blue_ice",
+    "minecraft:brown_mushroom_block",
+    "minecraft:calcite",
+    "minecraft:magma_block",
+    "minecraft:nether_wart_block",
+    "minecraft:packed_ice",
+    "minecraft:prismarine",
+    "minecraft:shroomlight",
+    "minecraft:snow_block",
+    "minecraft:warped_wart_block"
+  ]
+}

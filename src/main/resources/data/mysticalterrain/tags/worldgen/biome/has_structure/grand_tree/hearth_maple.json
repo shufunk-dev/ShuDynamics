@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:amber_meadow",
+    "mysticalterrain:crimson_canopy",
+    "mysticalterrain:gusty_maples",
+    "mysticalterrain:harvest_prairie",
+    "mysticalterrain:pumpkin_fields",
+    "mysticalterrain:tawny_savanna"
+  ]
+}

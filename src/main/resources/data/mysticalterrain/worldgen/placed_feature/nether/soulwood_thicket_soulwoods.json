@@ -1,0 +1,73 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "weeping",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 18,
+        "max_inclusive": 26
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.6,
+        "max_exclusive": 2.4
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 9.0,
+        "max_exclusive": 12.0
+      },
+      "droop": 0.6,
+      "reach": 14,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:stripped_warped_hyphae",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:warped_wart_block"
+              },
+              "weight": 5
+            },
+            {
+              "data": {
+                "Name": "minecraft:shroomlight"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "cover": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:soul_fire"
+          }
+        },
+        "cover_chance": 0.05
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

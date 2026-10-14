@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "mysticalterrain:block/rimewood_planks",
+    "side": "mysticalterrain:block/rimewood_planks",
+    "top": "mysticalterrain:block/rimewood_planks"
+  }
+}

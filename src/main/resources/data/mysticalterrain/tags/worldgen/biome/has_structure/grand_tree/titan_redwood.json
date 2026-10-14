@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_redwoods",
+    "mysticalterrain:crag_forest",
+    "mysticalterrain:mossy_taiga",
+    "mysticalterrain:sequoia_grove",
+    "mysticalterrain:titanwood"
+  ]
+}

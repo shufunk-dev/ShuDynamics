@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:blighted_glowcap_hollows",
+    "mysticalterrain:crystalline_glowcap_hollows",
+    "mysticalterrain:frostbitten_glowcap_hollows",
+    "mysticalterrain:fungal_auric_badlands",
+    "mysticalterrain:fungal_brimstone_flats",
+    "mysticalterrain:fungal_charred_forest",
+    "mysticalterrain:fungal_cinder_wastes",
+    "mysticalterrain:fungal_ember_thicket",
+    "mysticalterrain:fungal_frostfire_chasm",
+    "mysticalterrain:fungal_glowstone_grotto",
+    "mysticalterrain:fungal_infernal_spires",
+    "mysticalterrain:fungal_molten_fields",
+    "mysticalterrain:fungal_ossuary_dunes",
+    "mysticalterrain:fungal_quartz_crags",
+    "mysticalterrain:fungal_scarlet_bog",
+    "mysticalterrain:fungal_soulfire_marsh",
+    "mysticalterrain:fungal_soulglass_dunes",
+    "mysticalterrain:gilded_glowcap_hollows",
+    "mysticalterrain:glowcap_hollows",
+    "mysticalterrain:molten_glowcap_hollows",
+    "mysticalterrain:overgrown_glowcap_hollows",
+    "mysticalterrain:radiant_glowcap_hollows",
+    "mysticalterrain:towering_glowcap_hollows",
+    "mysticalterrain:weeping_glowcap_hollows"
+  ]
+}

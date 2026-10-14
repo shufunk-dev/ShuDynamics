@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 45,
+      "max_inclusive": 56
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.14,
+      "max_exclusive": 3.84
+    },
+    "crown": 19.0,
+    "lean": 0.44,
+    "gnarl": 0.43,
+    "density": 0.8,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:starbark_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:shroomlight"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.94,
+      "flat": 0.75,
+      "tiers": 0.03,
+      "lopside": 0.9,
+      "bends": 1.52,
+      "swing": 0.86,
+      "split": 0.55,
+      "sprout": 0.28,
+      "tropism": -0.39,
+      "twig": 0.99,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.56,
+      "jitter": 0.62,
+      "forks": 1
+    }
+  }
+}

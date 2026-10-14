@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:aspen_hollow",
+    "mysticalterrain:golden_birchwood",
+    "mysticalterrain:hollowbark_forest",
+    "mysticalterrain:maple_woods",
+    "mysticalterrain:marigold_grove"
+  ]
+}

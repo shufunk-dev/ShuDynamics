@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 36,
+      "max_inclusive": 45
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.01,
+      "max_exclusive": 2.45
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.9,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.4,
+    "gnarl": 0.61,
+    "density": 0.83,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:mystwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:mystwood_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 5,
+      "spread": 0.81,
+      "flat": 0.79,
+      "tiers": 0.38,
+      "lopside": 0.45,
+      "bends": 2.06,
+      "swing": 0.38,
+      "split": 0.41,
+      "sprout": 0.44,
+      "tropism": -0.03,
+      "twig": 1.35,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.48,
+      "jitter": 0.3,
+      "forks": 1
+    }
+  }
+}

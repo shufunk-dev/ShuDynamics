@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:frostbloom_meadow",
+    "mysticalterrain:glacial_expanse",
+    "mysticalterrain:pale_frostwood",
+    "mysticalterrain:rimegrass_plains",
+    "mysticalterrain:sleet_hills"
+  ]
+}

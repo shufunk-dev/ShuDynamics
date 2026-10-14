@@ -1,0 +1,268 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:overworld/acacia_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/acacia_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/bamboo_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/bamboo_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/birch_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cherry_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/drowned_sandstone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/drowned_sandstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mossy_gate",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mushroom_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mushroom_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/obsidian_monoliths",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/pale_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/pale_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/pale_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/starbark_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/starbark_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/stone_circle",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/wayside_shrine",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 3,
+    "salt": 252543678,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 3
+    }
+  }
+}
