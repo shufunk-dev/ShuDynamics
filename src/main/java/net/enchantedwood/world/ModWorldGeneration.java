@@ -89,6 +89,57 @@ public class ModWorldGeneration {
     public static final RegistryKey<PlacedFeature> VOLCANIC_CALDERA_PLACED_KEY =
             RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "volcanic_caldera"));
 
+    public static final Feature<net.enchantedwood.world.gen.mystical.feature.GrandTreeConfiguration> GRAND_TREE_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "grand_tree"),
+            new net.enchantedwood.world.gen.mystical.feature.GrandTreeFeature(net.enchantedwood.world.gen.mystical.feature.GrandTreeConfiguration.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> GRAND_TREE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "grand_tree"));
+
+    public static final RegistryKey<PlacedFeature> GRAND_TREE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "grand_tree"));
+
+    public static final Feature<net.enchantedwood.world.gen.mystical.feature.SpireConfiguration> SPIRE_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "spire"),
+            new net.enchantedwood.world.gen.mystical.feature.SpireFeature(net.enchantedwood.world.gen.mystical.feature.SpireConfiguration.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> SPIRE_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "spire"));
+
+    public static final RegistryKey<PlacedFeature> SPIRE_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "spire"));
+
+    public static final Feature<net.enchantedwood.world.gen.mystical.feature.BoulderConfiguration> BOULDER_FEATURE = Registry.register(
+            Registries.FEATURE,
+            Identifier.of(EnchantedWoodMod.MOD_ID, "boulder"),
+            new net.enchantedwood.world.gen.mystical.feature.BoulderFeature(net.enchantedwood.world.gen.mystical.feature.BoulderConfiguration.CODEC)
+    );
+
+    public static final RegistryKey<ConfiguredFeature<?, ?>> BOULDER_KEY =
+            RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "boulder"));
+
+    public static final RegistryKey<PlacedFeature> BOULDER_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "boulder"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_BAOBAB_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_baobab"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_GIANT_FUNGUS_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_giant_fungus"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_TIERED_SHELF_FUNGUS_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_tiered_shelf_fungus"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_SPIRES_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_spires"));
+
+    public static final RegistryKey<PlacedFeature> CONVERGENCE_BOULDERS_PLACED_KEY =
+            RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "convergence_boulders"));
+
     public static final RegistryKey<ConfiguredFeature<?, ?>> AVOCADO_TREE_KEY =
             RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(EnchantedWoodMod.MOD_ID, "avocado_tree"));
     public static final RegistryKey<ConfiguredFeature<?, ?>> STARFRUIT_TREE_KEY =
@@ -394,6 +445,37 @@ public class ModWorldGeneration {
                 BiomeSelectors.includeByKey(scorchedCaldera),
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 VOLCANIC_CALDERA_PLACED_KEY
+        );
+
+        // Mystical Convergence Procedural Features: Colossal Baobabs, Giant Tiered Fungi, Spires & Boulders
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(anoxicBarrens, riftwoodHaven),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                CONVERGENCE_BAOBAB_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                CONVERGENCE_GIANT_FUNGUS_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(causticMire, anoxicBarrens),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                CONVERGENCE_TIERED_SHELF_FUNGUS_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(anoxicBarrens, scorchedCaldera, causticMire),
+                GenerationStep.Feature.RAW_GENERATION,
+                CONVERGENCE_SPIRES_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                BiomeSelectors.includeByKey(riftwoodHaven, scorchedCaldera, anoxicBarrens),
+                GenerationStep.Feature.RAW_GENERATION,
+                CONVERGENCE_BOULDERS_PLACED_KEY
         );
 
         // Fractured Nether & End Incursions in Convergence: Overworld Cave Carvers & Terrain/Ores
