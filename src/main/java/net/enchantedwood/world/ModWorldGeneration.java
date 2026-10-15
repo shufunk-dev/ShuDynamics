@@ -1,7 +1,9 @@
 package net.enchantedwood.world;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import java.util.function.Predicate;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -351,17 +353,46 @@ public class ModWorldGeneration {
                 "disk_gravel"
         };
 
+        Predicate<BiomeSelectionContext> isConvergenceBiome = context -> {
+            var key = context.getBiomeKey();
+            if (key == null) return false;
+            String ns = key.getValue().getNamespace();
+            return ns.equals("enchantedwood") || ns.equals("mysticalterrain");
+        };
+
+        Predicate<BiomeSelectionContext> isThermalBiomeSelector = context -> {
+            var key = context.getBiomeKey();
+            return key != null && net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(key.getValue());
+        };
+
+        Predicate<BiomeSelectionContext> isAcidBiomeSelector = context -> {
+            var key = context.getBiomeKey();
+            return key != null && (net.enchantedwood.event.ConvergenceHazardHandler.isAcidBiome(key.getValue()) || key.equals(riftwoodHaven));
+        };
+
+        Predicate<BiomeSelectionContext> isAnoxicBiomeSelector = context -> {
+            var key = context.getBiomeKey();
+            return key != null && (net.enchantedwood.event.ConvergenceHazardHandler.isAnoxicBiome(key.getValue())
+                    || key.equals(riftwoodHaven)
+                    || key.equals(resonanceSanctum));
+        };
+
+        Predicate<BiomeSelectionContext> isHazardBiomeSelector = context -> {
+            var key = context.getBiomeKey();
+            if (key == null) return false;
+            Identifier id = key.getValue();
+            return net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(id)
+                    || net.enchantedwood.event.ConvergenceHazardHandler.isAcidBiome(id)
+                    || net.enchantedwood.event.ConvergenceHazardHandler.isAnoxicBiome(id);
+        };
+
         for (String oreId : vanillaOreIds) {
             RegistryKey<PlacedFeature> placedKey = RegistryKey.of(
                     RegistryKeys.PLACED_FEATURE,
                     Identifier.of("minecraft", oreId)
             );
             BiomeModifications.addFeature(
-                    BiomeSelectors.includeByKey(
-                            riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera,
-                            alphaRainforest, seasonalForest, shrubland, modifiedJungleEdge,
-                            alphaTundra, desertLakes, gravellyMountains
-                    ),
+                    isConvergenceBiome,
                     GenerationStep.Feature.UNDERGROUND_ORES,
                     placedKey
             );
@@ -374,47 +405,65 @@ public class ModWorldGeneration {
                 TIN_ORE_PLACED_KEY
         );
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(
-                        riftwoodHaven, anoxicBarrens, causticMire, scorchedCaldera,
-                        alphaRainforest, seasonalForest, shrubland, modifiedJungleEdge,
-                        alphaTundra, desertLakes, gravellyMountains
-                ),
+                isConvergenceBiome,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 TIN_ORE_PLACED_KEY
         );
 
+        // Acid/Toxic Biomes: Fluorite & Tantalum
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                isAcidBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 FLUORITE_ORE_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                isAcidBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 TANTALUM_ORE_PLACED_KEY
         );
 
+        // Thermal/Volcanic Biomes: Zirconia, Hafnium, Cobalt, Ardite, Nether Tungsten
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(scorchedCaldera),
+                isThermalBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 ZIRCONIA_ORE_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(scorchedCaldera),
+                isThermalBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 HAFNIUM_ORE_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(anoxicBarrens, riftwoodHaven, resonanceSanctum),
+                isThermalBiomeSelector,
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                COBALT_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                isThermalBiomeSelector,
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                ARDITE_ORE_PLACED_KEY
+        );
+
+        BiomeModifications.addFeature(
+                isThermalBiomeSelector,
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                NETHER_TUNGSTEN_ORE_PLACED_KEY
+        );
+
+        // Anoxic/Void Biomes: Neodymium
+        BiomeModifications.addFeature(
+                isAnoxicBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 NEODYMIUM_ORE_PLACED_KEY
         );
 
+        // All Hazard Biomes (Thermal, Acid, Anoxic): Aerogel
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(anoxicBarrens, causticMire, scorchedCaldera),
+                isHazardBiomeSelector,
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 AEROGEL_ORE_PLACED_KEY
         );
@@ -440,40 +489,40 @@ public class ModWorldGeneration {
                 RIFTWOOD_VILLAGE_PLACED_KEY
         );
 
-        // Scorched Caldera Volcanic Strata, Peaks & Active Lava Craters
+        // Scorched Caldera & Thermal Volcanic Strata, Peaks & Active Lava Craters
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(scorchedCaldera),
+                isThermalBiomeSelector,
                 GenerationStep.Feature.SURFACE_STRUCTURES,
                 VOLCANIC_CALDERA_PLACED_KEY
         );
 
         // Mystical Convergence Procedural Features: Colossal Baobabs, Giant Tiered Fungi, Spires & Boulders
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(anoxicBarrens, riftwoodHaven),
+                isAnoxicBiomeSelector,
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_BAOBAB_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(causticMire, riftwoodHaven),
+                isAcidBiomeSelector,
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_GIANT_FUNGUS_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(causticMire, anoxicBarrens),
+                context -> isAcidBiomeSelector.test(context) || isAnoxicBiomeSelector.test(context),
                 GenerationStep.Feature.VEGETAL_DECORATION,
                 CONVERGENCE_TIERED_SHELF_FUNGUS_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(anoxicBarrens, scorchedCaldera, causticMire),
+                isHazardBiomeSelector,
                 GenerationStep.Feature.RAW_GENERATION,
                 CONVERGENCE_SPIRES_PLACED_KEY
         );
 
         BiomeModifications.addFeature(
-                BiomeSelectors.includeByKey(riftwoodHaven, scorchedCaldera, anoxicBarrens),
+                context -> isHazardBiomeSelector.test(context) || (context.getBiomeKey() != null && context.getBiomeKey().equals(riftwoodHaven)),
                 GenerationStep.Feature.RAW_GENERATION,
                 CONVERGENCE_BOULDERS_PLACED_KEY
         );

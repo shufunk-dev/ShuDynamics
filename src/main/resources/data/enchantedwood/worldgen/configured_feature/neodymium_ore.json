@@ -21,6 +21,15 @@
         "state": {
           "Name": "enchantedwood:deepslate_neodymium_ore"
         }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:end_stone"
+        },
+        "state": {
+          "Name": "enchantedwood:neodymium_ore"
+        }
       }
     ]
   }

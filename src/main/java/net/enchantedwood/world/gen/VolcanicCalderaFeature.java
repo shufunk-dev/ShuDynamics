@@ -35,9 +35,9 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
         BlockPos origin = context.getOrigin();
         Random random = context.getRandom();
 
-        // Verify this is Scorched Caldera biome
+        // Verify this is a thermal biome
         var biomeKey = world.getBiome(origin).getKey();
-        if (biomeKey.isEmpty() || !biomeKey.get().getValue().equals(Identifier.of(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
+        if (biomeKey.isEmpty() || !net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(biomeKey.get().getValue())) {
             return false;
         }
 
@@ -57,7 +57,7 @@ public class VolcanicCalderaFeature extends Feature<DefaultFeatureConfig> {
 
                 mutablePos.set(x, 0, z);
                 var colBiome = world.getBiome(mutablePos).getKey();
-                if (colBiome.isEmpty() || !colBiome.get().getValue().equals(Identifier.of(EnchantedWoodMod.MOD_ID, "scorched_caldera"))) {
+                if (colBiome.isEmpty() || !net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(colBiome.get().getValue())) {
                     continue;
                 }
 

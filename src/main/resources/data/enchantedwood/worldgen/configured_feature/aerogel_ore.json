@@ -21,6 +21,24 @@
         "state": {
           "Name": "enchantedwood:deepslate_aerogel_ore"
         }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:end_stone"
+        },
+        "state": {
+          "Name": "enchantedwood:aerogel_ore"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "minecraft:base_stone_nether"
+        },
+        "state": {
+          "Name": "enchantedwood:aerogel_ore"
+        }
       }
     ]
   }

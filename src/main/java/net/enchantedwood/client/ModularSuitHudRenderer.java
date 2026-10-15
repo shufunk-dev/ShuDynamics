@@ -208,7 +208,7 @@ public class ModularSuitHudRenderer {
         if (player.getEntityWorld() == null) return false;
         var pos = player.getBlockPos();
         var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
-        boolean isCaustic = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        boolean isCaustic = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isAcidBiome(biomeKey.get().getValue());
         if (!isCaustic) return false;
         boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
         boolean inRain = player.getEntityWorld().isRaining() && player.getEntityWorld().isSkyVisible(pos);
@@ -220,10 +220,10 @@ public class ModularSuitHudRenderer {
         if (player.isInLava() || player.isOnFire()) return true;
         var pos = player.getBlockPos();
         var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
-        boolean isCaldera = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
-        boolean isDeepCaldera = isCaldera && player.getY() <= 25;
+        boolean isThermal = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(biomeKey.get().getValue());
+        boolean isDeepThermal = isThermal && player.getY() <= 25;
         boolean nearHeatSource = isClientNearThermalSource(player, pos);
-        return isDeepCaldera || nearHeatSource;
+        return isDeepThermal || nearHeatSource;
     }
 
     private static boolean isClientNearThermalSource(PlayerEntity player, BlockPos pos) {
@@ -240,7 +240,7 @@ public class ModularSuitHudRenderer {
         if (player.getEntityWorld() == null) return false;
         var pos = player.getBlockPos();
         var biomeKey = player.getEntityWorld().getBiome(pos).getKey();
-        boolean isAnoxic = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "anoxic_barrens"));
+        boolean isAnoxic = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isAnoxicBiome(biomeKey.get().getValue());
         if (isAnoxic) return true;
         boolean isHighAltitude = player.getY() >= 180 && player.getEntityWorld().isSkyVisible(pos);
         boolean isAnoxicCave = player.getY() <= 35 && !player.getEntityWorld().isSkyVisible(pos);

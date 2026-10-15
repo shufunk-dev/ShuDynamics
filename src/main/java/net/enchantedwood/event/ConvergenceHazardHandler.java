@@ -96,14 +96,80 @@ public class ConvergenceHazardHandler {
         tickAtmosphericHazard(world, player);
     }
 
+    public static boolean isThermalBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("scorched_caldera");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("cinder_wastes") ||
+                   path.contains("molten_fields") ||
+                   path.contains("molten_geodes") ||
+                   path.contains("infernal_spires") ||
+                   path.contains("brimstone_flats") ||
+                   path.contains("blackstone_badlands") ||
+                   path.contains("charred_forest") ||
+                   path.contains("ember_thicket") ||
+                   path.contains("emberwood_forest") ||
+                   path.contains("basalt_organs") ||
+                   path.contains("auric_badlands") ||
+                   path.contains("magma_chambers") ||
+                   path.contains("glowstone_grotto") ||
+                   path.contains("quartz_crags") ||
+                   path.contains("weeping_rift");
+        }
+        return false;
+    }
+
+    public static boolean isAcidBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("caustic_mire");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("warped_mire") ||
+                   path.contains("scarlet_bog") ||
+                   path.contains("gloom_marsh") ||
+                   path.contains("glowmire") ||
+                   path.contains("peat_bog") ||
+                   path.contains("cranberry_bog") ||
+                   path.contains("rotwood") ||
+                   path.contains("mudroot_caverns") ||
+                   path.contains("frogspawn_grotto") ||
+                   path.contains("rootcellar_caverns");
+        }
+        return false;
+    }
+
+    public static boolean isAnoxicBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("anoxic_barrens");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("ashen_void") ||
+                   path.contains("voidglass_flats") ||
+                   path.contains("nebula_barrens") ||
+                   path.contains("dragonbone_fields") ||
+                   path.contains("sculk_barrens") ||
+                   path.contains("frostvoid_expanse") ||
+                   path.contains("void_hollows") ||
+                   path.contains("echoing_hollows") ||
+                   path.contains("deep_hollows");
+        }
+        return false;
+    }
+
     // --- 1. CAUSTIC ACID PRECIPITATION & ACID WATERS ---
     private static void tickAcidHazard(ServerWorld world, ServerPlayerEntity player) {
         BlockPos pos = player.getBlockPos();
 
-        // Biome Scoping: Acid rain and caustic water hazard ONLY exist in the Caustic Mire biome!
+        // Biome Scoping: Acid rain and caustic water hazard in all caustic bogs/mires
         var biomeKey = world.getBiome(pos).getKey();
-        boolean isCausticBiome = biomeKey.isPresent() &&
-                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        boolean isCausticBiome = biomeKey.isPresent() && isAcidBiome(biomeKey.get().getValue());
         if (!isCausticBiome) return;
 
         boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
@@ -153,8 +219,7 @@ public class ConvergenceHazardHandler {
         BlockPos pos = player.getBlockPos();
 
         var biomeKey = world.getBiome(pos).getKey();
-        boolean isCalderaBiome = biomeKey.isPresent() &&
-                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+        boolean isCalderaBiome = biomeKey.isPresent() && isThermalBiome(biomeKey.get().getValue());
 
         boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
         boolean nearHeatSource = isNearThermalSource(world, pos);
@@ -197,8 +262,7 @@ public class ConvergenceHazardHandler {
 
         BlockPos pos = player.getBlockPos();
         var biomeKey = world.getBiome(pos).getKey();
-        boolean isCausticBiome = biomeKey.isPresent() &&
-                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "caustic_mire"));
+        boolean isCausticBiome = biomeKey.isPresent() && isAcidBiome(biomeKey.get().getValue());
         if (!isCausticBiome) return false;
 
         boolean inWater = player.isTouchingWater() || player.isSubmergedInWater();
@@ -213,8 +277,7 @@ public class ConvergenceHazardHandler {
 
         BlockPos pos = player.getBlockPos();
         var biomeKey = world.getBiome(pos).getKey();
-        boolean isCalderaBiome = biomeKey.isPresent() &&
-                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+        boolean isCalderaBiome = biomeKey.isPresent() && isThermalBiome(biomeKey.get().getValue());
 
         boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
         boolean nearHeatSource = isNearThermalSource(world, pos);
@@ -246,8 +309,7 @@ public class ConvergenceHazardHandler {
         BlockPos pos = player.getBlockPos();
 
         var biomeKey = world.getBiome(pos).getKey();
-        boolean isAnoxicBiome = biomeKey.isPresent() &&
-                biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "anoxic_barrens"));
+        boolean isAnoxicBiome = biomeKey.isPresent() && isAnoxicBiome(biomeKey.get().getValue());
 
         boolean isHighAltitude = player.getY() >= 180 && world.isSkyVisible(pos);
         boolean isAnoxicCave = player.getY() <= 35 && !world.isSkyVisible(pos) && world.getLightLevel(pos) <= 7;

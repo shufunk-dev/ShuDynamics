@@ -93,9 +93,9 @@ public class RiftChasmFeature extends Feature<DefaultFeatureConfig> {
             }
         }
 
-        // Check if we are in Scorched Caldera
+        // Check if we are in Scorched Caldera / thermal biome
         var biomeKey = world.getBiome(surfacePos).getKey();
-        boolean isCaldera = biomeKey.isPresent() && biomeKey.get().getValue().equals(Identifier.of("enchantedwood", "scorched_caldera"));
+        boolean isCaldera = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(biomeKey.get().getValue());
 
         // 2. Decorate Chasm Interior Walls (Only below the surface rim to preserve natural surface grass!)
         int scanRadius = (chasmLength / 2) + 4;
