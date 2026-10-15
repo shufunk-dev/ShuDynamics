@@ -906,5 +906,10 @@
   "block.enchantedwood.resonant_gem_ore": "Resonant Gem Ore",
   "item.enchantedwood.void_crystal": "Void Crystal",
   "item.enchantedwood.astral_shard": "Astral Shard",
-  "item.enchantedwood.resonant_gem": "Resonant Gem"
+  "item.enchantedwood.resonant_gem": "Resonant Gem",
+  "block.enchantedwood.netherrack_iron_ore": "Netherrack Iron Ore",
+  "block.enchantedwood.netherrack_coal_ore": "Netherrack Coal Ore",
+  "block.enchantedwood.netherrack_redstone_ore": "Netherrack Redstone Ore",
+  "block.enchantedwood.netherrack_diamond_ore": "Netherrack Diamond Ore",
+  "block.enchantedwood.netherrack_lapis_ore": "Netherrack Lapis Ore"
 }

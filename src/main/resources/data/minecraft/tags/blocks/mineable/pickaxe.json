@@ -148,6 +148,11 @@
     "enchantedwood:end_stone_diamond_ore",
     "enchantedwood:void_crystal_ore",
     "enchantedwood:astral_shard_ore",
-    "enchantedwood:resonant_gem_ore"
+    "enchantedwood:resonant_gem_ore",
+    "enchantedwood:netherrack_iron_ore",
+    "enchantedwood:netherrack_coal_ore",
+    "enchantedwood:netherrack_redstone_ore",
+    "enchantedwood:netherrack_diamond_ore",
+    "enchantedwood:netherrack_lapis_ore"
   ]
 }

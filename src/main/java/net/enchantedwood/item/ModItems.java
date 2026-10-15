@@ -1771,6 +1771,11 @@ public class ModItems {
                 entries.add(net.enchantedwood.block.ModBlocks.VOID_CRYSTAL_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.ASTRAL_SHARD_ORE);
                 entries.add(net.enchantedwood.block.ModBlocks.RESONANT_GEM_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHERRACK_COAL_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHERRACK_IRON_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHERRACK_REDSTONE_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHERRACK_LAPIS_ORE);
+                entries.add(net.enchantedwood.block.ModBlocks.NETHERRACK_DIAMOND_ORE);
                 entries.add(VOID_CRYSTAL);
                 entries.add(ASTRAL_SHARD);
                 entries.add(RESONANT_GEM);

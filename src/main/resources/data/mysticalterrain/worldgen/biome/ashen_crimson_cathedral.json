@@ -8,7 +8,7 @@
       "loop": "minecraft:ambient.crimson_forest.loop",
       "mood": {
         "block_search_extent": 8,
-        "offset": 2.0,
+        "offset": 2,
         "sound": "minecraft:ambient.crimson_forest.mood",
         "tick_delay": 6000
       }
@@ -31,7 +31,7 @@
     "minecraft:visual/fog_color": "#4b2724"
   },
   "carvers": "minecraft:nether_cave",
-  "downfall": 0.0,
+  "downfall": 0,
   "effects": {
     "water_color": "#3f76e4"
   },
@@ -73,7 +73,7 @@
     "water_ambient": [],
     "water_creature": []
   },
-  "temperature": 2.0,
+  "temperature": 2,
   "features": [
     [],
     [],
@@ -96,7 +96,12 @@
       "minecraft:ore_gold_nether",
       "minecraft:ore_quartz_nether",
       "minecraft:ore_ancient_debris_large",
-      "minecraft:ore_debris_small"
+      "minecraft:ore_debris_small",
+      "enchantedwood:ore_netherrack_coal",
+      "enchantedwood:ore_netherrack_iron",
+      "enchantedwood:ore_netherrack_redstone",
+      "enchantedwood:ore_netherrack_lapis",
+      "enchantedwood:ore_netherrack_diamond"
     ],
     [],
     [

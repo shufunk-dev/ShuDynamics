@@ -22,6 +22,9 @@
     "enchantedwood:deepslate_fluorite_ore",
     "enchantedwood:zirconia_ore",
     "enchantedwood:deepslate_zirconia_ore",
-    "enchantedwood:end_stone_coal_ore"
+    "enchantedwood:end_stone_coal_ore",
+    "enchantedwood:netherrack_iron_ore",
+    "enchantedwood:netherrack_coal_ore",
+    "enchantedwood:netherrack_lapis_ore"
   ]
 }

@@ -789,6 +789,57 @@ public class ModBlocks {
             Text.literal("§6Resonant Gem Ore"),
             Text.literal("§7Harmonic amber crystals that hum with acoustic resonance."));
 
+    // Netherrack Ore Suite for The Convergence Dimension
+    public static final Block NETHERRACK_COAL_ORE = registerBlockWithTooltip("netherrack_coal_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "netherrack_coal_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(1.0f)
+                    .resistance(1.0f)
+                    .requiresTool()),
+            Text.literal("§7Netherrack Coal Ore"),
+            Text.literal("§8Dense carbon deposits embedded inside fiery Netherrack."));
+
+    public static final Block NETHERRACK_IRON_ORE = registerBlockWithTooltip("netherrack_iron_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "netherrack_iron_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(1.5f)
+                    .resistance(1.5f)
+                    .requiresTool()),
+            Text.literal("§fNetherrack Iron Ore"),
+            Text.literal("§8Raw metallic veins running through hot Netherrack."));
+
+    public static final Block NETHERRACK_REDSTONE_ORE = registerBlockWithTooltip("netherrack_redstone_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "netherrack_redstone_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(1.5f)
+                    .resistance(1.5f)
+                    .requiresTool()
+                    .luminance(state -> 9)),
+            Text.literal("§cNetherrack Redstone Ore"),
+            Text.literal("§8Pulsing thermal redstone crystals surging inside Netherrack."));
+
+    public static final Block NETHERRACK_LAPIS_ORE = registerBlockWithTooltip("netherrack_lapis_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "netherrack_lapis_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(1.5f)
+                    .resistance(1.5f)
+                    .requiresTool()),
+            Text.literal("§9Netherrack Lapis Lazuli Ore"),
+            Text.literal("§8Deep cobalt pigments embedded inside porous Netherrack."));
+
+    public static final Block NETHERRACK_DIAMOND_ORE = registerBlockWithTooltip("netherrack_diamond_ore",
+            new Block(AbstractBlock.Settings.create()
+                    .registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(EnchantedWoodMod.MOD_ID, "netherrack_diamond_ore")))
+                    .sounds(BlockSoundGroup.NETHERRACK)
+                    .hardness(2.5f)
+                    .resistance(2.5f)
+                    .requiresTool()),
+            Text.literal("§bNetherrack Diamond Ore"),
+            Text.literal("§8High-pressure gemstone crystals forged within Nether depths."));
 
     // Nether Metallurgy: Tungsten, Cobalt, Ardite & Manyullyn
     public static final Block NETHER_TUNGSTEN_ORE = registerBlock("nether_tungsten_ore",

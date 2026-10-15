@@ -68,6 +68,8 @@
     "enchantedwood:end_stone_redstone_ore",
     "enchantedwood:end_stone_lapis_ore",
     "enchantedwood:end_stone_diamond_ore",
-    "enchantedwood:astral_shard_ore"
+    "enchantedwood:astral_shard_ore",
+    "enchantedwood:netherrack_redstone_ore",
+    "enchantedwood:netherrack_diamond_ore"
   ]
 }
