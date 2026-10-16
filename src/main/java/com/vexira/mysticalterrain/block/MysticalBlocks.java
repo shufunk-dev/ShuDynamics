@@ -127,23 +127,6 @@ public final class MysticalBlocks {
    public static final Block STARFLOWER = flower("starflower", StatusEffects.GLOWING, 10.0F, 7);
    public static final Block VOIDBLOOM = flower("voidbloom", StatusEffects.SLOWNESS, 4.0F, 4);
 
-   // Boss Ritual Altars
-   public static final Block ARCHON_ALTAR = altar("archon_altar", MapColor.PALE_YELLOW, BlockSoundGroup.STONE);
-   public static final Block ASTRAEL_ALTAR = altar("astrael_altar", MapColor.PURPLE, BlockSoundGroup.AMETHYST_BLOCK);
-   public static final Block BOGROT_ALTAR = altar("bogrot_altar", MapColor.BROWN, BlockSoundGroup.MUD_BRICKS);
-   public static final Block GROTHMAW_ALTAR = altar("grothmaw_altar", MapColor.DEEPSLATE_GRAY, BlockSoundGroup.DEEPSLATE);
-   public static final Block HOLLOW_WARDEN_ALTAR = altar("hollow_warden_altar", MapColor.CYAN, BlockSoundGroup.SCULK_CATALYST);
-   public static final Block HRIMTHANE_ALTAR = altar("hrimthane_altar", MapColor.LIGHT_BLUE, BlockSoundGroup.GLASS);
-   public static final Block LIRAEL_ALTAR = altar("lirael_altar", MapColor.MAGENTA, BlockSoundGroup.STONE);
-   public static final Block MYCELORD_ALTAR = altar("mycelord_altar", MapColor.RED, BlockSoundGroup.WOOD);
-   public static final Block PYRAXIS_ALTAR = altar("pyraxis_altar", MapColor.DARK_RED, BlockSoundGroup.NETHER_BRICKS);
-   public static final Block SEKHMAR_ALTAR = altar("sekhmar_altar", MapColor.PALE_YELLOW, BlockSoundGroup.STONE);
-
-   // Fixtures & Pedestals
-   public static final Block FROST_BELL = register("frost_bell", FrostBellBlock::new, AbstractBlock.Settings.copy(Blocks.ANVIL).sounds(BlockSoundGroup.ANVIL).luminance(state -> 6));
-   public static final Block GLOOM_BRAZIER = register("gloom_brazier", GloomBrazierBlock::new, AbstractBlock.Settings.copy(Blocks.DEEPSLATE_BRICKS).sounds(BlockSoundGroup.STONE).luminance(state -> state.get(GloomBrazierBlock.LIT) ? 12 : 0));
-   public static final Block RUNE_PILLAR = register("rune_pillar", RunePillarBlock::new, AbstractBlock.Settings.copy(Blocks.PURPUR_PILLAR).sounds(BlockSoundGroup.STONE).luminance(state -> state.get(RunePillarBlock.CHARGED) ? 13 : 3));
-   public static final Block VOID_PEDESTAL = register("void_pedestal", VoidPedestalBlock::new, AbstractBlock.Settings.copy(Blocks.OBSIDIAN).sounds(BlockSoundGroup.STONE).luminance(state -> state.get(VoidPedestalBlock.EYE) ? 10 : 3));
 
    private MysticalBlocks() {}
 
@@ -275,67 +258,4 @@ public final class MysticalBlocks {
       return block;
    }
 
-   private static Block altar(String name, MapColor color, BlockSoundGroup sound) {
-      return register(name, AltarBlock::new, AbstractBlock.Settings.copy(Blocks.OBSIDIAN).mapColor(color).sounds(sound).luminance(state -> 4 + state.get(AltarBlock.STAGE) * 2));
-   }
-
-   public static class AltarBlock extends Block {
-      public static final IntProperty STAGE = IntProperty.of("stage", 0, 6);
-      public AltarBlock(Settings settings) {
-         super(settings);
-         this.setDefaultState(this.stateManager.getDefaultState().with(STAGE, 0));
-      }
-      @Override
-      protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-         builder.add(STAGE);
-      }
-   }
-
-   public static class FrostBellBlock extends Block {
-      public static final IntProperty NUMBER = IntProperty.of("number", 0, 3);
-      public FrostBellBlock(Settings settings) {
-         super(settings);
-         this.setDefaultState(this.stateManager.getDefaultState().with(NUMBER, 0));
-      }
-      @Override
-      protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-         builder.add(NUMBER);
-      }
-   }
-
-   public static class GloomBrazierBlock extends Block {
-      public static final BooleanProperty LIT = Properties.LIT;
-      public GloomBrazierBlock(Settings settings) {
-         super(settings);
-         this.setDefaultState(this.stateManager.getDefaultState().with(LIT, false));
-      }
-      @Override
-      protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-         builder.add(LIT);
-      }
-   }
-
-   public static class RunePillarBlock extends Block {
-      public static final BooleanProperty CHARGED = BooleanProperty.of("charged");
-      public RunePillarBlock(Settings settings) {
-         super(settings);
-         this.setDefaultState(this.stateManager.getDefaultState().with(CHARGED, false));
-      }
-      @Override
-      protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-         builder.add(CHARGED);
-      }
-   }
-
-   public static class VoidPedestalBlock extends Block {
-      public static final BooleanProperty EYE = BooleanProperty.of("eye");
-      public VoidPedestalBlock(Settings settings) {
-         super(settings);
-         this.setDefaultState(this.stateManager.getDefaultState().with(EYE, false));
-      }
-      @Override
-      protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-         builder.add(EYE);
-      }
-   }
 }
