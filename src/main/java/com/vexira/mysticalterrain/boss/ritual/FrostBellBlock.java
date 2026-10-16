@@ -48,10 +48,33 @@ public class FrostBellBlock extends Block {
 
    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
       if (world instanceof ServerWorld server) {
+         RitualAltarBlockEntity altar = RitualFixtures.findAltar(server, pos, Ritual.HRIMTHANE, 12);
          int n = (Integer)state.get(NUMBER);
+
+         // Auto-tune if uninitialized or if player is sneaking (crouching)
+         if (altar != null && (n == 0 || player.isSneaking())) {
+            if (player.isSneaking()) {
+               n = (n + 1) % 4;
+               world.setBlockState(pos, state.with(NUMBER, n), 3);
+               player.sendMessage(Text.literal("§bFrost Bell tuned to: §f" + n), true);
+               world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1.5F, 0.7F + n * 0.25F);
+               return ActionResult.SUCCESS;
+            } else {
+               // Calculate orientation relative to altar center:
+               // In LairBuilder: {0, -9}=0 (North), {9, 0}=1 (East), {0, 9}=2 (South), {-9, 0}=3 (West)
+               BlockPos delta = pos.subtract(altar.getPos());
+               double angle = Math.atan2(delta.getX(), -delta.getZ());
+               if (angle < 0) angle += Math.PI * 2.0;
+               int resolved = (int)Math.round(angle / (Math.PI / 2.0)) % 4;
+               if (resolved != n) {
+                  n = resolved;
+                  world.setBlockState(pos, state.with(NUMBER, n), 3);
+               }
+            }
+         }
+
          world.playSound(null, pos, SoundEvents.BLOCK_BELL_USE, SoundCategory.BLOCKS, 2.0F, 0.7F + n * 0.25F);
          server.spawnParticles(ParticleTypes.SNOWFLAKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 20, 0.4, 0.4, 0.4, 0.05);
-         RitualAltarBlockEntity altar = RitualFixtures.findAltar(server, pos, Ritual.HRIMTHANE, 12);
          if (altar != null) {
             altar.ringBell(server, n);
          } else {

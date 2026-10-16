@@ -34,7 +34,7 @@ final class BuildingPlacer implements Blueprint.Visitor {
    private static final List<EnumProperty<WallShape>> WALL_SIDES = List.of(
       Properties.SOUTH_WALL_SHAPE, Properties.WEST_WALL_SHAPE, Properties.NORTH_WALL_SHAPE, Properties.EAST_WALL_SHAPE
    );
-   private static final IntProperty NUMBER = IntProperty.of("number", 0, 3);
+   private static final IntProperty NUMBER = com.vexira.mysticalterrain.boss.ritual.FrostBellBlock.NUMBER;
    private static final int[] DX = new int[]{0, -1, 0, 1};
    private static final int[] DZ = new int[]{1, 0, -1, 0};
 
