@@ -15,7 +15,7 @@ public abstract class DragonLandingPhaseMixin extends AbstractPhase {
       super(dragon);
    }
 
-   @Inject(method = "method_6853", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "clientTick", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$monoBreath(CallbackInfo ci) {
       ci.cancel();
       DragonFx.breathTrail(this.dragon);

@@ -18,23 +18,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Camera.class)
 public abstract class CameraShakeMixin {
    @Shadow
-   private float field_18717;
+   private float pitch;
    @Shadow
-   private float field_18718;
+   private float yaw;
    @Shadow
    @Final
-   private Quaternionf field_21518;
+   private Quaternionf rotation;
 
    @Shadow
-   protected abstract void method_19325(float var1, float var2);
+   protected abstract void setRotation(float yaw, float pitch);
 
-   @Inject(method = "method_19321", at = @At("TAIL"))
+   @Inject(method = "update", at = @At("TAIL"))
    private void mysticalterrain$shake(World level, Entity entity, boolean detached, boolean mirrored, float partial, CallbackInfo ci) {
       float[] o = VfxClient.cameraOffset(partial);
       if (o != null) {
-         this.method_19325(this.field_18718 + o[0], this.field_18717 + o[1]);
+         this.setRotation(this.yaw + o[0], this.pitch + o[1]);
          if (o.length > 2 && o[2] != 0.0F) {
-            this.field_21518.rotateZ(o[2] * (float) (Math.PI / 180.0));
+            this.rotation.rotateZ(o[2] * (float) (Math.PI / 180.0));
          }
       }
    }

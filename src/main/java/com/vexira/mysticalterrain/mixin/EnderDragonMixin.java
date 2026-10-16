@@ -46,9 +46,9 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
    }
 
    @Shadow
-   protected abstract void method_6819(ServerWorld var1, DamageSource var2, float var3);
+   protected abstract void parentDamage(ServerWorld var1, DamageSource var2, float var3);
 
-   @Inject(method = "method_5693", at = @At("TAIL"))
+   @Inject(method = "initDataTracker", at = @At("TAIL"))
    private void mysticalterrain$defineState(Builder builder, CallbackInfo ci) {
       builder.add(MYSTICALTERRAIN_STATE, 0);
    }
@@ -74,15 +74,15 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
 
    @Override
    public void mysticalterrain$reallyHurt(ServerWorld level, DamageSource source, float amount) {
-      this.method_6819(level, source, amount);
+      this.parentDamage(level, source, amount);
    }
 
-   @WrapOperation(method = "method_6007", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1521;method_6851()Lnet/minecraft/class_243;"))
+   @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/phase/Phase;getPathTarget()Lnet/minecraft/util/math/Vec3d;"))
    private Vec3d mysticalterrain$holdCourse(Phase phase, Operation<Vec3d> original) {
       return !this.getEntityWorld().isClient() && this.mysticalterrain$rework().steering() ? null : (Vec3d)original.call(new Object[]{phase});
    }
 
-   @WrapOperation(method = "method_6007", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1521;method_6855(Lnet/minecraft/class_3218;)V"))
+   @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/phase/Phase;serverTick(Lnet/minecraft/server/world/ServerWorld;)V"))
    private void mysticalterrain$holdPhase(Phase phase, ServerWorld level, Operation<Void> original) {
       if (!this.mysticalterrain$rework().holdsPhase()) {
          original.call(new Object[]{phase, level});
@@ -90,22 +90,22 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
    }
 
    @WrapOperation(
-      method = "method_6007",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1510;method_6825(Lnet/minecraft/class_3218;Ljava/util/List;)V")
+      method = "tickMovement",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;launch(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V")
    )
    private void mysticalterrain$spareKnockBack(EnderDragonEntity self, ServerWorld level, List<Entity> hit, Operation<Void> original) {
       original.call(new Object[]{self, level, this.mysticalterrain$rework().spare(hit)});
    }
 
    @WrapOperation(
-      method = "method_6007",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1510;method_6827(Lnet/minecraft/class_3218;Ljava/util/List;)V")
+      method = "tickMovement",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;damageLivingEntities(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V")
    )
    private void mysticalterrain$spareBite(EnderDragonEntity self, ServerWorld level, List<Entity> hit, Operation<Void> original) {
       original.call(new Object[]{self, level, this.mysticalterrain$rework().spare(hit)});
    }
 
-   @Inject(method = "method_6108", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "updatePostDeath", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$customDeath(CallbackInfo ci) {
       ci.cancel();
       if (this.getEntityWorld() instanceof ServerWorld server) {
@@ -120,8 +120,8 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
    }
 
    @WrapOperation(
-      method = "method_6007",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1937;method_8406(Lnet/minecraft/class_2394;DDDDDD)V"),
+      method = "tickMovement",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)V"),
       require = 0
    )
    private void mysticalterrain$noVanillaDeathParticles(
@@ -132,7 +132,7 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
       }
    }
 
-   @Inject(method = "method_6007", at = @At("HEAD"))
+   @Inject(method = "tickMovement", at = @At("HEAD"))
    private void mysticalterrain$followNoAi(CallbackInfo ci) {
       if (this.getEntityWorld().isClient() && this.isAiDisabled() && !this.isDead()) {
          PositionInterpolator interpolation = this.getInterpolator();
@@ -142,29 +142,29 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
       }
    }
 
-   @Inject(method = "method_6007", at = @At("TAIL"))
+   @Inject(method = "tickMovement", at = @At("TAIL"))
    private void mysticalterrain$tickRework(CallbackInfo ci) {
       if (this.getEntityWorld() instanceof ServerWorld server && !this.isAiDisabled()) {
          this.mysticalterrain$rework().tick(server);
       }
    }
 
-   @Inject(method = "method_6816(Lnet/minecraft/class_3218;Lnet/minecraft/class_1508;Lnet/minecraft/class_1282;F)Z", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "damagePart", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$hurt(ServerWorld level, EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
       cir.setReturnValue(this.mysticalterrain$rework().hurt(level, part, source, amount));
    }
 
-   @Inject(method = "method_6828", at = @At("HEAD"))
+   @Inject(method = "crystalDestroyed", at = @At("HEAD"))
    private void mysticalterrain$crystalDestroyed(ServerWorld level, EndCrystalEntity crystal, BlockPos pos, DamageSource source, CallbackInfo ci) {
       this.mysticalterrain$rework().onCrystalDestroyed(level, crystal, source);
    }
 
-   @Inject(method = "method_5652", at = @At("TAIL"))
+   @Inject(method = "writeCustomData", at = @At("TAIL"))
    private void mysticalterrain$save(WriteView output, CallbackInfo ci) {
       this.mysticalterrain$rework().save(output);
    }
 
-   @Inject(method = "method_5749", at = @At("TAIL"))
+   @Inject(method = "readCustomData", at = @At("TAIL"))
    private void mysticalterrain$load(ReadView input, CallbackInfo ci) {
       this.mysticalterrain$rework().load(input);
    }

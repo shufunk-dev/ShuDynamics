@@ -24,22 +24,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BossHealthOverlayMixin {
    @Shadow
    @Final
-   private MinecraftClient field_2058;
+   private MinecraftClient client;
    @Shadow
    @Final
-   Map<UUID, ClientBossBar> field_2060;
+   Map<UUID, ClientBossBar> bossBars;
 
    @Shadow
-   private void method_1799(DrawContext graphics, int x, int y, BossBar event) {
+   private void renderBossBar(DrawContext graphics, int x, int y, BossBar event) {
       throw new AssertionError();
    }
 
-   @Inject(method = "method_1796", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "render", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$render(DrawContext graphics, CallbackInfo ci) {
-      BossBarState.retain(this.field_2060.keySet());
+      BossBarState.retain(this.bossBars.keySet());
       boolean styled = false;
 
-      for (ClientBossBar event : this.field_2060.values()) {
+      for (ClientBossBar event : this.bossBars.values()) {
          if (BossBarRenderer.isStyled(event)) {
             styled = true;
             break;
@@ -48,11 +48,10 @@ public abstract class BossHealthOverlayMixin {
 
       if (styled) {
          ci.cancel();
-         graphics.createNewRootLayer();
          int y = 4;
          boolean first = true;
 
-         for (ClientBossBar event : this.field_2060.values()) {
+         for (ClientBossBar event : this.bossBars.values()) {
             if (BossBarRenderer.isStyled(event)) {
                y += BossBarRenderer.draw(graphics, event, y, !first);
                first = false;
@@ -60,9 +59,9 @@ public abstract class BossHealthOverlayMixin {
                int x = graphics.getScaledWindowWidth() / 2 - 91;
                Text name = event.getName();
                graphics.drawTextWithShadow(
-                  this.field_2058.textRenderer, name, graphics.getScaledWindowWidth() / 2 - this.field_2058.textRenderer.getWidth(name) / 2, y, -1
+                  this.client.textRenderer, name, graphics.getScaledWindowWidth() / 2 - this.client.textRenderer.getWidth(name) / 2, y, -1
                );
-               this.method_1799(graphics, x, y + 9, event);
+               this.renderBossBar(graphics, x, y + 9, event);
                y += 19;
             }
 
@@ -73,7 +72,7 @@ public abstract class BossHealthOverlayMixin {
       }
    }
 
-   @Inject(method = "method_1801", at = @At("HEAD"))
+   @Inject(method = "clear", at = @At("HEAD"))
    private void mysticalterrain$reset(CallbackInfo ci) {
       BossBarState.clear();
    }

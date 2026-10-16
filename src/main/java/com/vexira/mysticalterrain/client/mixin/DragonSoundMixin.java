@@ -32,12 +32,12 @@ public abstract class DragonSoundMixin {
    );
    private static final Random RANDOM = Random.create();
 
-   @ModifyVariable(method = "method_4873", at = @At("HEAD"), argsOnly = true)
+   @ModifyVariable(method = "play(Lnet/minecraft/client/sound/SoundInstance;)Lnet/minecraft/client/sound/SoundSystem$PlayResult;", at = @At("HEAD"), argsOnly = true)
    private SoundInstance mysticalterrain$dragonVoice(SoundInstance sound) {
       return swap(sound);
    }
 
-   @ModifyVariable(method = "method_4872", at = @At("HEAD"), argsOnly = true)
+   @ModifyVariable(method = "play(Lnet/minecraft/client/sound/SoundInstance;I)V", at = @At("HEAD"), argsOnly = true)
    private SoundInstance mysticalterrain$dragonVoiceDelayed(SoundInstance sound) {
       return swap(sound);
    }

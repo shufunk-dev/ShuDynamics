@@ -31,17 +31,17 @@ public abstract class DragonFireballMixin extends ExplosiveProjectileEntity {
       return entity instanceof EnderDragonPart part && part.owner == this.getOwner() ? false : super.canHit(entity);
    }
 
-   @Inject(method = "method_7467", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "getParticleType", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$monoTrail(CallbackInfoReturnable<ParticleEffect> cir) {
       cir.setReturnValue(DragonFx.orbTrail());
    }
 
-   @ModifyArg(method = "method_7488", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1295;method_5608(Lnet/minecraft/class_2394;)V"), require = 0)
+   @ModifyArg(method = "onCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setParticleType(Lnet/minecraft/particle/ParticleEffect;)V"), require = 0)
    private ParticleEffect mysticalterrain$monoPool(ParticleEffect original) {
       return DragonFx.POOL;
    }
 
-   @ModifyArg(method = "method_7488", at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1295;method_5604(I)V"), require = 0)
+   @ModifyArg(method = "onCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setDuration(I)V"), require = 0)
    private int mysticalterrain$longerPools(int duration) {
       return this.getOwner() instanceof EnderDragonEntity dragon && ((DragonReworkHolder)dragon).mysticalterrain$rework().fightPhase() >= 2
          ? duration * 2
@@ -49,8 +49,8 @@ public abstract class DragonFireballMixin extends ExplosiveProjectileEntity {
    }
 
    @WrapOperation(
-      method = "method_7488",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1937;method_20290(ILnet/minecraft/class_2338;I)V"),
+      method = "onCollision",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;syncWorldEvent(ILnet/minecraft/util/math/BlockPos;I)V"),
       require = 0
    )
    private void mysticalterrain$monoBurst(World level, int event, BlockPos pos, int data, Operation<Void> original) {

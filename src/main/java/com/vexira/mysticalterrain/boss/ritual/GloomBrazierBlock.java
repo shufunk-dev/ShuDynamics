@@ -55,7 +55,7 @@ public class GloomBrazierBlock extends Block {
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 0.6F);
             world.playSound(null, pos, (SoundEvent)SoundEvents.PARTICLE_SOUL_ESCAPE.value(), SoundCategory.BLOCKS, 1.0F, 0.5F);
             stack.damage(1, player, hand.getEquipmentSlot());
-            boolean newMoon = world.getTimeOfDay() / 24000L % 8L == 4L;
+            boolean newMoon = (world.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
             if (!newMoon || !world.isNight()) {
                player.sendMessage(Text.translatable("ritual.mysticalterrain.hollow_warden.moon"), true);
             }

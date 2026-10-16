@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Environment(EnvType.CLIENT)
 @Mixin(EnderDragonEntityRenderer.class)
 public interface EnderDragonRendererInvoker {
-   @Invoker("method_61158")
+   @Invoker("renderDeathAnimation")
    static void mysticalterrain$submitRays(MatrixStack poseStack, float progress, OrderedRenderCommandQueue collector, RenderLayer type) {
       throw new AssertionError();
    }

@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(EnderDragonFight.class)
 public interface EndDragonFightInvoker {
-   @Invoker("method_12535")
+   @Invoker("countAliveCrystals")
    void mysticalterrain$updateCrystalCount();
 }

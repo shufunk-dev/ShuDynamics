@@ -10,24 +10,24 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(EnderDragonFight.class)
 public interface EndDragonFightAccessor {
-   @Invoker("method_12523")
+   @Invoker("createDragon")
    EnderDragonEntity mysticalterrain$createNewDragon();
 
-   @Invoker("method_12518")
+   @Invoker("generateEndPortal")
    void mysticalterrain$spawnExitPortal(boolean var1);
 
-   @Accessor("field_13115")
+   @Accessor("dragonKilled")
    boolean mysticalterrain$dragonKilled();
 
-   @Accessor("field_13115")
+   @Accessor("dragonKilled")
    void mysticalterrain$setDragonKilled(boolean var1);
 
-   @Accessor("field_13117")
+   @Accessor("exitPortalLocation")
    BlockPos mysticalterrain$portalLocation();
 
-   @Accessor("field_44877")
+   @Accessor("origin")
    BlockPos mysticalterrain$origin();
 
-   @Accessor("field_13119")
+   @Accessor("bossBar")
    ServerBossBar mysticalterrain$dragonEvent();
 }

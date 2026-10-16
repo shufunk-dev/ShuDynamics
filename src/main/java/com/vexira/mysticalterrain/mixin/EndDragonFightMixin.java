@@ -18,32 +18,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnderDragonFight.class)
 public abstract class EndDragonFightMixin {
    @Shadow
-   private @Nullable UUID field_13116;
+   private @Nullable UUID dragonUuid;
    @Shadow
    @Final
-   private ServerBossBar field_13119;
+   private ServerBossBar bossBar;
 
-   @Inject(method = "method_12523", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "createDragon", at = @At("HEAD"), cancellable = true)
    private void mysticalterrain$waitForRitual(CallbackInfoReturnable<EnderDragonEntity> cir) {
       if (!DragonRitual.allowsSpawn()) {
          cir.setReturnValue(null);
       }
    }
 
-   @Inject(method = "method_12521", at = @At("HEAD"))
+   @Inject(method = "setSpawnState", at = @At("HEAD"))
    private void mysticalterrain$crystalRespawnStart(EnderDragonSpawnState stage, CallbackInfo ci) {
       DragonRitual.setAllowSpawn(true);
    }
 
-   @Inject(method = "method_12521", at = @At("RETURN"))
+   @Inject(method = "setSpawnState", at = @At("RETURN"))
    private void mysticalterrain$crystalRespawnEnd(EnderDragonSpawnState stage, CallbackInfo ci) {
       DragonRitual.setAllowSpawn(false);
    }
 
-   @Inject(method = "method_12538", at = @At("TAIL"))
+   @Inject(method = "tick", at = @At("TAIL"))
    private void mysticalterrain$hideEmptyBar(CallbackInfo ci) {
-      if (this.field_13116 == null) {
-         this.field_13119.setVisible(false);
+      if (this.dragonUuid == null) {
+         this.bossBar.setVisible(false);
       }
    }
 }

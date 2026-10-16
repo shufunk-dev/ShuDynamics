@@ -151,6 +151,7 @@ public class RitualAltarBlockEntity extends BlockEntity {
                break;
             case MYCELORD:
                this.incubate(level, 600, SoundEvents.BLOCK_ROOTED_DIRT_PLACE);
+               break;
             case ASTRAEL:
             case SEKHMAR:
             default:
@@ -159,7 +160,7 @@ public class RitualAltarBlockEntity extends BlockEntity {
                if (level.getTime() % 20L == 0L) {
                   int lit = RitualFixtures.count(level, this.pos, MysticalBosses.GLOOM_BRAZIER, GloomBrazierBlock.LIT);
                   this.setStage(level, lit);
-                  boolean newMoon = level.getTimeOfDay() / 24000L % 8L == 4L;
+                  boolean newMoon = (level.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
                   if (lit >= 6 && level.isNight() && newMoon) {
                      this.begin(level);
                   }

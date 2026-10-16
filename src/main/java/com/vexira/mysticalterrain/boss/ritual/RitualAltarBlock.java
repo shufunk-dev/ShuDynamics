@@ -89,15 +89,20 @@ public class RitualAltarBlock extends BlockWithEntity {
    }
 
    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-      if (world.getBlockEntity(pos) instanceof RitualAltarBlockEntity altar) {
-         int var13 = MysticalBosses.jarIndex(stack);
-         boolean fits = stack.isOf(this.offering() != null ? this.offering() : Items.AIR) || this.ritual == Ritual.SEKHMAR && var13 >= 0;
-         if (!fits) {
-            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
-         }
+      if (stack.isEmpty()) {
+         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+      }
 
+      Item required = this.offering();
+      int jarIndex = MysticalBosses.jarIndex(stack);
+      boolean fits = (required != null && stack.isOf(required)) || (this.ritual == Ritual.SEKHMAR && jarIndex >= 0);
+      if (!fits) {
+         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+      }
+
+      if (world.getBlockEntity(pos) instanceof RitualAltarBlockEntity altar) {
          if (world instanceof ServerWorld server) {
-            Text refusal = altar.offer(server, player, stack, var13);
+            Text refusal = altar.offer(server, player, stack, jarIndex);
             if (refusal != null) {
                player.sendMessage(refusal, true);
                return ActionResult.FAIL;
