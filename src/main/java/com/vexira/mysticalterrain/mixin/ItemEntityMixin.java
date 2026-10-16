@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
-   @Inject(method = "method_5773", at = @At("TAIL"))
+   @Inject(method = "tick", at = @At("TAIL"))
    private void mysticalterrain$offering(CallbackInfo ci) {
       RitualFixtures.itemTick((ItemEntity)(Object)this);
    }
