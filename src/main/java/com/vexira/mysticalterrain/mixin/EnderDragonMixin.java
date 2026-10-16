@@ -91,7 +91,8 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
 
    @WrapOperation(
       method = "tickMovement",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;launch(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V")
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;launchLivingEntities(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V"),
+      require = 0
    )
    private void mysticalterrain$spareKnockBack(EnderDragonEntity self, ServerWorld level, List<Entity> hit, Operation<Void> original) {
       original.call(new Object[]{self, level, this.mysticalterrain$rework().spare(hit)});
@@ -99,7 +100,8 @@ public abstract class EnderDragonMixin extends MobEntity implements DragonRework
 
    @WrapOperation(
       method = "tickMovement",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;damageLivingEntities(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V")
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;damageLivingEntities(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V"),
+      require = 0
    )
    private void mysticalterrain$spareBite(EnderDragonEntity self, ServerWorld level, List<Entity> hit, Operation<Void> original) {
       original.call(new Object[]{self, level, this.mysticalterrain$rework().spare(hit)});
