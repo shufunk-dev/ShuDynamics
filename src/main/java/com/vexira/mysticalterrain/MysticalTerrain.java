@@ -37,11 +37,14 @@ public class MysticalTerrain {
       Registry.register(Registries.STRUCTURE_PIECE, id("formation"), FormationPiece.TYPE);
       Registry.register(Registries.STRUCTURE_PIECE, id("building"), BuildingPiece.TYPE);
 
-      // 5. Blocks & Biomes
+      // 5. Blocks, Bosses, Gear & Biomes
       MysticalBlocks.register();
+      com.vexira.mysticalterrain.boss.MysticalBosses.register();
+      com.vexira.mysticalterrain.boss.net.BossNet.register();
+      com.vexira.mysticalterrain.gear.GearSystem.init();
       MysticalTrees.register();
 
-      LOGGER.info("Mystical Terrain features, structures & blocksets successfully integrated for The Convergence!");
+      LOGGER.info("Mystical Terrain features, structures, bosses, weapons, armor & blocksets successfully integrated for The Convergence!");
    }
 
    public static Identifier id(String path) {

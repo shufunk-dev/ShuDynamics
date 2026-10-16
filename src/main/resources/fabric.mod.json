@@ -23,12 +23,18 @@
     ]
   },
   "mixins": [
-    "enchantedwood.mixins.json"
+    "enchantedwood.mixins.json",
+    "mysticalterrain.mixins.json",
+    {
+      "config": "mysticalterrain.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=0.16.0",
     "minecraft": ">=1.21.4",
     "java": ">=21",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "geckolib": ">=5.4.5"
   }
 }

@@ -37,6 +37,10 @@ repositories {
         name = 'ModMaven'
         url = 'https://modmaven.dev/'
     }
+    maven {
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
     mavenCentral()
 }
 
@@ -48,6 +52,9 @@ dependencies {
 
     // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // GeckoLib
+    modImplementation files("libs/geckolib-fabric-1.21.11-5.4.5.jar")
 
     // EMI Recipe Viewer API
     modCompileOnly "dev.emi:emi-fabric:1.1.16+1.21.1:api"

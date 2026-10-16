@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.vexira.mysticalterrain.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DragonFireballMixin",
+    "DragonLandingPhaseMixin",
+    "DragonSittingFlamingPhaseMixin",
+    "DragonStrafePlayerPhaseMixin",
+    "EndDragonFightAccessor",
+    "EndDragonFightInvoker",
+    "EndDragonFightMixin",
+    "EnderDragonMixin",
+    "ItemEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

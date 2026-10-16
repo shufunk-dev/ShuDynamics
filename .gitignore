@@ -3,6 +3,7 @@
 build/
 bin/
 out/
+libs/
 gradle-app.setting
 !gradle/wrapper/gradle-wrapper.jar
 

@@ -196,5 +196,8 @@ public class EnchantedWoodClient implements ClientModInitializer {
                 }
             }
         });
+
+        // Initialize Mystical Terrain combat, bosses, VFX and weapon renderers
+        new com.vexira.mysticalterrain.client.MysticalTerrainClient().onInitializeClient();
     }
 }
