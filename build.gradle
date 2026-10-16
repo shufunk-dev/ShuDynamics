@@ -20,6 +20,13 @@ base {
     archivesName = project.archives_base_name
 }
 
+loom {
+    mixin {
+        defaultRefmapName = "enchantedwood.refmap.json"
+        useLegacyMixinAp = true
+    }
+}
+
 repositories {
     maven {
         name = 'Fabric'

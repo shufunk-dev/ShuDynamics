@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "com.vexira.mysticalterrain.mixin",
+  "refmap": "enchantedwood.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "DragonFireballMixin",
