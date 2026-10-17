@@ -90,17 +90,59 @@ public class ResonanceColossusModel extends EntityModel<ResonanceColossusRenderS
         super.setAngles(state);
 
         // Walking leg animations
-        this.rightLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F) * 1.2F * state.limbSwingAmplitude;
-        this.leftLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F + (float) Math.PI) * 1.2F * state.limbSwingAmplitude;
+        if (state.summonTicks > 0 || state.deathOverloadTicks > 0) {
+            this.rightLeg.pitch = 0.0F;
+            this.leftLeg.pitch = 0.0F;
+        } else {
+            this.rightLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F) * 1.2F * state.limbSwingAmplitude;
+            this.leftLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F + (float) Math.PI) * 1.2F * state.limbSwingAmplitude;
+        }
 
         // Arm swing animations
         this.rightArm.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F + (float) Math.PI) * 0.8F * state.limbSwingAmplitude;
         this.leftArm.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F) * 0.8F * state.limbSwingAmplitude;
+
+        // Reset base positions & angles
+        this.body.originY = -30.0F;
+        this.body.roll = 0.0F;
+        this.head.pitch = 0.0F;
+        this.head.yaw = 0.0F;
+        this.rightArm.roll = 0.0F;
+        this.leftArm.roll = 0.0F;
 
         // Floating telekinetic orbit crystals bobbing up and down
         this.leftCrystal.originY = -36.0F + MathHelper.sin(state.ageInTicks * 0.08F) * 3.0F;
         this.rightCrystal.originY = -36.0F + MathHelper.cos(state.ageInTicks * 0.08F) * 3.0F;
         this.leftCrystal.yaw = state.ageInTicks * 0.04F;
         this.rightCrystal.yaw = -state.ageInTicks * 0.04F;
+
+        // --- Custom Entrance & Death Animations ---
+        if (state.summonTicks > 0) {
+            float sProgress = (70 - state.summonTicks) / 70.0F; // 0.0 to 1.0
+            // Bowed head and crossed/downward arms, rising up from the ground
+            this.head.pitch = (1.0F - sProgress) * 0.6F;
+            this.rightArm.pitch = -(1.0F - sProgress) * 0.5F;
+            this.leftArm.pitch = -(1.0F - sProgress) * 0.5F;
+            this.body.originY = -30.0F + (1.0F - sProgress) * 16.0F;
+            this.leftCrystal.originY = -36.0F + (1.0F - sProgress) * 12.0F;
+            this.rightCrystal.originY = -36.0F + (1.0F - sProgress) * 12.0F;
+        } else if (state.deathOverloadTicks > 0) {
+            float dProgress = (80 - state.deathOverloadTicks) / 80.0F; // 0.0 to 1.0
+            float jitter = MathHelper.sin(state.ageInTicks * 2.5F) * 0.12F * (1.0F + dProgress);
+            // Head thrown back roaring into the sky
+            this.head.pitch = -0.65F + jitter;
+            this.head.yaw = jitter * 1.5F;
+            this.body.roll = jitter;
+            // Arms outstretched trembling violently
+            this.rightArm.roll = 0.85F + jitter;
+            this.leftArm.roll = -0.85F - jitter;
+            this.rightArm.pitch = -0.3F;
+            this.leftArm.pitch = -0.3F;
+            // Crystals orbiting at hyper-speed and ascending
+            this.leftCrystal.originY = -36.0F - dProgress * 16.0F;
+            this.rightCrystal.originY = -36.0F - dProgress * 16.0F;
+            this.leftCrystal.yaw = state.ageInTicks * 0.5F;
+            this.rightCrystal.yaw = -state.ageInTicks * 0.5F;
+        }
     }
 }

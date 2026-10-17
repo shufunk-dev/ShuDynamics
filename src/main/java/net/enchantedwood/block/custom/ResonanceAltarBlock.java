@@ -106,7 +106,7 @@ public class ResonanceAltarBlock extends Block {
                 ResonanceColossusEntity colossus = ModEntities.RESONANCE_COLOSSUS.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
                 if (colossus != null) {
                     colossus.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
-                    colossus.setAltarPos(pos);
+                    colossus.beginSummon(pos);
                     serverWorld.spawnEntity(colossus);
                 }
 
@@ -123,7 +123,7 @@ public class ResonanceAltarBlock extends Block {
                 net.enchantedwood.entity.custom.AscendantColossusEntity ascendant = ModEntities.ASCENDANT_COLOSSUS.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
                 if (ascendant != null) {
                     ascendant.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
-                    ascendant.setAltarPos(pos);
+                    ascendant.beginSummon(pos);
                     serverWorld.spawnEntity(ascendant);
                 }
 
@@ -140,7 +140,7 @@ public class ResonanceAltarBlock extends Block {
                 net.enchantedwood.entity.custom.PrimordialCataclysmEntity cataclysm = ModEntities.PRIMORDIAL_CATACLYSM.create(serverWorld, net.minecraft.entity.SpawnReason.EVENT);
                 if (cataclysm != null) {
                     cataclysm.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0.0f, 0.0f);
-                    cataclysm.setAltarPos(pos);
+                    cataclysm.beginSummon(pos);
                     serverWorld.spawnEntity(cataclysm);
                 }
 

@@ -1,5 +1,11 @@
 package net.enchantedwood.entity.custom;
 
+import com.vexira.mysticalterrain.boss.vfx.Vfx;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.enchantedwood.block.ModBlocks;
 import net.enchantedwood.block.custom.ResonanceAltarBlock;
 import net.enchantedwood.entity.ModEntities;
@@ -32,12 +38,17 @@ import java.util.List;
 
 public class PrimordialCataclysmEntity extends HostileEntity {
 
+    private static final TrackedData<Integer> SUMMON_TICKS = DataTracker.registerData(PrimordialCataclysmEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> DEATH_OVERLOAD_TICKS = DataTracker.registerData(PrimordialCataclysmEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
     private final ServerBossBar bossBar;
     private BlockPos altarPos;
     private int attackTimer = 0;
     private int phase = 1; // 1: 100-66%, 2: 66-33%, 3: <33%
     private boolean riftsSpawned = false;
     private boolean isResetting = false;
+    private DamageSource storedKillerSource;
+    private boolean rewardsDropped = false;
 
     public PrimordialCataclysmEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -57,6 +68,50 @@ public class PrimordialCataclysmEntity extends HostileEntity {
                 .add(EntityAttributes.ARMOR, 20.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 64.0);
+    }
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(SUMMON_TICKS, 0);
+        builder.add(DEATH_OVERLOAD_TICKS, 0);
+    }
+
+    public int getSummonTicks() {
+        return this.dataTracker.get(SUMMON_TICKS);
+    }
+
+    public void setSummonTicks(int ticks) {
+        this.dataTracker.set(SUMMON_TICKS, ticks);
+    }
+
+    public int getDeathOverloadTicks() {
+        return this.dataTracker.get(DEATH_OVERLOAD_TICKS);
+    }
+
+    public void setDeathOverloadTicks(int ticks) {
+        this.dataTracker.set(DEATH_OVERLOAD_TICKS, ticks);
+    }
+
+    public void beginSummon(BlockPos pos) {
+        this.setAltarPos(pos);
+        this.setSummonTicks(70);
+        this.setInvulnerable(true);
+        this.bossBar.setVisible(false);
+    }
+
+    public void beginDeathOverload(ServerWorld sw, DamageSource source) {
+        if (this.getDeathOverloadTicks() > 0) return;
+        this.storedKillerSource = source;
+        this.setDeathOverloadTicks(80);
+        this.setInvulnerable(true);
+        this.setHealth(1.0f);
+        this.setTarget(null);
+        this.bossBar.setPercent(0.0f);
+        this.bossBar.setName(Text.literal("§d✦ The Primordial Cataclysm - CRITICAL OVERLOAD ✦"));
+
+        Vfx.screen(sw, this.getEntityPos(), 80.0, 1.4, 25, Vfx.Palette.VOID.glow(), 0.5F);
+        sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.HOSTILE, 2.5f, 0.4f);
     }
 
     public void setAltarPos(BlockPos pos) {
@@ -82,7 +137,11 @@ public class PrimordialCataclysmEntity extends HostileEntity {
 
     @Override
     public boolean damage(ServerWorld world, DamageSource source, float amount) {
-        if (this.isResetting) {
+        if (this.isResetting || this.getSummonTicks() > 0 || this.getDeathOverloadTicks() > 0) {
+            return false;
+        }
+        if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            beginDeathOverload(world, source);
             return false;
         }
         if (source.getAttacker() instanceof LivingEntity attacker && !isWithinArena(attacker)) {
@@ -94,6 +153,12 @@ public class PrimordialCataclysmEntity extends HostileEntity {
 
         // Soft damage cap: maximum 50 damage per hit
         float cappedAmount = Math.min(amount, 50.0f);
+
+        if (this.getHealth() - cappedAmount <= 0.0f) {
+            beginDeathOverload(world, source);
+            return false;
+        }
+
         return super.damage(world, source, cappedAmount);
     }
 
@@ -119,7 +184,9 @@ public class PrimordialCataclysmEntity extends HostileEntity {
     @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
-        this.bossBar.addPlayer(player);
+        if (this.getSummonTicks() <= 0) {
+            this.bossBar.addPlayer(player);
+        }
     }
 
     @Override
@@ -133,6 +200,76 @@ public class PrimordialCataclysmEntity extends HostileEntity {
         super.tick();
 
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+
+        int sTicks = this.getSummonTicks();
+        if (sTicks > 0) {
+            this.setVelocity(0, 0, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setSummonTicks(sTicks - 1);
+
+                if (sTicks % 5 == 0) {
+                    Vfx.gather(sw, this.getEntityPos().add(0, 3.0, 0), Vfx.Palette.VOID, 5.0F, 16);
+                    Vfx.ring(sw, this.getEntityPos(), Vfx.Palette.VOID.glow(), 4.5, 8);
+                    float pitch = 0.4F + (70 - sTicks) * 0.015F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.HOSTILE, 1.6f, pitch);
+                }
+
+                if (sTicks == 1) {
+                    this.setInvulnerable(false);
+                    for (ServerPlayerEntity p : sw.getPlayers()) {
+                        if (p.squaredDistanceTo(this.getEntityPos()) < (128.0 * 128.0)) {
+                            this.bossBar.addPlayer(p);
+                        }
+                    }
+                    this.bossBar.setVisible(true);
+
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.VOID, 16.0);
+                    Vfx.screen(sw, this.getEntityPos(), 80.0, 1.8, 30, Vfx.Palette.VOID.glow(), 0.65F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 3.0, 0), Vfx.Palette.VOID, 5.5);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 2.5f, 0.5f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.HOSTILE, 2.5f, 0.5f);
+
+                    Box blastBox = this.getBoundingBox().expand(10.0);
+                    for (PlayerEntity p : sw.getEntitiesByClass(PlayerEntity.class, blastBox, p -> !p.isCreative() && !p.isSpectator())) {
+                        Vec3d push = p.getEntityPos().subtract(this.getEntityPos()).normalize().multiply(2.2).add(0, 0.5, 0);
+                        p.addVelocity(push.x, push.y, push.z);
+                        p.velocityDirty = true;
+                    }
+                }
+            }
+            return;
+        }
+
+        int dTicks = this.getDeathOverloadTicks();
+        if (dTicks > 0) {
+            this.setVelocity(0, 0.05, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setDeathOverloadTicks(dTicks - 1);
+
+                int pulseInterval = dTicks > 40 ? 10 : (dTicks > 15 ? 5 : 2);
+                if (dTicks % pulseInterval == 0) {
+                    Vfx.sparks(sw, this.getEntityPos().add(0, 3.0, 0), Vfx.Palette.VOID.core(), 35, 1.0, 2.0);
+                    Vfx.ring(sw, this.getEntityPos().add(0, 1.5, 0), Vfx.Palette.VOID.glow(), 3.0 + (80 - dTicks) * 0.1, 6);
+                    float pitch = 0.6F + (80 - dTicks) * 0.02F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.HOSTILE, 1.8f, pitch);
+                }
+
+                if (dTicks == 1) {
+                    // SUPERNOVA DETONATION
+                    Vfx.screen(sw, this.getEntityPos(), 100.0, 2.8, 50, Vfx.Palette.VOID.core(), 1.0F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 3.0, 0), Vfx.Palette.VOID, 8.0);
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.VOID, 28.0);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.HOSTILE, 3.0f, 0.5f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 3.0f, 0.4f);
+
+                    executeDeathRewards(sw);
+                    this.discard();
+                }
+            }
+            return;
+        }
 
         if (this.getEntityWorld().isClient()) {
             return;
@@ -374,27 +511,38 @@ public class PrimordialCataclysmEntity extends HostileEntity {
     @Override
     public void onDeath(DamageSource damageSource) {
         super.onDeath(damageSource);
-
         if (this.getEntityWorld() instanceof ServerWorld sw) {
-            if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
-                sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
-            }
+            executeDeathRewards(sw);
+        }
+    }
 
-            // The Pinnacle Creative-Tier Rewards
-            this.dropStack(sw, new ItemStack(ModItems.RING_OF_GRAVITATIONAL_MASTERY, 1));
-            this.dropStack(sw, new ItemStack(ModItems.INFINITE_DIMENSIONAL_MATRIX, 1));
-            this.dropStack(sw, new ItemStack(ModBlocks.TROPHY_OF_OMNIPOTENCE.asItem(), 1));
+    private void executeDeathRewards(ServerWorld sw) {
+        if (this.rewardsDropped) {
+            return;
+        }
+        this.rewardsDropped = true;
 
-            // Massive high-tier cache
-            this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 24));
-            this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 24));
-            this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 12));
-            this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 12));
-            this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 12));
+        if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
+            sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
+        }
 
-            for (ServerPlayerEntity p : sw.getPlayers()) {
-                p.sendMessage(Text.literal("§d✦ Reality stabilizes as The Primordial Cataclysm dissolves! You have conquered ShuDynamics! ✦"), false);
-            }
+        // The Pinnacle Creative-Tier Rewards
+        this.dropStack(sw, new ItemStack(ModItems.RING_OF_GRAVITATIONAL_MASTERY, 1));
+        this.dropStack(sw, new ItemStack(ModItems.INFINITE_DIMENSIONAL_MATRIX, 1));
+        this.dropStack(sw, new ItemStack(ModBlocks.TROPHY_OF_OMNIPOTENCE.asItem(), 1));
+
+        // Massive high-tier cache
+        this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 24));
+        this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 24));
+        this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 12));
+        this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 12));
+        this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 12));
+
+        // Drop Experience Orbs
+        ExperienceOrbEntity.spawn(sw, this.getEntityPos(), 500);
+
+        for (ServerPlayerEntity p : sw.getPlayers()) {
+            p.sendMessage(Text.literal("§d✦ Reality stabilizes as The Primordial Cataclysm implodes into nothingness! You have conquered ShuDynamics! ✦"), false);
         }
     }
 }

@@ -25,6 +25,8 @@ public class ResonanceColossusRenderer extends MobEntityRenderer<ResonanceColoss
     public void updateRenderState(ResonanceColossusEntity entity, ResonanceColossusRenderState state, float tickProgress) {
         super.updateRenderState(entity, state, tickProgress);
         state.ageInTicks = entity.age + tickProgress;
+        state.summonTicks = entity.getSummonTicks();
+        state.deathOverloadTicks = entity.getDeathOverloadTicks();
     }
 
     @Override

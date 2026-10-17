@@ -1,5 +1,11 @@
 package net.enchantedwood.entity.custom;
 
+import com.vexira.mysticalterrain.boss.vfx.Vfx;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.enchantedwood.block.custom.ResonanceAltarBlock;
 import net.enchantedwood.entity.ModEntities;
 import net.enchantedwood.item.ModItems;
@@ -31,12 +37,17 @@ import java.util.List;
 
 public class AscendantColossusEntity extends HostileEntity {
 
+    private static final TrackedData<Integer> SUMMON_TICKS = DataTracker.registerData(AscendantColossusEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> DEATH_OVERLOAD_TICKS = DataTracker.registerData(AscendantColossusEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
     private final ServerBossBar bossBar;
     private BlockPos altarPos;
     private int attackTimer = 0;
     private int phase = 1; // 1: 100-60%, 2: 60-25%, 3: <25%
     private boolean illusionsSpawned = false;
     private boolean isResetting = false;
+    private DamageSource storedKillerSource;
+    private boolean rewardsDropped = false;
 
     public AscendantColossusEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -56,6 +67,50 @@ public class AscendantColossusEntity extends HostileEntity {
                 .add(EntityAttributes.ARMOR, 16.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 64.0);
+    }
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(SUMMON_TICKS, 0);
+        builder.add(DEATH_OVERLOAD_TICKS, 0);
+    }
+
+    public int getSummonTicks() {
+        return this.dataTracker.get(SUMMON_TICKS);
+    }
+
+    public void setSummonTicks(int ticks) {
+        this.dataTracker.set(SUMMON_TICKS, ticks);
+    }
+
+    public int getDeathOverloadTicks() {
+        return this.dataTracker.get(DEATH_OVERLOAD_TICKS);
+    }
+
+    public void setDeathOverloadTicks(int ticks) {
+        this.dataTracker.set(DEATH_OVERLOAD_TICKS, ticks);
+    }
+
+    public void beginSummon(BlockPos pos) {
+        this.setAltarPos(pos);
+        this.setSummonTicks(70);
+        this.setInvulnerable(true);
+        this.bossBar.setVisible(false);
+    }
+
+    public void beginDeathOverload(ServerWorld sw, DamageSource source) {
+        if (this.getDeathOverloadTicks() > 0) return;
+        this.storedKillerSource = source;
+        this.setDeathOverloadTicks(80);
+        this.setInvulnerable(true);
+        this.setHealth(1.0f);
+        this.setTarget(null);
+        this.bossBar.setPercent(0.0f);
+        this.bossBar.setName(Text.literal("§4✦ The Ascendant Colossus - CRITICAL OVERLOAD ✦"));
+
+        Vfx.screen(sw, this.getEntityPos(), 64.0, 1.2, 20, Vfx.Palette.FIRE.glow(), 0.4F);
+        sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0f, 0.7f);
     }
 
     public void setAltarPos(BlockPos pos) {
@@ -81,7 +136,11 @@ public class AscendantColossusEntity extends HostileEntity {
 
     @Override
     public boolean damage(ServerWorld world, DamageSource source, float amount) {
-        if (this.isResetting) {
+        if (this.isResetting || this.getSummonTicks() > 0 || this.getDeathOverloadTicks() > 0) {
+            return false;
+        }
+        if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            beginDeathOverload(world, source);
             return false;
         }
         if (source.getAttacker() instanceof LivingEntity attacker && !isWithinArena(attacker)) {
@@ -93,6 +152,12 @@ public class AscendantColossusEntity extends HostileEntity {
 
         // Soft damage cap: maximum 35 damage per hit
         float cappedAmount = Math.min(amount, 35.0f);
+
+        if (this.getHealth() - cappedAmount <= 0.0f) {
+            beginDeathOverload(world, source);
+            return false;
+        }
+
         return super.damage(world, source, cappedAmount);
     }
 
@@ -118,7 +183,9 @@ public class AscendantColossusEntity extends HostileEntity {
     @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
-        this.bossBar.addPlayer(player);
+        if (this.getSummonTicks() <= 0) {
+            this.bossBar.addPlayer(player);
+        }
     }
 
     @Override
@@ -132,6 +199,76 @@ public class AscendantColossusEntity extends HostileEntity {
         super.tick();
 
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+
+        int sTicks = this.getSummonTicks();
+        if (sTicks > 0) {
+            this.setVelocity(0, 0, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setSummonTicks(sTicks - 1);
+
+                if (sTicks % 5 == 0) {
+                    Vfx.gather(sw, this.getEntityPos().add(0, 2.5, 0), Vfx.Palette.FIRE, 4.5F, 14);
+                    Vfx.ring(sw, this.getEntityPos(), Vfx.Palette.FIRE.glow(), 4.0, 8);
+                    float pitch = 0.5F + (70 - sTicks) * 0.015F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.HOSTILE, 1.4f, pitch);
+                }
+
+                if (sTicks == 1) {
+                    this.setInvulnerable(false);
+                    for (ServerPlayerEntity p : sw.getPlayers()) {
+                        if (p.squaredDistanceTo(this.getEntityPos()) < (128.0 * 128.0)) {
+                            this.bossBar.addPlayer(p);
+                        }
+                    }
+                    this.bossBar.setVisible(true);
+
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.FIRE, 14.0);
+                    Vfx.screen(sw, this.getEntityPos(), 64.0, 1.6, 25, Vfx.Palette.FIRE.glow(), 0.55F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 2.5, 0), Vfx.Palette.FIRE, 4.5);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0f, 0.7f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.HOSTILE, 2.0f, 0.7f);
+
+                    Box blastBox = this.getBoundingBox().expand(9.0);
+                    for (PlayerEntity p : sw.getEntitiesByClass(PlayerEntity.class, blastBox, p -> !p.isCreative() && !p.isSpectator())) {
+                        Vec3d push = p.getEntityPos().subtract(this.getEntityPos()).normalize().multiply(1.8).add(0, 0.45, 0);
+                        p.addVelocity(push.x, push.y, push.z);
+                        p.velocityDirty = true;
+                    }
+                }
+            }
+            return;
+        }
+
+        int dTicks = this.getDeathOverloadTicks();
+        if (dTicks > 0) {
+            this.setVelocity(0, 0.045, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setDeathOverloadTicks(dTicks - 1);
+
+                int pulseInterval = dTicks > 40 ? 10 : (dTicks > 15 ? 5 : 2);
+                if (dTicks % pulseInterval == 0) {
+                    Vfx.sparks(sw, this.getEntityPos().add(0, 2.8, 0), Vfx.Palette.FIRE.core(), 30, 0.9, 1.8);
+                    Vfx.ring(sw, this.getEntityPos().add(0, 1.2, 0), Vfx.Palette.FIRE.glow(), 2.5 + (80 - dTicks) * 0.09, 6);
+                    float pitch = 0.7F + (80 - dTicks) * 0.02F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.HOSTILE, 1.6f, pitch);
+                }
+
+                if (dTicks == 1) {
+                    // SUPERNOVA DETONATION
+                    Vfx.screen(sw, this.getEntityPos(), 85.0, 2.4, 40, Vfx.Palette.FIRE.core(), 0.9F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 2.8, 0), Vfx.Palette.FIRE, 7.0);
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.FIRE, 24.0);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.HOSTILE, 2.5f, 0.6f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_ENDER_DRAGON_GROWL, SoundCategory.HOSTILE, 2.5f, 0.6f);
+
+                    executeDeathRewards(sw);
+                    this.discard();
+                }
+            }
+            return;
+        }
 
         if (this.getEntityWorld().isClient()) {
             return;
@@ -376,26 +513,37 @@ public class AscendantColossusEntity extends HostileEntity {
     @Override
     public void onDeath(DamageSource damageSource) {
         super.onDeath(damageSource);
-
         if (this.getEntityWorld() instanceof ServerWorld sw) {
-            if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
-                sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
-            }
+            executeDeathRewards(sw);
+        }
+    }
 
-            // Guaranteed Ascendant Relic upgrades & Singularity Heart
-            this.dropStack(sw, new ItemStack(ModItems.PRIMORDIAL_CATALYST, 2));
-            this.dropStack(sw, new ItemStack(ModItems.SINGULARITY_HEART, 1));
+    private void executeDeathRewards(ServerWorld sw) {
+        if (this.rewardsDropped) {
+            return;
+        }
+        this.rewardsDropped = true;
 
-            // High tier resources
-            this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 12));
-            this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 12));
-            this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 6));
-            this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 6));
-            this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 6));
+        if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
+            sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
+        }
 
-            for (ServerPlayerEntity p : sw.getPlayers()) {
-                p.sendMessage(Text.literal("§4✦ The Ascendant Colossus has fallen! Primordial Catalysts and the Singularity Heart are yours! ✦"), false);
-            }
+        // Guaranteed Ascendant Relic upgrades & Singularity Heart
+        this.dropStack(sw, new ItemStack(ModItems.PRIMORDIAL_CATALYST, 2));
+        this.dropStack(sw, new ItemStack(ModItems.SINGULARITY_HEART, 1));
+
+        // High tier resources
+        this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 12));
+        this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 12));
+        this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 6));
+        this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 6));
+        this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 6));
+
+        // Drop Experience Orbs
+        ExperienceOrbEntity.spawn(sw, this.getEntityPos(), 250);
+
+        for (ServerPlayerEntity p : sw.getPlayers()) {
+            p.sendMessage(Text.literal("§4✦ The Ascendant Colossus has detonated in cataclysmic fire! Primordial Catalysts and the Singularity Heart are yours! ✦"), false);
         }
     }
 }

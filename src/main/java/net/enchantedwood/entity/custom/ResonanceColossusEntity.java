@@ -1,5 +1,11 @@
 package net.enchantedwood.entity.custom;
 
+import com.vexira.mysticalterrain.boss.vfx.Vfx;
+import net.minecraft.entity.ExperienceOrbEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.enchantedwood.block.custom.ResonanceAltarBlock;
 import net.enchantedwood.entity.ModEntities;
 import net.enchantedwood.item.ModItems;
@@ -36,6 +42,9 @@ import java.util.List;
 
 public class ResonanceColossusEntity extends HostileEntity {
 
+    private static final TrackedData<Integer> SUMMON_TICKS = DataTracker.registerData(ResonanceColossusEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> DEATH_OVERLOAD_TICKS = DataTracker.registerData(ResonanceColossusEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
     private final ServerBossBar bossBar;
     private BlockPos altarPos;
     private boolean minionsSpawned = false;
@@ -47,6 +56,8 @@ public class ResonanceColossusEntity extends HostileEntity {
     private boolean shieldActive = false;
     private int activePylons = 0;
     private int resetMessageCooldown = 0;
+    private DamageSource storedKillerSource;
+    private boolean rewardsDropped = false;
 
     public ResonanceColossusEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -66,6 +77,50 @@ public class ResonanceColossusEntity extends HostileEntity {
                 .add(EntityAttributes.ARMOR, 12.0)
                 .add(EntityAttributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 64.0);
+    }
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(SUMMON_TICKS, 0);
+        builder.add(DEATH_OVERLOAD_TICKS, 0);
+    }
+
+    public int getSummonTicks() {
+        return this.dataTracker.get(SUMMON_TICKS);
+    }
+
+    public void setSummonTicks(int ticks) {
+        this.dataTracker.set(SUMMON_TICKS, ticks);
+    }
+
+    public int getDeathOverloadTicks() {
+        return this.dataTracker.get(DEATH_OVERLOAD_TICKS);
+    }
+
+    public void setDeathOverloadTicks(int ticks) {
+        this.dataTracker.set(DEATH_OVERLOAD_TICKS, ticks);
+    }
+
+    public void beginSummon(BlockPos pos) {
+        this.setAltarPos(pos);
+        this.setSummonTicks(70);
+        this.setInvulnerable(true);
+        this.bossBar.setVisible(false);
+    }
+
+    public void beginDeathOverload(ServerWorld sw, DamageSource source) {
+        if (this.getDeathOverloadTicks() > 0) return;
+        this.storedKillerSource = source;
+        this.setDeathOverloadTicks(80);
+        this.setInvulnerable(true);
+        this.setHealth(1.0f);
+        this.setTarget(null);
+        this.bossBar.setPercent(0.0f);
+        this.bossBar.setName(Text.literal("§5✦ The Resonance Colossus - CRITICAL OVERLOAD ✦"));
+
+        Vfx.screen(sw, this.getEntityPos(), 64.0, 1.2, 20, Vfx.Palette.ARCANE.glow(), 0.4F);
+        sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 2.0f, 0.6f);
     }
 
     public void setAltarPos(BlockPos pos) {
@@ -91,7 +146,11 @@ public class ResonanceColossusEntity extends HostileEntity {
 
     @Override
     public boolean damage(ServerWorld world, DamageSource source, float amount) {
-        if (this.isResetting) {
+        if (this.isResetting || this.getSummonTicks() > 0 || this.getDeathOverloadTicks() > 0) {
+            return false;
+        }
+        if (source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            beginDeathOverload(world, source);
             return false;
         }
         if (source.getAttacker() instanceof LivingEntity attacker && !isWithinArena(attacker)) {
@@ -109,6 +168,12 @@ public class ResonanceColossusEntity extends HostileEntity {
         }
         // Soft damage cap: maximum 25 damage per hit to prevent burst cheesing
         float cappedAmount = Math.min(amount, 25.0f);
+
+        if (this.getHealth() - cappedAmount <= 0.0f) {
+            beginDeathOverload(world, source);
+            return false;
+        }
+
         return super.damage(world, source, cappedAmount);
     }
 
@@ -163,7 +228,9 @@ public class ResonanceColossusEntity extends HostileEntity {
     @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
-        this.bossBar.addPlayer(player);
+        if (this.getSummonTicks() <= 0) {
+            this.bossBar.addPlayer(player);
+        }
     }
 
     @Override
@@ -177,6 +244,79 @@ public class ResonanceColossusEntity extends HostileEntity {
         super.tick();
 
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+
+        int sTicks = this.getSummonTicks();
+        if (sTicks > 0) {
+            this.setVelocity(0, 0, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setSummonTicks(sTicks - 1);
+
+                // Vortex particles gathering inward
+                if (sTicks % 5 == 0) {
+                    Vfx.gather(sw, this.getEntityPos().add(0, 2.0, 0), Vfx.Palette.ARCANE, 4.0F, 12);
+                    Vfx.ring(sw, this.getEntityPos(), Vfx.Palette.ARCANE.glow(), 3.5, 8);
+                    float pitch = 0.6F + (70 - sTicks) * 0.015F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.HOSTILE, 1.2f, pitch);
+                }
+
+                if (sTicks == 1) {
+                    // Awakening climax
+                    this.setInvulnerable(false);
+                    for (ServerPlayerEntity p : sw.getPlayers()) {
+                        if (p.squaredDistanceTo(this.getEntityPos()) < (128.0 * 128.0)) {
+                            this.bossBar.addPlayer(p);
+                        }
+                    }
+                    this.bossBar.setVisible(true);
+
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.ARCANE, 12.0);
+                    Vfx.screen(sw, this.getEntityPos(), 64.0, 1.5, 25, Vfx.Palette.ARCANE.glow(), 0.5F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 2.0, 0), Vfx.Palette.ARCANE, 4.0);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_ROAR, SoundCategory.HOSTILE, 2.0f, 0.7f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.HOSTILE, 2.0f, 0.8f);
+
+                    // Kinetic shockwave outward
+                    Box blastBox = this.getBoundingBox().expand(8.0);
+                    for (PlayerEntity p : sw.getEntitiesByClass(PlayerEntity.class, blastBox, p -> !p.isCreative() && !p.isSpectator())) {
+                        Vec3d push = p.getEntityPos().subtract(this.getEntityPos()).normalize().multiply(1.5).add(0, 0.4, 0);
+                        p.addVelocity(push.x, push.y, push.z);
+                        p.velocityDirty = true;
+                    }
+                }
+            }
+            return;
+        }
+
+        int dTicks = this.getDeathOverloadTicks();
+        if (dTicks > 0) {
+            this.setVelocity(0, 0.04, 0);
+            this.velocityDirty = true;
+            if (!this.getEntityWorld().isClient() && this.getEntityWorld() instanceof ServerWorld sw) {
+                this.setDeathOverloadTicks(dTicks - 1);
+
+                int pulseInterval = dTicks > 40 ? 10 : (dTicks > 15 ? 5 : 2);
+                if (dTicks % pulseInterval == 0) {
+                    Vfx.sparks(sw, this.getEntityPos().add(0, 2.5, 0), Vfx.Palette.ARCANE.core(), 25, 0.8, 1.5);
+                    Vfx.ring(sw, this.getEntityPos().add(0, 1.0, 0), Vfx.Palette.ARCANE.glow(), 2.0 + (80 - dTicks) * 0.08, 6);
+                    float pitch = 0.8F + (80 - dTicks) * 0.02F;
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), SoundCategory.HOSTILE, 1.5f, pitch);
+                }
+
+                if (dTicks == 1) {
+                    // SUPERNOVA DETONATION
+                    Vfx.screen(sw, this.getEntityPos(), 80.0, 2.2, 40, Vfx.Palette.ARCANE.core(), 0.9F);
+                    Vfx.explosion(sw, this.getEntityPos().add(0, 2.5, 0), Vfx.Palette.ARCANE, 6.5);
+                    Vfx.shockwave(sw, this.getEntityPos(), Vfx.Palette.ARCANE, 22.0);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.HOSTILE, 2.5f, 0.7f);
+                    sw.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.HOSTILE, 2.5f, 0.5f);
+
+                    executeDeathRewards(sw);
+                    this.discard();
+                }
+            }
+            return;
+        }
 
         if (this.getEntityWorld().isClient()) {
             return;
@@ -477,40 +617,52 @@ public class ResonanceColossusEntity extends HostileEntity {
     @Override
     public void onDeath(DamageSource damageSource) {
         super.onDeath(damageSource);
-
         if (this.getEntityWorld() instanceof ServerWorld sw) {
-            // Reset altar if bound
-            if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
-                sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
+            executeDeathRewards(sw);
+        }
+    }
+
+    private void executeDeathRewards(ServerWorld sw) {
+        if (this.rewardsDropped) {
+            return;
+        }
+        this.rewardsDropped = true;
+
+        // Reset altar if bound
+        if (this.altarPos != null && sw.getBlockState(this.altarPos).getBlock() instanceof ResonanceAltarBlock) {
+            sw.setBlockState(this.altarPos, sw.getBlockState(this.altarPos).with(ResonanceAltarBlock.ACTIVE, false));
+        }
+
+        // Player reward: Smart Knockout Relic Drop
+        DamageSource src = this.storedKillerSource != null ? this.storedKillerSource : sw.getDamageSources().generic();
+        PlayerEntity killer = null;
+        if (src.getAttacker() instanceof PlayerEntity p) {
+            killer = p;
+        } else {
+            killer = sw.getClosestPlayer(this, 128.0);
+            if (killer == null && !sw.getPlayers().isEmpty()) {
+                killer = sw.getPlayers().get(0);
             }
+        }
 
-            // Player reward: Smart Knockout Relic Drop
-            PlayerEntity killer = null;
-            if (damageSource.getAttacker() instanceof PlayerEntity p) {
-                killer = p;
-            } else {
-                killer = sw.getClosestPlayer(this, 128.0);
-                if (killer == null && !sw.getPlayers().isEmpty()) {
-                    killer = sw.getPlayers().get(0);
-                }
-            }
+        ItemStack relicToDrop = chooseSmartRelicDrop(killer);
+        this.dropStack(sw, relicToDrop);
 
-            ItemStack relicToDrop = chooseSmartRelicDrop(killer);
-            this.dropStack(sw, relicToDrop);
+        // Guaranteed crafting & culinary materials
+        this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 6));
+        this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 6));
+        this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 3));
+        this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 3));
+        this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 3));
 
-            // Guaranteed crafting & culinary materials
-            this.dropStack(sw, new ItemStack(ModItems.FIRE_CRYSTAL, 6));
-            this.dropStack(sw, new ItemStack(ModItems.SULFUR_DUST, 6));
-            this.dropStack(sw, new ItemStack(ModItems.DRAGON_FRUIT, 3));
-            this.dropStack(sw, new ItemStack(ModItems.WASABI_ROOT, 3));
-            this.dropStack(sw, new ItemStack(ModItems.STARFRUIT, 3));
+        // Guaranteed Music Disc drop: Rift of the Colossus
+        this.dropStack(sw, new ItemStack(ModItems.MUSIC_DISC_COLOSSUS));
 
-            // Guaranteed Music Disc drop: Rift of the Colossus
-            this.dropStack(sw, new ItemStack(ModItems.MUSIC_DISC_COLOSSUS));
+        // Drop Experience Orbs
+        ExperienceOrbEntity.spawn(sw, this.getEntityPos(), 150);
 
-            for (ServerPlayerEntity p : sw.getPlayers()) {
-                p.sendMessage(Text.literal("§5✦ The Resonance Colossus has collapsed! An ancient Relic has been unearthed! ✦"), false);
-            }
+        for (ServerPlayerEntity p : sw.getPlayers()) {
+            p.sendMessage(Text.literal("§5✦ The Resonance Colossus has collapsed in a supernova explosion! An ancient Relic has been unearthed! ✦"), false);
         }
     }
 

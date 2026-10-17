@@ -9,4 +9,6 @@ public class ResonanceColossusRenderState extends LivingEntityRenderState {
     public float limbSwing;
     public float limbSwingAmount;
     public float ageInTicks;
+    public int summonTicks;
+    public int deathOverloadTicks;
 }
