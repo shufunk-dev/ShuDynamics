@@ -54,10 +54,6 @@ public class RitualAltarBlockEntity extends BlockEntity {
 
       switch (this.ritual()) {
          case LIRAEL:
-            if (level.getDimension().hasSkyLight() && !level.isNight()) {
-               return Text.translatable("ritual.mysticalterrain.lirael.day");
-            }
-
             this.step(level, 1);
             break;
          case GROTHMAW:
@@ -71,11 +67,6 @@ public class RitualAltarBlockEntity extends BlockEntity {
             this.setStage(level, 1);
             break;
          case ASTRAEL:
-            long time = (level.getTimeOfDay() % 24000L + 24000L) % 24000L;
-            if (level.getDimension().hasSkyLight() && (time < 17000L || time > 19000L)) {
-               return Text.translatable("ritual.mysticalterrain.astrael.time");
-            }
-
             this.begin(level);
             break;
          case SEKHMAR:

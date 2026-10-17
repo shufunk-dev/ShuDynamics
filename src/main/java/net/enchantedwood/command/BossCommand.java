@@ -1,6 +1,7 @@
 package net.enchantedwood.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.vexira.mysticalterrain.boss.MysticalBoss;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -29,13 +30,14 @@ public class BossCommand {
         for (var entity : world.iterateEntities()) {
             if (entity instanceof ResonanceColossusEntity ||
                 entity instanceof AscendantColossusEntity ||
-                entity instanceof PrimordialCataclysmEntity) {
+                entity instanceof PrimordialCataclysmEntity ||
+                entity instanceof MysticalBoss) {
                 entity.discard();
                 count++;
             }
         }
         int finalCount = count;
-        source.sendFeedback(() -> Text.literal("§e✦ Dismissed " + finalCount + " active ShuDynamics boss(es)!"), true);
+        source.sendFeedback(() -> Text.literal("§e✦ Dismissed " + finalCount + " active boss(es)!"), true);
         return count;
     }
 }

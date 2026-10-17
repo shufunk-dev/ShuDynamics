@@ -2185,6 +2185,14 @@ public abstract class MysticalBoss extends HostileEntity implements GeoEntity {
       }
    }
 
+   @Override
+   public void remove(RemovalReason reason) {
+      if (this.bar != null) {
+         this.bar.clearPlayers();
+      }
+      super.remove(reason);
+   }
+
    public boolean canImmediatelyDespawn(double distanceSquared) {
       return !this.isBoss() && super.canImmediatelyDespawn(distanceSquared);
    }
