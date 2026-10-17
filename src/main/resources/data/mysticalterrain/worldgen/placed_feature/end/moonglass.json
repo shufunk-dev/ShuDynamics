@@ -1,0 +1,66 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "crystal",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 16,
+        "max_inclusive": 26
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.3,
+        "max_exclusive": 1.9
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7.0,
+        "max_exclusive": 10.0
+      },
+      "lean": 0.35,
+      "reach": 21,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "mysticalterrain:moonstone"
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:light_blue_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

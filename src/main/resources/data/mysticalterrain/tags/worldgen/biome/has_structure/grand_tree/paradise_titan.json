@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:emerald_mangroves",
+    "mysticalterrain:golden_veld",
+    "mysticalterrain:hibiscus_garden",
+    "mysticalterrain:jade_bamboo_forest",
+    "mysticalterrain:lagoon_marsh",
+    "mysticalterrain:mango_plateau",
+    "mysticalterrain:monsoon_forest",
+    "mysticalterrain:mooshroom_atoll",
+    "mysticalterrain:orchid_thicket",
+    "mysticalterrain:paradise_jungle",
+    "mysticalterrain:sunlit_savanna",
+    "mysticalterrain:tradewind_plains"
+  ]
+}

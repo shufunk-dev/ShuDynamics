@@ -1,0 +1,162 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 34,
+      "max_inclusive": 43
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.54,
+      "max_exclusive": 1.88
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 13.1,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.27,
+    "gnarl": 0.32,
+    "density": 0.86,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:maple_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:nether_wart_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "4"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "4"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover_chance": 0.3
+    },
+    "growth": {
+      "lobes": 5,
+      "spread": 0.59,
+      "flat": 0.59,
+      "tiers": 0.39,
+      "lopside": 0.11,
+      "bends": 0.0,
+      "swing": 0.24,
+      "split": 0.49,
+      "sprout": 0.48,
+      "tropism": 0.25,
+      "twig": 1.02,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.42,
+      "jitter": 0.37,
+      "forks": 1
+    }
+  }
+}

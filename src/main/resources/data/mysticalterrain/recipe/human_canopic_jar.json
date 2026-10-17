@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "SCS",
+    "SSS"
+  ],
+  "key": {
+    "S": "mysticalterrain:sandrock_bricks",
+    "G": "minecraft:gold_ingot",
+    "C": "minecraft:decorated_pot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:human_canopic_jar"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "umbrella",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 16,
+        "max_inclusive": 24
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.5,
+        "max_exclusive": 2.1
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 11.0,
+        "max_exclusive": 14.0
+      },
+      "reach": 14,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crimson_hyphae",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:nether_wart_block"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:warped_wart_block"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:shroomlight"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:mystwood_log",
+    "mysticalterrain:mystwood_wood",
+    "mysticalterrain:stripped_mystwood_log",
+    "mysticalterrain:stripped_mystwood_wood"
+  ]
+}

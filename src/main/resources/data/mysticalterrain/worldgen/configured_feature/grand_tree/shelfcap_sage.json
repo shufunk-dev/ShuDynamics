@@ -1,0 +1,68 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 38,
+      "max_inclusive": 49
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.83,
+      "max_exclusive": 2.23
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.2,
+      "max_exclusive": 13.8
+    },
+    "lean": 0.43,
+    "gnarl": 0.44,
+    "density": 0.91,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sporewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:brown_mushroom_block",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 5,
+      "spread": 0.63,
+      "flat": 1.0,
+      "tiers": 0.53,
+      "lopside": 0.73,
+      "bends": 1.55,
+      "swing": 0.81,
+      "split": 0.58,
+      "sprout": 0.25,
+      "tropism": 0.21,
+      "twig": 0.89,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.34,
+      "jitter": 0.45,
+      "forks": 1
+    }
+  }
+}

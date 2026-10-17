@@ -1,0 +1,50 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "broadleaf",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 36,
+      "max_inclusive": 52
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.0,
+      "max_exclusive": 4.2
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15.0,
+      "max_exclusive": 19.0
+    },
+    "gnarl": 0.45,
+    "roots": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 6
+    },
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    }
+  }
+}

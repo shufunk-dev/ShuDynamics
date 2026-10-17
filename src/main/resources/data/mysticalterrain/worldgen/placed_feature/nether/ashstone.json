@@ -1,0 +1,51 @@
+{
+  "feature": {
+    "type": "mysticalterrain:boulder",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:ashstone"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:basalt",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "shards",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 10,
+        "max_inclusive": 16
+      },
+      "girth": 1.5,
+      "sides": 6,
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:smooth_basalt"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:basalt",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:polished_basalt",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:basalt",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:polished_basalt",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

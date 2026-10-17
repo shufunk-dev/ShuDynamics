@@ -1,0 +1,51 @@
+{
+  "feature": {
+    "type": "mysticalterrain:boulder",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

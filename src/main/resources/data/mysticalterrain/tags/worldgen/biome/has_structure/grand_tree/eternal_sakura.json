@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cherry_grove",
+    "mysticalterrain:allium_cherry_grove",
+    "mysticalterrain:birch_and_cherry_grove",
+    "mysticalterrain:dense_cherry_grove",
+    "mysticalterrain:dense_flowering_cherry_grove",
+    "mysticalterrain:dense_lush_cherry_grove",
+    "mysticalterrain:dense_mossy_cherry_grove",
+    "mysticalterrain:dense_snowy_cherry_grove",
+    "mysticalterrain:firefly_cherry_grove",
+    "mysticalterrain:flowering_cherry_grove",
+    "mysticalterrain:lush_cherry_grove",
+    "mysticalterrain:mossy_cherry_grove",
+    "mysticalterrain:rocky_cherry_grove",
+    "mysticalterrain:snowy_cherry_grove",
+    "mysticalterrain:sparse_cherry_grove",
+    "mysticalterrain:sparse_flowering_cherry_grove",
+    "mysticalterrain:sparse_rocky_cherry_grove",
+    "mysticalterrain:tulip_cherry_grove"
+  ]
+}

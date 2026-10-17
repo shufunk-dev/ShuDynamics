@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "number=0": {
+      "model": "mysticalterrain:block/frost_bell_0"
+    },
+    "number=1": {
+      "model": "mysticalterrain:block/frost_bell_1"
+    },
+    "number=2": {
+      "model": "mysticalterrain:block/frost_bell_2"
+    },
+    "number=3": {
+      "model": "mysticalterrain:block/frost_bell_3"
+    }
+  }
+}

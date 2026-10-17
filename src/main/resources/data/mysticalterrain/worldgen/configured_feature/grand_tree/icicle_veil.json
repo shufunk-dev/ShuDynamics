@@ -1,0 +1,76 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 33,
+      "max_inclusive": 42
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.68,
+      "max_exclusive": 3.28
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.0,
+      "max_exclusive": 12.4
+    },
+    "lean": 0.23,
+    "gnarl": 0.75,
+    "density": 0.82,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:rimewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:rimewood_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:snow_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.79,
+      "flat": 0.31,
+      "tiers": 0.35,
+      "lopside": 0.1,
+      "bends": 0.86,
+      "swing": 0.32,
+      "split": 0.49,
+      "sprout": 0.67,
+      "tropism": 0.39,
+      "twig": 1.02,
+      "drip": 1.3,
+      "hollow": 0.44,
+      "buttress": 0.78,
+      "jitter": 0.37,
+      "forks": 1
+    }
+  }
+}

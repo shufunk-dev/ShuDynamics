@@ -1,0 +1,67 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "crystal",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 80,
+      "max_inclusive": 110
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5.0,
+      "max_exclusive": 7.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 32.0,
+      "max_exclusive": 42.0
+    },
+    "reach": 60,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:quartz_pillar",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:calcite"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:prismarine"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:sea_lantern"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

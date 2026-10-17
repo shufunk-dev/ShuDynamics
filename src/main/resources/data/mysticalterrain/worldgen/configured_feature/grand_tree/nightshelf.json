@@ -1,0 +1,80 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 60,
+      "max_inclusive": 76
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.3,
+      "max_exclusive": 2.81
+    },
+    "crown": 19.0,
+    "lean": 0.22,
+    "gnarl": 0.57,
+    "density": 0.82,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 14
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.89,
+      "flat": 0.27,
+      "tiers": 0.21,
+      "lopside": 0.47,
+      "bends": 0.69,
+      "swing": 0.84,
+      "split": 0.54,
+      "sprout": 0.48,
+      "tropism": 0.05,
+      "twig": 0.96,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.42,
+      "jitter": 0.29,
+      "forks": 1
+    }
+  }
+}

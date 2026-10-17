@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "mysticalterrain:item/archon_focus",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

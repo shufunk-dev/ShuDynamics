@@ -1,0 +1,34 @@
+{
+  "feature": {
+    "type": "minecraft:sculk_patch",
+    "config": {
+      "amount_per_charge": 24,
+      "catalyst_chance": 0.0,
+      "charge_count": 6,
+      "extra_rare_growths": 0,
+      "growth_rounds": 0,
+      "spread_attempts": 48,
+      "spread_rounds": 1
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 7
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

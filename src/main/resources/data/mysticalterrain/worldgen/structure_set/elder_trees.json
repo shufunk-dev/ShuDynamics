@@ -1,0 +1,54 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:elder_oak",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:gloomroot_patriarch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:grandmother_birch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:great_banyan",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:jungle_emperor",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:mangrove_mother",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:mycelial_monarch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:pale_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:sakura_world_tree",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:savanna_king",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:sky_sequoia",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 34,
+    "separation": 12,
+    "salt": 253879490
+  }
+}

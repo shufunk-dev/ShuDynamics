@@ -1,0 +1,55 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:crystal_quartz_flats",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:smooth_quartz"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:calcite"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.55
+    }
+  },
+  "placement": []
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SAS",
+    "ABA",
+    "SAS"
+  ],
+  "key": {
+    "S": "mysticalterrain:starflower",
+    "A": "minecraft:amethyst_shard",
+    "B": "minecraft:glass_bottle"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:starlight_vial"
+  }
+}

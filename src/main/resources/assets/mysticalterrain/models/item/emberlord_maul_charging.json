@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/emberlord_maul"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.89,
+        -0.87,
+        2.17
+      ],
+      "scale": [
+        0.459,
+        0.459,
+        0.459
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.8,
+        -2.49,
+        -16.63
+      ],
+      "scale": [
+        0.389,
+        0.389,
+        0.389
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -5.25,
+        -5.11,
+        0
+      ],
+      "scale": [
+        0.3511,
+        0.3511,
+        0.3511
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.25,
+        -5.11,
+        0
+      ],
+      "scale": [
+        0.3511,
+        0.3511,
+        0.3511
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.25,
+        -5.11,
+        0
+      ],
+      "scale": [
+        0.3511,
+        0.3511,
+        0.3511
+      ]
+    }
+  }
+}

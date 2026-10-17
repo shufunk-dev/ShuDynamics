@@ -1,0 +1,228 @@
+{
+  "feature": {
+    "type": "minecraft:random_selector",
+    "config": {
+      "features": [
+        {
+          "chance": 0.3333,
+          "feature": {
+            "feature": {
+              "type": "minecraft:tree",
+              "config": {
+                "decorators": [],
+                "dirt_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:dirt"
+                  }
+                },
+                "foliage_placer": {
+                  "type": "minecraft:spruce_foliage_placer",
+                  "offset": {
+                    "type": "minecraft:uniform",
+                    "max_inclusive": 2,
+                    "min_inclusive": 0
+                  },
+                  "radius": {
+                    "type": "minecraft:uniform",
+                    "max_inclusive": 3,
+                    "min_inclusive": 2
+                  },
+                  "trunk_height": {
+                    "type": "minecraft:uniform",
+                    "max_inclusive": 2,
+                    "min_inclusive": 1
+                  }
+                },
+                "foliage_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:acacia_leaves",
+                    "Properties": {
+                      "distance": "7",
+                      "persistent": "false",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                "force_dirt": false,
+                "ignore_vines": true,
+                "minimum_size": {
+                  "type": "minecraft:two_layers_feature_size",
+                  "limit": 2,
+                  "lower_size": 0,
+                  "upper_size": 2
+                },
+                "trunk_placer": {
+                  "type": "minecraft:straight_trunk_placer",
+                  "base_height": 5,
+                  "height_rand_a": 2,
+                  "height_rand_b": 1
+                },
+                "trunk_provider": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:spruce_log",
+                    "Properties": {
+                      "axis": "y"
+                    }
+                  }
+                }
+              }
+            },
+            "placement": [
+              {
+                "type": "minecraft:block_predicate_filter",
+                "predicate": {
+                  "type": "minecraft:would_survive",
+                  "state": {
+                    "Name": "minecraft:oak_sapling",
+                    "Properties": {
+                      "stage": "0"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "chance": 0.3333,
+          "feature": "minecraft:spruce_checked"
+        },
+        {
+          "chance": 0.25,
+          "feature": "minecraft:pine_checked"
+        }
+      ],
+      "default": {
+        "feature": {
+          "type": "minecraft:tree",
+          "config": {
+            "decorators": [],
+            "dirt_provider": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:dirt"
+              }
+            },
+            "foliage_placer": {
+              "type": "minecraft:spruce_foliage_placer",
+              "offset": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 0
+              },
+              "radius": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "trunk_height": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              }
+            },
+            "foliage_provider": {
+              "type": "minecraft:weighted_state_provider",
+              "entries": [
+                {
+                  "data": {
+                    "Name": "mysticalterrain:maple_leaves",
+                    "Properties": {
+                      "distance": "7",
+                      "persistent": "false",
+                      "waterlogged": "false"
+                    }
+                  },
+                  "weight": 3
+                },
+                {
+                  "data": {
+                    "Name": "mysticalterrain:golden_maple_leaves",
+                    "Properties": {
+                      "distance": "7",
+                      "persistent": "false",
+                      "waterlogged": "false"
+                    }
+                  },
+                  "weight": 1
+                }
+              ]
+            },
+            "force_dirt": false,
+            "ignore_vines": true,
+            "minimum_size": {
+              "type": "minecraft:two_layers_feature_size",
+              "limit": 2,
+              "lower_size": 0,
+              "upper_size": 2
+            },
+            "trunk_placer": {
+              "type": "minecraft:straight_trunk_placer",
+              "base_height": 5,
+              "height_rand_a": 2,
+              "height_rand_b": 1
+            },
+            "trunk_provider": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "mysticalterrain:maple_log",
+                "Properties": {
+                  "axis": "y"
+                }
+              }
+            }
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+              "type": "minecraft:would_survive",
+              "state": {
+                "Name": "minecraft:oak_sapling",
+                "Properties": {
+                  "stage": "0"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 8
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "minecraft:oak_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:blossom_hollow",
+    "mysticalterrain:crystal_glade",
+    "mysticalterrain:dreamvine_jungle",
+    "mysticalterrain:elder_silverbark",
+    "mysticalterrain:enchanted_garden",
+    "mysticalterrain:faerie_ring_isles",
+    "mysticalterrain:faewood",
+    "mysticalterrain:glimmer_plains",
+    "mysticalterrain:glowmire",
+    "mysticalterrain:lilac_taiga",
+    "mysticalterrain:moonlit_garden",
+    "mysticalterrain:moonpetal_meadow",
+    "mysticalterrain:pixie_fields",
+    "mysticalterrain:silverbark_glade",
+    "mysticalterrain:sprite_thicket",
+    "mysticalterrain:whispering_woods",
+    "mysticalterrain:witchwood"
+  ]
+}

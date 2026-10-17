@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right_open",
+  "textures": {
+    "bottom": "mysticalterrain:block/rimewood_door_bottom",
+    "top": "mysticalterrain:block/rimewood_door_top"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_verdigris_expanse",
+    "mysticalterrain:bleached_verdigris_expanse",
+    "mysticalterrain:cratered_verdigris_expanse",
+    "mysticalterrain:crystal_verdigris_expanse",
+    "mysticalterrain:luminous_verdigris_expanse",
+    "mysticalterrain:scorched_verdigris_expanse",
+    "mysticalterrain:sculked_verdigris_expanse",
+    "mysticalterrain:shattered_verdigris_expanse",
+    "mysticalterrain:verdigris_expanse",
+    "mysticalterrain:voidscarred_verdigris_expanse"
+  ]
+}

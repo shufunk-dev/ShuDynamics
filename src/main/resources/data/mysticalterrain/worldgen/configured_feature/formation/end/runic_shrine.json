@@ -1,0 +1,61 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "shrine",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:runestone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:runestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:runestone"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:chiseled_stone_bricks"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:runestone_bricks"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/end_supplies"
+  }
+}

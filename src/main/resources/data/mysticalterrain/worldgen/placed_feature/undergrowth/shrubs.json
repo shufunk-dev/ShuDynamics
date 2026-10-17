@@ -1,0 +1,71 @@
+{
+  "feature": {
+    "type": "minecraft:random_patch",
+    "config": {
+      "tries": 24,
+      "xz_spread": 5,
+      "y_spread": 3,
+      "feature": {
+        "feature": {
+          "type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:weighted_state_provider",
+              "entries": [
+                {
+                  "data": {
+                    "Name": "minecraft:bush"
+                  },
+                  "weight": 12
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:sweet_berry_bush",
+                    "Properties": {
+                      "age": "2"
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "data": {
+                    "Name": "minecraft:sweet_berry_bush",
+                    "Properties": {
+                      "age": "3"
+                    }
+                  },
+                  "weight": 2
+                }
+              ]
+            }
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+              "type": "minecraft:matching_blocks",
+              "blocks": "minecraft:air"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

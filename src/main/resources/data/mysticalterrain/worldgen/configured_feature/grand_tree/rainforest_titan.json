@@ -1,0 +1,84 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 52,
+      "max_inclusive": 66
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.19,
+      "max_exclusive": 3.9
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18.7,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.07,
+    "gnarl": 0.45,
+    "density": 0.85,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:jungle_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:jungle_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.25,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 12
+      }
+    },
+    "growth": {
+      "lobes": 2,
+      "spread": 0.58,
+      "flat": 0.72,
+      "tiers": 0.24,
+      "lopside": 0.52,
+      "bends": 1.37,
+      "swing": 0.23,
+      "split": 0.65,
+      "sprout": 0.66,
+      "tropism": 0.46,
+      "twig": 1.35,
+      "drip": 0.17,
+      "hollow": 0.89,
+      "buttress": 0.49,
+      "jitter": 0.26,
+      "forks": 1
+    }
+  }
+}

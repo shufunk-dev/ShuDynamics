@@ -1,0 +1,23 @@
+{
+  "feature": "mysticalterrain:grand_tree/mistcap",
+  "placement": [
+    {
+      "type": "mysticalterrain:grand_tree_count",
+      "tree": "mysticalterrain:grand_tree/mistcap"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 2
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

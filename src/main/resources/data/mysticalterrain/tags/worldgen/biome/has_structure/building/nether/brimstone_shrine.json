@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ashen_brimstone_flats",
+    "mysticalterrain:basaltic_brimstone_flats",
+    "mysticalterrain:brimstone_flats",
+    "mysticalterrain:crystalline_brimstone_flats",
+    "mysticalterrain:fungal_brimstone_flats",
+    "mysticalterrain:overgrown_brimstone_flats",
+    "mysticalterrain:radiant_brimstone_flats",
+    "mysticalterrain:shattered_brimstone_flats",
+    "mysticalterrain:soulburnt_brimstone_flats",
+    "mysticalterrain:weeping_brimstone_flats"
+  ]
+}

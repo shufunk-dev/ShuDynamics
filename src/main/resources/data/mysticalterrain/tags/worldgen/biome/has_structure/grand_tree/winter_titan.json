@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:aurora_grove",
+    "mysticalterrain:frostbloom_meadow",
+    "mysticalterrain:frostneedle_taiga",
+    "mysticalterrain:frostscree_hills",
+    "mysticalterrain:glacial_expanse",
+    "mysticalterrain:hoarfrost_giants",
+    "mysticalterrain:pale_frostwood",
+    "mysticalterrain:powder_slopes",
+    "mysticalterrain:rimegrass_plains",
+    "mysticalterrain:rimepine_forest",
+    "mysticalterrain:silverpine_wilds",
+    "mysticalterrain:sleet_hills"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/rimewood_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/rimewood_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/rimewood_slab_top"
+    }
+  }
+}

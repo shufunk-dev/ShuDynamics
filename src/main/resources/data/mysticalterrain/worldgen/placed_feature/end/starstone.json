@@ -1,0 +1,51 @@
+{
+  "feature": {
+    "type": "mysticalterrain:boulder",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:starstone"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:starstone_bricks"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 7
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

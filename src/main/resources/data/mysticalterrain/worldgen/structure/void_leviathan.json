@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:formation",
+  "biomes": "#mysticalterrain:has_structure/formation/void_leviathan",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "formation": "mysticalterrain:formation/void_leviathan"
+}

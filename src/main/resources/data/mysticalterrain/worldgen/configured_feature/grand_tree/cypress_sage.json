@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 30,
+      "max_inclusive": 38
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.15,
+      "max_exclusive": 2.63
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 13.1,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.11,
+    "gnarl": 0.37,
+    "density": 0.94,
+    "reach": 16,
+    "aquatic": true,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:cypress_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:cypress_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.35,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 12
+      }
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.83,
+      "flat": 0.91,
+      "tiers": 0.32,
+      "lopside": 0.49,
+      "bends": 1.11,
+      "swing": 0.87,
+      "split": 0.56,
+      "sprout": 0.24,
+      "tropism": 0.17,
+      "twig": 0.95,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.51,
+      "jitter": 0.23,
+      "forks": 2
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "mysticalterrain:fossil_stone",
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:fossil_stone_bricks"
+  }
+}

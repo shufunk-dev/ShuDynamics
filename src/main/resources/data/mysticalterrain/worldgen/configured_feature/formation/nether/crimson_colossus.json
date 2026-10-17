@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "reef",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 20,
+      "max_inclusive": 30
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:nether_wart_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:crimson_nylium"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:nether_wart_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_nether_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      }
+    },
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    }
+  }
+}

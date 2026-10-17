@@ -142,6 +142,20 @@
     "enchantedwood:water_pipe",
     "enchantedwood:tan_ti_block",
     "enchantedwood:neo_titanium_block",
-    "enchantedwood:hafnium_tungsten_carbide_block"
+    "enchantedwood:hafnium_tungsten_carbide_block",
+    "enchantedwood:end_stone_coal_ore",
+    "enchantedwood:end_stone_iron_ore",
+    "enchantedwood:end_stone_gold_ore",
+    "enchantedwood:end_stone_redstone_ore",
+    "enchantedwood:end_stone_lapis_ore",
+    "enchantedwood:end_stone_diamond_ore",
+    "enchantedwood:void_crystal_ore",
+    "enchantedwood:astral_shard_ore",
+    "enchantedwood:resonant_gem_ore",
+    "enchantedwood:netherrack_coal_ore",
+    "enchantedwood:netherrack_iron_ore",
+    "enchantedwood:netherrack_redstone_ore",
+    "enchantedwood:netherrack_lapis_ore",
+    "enchantedwood:netherrack_diamond_ore"
   ]
 }

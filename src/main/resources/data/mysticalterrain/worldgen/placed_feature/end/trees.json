@@ -1,0 +1,84 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "spiral",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 24,
+        "max_inclusive": 36
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.8,
+        "max_exclusive": 2.6
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 11.0,
+        "max_exclusive": 15.0
+      },
+      "shape": 0.55,
+      "reach": 21,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "mysticalterrain:starbark_wood",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "mysticalterrain:starbark_leaves",
+                "Properties": {
+                  "distance": "7",
+                  "persistent": "false",
+                  "waterlogged": "false"
+                }
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "fruit": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:pearlescent_froglight",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "fruit_chance": 0.02
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

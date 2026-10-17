@@ -1,0 +1,147 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 31,
+      "max_inclusive": 39
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.01,
+      "max_exclusive": 2.46
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.2,
+      "max_exclusive": 12.6
+    },
+    "lean": 0.33,
+    "gnarl": 0.4,
+    "density": 0.92,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "cover": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "south",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "south",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:wildflowers",
+              "Properties": {
+                "facing": "south",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover_chance": 0.2
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.47,
+      "flat": 0.01,
+      "tiers": 0.41,
+      "lopside": 0.43,
+      "bends": 1.07,
+      "swing": 0.34,
+      "split": 0.44,
+      "sprout": 0.76,
+      "tropism": 0.5,
+      "twig": 0.8,
+      "drip": 0.02,
+      "hollow": 0.43,
+      "buttress": 0.12,
+      "jitter": 0.11,
+      "forks": 2
+    }
+  }
+}

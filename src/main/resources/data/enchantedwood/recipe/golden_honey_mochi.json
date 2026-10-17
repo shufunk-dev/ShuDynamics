@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
+  "category": "food",
   "ingredients": [
     "enchantedwood:sushi_rice",
     "minecraft:honey_bottle",

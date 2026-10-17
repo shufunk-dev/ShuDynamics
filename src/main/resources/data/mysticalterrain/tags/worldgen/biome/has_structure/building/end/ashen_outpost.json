@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_ashen_void",
+    "mysticalterrain:ashen_void",
+    "mysticalterrain:barren_ashen_void",
+    "mysticalterrain:bleached_ashen_void",
+    "mysticalterrain:cratered_ashen_void",
+    "mysticalterrain:frozen_ashen_void",
+    "mysticalterrain:luminous_ashen_void",
+    "mysticalterrain:scorched_amethyst_canyons",
+    "mysticalterrain:scorched_dragonbone_fields",
+    "mysticalterrain:scorched_ender_gardens",
+    "mysticalterrain:scorched_moonstone_terraces",
+    "mysticalterrain:scorched_nebula_barrens",
+    "mysticalterrain:scorched_obsidian_bluffs",
+    "mysticalterrain:scorched_obsidian_shelf",
+    "mysticalterrain:scorched_pale_meadows",
+    "mysticalterrain:scorched_prismarine_shoals",
+    "mysticalterrain:scorched_prismatic_fields",
+    "mysticalterrain:scorched_purpur_mesas",
+    "mysticalterrain:scorched_quartz_flats",
+    "mysticalterrain:scorched_runic_plateau",
+    "mysticalterrain:scorched_shulker_reef",
+    "mysticalterrain:scorched_umbral_fen",
+    "mysticalterrain:scorched_verdigris_expanse",
+    "mysticalterrain:scorched_violet_moors",
+    "mysticalterrain:scorched_voidglass_flats",
+    "mysticalterrain:sculked_ashen_void",
+    "mysticalterrain:shattered_ashen_void",
+    "mysticalterrain:verdant_ashen_void"
+  ]
+}

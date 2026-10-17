@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ENE",
+    "E E"
+  ],
+  "key": {
+    "E": "mysticalterrain:astrael_essence",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:celestial_aegis_helmet"
+  }
+}

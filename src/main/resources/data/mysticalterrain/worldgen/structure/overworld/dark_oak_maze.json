@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:building",
+  "biomes": "#mysticalterrain:has_structure/building/overworld/dark_oak_maze",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "building": "mysticalterrain:building/overworld/dark_oak_maze"
+}

@@ -1,0 +1,147 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "weeping",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 26,
+      "max_inclusive": 36
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15.0,
+      "max_exclusive": 19.0
+    },
+    "droop": 0.7,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:silverbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:wisteria_blossoms",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:silverbark_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover_chance": 0.2
+    }
+  }
+}

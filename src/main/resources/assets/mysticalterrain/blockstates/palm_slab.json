@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/palm_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/palm_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/palm_slab_top"
+    }
+  }
+}

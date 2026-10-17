@@ -1,0 +1,100 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "shards",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 13
+      },
+      "girth": 1.3,
+      "sides": 4,
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:deepslate",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:sculk"
+              },
+              "weight": 2
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:deepslate_tiles"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:sculk"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "accent": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:sculk_catalyst",
+            "Properties": {
+              "bloom": "false"
+            }
+          }
+        },
+        "shell": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:cobbled_deepslate"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:ochre_froglight",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:sculk"
+          }
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

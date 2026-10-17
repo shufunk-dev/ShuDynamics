@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:barren_rime_plateau",
+    "mysticalterrain:cratered_rime_plateau",
+    "mysticalterrain:crystal_rime_plateau",
+    "mysticalterrain:frostvoid_expanse",
+    "mysticalterrain:frozen_amethyst_canyons",
+    "mysticalterrain:frozen_ashen_void",
+    "mysticalterrain:frozen_basalt_columns",
+    "mysticalterrain:frozen_ender_gardens",
+    "mysticalterrain:frozen_moonstone_terraces",
+    "mysticalterrain:frozen_nebula_barrens",
+    "mysticalterrain:frozen_obsidian_bluffs",
+    "mysticalterrain:frozen_obsidian_shelf",
+    "mysticalterrain:frozen_quartz_flats",
+    "mysticalterrain:frozen_runic_plateau",
+    "mysticalterrain:frozen_sculk_barrens",
+    "mysticalterrain:frozen_shulker_reef",
+    "mysticalterrain:frozen_spore_rift",
+    "mysticalterrain:frozen_starstone_heights",
+    "mysticalterrain:frozen_voidglass_flats",
+    "mysticalterrain:luminous_rime_plateau",
+    "mysticalterrain:overgrown_rime_plateau",
+    "mysticalterrain:rime_plateau",
+    "mysticalterrain:sculked_rime_plateau",
+    "mysticalterrain:shattered_rime_plateau",
+    "mysticalterrain:towering_rime_plateau",
+    "mysticalterrain:verdant_rime_plateau"
+  ]
+}

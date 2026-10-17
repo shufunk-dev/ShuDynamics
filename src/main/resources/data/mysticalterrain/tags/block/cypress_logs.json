@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:cypress_log",
+    "mysticalterrain:cypress_wood",
+    "mysticalterrain:stripped_cypress_log",
+    "mysticalterrain:stripped_cypress_wood"
+  ]
+}

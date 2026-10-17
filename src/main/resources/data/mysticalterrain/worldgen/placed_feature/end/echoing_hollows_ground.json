@@ -1,0 +1,56 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:echoing_hollows",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:deepslate",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobbled_deepslate"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:deepslate",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sculk"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.25
+    }
+  },
+  "placement": []
+}

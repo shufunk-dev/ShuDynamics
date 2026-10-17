@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "mysticalterrain:block/olive_planks",
+    "side": "mysticalterrain:block/olive_planks",
+    "top": "mysticalterrain:block/olive_planks"
+  }
+}

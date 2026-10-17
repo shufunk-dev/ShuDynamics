@@ -1,0 +1,76 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 32,
+      "max_inclusive": 41
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.0,
+      "max_exclusive": 2.44
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.8,
+      "max_exclusive": 13.3
+    },
+    "lean": 0.4,
+    "gnarl": 0.32,
+    "density": 0.87,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:bee_nest",
+          "Properties": {
+            "facing": "south",
+            "honey_level": "0"
+          }
+        }
+      },
+      "fruit_chance": 0.004
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.71,
+      "flat": 0.78,
+      "tiers": 0.62,
+      "lopside": 0.36,
+      "bends": 0.79,
+      "swing": 0.19,
+      "split": 0.62,
+      "sprout": 0.6,
+      "tropism": 0.44,
+      "twig": 1.12,
+      "drip": 0.0,
+      "hollow": 0.53,
+      "buttress": 0.13,
+      "jitter": 0.41,
+      "forks": 2
+    }
+  }
+}

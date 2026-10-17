@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:canebrake",
+    "mysticalterrain:cycad_scrub",
+    "mysticalterrain:fern_steppe",
+    "mysticalterrain:fernwood",
+    "mysticalterrain:horsetail_meadow",
+    "mysticalterrain:mossgloom_forest",
+    "mysticalterrain:primeval_fen",
+    "mysticalterrain:primordial_jungle"
+  ]
+}

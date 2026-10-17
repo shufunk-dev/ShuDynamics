@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_fields",
+    "mysticalterrain:rocky_mushroom_fields",
+    "mysticalterrain:wooded_mushroom_fields"
+  ]
+}

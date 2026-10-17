@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "mysticalterrain:block/rimewood_log",
+    "side": "mysticalterrain:block/rimewood_log"
+  }
+}

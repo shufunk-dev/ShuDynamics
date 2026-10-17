@@ -903,5 +903,22 @@
     "item.enchantedwood.neo_titanium_ingot": "Neo-Titanium Ingot",
     "block.enchantedwood.neo_titanium_block": "Block of Neo-Titanium",
     "item.enchantedwood.hafnium_tungsten_carbide_ingot": "Hafnium-Tungsten Carbide Ingot",
-    "block.enchantedwood.hafnium_tungsten_carbide_block": "Block of Hafnium-Tungsten Carbide"
+    "block.enchantedwood.hafnium_tungsten_carbide_block": "Block of Hafnium-Tungsten Carbide",
+    "block.enchantedwood.end_stone_coal_ore": "End Stone Coal Ore",
+    "block.enchantedwood.end_stone_iron_ore": "End Stone Iron Ore",
+    "block.enchantedwood.end_stone_gold_ore": "End Stone Gold Ore",
+    "block.enchantedwood.end_stone_redstone_ore": "End Stone Redstone Ore",
+    "block.enchantedwood.end_stone_lapis_ore": "End Stone Lapis Lazuli Ore",
+    "block.enchantedwood.end_stone_diamond_ore": "End Stone Diamond Ore",
+    "block.enchantedwood.void_crystal_ore": "Void Crystal Ore",
+    "block.enchantedwood.astral_shard_ore": "Astral Shard Ore",
+    "block.enchantedwood.resonant_gem_ore": "Resonant Gem Ore",
+    "item.enchantedwood.void_crystal": "Void Crystal",
+    "item.enchantedwood.astral_shard": "Astral Shard",
+    "item.enchantedwood.resonant_gem": "Resonant Gem",
+    "block.enchantedwood.netherrack_iron_ore": "Netherrack Iron Ore",
+    "block.enchantedwood.netherrack_coal_ore": "Netherrack Coal Ore",
+    "block.enchantedwood.netherrack_redstone_ore": "Netherrack Redstone Ore",
+    "block.enchantedwood.netherrack_diamond_ore": "Netherrack Diamond Ore",
+    "block.enchantedwood.netherrack_lapis_ore": "Netherrack Lapis Ore"
 }

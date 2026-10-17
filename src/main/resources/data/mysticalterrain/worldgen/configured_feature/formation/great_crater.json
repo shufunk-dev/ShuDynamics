@@ -1,0 +1,71 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "crater",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 16,
+      "max_inclusive": 26
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:magma_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:magma_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:deepslate_iron_ore"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "island",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5,
+        "max_inclusive": 9
+      },
+      "materials": {
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:end_stone"
+          }
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:end_stone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "light": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:pearlescent_froglight",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:ochre_froglight",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:amethyst_block"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 45
+        },
+        "max_inclusive": {
+          "absolute": 95
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

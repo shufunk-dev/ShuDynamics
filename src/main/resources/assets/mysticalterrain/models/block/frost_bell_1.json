@@ -1,0 +1,235 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "mysticalterrain:block/frost_bell_1",
+    "bell": "mysticalterrain:block/frost_bell_1",
+    "post": "mysticalterrain:block/rimestone_bricks"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        3,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#post",
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#post",
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#post",
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#post",
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#post"
+        },
+        "down": {
+          "texture": "#post"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        13,
+        13,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bell",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "south": {
+          "texture": "#bell",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "east": {
+          "texture": "#bell",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "west": {
+          "texture": "#bell",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "up": {
+          "texture": "#bell"
+        },
+        "down": {
+          "texture": "#bell"
+        }
+      },
+      "light_emission": 6
+    },
+    {
+      "from": [
+        5,
+        13,
+        5
+      ],
+      "to": [
+        11,
+        15,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bell",
+          "uv": [
+            5,
+            1,
+            11,
+            3
+          ]
+        },
+        "south": {
+          "texture": "#bell",
+          "uv": [
+            5,
+            1,
+            11,
+            3
+          ]
+        },
+        "east": {
+          "texture": "#bell",
+          "uv": [
+            5,
+            1,
+            11,
+            3
+          ]
+        },
+        "west": {
+          "texture": "#bell",
+          "uv": [
+            5,
+            1,
+            11,
+            3
+          ]
+        },
+        "up": {
+          "texture": "#bell"
+        },
+        "down": {
+          "texture": "#bell"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        15,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#post",
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#post",
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#post",
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#post",
+          "uv": [
+            7,
+            0,
+            9,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#post"
+        },
+        "down": {
+          "texture": "#post"
+        }
+      }
+    }
+  ]
+}

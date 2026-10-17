@@ -3,13 +3,15 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.3.6--v2--26.3%20%7C%20v2.3.6--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.4.0--26.3%20%7C%20v2.4.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
 [![Company](https://img.shields.io/badge/By-Shufelt%20Designs-indigo.svg?style=flat-square)](https://github.com/shufunk-dev)
 
 **ShuDynamics** is an expansive tech, magic, logistics, modular vehicles, dimensional exploration, culinary arts, and musical mod for **Minecraft Fabric**, officially maintained for both **Minecraft 26.3 ("Wilderness Bound")** and **Minecraft 1.21.11+ / 1.21.2+**. Built from the ground up to deliver a deeply rewarding survival tech tree—from early-game wooden enchantments and metallurgy to **high-voltage geothermal energy grids**, **wireless crystal storage networks**, **recursive autocrafting supercomputers**, **modular drivable ATVs with industrial tools**, **autonomous chunk laser quarries**, the **Cleanroom Complex with needleless hypospray medicine**, the **Modular Power Exosuit**, the **Harmonic Record Press with a full 10-track original soundtrack**, the **Multi-Course Bento Boxes**, **artisan kitchen appliances & cryogenic logistics**, **7 nostalgic Lost Biomes in the fractured Convergence dimension**, and the multi-tier boss gauntlet culminating in **The Primordial Cataclysm**.
+
+ShuDynamics also incorporates the complete procedural world generation, landscape anomalies, structures, mythic weapons, and animated GeckoLib Colossus boss gauntlet from our sister standalone mod, **[Mystical Terrain](https://github.com/shufunk-dev/Mystical-Terrain)**.
 
 ---
 
@@ -19,16 +21,39 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.3.6-v2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
-| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.3.6-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.4.0-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.4.0-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
+* 🌲 **Mystical Terrain (Standalone Mod Repo)**: [https://github.com/shufunk-dev/Mystical-Terrain](https://github.com/shufunk-dev/Mystical-Terrain)
 * ▶️ **Official Soundtrack (YouTube)**: [https://www.youtube.com/playlist?list=PLAEoPqUv2z90](https://www.youtube.com/playlist?list=PLAEoPqUv2z90)
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
+
+---
+
+## 🌟 What's New in v2.4.0 — The Mystical Convergence & Colossus Bosses Major Update
+
+* 🌲 **Full Mystical Terrain Subsystem Integration ([Mystical-Terrain Repo](https://github.com/shufunk-dev/Mystical-Terrain))**:
+  * **Unified Codebase**: The procedural world generation algorithms, colossal organic trees, crystalline spires, ancient boulders, and mystical structures originally developed for [Mystical Terrain](https://github.com/shufunk-dev/Mystical-Terrain) are fully integrated into ShuDynamics' Convergence dimension.
+  * **Procedural Space-Colonization Trees**: Authentic branching algorithms generating colossal Starbark, Silverbark, Titan Redwood, Spore Titan, Wishing Titan, and Prism Trees with dynamic crown canopies and hanging lianas.
+  * **Mystical Geological Features**: Great Amethyst Spires, Great Craters, Ancient Geodes, Great Reefs, Nebula Hearts, Glacier Crystals, and Obsidian Circles.
+  * **subterranean Cave Carvers & Anomalies**: Deep 3D underground cavern carvers and anomalous landscape features distributing progression minerals across the dimension.
+* ⚔️ **GeckoLib Colossus Boss Gauntlet & Cinematic Rituals**:
+  * **Custom 3D Animated Bosses**: High-detail animated models and cinematic encounter phases powered by GeckoLib for **The Resonance Colossus**, **The Ascendant Colossus**, and **The Primordial Cataclysm**.
+  * **Atmospheric Awakening Rituals**: Complex multi-block altar rituals requiring Core of Awakening, Ascendant Awakening Core, and Primordial Cataclysm Core with environmental sound effects, dynamic altar lighting, and chat milestones.
+  * **Supernova Death Animations**: Defeating Colossus raid bosses triggers catastrophic implosions and blinding supernova energy bursts before dispersing their relics.
+  * **Admin & Server Commands**: Comprehensive `/boss` command suite (`/boss spawn <boss_id>`, `/boss despawn`) for testing and multiplayer encounter management.
+* 🌌 **Dimension & Biome Convergence**:
+  * **Merged Convergence Multi-Noise Biomes**: Rebalanced 3D multi-noise climate parameters synthesizing alien landscapes with 26 distinct Nether biomes and 7 nostalgic Lost Biomes.
+  * **End Stone & Netherrack Progression Ores**: Embedded Neodymium, Hafnium, Tantalum, Ardite, Cobalt, and Zirconia ore clusters with authentic composite stone textures.
+  * **Dimensional Incursions & Natural Spawns**: Environmental monster spawns matching biome themes with dimensional incursion waves occurring in active rift zones.
+* 🛡️ **Mythic Relics, Armory & Gear**:
+  * Legendary Resonance Cleaver, Ascendant Cleaver, Singularity Staff, and Eternal Bento Box.
+  * Pinnacle relics: **Ring of Gravitational Mastery** (creative flight in survival) and **Trophy of Omnipotence**.
 
 ---
 

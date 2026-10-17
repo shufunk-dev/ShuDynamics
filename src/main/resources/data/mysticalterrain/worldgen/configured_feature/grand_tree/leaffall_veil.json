@@ -1,0 +1,167 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 37,
+      "max_inclusive": 47
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.69,
+      "max_exclusive": 3.29
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.8,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.18,
+    "gnarl": 0.62,
+    "density": 0.83,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:maple_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:golden_maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "north",
+                "segment_amount": "4"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:leaf_litter",
+              "Properties": {
+                "facing": "west",
+                "segment_amount": "4"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cover_chance": 0.4
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.83,
+      "flat": 0.61,
+      "tiers": 0.04,
+      "lopside": 0.45,
+      "bends": 1.13,
+      "swing": 0.27,
+      "split": 0.62,
+      "sprout": 0.78,
+      "tropism": 0.01,
+      "twig": 1.19,
+      "drip": 1.1,
+      "hollow": 0.93,
+      "buttress": 0.76,
+      "jitter": 0.17,
+      "forks": 2
+    }
+  }
+}

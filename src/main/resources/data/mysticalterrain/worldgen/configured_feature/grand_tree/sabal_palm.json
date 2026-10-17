@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "palm",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 26,
+      "max_inclusive": 36
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.4,
+      "max_exclusive": 1.71
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8.2,
+      "max_exclusive": 9.2
+    },
+    "lean": 0.45,
+    "gnarl": 0.22,
+    "droop": 0.6,
+    "shape": 0.4,
+    "density": 0.95,
+    "branches": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12,
+      "max_inclusive": 14
+    },
+    "veins": 1,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:stripped_palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:palm_fronds",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:jungle_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit_chance": 0.0
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#mysticalterrain:rimewood_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mysticalterrain:rimewood_planks"
+  }
+}

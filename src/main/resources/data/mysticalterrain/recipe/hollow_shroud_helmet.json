@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "ENE",
+    "E E"
+  ],
+  "key": {
+    "E": "mysticalterrain:hollow_warden_essence",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:hollow_shroud_helmet"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 39,
+      "max_inclusive": 50
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.91,
+      "max_exclusive": 2.33
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.3,
+      "max_exclusive": 13.9
+    },
+    "lean": 0.05,
+    "gnarl": 0.75,
+    "density": 0.91,
+    "veins": 4,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:charwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:ember_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:dark_oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:magma_block"
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "fruit_chance": 0.02
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.63,
+      "flat": 0.72,
+      "tiers": 0.88,
+      "lopside": 0.14,
+      "bends": 0.13,
+      "swing": 0.81,
+      "split": 0.39,
+      "sprout": 0.44,
+      "tropism": -0.45,
+      "twig": 1.16,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.33,
+      "jitter": 0.45,
+      "forks": 1
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "conifer",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 46,
+      "max_inclusive": 70
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10.0,
+      "max_exclusive": 13.0
+    },
+    "droop": 0.5,
+    "shape": 0.3,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:spruce_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:spruce_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:golden_maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

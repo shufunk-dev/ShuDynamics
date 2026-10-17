@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  E",
+    "NE ",
+    "S  "
+  ],
+  "key": {
+    "E": "mysticalterrain:ender_dragon_essence",
+    "N": "minecraft:netherite_ingot",
+    "S": "minecraft:blaze_rod"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:voidreaver"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:sky_isle",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 3,
+    "salt": 117250224
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:nether/ashen_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/ashen_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/ashen_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/ashen_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/brimstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/frostfire_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/frostfire_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/frostfire_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_gate",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_monoliths",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/sporewood_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/sporewood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/sporewood_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_watchtower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 3,
+    "salt": 138735563,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 3
+    }
+  }
+}

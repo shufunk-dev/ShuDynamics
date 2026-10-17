@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:hibiscus_garden",
+    "mysticalterrain:jade_bamboo_forest",
+    "mysticalterrain:lagoon_marsh",
+    "mysticalterrain:monsoon_forest",
+    "mysticalterrain:orchid_thicket",
+    "mysticalterrain:paradise_jungle"
+  ]
+}

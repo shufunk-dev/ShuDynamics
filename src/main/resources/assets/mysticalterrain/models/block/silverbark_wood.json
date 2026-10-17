@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "mysticalterrain:block/silverbark_log",
+    "side": "mysticalterrain:block/silverbark_log"
+  }
+}

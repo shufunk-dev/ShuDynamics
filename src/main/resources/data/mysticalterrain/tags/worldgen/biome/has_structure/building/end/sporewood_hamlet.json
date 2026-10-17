@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_spore_rift",
+    "mysticalterrain:bleached_spore_rift",
+    "mysticalterrain:cratered_spore_rift",
+    "mysticalterrain:frozen_spore_rift",
+    "mysticalterrain:luminous_spore_rift",
+    "mysticalterrain:overgrown_spore_rift",
+    "mysticalterrain:shattered_spore_rift",
+    "mysticalterrain:spore_rift",
+    "mysticalterrain:towering_spore_rift",
+    "mysticalterrain:verdant_spore_rift"
+  ]
+}

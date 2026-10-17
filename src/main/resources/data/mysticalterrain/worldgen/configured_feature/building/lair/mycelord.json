@@ -1,0 +1,92 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_sporecap",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mushroom_stem"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:spore_soil"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:mycelium"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "wall": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mushroom_stem"
+        }
+      },
+      "roof": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:sporecap_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_mushroom_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging_light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:glowcap_block"
+        }
+      },
+      "plant": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:red_mushroom"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:brown_mushroom"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:inkcap"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "altar": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:mycelord_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_mycelord",
+    "treasure": "mysticalterrain:chests/lair_mycelord"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 120,
+      "max_inclusive": 152
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6.06,
+      "max_exclusive": 7.41
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 51.8,
+      "max_exclusive": 58.4
+    },
+    "lean": 0.16,
+    "gnarl": 0.74,
+    "density": 0.87,
+    "reach": 81,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:spruce_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.64,
+      "flat": 0.79,
+      "tiers": 0.89,
+      "lopside": 0.7,
+      "bends": 2.2,
+      "swing": 0.79,
+      "split": 0.41,
+      "sprout": 0.4,
+      "tropism": -0.2,
+      "twig": 1.04,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.21,
+      "jitter": 0.4,
+      "forks": 1
+    }
+  }
+}

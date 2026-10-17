@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 27,
+      "max_inclusive": 34
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.59,
+      "max_exclusive": 1.94
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.5,
+      "max_exclusive": 13.0
+    },
+    "lean": 0.34,
+    "gnarl": 0.68,
+    "density": 0.86,
+    "reach": 16,
+    "aquatic": true,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mangrove_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mangrove_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.25,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 9
+      }
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.93,
+      "flat": 0.85,
+      "tiers": 0.84,
+      "lopside": 0.07,
+      "bends": 0.41,
+      "swing": 0.64,
+      "split": 0.38,
+      "sprout": 0.3,
+      "tropism": 0.11,
+      "twig": 1.21,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.19,
+      "jitter": 0.9,
+      "forks": 1
+    }
+  }
+}

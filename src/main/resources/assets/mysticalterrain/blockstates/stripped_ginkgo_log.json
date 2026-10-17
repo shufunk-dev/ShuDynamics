@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "mysticalterrain:block/stripped_ginkgo_log_x"
+    },
+    "axis=y": {
+      "model": "mysticalterrain:block/stripped_ginkgo_log_y"
+    },
+    "axis=z": {
+      "model": "mysticalterrain:block/stripped_ginkgo_log_z"
+    }
+  }
+}

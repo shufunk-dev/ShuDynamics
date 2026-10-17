@@ -1,0 +1,80 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 115,
+      "max_inclusive": 147
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7.42,
+      "max_exclusive": 9.06
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 35.9,
+      "max_exclusive": 40.5
+    },
+    "lean": 0.34,
+    "gnarl": 0.24,
+    "density": 0.84,
+    "reach": 58,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:spruce_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:spruce_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.25,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 8
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.39,
+      "flat": 0.3,
+      "tiers": 0.48,
+      "lopside": 0.44,
+      "bends": 1.32,
+      "swing": 0.25,
+      "split": 0.54,
+      "sprout": 0.7,
+      "tropism": 0.48,
+      "twig": 1.38,
+      "drip": 0.71,
+      "hollow": 1.0,
+      "buttress": 0.78,
+      "jitter": 0.44,
+      "forks": 1
+    }
+  }
+}

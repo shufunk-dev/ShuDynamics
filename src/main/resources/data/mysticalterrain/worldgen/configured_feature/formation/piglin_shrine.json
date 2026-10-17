@@ -1,0 +1,78 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "shrine",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:polished_blackstone_bricks"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:gold_block"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:gold_block"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:gilded_blackstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      }
+    },
+    "loot": "minecraft:chests/bastion_other",
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 60,
+      "max_inclusive": 110
+    }
+  }
+}

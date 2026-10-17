@@ -1,0 +1,107 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 50,
+      "max_inclusive": 64
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.47,
+      "max_exclusive": 3.01
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18.2,
+      "max_exclusive": 19.0
+    },
+    "lean": 0.07,
+    "gnarl": 0.29,
+    "density": 0.93,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "cover": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:moss_carpet"
+        }
+      },
+      "hanging_chance": 0.2,
+      "cover_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 9
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 1.0,
+      "flat": 0.55,
+      "tiers": 0.4,
+      "lopside": 0.22,
+      "bends": 1.56,
+      "swing": 0.76,
+      "split": 0.35,
+      "sprout": 0.32,
+      "tropism": -0.45,
+      "twig": 1.32,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.1,
+      "jitter": 0.2,
+      "forks": 1
+    }
+  }
+}

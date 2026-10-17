@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/voidreaver"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.78,
+        -1.53,
+        0.89
+      ],
+      "scale": [
+        0.54,
+        0.54,
+        0.54
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -15,
+        -90,
+        20
+      ],
+      "translation": [
+        2,
+        -3,
+        -1
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -5.49,
+        -5.63,
+        0
+      ],
+      "scale": [
+        0.3992,
+        0.3992,
+        0.3992
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.24,
+        0.24,
+        0.24
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.49,
+        -5.63,
+        0
+      ],
+      "scale": [
+        0.3992,
+        0.3992,
+        0.3992
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        5.49,
+        -5.63,
+        0
+      ],
+      "scale": [
+        0.3992,
+        0.3992,
+        0.3992
+      ]
+    }
+  }
+}

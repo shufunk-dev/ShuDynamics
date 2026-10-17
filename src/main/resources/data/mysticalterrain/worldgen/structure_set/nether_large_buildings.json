@@ -1,0 +1,116 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:nether/ashen_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/brimstone_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_colossus",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 24,
+    "separation": 8,
+    "salt": 121828685,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 3
+    }
+  }
+}

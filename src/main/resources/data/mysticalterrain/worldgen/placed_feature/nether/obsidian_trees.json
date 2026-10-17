@@ -1,0 +1,63 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "crystal",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 14,
+        "max_inclusive": 22
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.2,
+        "max_exclusive": 1.8
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6.0,
+        "max_exclusive": 9.0
+      },
+      "lean": 0.3,
+      "reach": 12,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:obsidian"
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:crying_obsidian"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:purple_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

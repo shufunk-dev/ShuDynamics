@@ -1,0 +1,188 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:nether/ashen_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_organ",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/basalt_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/blackstone_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/bone_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/brimstone_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/brimstone_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/crimson_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/frostfire_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/frostfire_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/gilded_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/magma_crater",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/molten_geode",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/nether_brick_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_spires",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/obsidian_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/piglin_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/quartz_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/red_nether_brick_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/soul_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/sporewood_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/sporewood_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/warped_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:nether/wither_spires",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 14,
+    "separation": 5,
+    "salt": 119523497,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 3
+    }
+  }
+}

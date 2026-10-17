@@ -1,0 +1,25 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:pearlbloom_glades",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_moss_block"
+        }
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 0
+    }
+  },
+  "placement": []
+}

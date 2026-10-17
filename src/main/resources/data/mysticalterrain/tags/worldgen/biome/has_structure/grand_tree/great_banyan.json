@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sparse_jungle",
+    "mysticalterrain:sparse_dry_jungle",
+    "mysticalterrain:sparse_dry_rocky_jungle",
+    "mysticalterrain:sparse_flowering_jungle",
+    "mysticalterrain:sparse_lush_flowering_jungle",
+    "mysticalterrain:sparse_lush_jungle",
+    "mysticalterrain:sparse_melon_jungle",
+    "mysticalterrain:sparse_mossy_jungle",
+    "mysticalterrain:sparse_mossy_orchid_jungle",
+    "mysticalterrain:sparse_orchid_jungle",
+    "mysticalterrain:sparse_rocky_jungle"
+  ]
+}

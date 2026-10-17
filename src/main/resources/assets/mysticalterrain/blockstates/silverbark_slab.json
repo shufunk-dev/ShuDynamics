@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mysticalterrain:block/silverbark_slab"
+    },
+    "type=double": {
+      "model": "mysticalterrain:block/silverbark_planks"
+    },
+    "type=top": {
+      "model": "mysticalterrain:block/silverbark_slab_top"
+    }
+  }
+}

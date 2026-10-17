@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:amethyst_canyons",
+    "mysticalterrain:amethyst_spires",
+    "mysticalterrain:ancient_amethyst_canyons",
+    "mysticalterrain:barren_amethyst_canyons",
+    "mysticalterrain:bleached_amethyst_canyons",
+    "mysticalterrain:crystal_basalt_columns",
+    "mysticalterrain:crystal_chorus_jungle",
+    "mysticalterrain:crystal_obsidian_bluffs",
+    "mysticalterrain:crystal_obsidian_shelf",
+    "mysticalterrain:crystal_pale_meadows",
+    "mysticalterrain:crystal_purpur_mesas",
+    "mysticalterrain:crystal_quartz_flats",
+    "mysticalterrain:crystal_rime_plateau",
+    "mysticalterrain:crystal_runic_plateau",
+    "mysticalterrain:crystal_sculk_barrens",
+    "mysticalterrain:crystal_shulker_reef",
+    "mysticalterrain:crystal_starstone_heights",
+    "mysticalterrain:crystal_umbral_fen",
+    "mysticalterrain:crystal_verdigris_expanse",
+    "mysticalterrain:frozen_amethyst_canyons",
+    "mysticalterrain:overgrown_amethyst_canyons",
+    "mysticalterrain:scorched_amethyst_canyons",
+    "mysticalterrain:towering_amethyst_canyons",
+    "mysticalterrain:verdant_amethyst_canyons",
+    "mysticalterrain:voidscarred_amethyst_canyons"
+  ]
+}

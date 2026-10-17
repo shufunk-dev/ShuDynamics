@@ -1,0 +1,102 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "spires",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 18
+      },
+      "lean": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 0.2,
+        "max_exclusive": 0.5
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "mysticalterrain:moonstone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:calcite"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "mysticalterrain:moonstone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "mysticalterrain:moonstone"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:pearlescent_froglight",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "mysticalterrain:moonstone"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

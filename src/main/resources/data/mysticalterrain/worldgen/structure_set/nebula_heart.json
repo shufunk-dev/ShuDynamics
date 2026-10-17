@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:nebula_heart",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 3,
+    "salt": 76917036
+  }
+}

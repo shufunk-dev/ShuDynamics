@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:alder_carr",
+    "mysticalterrain:bayou_jungle",
+    "mysticalterrain:cypress_bayou",
+    "mysticalterrain:delta_floodplain",
+    "mysticalterrain:fogwood",
+    "mysticalterrain:lotus_glade",
+    "mysticalterrain:marshmallow_meadows",
+    "mysticalterrain:moss_drowned_spruces",
+    "mysticalterrain:muskeg_taiga",
+    "mysticalterrain:peat_bog",
+    "mysticalterrain:reed_flats",
+    "mysticalterrain:rotwood",
+    "mysticalterrain:rushwater_thicket",
+    "mysticalterrain:sedge_meadow",
+    "mysticalterrain:tanglewood_mangroves",
+    "mysticalterrain:willow_woods"
+  ]
+}

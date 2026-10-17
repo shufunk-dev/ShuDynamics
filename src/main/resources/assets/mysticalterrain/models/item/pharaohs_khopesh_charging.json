@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/pharaohs_khopesh"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -151.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.93,
+        -0.89,
+        2.21
+      ],
+      "scale": [
+        0.457,
+        0.457,
+        0.457
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        19.22,
+        -74.63,
+        1.48
+      ],
+      "translation": [
+        7.79,
+        -2.5,
+        -16.62
+      ],
+      "scale": [
+        0.419,
+        0.419,
+        0.419
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -2.17,
+        -4.31,
+        0
+      ],
+      "scale": [
+        0.348,
+        0.348,
+        0.348
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.2727272727272727,
+        0.2727272727272727,
+        0.2727272727272727
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        2.17,
+        -4.31,
+        0
+      ],
+      "scale": [
+        0.348,
+        0.348,
+        0.348
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        2.17,
+        -4.31,
+        0
+      ],
+      "scale": [
+        0.348,
+        0.348,
+        0.348
+      ]
+    }
+  }
+}

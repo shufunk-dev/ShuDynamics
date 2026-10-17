@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:formation",
+  "biomes": "#mysticalterrain:has_structure/formation/echo_gate",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "formation": "mysticalterrain:formation/echo_gate"
+}

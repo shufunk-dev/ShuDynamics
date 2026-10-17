@@ -1,0 +1,7838 @@
+[
+  {
+    "name": "mysticalterrain:nether",
+    "weight": 7,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:emberwood_forest",
+        "parameters": {
+          "temperature": [
+            0.4,
+            0.4
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulwood_thicket",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:quartz_caverns",
+        "parameters": {
+          "temperature": [
+            -0.45,
+            -0.45
+          ],
+          "humidity": [
+            0.35,
+            0.35
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.1
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_ruins",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:bone_wastes",
+        "parameters": {
+          "temperature": [
+            -0.35,
+            -0.35
+          ],
+          "humidity": [
+            -0.35,
+            -0.35
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.1
+        }
+      },
+      {
+        "biome": "mysticalterrain:magma_rifts",
+        "parameters": {
+          "temperature": [
+            0.35,
+            0.35
+          ],
+          "humidity": [
+            0.45,
+            0.45
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.15
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_cinder_wastes",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:cinder_wastes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            -0.498,
+            -0.498
+          ],
+          "humidity": [
+            0.041,
+            0.041
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            -0.408,
+            -0.408
+          ],
+          "humidity": [
+            -0.289,
+            -0.289
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            -0.127,
+            -0.127
+          ],
+          "humidity": [
+            -0.484,
+            -0.484
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            0.213,
+            0.213
+          ],
+          "humidity": [
+            -0.452,
+            -0.452
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            0.454,
+            0.454
+          ],
+          "humidity": [
+            -0.209,
+            -0.209
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            0.482,
+            0.482
+          ],
+          "humidity": [
+            0.132,
+            0.132
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            0.285,
+            0.285
+          ],
+          "humidity": [
+            0.411,
+            0.411
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            -0.046,
+            -0.046
+          ],
+          "humidity": [
+            0.498,
+            0.498
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_cinder_wastes",
+        "parameters": {
+          "temperature": [
+            -0.355,
+            -0.355
+          ],
+          "humidity": [
+            0.352,
+            0.352
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_ember_thicket",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:ember_thicket",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_ember_thicket",
+        "parameters": {
+          "temperature": [
+            0.448,
+            0.448
+          ],
+          "humidity": [
+            -0.223,
+            -0.223
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_ember_thicket",
+        "parameters": {
+          "temperature": [
+            0.486,
+            0.486
+          ],
+          "humidity": [
+            0.117,
+            0.117
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_ember_thicket",
+        "parameters": {
+          "temperature": [
+            0.297,
+            0.297
+          ],
+          "humidity": [
+            0.402,
+            0.402
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_ember_thicket",
+        "parameters": {
+          "temperature": [
+            -0.031,
+            -0.031
+          ],
+          "humidity": [
+            0.499,
+            0.499
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_ember_thicket",
+        "parameters": {
+          "temperature": [
+            -0.345,
+            -0.345
+          ],
+          "humidity": [
+            0.362,
+            0.362
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_ember_thicket",
+        "parameters": {
+          "temperature": [
+            -0.497,
+            -0.497
+          ],
+          "humidity": [
+            0.056,
+            0.056
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_ember_thicket",
+        "parameters": {
+          "temperature": [
+            -0.417,
+            -0.417
+          ],
+          "humidity": [
+            -0.276,
+            -0.276
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_ember_thicket",
+        "parameters": {
+          "temperature": [
+            -0.142,
+            -0.142
+          ],
+          "humidity": [
+            -0.48,
+            -0.48
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_ember_thicket",
+        "parameters": {
+          "temperature": [
+            0.2,
+            0.2
+          ],
+          "humidity": [
+            -0.458,
+            -0.458
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_blackstone_badlands",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            -0.001,
+            -0.001
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            0.321,
+            0.321
+          ],
+          "humidity": [
+            -0.383,
+            -0.383
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            0.492,
+            0.492
+          ],
+          "humidity": [
+            -0.087,
+            -0.087
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            0.433,
+            0.433
+          ],
+          "humidity": [
+            0.25,
+            0.25
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            0.172,
+            0.172
+          ],
+          "humidity": [
+            0.47,
+            0.47
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            -0.171,
+            -0.171
+          ],
+          "humidity": [
+            0.47,
+            0.47
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            -0.433,
+            -0.433
+          ],
+          "humidity": [
+            0.25,
+            0.25
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            -0.492,
+            -0.492
+          ],
+          "humidity": [
+            -0.086,
+            -0.086
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_blackstone_badlands",
+        "parameters": {
+          "temperature": [
+            -0.322,
+            -0.322
+          ],
+          "humidity": [
+            -0.383,
+            -0.383
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_quartz_crags",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_quartz_crags",
+        "parameters": {
+          "temperature": [
+            -0.218,
+            -0.218
+          ],
+          "humidity": [
+            0.45,
+            0.45
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_quartz_crags",
+        "parameters": {
+          "temperature": [
+            -0.456,
+            -0.456
+          ],
+          "humidity": [
+            0.204,
+            0.204
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_quartz_crags",
+        "parameters": {
+          "temperature": [
+            -0.481,
+            -0.481
+          ],
+          "humidity": [
+            -0.137,
+            -0.137
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_quartz_crags",
+        "parameters": {
+          "temperature": [
+            -0.28,
+            -0.28
+          ],
+          "humidity": [
+            -0.414,
+            -0.414
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.051,
+            0.051
+          ],
+          "humidity": [
+            -0.497,
+            -0.497
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.359,
+            0.359
+          ],
+          "humidity": [
+            -0.348,
+            -0.348
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.499,
+            0.499
+          ],
+          "humidity": [
+            -0.036,
+            -0.036
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.405,
+            0.405
+          ],
+          "humidity": [
+            0.293,
+            0.293
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_quartz_crags",
+        "parameters": {
+          "temperature": [
+            0.122,
+            0.122
+          ],
+          "humidity": [
+            0.485,
+            0.485
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_molten_fields",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:molten_fields",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_molten_fields",
+        "parameters": {
+          "temperature": [
+            -0.409,
+            -0.409
+          ],
+          "humidity": [
+            0.288,
+            0.288
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_molten_fields",
+        "parameters": {
+          "temperature": [
+            -0.498,
+            -0.498
+          ],
+          "humidity": [
+            -0.043,
+            -0.043
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_molten_fields",
+        "parameters": {
+          "temperature": [
+            -0.354,
+            -0.354
+          ],
+          "humidity": [
+            -0.353,
+            -0.353
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_molten_fields",
+        "parameters": {
+          "temperature": [
+            -0.045,
+            -0.045
+          ],
+          "humidity": [
+            -0.498,
+            -0.498
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_molten_fields",
+        "parameters": {
+          "temperature": [
+            0.286,
+            0.286
+          ],
+          "humidity": [
+            -0.41,
+            -0.41
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_molten_fields",
+        "parameters": {
+          "temperature": [
+            0.483,
+            0.483
+          ],
+          "humidity": [
+            -0.13,
+            -0.13
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_molten_fields",
+        "parameters": {
+          "temperature": [
+            0.454,
+            0.454
+          ],
+          "humidity": [
+            0.21,
+            0.21
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_molten_fields",
+        "parameters": {
+          "temperature": [
+            0.212,
+            0.212
+          ],
+          "humidity": [
+            0.453,
+            0.453
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_molten_fields",
+        "parameters": {
+          "temperature": [
+            -0.128,
+            -0.128
+          ],
+          "humidity": [
+            0.483,
+            0.483
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_soulfire_marsh",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            0.434,
+            0.434
+          ],
+          "humidity": [
+            -0.249,
+            -0.249
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            0.492,
+            0.492
+          ],
+          "humidity": [
+            0.088,
+            0.088
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            0.32,
+            0.32
+          ],
+          "humidity": [
+            0.384,
+            0.384
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            -0.001,
+            -0.001
+          ],
+          "humidity": [
+            0.5,
+            0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            -0.322,
+            -0.322
+          ],
+          "humidity": [
+            0.382,
+            0.382
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            -0.493,
+            -0.493
+          ],
+          "humidity": [
+            0.086,
+            0.086
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            -0.432,
+            -0.432
+          ],
+          "humidity": [
+            -0.251,
+            -0.251
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            -0.17,
+            -0.17
+          ],
+          "humidity": [
+            -0.47,
+            -0.47
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_soulfire_marsh",
+        "parameters": {
+          "temperature": [
+            0.172,
+            0.172
+          ],
+          "humidity": [
+            -0.469,
+            -0.469
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_ossuary_dunes",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            0.313,
+            0.313
+          ],
+          "humidity": [
+            -0.39,
+            -0.39
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            0.49,
+            0.49
+          ],
+          "humidity": [
+            -0.097,
+            -0.097
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            0.438,
+            0.438
+          ],
+          "humidity": [
+            0.241,
+            0.241
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            0.181,
+            0.181
+          ],
+          "humidity": [
+            0.466,
+            0.466
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            -0.161,
+            -0.161
+          ],
+          "humidity": [
+            0.473,
+            0.473
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            -0.428,
+            -0.428
+          ],
+          "humidity": [
+            0.259,
+            0.259
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            -0.494,
+            -0.494
+          ],
+          "humidity": [
+            -0.076,
+            -0.076
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            -0.329,
+            -0.329
+          ],
+          "humidity": [
+            -0.376,
+            -0.376
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_ossuary_dunes",
+        "parameters": {
+          "temperature": [
+            -0.01,
+            -0.01
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_warped_mire",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:warped_mire",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_warped_mire",
+        "parameters": {
+          "temperature": [
+            -0.499,
+            -0.499
+          ],
+          "humidity": [
+            0.036,
+            0.036
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_warped_mire",
+        "parameters": {
+          "temperature": [
+            -0.405,
+            -0.405
+          ],
+          "humidity": [
+            -0.293,
+            -0.293
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_warped_mire",
+        "parameters": {
+          "temperature": [
+            -0.122,
+            -0.122
+          ],
+          "humidity": [
+            -0.485,
+            -0.485
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_warped_mire",
+        "parameters": {
+          "temperature": [
+            0.219,
+            0.219
+          ],
+          "humidity": [
+            -0.45,
+            -0.45
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_warped_mire",
+        "parameters": {
+          "temperature": [
+            0.457,
+            0.457
+          ],
+          "humidity": [
+            -0.204,
+            -0.204
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_warped_mire",
+        "parameters": {
+          "temperature": [
+            0.481,
+            0.481
+          ],
+          "humidity": [
+            0.137,
+            0.137
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_warped_mire",
+        "parameters": {
+          "temperature": [
+            0.28,
+            0.28
+          ],
+          "humidity": [
+            0.414,
+            0.414
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_warped_mire",
+        "parameters": {
+          "temperature": [
+            -0.052,
+            -0.052
+          ],
+          "humidity": [
+            0.497,
+            0.497
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_warped_mire",
+        "parameters": {
+          "temperature": [
+            -0.359,
+            -0.359
+          ],
+          "humidity": [
+            0.348,
+            0.348
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_crimson_cathedral",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            -0.488,
+            -0.488
+          ],
+          "humidity": [
+            0.11,
+            0.11
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            -0.444,
+            -0.444
+          ],
+          "humidity": [
+            -0.229,
+            -0.229
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            -0.193,
+            -0.193
+          ],
+          "humidity": [
+            -0.461,
+            -0.461
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.149,
+            0.149
+          ],
+          "humidity": [
+            -0.477,
+            -0.477
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.421,
+            0.421
+          ],
+          "humidity": [
+            -0.27,
+            -0.27
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.496,
+            0.496
+          ],
+          "humidity": [
+            0.063,
+            0.063
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.339,
+            0.339
+          ],
+          "humidity": [
+            0.367,
+            0.367
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            0.024,
+            0.024
+          ],
+          "humidity": [
+            0.499,
+            0.499
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_crimson_cathedral",
+        "parameters": {
+          "temperature": [
+            -0.303,
+            -0.303
+          ],
+          "humidity": [
+            0.398,
+            0.398
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_glowstone_grotto",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            0.49,
+            0.49
+          ],
+          "humidity": [
+            -0.1,
+            -0.1
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            0.44,
+            0.44
+          ],
+          "humidity": [
+            0.238,
+            0.238
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            0.183,
+            0.183
+          ],
+          "humidity": [
+            0.465,
+            0.465
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            -0.158,
+            -0.158
+          ],
+          "humidity": [
+            0.474,
+            0.474
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            -0.426,
+            -0.426
+          ],
+          "humidity": [
+            0.261,
+            0.261
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            -0.495,
+            -0.495
+          ],
+          "humidity": [
+            -0.074,
+            -0.074
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            -0.331,
+            -0.331
+          ],
+          "humidity": [
+            -0.374,
+            -0.374
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            -0.013,
+            -0.013
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_glowstone_grotto",
+        "parameters": {
+          "temperature": [
+            0.311,
+            0.311
+          ],
+          "humidity": [
+            -0.391,
+            -0.391
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_basalt_organs",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.428,
+            0.428
+          ],
+          "humidity": [
+            -0.258,
+            -0.258
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.494,
+            0.494
+          ],
+          "humidity": [
+            0.077,
+            0.077
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.329,
+            0.329
+          ],
+          "humidity": [
+            0.377,
+            0.377
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.01,
+            0.01
+          ],
+          "humidity": [
+            0.5,
+            0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_basalt_organs",
+        "parameters": {
+          "temperature": [
+            -0.314,
+            -0.314
+          ],
+          "humidity": [
+            0.389,
+            0.389
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_basalt_organs",
+        "parameters": {
+          "temperature": [
+            -0.491,
+            -0.491
+          ],
+          "humidity": [
+            0.096,
+            0.096
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_basalt_organs",
+        "parameters": {
+          "temperature": [
+            -0.438,
+            -0.438
+          ],
+          "humidity": [
+            -0.242,
+            -0.242
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_basalt_organs",
+        "parameters": {
+          "temperature": [
+            -0.18,
+            -0.18
+          ],
+          "humidity": [
+            -0.466,
+            -0.466
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_basalt_organs",
+        "parameters": {
+          "temperature": [
+            0.162,
+            0.162
+          ],
+          "humidity": [
+            -0.473,
+            -0.473
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_brimstone_flats",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:brimstone_flats",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            0.482,
+            0.482
+          ],
+          "humidity": [
+            -0.132,
+            -0.132
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            0.454,
+            0.454
+          ],
+          "humidity": [
+            0.209,
+            0.209
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            0.213,
+            0.213
+          ],
+          "humidity": [
+            0.452,
+            0.452
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            -0.127,
+            -0.127
+          ],
+          "humidity": [
+            0.484,
+            0.484
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            -0.408,
+            -0.408
+          ],
+          "humidity": [
+            0.289,
+            0.289
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            -0.498,
+            -0.498
+          ],
+          "humidity": [
+            -0.041,
+            -0.041
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            -0.355,
+            -0.355
+          ],
+          "humidity": [
+            -0.352,
+            -0.352
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            -0.046,
+            -0.046
+          ],
+          "humidity": [
+            -0.498,
+            -0.498
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_brimstone_flats",
+        "parameters": {
+          "temperature": [
+            0.285,
+            0.285
+          ],
+          "humidity": [
+            -0.411,
+            -0.411
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_auric_badlands",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:auric_badlands",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_auric_badlands",
+        "parameters": {
+          "temperature": [
+            -0.099,
+            -0.099
+          ],
+          "humidity": [
+            0.49,
+            0.49
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_auric_badlands",
+        "parameters": {
+          "temperature": [
+            -0.391,
+            -0.391
+          ],
+          "humidity": [
+            0.312,
+            0.312
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_auric_badlands",
+        "parameters": {
+          "temperature": [
+            -0.5,
+            -0.5
+          ],
+          "humidity": [
+            -0.013,
+            -0.013
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_auric_badlands",
+        "parameters": {
+          "temperature": [
+            -0.375,
+            -0.375
+          ],
+          "humidity": [
+            -0.331,
+            -0.331
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_auric_badlands",
+        "parameters": {
+          "temperature": [
+            -0.074,
+            -0.074
+          ],
+          "humidity": [
+            -0.494,
+            -0.494
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_auric_badlands",
+        "parameters": {
+          "temperature": [
+            0.261,
+            0.261
+          ],
+          "humidity": [
+            -0.427,
+            -0.427
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_auric_badlands",
+        "parameters": {
+          "temperature": [
+            0.474,
+            0.474
+          ],
+          "humidity": [
+            -0.159,
+            -0.159
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_auric_badlands",
+        "parameters": {
+          "temperature": [
+            0.465,
+            0.465
+          ],
+          "humidity": [
+            0.183,
+            0.183
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_auric_badlands",
+        "parameters": {
+          "temperature": [
+            0.239,
+            0.239
+          ],
+          "humidity": [
+            0.439,
+            0.439
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_glowcap_hollows",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.495,
+            0.495
+          ],
+          "humidity": [
+            -0.07,
+            -0.07
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.424,
+            0.424
+          ],
+          "humidity": [
+            0.265,
+            0.265
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.154,
+            0.154
+          ],
+          "humidity": [
+            0.476,
+            0.476
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            -0.187,
+            -0.187
+          ],
+          "humidity": [
+            0.464,
+            0.464
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            -0.441,
+            -0.441
+          ],
+          "humidity": [
+            0.235,
+            0.235
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            -0.489,
+            -0.489
+          ],
+          "humidity": [
+            -0.104,
+            -0.104
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            -0.308,
+            -0.308
+          ],
+          "humidity": [
+            -0.394,
+            -0.394
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.017,
+            0.017
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_glowcap_hollows",
+        "parameters": {
+          "temperature": [
+            0.335,
+            0.335
+          ],
+          "humidity": [
+            -0.372,
+            -0.372
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_withered_grove",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:withered_grove",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_withered_grove",
+        "parameters": {
+          "temperature": [
+            -0.128,
+            -0.128
+          ],
+          "humidity": [
+            -0.483,
+            -0.483
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_withered_grove",
+        "parameters": {
+          "temperature": [
+            0.213,
+            0.213
+          ],
+          "humidity": [
+            -0.452,
+            -0.452
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_withered_grove",
+        "parameters": {
+          "temperature": [
+            0.454,
+            0.454
+          ],
+          "humidity": [
+            -0.21,
+            -0.21
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_withered_grove",
+        "parameters": {
+          "temperature": [
+            0.482,
+            0.482
+          ],
+          "humidity": [
+            0.131,
+            0.131
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_withered_grove",
+        "parameters": {
+          "temperature": [
+            0.285,
+            0.285
+          ],
+          "humidity": [
+            0.411,
+            0.411
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_withered_grove",
+        "parameters": {
+          "temperature": [
+            -0.046,
+            -0.046
+          ],
+          "humidity": [
+            0.498,
+            0.498
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_withered_grove",
+        "parameters": {
+          "temperature": [
+            -0.355,
+            -0.355
+          ],
+          "humidity": [
+            0.352,
+            0.352
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_withered_grove",
+        "parameters": {
+          "temperature": [
+            -0.498,
+            -0.498
+          ],
+          "humidity": [
+            0.042,
+            0.042
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_withered_grove",
+        "parameters": {
+          "temperature": [
+            -0.408,
+            -0.408
+          ],
+          "humidity": [
+            -0.288,
+            -0.288
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_wartbloom_fields",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            -0.205,
+            -0.205
+          ],
+          "humidity": [
+            -0.456,
+            -0.456
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.136,
+            0.136
+          ],
+          "humidity": [
+            -0.481,
+            -0.481
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.413,
+            0.413
+          ],
+          "humidity": [
+            -0.281,
+            -0.281
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.497,
+            0.497
+          ],
+          "humidity": [
+            0.05,
+            0.05
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.349,
+            0.349
+          ],
+          "humidity": [
+            0.358,
+            0.358
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            0.037,
+            0.037
+          ],
+          "humidity": [
+            0.499,
+            0.499
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            -0.292,
+            -0.292
+          ],
+          "humidity": [
+            0.406,
+            0.406
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            -0.485,
+            -0.485
+          ],
+          "humidity": [
+            0.123,
+            0.123
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_wartbloom_fields",
+        "parameters": {
+          "temperature": [
+            -0.45,
+            -0.45
+          ],
+          "humidity": [
+            -0.217,
+            -0.217
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_infernal_spires",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_infernal_spires",
+        "parameters": {
+          "temperature": [
+            -0.483,
+            -0.483
+          ],
+          "humidity": [
+            -0.129,
+            -0.129
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_infernal_spires",
+        "parameters": {
+          "temperature": [
+            -0.287,
+            -0.287
+          ],
+          "humidity": [
+            -0.409,
+            -0.409
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.043,
+            0.043
+          ],
+          "humidity": [
+            -0.498,
+            -0.498
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.353,
+            0.353
+          ],
+          "humidity": [
+            -0.354,
+            -0.354
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.498,
+            0.498
+          ],
+          "humidity": [
+            -0.044,
+            -0.044
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.41,
+            0.41
+          ],
+          "humidity": [
+            0.287,
+            0.287
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_infernal_spires",
+        "parameters": {
+          "temperature": [
+            0.13,
+            0.13
+          ],
+          "humidity": [
+            0.483,
+            0.483
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_infernal_spires",
+        "parameters": {
+          "temperature": [
+            -0.211,
+            -0.211
+          ],
+          "humidity": [
+            0.453,
+            0.453
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_infernal_spires",
+        "parameters": {
+          "temperature": [
+            -0.453,
+            -0.453
+          ],
+          "humidity": [
+            0.212,
+            0.212
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_weeping_rift",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:weeping_rift",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_weeping_rift",
+        "parameters": {
+          "temperature": [
+            0.445,
+            0.445
+          ],
+          "humidity": [
+            -0.229,
+            -0.229
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_weeping_rift",
+        "parameters": {
+          "temperature": [
+            0.488,
+            0.488
+          ],
+          "humidity": [
+            0.111,
+            0.111
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_weeping_rift",
+        "parameters": {
+          "temperature": [
+            0.302,
+            0.302
+          ],
+          "humidity": [
+            0.398,
+            0.398
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_weeping_rift",
+        "parameters": {
+          "temperature": [
+            -0.024,
+            -0.024
+          ],
+          "humidity": [
+            0.499,
+            0.499
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_weeping_rift",
+        "parameters": {
+          "temperature": [
+            -0.34,
+            -0.34
+          ],
+          "humidity": [
+            0.367,
+            0.367
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_weeping_rift",
+        "parameters": {
+          "temperature": [
+            -0.496,
+            -0.496
+          ],
+          "humidity": [
+            0.063,
+            0.063
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_weeping_rift",
+        "parameters": {
+          "temperature": [
+            -0.42,
+            -0.42
+          ],
+          "humidity": [
+            -0.271,
+            -0.271
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_weeping_rift",
+        "parameters": {
+          "temperature": [
+            -0.148,
+            -0.148
+          ],
+          "humidity": [
+            -0.478,
+            -0.478
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_weeping_rift",
+        "parameters": {
+          "temperature": [
+            0.194,
+            0.194
+          ],
+          "humidity": [
+            -0.461,
+            -0.461
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_frostfire_chasm",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            -0.499,
+            -0.499
+          ],
+          "humidity": [
+            -0.033,
+            -0.033
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            -0.361,
+            -0.361
+          ],
+          "humidity": [
+            -0.346,
+            -0.346
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            -0.055,
+            -0.055
+          ],
+          "humidity": [
+            -0.497,
+            -0.497
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            0.278,
+            0.278
+          ],
+          "humidity": [
+            -0.416,
+            -0.416
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            0.48,
+            0.48
+          ],
+          "humidity": [
+            -0.14,
+            -0.14
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            0.458,
+            0.458
+          ],
+          "humidity": [
+            0.201,
+            0.201
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            0.221,
+            0.221
+          ],
+          "humidity": [
+            0.448,
+            0.448
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            -0.119,
+            -0.119
+          ],
+          "humidity": [
+            0.486,
+            0.486
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_frostfire_chasm",
+        "parameters": {
+          "temperature": [
+            -0.403,
+            -0.403
+          ],
+          "humidity": [
+            0.296,
+            0.296
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_molten_geodes",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:molten_geodes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:soulburnt_molten_geodes",
+        "parameters": {
+          "temperature": [
+            0.299,
+            0.299
+          ],
+          "humidity": [
+            -0.401,
+            -0.401
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_molten_geodes",
+        "parameters": {
+          "temperature": [
+            0.487,
+            0.487
+          ],
+          "humidity": [
+            -0.114,
+            -0.114
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_molten_geodes",
+        "parameters": {
+          "temperature": [
+            0.446,
+            0.446
+          ],
+          "humidity": [
+            0.225,
+            0.225
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_molten_geodes",
+        "parameters": {
+          "temperature": [
+            0.197,
+            0.197
+          ],
+          "humidity": [
+            0.459,
+            0.459
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_molten_geodes",
+        "parameters": {
+          "temperature": [
+            -0.144,
+            -0.144
+          ],
+          "humidity": [
+            0.479,
+            0.479
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_molten_geodes",
+        "parameters": {
+          "temperature": [
+            -0.418,
+            -0.418
+          ],
+          "humidity": [
+            0.274,
+            0.274
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_molten_geodes",
+        "parameters": {
+          "temperature": [
+            -0.497,
+            -0.497
+          ],
+          "humidity": [
+            -0.059,
+            -0.059
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_molten_geodes",
+        "parameters": {
+          "temperature": [
+            -0.342,
+            -0.342
+          ],
+          "humidity": [
+            -0.364,
+            -0.364
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_molten_geodes",
+        "parameters": {
+          "temperature": [
+            -0.028,
+            -0.028
+          ],
+          "humidity": [
+            -0.499,
+            -0.499
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_scarlet_bog",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:scarlet_bog",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            0.463,
+            0.463
+          ],
+          "humidity": [
+            -0.19,
+            -0.19
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            0.476,
+            0.476
+          ],
+          "humidity": [
+            0.152,
+            0.152
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            0.267,
+            0.267
+          ],
+          "humidity": [
+            0.423,
+            0.423
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            -0.067,
+            -0.067
+          ],
+          "humidity": [
+            0.495,
+            0.495
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            -0.37,
+            -0.37
+          ],
+          "humidity": [
+            0.336,
+            0.336
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            -0.5,
+            -0.5
+          ],
+          "humidity": [
+            0.02,
+            0.02
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            -0.396,
+            -0.396
+          ],
+          "humidity": [
+            -0.306,
+            -0.306
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            -0.106,
+            -0.106
+          ],
+          "humidity": [
+            -0.489,
+            -0.489
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_scarlet_bog",
+        "parameters": {
+          "temperature": [
+            0.232,
+            0.232
+          ],
+          "humidity": [
+            -0.443,
+            -0.443
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_warped_reef",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:warped_reef",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:overgrown_warped_reef",
+        "parameters": {
+          "temperature": [
+            0.429,
+            0.429
+          ],
+          "humidity": [
+            0.257,
+            0.257
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_warped_reef",
+        "parameters": {
+          "temperature": [
+            0.163,
+            0.163
+          ],
+          "humidity": [
+            0.473,
+            0.473
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_warped_reef",
+        "parameters": {
+          "temperature": [
+            -0.179,
+            -0.179
+          ],
+          "humidity": [
+            0.467,
+            0.467
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_warped_reef",
+        "parameters": {
+          "temperature": [
+            -0.437,
+            -0.437
+          ],
+          "humidity": [
+            0.243,
+            0.243
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_warped_reef",
+        "parameters": {
+          "temperature": [
+            -0.491,
+            -0.491
+          ],
+          "humidity": [
+            -0.095,
+            -0.095
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_warped_reef",
+        "parameters": {
+          "temperature": [
+            -0.315,
+            -0.315
+          ],
+          "humidity": [
+            -0.388,
+            -0.388
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_warped_reef",
+        "parameters": {
+          "temperature": [
+            0.008,
+            0.008
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ashen_warped_reef",
+        "parameters": {
+          "temperature": [
+            0.328,
+            0.328
+          ],
+          "humidity": [
+            -0.378,
+            -0.378
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_warped_reef",
+        "parameters": {
+          "temperature": [
+            0.494,
+            0.494
+          ],
+          "humidity": [
+            -0.079,
+            -0.079
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_charred_forest",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:charred_forest",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_charred_forest",
+        "parameters": {
+          "temperature": [
+            0.465,
+            0.465
+          ],
+          "humidity": [
+            -0.183,
+            -0.183
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_charred_forest",
+        "parameters": {
+          "temperature": [
+            0.474,
+            0.474
+          ],
+          "humidity": [
+            0.159,
+            0.159
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_charred_forest",
+        "parameters": {
+          "temperature": [
+            0.261,
+            0.261
+          ],
+          "humidity": [
+            0.427,
+            0.427
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:weeping_charred_forest",
+        "parameters": {
+          "temperature": [
+            -0.074,
+            -0.074
+          ],
+          "humidity": [
+            0.494,
+            0.494
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_charred_forest",
+        "parameters": {
+          "temperature": [
+            -0.375,
+            -0.375
+          ],
+          "humidity": [
+            0.331,
+            0.331
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_charred_forest",
+        "parameters": {
+          "temperature": [
+            -0.5,
+            -0.5
+          ],
+          "humidity": [
+            0.013,
+            0.013
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_charred_forest",
+        "parameters": {
+          "temperature": [
+            -0.391,
+            -0.391
+          ],
+          "humidity": [
+            -0.312,
+            -0.312
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_charred_forest",
+        "parameters": {
+          "temperature": [
+            -0.099,
+            -0.099
+          ],
+          "humidity": [
+            -0.49,
+            -0.49
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_charred_forest",
+        "parameters": {
+          "temperature": [
+            0.239,
+            0.239
+          ],
+          "humidity": [
+            -0.439,
+            -0.439
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_soulglass_dunes",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            0.176,
+            0.176
+          ],
+          "humidity": [
+            0.468,
+            0.468
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            -0.166,
+            -0.166
+          ],
+          "humidity": [
+            0.472,
+            0.472
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            -0.43,
+            -0.43
+          ],
+          "humidity": [
+            0.255,
+            0.255
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            -0.493,
+            -0.493
+          ],
+          "humidity": [
+            -0.081,
+            -0.081
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            -0.326,
+            -0.326
+          ],
+          "humidity": [
+            -0.379,
+            -0.379
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            -0.006,
+            -0.006
+          ],
+          "humidity": [
+            -0.5,
+            -0.5
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:gilded_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            0.317,
+            0.317
+          ],
+          "humidity": [
+            -0.387,
+            -0.387
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            0.491,
+            0.491
+          ],
+          "humidity": [
+            -0.092,
+            -0.092
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_soulglass_dunes",
+        "parameters": {
+          "temperature": [
+            0.436,
+            0.436
+          ],
+          "humidity": [
+            0.245,
+            0.245
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:nether_mingled_wilds",
+    "weight": 3,
+    "biomes": [
+      {
+        "biome": "mysticalterrain:mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.0,
+            0.0
+          ],
+          "humidity": [
+            0.0,
+            0.0
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:blighted_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.059,
+            0.059
+          ],
+          "humidity": [
+            0.497,
+            0.497
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:crystalline_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            -0.274,
+            -0.274
+          ],
+          "humidity": [
+            0.418,
+            0.418
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frostbitten_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            -0.479,
+            -0.479
+          ],
+          "humidity": [
+            0.144,
+            0.144
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:towering_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            -0.459,
+            -0.459
+          ],
+          "humidity": [
+            -0.197,
+            -0.197
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:shattered_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            -0.225,
+            -0.225
+          ],
+          "humidity": [
+            -0.446,
+            -0.446
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ossified_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.115,
+            0.115
+          ],
+          "humidity": [
+            -0.487,
+            -0.487
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:molten_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.401,
+            0.401
+          ],
+          "humidity": [
+            -0.299,
+            -0.299
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:basaltic_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.499,
+            0.499
+          ],
+          "humidity": [
+            0.028,
+            0.028
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:radiant_mingled_wilds",
+        "parameters": {
+          "temperature": [
+            0.364,
+            0.364
+          ],
+          "humidity": [
+            0.343,
+            0.343
+          ],
+          "continentalness": [
+            0.0,
+            0.0
+          ],
+          "erosion": [
+            0.0,
+            0.0
+          ],
+          "depth": [
+            0.0,
+            0.0
+          ],
+          "weirdness": [
+            0.0,
+            0.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  }
+]

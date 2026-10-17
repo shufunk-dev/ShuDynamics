@@ -1,0 +1,60 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "weeping",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 26,
+      "max_inclusive": 38
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15.0,
+      "max_exclusive": 19.0
+    },
+    "droop": 0.7,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_oak_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 8
+      }
+    }
+  }
+}

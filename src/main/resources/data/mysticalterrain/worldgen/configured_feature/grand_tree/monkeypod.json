@@ -1,0 +1,61 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "umbrella",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 22,
+      "max_inclusive": 32
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18.0,
+      "max_exclusive": 21.0
+    },
+    "shape": 0.15,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:jungle_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:mango_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:jungle_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          }
+        ]
+      }
+    }
+  }
+}

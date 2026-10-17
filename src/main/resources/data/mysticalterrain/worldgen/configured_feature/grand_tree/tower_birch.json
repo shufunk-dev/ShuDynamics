@@ -1,0 +1,46 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "broadleaf",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 58
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.0,
+      "max_exclusive": 3.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.0,
+      "max_exclusive": 14.0
+    },
+    "gnarl": 0.2,
+    "shape": 0.9,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:birch_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:birch_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    }
+  }
+}

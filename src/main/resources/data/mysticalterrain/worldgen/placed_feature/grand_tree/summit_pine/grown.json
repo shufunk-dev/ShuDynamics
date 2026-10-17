@@ -1,0 +1,23 @@
+{
+  "feature": "mysticalterrain:grand_tree/summit_pine",
+  "placement": [
+    {
+      "type": "mysticalterrain:grand_tree_count",
+      "tree": "mysticalterrain:grand_tree/summit_pine"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

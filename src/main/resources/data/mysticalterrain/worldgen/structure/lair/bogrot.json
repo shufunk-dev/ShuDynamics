@@ -1,0 +1,8 @@
+{
+  "type": "mysticalterrain:building",
+  "biomes": "#mysticalterrain:has_structure/building/lair/bogrot",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "building": "mysticalterrain:building/lair/bogrot"
+}

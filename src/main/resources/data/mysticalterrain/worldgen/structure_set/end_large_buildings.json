@@ -1,0 +1,92 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:end/amethyst_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/basalt_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/basalt_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/crystal_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/dragon_skeleton",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/moonstone_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/purpur_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/purpur_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/quartz_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/rime_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/runestone_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sculk_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sculk_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sporewood_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/starstone_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_obsidian_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_obsidian_maze",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 24,
+    "separation": 8,
+    "salt": 148515981,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:end_cities",
+      "chunk_count": 3
+    }
+  }
+}

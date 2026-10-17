@@ -1,0 +1,177 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "layered",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 38,
+      "max_inclusive": 48
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.79,
+      "max_exclusive": 2.19
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.3,
+      "max_exclusive": 12.8
+    },
+    "lean": 0.48,
+    "gnarl": 0.29,
+    "density": 0.83,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:mystwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:starbloom_blossoms",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:cherry_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "cover": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "north",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:pink_petals",
+              "Properties": {
+                "facing": "east",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "fruit_chance": 0.008,
+      "cover_chance": 0.3
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.87,
+      "flat": 0.54,
+      "tiers": 0.7,
+      "lopside": 0.49,
+      "bends": 0.84,
+      "swing": 0.81,
+      "split": 0.42,
+      "sprout": 0.54,
+      "tropism": -0.4,
+      "twig": 1.08,
+      "drip": 0.0,
+      "hollow": 0.0,
+      "buttress": 0.59,
+      "jitter": 0.44,
+      "forks": 2
+    }
+  }
+}

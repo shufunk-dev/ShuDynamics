@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ancient_redwoods",
+    "mysticalterrain:blossom_vale",
+    "mysticalterrain:crystal_highlands",
+    "mysticalterrain:frostveil_glacier",
+    "mysticalterrain:spire_karst",
+    "mysticalterrain:twilight_thicket",
+    "mysticalterrain:verdant_highlands"
+  ]
+}

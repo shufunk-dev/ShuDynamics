@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ashen_dunes",
+    "mysticalterrain:ashfall_plains",
+    "mysticalterrain:ashfang_peaks",
+    "mysticalterrain:basalt_tableland",
+    "mysticalterrain:caldera_peaks",
+    "mysticalterrain:charred_plateau",
+    "mysticalterrain:charwood_forest",
+    "mysticalterrain:cinder_hoodoos",
+    "mysticalterrain:cinder_savanna",
+    "mysticalterrain:fireflower_fields",
+    "mysticalterrain:scorched_mesa",
+    "mysticalterrain:slag_heaps",
+    "mysticalterrain:smoke_jungle",
+    "mysticalterrain:smoldering_crags",
+    "mysticalterrain:sulfur_hills"
+  ]
+}

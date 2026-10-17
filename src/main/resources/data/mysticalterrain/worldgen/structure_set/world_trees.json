@@ -1,0 +1,74 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:aurora_crystal",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:caldera_heart",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:dragon_king",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:dreamblossom",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:drowned_patriarch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:emerald_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:everbloom",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:frosted_weeper",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:glowcap_colossus",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:golden_rune_elder",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:hearth_maple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:hollow_king",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:oasis_sentinel",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:prism_tree",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:titan_redwood",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:worldroot",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 26,
+    "separation": 9,
+    "salt": 30931423
+  }
+}

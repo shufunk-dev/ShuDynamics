@@ -1,0 +1,50 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:verdigris_expanse",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:oxidized_copper"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:weathered_copper"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:oxidized_cut_copper"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.5
+    }
+  },
+  "placement": []
+}

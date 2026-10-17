@@ -1,0 +1,77 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "crater",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 6
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:magma_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:basalt",
+                "Properties": {
+                  "axis": "y"
+                }
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:crying_obsidian"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:magma_block"
+              },
+              "weight": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

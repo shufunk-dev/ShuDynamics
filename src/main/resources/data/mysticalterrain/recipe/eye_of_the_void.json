@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:ender_eye",
+    "O": "minecraft:crying_obsidian",
+    "A": "minecraft:amethyst_shard"
+  },
+  "pattern": [
+    "OAO",
+    "AEA",
+    "OAO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:eye_of_the_void"
+  }
+}

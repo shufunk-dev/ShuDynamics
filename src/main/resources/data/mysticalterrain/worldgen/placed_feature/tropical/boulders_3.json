@@ -1,0 +1,55 @@
+{
+  "feature": {
+    "type": "mysticalterrain:boulder",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:sandstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:smooth_sandstone"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:mossy_cobblestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

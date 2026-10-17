@@ -1,0 +1,48 @@
+{
+  "feature": {
+    "type": "mysticalterrain:spire",
+    "config": {
+      "core": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_pillar",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_block"
+        }
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 22
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

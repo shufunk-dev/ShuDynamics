@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/fossil_greataxe"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.74,
+        -41.0,
+        -61.63
+      ],
+      "translation": [
+        0.91,
+        -1.43,
+        1.0
+      ],
+      "scale": [
+        0.441,
+        0.441,
+        0.441
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -15,
+        -90,
+        20
+      ],
+      "translation": [
+        2,
+        -3,
+        -1
+      ],
+      "scale": [
+        0.373,
+        0.373,
+        0.373
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.69,
+        -5.46,
+        0
+      ],
+      "scale": [
+        0.297,
+        0.297,
+        0.297
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.2608695652173913,
+        0.2608695652173913,
+        0.2608695652173913
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.69,
+        -5.46,
+        0
+      ],
+      "scale": [
+        0.297,
+        0.297,
+        0.297
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.69,
+        -5.46,
+        0
+      ],
+      "scale": [
+        0.297,
+        0.297,
+        0.297
+      ]
+    }
+  }
+}

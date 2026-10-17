@@ -1,0 +1,89 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "gate",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:deepslate_tiles"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobbled_deepslate"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:sculk"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:deepslate_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cracked_deepslate_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:deepslate_tiles"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:sculk"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sculk_catalyst",
+          "Properties": {
+            "bloom": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:soul_lantern",
+          "Properties": {
+            "hanging": "true",
+            "waterlogged": "false"
+          }
+        }
+      }
+    }
+  }
+}

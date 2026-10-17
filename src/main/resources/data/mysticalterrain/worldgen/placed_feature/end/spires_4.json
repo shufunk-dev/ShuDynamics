@@ -1,0 +1,59 @@
+{
+  "feature": {
+    "type": "mysticalterrain:spire",
+    "config": {
+      "core": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:purpur_pillar",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:end_stone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cracked_stone_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5,
+        "max_inclusive": 12
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 1
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

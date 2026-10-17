@@ -1,0 +1,75 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "island",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 6
+      },
+      "materials": {
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:packed_ice"
+          }
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:snow_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:packed_ice"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:sea_lantern"
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:blue_ice"
+          }
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 45
+        },
+        "max_inclusive": {
+          "absolute": 105
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

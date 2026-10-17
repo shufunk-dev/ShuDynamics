@@ -1,0 +1,180 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:end/amethyst_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/amethyst_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/ashen_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/ashen_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/ashen_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/ashen_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/basalt_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/basalt_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/end_stone_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/gloomstone_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/gloomstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/gloomstone_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/moonstone_arch",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/moonstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/prismarine_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/prismarine_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/purpur_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/purpur_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/quartz_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/rime_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/rime_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/runestone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/runic_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sculk_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sporewood_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sporewood_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/sporewood_watchtower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/star_gate",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/starstone_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/starstone_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/starstone_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/verdigris_forge",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/verdigris_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_monoliths",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_obsidian_crypt",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_obsidian_shrine",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/void_obsidian_tower",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:end/voidglass_shrine",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 3,
+    "salt": 117131518,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:end_cities",
+      "chunk_count": 3
+    }
+  }
+}

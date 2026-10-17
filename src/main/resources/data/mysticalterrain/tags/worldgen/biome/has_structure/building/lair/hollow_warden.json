@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:barrow_hills",
+    "mysticalterrain:blackspruce_deeps",
+    "mysticalterrain:dusk_plains",
+    "mysticalterrain:duskwood",
+    "mysticalterrain:ghostbirch_forest",
+    "mysticalterrain:gloamwood",
+    "mysticalterrain:gloom_marsh",
+    "mysticalterrain:hollow_garden",
+    "mysticalterrain:howling_woods",
+    "mysticalterrain:moonfrost_taiga",
+    "mysticalterrain:nightshade_meadow",
+    "mysticalterrain:starlit_grove",
+    "mysticalterrain:umbral_taiga",
+    "mysticalterrain:violet_hollow",
+    "mysticalterrain:wraithbirch_wood",
+    "mysticalterrain:wraithroot_swamp"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "mushroom",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 20,
+      "max_inclusive": 32
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.0,
+      "max_exclusive": 3.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.0,
+      "max_exclusive": 15.0
+    },
+    "droop": 0.8,
+    "shape": 0.7,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mushroom_stem",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_mushroom_block",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit_chance": 0.03
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "feature": {
+    "type": "mysticalterrain:spire",
+    "config": {
+      "core": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:stone"
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:andesite"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:tuff"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobblestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 14,
+        "max_inclusive": 34
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 2,
+        "max_inclusive": 5
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": 1,
+            "weight": 8
+          },
+          {
+            "data": 2,
+            "weight": 2
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

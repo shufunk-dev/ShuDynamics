@@ -1,0 +1,79 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "palm",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 20,
+      "max_inclusive": 28
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1.41,
+      "max_exclusive": 1.72
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8.4,
+      "max_exclusive": 9.4
+    },
+    "lean": 0.95,
+    "gnarl": 0.36,
+    "droop": 0.55,
+    "shape": 0.25,
+    "density": 0.87,
+    "branches": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12,
+      "max_inclusive": 14
+    },
+    "veins": 1,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:palm_fronds",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:stripped_palm_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:brown_mushroom_block",
+          "Properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      },
+      "fruit_chance": 0.0
+    }
+  }
+}

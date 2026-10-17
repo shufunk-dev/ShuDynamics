@@ -1,0 +1,227 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "graveyard",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 11
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.2,
+      "max_exclusive": 0.55
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_nether_brick_wall",
+          "Properties": {
+            "east": "none",
+            "north": "none",
+            "south": "none",
+            "up": "true",
+            "waterlogged": "false",
+            "west": "none"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:red_carpet"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:black_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:nether_bricks"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:nether_bricks"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:ladder",
+          "Properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:nether_wart_block"
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_nether_brick_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_nether_brick_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:barrel",
+          "Properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:nether_wart_block"
+        }
+      },
+      "wall": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_nether_bricks"
+        }
+      },
+      "window": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:red_stained_glass_pane",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blast_furnace",
+              "Properties": {
+                "facing": "north",
+                "lit": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:smithing_table"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:anvil",
+              "Properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:brewing_stand",
+              "Properties": {
+                "has_bottle_0": "false",
+                "has_bottle_1": "false",
+                "has_bottle_2": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:lodestone"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:cauldron"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/nether_supplies",
+    "treasure": "mysticalterrain:chests/nether_treasure",
+    "spawners": [
+      "minecraft:blaze",
+      "minecraft:wither_skeleton"
+    ],
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "shards",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 11
+      },
+      "girth": 1.2,
+      "sides": 5,
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:tinted_glass"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:black_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:tinted_glass"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:crying_obsidian"
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:black_stained_glass"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:tinted_glass"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:starstone_heights",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:starstone"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:end_stone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 2,
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starstone_bricks"
+        }
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.5
+    }
+  },
+  "placement": []
+}

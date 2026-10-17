@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "mushroom",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 80,
+      "max_inclusive": 110
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7.0,
+      "max_exclusive": 9.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40.0,
+      "max_exclusive": 55.0
+    },
+    "droop": 0.6,
+    "shape": 0.4,
+    "branches": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 4
+    },
+    "reach": 77,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sporewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:glowcap_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:red_mushroom_block",
+              "Properties": {
+                "down": "true",
+                "east": "true",
+                "north": "true",
+                "south": "true",
+                "up": "true",
+                "west": "true"
+              }
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "fruit_chance": 0.02
+    }
+  }
+}

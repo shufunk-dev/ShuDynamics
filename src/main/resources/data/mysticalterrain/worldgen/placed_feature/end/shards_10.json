@@ -1,0 +1,101 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "shards",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 6,
+        "max_inclusive": 11
+      },
+      "girth": 1.2,
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:netherrack"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:smooth_quartz"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:smooth_quartz"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:quartz_block"
+          }
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:glowstone"
+          }
+        },
+        "tip": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:quartz_block"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:white_stained_glass"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

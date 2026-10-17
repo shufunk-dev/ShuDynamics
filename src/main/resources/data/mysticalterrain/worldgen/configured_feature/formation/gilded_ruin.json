@@ -1,0 +1,93 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "ruins",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 12
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:cracked_polished_blackstone_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:cracked_polished_blackstone_bricks"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:gilded_blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:chiseled_polished_blackstone"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "loot": "minecraft:chests/bastion_other",
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 60,
+      "max_inclusive": 110
+    }
+  }
+}

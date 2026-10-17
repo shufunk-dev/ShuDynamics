@@ -1,0 +1,67 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "elder",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 28,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.5,
+      "max_exclusive": 5.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15.0,
+      "max_exclusive": 19.0
+    },
+    "veins": 6,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:starbark_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:pale_oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      }
+    }
+  }
+}

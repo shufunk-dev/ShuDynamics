@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "mysticalterrain:block/starbark_log_x"
+    },
+    "axis=y": {
+      "model": "mysticalterrain:block/starbark_log_y"
+    },
+    "axis=z": {
+      "model": "mysticalterrain:block/starbark_log_z"
+    }
+  }
+}

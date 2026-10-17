@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:ashen_frostfire_chasm",
+    "mysticalterrain:basaltic_frostfire_chasm",
+    "mysticalterrain:blighted_frostfire_chasm",
+    "mysticalterrain:frostbitten_basalt_organs",
+    "mysticalterrain:frostbitten_blackstone_badlands",
+    "mysticalterrain:frostbitten_cinder_wastes",
+    "mysticalterrain:frostbitten_crimson_cathedral",
+    "mysticalterrain:frostbitten_ember_thicket",
+    "mysticalterrain:frostbitten_glowcap_hollows",
+    "mysticalterrain:frostbitten_infernal_spires",
+    "mysticalterrain:frostbitten_mingled_wilds",
+    "mysticalterrain:frostbitten_molten_fields",
+    "mysticalterrain:frostbitten_ossuary_dunes",
+    "mysticalterrain:frostbitten_scarlet_bog",
+    "mysticalterrain:frostbitten_soulfire_marsh",
+    "mysticalterrain:frostbitten_warped_mire",
+    "mysticalterrain:frostbitten_warped_reef",
+    "mysticalterrain:frostbitten_wartbloom_fields",
+    "mysticalterrain:frostfire_chasm",
+    "mysticalterrain:fungal_frostfire_chasm",
+    "mysticalterrain:molten_frostfire_chasm",
+    "mysticalterrain:overgrown_frostfire_chasm",
+    "mysticalterrain:shattered_frostfire_chasm",
+    "mysticalterrain:soulburnt_frostfire_chasm",
+    "mysticalterrain:weeping_frostfire_chasm"
+  ]
+}

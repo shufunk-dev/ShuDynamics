@@ -1,0 +1,77 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 48,
+      "max_inclusive": 62
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4.02,
+      "max_exclusive": 4.91
+    },
+    "crown": 19.0,
+    "lean": 0.24,
+    "gnarl": 0.7,
+    "density": 0.95,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_oak_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 2,
+      "spread": 0.63,
+      "flat": 0.73,
+      "tiers": 0.55,
+      "lopside": 0.06,
+      "bends": 0.31,
+      "swing": 0.18,
+      "split": 0.36,
+      "sprout": 0.64,
+      "tropism": 0.02,
+      "twig": 1.26,
+      "drip": 0.53,
+      "hollow": 1.0,
+      "buttress": 0.15,
+      "jitter": 0.5,
+      "forks": 2
+    }
+  }
+}

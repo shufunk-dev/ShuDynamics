@@ -1,0 +1,200 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:overworld/acacia_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/acacia_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/bamboo_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/birch_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cherry_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/drowned_sandstone_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/great_fossil",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mushroom_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_maze",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sky_isle",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_hamlet",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_keep",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_arena",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_ziggurat",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_arena",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 24,
+    "separation": 8,
+    "salt": 148611118,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 3
+    }
+  }
+}

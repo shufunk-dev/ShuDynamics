@@ -1,0 +1,48 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "mushroom",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 22,
+      "max_inclusive": 34
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.0,
+      "max_exclusive": 16.0
+    },
+    "droop": 0.4,
+    "shape": 0.3,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sporewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sporecap_block"
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:shroomlight"
+        }
+      },
+      "fruit_chance": 0.02
+    }
+  }
+}

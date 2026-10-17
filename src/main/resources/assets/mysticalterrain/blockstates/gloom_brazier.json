@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "mysticalterrain:block/gloom_brazier"
+    },
+    "lit=true": {
+      "model": "mysticalterrain:block/gloom_brazier_lit"
+    }
+  }
+}

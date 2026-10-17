@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "mysticalterrain:russet_granite",
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:russet_granite_bricks"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "end_ore_blasting",
+  "ingredient": "enchantedwood:end_stone_iron_ore",
+  "result": {
+    "id": "minecraft:iron_ingot",
+    "count": 1
+  }
+}

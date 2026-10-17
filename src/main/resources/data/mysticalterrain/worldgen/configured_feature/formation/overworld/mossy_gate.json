@@ -1,0 +1,69 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "gate",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:mossy_stone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:cobblestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:stone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:mossy_stone_bricks"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:mossy_stone_bricks"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:chiseled_stone_bricks"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:lantern",
+          "Properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    }
+  }
+}

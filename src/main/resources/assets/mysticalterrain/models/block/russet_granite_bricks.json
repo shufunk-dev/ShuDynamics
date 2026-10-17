@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "mysticalterrain:block/russet_granite_bricks"
+  }
+}

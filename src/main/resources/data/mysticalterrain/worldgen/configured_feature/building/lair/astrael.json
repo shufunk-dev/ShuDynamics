@@ -1,0 +1,56 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_spire",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starstone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starstone_bricks"
+        }
+      },
+      "wall": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starstone_bricks"
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starstone_bricks"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:gold_block"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_rod",
+          "Properties": {
+            "facing": "up"
+          }
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:astrael_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_astrael",
+    "treasure": "mysticalterrain:chests/lair_astrael"
+  }
+}

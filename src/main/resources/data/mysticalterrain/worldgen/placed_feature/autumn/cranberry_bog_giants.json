@@ -1,0 +1,83 @@
+{
+  "feature": {
+    "type": "mysticalterrain:colossal_tree",
+    "config": {
+      "trunk_provider": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:maple_log",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "foliage_provider": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:golden_maple_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 28,
+        "max_inclusive": 44
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 2
+      },
+      "crown_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 12
+      },
+      "branch_count": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5,
+        "max_inclusive": 8
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 20
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

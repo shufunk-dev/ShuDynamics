@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_uv_locked_y",
+  "textures": {
+    "end": "mysticalterrain:block/stripped_ginkgo_log_top",
+    "side": "mysticalterrain:block/stripped_ginkgo_log"
+  }
+}

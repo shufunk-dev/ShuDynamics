@@ -1,0 +1,89 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "crater",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 5,
+        "max_inclusive": 9
+      },
+      "materials": {
+        "base": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:tuff"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "Name": "minecraft:magma_block"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "body": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:blackstone"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "Name": "minecraft:magma_block"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "Name": "minecraft:deepslate_iron_ore"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:obsidian"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "WORLD_SURFACE_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

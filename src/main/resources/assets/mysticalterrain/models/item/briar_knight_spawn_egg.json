@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mysticalterrain:item/briar_knight_spawn_egg"
+  }
+}

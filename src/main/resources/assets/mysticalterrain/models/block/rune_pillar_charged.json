@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "mysticalterrain:block/rune_pillar_charged_side",
+    "end": "mysticalterrain:block/runestone_bricks"
+  }
+}

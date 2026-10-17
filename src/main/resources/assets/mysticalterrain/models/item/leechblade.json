@@ -1,0 +1,110 @@
+{
+  "gui_light": "front",
+  "textures": {
+    "particle": "mysticalterrain:item/gear_particle/leechblade"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -1.86,
+        -45.0,
+        -61.81
+      ],
+      "translation": [
+        0.83,
+        -1.53,
+        0.85
+      ],
+      "scale": [
+        0.535,
+        0.535,
+        0.535
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -15,
+        -90,
+        20
+      ],
+      "translation": [
+        2,
+        -3,
+        -1
+      ],
+      "scale": [
+        0.491,
+        0.491,
+        0.491
+      ]
+    },
+    "gui": {
+      "rotation": [
+        123.4,
+        39.86,
+        -112.91
+      ],
+      "translation": [
+        -4.21,
+        -3.88,
+        0
+      ],
+      "scale": [
+        0.4451,
+        0.4451,
+        0.4451
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.31578947368421056,
+        0.31578947368421056,
+        0.31578947368421056
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.21,
+        -3.88,
+        0
+      ],
+      "scale": [
+        0.4451,
+        0.4451,
+        0.4451
+      ]
+    },
+    "on_shelf": {
+      "rotation": [
+        56.6,
+        -39.86,
+        67.09
+      ],
+      "translation": [
+        4.21,
+        -3.88,
+        0
+      ],
+      "scale": [
+        0.4451,
+        0.4451,
+        0.4451
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "mysticalterrain:block/starbark_door_bottom",
+    "top": "mysticalterrain:block/starbark_door_top"
+  }
+}

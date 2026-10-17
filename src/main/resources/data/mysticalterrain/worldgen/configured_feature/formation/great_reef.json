@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "reef",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 26,
+      "max_inclusive": 38
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:dark_prismarine"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:prismarine"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:prismarine"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:prismarine_bricks"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:dark_prismarine"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:warped_wart_block"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      }
+    }
+  }
+}

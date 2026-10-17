@@ -1,0 +1,70 @@
+{
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "water_color": "#3f76e4"
+  },
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:enderman",
+        "maxCount": 4,
+        "minCount": 4,
+        "weight": 10
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5,
+  "features": [
+    [],
+    [],
+    [
+      "mysticalterrain:end/ancient_ender_gardens_ground"
+    ],
+    [],
+    [
+      "mysticalterrain:end/starstone",
+      "mysticalterrain:end/ruins",
+      "mysticalterrain:end/spires_4"
+    ],
+    [],
+    [
+      "enchantedwood:ore_end_stone_coal",
+      "enchantedwood:ore_end_stone_iron",
+      "enchantedwood:ore_end_stone_gold",
+      "enchantedwood:ore_end_stone_redstone",
+      "enchantedwood:ore_end_stone_lapis",
+      "enchantedwood:ore_end_stone_diamond",
+      "enchantedwood:ore_void_crystal",
+      "enchantedwood:ore_astral_shard",
+      "enchantedwood:ore_resonant_gem"
+    ],
+    [],
+    [],
+    [
+      "mysticalterrain:end/trees_5",
+      "mysticalterrain:end/plants_10"
+    ],
+    []
+  ],
+  "attributes": {
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#262c25"
+  }
+}

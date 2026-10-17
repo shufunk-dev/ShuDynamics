@@ -1,0 +1,79 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 33,
+      "max_inclusive": 41
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.07,
+      "max_exclusive": 2.54
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 13.0,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.35,
+    "gnarl": 0.24,
+    "density": 0.78,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:sporewood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:red_mushroom_block",
+              "Properties": {
+                "down": "true",
+                "east": "true",
+                "north": "true",
+                "south": "true",
+                "up": "true",
+                "west": "true"
+              }
+            },
+            "weight": 8
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:glowcap_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 8,
+      "spread": 0.84,
+      "flat": 1.0,
+      "tiers": 0.46,
+      "lopside": 0.06,
+      "bends": 0.59,
+      "swing": 0.14,
+      "split": 0.51,
+      "sprout": 0.78,
+      "tropism": 0.3,
+      "twig": 0.98,
+      "drip": 0.15,
+      "hollow": 0.45,
+      "buttress": 0.25,
+      "jitter": 0.48,
+      "forks": 2
+    }
+  }
+}

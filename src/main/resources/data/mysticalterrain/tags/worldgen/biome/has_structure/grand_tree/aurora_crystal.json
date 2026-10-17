@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:aurora_grove",
+    "mysticalterrain:glacier_crown",
+    "mysticalterrain:icefang_peaks",
+    "mysticalterrain:powder_slopes",
+    "mysticalterrain:shardfield"
+  ]
+}

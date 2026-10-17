@@ -1,0 +1,53 @@
+{
+  "feature": {
+    "type": "mysticalterrain:ground_cover",
+    "config": {
+      "biome": "mysticalterrain:scorched_violet_moors",
+      "replaceable": [
+        "minecraft:end_stone"
+      ],
+      "top": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:fae_moss"
+        }
+      },
+      "under": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:end_stone"
+        }
+      },
+      "depth": 0,
+      "accent": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:magma_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:basalt",
+              "Properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent_scale": 12.0,
+      "accent_threshold": 0.45
+    }
+  },
+  "placement": []
+}

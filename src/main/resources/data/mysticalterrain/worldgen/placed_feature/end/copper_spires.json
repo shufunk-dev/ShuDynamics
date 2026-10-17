@@ -1,0 +1,66 @@
+{
+  "feature": {
+    "type": "mysticalterrain:grand_tree",
+    "config": {
+      "style": "crystal",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 18,
+        "max_inclusive": 28
+      },
+      "trunk_radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1.4,
+        "max_exclusive": 2.0
+      },
+      "crown": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 7.0,
+        "max_exclusive": 10.0
+      },
+      "lean": 0.3,
+      "reach": 21,
+      "blocks": {
+        "trunk": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:oxidized_copper"
+          }
+        },
+        "leaves": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:oxidized_cut_copper"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:weathered_copper"
+              },
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

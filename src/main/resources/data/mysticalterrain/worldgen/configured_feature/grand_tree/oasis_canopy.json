@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 48,
+      "max_inclusive": 62
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.98,
+      "max_exclusive": 4.86
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 16.1,
+      "max_exclusive": 18.1
+    },
+    "lean": 0.03,
+    "gnarl": 0.54,
+    "density": 0.89,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:acacia_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:acacia_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 6,
+      "spread": 0.98,
+      "flat": 0.27,
+      "tiers": 0.61,
+      "lopside": 0.48,
+      "bends": 0.55,
+      "swing": 0.47,
+      "split": 0.5,
+      "sprout": 0.78,
+      "tropism": -0.18,
+      "twig": 1.31,
+      "drip": 0.47,
+      "hollow": 0.67,
+      "buttress": 0.49,
+      "jitter": 0.21,
+      "forks": 1
+    }
+  }
+}

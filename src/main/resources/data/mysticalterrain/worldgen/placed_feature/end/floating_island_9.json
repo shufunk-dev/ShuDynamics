@@ -1,0 +1,81 @@
+{
+  "feature": {
+    "type": "mysticalterrain:formation",
+    "config": {
+      "kind": "island",
+      "size": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 7
+      },
+      "materials": {
+        "body": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:end_stone"
+          }
+        },
+        "shell": {
+          "type": "minecraft:weighted_state_provider",
+          "entries": [
+            {
+              "data": {
+                "Name": "minecraft:end_stone_bricks"
+              },
+              "weight": 2
+            },
+            {
+              "data": {
+                "Name": "minecraft:end_stone"
+              },
+              "weight": 1
+            }
+          ]
+        },
+        "light": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:end_rod",
+            "Properties": {
+              "facing": "up"
+            }
+          }
+        },
+        "tip": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:purpur_pillar",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        }
+      },
+      "anchor": "float"
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 45
+        },
+        "max_inclusive": {
+          "absolute": 105
+        }
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

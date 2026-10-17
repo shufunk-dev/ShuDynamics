@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 35,
+      "max_inclusive": 45
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.56,
+      "max_exclusive": 3.13
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.4,
+      "max_exclusive": 12.8
+    },
+    "lean": 0.4,
+    "gnarl": 0.41,
+    "density": 0.82,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:stripped_starbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:starbark_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "fruit_chance": 0.006
+    },
+    "growth": {
+      "lobes": 3,
+      "spread": 0.59,
+      "flat": 0.44,
+      "tiers": 0.07,
+      "lopside": 0.21,
+      "bends": 0.9,
+      "swing": 0.24,
+      "split": 0.55,
+      "sprout": 0.68,
+      "tropism": 0.11,
+      "twig": 0.87,
+      "drip": 1.1,
+      "hollow": 0.3,
+      "buttress": 0.2,
+      "jitter": 0.18,
+      "forks": 1
+    }
+  }
+}

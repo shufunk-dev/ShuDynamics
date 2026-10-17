@@ -1,0 +1,76 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 29,
+      "max_inclusive": 37
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.62,
+      "max_exclusive": 3.2
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12.9,
+      "max_exclusive": 14.0
+    },
+    "lean": 0.42,
+    "gnarl": 0.63,
+    "density": 0.9,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:stripped_charwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:ember_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:air"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.88,
+      "flat": 0.01,
+      "tiers": 0.14,
+      "lopside": 0.34,
+      "bends": 0.87,
+      "swing": 0.48,
+      "split": 0.5,
+      "sprout": 0.7,
+      "tropism": 0.23,
+      "twig": 1.26,
+      "drip": 0.54,
+      "hollow": 0.66,
+      "buttress": 0.17,
+      "jitter": 0.48,
+      "forks": 2
+    }
+  }
+}

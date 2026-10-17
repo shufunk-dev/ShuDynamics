@@ -1,0 +1,257 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "tower",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 5
+    },
+    "floors": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 6
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.15,
+      "max_exclusive": 0.5
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:prismarine_wall",
+          "Properties": {
+            "east": "none",
+            "north": "none",
+            "south": "none",
+            "up": "true",
+            "waterlogged": "false",
+            "west": "none"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:cyan_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:light_blue_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:prismarine_bricks"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:ladder",
+          "Properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_lantern"
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:small_amethyst_bud",
+          "Properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine"
+        }
+      },
+      "roof_slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof_stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:prismarine_brick_slab",
+          "Properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:prismarine_brick_stairs",
+          "Properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:barrel",
+          "Properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:dark_prismarine"
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:prismarine_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:prismarine"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:light_blue_stained_glass_pane",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:enchanting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:brewing_stand",
+              "Properties": {
+                "has_bottle_0": "false",
+                "has_bottle_1": "false",
+                "has_bottle_2": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:lectern",
+              "Properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:crafting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "Name": "minecraft:cauldron"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/end_supplies",
+    "treasure": "mysticalterrain:chests/end_treasure",
+    "spawners": [
+      "minecraft:enderman",
+      "minecraft:endermite"
+    ]
+  }
+}

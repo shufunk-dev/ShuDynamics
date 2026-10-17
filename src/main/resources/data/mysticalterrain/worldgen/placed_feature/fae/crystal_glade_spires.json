@@ -1,0 +1,66 @@
+{
+  "feature": {
+    "type": "mysticalterrain:spire",
+    "config": {
+      "core": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:amethyst_block"
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:amethyst_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:calcite"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "mysticalterrain:moonstone"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 8,
+        "max_inclusive": 22
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

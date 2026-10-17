@@ -1,0 +1,75 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 33,
+      "max_inclusive": 42
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.49,
+      "max_exclusive": 3.04
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 11.0,
+      "max_exclusive": 12.4
+    },
+    "lean": 0.12,
+    "gnarl": 0.47,
+    "density": 0.92,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:silverbark_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:silverbark_leaves",
+          "Properties": {
+            "distance": "7",
+            "persistent": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:verdant_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "fruit_chance": 0.008
+    },
+    "growth": {
+      "lobes": 7,
+      "spread": 0.75,
+      "flat": 0.95,
+      "tiers": 0.35,
+      "lopside": 0.32,
+      "bends": 1.07,
+      "swing": 0.32,
+      "split": 0.36,
+      "sprout": 0.76,
+      "tropism": -0.19,
+      "twig": 0.89,
+      "drip": 0.15,
+      "hollow": 0.75,
+      "buttress": 0.18,
+      "jitter": 0.47,
+      "forks": 3
+    }
+  }
+}

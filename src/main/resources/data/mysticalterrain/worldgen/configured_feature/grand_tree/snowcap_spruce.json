@@ -1,0 +1,76 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 31,
+      "max_inclusive": 39
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.14,
+      "max_exclusive": 2.62
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10.5,
+      "max_exclusive": 11.8
+    },
+    "lean": 0.41,
+    "gnarl": 0.46,
+    "density": 0.86,
+    "reach": 16,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:spruce_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:spruce_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:snow_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 4,
+      "spread": 0.97,
+      "flat": 0.33,
+      "tiers": 0.65,
+      "lopside": 0.35,
+      "bends": 0.31,
+      "swing": 0.21,
+      "split": 0.57,
+      "sprout": 0.77,
+      "tropism": 0.53,
+      "twig": 0.99,
+      "drip": 0.9,
+      "hollow": 0.27,
+      "buttress": 0.75,
+      "jitter": 0.29,
+      "forks": 1
+    }
+  }
+}

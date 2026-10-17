@@ -1,0 +1,28 @@
+{
+  "feature": "minecraft:large_basalt_columns",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:weighted_list",
+        "distribution": [
+          {
+            "data": 1,
+            "weight": 5
+          },
+          {
+            "data": 2,
+            "weight": 5
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 2
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

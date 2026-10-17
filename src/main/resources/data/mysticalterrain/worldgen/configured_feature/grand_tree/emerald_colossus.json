@@ -1,0 +1,84 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "kapok",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 130,
+      "max_inclusive": 170
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7.0,
+      "max_exclusive": 9.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 38.0,
+      "max_exclusive": 50.0
+    },
+    "roots": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 9
+    },
+    "reach": 71,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:jungle_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:jungle_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "Name": "minecraft:flowering_azalea_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:vine",
+          "Properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 14
+      }
+    }
+  }
+}

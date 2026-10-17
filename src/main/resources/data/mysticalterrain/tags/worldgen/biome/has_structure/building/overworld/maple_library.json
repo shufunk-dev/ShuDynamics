@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:amber_meadow",
+    "mysticalterrain:aspen_hollow",
+    "mysticalterrain:bronze_pinewood",
+    "mysticalterrain:copper_grove",
+    "mysticalterrain:cranberry_bog",
+    "mysticalterrain:crimson_canopy",
+    "mysticalterrain:elder_rustwood",
+    "mysticalterrain:first_snow_fields",
+    "mysticalterrain:frostfall_pines",
+    "mysticalterrain:golden_birchwood",
+    "mysticalterrain:gusty_maples",
+    "mysticalterrain:harvest_prairie",
+    "mysticalterrain:hollowbark_forest",
+    "mysticalterrain:maple_woods",
+    "mysticalterrain:marigold_grove",
+    "mysticalterrain:pumpkin_fields",
+    "mysticalterrain:russet_hills",
+    "mysticalterrain:rustpine_taiga",
+    "mysticalterrain:tawny_savanna"
+  ]
+}

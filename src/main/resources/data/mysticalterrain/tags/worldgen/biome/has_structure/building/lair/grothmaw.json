@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:canebrake",
+    "mysticalterrain:crag_forest",
+    "mysticalterrain:cycad_scrub",
+    "mysticalterrain:fern_steppe",
+    "mysticalterrain:fernwood",
+    "mysticalterrain:fossil_plateau",
+    "mysticalterrain:horsetail_meadow",
+    "mysticalterrain:mossgloom_forest",
+    "mysticalterrain:mossy_taiga",
+    "mysticalterrain:primeval_fen",
+    "mysticalterrain:primordial_jungle",
+    "mysticalterrain:rootmire",
+    "mysticalterrain:saurian_savanna",
+    "mysticalterrain:sequoia_grove",
+    "mysticalterrain:titanwood",
+    "mysticalterrain:tor_hills"
+  ]
+}

@@ -1145,6 +1145,26 @@ public class ModItems {
                 @Override public boolean isFoil(ItemStack stack) { return true; }
             });
 
+    // End Biome Materials & Celestial Crystals
+    public static final Item VOID_CRYSTAL = registerItem("void_crystal", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.RARE),
+            Component.literal("§5Void Crystal"),
+            Component.literal("§7A dark, pulsating crystalline mineral mined from End biomes."),
+            Component.literal("§8Resonates with null energy and dimensional gravity.")
+    ));
+    public static final Item ASTRAL_SHARD = registerItem("astral_shard", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.UNCOMMON),
+            Component.literal("§bAstral Shard"),
+            Component.literal("§7Luminous starlight fragment embedded within End Stone."),
+            Component.literal("§8Glows with celestial luminescence.")
+    ));
+    public static final Item RESONANT_GEM = registerItem("resonant_gem", settings -> new net.enchantedwood.item.custom.TooltipItem(
+            settings.rarity(Rarity.UNCOMMON),
+            Component.literal("§6Resonant Gem"),
+            Component.literal("§7Acoustic gemstone harvested from resonant geodes."),
+            Component.literal("§8Amplifies harmonic frequencies and telekinetic fields.")
+    ));
+
     // Enchanted Health Upgrades (Heart Lockets)
     public static final Item ENCHANTED_HEART = registerItem("enchanted_heart", settings -> new net.enchantedwood.item.custom.EnchantedHeartItem(2.0f, settings.stacksTo(1)));
     public static final Item IRON_ENCHANTED_HEART = registerItem("iron_enchanted_heart", settings -> new net.enchantedwood.item.custom.EnchantedHeartItem(6.0f, settings.stacksTo(1)));
@@ -2035,6 +2055,23 @@ public class ModItems {
                 entries.accept(net.enchantedwood.block.ModBlocks.NETHER_REDSTONE_ORE);
                 entries.accept(net.enchantedwood.block.ModBlocks.NETHER_LAPIS_ORE);
                 entries.accept(net.enchantedwood.block.ModBlocks.NETHER_DIAMOND_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_COAL_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_IRON_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_GOLD_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_REDSTONE_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_LAPIS_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.END_STONE_DIAMOND_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.VOID_CRYSTAL_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.ASTRAL_SHARD_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.RESONANT_GEM_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.NETHERRACK_COAL_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.NETHERRACK_IRON_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.NETHERRACK_REDSTONE_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.NETHERRACK_LAPIS_ORE);
+                entries.accept(net.enchantedwood.block.ModBlocks.NETHERRACK_DIAMOND_ORE);
+                entries.accept(VOID_CRYSTAL);
+                entries.accept(ASTRAL_SHARD);
+                entries.accept(RESONANT_GEM);
                 entries.accept(net.enchantedwood.block.ModBlocks.NETHER_TUNGSTEN_ORE);
                 entries.accept(net.enchantedwood.block.ModBlocks.DEEPSLATE_TUNGSTEN_ORE);
                 entries.accept(net.enchantedwood.block.ModBlocks.RAW_TUNGSTEN_BLOCK);

@@ -1,0 +1,33 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:warm_ocean",
+    "mysticalterrain:abyssal_vents",
+    "mysticalterrain:ancient_shallows",
+    "mysticalterrain:bioluminescent_bay",
+    "mysticalterrain:coral_lagoon",
+    "mysticalterrain:coral_reef",
+    "mysticalterrain:coral_sands_sea",
+    "mysticalterrain:deep_lukewarm_kelp_forest",
+    "mysticalterrain:deep_reef",
+    "mysticalterrain:deep_rocky_lukewarm_ocean",
+    "mysticalterrain:iridescent_sea",
+    "mysticalterrain:lukewarm_kelp_forest",
+    "mysticalterrain:lukewarm_reef",
+    "mysticalterrain:lukewarm_seagrass_meadow",
+    "mysticalterrain:magma_reef",
+    "mysticalterrain:rocky_lukewarm_ocean",
+    "mysticalterrain:rocky_warm_ocean",
+    "mysticalterrain:sandbar_shallows",
+    "mysticalterrain:sandy_lukewarm_ocean",
+    "mysticalterrain:sapphire_deep",
+    "mysticalterrain:sargasso_sea",
+    "mysticalterrain:seamount_pinnacles",
+    "mysticalterrain:steamvent_sea",
+    "mysticalterrain:turquoise_shallows",
+    "mysticalterrain:volcanic_isles",
+    "mysticalterrain:warm_seagrass_meadow"
+  ]
+}

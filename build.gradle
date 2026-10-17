@@ -42,6 +42,9 @@ dependencies {
     // Fabric API
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    // GeckoLib
+    implementation files("libs/geckolib-fabric-26.3-5.5.7.jar")
+
     // EMI Recipe Viewer API
     compileOnly files("C:/Users/shufu/curseforge/minecraft/Instances/Curios/mods/emi-1.1.24-2fb0d30+26.3+fabric.jar")
 }
@@ -78,7 +81,7 @@ tasks.register('deployMod') {
         def src = jar.archiveFile.get().asFile
         def targetDirs = [
             file("C:/Projects/Minecraft Mod/scratch/mods"),
-            file("C:/Users/shufu/CurseForge/minecraft/Instances/Curios/mods")
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/Shu 263/mods")
         ]
         targetDirs.each { dir ->
             if (!dir.exists()) dir.mkdirs()

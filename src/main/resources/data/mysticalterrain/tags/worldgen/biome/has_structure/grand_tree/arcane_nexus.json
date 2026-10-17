@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:aether_blossoms",
+    "mysticalterrain:astral_meadow",
+    "mysticalterrain:chorus_forest",
+    "mysticalterrain:eldritch_wood",
+    "mysticalterrain:leyline_taiga",
+    "mysticalterrain:moonbark_forest",
+    "mysticalterrain:obelisk_plateau",
+    "mysticalterrain:prismatic_grove",
+    "mysticalterrain:runestone_hills",
+    "mysticalterrain:starfall_plains",
+    "mysticalterrain:starlit_savanna"
+  ]
+}

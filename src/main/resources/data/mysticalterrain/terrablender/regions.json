@@ -1,0 +1,3580 @@
+[
+  {
+    "name": "mysticalterrain:mystical",
+    "weight": 4,
+    "replacements": {
+      "minecraft:jagged_peaks": "mysticalterrain:titan_peaks",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:ancient_redwoods",
+      "minecraft:grove": "mysticalterrain:crystal_highlands",
+      "minecraft:flower_forest": "mysticalterrain:blossom_vale",
+      "minecraft:badlands": "mysticalterrain:ember_wastes",
+      "minecraft:snowy_plains": "mysticalterrain:frostveil_glacier",
+      "minecraft:meadow": "mysticalterrain:verdant_highlands",
+      "minecraft:dark_forest": "mysticalterrain:twilight_thicket",
+      "minecraft:sparse_jungle": "mysticalterrain:spire_karst",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:volcanic_isles",
+      "minecraft:dripstone_caves": "mysticalterrain:deep_hollows"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:crystal_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:fungal_depths",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:verdant_abyss",
+        "parameters": {
+          "temperature": [
+            0.2,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:autumn",
+    "weight": 3,
+    "replacements": {
+      "minecraft:plains": "mysticalterrain:harvest_prairie",
+      "minecraft:sunflower_plains": "mysticalterrain:pumpkin_fields",
+      "minecraft:meadow": "mysticalterrain:amber_meadow",
+      "minecraft:forest": "mysticalterrain:maple_woods",
+      "minecraft:flower_forest": "mysticalterrain:marigold_grove",
+      "minecraft:birch_forest": "mysticalterrain:golden_birchwood",
+      "minecraft:old_growth_birch_forest": "mysticalterrain:aspen_hollow",
+      "minecraft:dark_forest": "mysticalterrain:hollowbark_forest",
+      "minecraft:cherry_grove": "mysticalterrain:crimson_canopy",
+      "minecraft:windswept_forest": "mysticalterrain:gusty_maples",
+      "minecraft:windswept_hills": "mysticalterrain:russet_hills",
+      "minecraft:taiga": "mysticalterrain:rustpine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:elder_rustwood",
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:bronze_pinewood",
+      "minecraft:snowy_taiga": "mysticalterrain:frostfall_pines",
+      "minecraft:snowy_plains": "mysticalterrain:first_snow_fields",
+      "minecraft:grove": "mysticalterrain:copper_grove",
+      "minecraft:swamp": "mysticalterrain:cranberry_bog",
+      "minecraft:savanna": "mysticalterrain:tawny_savanna",
+      "minecraft:river": "mysticalterrain:leafdrift_river",
+      "minecraft:beach": "mysticalterrain:harvest_shore"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:rootcellar_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:amber_hollows",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:frost",
+    "weight": 3,
+    "replacements": {
+      "minecraft:snowy_plains": "mysticalterrain:glacial_expanse",
+      "minecraft:ice_spikes": "mysticalterrain:shardfield",
+      "minecraft:snowy_taiga": "mysticalterrain:rimepine_forest",
+      "minecraft:taiga": "mysticalterrain:frostneedle_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:hoarfrost_giants",
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:silverpine_wilds",
+      "minecraft:grove": "mysticalterrain:aurora_grove",
+      "minecraft:snowy_slopes": "mysticalterrain:powder_slopes",
+      "minecraft:frozen_peaks": "mysticalterrain:glacier_crown",
+      "minecraft:jagged_peaks": "mysticalterrain:icefang_peaks",
+      "minecraft:windswept_hills": "mysticalterrain:sleet_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:frostscree_hills",
+      "minecraft:plains": "mysticalterrain:rimegrass_plains",
+      "minecraft:meadow": "mysticalterrain:frostbloom_meadow",
+      "minecraft:birch_forest": "mysticalterrain:pale_frostwood",
+      "minecraft:frozen_river": "mysticalterrain:glass_river",
+      "minecraft:snowy_beach": "mysticalterrain:frostshore",
+      "minecraft:stony_shore": "mysticalterrain:rime_cliffs",
+      "minecraft:frozen_ocean": "mysticalterrain:floe_sea",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:abyssal_floe",
+      "minecraft:cold_ocean": "mysticalterrain:iceglass_sea"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:frozen_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:rime_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:ember",
+    "weight": 3,
+    "replacements": {
+      "minecraft:desert": "mysticalterrain:ashen_dunes",
+      "minecraft:badlands": "mysticalterrain:scorched_mesa",
+      "minecraft:eroded_badlands": "mysticalterrain:cinder_hoodoos",
+      "minecraft:wooded_badlands": "mysticalterrain:charred_plateau",
+      "minecraft:savanna": "mysticalterrain:cinder_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:basalt_tableland",
+      "minecraft:windswept_savanna": "mysticalterrain:smoldering_crags",
+      "minecraft:stony_peaks": "mysticalterrain:caldera_peaks",
+      "minecraft:jagged_peaks": "mysticalterrain:ashfang_peaks",
+      "minecraft:windswept_hills": "mysticalterrain:sulfur_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:slag_heaps",
+      "minecraft:plains": "mysticalterrain:ashfall_plains",
+      "minecraft:sunflower_plains": "mysticalterrain:fireflower_fields",
+      "minecraft:forest": "mysticalterrain:charwood_forest",
+      "minecraft:sparse_jungle": "mysticalterrain:smoke_jungle",
+      "minecraft:stony_shore": "mysticalterrain:obsidian_coast",
+      "minecraft:beach": "mysticalterrain:black_sand_beach",
+      "minecraft:warm_ocean": "mysticalterrain:magma_reef",
+      "minecraft:lukewarm_ocean": "mysticalterrain:steamvent_sea",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:abyssal_vents",
+      "minecraft:river": "mysticalterrain:cinder_river"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:magma_chambers",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:obsidian_vaults",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:fae",
+    "weight": 3,
+    "replacements": {
+      "minecraft:plains": "mysticalterrain:glimmer_plains",
+      "minecraft:sunflower_plains": "mysticalterrain:pixie_fields",
+      "minecraft:meadow": "mysticalterrain:moonpetal_meadow",
+      "minecraft:flower_forest": "mysticalterrain:enchanted_garden",
+      "minecraft:forest": "mysticalterrain:faewood",
+      "minecraft:birch_forest": "mysticalterrain:silverbark_glade",
+      "minecraft:old_growth_birch_forest": "mysticalterrain:elder_silverbark",
+      "minecraft:dark_forest": "mysticalterrain:witchwood",
+      "minecraft:pale_garden": "mysticalterrain:moonlit_garden",
+      "minecraft:cherry_grove": "mysticalterrain:blossom_hollow",
+      "minecraft:windswept_forest": "mysticalterrain:whispering_woods",
+      "minecraft:taiga": "mysticalterrain:lilac_taiga",
+      "minecraft:grove": "mysticalterrain:crystal_glade",
+      "minecraft:swamp": "mysticalterrain:glowmire",
+      "minecraft:river": "mysticalterrain:moonlit_stream",
+      "minecraft:beach": "mysticalterrain:pearl_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:iridescent_sea",
+      "minecraft:jungle": "mysticalterrain:dreamvine_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sprite_thicket",
+      "minecraft:mushroom_fields": "mysticalterrain:faerie_ring_isles"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:glowshroom_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:amethyst_hollow",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:primeval",
+    "weight": 3,
+    "replacements": {
+      "minecraft:forest": "mysticalterrain:fernwood",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:titanwood",
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:sequoia_grove",
+      "minecraft:jungle": "mysticalterrain:primordial_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:canebrake",
+      "minecraft:sparse_jungle": "mysticalterrain:cycad_scrub",
+      "minecraft:swamp": "mysticalterrain:primeval_fen",
+      "minecraft:mangrove_swamp": "mysticalterrain:rootmire",
+      "minecraft:dark_forest": "mysticalterrain:mossgloom_forest",
+      "minecraft:plains": "mysticalterrain:fern_steppe",
+      "minecraft:meadow": "mysticalterrain:horsetail_meadow",
+      "minecraft:taiga": "mysticalterrain:mossy_taiga",
+      "minecraft:windswept_forest": "mysticalterrain:crag_forest",
+      "minecraft:windswept_hills": "mysticalterrain:tor_hills",
+      "minecraft:savanna": "mysticalterrain:saurian_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:fossil_plateau",
+      "minecraft:river": "mysticalterrain:silt_river",
+      "minecraft:stony_shore": "mysticalterrain:tidepool_cliffs",
+      "minecraft:beach": "mysticalterrain:fossil_beach",
+      "minecraft:lukewarm_ocean": "mysticalterrain:ancient_shallows",
+      "minecraft:cold_ocean": "mysticalterrain:kelp_deeps"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:fossil_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:mossy_underdeep",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:twilight",
+    "weight": 3,
+    "replacements": {
+      "minecraft:dark_forest": "mysticalterrain:duskwood",
+      "minecraft:pale_garden": "mysticalterrain:hollow_garden",
+      "minecraft:forest": "mysticalterrain:gloamwood",
+      "minecraft:birch_forest": "mysticalterrain:ghostbirch_forest",
+      "minecraft:old_growth_birch_forest": "mysticalterrain:wraithbirch_wood",
+      "minecraft:plains": "mysticalterrain:dusk_plains",
+      "minecraft:meadow": "mysticalterrain:nightshade_meadow",
+      "minecraft:taiga": "mysticalterrain:umbral_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:blackspruce_deeps",
+      "minecraft:snowy_taiga": "mysticalterrain:moonfrost_taiga",
+      "minecraft:swamp": "mysticalterrain:gloom_marsh",
+      "minecraft:mangrove_swamp": "mysticalterrain:wraithroot_swamp",
+      "minecraft:windswept_forest": "mysticalterrain:howling_woods",
+      "minecraft:windswept_hills": "mysticalterrain:barrow_hills",
+      "minecraft:grove": "mysticalterrain:starlit_grove",
+      "minecraft:cherry_grove": "mysticalterrain:violet_hollow",
+      "minecraft:river": "mysticalterrain:nightglass_river",
+      "minecraft:beach": "mysticalterrain:moonshore",
+      "minecraft:deep_ocean": "mysticalterrain:midnight_deep",
+      "minecraft:ocean": "mysticalterrain:umbral_sea"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:sculk_hollows",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:twilight_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:tropical",
+    "weight": 3,
+    "replacements": {
+      "minecraft:beach": "mysticalterrain:coconut_coast",
+      "minecraft:warm_ocean": "mysticalterrain:coral_lagoon",
+      "minecraft:lukewarm_ocean": "mysticalterrain:turquoise_shallows",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:sapphire_deep",
+      "minecraft:jungle": "mysticalterrain:paradise_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:orchid_thicket",
+      "minecraft:bamboo_jungle": "mysticalterrain:jade_bamboo_forest",
+      "minecraft:savanna": "mysticalterrain:sunlit_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:mango_plateau",
+      "minecraft:plains": "mysticalterrain:tradewind_plains",
+      "minecraft:sunflower_plains": "mysticalterrain:golden_veld",
+      "minecraft:forest": "mysticalterrain:monsoon_forest",
+      "minecraft:flower_forest": "mysticalterrain:hibiscus_garden",
+      "minecraft:swamp": "mysticalterrain:lagoon_marsh",
+      "minecraft:mangrove_swamp": "mysticalterrain:emerald_mangroves",
+      "minecraft:river": "mysticalterrain:jade_river",
+      "minecraft:stony_shore": "mysticalterrain:reef_cliffs",
+      "minecraft:desert": "mysticalterrain:sugar_sand_dunes",
+      "minecraft:ocean": "mysticalterrain:azure_sea",
+      "minecraft:deep_ocean": "mysticalterrain:abyssal_blue",
+      "minecraft:mushroom_fields": "mysticalterrain:mooshroom_atoll"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:jungle_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:turquoise_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:mire",
+    "weight": 3,
+    "replacements": {
+      "minecraft:swamp": "mysticalterrain:peat_bog",
+      "minecraft:mangrove_swamp": "mysticalterrain:tanglewood_mangroves",
+      "minecraft:plains": "mysticalterrain:reed_flats",
+      "minecraft:forest": "mysticalterrain:willow_woods",
+      "minecraft:dark_forest": "mysticalterrain:rotwood",
+      "minecraft:taiga": "mysticalterrain:muskeg_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:moss_drowned_spruces",
+      "minecraft:river": "mysticalterrain:murky_river",
+      "minecraft:beach": "mysticalterrain:mudflats",
+      "minecraft:stony_shore": "mysticalterrain:clay_bluffs",
+      "minecraft:jungle": "mysticalterrain:bayou_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:cypress_bayou",
+      "minecraft:bamboo_jungle": "mysticalterrain:rushwater_thicket",
+      "minecraft:meadow": "mysticalterrain:sedge_meadow",
+      "minecraft:birch_forest": "mysticalterrain:alder_carr",
+      "minecraft:savanna": "mysticalterrain:delta_floodplain",
+      "minecraft:cherry_grove": "mysticalterrain:lotus_glade",
+      "minecraft:ocean": "mysticalterrain:brackish_sea",
+      "minecraft:lukewarm_ocean": "mysticalterrain:sargasso_sea",
+      "minecraft:windswept_forest": "mysticalterrain:fogwood",
+      "minecraft:sunflower_plains": "mysticalterrain:marshmallow_meadows"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:mudroot_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:frogspawn_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:dune",
+    "weight": 3,
+    "replacements": {
+      "minecraft:desert": "mysticalterrain:great_erg",
+      "minecraft:badlands": "mysticalterrain:canyonlands",
+      "minecraft:eroded_badlands": "mysticalterrain:hoodoo_valley",
+      "minecraft:wooded_badlands": "mysticalterrain:juniper_mesa",
+      "minecraft:savanna": "mysticalterrain:thornbush_steppe",
+      "minecraft:savanna_plateau": "mysticalterrain:butte_country",
+      "minecraft:windswept_savanna": "mysticalterrain:dust_devil_crags",
+      "minecraft:plains": "mysticalterrain:tumbleweed_plains",
+      "minecraft:sunflower_plains": "mysticalterrain:date_palm_oasis",
+      "minecraft:beach": "mysticalterrain:dune_coast",
+      "minecraft:stony_shore": "mysticalterrain:sandstone_bluffs",
+      "minecraft:river": "mysticalterrain:wadi",
+      "minecraft:warm_ocean": "mysticalterrain:sandbar_shallows",
+      "minecraft:stony_peaks": "mysticalterrain:mesa_summits",
+      "minecraft:windswept_hills": "mysticalterrain:sage_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:gravel_barrens",
+      "minecraft:forest": "mysticalterrain:olive_grove",
+      "minecraft:flower_forest": "mysticalterrain:desert_bloom",
+      "minecraft:meadow": "mysticalterrain:sagebrush_meadow",
+      "minecraft:sparse_jungle": "mysticalterrain:scrub_oasis",
+      "minecraft:lukewarm_ocean": "mysticalterrain:coral_sands_sea"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:sandstone_catacombs",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:buried_oasis",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:fungal",
+    "weight": 3,
+    "replacements": {
+      "minecraft:mushroom_fields": "mysticalterrain:sporecap_isles",
+      "minecraft:dark_forest": "mysticalterrain:toadstool_forest",
+      "minecraft:forest": "mysticalterrain:crimson_mycowood",
+      "minecraft:birch_forest": "mysticalterrain:warped_mycowood",
+      "minecraft:taiga": "mysticalterrain:morel_taiga",
+      "minecraft:swamp": "mysticalterrain:spore_marsh",
+      "minecraft:plains": "mysticalterrain:mycelium_flats",
+      "minecraft:meadow": "mysticalterrain:puffball_meadow",
+      "minecraft:jungle": "mysticalterrain:mycojungle",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:truffle_woods",
+      "minecraft:pale_garden": "mysticalterrain:ghostcap_garden",
+      "minecraft:windswept_forest": "mysticalterrain:sporewind_forest",
+      "minecraft:river": "mysticalterrain:sporestream",
+      "minecraft:beach": "mysticalterrain:mycelium_shore",
+      "minecraft:savanna": "mysticalterrain:lichen_steppe",
+      "minecraft:cherry_grove": "mysticalterrain:pinkcap_glade",
+      "minecraft:bamboo_jungle": "mysticalterrain:stinkhorn_thicket",
+      "minecraft:flower_forest": "mysticalterrain:chanterelle_grove",
+      "minecraft:sunflower_plains": "mysticalterrain:fairy_ring_fields",
+      "minecraft:snowy_taiga": "mysticalterrain:frostcap_taiga"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:shroomlight_hollows",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:mycorrhizal_depths",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:arcane",
+    "weight": 3,
+    "replacements": {
+      "minecraft:plains": "mysticalterrain:starfall_plains",
+      "minecraft:desert": "mysticalterrain:endstone_wastes",
+      "minecraft:badlands": "mysticalterrain:purpur_badlands",
+      "minecraft:windswept_hills": "mysticalterrain:runestone_hills",
+      "minecraft:stony_peaks": "mysticalterrain:amethyst_peaks",
+      "minecraft:jagged_peaks": "mysticalterrain:astral_peaks",
+      "minecraft:meadow": "mysticalterrain:astral_meadow",
+      "minecraft:forest": "mysticalterrain:chorus_forest",
+      "minecraft:birch_forest": "mysticalterrain:moonbark_forest",
+      "minecraft:dark_forest": "mysticalterrain:eldritch_wood",
+      "minecraft:grove": "mysticalterrain:prismatic_grove",
+      "minecraft:cherry_grove": "mysticalterrain:aether_blossoms",
+      "minecraft:savanna": "mysticalterrain:starlit_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:obelisk_plateau",
+      "minecraft:taiga": "mysticalterrain:leyline_taiga",
+      "minecraft:ocean": "mysticalterrain:prismarine_sea",
+      "minecraft:deep_ocean": "mysticalterrain:leviathan_deep",
+      "minecraft:cold_ocean": "mysticalterrain:glimmering_sea",
+      "minecraft:river": "mysticalterrain:starlight_river",
+      "minecraft:beach": "mysticalterrain:crystal_shore",
+      "minecraft:stony_shore": "mysticalterrain:runestone_shore"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:geode_vaults",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.5
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:void_hollows",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            1.0
+          ],
+          "humidity": [
+            0.3,
+            0.7
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_1",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:autumn_plains",
+        "mysticalterrain:dandelion_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_flowering_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:pale_meadow",
+        "mysticalterrain:dry_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:flowering_forest",
+        "mysticalterrain:spruce_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:lush_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:sparse_flowering_birch_forest",
+        "mysticalterrain:pale_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:pale_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:dense_lush_dark_forest",
+        "mysticalterrain:mossy_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:dense_mossy_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_lush_forest",
+        "mysticalterrain:windswept_rocky_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_wildflower_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_gravelly_birch_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_taiga",
+        "mysticalterrain:mossgrown_taiga"
+      ],
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:sparse_rocky_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:dense_snowy_taiga",
+        "mysticalterrain:snowy_berry_taiga"
+      ],
+      "minecraft:snowy_plains": "mysticalterrain:wooded_snowy_plains",
+      "minecraft:jagged_peaks": "mysticalterrain:icy_jagged_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:shrubby_savanna",
+        "mysticalterrain:wooded_dry_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:autumn_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:gravelly_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:sparse_wooded_badlands",
+      "minecraft:jungle": "mysticalterrain:mossy_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:rocky_bamboo_jungle",
+      "minecraft:swamp": "mysticalterrain:orchid_swamp",
+      "minecraft:mangrove_swamp": "mysticalterrain:dense_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:gravelly_river",
+      "minecraft:snowy_beach": "mysticalterrain:icy_beach",
+      "minecraft:warm_ocean": "mysticalterrain:rocky_warm_ocean",
+      "minecraft:frozen_ocean": "mysticalterrain:iceberg_ocean",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep",
+      "minecraft:ocean": "mysticalterrain:sunken_forest"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_2",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:dry_rocky_plains",
+        "mysticalterrain:allium_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:lush_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:rose_meadow",
+        "mysticalterrain:bluet_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:sparse_dry_forest",
+        "mysticalterrain:sparse_flowering_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:dense_mossy_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:mushroom_birch_forest",
+        "mysticalterrain:spruce_and_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:firefly_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:snowy_dark_spruce_forest",
+        "mysticalterrain:dense_snowy_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:birch_and_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:sparse_windswept_dry_forest",
+        "mysticalterrain:dense_windswept_pine_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_lush_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_shrubby_gravelly_hills",
+      "minecraft:taiga": "mysticalterrain:firefly_taiga",
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:dense_mossy_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:snowy_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:snowy_birch_taiga",
+      "minecraft:grove": "mysticalterrain:pine_grove",
+      "minecraft:snowy_plains": "mysticalterrain:snowy_birch_plains",
+      "minecraft:stony_peaks": "mysticalterrain:diorite_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:melon_savanna",
+        "mysticalterrain:gravelly_savanna"
+      ],
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_autumn_savanna",
+      "minecraft:desert": "mysticalterrain:windswept_gravelly_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:sparse_wooded_shrubby_badlands",
+      "minecraft:jungle": "mysticalterrain:mossy_old_growth_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:mossy_bamboo_jungle",
+      "minecraft:swamp": "mysticalterrain:dense_fern_swamp",
+      "minecraft:mangrove_swamp": "mysticalterrain:sparse_lush_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:reedy_river",
+      "minecraft:stony_shore": "mysticalterrain:andesite_shore",
+      "minecraft:warm_ocean": "mysticalterrain:coral_reef",
+      "minecraft:frozen_ocean": "mysticalterrain:rocky_frozen_ocean",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles",
+      "minecraft:ocean": "mysticalterrain:sunken_forest",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_3",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:spruce_plains",
+        "mysticalterrain:sandy_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:pumpkin_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:azalea_meadow",
+        "mysticalterrain:dry_wildflower_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:tulip_forest",
+        "mysticalterrain:pale_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:rocky_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:cherry_and_birch_forest",
+        "mysticalterrain:rocky_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:mossy_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:dense_rocky_dark_forest",
+        "mysticalterrain:lily_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:mossy_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_berry_forest",
+        "mysticalterrain:sparse_windswept_snowy_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:wooded_snowy_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:mossy_fern_taiga",
+        "mysticalterrain:dense_fern_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:old_growth_birch_and_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:dense_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:dense_rocky_snowy_taiga",
+      "minecraft:grove": "mysticalterrain:dense_rocky_grove",
+      "minecraft:snowy_plains": "mysticalterrain:gravelly_snowy_plains",
+      "minecraft:stony_peaks": "mysticalterrain:granite_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:dense_savanna",
+        "mysticalterrain:sunflower_savanna"
+      ],
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_flowering_savanna",
+      "minecraft:badlands": "mysticalterrain:sandy_badlands",
+      "minecraft:jungle": [
+        "mysticalterrain:dense_firefly_jungle",
+        "mysticalterrain:fern_jungle"
+      ],
+      "minecraft:bamboo_jungle": "mysticalterrain:lush_bamboo_jungle",
+      "minecraft:swamp": "mysticalterrain:sparse_swamp",
+      "minecraft:mangrove_swamp": "mysticalterrain:lush_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:red_river",
+      "minecraft:stony_shore": "mysticalterrain:tuff_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:lukewarm_seagrass_meadow",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:deep_rocky_frozen_ocean",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_4",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:daisy_plains",
+        "mysticalterrain:azalea_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:lush_flowering_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:wooded_flowering_meadow",
+        "mysticalterrain:autumn_flowering_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:mushroom_forest",
+        "mysticalterrain:cornflower_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:snowy_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:sparse_dry_birch_forest",
+        "mysticalterrain:dense_fern_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:mushroom_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:fern_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:dense_snowy_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:lush_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:dense_windswept_rocky_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_andesite_hills",
+        "mysticalterrain:snowy_rocky_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:flowering_taiga",
+        "mysticalterrain:berry_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:berry_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:sparse_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:dense_snowy_berry_taiga",
+      "minecraft:grove": "mysticalterrain:rocky_grove",
+      "minecraft:snowy_plains": "mysticalterrain:rocky_snowy_plains",
+      "minecraft:stony_peaks": "mysticalterrain:andesite_peaks",
+      "minecraft:savanna": "mysticalterrain:wooded_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:wooded_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_gravelly_savanna",
+      "minecraft:badlands": "mysticalterrain:gravelly_badlands",
+      "minecraft:jungle": [
+        "mysticalterrain:dense_flowering_jungle",
+        "mysticalterrain:flooded_jungle"
+      ],
+      "minecraft:bamboo_jungle": "mysticalterrain:sparse_flowering_bamboo_jungle",
+      "minecraft:swamp": "mysticalterrain:muddy_swamp",
+      "minecraft:mangrove_swamp": "mysticalterrain:autumn_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:autumn_river",
+      "minecraft:stony_shore": "mysticalterrain:granite_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:lukewarm_reef",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:deep_iceberg_ocean",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep",
+      "minecraft:ocean": "mysticalterrain:sunken_forest"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_5",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:bluet_plains",
+        "mysticalterrain:lilac_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:rocky_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:birch_meadow",
+        "mysticalterrain:allium_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:sparse_rocky_forest",
+        "mysticalterrain:sparse_snowy_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:azalea_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:marshy_birch_forest",
+        "mysticalterrain:berry_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:lush_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:sparse_snowy_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:snowy_old_growth_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:allium_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_autumn_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:dry_rocky_hills",
+        "mysticalterrain:windswept_poppy_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_mossy_taiga",
+        "mysticalterrain:pale_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:sparse_berry_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:rocky_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:dense_snowy_mixed_taiga",
+      "minecraft:grove": "mysticalterrain:sparse_rocky_grove",
+      "minecraft:snowy_plains": "mysticalterrain:snowy_berry_plains",
+      "minecraft:stony_peaks": "mysticalterrain:tuff_peaks",
+      "minecraft:savanna": "mysticalterrain:wooded_autumn_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:dense_dry_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:dense_windswept_savanna",
+      "minecraft:badlands": "mysticalterrain:badlands_scrub",
+      "minecraft:jungle": "mysticalterrain:melon_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_mossy_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:pale_swamp",
+        "mysticalterrain:flowering_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:sparse_mossy_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:rocky_river",
+      "minecraft:stony_shore": "mysticalterrain:diorite_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:sandy_lukewarm_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:tuff_caves",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_6",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:windswept_plains",
+        "mysticalterrain:peony_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_autumn_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:tulip_meadow",
+        "mysticalterrain:dry_rocky_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:lush_forest",
+        "mysticalterrain:berry_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:autumn_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:lily_birch_forest",
+        "mysticalterrain:lilac_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:old_growth_spruce_and_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:dark_spruce_forest",
+      "minecraft:pale_garden": "mysticalterrain:rocky_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:dense_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:dense_windswept_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_cherry_hills",
+        "mysticalterrain:windswept_daisy_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_lush_taiga",
+        "mysticalterrain:lily_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:fern_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:mossy_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:sparse_snowy_dark_taiga",
+      "minecraft:grove": "mysticalterrain:dense_berry_grove",
+      "minecraft:snowy_plains": "mysticalterrain:frozen_marsh",
+      "minecraft:stony_peaks": "mysticalterrain:chalk_peaks",
+      "minecraft:savanna": "mysticalterrain:dry_rocky_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:dense_lush_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_dry_savanna",
+      "minecraft:badlands": "mysticalterrain:windswept_badlands",
+      "minecraft:jungle": "mysticalterrain:flowering_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_dry_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:old_growth_swamp",
+        "mysticalterrain:dense_lush_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:dense_autumn_mangrove_swamp",
+      "minecraft:frozen_river": "mysticalterrain:rocky_frozen_river",
+      "minecraft:stony_shore": "mysticalterrain:gravelly_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:rocky_lukewarm_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:mossy_dripstone_caves",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_7",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:wooded_plains",
+        "mysticalterrain:wooded_dry_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:gravelly_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:windswept_meadow",
+        "mysticalterrain:wooded_autumn_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:sparse_forest",
+        "mysticalterrain:snowy_spruce_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:dense_cherry_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:dense_snowy_birch_forest",
+        "mysticalterrain:sparse_snowy_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:mossy_fern_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:flowering_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:pale_marsh",
+      "minecraft:cherry_grove": "mysticalterrain:dense_flowering_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_snowy_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_pine_hills",
+        "mysticalterrain:windswept_chalk_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:windswept_taiga",
+        "mysticalterrain:fern_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:snowy_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:mushroom_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:windswept_snowy_taiga",
+      "minecraft:grove": "mysticalterrain:icy_grove",
+      "minecraft:snowy_plains": "mysticalterrain:shrubby_snowy_plains",
+      "minecraft:stony_peaks": "mysticalterrain:mossy_peaks",
+      "minecraft:savanna": "mysticalterrain:wildflower_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:dense_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_red_savanna",
+      "minecraft:badlands": "mysticalterrain:rocky_badlands",
+      "minecraft:jungle": "mysticalterrain:firefly_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_rocky_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:dense_firefly_swamp",
+        "mysticalterrain:mossy_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:mossy_old_growth_mangrove_swamp",
+      "minecraft:frozen_river": "mysticalterrain:icy_river",
+      "minecraft:stony_shore": "mysticalterrain:sandy_shore",
+      "minecraft:lukewarm_ocean": "mysticalterrain:lukewarm_kelp_forest",
+      "minecraft:dripstone_caves": "mysticalterrain:diorite_caves"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_8",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:flowering_plains",
+        "mysticalterrain:wooded_flowering_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_lush_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:shrubby_meadow",
+        "mysticalterrain:poppy_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:peony_forest",
+        "mysticalterrain:pine_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:dense_autumn_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:firefly_birch_forest",
+        "mysticalterrain:fern_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:sparse_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:mushroom_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:sparse_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:sparse_flowering_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_birch_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_flowering_hills",
+        "mysticalterrain:windswept_tulip_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:flowering_birch_taiga",
+        "mysticalterrain:fern_birch_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:flowering_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:dense_mossy_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:sparse_snowy_fern_taiga",
+      "minecraft:grove": "mysticalterrain:sparse_pine_grove",
+      "minecraft:snowy_plains": "mysticalterrain:windswept_snowy_plains",
+      "minecraft:stony_peaks": "mysticalterrain:gravelly_peaks",
+      "minecraft:savanna": "mysticalterrain:lush_savanna",
+      "minecraft:savanna_plateau": "mysticalterrain:dry_rocky_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_shrubby_savanna",
+      "minecraft:eroded_badlands": "mysticalterrain:rocky_eroded_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_lush_flowering_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:mushroom_swamp",
+        "mysticalterrain:sparse_mossy_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:sparse_mangrove_swamp",
+      "minecraft:frozen_river": "mysticalterrain:gravelly_frozen_river",
+      "minecraft:stony_shore": "mysticalterrain:snowy_shore",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:deep_rocky_lukewarm_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:sparse_dripstone_caves",
+      "minecraft:ocean": "mysticalterrain:sunken_forest"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_9",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:birch_plains",
+        "mysticalterrain:rose_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:dry_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:rocky_flowering_meadow",
+        "mysticalterrain:berry_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:dense_forest",
+        "mysticalterrain:rocky_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:dense_lush_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:dark_birch_forest",
+        "mysticalterrain:petal_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:lily_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:sparse_gravelly_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:old_growth_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:sparse_rocky_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_snowy_birch_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_mossy_hills",
+        "mysticalterrain:windswept_tuff_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:muskeg",
+        "mysticalterrain:dense_rocky_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:dense_berry_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:flowering_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:dense_snowy_fern_taiga",
+      "minecraft:grove": "mysticalterrain:dense_pine_grove",
+      "minecraft:ice_spikes": "mysticalterrain:sparse_ice_spikes",
+      "minecraft:savanna": [
+        "mysticalterrain:dense_autumn_savanna",
+        "mysticalterrain:dandelion_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:dry_red_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_rocky_savanna",
+      "minecraft:eroded_badlands": "mysticalterrain:sandy_eroded_badlands",
+      "minecraft:jungle": "mysticalterrain:orchid_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_dry_rocky_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:birch_swamp",
+        "mysticalterrain:mossy_birch_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:dense_mossy_mangrove_swamp",
+      "minecraft:beach": "mysticalterrain:windswept_rocky_beach",
+      "minecraft:stony_shore": "mysticalterrain:mossy_shore",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:deep_reef",
+      "minecraft:dripstone_caves": "mysticalterrain:ice_caves",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_10",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:lush_flowering_plains",
+        "mysticalterrain:pumpkin_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:dry_rocky_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:sunflower_meadow",
+        "mysticalterrain:flowering_chalk_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:marshy_forest",
+        "mysticalterrain:sparse_autumn_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:sparse_birch_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:flowering_birch_forest",
+        "mysticalterrain:azalea_and_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:fern_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:berry_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:dense_mossy_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:dense_lush_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_pine_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:wooded_autumn_hills",
+        "mysticalterrain:windswept_autumn_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:rocky_taiga",
+        "mysticalterrain:dense_lush_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:mushroom_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:lush_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:snowy_old_growth_taiga",
+      "minecraft:grove": "mysticalterrain:dense_mossy_grove",
+      "minecraft:ice_spikes": "mysticalterrain:dense_ice_spikes",
+      "minecraft:savanna": [
+        "mysticalterrain:lush_oak_savanna",
+        "mysticalterrain:autumn_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:shrubby_savanna_plateau",
+      "minecraft:windswept_savanna": "mysticalterrain:windswept_lush_savanna",
+      "minecraft:wooded_badlands": "mysticalterrain:wooded_shrubby_badlands",
+      "minecraft:jungle": "mysticalterrain:mangrove_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_mossy_orchid_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:dense_mossy_swamp",
+        "mysticalterrain:dense_spruce_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:old_growth_mangrove_swamp",
+      "minecraft:beach": "mysticalterrain:muddy_beach",
+      "minecraft:stony_shore": "mysticalterrain:chalk_cliffs",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:deep_lukewarm_kelp_forest",
+      "minecraft:dripstone_caves": "mysticalterrain:andesite_caves",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_11",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:wildflower_plains",
+        "mysticalterrain:dry_shrubby_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_dry_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:gravelly_meadow",
+        "mysticalterrain:mossy_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:dense_mossy_forest",
+        "mysticalterrain:gravelly_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:cherry_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:dense_mossy_birch_forest",
+        "mysticalterrain:pumpkin_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:dense_mossy_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:old_growth_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:sparse_flowering_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:dense_snowy_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:sparse_windswept_forest",
+      "minecraft:windswept_hills": [
+        "mysticalterrain:windswept_diorite_hills",
+        "mysticalterrain:wooded_hills"
+      ],
+      "minecraft:taiga": [
+        "mysticalterrain:oak_taiga",
+        "mysticalterrain:sandy_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:mossy_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:sparse_snowy_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:rocky_snowy_taiga",
+      "minecraft:grove": "mysticalterrain:sparse_berry_grove",
+      "minecraft:ice_spikes": "mysticalterrain:rocky_ice_spikes",
+      "minecraft:savanna": [
+        "mysticalterrain:pine_savanna",
+        "mysticalterrain:rocky_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:dry_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:desert_oasis",
+      "minecraft:wooded_badlands": "mysticalterrain:wooded_dry_badlands",
+      "minecraft:jungle": "mysticalterrain:rocky_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_flowering_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:dense_birch_swamp",
+        "mysticalterrain:bog"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:mossy_mangrove_swamp",
+      "minecraft:beach": "mysticalterrain:rocky_red_beach",
+      "minecraft:ocean": "mysticalterrain:rocky_ocean",
+      "minecraft:cold_ocean": "mysticalterrain:gravelly_cold_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:granite_caves",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_12",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:wooded_lush_plains",
+        "mysticalterrain:dry_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:wet_meadow",
+        "mysticalterrain:petal_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:rose_forest",
+        "mysticalterrain:old_growth_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:dense_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:mossy_birch_forest",
+        "mysticalterrain:dense_lush_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:flowering_old_growth_birch_forest",
+      "minecraft:dark_forest": "mysticalterrain:sparse_autumn_dark_forest",
+      "minecraft:pale_garden": "mysticalterrain:mossy_pale_garden",
+      "minecraft:cherry_grove": "mysticalterrain:tulip_cherry_grove",
+      "minecraft:windswept_forest": "mysticalterrain:windswept_gravelly_forest",
+      "minecraft:windswept_hills": "mysticalterrain:windswept_granite_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_gravelly_pine_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_flowering_taiga",
+        "mysticalterrain:gravelly_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:dense_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:fern_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:snowy_oak_taiga",
+      "minecraft:grove": "mysticalterrain:dense_grove",
+      "minecraft:snowy_slopes": "mysticalterrain:wooded_snowy_slopes",
+      "minecraft:savanna": [
+        "mysticalterrain:dry_oak_savanna",
+        "mysticalterrain:dry_red_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:autumn_oak_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:rocky_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:wooded_autumn_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_melon_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_lush_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:autumn_swamp",
+        "mysticalterrain:dense_pale_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:firefly_mangrove_swamp",
+      "minecraft:beach": "mysticalterrain:rocky_beach",
+      "minecraft:ocean": "mysticalterrain:kelp_forest",
+      "minecraft:cold_ocean": "mysticalterrain:icy_cold_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:dense_dripstone_caves"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_13",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:windswept_dry_plains",
+        "mysticalterrain:rocky_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:wooded_rocky_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:lush_meadow",
+        "mysticalterrain:mossy_flowering_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:lily_forest",
+        "mysticalterrain:azalea_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:sparse_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:sparse_mossy_birch_forest",
+        "mysticalterrain:dry_birch_forest"
+      ],
+      "minecraft:dark_forest": [
+        "mysticalterrain:sparse_flowering_dark_forest",
+        "mysticalterrain:dense_autumn_dark_forest"
+      ],
+      "minecraft:pale_garden": "mysticalterrain:dense_pale_garden",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:dense_windswept_fern_forest",
+        "mysticalterrain:dense_windswept_autumn_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_dry_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:wooded_snowy_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_berry_taiga",
+        "mysticalterrain:cornflower_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:dense_snowy_old_growth_pine_taiga",
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:mossy_fern_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": "mysticalterrain:frozen_bog",
+      "minecraft:grove": "mysticalterrain:dense_icy_grove",
+      "minecraft:snowy_slopes": "mysticalterrain:gravelly_snowy_slopes",
+      "minecraft:savanna": [
+        "mysticalterrain:dry_savanna",
+        "mysticalterrain:flowering_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:rocky_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:blooming_red_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:dense_wooded_dry_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_rocky_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_orchid_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:spruce_swamp",
+        "mysticalterrain:dense_autumn_swamp"
+      ],
+      "minecraft:mangrove_swamp": "mysticalterrain:dense_lush_mangrove_swamp",
+      "minecraft:beach": "mysticalterrain:windswept_pebble_beach",
+      "minecraft:ocean": "mysticalterrain:sandy_ocean",
+      "minecraft:cold_ocean": "mysticalterrain:cold_seagrass_meadow",
+      "minecraft:dripstone_caves": "mysticalterrain:calcite_caves",
+      "minecraft:deep_cold_ocean": "mysticalterrain:sponge_reef",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_14",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:shrubby_plains",
+        "mysticalterrain:wooded_autumn_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:autumn_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:lush_flowering_meadow",
+        "mysticalterrain:rocky_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:autumn_forest",
+        "mysticalterrain:dense_autumn_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:sparse_cherry_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:snowy_birch_forest",
+        "mysticalterrain:dense_rocky_birch_forest"
+      ],
+      "minecraft:dark_forest": [
+        "mysticalterrain:autumn_dark_forest",
+        "mysticalterrain:dense_mossy_dark_forest"
+      ],
+      "minecraft:pale_garden": "mysticalterrain:snowy_pale_garden",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_fern_forest",
+        "mysticalterrain:sparse_windswept_autumn_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_shrubby_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_autumn_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_rocky_taiga",
+        "mysticalterrain:sparse_fern_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:rocky_old_growth_pine_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:sparse_rocky_snowy_taiga",
+        "mysticalterrain:gravelly_snowy_taiga"
+      ],
+      "minecraft:grove": "mysticalterrain:berry_grove",
+      "minecraft:snowy_slopes": "mysticalterrain:rocky_snowy_slopes",
+      "minecraft:savanna": [
+        "mysticalterrain:sandy_savanna",
+        "mysticalterrain:flowering_oak_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:red_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:blooming_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:sparse_wooded_acacia_badlands",
+      "minecraft:jungle": "mysticalterrain:lush_jungle",
+      "minecraft:sparse_jungle": "mysticalterrain:sparse_melon_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:mossy_old_growth_swamp",
+        "mysticalterrain:frozen_spruce_swamp"
+      ],
+      "minecraft:mushroom_fields": "mysticalterrain:rocky_mushroom_fields",
+      "minecraft:beach": "mysticalterrain:windswept_beach",
+      "minecraft:ocean": "mysticalterrain:gravelly_ocean",
+      "minecraft:cold_ocean": "mysticalterrain:rocky_cold_ocean",
+      "minecraft:dripstone_caves": "mysticalterrain:flooded_dripstone_caves",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_15",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:marsh",
+        "mysticalterrain:poppy_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:flowering_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:peony_meadow",
+        "mysticalterrain:lilac_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:petal_forest",
+        "mysticalterrain:pumpkin_forest"
+      ],
+      "minecraft:birch_forest": [
+        "mysticalterrain:dense_flowering_birch_forest",
+        "mysticalterrain:sparse_rocky_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:snowy_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:sparse_rocky_dark_forest",
+        "mysticalterrain:firefly_dark_forest"
+      ],
+      "minecraft:pale_garden": "mysticalterrain:flowering_pale_garden",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_mossy_forest",
+        "mysticalterrain:sparse_windswept_rocky_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_snowy_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:wooded_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:dry_taiga",
+        "mysticalterrain:lush_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:lush_old_growth_pine_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:sparse_gravelly_snowy_taiga",
+        "mysticalterrain:snowy_fern_taiga"
+      ],
+      "minecraft:grove": "mysticalterrain:windswept_grove",
+      "minecraft:snowy_slopes": "mysticalterrain:icy_slopes",
+      "minecraft:savanna": [
+        "mysticalterrain:red_savanna",
+        "mysticalterrain:dry_shrubby_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:dry_shrubby_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:windswept_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:dense_wooded_rocky_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_orchid_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:dense_bamboo_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:dark_swamp",
+        "mysticalterrain:lush_swamp"
+      ],
+      "minecraft:mushroom_fields": "mysticalterrain:wooded_mushroom_fields",
+      "minecraft:beach": "mysticalterrain:salt_marsh",
+      "minecraft:ocean": "mysticalterrain:muddy_ocean",
+      "minecraft:cold_ocean": "mysticalterrain:cold_kelp_forest",
+      "minecraft:lush_caves": "mysticalterrain:sparse_lush_caves",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_16",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:cherry_plains",
+        "mysticalterrain:wooded_rocky_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:mossy_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:flowering_meadow",
+        "mysticalterrain:chalk_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:dry_forest",
+        "mysticalterrain:snowy_pine_forest"
+      ],
+      "minecraft:birch_forest": [
+        "mysticalterrain:snowy_spruce_and_birch_forest",
+        "mysticalterrain:dense_mushroom_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:dense_fern_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:dense_fern_dark_forest",
+        "mysticalterrain:dense_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:firefly_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_snowy_pine_forest",
+        "mysticalterrain:windswept_mixed_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_allium_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_dry_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:sparse_dry_taiga",
+        "mysticalterrain:dense_berry_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:sparse_old_growth_pine_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:sparse_snowy_taiga",
+        "mysticalterrain:sparse_snowy_pale_taiga"
+      ],
+      "minecraft:grove": "mysticalterrain:windswept_rocky_grove",
+      "minecraft:frozen_peaks": "mysticalterrain:rocky_frozen_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:rocky_red_savanna",
+        "mysticalterrain:dense_lush_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:flowering_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:windswept_red_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:dense_wooded_autumn_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_mossy_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:sparse_bamboo_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:dense_dark_swamp",
+        "mysticalterrain:dense_frozen_swamp"
+      ],
+      "minecraft:river": "mysticalterrain:firefly_river",
+      "minecraft:beach": "mysticalterrain:red_pebble_beach",
+      "minecraft:ocean": "mysticalterrain:seagrass_meadow",
+      "minecraft:deep_cold_ocean": "mysticalterrain:deep_rocky_cold_ocean",
+      "minecraft:lush_caves": "mysticalterrain:flowering_lush_caves",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_17",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:tulip_plains",
+        "mysticalterrain:rocky_flowering_plains"
+      ],
+      "minecraft:sunflower_plains": "mysticalterrain:shrubby_sunflower_plains",
+      "minecraft:meadow": [
+        "mysticalterrain:wooded_lush_meadow",
+        "mysticalterrain:daisy_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:mossy_forest",
+        "mysticalterrain:cherry_forest"
+      ],
+      "minecraft:birch_forest": [
+        "mysticalterrain:sparse_lush_birch_forest",
+        "mysticalterrain:gravelly_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:rocky_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:sparse_dark_forest",
+        "mysticalterrain:dense_firefly_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:snowy_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_cherry_forest",
+        "mysticalterrain:windswept_dry_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_birch_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_snowy_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:birch_taiga",
+        "mysticalterrain:mushroom_taiga"
+      ],
+      "minecraft:old_growth_pine_taiga": "mysticalterrain:dense_rocky_old_growth_pine_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:snowy_pale_taiga",
+        "mysticalterrain:snowy_dark_taiga"
+      ],
+      "minecraft:grove": "mysticalterrain:mossy_grove",
+      "minecraft:frozen_peaks": "mysticalterrain:glacial_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:dense_flowering_savanna",
+        "mysticalterrain:dense_dry_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:flowering_oak_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:rocky_red_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:dense_wooded_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_lush_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:dense_lush_bamboo_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:frozen_swamp",
+        "mysticalterrain:rocky_swamp"
+      ],
+      "minecraft:river": "mysticalterrain:muddy_river",
+      "minecraft:beach": "mysticalterrain:red_beach",
+      "minecraft:deep_ocean": "mysticalterrain:deep_kelp_forest",
+      "minecraft:deep_cold_ocean": "mysticalterrain:deep_icy_cold_ocean",
+      "minecraft:lush_caves": "mysticalterrain:dense_lush_caves",
+      "minecraft:ocean": "mysticalterrain:sunken_forest",
+      "minecraft:lukewarm_ocean": "mysticalterrain:bioluminescent_bay"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_18",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:cornflower_plains",
+        "mysticalterrain:lush_plains"
+      ],
+      "minecraft:meadow": [
+        "mysticalterrain:autumn_meadow",
+        "mysticalterrain:wooded_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:snowy_forest",
+        "mysticalterrain:dense_lush_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:firefly_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:wildflower_birch_forest",
+        "mysticalterrain:dense_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:sparse_lush_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:gravelly_dark_forest",
+        "mysticalterrain:sparse_lush_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:flowering_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:windswept_flowering_forest",
+        "mysticalterrain:windswept_snowy_mixed_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_rocky_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_mossy_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:mixed_taiga",
+        "mysticalterrain:dark_taiga"
+      ],
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:dense_fern_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:icy_taiga",
+        "mysticalterrain:dense_snowy_birch_taiga"
+      ],
+      "minecraft:grove": "mysticalterrain:sparse_grove",
+      "minecraft:jagged_peaks": "mysticalterrain:rocky_jagged_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:wooded_flowering_savanna",
+        "mysticalterrain:poppy_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:wooded_autumn_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:desert_scrub",
+      "minecraft:wooded_badlands": "mysticalterrain:wooded_rocky_badlands",
+      "minecraft:jungle": "mysticalterrain:old_growth_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:flowering_bamboo_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:firefly_swamp",
+        "mysticalterrain:dense_swamp"
+      ],
+      "minecraft:river": "mysticalterrain:lush_river",
+      "minecraft:beach": "mysticalterrain:pebble_beach",
+      "minecraft:deep_ocean": "mysticalterrain:deep_gravelly_ocean",
+      "minecraft:deep_cold_ocean": "mysticalterrain:deep_gravelly_cold_ocean",
+      "minecraft:lush_caves": "mysticalterrain:flooded_lush_caves"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:cascade_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:lava_tubes",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_19",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:berry_plains",
+        "mysticalterrain:mossy_plains"
+      ],
+      "minecraft:meadow": [
+        "mysticalterrain:cherry_meadow",
+        "mysticalterrain:wildflower_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:mossy_old_growth_forest",
+        "mysticalterrain:firefly_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:birch_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:daisy_birch_forest",
+        "mysticalterrain:sparse_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:dense_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:lush_dark_forest",
+        "mysticalterrain:rocky_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:rocky_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:dense_windswept_mossy_forest",
+        "mysticalterrain:dense_windswept_snowy_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_berry_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_lush_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:dense_taiga",
+        "mysticalterrain:dense_mossy_taiga"
+      ],
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:old_growth_birch_and_spruce_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:sparse_icy_taiga",
+        "mysticalterrain:sparse_snowy_berry_taiga"
+      ],
+      "minecraft:snowy_plains": "mysticalterrain:snowy_pine_plains",
+      "minecraft:jagged_peaks": "mysticalterrain:jagged_andesite_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:wet_savanna",
+        "mysticalterrain:wooded_lush_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:lush_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:windswept_rocky_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:dense_wooded_acacia_badlands",
+      "minecraft:jungle": "mysticalterrain:dense_fern_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:dense_mossy_bamboo_jungle",
+      "minecraft:swamp": [
+        "mysticalterrain:fern_swamp",
+        "mysticalterrain:azalea_swamp"
+      ],
+      "minecraft:river": "mysticalterrain:mossy_river",
+      "minecraft:snowy_beach": "mysticalterrain:rocky_snowy_beach",
+      "minecraft:deep_ocean": "mysticalterrain:deep_rocky_ocean",
+      "minecraft:deep_cold_ocean": "mysticalterrain:deep_cold_kelp_forest",
+      "minecraft:lush_caves": "mysticalterrain:azalea_caves",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles",
+      "minecraft:ocean": "mysticalterrain:sunken_forest",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:limestone_caverns",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:guano_roost",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "name": "mysticalterrain:heartland_20",
+    "weight": 2,
+    "replacements": {
+      "minecraft:plains": [
+        "mysticalterrain:gravelly_plains",
+        "mysticalterrain:acacia_plains"
+      ],
+      "minecraft:meadow": [
+        "mysticalterrain:cornflower_meadow",
+        "mysticalterrain:spruce_meadow"
+      ],
+      "minecraft:forest": [
+        "mysticalterrain:mixed_forest",
+        "mysticalterrain:fern_forest"
+      ],
+      "minecraft:flower_forest": "mysticalterrain:mossy_flower_forest",
+      "minecraft:birch_forest": [
+        "mysticalterrain:lush_flowering_birch_forest",
+        "mysticalterrain:lush_birch_forest"
+      ],
+      "minecraft:old_growth_birch_forest": "mysticalterrain:dense_snowy_old_growth_birch_forest",
+      "minecraft:dark_forest": [
+        "mysticalterrain:mossy_old_growth_dark_forest",
+        "mysticalterrain:snowy_dark_forest"
+      ],
+      "minecraft:cherry_grove": "mysticalterrain:sparse_cherry_grove",
+      "minecraft:windswept_forest": [
+        "mysticalterrain:dense_windswept_lush_forest",
+        "mysticalterrain:sparse_windswept_mossy_forest"
+      ],
+      "minecraft:windswept_hills": "mysticalterrain:windswept_azalea_hills",
+      "minecraft:windswept_gravelly_hills": "mysticalterrain:windswept_flowering_gravelly_hills",
+      "minecraft:taiga": [
+        "mysticalterrain:pumpkin_taiga",
+        "mysticalterrain:mossy_birch_taiga"
+      ],
+      "minecraft:old_growth_spruce_taiga": "mysticalterrain:berry_old_growth_spruce_taiga",
+      "minecraft:snowy_taiga": [
+        "mysticalterrain:sparse_snowy_birch_taiga",
+        "mysticalterrain:snowy_mixed_taiga"
+      ],
+      "minecraft:snowy_plains": "mysticalterrain:ice_plains",
+      "minecraft:jagged_peaks": "mysticalterrain:jagged_granite_peaks",
+      "minecraft:savanna": [
+        "mysticalterrain:oak_savanna",
+        "mysticalterrain:dry_pine_savanna"
+      ],
+      "minecraft:savanna_plateau": "mysticalterrain:oak_savanna_plateau",
+      "minecraft:desert": "mysticalterrain:red_desert",
+      "minecraft:wooded_badlands": "mysticalterrain:wooded_acacia_badlands",
+      "minecraft:jungle": "mysticalterrain:lush_flowering_jungle",
+      "minecraft:bamboo_jungle": "mysticalterrain:bamboo_fen",
+      "minecraft:swamp": "mysticalterrain:dense_azalea_swamp",
+      "minecraft:mangrove_swamp": "mysticalterrain:dense_firefly_mangrove_swamp",
+      "minecraft:river": "mysticalterrain:sandy_river",
+      "minecraft:snowy_beach": "mysticalterrain:snowy_pebble_beach",
+      "minecraft:warm_ocean": "mysticalterrain:warm_seagrass_meadow",
+      "minecraft:frozen_ocean": "mysticalterrain:gravelly_frozen_ocean",
+      "minecraft:deep_ocean": "mysticalterrain:whale_fall_deep",
+      "minecraft:deep_lukewarm_ocean": "mysticalterrain:seamount_pinnacles",
+      "minecraft:deep_frozen_ocean": "mysticalterrain:dropstone_shelf"
+    },
+    "caves": [
+      {
+        "biome": "mysticalterrain:glowworm_grotto",
+        "parameters": {
+          "temperature": [
+            -1.0,
+            0.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      },
+      {
+        "biome": "mysticalterrain:ironstone_caverns",
+        "parameters": {
+          "temperature": [
+            0.0,
+            1.0
+          ],
+          "humidity": [
+            -1.0,
+            -0.35
+          ],
+          "continentalness": [
+            -1.0,
+            1.0
+          ],
+          "erosion": [
+            -1.0,
+            1.0
+          ],
+          "depth": [
+            0.2,
+            0.9
+          ],
+          "weirdness": [
+            -1.0,
+            1.0
+          ],
+          "offset": 0.0
+        }
+      }
+    ]
+  }
+]

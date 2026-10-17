@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FBF",
+    "BEB",
+    "FBF"
+  ],
+  "key": {
+    "F": "mysticalterrain:fossil_stone",
+    "B": "minecraft:bone_block",
+    "E": "minecraft:turtle_egg"
+  },
+  "result": {
+    "count": 1,
+    "id": "mysticalterrain:primal_egg"
+  }
+}

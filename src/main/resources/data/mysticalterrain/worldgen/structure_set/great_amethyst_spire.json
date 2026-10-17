@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:great_amethyst_spire",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 4,
+    "salt": 12200818
+  }
+}

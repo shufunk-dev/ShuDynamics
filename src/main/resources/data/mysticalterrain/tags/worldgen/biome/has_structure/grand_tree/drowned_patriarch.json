@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "mysticalterrain:bayou_jungle",
+    "mysticalterrain:cypress_bayou",
+    "mysticalterrain:delta_floodplain",
+    "mysticalterrain:peat_bog",
+    "mysticalterrain:rotwood",
+    "mysticalterrain:rushwater_thicket",
+    "mysticalterrain:tanglewood_mangroves",
+    "mysticalterrain:willow_woods"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "monoliths",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 9,
+      "max_inclusive": 13
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:blackstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:crying_obsidian"
+        }
+      },
+      "body": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:obsidian"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "Name": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:obsidian"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:crying_obsidian"
+        }
+      }
+    },
+    "loot": "minecraft:chests/end_city_treasure"
+  }
+}

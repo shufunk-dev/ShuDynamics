@@ -1,0 +1,54 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:lair/pyraxis",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/hrimthane",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/lirael",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/grothmaw",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/hollow_warden",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/bogrot",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/sekhmar",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/mycelord",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/archon",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:lair/astrael",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 44,
+    "separation": 14,
+    "salt": 71239011,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 4
+    }
+  }
+}

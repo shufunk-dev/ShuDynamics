@@ -1,0 +1,90 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "elder",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 60,
+      "max_inclusive": 85
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8.0,
+      "max_exclusive": 10.0
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 36.0,
+      "max_exclusive": 46.0
+    },
+    "roots": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 12
+    },
+    "veins": 10,
+    "reach": 65,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "mysticalterrain:gloamwood_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "mysticalterrain:gloamwood_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "Name": "minecraft:pale_oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pearlescent_froglight",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "hanging": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:pale_hanging_moss",
+          "Properties": {
+            "tip": "true"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 3,
+        "max_inclusive": 10
+      }
+    }
+  }
+}

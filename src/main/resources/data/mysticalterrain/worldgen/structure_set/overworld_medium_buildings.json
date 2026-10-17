@@ -1,0 +1,316 @@
+{
+  "structures": [
+    {
+      "structure": "mysticalterrain:overworld/acacia_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/amethyst_spires",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/bamboo_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/basalt_pillars",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/birch_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/birch_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/birch_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/charwood_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cherry_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cherry_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cherry_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/cypress_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/dark_oak_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/desert_ruins",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/drowned_sandstone_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/drowned_sandstone_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fallen_star",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/fortress_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/frosted_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ginkgo_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/gloamwood_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/ice_spires",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/jungle_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mangrove_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/maple_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mesa_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/meteor_crater",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/moss_geode",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mushroom_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mushroom_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/mystwood_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/oak_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/olive_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/pale_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/pale_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/palm_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/rimewood_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sandstone_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/silverbark_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_graveyard",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_lighthouse",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/spruce_outpost",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/starbark_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/starbark_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/starbark_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_temple",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/sunken_vault",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_library",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_observatory",
+      "weight": 1
+    },
+    {
+      "structure": "mysticalterrain:overworld/tuff_vault",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 14,
+    "separation": 5,
+    "salt": 155735613,
+    "frequency": 0.1,
+    "frequency_reduction_method": "default",
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 3
+    }
+  }
+}

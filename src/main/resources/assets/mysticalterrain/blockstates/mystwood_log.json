@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "mysticalterrain:block/mystwood_log_x"
+    },
+    "axis=y": {
+      "model": "mysticalterrain:block/mystwood_log_y"
+    },
+    "axis=z": {
+      "model": "mysticalterrain:block/mystwood_log_z"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "canopy",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 66,
+      "max_inclusive": 82
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.9,
+      "max_exclusive": 4.76
+    },
+    "crown": 19.0,
+    "lean": 0.03,
+    "gnarl": 0.58,
+    "density": 0.86,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:acacia_wood",
+          "Properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted_state_provider",
+        "entries": [
+          {
+            "data": {
+              "Name": "minecraft:acacia_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "Name": "minecraft:oak_leaves",
+              "Properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "growth": {
+      "lobes": 8,
+      "spread": 0.59,
+      "flat": 1.0,
+      "tiers": 0.16,
+      "lopside": 0.63,
+      "bends": 0.52,
+      "swing": 0.1,
+      "split": 0.53,
+      "sprout": 0.63,
+      "tropism": 0.26,
+      "twig": 0.87,
+      "drip": 0.05,
+      "hollow": 0.48,
+      "buttress": 0.75,
+      "jitter": 0.11,
+      "forks": 2
+    }
+  }
+}
