@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import org.jspecify.annotations.Nullable;
 
 public final class RitualFixtures {
-   static final int REACH = 12;
+   static final int REACH = 24;
 
    private RitualFixtures() {
    }
@@ -18,7 +18,7 @@ public final class RitualFixtures {
    public static int count(ServerWorld level, BlockPos altar, Block block, BooleanProperty on) {
       int n = 0;
 
-      for (BlockPos p : BlockPos.iterate(altar.add(-12, -4, -12), altar.add(12, 6, 12))) {
+      for (BlockPos p : BlockPos.iterate(altar.add(-24, -6, -24), altar.add(24, 10, 24))) {
          BlockState s = level.getBlockState(p);
          if (s.isOf(block) && (Boolean)s.get(on)) {
             n++;
@@ -29,7 +29,7 @@ public final class RitualFixtures {
    }
 
    static void resetAll(ServerWorld level, BlockPos altar) {
-      for (BlockPos p : BlockPos.iterate(altar.add(-12, -4, -12), altar.add(12, 6, 12))) {
+      for (BlockPos p : BlockPos.iterate(altar.add(-24, -6, -24), altar.add(24, 10, 24))) {
          BlockState s = level.getBlockState(p);
          if (s.isOf(MysticalBosses.GLOOM_BRAZIER) && (Boolean)s.get(GloomBrazierBlock.LIT)) {
             level.setBlockState(p, (BlockState)s.with(GloomBrazierBlock.LIT, false), 3);

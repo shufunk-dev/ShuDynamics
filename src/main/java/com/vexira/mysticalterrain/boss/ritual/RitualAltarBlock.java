@@ -120,6 +120,21 @@ public class RitualAltarBlock extends BlockWithEntity {
 
    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
       if (!world.isClient()) {
+         if (this.ritual == Ritual.HOLLOW_WARDEN && world instanceof ServerWorld server) {
+            int lit = RitualFixtures.count(server, pos, MysticalBosses.GLOOM_BRAZIER, GloomBrazierBlock.LIT);
+            boolean newMoon = (server.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
+            if (lit < 6) {
+               player.sendMessage(Text.literal("§c" + lit + "/6 Gloom Braziers lit. Light all six to awaken the Warden."), true);
+            } else if (!server.isNight()) {
+               player.sendMessage(Text.literal("§cThe braziers burn, but the Warden only comes at night."), true);
+            } else if (!newMoon) {
+               player.sendMessage(Text.translatable("ritual.mysticalterrain.hollow_warden.moon"), true);
+            } else {
+               player.sendMessage(Text.literal("§aAll conditions met. The Warden stirs..."), true);
+            }
+            return ActionResult.SUCCESS;
+         }
+
          player.sendMessage(Text.translatable("ritual.mysticalterrain." + this.ritual.id() + ".hint"), true);
       }
 
