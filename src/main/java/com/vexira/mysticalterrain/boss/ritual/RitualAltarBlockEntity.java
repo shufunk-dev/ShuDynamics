@@ -54,7 +54,7 @@ public class RitualAltarBlockEntity extends BlockEntity {
 
       switch (this.ritual()) {
          case LIRAEL:
-            if (!level.isNight()) {
+            if (level.getDimension().hasSkyLight() && !level.isNight()) {
                return Text.translatable("ritual.mysticalterrain.lirael.day");
             }
 
@@ -71,8 +71,8 @@ public class RitualAltarBlockEntity extends BlockEntity {
             this.setStage(level, 1);
             break;
          case ASTRAEL:
-            long time = level.getTimeOfDay() % 24000L;
-            if (time < 17000L || time > 19000L) {
+            long time = (level.getTimeOfDay() % 24000L + 24000L) % 24000L;
+            if (level.getDimension().hasSkyLight() && (time < 17000L || time > 19000L)) {
                return Text.translatable("ritual.mysticalterrain.astrael.time");
             }
 
@@ -160,8 +160,7 @@ public class RitualAltarBlockEntity extends BlockEntity {
                if (level.getTime() % 20L == 0L) {
                   int lit = RitualFixtures.count(level, this.pos, MysticalBosses.GLOOM_BRAZIER, GloomBrazierBlock.LIT);
                   this.setStage(level, lit);
-                  boolean newMoon = (level.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
-                  if (lit >= 6 && level.isNight() && newMoon) {
+                  if (lit >= 6) {
                      this.begin(level);
                   }
                }
@@ -203,14 +202,14 @@ public class RitualAltarBlockEntity extends BlockEntity {
       }
    }
 
-   private void begin(ServerWorld level) {
+   public void begin(ServerWorld level) {
       this.summon = 0;
       this.setStage(level, 6);
       Vec3d c = Vec3d.ofCenter(this.pos);
       level.playSound(null, c.x, c.y, c.z, MysticalBosses.RITUAL_ACTIVATE, SoundCategory.HOSTILE, 6.0F, 0.9F);
 
       for (ServerPlayerEntity p : level.getPlayers(px -> px.squaredDistanceTo(c) < 4096.0)) {
-         p.sendMessage(Text.translatable("ritual.mysticalterrain." + this.ritual().id() + ".begin"), true);
+         p.sendMessage(Text.translatable("ritual.mysticalterrain." + this.ritual().id() + ".begin"), false);
       }
 
       this.markDirty();

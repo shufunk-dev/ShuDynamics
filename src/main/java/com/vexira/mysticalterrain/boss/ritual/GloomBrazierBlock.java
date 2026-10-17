@@ -1,16 +1,17 @@
 package com.vexira.mysticalterrain.boss.ritual;
 
 import com.mojang.serialization.MapCodec;
+import com.vexira.mysticalterrain.boss.MysticalBosses;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
@@ -36,37 +37,75 @@ public class GloomBrazierBlock extends Block {
       this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(LIT, false));
    }
 
+   @Override
    protected MapCodec<? extends Block> getCodec() {
       return CODEC;
    }
 
+   @Override
    protected void appendProperties(Builder<Block, BlockState> builder) {
       builder.add(new Property[]{LIT});
    }
 
+   @Override
    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
       return SHAPE;
    }
 
+   @Override
    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-      if (stack.isOf(Items.FLINT_AND_STEEL) && !(Boolean)state.get(LIT)) {
+      boolean isLit = (Boolean)state.get(LIT);
+      if (isLit) {
          if (!world.isClient()) {
+            player.sendMessage(Text.literal("§7[Ritual] This Gloom Brazier is already burning."), false);
+         }
+         return ActionResult.SUCCESS;
+      }
+
+      boolean canLight = stack.isOf(Items.FLINT_AND_STEEL)
+         || stack.isOf(Items.FIRE_CHARGE)
+         || stack.isOf(Items.TORCH)
+         || stack.isOf(Items.SOUL_TORCH)
+         || stack.isIn(ItemTags.CANDLES);
+
+      if (canLight) {
+         if (!world.isClient() && world instanceof ServerWorld server) {
             world.setBlockState(pos, (BlockState)state.with(LIT, true), 3);
             world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 0.6F);
-            world.playSound(null, pos, (SoundEvent)SoundEvents.PARTICLE_SOUL_ESCAPE.value(), SoundCategory.BLOCKS, 1.0F, 0.5F);
-            stack.damage(1, player, hand.getEquipmentSlot());
-            boolean newMoon = (world.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
-            if (!newMoon || !world.isNight()) {
-               player.sendMessage(Text.translatable("ritual.mysticalterrain.hollow_warden.moon"), true);
+            world.playSound(null, pos, SoundEvents.PARTICLE_SOUL_ESCAPE.value(), SoundCategory.BLOCKS, 1.0F, 0.5F);
+            if (stack.isOf(Items.FLINT_AND_STEEL)) {
+               stack.damage(1, player, hand.getEquipmentSlot());
+            } else if (stack.isOf(Items.FIRE_CHARGE)) {
+               stack.decrementUnlessCreative(1, player);
+            }
+
+            RitualAltarBlockEntity altar = RitualFixtures.findAltar(server, pos, Ritual.HOLLOW_WARDEN, 32);
+            int count = altar != null ? RitualFixtures.count(server, altar.getPos(), MysticalBosses.GLOOM_BRAZIER, LIT) : 1;
+            player.sendMessage(Text.literal("§5[Ritual] §aGloom Brazier ignited! (" + count + "/6 lit)"), false);
+            if (altar != null && count >= 6) {
+               altar.begin(server);
             }
          }
 
          return ActionResult.SUCCESS;
-      } else {
-         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
       }
+
+      return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
    }
 
+   @Override
+   protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+      if (!world.isClient()) {
+         if ((Boolean)state.get(LIT)) {
+            player.sendMessage(Text.literal("§7[Ritual] This Gloom Brazier is already burning."), false);
+         } else {
+            player.sendMessage(Text.literal("§5[Ritual] §eIgnite this Gloom Brazier using flint & steel, a fire charge, a torch, or a candle."), false);
+         }
+      }
+      return ActionResult.SUCCESS;
+   }
+
+   @Override
    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
       if ((Boolean)state.get(LIT)) {
          world.addParticleClient(

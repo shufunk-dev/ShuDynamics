@@ -119,23 +119,34 @@ public class RitualAltarBlock extends BlockWithEntity {
    }
 
    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-      if (!world.isClient()) {
-         if (this.ritual == Ritual.HOLLOW_WARDEN && world instanceof ServerWorld server) {
-            int lit = RitualFixtures.count(server, pos, MysticalBosses.GLOOM_BRAZIER, GloomBrazierBlock.LIT);
-            boolean newMoon = (server.getTimeOfDay() / 24000L % 8L + 8L) % 8L == 4L;
-            if (lit < 6) {
-               player.sendMessage(Text.literal("§c" + lit + "/6 Gloom Braziers lit. Light all six to awaken the Warden."), true);
-            } else if (!server.isNight()) {
-               player.sendMessage(Text.literal("§cThe braziers burn, but the Warden only comes at night."), true);
-            } else if (!newMoon) {
-               player.sendMessage(Text.translatable("ritual.mysticalterrain.hollow_warden.moon"), true);
-            } else {
-               player.sendMessage(Text.literal("§aAll conditions met. The Warden stirs..."), true);
+      if (!world.isClient() && world instanceof ServerWorld server) {
+         if (this.ritual == Ritual.HOLLOW_WARDEN) {
+            if (world.getBlockEntity(pos) instanceof RitualAltarBlockEntity altar) {
+               int lit = RitualFixtures.count(server, pos, MysticalBosses.GLOOM_BRAZIER, GloomBrazierBlock.LIT);
+               if (lit >= 6) {
+                  player.sendMessage(Text.literal("§5[Ritual] §dAll 6 Gloom Braziers burn! The Hollow Warden stirs..."), false);
+                  altar.begin(server);
+                  return ActionResult.SUCCESS;
+               } else {
+                  player.sendMessage(Text.literal("§5[Ritual] §c" + lit + "/6 Gloom Braziers lit. Light all six braziers to awaken the Hollow Warden!"), false);
+                  return ActionResult.SUCCESS;
+               }
             }
-            return ActionResult.SUCCESS;
+         } else if (this.ritual == Ritual.ARCHON) {
+            if (world.getBlockEntity(pos) instanceof RitualAltarBlockEntity altar) {
+               int charged = RitualFixtures.count(server, pos, MysticalBosses.RUNE_PILLAR, RunePillarBlock.CHARGED);
+               if (charged >= 5) {
+                  player.sendMessage(Text.literal("§b[Ritual] §dAll 5 Rune Pillars are charged! Archon stirs..."), false);
+                  altar.begin(server);
+                  return ActionResult.SUCCESS;
+               } else {
+                  player.sendMessage(Text.literal("§b[Ritual] §c" + charged + "/5 Rune Pillars charged. Charge all five pillars with Lapis to awaken Archon!"), false);
+                  return ActionResult.SUCCESS;
+               }
+            }
          }
 
-         player.sendMessage(Text.translatable("ritual.mysticalterrain." + this.ritual.id() + ".hint"), true);
+         player.sendMessage(Text.translatable("ritual.mysticalterrain." + this.ritual.id() + ".hint"), false);
       }
 
       return ActionResult.SUCCESS;
