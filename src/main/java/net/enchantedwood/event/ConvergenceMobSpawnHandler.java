@@ -41,20 +41,36 @@ public class ConvergenceMobSpawnHandler {
                 }
             }
 
-            // 40% chance to convert vanilla mob into its Convergence Variant (60% remain vanilla)
-            if (world.getRandom().nextFloat() > 0.40f) {
-                return;
-            }
-
+            float roll = world.getRandom().nextFloat();
             EntityType<?> targetType = null;
-            if (entity instanceof ZombieEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity)) {
-                targetType = ModEntities.CONVERGENCE_ZOMBIE;
-            } else if (entity instanceof SkeletonEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity)) {
-                targetType = ModEntities.CONVERGENCE_SKELETON;
-            } else if (entity instanceof CreeperEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity)) {
-                targetType = ModEntities.CONVERGENCE_CREEPER;
-            } else if (entity instanceof SpiderEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity)) {
-                targetType = ModEntities.CONVERGENCE_SPIDER;
+
+            if (roll < 0.70f) {
+                // 70% chance: Native Mutant Convergence Mob
+                if (entity instanceof ZombieEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity)) {
+                    targetType = ModEntities.CONVERGENCE_ZOMBIE;
+                } else if (entity instanceof SkeletonEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity)) {
+                    targetType = ModEntities.CONVERGENCE_SKELETON;
+                } else if (entity instanceof CreeperEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity)) {
+                    targetType = ModEntities.CONVERGENCE_CREEPER;
+                } else if (entity instanceof SpiderEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity)) {
+                    targetType = ModEntities.CONVERGENCE_SPIDER;
+                }
+            } else {
+                // 30% chance: Dimensional Incursion Minion (Rift breach from across the realms!)
+                String[] DIMENSIONAL_KINDS = {
+                    "cinder_imp", "magma_brute",
+                    "frost_wisp", "rime_stalker",
+                    "bog_thrall", "bog_leech",
+                    "scarab", "tomb_guardian",
+                    "shade_wraith", "gloom_hound",
+                    "sporeling", "myconid_shaman",
+                    "thorn_sprite", "briar_knight",
+                    "primal_raptor", "shellback",
+                    "rune_golem", "arcane_eye",
+                    "starling", "astral_sentinel"
+                };
+                String chosenKind = DIMENSIONAL_KINDS[world.getRandom().nextInt(DIMENSIONAL_KINDS.length)];
+                targetType = com.vexira.mysticalterrain.boss.RealmMobs.type(chosenKind);
             }
 
             if (targetType != null) {
@@ -68,13 +84,14 @@ public class ConvergenceMobSpawnHandler {
             }
         });
 
-        // Rare drop: Anoxic Echoes from mutant Convergence mobs
+        // Rare drop: Anoxic Echoes from mutant Convergence mobs and incursion minions
         net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (entity.getEntityWorld() instanceof ServerWorld sw) {
                 if (entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity ||
                     entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity ||
                     entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity ||
-                    entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity) {
+                    entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity ||
+                    entity instanceof com.vexira.mysticalterrain.boss.RealmMob) {
                     if (sw.getRandom().nextFloat() < 0.035f) {
                         entity.dropStack(sw, new ItemStack(ModItems.MUSIC_DISC_ANOXIC));
                     }

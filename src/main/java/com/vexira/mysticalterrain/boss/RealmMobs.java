@@ -192,8 +192,9 @@ public final class RealmMobs {
          SpawnRestriction.register(
             type, k.flies() ? SpawnLocationTypes.UNRESTRICTED : SpawnLocationTypes.ON_GROUND, Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark
          );
-         TagKey<Biome> realm = TagKey.of(RegistryKeys.BIOME, MysticalTerrain.id("has_structure/building/lair/" + k.boss()));
-         BiomeModifications.addSpawn(BiomeSelectors.tag(realm), SpawnGroup.MONSTER, type, k.spawnWeight(), 1, k.groupMax());
+         TagKey<Biome> lairRealm = TagKey.of(RegistryKeys.BIOME, MysticalTerrain.id("has_structure/building/lair/" + k.boss()));
+         TagKey<Biome> mobRealm = TagKey.of(RegistryKeys.BIOME, MysticalTerrain.id("realm_mob_biomes/" + k.boss()));
+         BiomeModifications.addSpawn(BiomeSelectors.tag(lairRealm).or(BiomeSelectors.tag(mobRealm)), SpawnGroup.MONSTER, type, k.spawnWeight(), 1, k.groupMax());
          RegistryKey<Item> eggKey = RegistryKey.of(RegistryKeys.ITEM, MysticalTerrain.id(k.id() + "_spawn_egg"));
          MysticalBosses.addToTab((Item)Registry.register(Registries.ITEM, eggKey, new SpawnEggItem(new Settings().registryKey(eggKey).spawnEgg(type))));
       }
