@@ -76,7 +76,7 @@ public final class DragonRitual {
             begin(level, fight);
          } else {
             for (ServerPlayerEntity p : level.getPlayers(px -> px.squaredDistanceTo(player) < 4096.0)) {
-               p.sendMessage(Text.translatable("message.mysticalterrain.void_stirs", new Object[]{filled, 4}), true);
+               p.sendMessage(Text.translatable("message.mysticalterrain.void_stirs", new Object[]{filled, 4}), false);
             }
          }
       }
@@ -150,7 +150,7 @@ public final class DragonRitual {
 
       for (ServerPlayerEntity p : level.getPlayers(px -> px.squaredDistanceTo(at) < 32400.0)) {
          p.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 70, 0, false, false));
-         p.sendMessage(Text.translatable("message.mysticalterrain.dragon_ritual"), true);
+         p.sendMessage(Text.translatable("message.mysticalterrain.dragon_ritual"), false);
       }
    }
 

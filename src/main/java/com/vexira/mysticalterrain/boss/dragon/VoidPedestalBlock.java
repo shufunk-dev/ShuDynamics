@@ -6,12 +6,13 @@ import com.vexira.mysticalterrain.boss.MysticalBosses;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Property;
@@ -38,29 +39,37 @@ public class VoidPedestalBlock extends Block {
       this.setDefaultState((BlockState)((BlockState)this.stateManager.getDefaultState()).with(EYE, false));
    }
 
+   @Override
    protected MapCodec<? extends Block> getCodec() {
       return CODEC;
    }
 
+   @Override
    protected void appendProperties(Builder<Block, BlockState> builder) {
       builder.add(new Property[]{EYE});
    }
 
+   @Override
    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
       return SHAPE;
    }
 
+   @Override
    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
       if (stack.isOf(MysticalBosses.EYE_OF_THE_VOID) && !(Boolean)state.get(EYE)) {
          if (world instanceof ServerWorld server) {
             if (!DragonRitual.canBegin(server)) {
-               player.sendMessage(Text.translatable("message.mysticalterrain.dragon_awake"), true);
+               player.sendMessage(Text.literal("§c[Void Ritual] The Void Dragon is already awake!"), false);
                return ActionResult.FAIL;
             }
 
             world.setBlockState(pos, (BlockState)state.with(EYE, true), 3);
             stack.decrementUnlessCreative(1, player);
-            world.playSound(null, pos, BossSounds.event("bolt.void.launch"), SoundCategory.BLOCKS, 1.0F, 0.6F);
+            SoundEvent sound = BossSounds.event("bolt.void.launch");
+            if (sound == null) {
+               sound = SoundEvents.BLOCK_END_PORTAL_FRAME_FILL;
+            }
+            world.playSound(null, pos, sound, SoundCategory.BLOCKS, 1.0F, 0.6F);
             server.spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 40, 0.2, 0.3, 0.2, 0.08);
             DragonRitual.onEyePlaced(server, player);
          }
@@ -71,6 +80,19 @@ public class VoidPedestalBlock extends Block {
       }
    }
 
+   @Override
+   protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+      if (!world.isClient()) {
+         if ((Boolean)state.get(EYE)) {
+            player.sendMessage(Text.literal("§7[Void Ritual] An Eye of the Void is already set in this pedestal."), false);
+         } else {
+            player.sendMessage(Text.literal("§5[Void Ritual] §dRight-click with an Eye of the Void to empower this pedestal."), false);
+         }
+      }
+      return ActionResult.SUCCESS;
+   }
+
+   @Override
    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
       if ((Boolean)state.get(EYE)) {
          for (int i = 0; i < 2; i++) {
