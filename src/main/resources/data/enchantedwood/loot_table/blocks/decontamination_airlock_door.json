@@ -10,18 +10,22 @@
           "name": "enchantedwood:decontamination_airlock_door"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        },
-        {
-          "condition": "minecraft:block_state_property",
-          "block": "enchantedwood:decontamination_airlock_door",
-          "properties": {
-            "half": "lower"
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:survives_explosion"
+          },
+          {
+            "type": "minecraft:match_block",
+            "blocks": "enchantedwood:decontamination_airlock_door",
+            "state": {
+              "half": "lower"
+            }
           }
-        }
-      ]
+        ]
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/decontamination_airlock_door"
 }

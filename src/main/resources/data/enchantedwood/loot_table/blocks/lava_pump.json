@@ -10,11 +10,10 @@
           "name": "enchantedwood:lava_pump"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/lava_pump"
 }

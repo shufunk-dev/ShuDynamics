@@ -1,15 +1,16 @@
-﻿{
+{
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "enchantedwood:reinforced_tank_glass"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/reinforced_tank_glass"
 }

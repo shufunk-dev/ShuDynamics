@@ -2,18 +2,19 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
+      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "enchantedwood:aerogel_glass",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:explosion_decay"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/aerogel_glass"
 }

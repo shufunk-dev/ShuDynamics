@@ -10,11 +10,10 @@
           "name": "enchantedwood:manyullyn_block"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/manyullyn_block"
 }

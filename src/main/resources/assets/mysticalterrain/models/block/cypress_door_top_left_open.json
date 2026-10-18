@@ -3,5 +3,6 @@
   "textures": {
     "bottom": "mysticalterrain:block/cypress_door_bottom",
     "top": "mysticalterrain:block/cypress_door_top"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

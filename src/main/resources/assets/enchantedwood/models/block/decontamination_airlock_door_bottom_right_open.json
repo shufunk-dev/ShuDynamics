@@ -3,5 +3,6 @@
   "textures": {
     "bottom": "enchantedwood:block/decontamination_airlock_door_bottom",
     "top": "enchantedwood:block/decontamination_airlock_door_top"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

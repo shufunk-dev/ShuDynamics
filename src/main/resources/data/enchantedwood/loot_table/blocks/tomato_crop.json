@@ -7,24 +7,22 @@
         {
           "type": "minecraft:item",
           "name": "enchantedwood:tomato",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "enchantedwood:tomato_crop",
-              "properties": {
-                "age": "7"
-              }
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "enchantedwood:tomato_crop",
+            "state": {
+              "age": "7"
             }
-          ],
-          "functions": [
+          },
+          "modifier": [
             {
-              "function": "minecraft:apply_bonus",
               "enchantment": "minecraft:fortune",
               "formula": "minecraft:binomial_with_bonus_count",
               "parameters": {
                 "extra": 2,
                 "probability": 0.5714286
-              }
+              },
+              "type": "minecraft:apply_bonus"
             }
           ]
         }
@@ -36,19 +34,20 @@
         {
           "type": "minecraft:item",
           "name": "enchantedwood:tomato_seeds",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:apply_bonus",
               "enchantment": "minecraft:fortune",
               "formula": "minecraft:binomial_with_bonus_count",
               "parameters": {
                 "extra": 2,
                 "probability": 0.5714286
-              }
+              },
+              "type": "minecraft:apply_bonus"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/tomato_crop"
 }

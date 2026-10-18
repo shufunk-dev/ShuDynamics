@@ -1,4 +1,5 @@
 {
   "type": "minecraft:block",
-  "pools": []
+  "pools": [],
+  "random_sequence": "enchantedwood:blocks/asphalt_slab"
 }

@@ -10,11 +10,10 @@
           "name": "enchantedwood:harmonic_record_press"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/harmonic_record_press"
 }

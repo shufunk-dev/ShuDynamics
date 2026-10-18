@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": "enchantedwood:asphalt_block",
-  "result": {
-    "id": "enchantedwood:asphalt_slab"
-  }
-}

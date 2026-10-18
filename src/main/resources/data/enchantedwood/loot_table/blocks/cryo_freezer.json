@@ -10,11 +10,10 @@
           "name": "enchantedwood:cryo_freezer"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/cryo_freezer"
 }

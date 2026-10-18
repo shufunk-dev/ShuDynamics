@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "enchantedwood:block/enchanted_chest_gold_side",

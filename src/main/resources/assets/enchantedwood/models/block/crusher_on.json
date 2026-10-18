@@ -1,4 +1,4 @@
-﻿{
+{
     "parent":  "minecraft:block/orientable",
     "textures":  {
                      "top":  "enchantedwood:block/crusher_top",

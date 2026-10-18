@@ -7,15 +7,13 @@
         {
           "type": "minecraft:item",
           "name": "enchantedwood:cucumber",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "enchantedwood:cucumber_crop",
-              "properties": {
-                "age": "7"
-              }
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "enchantedwood:cucumber_crop",
+            "state": {
+              "age": "7"
             }
-          ]
+          }
         }
       ]
     },
@@ -25,19 +23,20 @@
         {
           "type": "minecraft:item",
           "name": "enchantedwood:cucumber_seeds",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:apply_bonus",
               "enchantment": "minecraft:fortune",
               "formula": "minecraft:binomial_with_bonus_count",
               "parameters": {
                 "extra": 2,
                 "probability": 0.5714286
-              }
+              },
+              "type": "minecraft:apply_bonus"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/cucumber_crop"
 }

@@ -10,11 +10,10 @@
           "name": "enchantedwood:cleanroom_filter_casing"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/cleanroom_filter_casing"
 }

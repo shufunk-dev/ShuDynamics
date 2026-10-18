@@ -3,5 +3,6 @@
   "textures": {
     "bottom": "mysticalterrain:block/silverbark_door_bottom",
     "top": "mysticalterrain:block/silverbark_door_top"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

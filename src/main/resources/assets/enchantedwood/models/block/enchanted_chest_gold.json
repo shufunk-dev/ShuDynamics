@@ -1,4 +1,4 @@
-﻿{
+{
   "parent": "minecraft:block/chest",
   "textures": {
     "particle": "minecraft:block/gold_block"

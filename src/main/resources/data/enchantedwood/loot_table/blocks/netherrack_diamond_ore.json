@@ -9,51 +9,36 @@
           "children": [
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "predicates": {
-                      "minecraft:enchantments": [
-                        {
-                          "enchantments": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ],
-              "name": "enchantedwood:netherrack_diamond_ore"
+              "name": "enchantedwood:netherrack_diamond_ore",
+              "condition": "minecraft:tool/can_silk_touch"
             },
             {
               "type": "minecraft:item",
-              "functions": [
+              "name": "minecraft:diamond",
+              "modifier": [
                 {
                   "enchantment": "minecraft:fortune",
                   "formula": "minecraft:ore_drops",
-                  "function": "minecraft:apply_bonus"
+                  "type": "minecraft:apply_bonus"
                 },
                 {
-                  "function": "minecraft:set_count",
                   "count": {
                     "type": "minecraft:uniform",
                     "min": 1,
                     "max": 1
-                  }
+                  },
+                  "type": "minecraft:set_count"
                 },
                 {
-                  "function": "minecraft:explosion_decay"
+                  "type": "minecraft:explosion_decay"
                 }
-              ],
-              "name": "minecraft:diamond"
+              ]
             }
           ]
         }
       ],
       "rolls": 1
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/netherrack_diamond_ore"
 }

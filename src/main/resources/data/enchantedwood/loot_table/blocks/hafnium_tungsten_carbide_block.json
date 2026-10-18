@@ -1,20 +1,19 @@
 {
-    "pools":  [
-                  {
-                      "conditions":  [
-                                         {
-                                             "condition":  "minecraft:survives_explosion"
-                                         }
-                                     ],
-                      "bonus_rolls":  0,
-                      "rolls":  1,
-                      "entries":  [
-                                      {
-                                          "name":  "enchantedwood:hafnium_tungsten_carbide_block",
-                                          "type":  "minecraft:item"
-                                      }
-                                  ]
-                  }
-              ],
-    "type":  "minecraft:block"
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "rolls": 1,
+      "entries": [
+        {
+          "name": "enchantedwood:hafnium_tungsten_carbide_block",
+          "type": "minecraft:item"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
+    }
+  ],
+  "type": "minecraft:block",
+  "random_sequence": "enchantedwood:blocks/hafnium_tungsten_carbide_block"
 }

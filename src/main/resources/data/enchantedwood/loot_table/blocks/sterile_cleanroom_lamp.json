@@ -10,11 +10,10 @@
           "name": "enchantedwood:sterile_cleanroom_lamp"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/sterile_cleanroom_lamp"
 }

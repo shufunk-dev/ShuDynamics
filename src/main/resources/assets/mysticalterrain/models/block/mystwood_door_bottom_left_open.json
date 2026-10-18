@@ -3,5 +3,6 @@
   "textures": {
     "bottom": "mysticalterrain:block/mystwood_door_bottom",
     "top": "mysticalterrain:block/mystwood_door_top"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

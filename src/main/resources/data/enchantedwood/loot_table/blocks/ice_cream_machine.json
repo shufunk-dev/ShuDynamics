@@ -10,11 +10,10 @@
           "name": "enchantedwood:ice_cream_machine"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/ice_cream_machine"
 }

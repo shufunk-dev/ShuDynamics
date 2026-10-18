@@ -2,18 +2,13 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "name": "enchantedwood:laser_quarry",
+          "modifier": [
             {
-              "function": "minecraft:copy_custom_data",
               "source": "block_entity",
               "ops": [
                 {
@@ -36,13 +31,17 @@
                   "target": "boundDimension",
                   "op": "replace"
                 }
-              ]
+              ],
+              "type": "minecraft:copy_custom_data"
             }
-          ],
-          "name": "enchantedwood:laser_quarry"
+          ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/laser_quarry"
 }

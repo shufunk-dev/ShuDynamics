@@ -2,5 +2,6 @@
   "parent": "minecraft:block/template_orientable_trapdoor_open",
   "textures": {
     "texture": "mysticalterrain:block/rimewood_trapdoor"
-  }
+  },
+  "render_type": "minecraft:cutout"
 }

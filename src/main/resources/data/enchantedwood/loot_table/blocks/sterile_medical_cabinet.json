@@ -10,11 +10,10 @@
           "name": "enchantedwood:sterile_medical_cabinet"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
-  ]
+  ],
+  "random_sequence": "enchantedwood:blocks/sterile_medical_cabinet"
 }
