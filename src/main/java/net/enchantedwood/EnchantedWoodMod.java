@@ -43,6 +43,7 @@ public class EnchantedWoodMod implements ModInitializer {
         net.enchantedwood.network.ModMessages.registerPackets();
         net.enchantedwood.world.dimension.ModDimensions.registerDimensions();
         net.enchantedwood.world.ModWorldGeneration.generateOres();
+        com.vexira.mysticalterrain.MysticalTerrain.init();
         net.enchantedwood.event.PlayerEquipmentState.register();
         net.enchantedwood.command.EquipmentCommand.register();
         net.enchantedwood.command.BossCommand.register();

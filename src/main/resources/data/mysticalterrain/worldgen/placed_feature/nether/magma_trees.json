@@ -11,34 +11,34 @@
       "trunk_radius": {
         "type": "minecraft:uniform",
         "min_inclusive": 1.4,
-        "max_exclusive": 2.0
+        "max_exclusive": 2
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 7.0,
-        "max_exclusive": 10.0
+        "min_inclusive": 7,
+        "max_exclusive": 10
       },
       "shape": 0.5,
       "reach": 12,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:blackstone"
+            "id": "minecraft:blackstone"
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:shroomlight"
+                "id": "minecraft:shroomlight"
               },
               "weight": 1
             }

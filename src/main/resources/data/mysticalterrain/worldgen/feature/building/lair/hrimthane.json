@@ -1,0 +1,75 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_glacier",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:packed_ice"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:packed_ice"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:snow_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:blue_ice"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:packed_ice"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:rimestone_bricks"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:rimestone_bricks"
+        }
+      },
+      "fixture": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:frost_bell"
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:hrimthane_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_hrimthane",
+    "treasure": "mysticalterrain:chests/lair_hrimthane"
+  }
+}

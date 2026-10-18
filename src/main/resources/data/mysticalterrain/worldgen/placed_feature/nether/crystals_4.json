@@ -15,55 +15,55 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:netherrack"
+                "id": "minecraft:netherrack"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:glowstone"
+                "id": "minecraft:glowstone"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:glowstone"
+            "id": "minecraft:glowstone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:glowstone"
+                "id": "minecraft:glowstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:yellow_stained_glass"
+                "id": "minecraft:yellow_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:glowstone"
+            "id": "minecraft:glowstone"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:glowstone"
+            "id": "minecraft:glowstone"
           }
         }
       }

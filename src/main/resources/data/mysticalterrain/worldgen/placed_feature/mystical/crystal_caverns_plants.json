@@ -1,81 +1,40 @@
 {
   "feature": {
-    "type": "minecraft:random_patch",
-    "config": {
-      "tries": 48,
-      "xz_spread": 6,
-      "y_spread": 2,
-      "feature": {
-        "feature": {
-          "type": "minecraft:simple_block",
-          "config": {
-            "to_place": {
-              "type": "minecraft:weighted_state_provider",
-              "entries": [
-                {
-                  "data": {
-                    "Name": "minecraft:amethyst_cluster",
-                    "Properties": {
-                      "facing": "up",
-                      "waterlogged": "false"
-                    }
-                  },
-                  "weight": 8
-                },
-                {
-                  "data": {
-                    "Name": "minecraft:large_amethyst_bud",
-                    "Properties": {
-                      "facing": "up",
-                      "waterlogged": "false"
-                    }
-                  },
-                  "weight": 12
-                },
-                {
-                  "data": {
-                    "Name": "minecraft:medium_amethyst_bud",
-                    "Properties": {
-                      "facing": "up",
-                      "waterlogged": "false"
-                    }
-                  },
-                  "weight": 12
-                }
-              ]
+    "type": "minecraft:simple_block",
+    "to_place": {
+      "type": "minecraft:weighted",
+      "entries": [
+        {
+          "data": {
+            "id": "minecraft:amethyst_cluster",
+            "properties": {
+              "facing": "up",
+              "waterlogged": "false"
             }
-          }
+          },
+          "weight": 8
         },
-        "placement": [
-          {
-            "type": "minecraft:block_predicate_filter",
-            "predicate": {
-              "type": "minecraft:all_of",
-              "predicates": [
-                {
-                  "type": "minecraft:matching_blocks",
-                  "blocks": "minecraft:air"
-                },
-                {
-                  "type": "minecraft:matching_blocks",
-                  "offset": [
-                    0,
-                    -1,
-                    0
-                  ],
-                  "blocks": [
-                    "minecraft:calcite",
-                    "minecraft:amethyst_block",
-                    "minecraft:deepslate",
-                    "minecraft:tuff",
-                    "minecraft:stone"
-                  ]
-                }
-              ]
+        {
+          "data": {
+            "id": "minecraft:large_amethyst_bud",
+            "properties": {
+              "facing": "up",
+              "waterlogged": "false"
             }
-          }
-        ]
-      }
+          },
+          "weight": 12
+        },
+        {
+          "data": {
+            "id": "minecraft:medium_amethyst_bud",
+            "properties": {
+              "facing": "up",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 12
+        }
+      ]
     }
   },
   "placement": [
@@ -111,12 +70,70 @@
       }
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": 1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 48
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "min": -6,
+        "max": 6,
+        "plateau": 0
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -2,
+        "max": 2,
+        "plateau": 0
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "min": -6,
+        "max": 6,
+        "plateau": 0
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [
+              0,
+              -1,
+              0
+            ],
+            "blocks": [
+              "minecraft:calcite",
+              "minecraft:amethyst_block",
+              "minecraft:deepslate",
+              "minecraft:tuff",
+              "minecraft:stone"
+            ]
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,84 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "kapok",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 130,
+      "max_inclusive": 170
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_exclusive": 9
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 38,
+      "max_exclusive": 50
+    },
+    "roots": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 9
+    },
+    "reach": 71,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:jungle_wood",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:jungle_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "minecraft:flowering_azalea_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "hanging": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:vine",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "up": "false",
+            "west": "false"
+          }
+        }
+      },
+      "hanging_chance": 0.3,
+      "hanging_length": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 4,
+        "max_inclusive": 14
+      }
+    }
+  }
+}

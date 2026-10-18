@@ -12,61 +12,61 @@
       "sides": 4,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:blackstone"
+                "id": "minecraft:blackstone"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:gilded_blackstone"
+                "id": "minecraft:gilded_blackstone"
               },
               "weight": 1
             }
           ]
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:polished_blackstone_bricks"
+            "id": "minecraft:polished_blackstone_bricks"
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:gilded_blackstone"
+            "id": "minecraft:gilded_blackstone"
           }
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:gilded_blackstone"
+                "id": "minecraft:gilded_blackstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:polished_blackstone"
+                "id": "minecraft:polished_blackstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:nether_gold_ore"
+                "id": "minecraft:nether_gold_ore"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:shroomlight"
+            "id": "minecraft:shroomlight"
           }
         }
       }

@@ -3,35 +3,35 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:granite"
+          "id": "minecraft:granite"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:granite"
+              "id": "minecraft:granite"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:andesite"
+              "id": "minecraft:andesite"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:mossy_cobblestone"
+              "id": "minecraft:mossy_cobblestone"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:russet_granite"
+              "id": "mysticalterrain:russet_granite"
             },
             "weight": 3
           }

@@ -1,0 +1,108 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "star",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_inclusive": 10
+    },
+    "materials": {
+      "light": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:sea_lantern"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:glowstone"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pearlescent_froglight",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:purple_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:magenta_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:light_blue_stained_glass"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:air"
+            },
+            "weight": 3
+          }
+        ]
+      },
+      "tip": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:white_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:light_blue_stained_glass"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:amethyst_block"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:purpur_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "anchor": "float",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 70,
+      "max_inclusive": 110
+    }
+  }
+}

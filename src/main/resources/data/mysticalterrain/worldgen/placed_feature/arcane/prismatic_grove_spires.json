@@ -3,35 +3,35 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:prismarine"
+          "id": "minecraft:prismarine"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:prismarine"
+              "id": "minecraft:prismarine"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:dark_prismarine"
+              "id": "minecraft:dark_prismarine"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:sea_lantern"
+              "id": "minecraft:sea_lantern"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:starstone"
+              "id": "mysticalterrain:starstone"
             },
             "weight": 3
           }

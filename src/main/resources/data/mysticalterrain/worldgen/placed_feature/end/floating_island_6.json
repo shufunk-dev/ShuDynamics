@@ -10,18 +10,18 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:blackstone"
+            "id": "minecraft:blackstone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:basalt",
-                "Properties": {
+                "id": "minecraft:basalt",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -29,22 +29,22 @@
             },
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:magma_block"
+            "id": "minecraft:magma_block"
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:magma_block"
+            "id": "minecraft:magma_block"
           }
         }
       },

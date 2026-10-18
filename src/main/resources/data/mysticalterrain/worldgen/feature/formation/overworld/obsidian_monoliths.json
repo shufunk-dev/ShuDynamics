@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "monoliths",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 12
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:red_sandstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:terracotta"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:obsidian"
+        }
+      },
+      "body": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:obsidian"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "id": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "tip": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:crying_obsidian"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:red_terracotta"
+        }
+      }
+    }
+  }
+}

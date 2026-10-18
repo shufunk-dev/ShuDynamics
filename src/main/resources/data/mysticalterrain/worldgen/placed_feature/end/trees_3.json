@@ -15,26 +15,26 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 10.0,
-        "max_exclusive": 14.0
+        "min_inclusive": 10,
+        "max_exclusive": 14
       },
       "droop": 0.7,
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:gloamwood_wood",
-            "Properties": {
+            "id": "mysticalterrain:gloamwood_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:gloamwood_leaves",
-            "Properties": {
+            "id": "mysticalterrain:gloamwood_leaves",
+            "properties": {
               "distance": "7",
               "persistent": "false",
               "waterlogged": "false"
@@ -42,10 +42,10 @@
           }
         },
         "fruit": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:verdant_froglight",
-            "Properties": {
+            "id": "minecraft:verdant_froglight",
+            "properties": {
               "axis": "y"
             }
           }

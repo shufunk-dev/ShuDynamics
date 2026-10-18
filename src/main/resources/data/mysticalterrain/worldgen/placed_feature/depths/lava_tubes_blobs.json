@@ -1,21 +1,19 @@
 {
   "feature": {
     "type": "minecraft:netherrack_replace_blobs",
-    "config": {
-      "target": {
-        "Name": "minecraft:stone"
-      },
-      "state": {
-        "Name": "minecraft:basalt",
-        "Properties": {
-          "axis": "y"
-        }
-      },
-      "radius": {
-        "type": "minecraft:uniform",
-        "min_inclusive": 4,
-        "max_inclusive": 8
+    "target": {
+      "id": "minecraft:stone"
+    },
+    "state": {
+      "id": "minecraft:basalt",
+      "properties": {
+        "axis": "y"
       }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_inclusive": 8
     }
   },
   "placement": [

@@ -1,0 +1,156 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "blossom",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 105,
+      "max_inclusive": 140
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_exclusive": 10
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 50,
+      "max_exclusive": 62
+    },
+    "reach": 86,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:pale_oak_wood",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:cherry_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "id": "minecraft:flowering_azalea_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "fruit": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:pearlescent_froglight",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "cover": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "north",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "north",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "north",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "north",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "east",
+                "flower_amount": "1"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "east",
+                "flower_amount": "2"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "east",
+                "flower_amount": "3"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:pink_petals",
+              "properties": {
+                "facing": "east",
+                "flower_amount": "4"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "fruit_chance": 0.004,
+      "cover_chance": 0.4
+    }
+  }
+}

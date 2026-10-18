@@ -3,23 +3,23 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:terracotta"
+              "id": "minecraft:terracotta"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:red_terracotta"
+              "id": "minecraft:red_terracotta"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:orange_terracotta"
+              "id": "minecraft:orange_terracotta"
             },
             "weight": 1
           }

@@ -12,12 +12,12 @@
       "sides": 4,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:deepslate",
-                "Properties": {
+                "id": "minecraft:deepslate",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -25,57 +25,57 @@
             },
             {
               "data": {
-                "Name": "minecraft:sculk"
+                "id": "minecraft:sculk"
               },
               "weight": 2
             }
           ]
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:deepslate_tiles"
+                "id": "minecraft:deepslate_tiles"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:sculk"
+                "id": "minecraft:sculk"
               },
               "weight": 1
             }
           ]
         },
         "accent": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sculk_catalyst",
-            "Properties": {
+            "id": "minecraft:sculk_catalyst",
+            "properties": {
               "bloom": "false"
             }
           }
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:cobbled_deepslate"
+            "id": "minecraft:cobbled_deepslate"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:ochre_froglight",
-            "Properties": {
+            "id": "minecraft:ochre_froglight",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sculk"
+            "id": "minecraft:sculk"
           }
         }
       }

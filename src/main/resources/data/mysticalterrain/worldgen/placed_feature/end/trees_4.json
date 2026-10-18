@@ -15,25 +15,25 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 7.0,
-        "max_exclusive": 10.0
+        "min_inclusive": 7,
+        "max_exclusive": 10
       },
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:rimewood_wood",
-            "Properties": {
+            "id": "mysticalterrain:rimewood_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:rimewood_leaves",
-            "Properties": {
+            "id": "mysticalterrain:rimewood_leaves",
+            "properties": {
               "distance": "7",
               "persistent": "false",
               "waterlogged": "false"

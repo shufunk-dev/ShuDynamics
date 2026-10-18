@@ -3,17 +3,17 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:sandrock"
+              "id": "mysticalterrain:sandrock"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "mysticalterrain:sandrock_bricks"
+              "id": "mysticalterrain:sandrock_bricks"
             },
             "weight": 1
           }

@@ -1,0 +1,297 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "library",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.05,
+      "max_exclusive": 0.35
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_fence",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:brown_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:green_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_planks"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:packed_mud"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:lantern",
+          "properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:ladder",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:lantern",
+          "properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mud"
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:moss_carpet"
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_planks"
+        }
+      },
+      "roof_slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof_stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mud_brick_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mud_brick_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:barrel",
+          "properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mangrove_log",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:mud_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:packed_mud"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:glass_pane",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:crafting_table"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:furnace",
+              "properties": {
+                "facing": "north",
+                "lit": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:smithing_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:anvil",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:loom",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:cartography_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:fletching_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:stonecutter",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:lectern",
+              "properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/overworld_supplies",
+    "treasure": "minecraft:chests/stronghold_library",
+    "spawners": [
+      "minecraft:zombie",
+      "minecraft:bogged",
+      "minecraft:spider"
+    ]
+  }
+}

@@ -10,46 +10,46 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:smooth_basalt"
+            "id": "minecraft:smooth_basalt"
           }
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:calcite"
+            "id": "minecraft:calcite"
           }
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 5
             },
             {
               "data": {
-                "Name": "minecraft:budding_amethyst"
+                "id": "minecraft:budding_amethyst"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 1
             }

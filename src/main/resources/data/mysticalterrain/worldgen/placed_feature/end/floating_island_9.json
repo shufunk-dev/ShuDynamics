@@ -10,42 +10,42 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:end_stone"
+            "id": "minecraft:end_stone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:end_stone_bricks"
+                "id": "minecraft:end_stone_bricks"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:end_stone"
+                "id": "minecraft:end_stone"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:end_rod",
-            "Properties": {
+            "id": "minecraft:end_rod",
+            "properties": {
               "facing": "up"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:purpur_pillar",
-            "Properties": {
+            "id": "minecraft:purpur_pillar",
+            "properties": {
               "axis": "y"
             }
           }

@@ -1,0 +1,65 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "shrine",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 9
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:stone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:cracked_stone_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:stone_bricks"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:chiseled_stone_bricks"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:moss_block"
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mossy_stone_bricks"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:lantern",
+          "properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/overworld_supplies"
+  }
+}

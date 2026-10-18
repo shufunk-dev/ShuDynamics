@@ -1,0 +1,53 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "crystal",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 60,
+      "max_inclusive": 90
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_exclusive": 6
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 28,
+      "max_exclusive": 36
+    },
+    "reach": 52,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:packed_ice"
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:blue_ice"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:packed_ice"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:sea_lantern"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "shrine",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 9
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:nether_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:cracked_nether_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:nether_bricks"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:chiseled_nether_bricks"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:red_nether_bricks"
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:red_nether_bricks"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:shroomlight"
+        }
+      }
+    },
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    },
+    "loot": "mysticalterrain:chests/nether_supplies"
+  }
+}

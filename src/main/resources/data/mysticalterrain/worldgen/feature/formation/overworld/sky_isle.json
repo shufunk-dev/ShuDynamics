@@ -1,0 +1,103 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "island",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 14,
+      "max_inclusive": 22
+    },
+    "materials": {
+      "body": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:dirt"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:andesite"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:moss_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:dirt"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:glowstone"
+        }
+      },
+      "tip": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:oak_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:azalea_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:flowering_azalea_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "anchor": "float",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 150,
+      "max_inclusive": 190
+    }
+  }
+}

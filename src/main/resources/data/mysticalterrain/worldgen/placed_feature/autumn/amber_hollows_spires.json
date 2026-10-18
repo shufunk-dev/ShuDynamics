@@ -3,29 +3,29 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:orange_terracotta"
+          "id": "minecraft:orange_terracotta"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:orange_terracotta"
+              "id": "minecraft:orange_terracotta"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:terracotta"
+              "id": "minecraft:terracotta"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 1
           }
@@ -76,9 +76,15 @@
       }
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": 1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"

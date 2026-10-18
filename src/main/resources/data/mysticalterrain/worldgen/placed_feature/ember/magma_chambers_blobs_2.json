@@ -1,24 +1,22 @@
 {
   "feature": {
     "type": "minecraft:netherrack_replace_blobs",
-    "config": {
-      "target": {
-        "Name": "minecraft:deepslate",
-        "Properties": {
-          "axis": "y"
-        }
-      },
-      "state": {
-        "Name": "minecraft:basalt",
-        "Properties": {
-          "axis": "y"
-        }
-      },
-      "radius": {
-        "type": "minecraft:uniform",
-        "min_inclusive": 3,
-        "max_inclusive": 6
+    "target": {
+      "id": "minecraft:deepslate",
+      "properties": {
+        "axis": "y"
       }
+    },
+    "state": {
+      "id": "minecraft:basalt",
+      "properties": {
+        "axis": "y"
+      }
+    },
+    "radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 6
     }
   },
   "placement": [

@@ -1,0 +1,85 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "spires",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18,
+      "max_inclusive": 30
+    },
+    "count": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 6
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:oxidized_copper"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:weathered_copper"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:oxidized_cut_copper"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:weathered_cut_copper"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:oxidized_copper"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:copper_bulb",
+          "properties": {
+            "lit": "false",
+            "powered": "false"
+          }
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:lightning_rod",
+          "properties": {
+            "facing": "up",
+            "powered": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:exposed_copper"
+        }
+      }
+    }
+  }
+}

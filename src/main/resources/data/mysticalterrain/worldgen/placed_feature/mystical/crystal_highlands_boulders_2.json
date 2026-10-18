@@ -3,23 +3,23 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 4
           },
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:amethyst_block"
+              "id": "minecraft:amethyst_block"
             },
             "weight": 1
           }

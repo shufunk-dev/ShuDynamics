@@ -7,42 +7,42 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 5
           },
           {
             "data": {
-              "Name": "minecraft:obsidian"
+              "id": "minecraft:obsidian"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:crying_obsidian"
+              "id": "minecraft:crying_obsidian"
             },
             "weight": 1
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:blackstone"
+          "id": "minecraft:blackstone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:obsidian"
+          "id": "minecraft:obsidian"
         }
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.4
     }
   },

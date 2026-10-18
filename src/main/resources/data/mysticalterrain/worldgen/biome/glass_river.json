@@ -41,7 +41,7 @@
     "water_color": "#4d75d7"
   },
   "has_precipitation": true,
-  "temperature": 0.0,
+  "temperature": 0,
   "features": [
     [],
     [

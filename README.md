@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.4.0--26.3%20%7C%20v2.4.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.4.0--v2--26.3%20%7C%20v2.4.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -21,12 +21,13 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.4.0-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.4.0-v2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
 | **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.4.0-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
 * 🌐 **Official Wiki & Documentation**: [https://shudynamics.shufunk.net](https://shudynamics.shufunk.net)
+* 🏔️ **Mystical Terrain Official Wiki**: [https://mysticalterrain.shufunk.net](https://mysticalterrain.shufunk.net)
 * 🌲 **Mystical Terrain (Standalone Mod Repo)**: [https://github.com/shufunk-dev/Mystical-Terrain](https://github.com/shufunk-dev/Mystical-Terrain)
 * ▶️ **Official Soundtrack (YouTube)**: [https://www.youtube.com/playlist?list=PLAEoPqUv2z90](https://www.youtube.com/playlist?list=PLAEoPqUv2z90)
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)

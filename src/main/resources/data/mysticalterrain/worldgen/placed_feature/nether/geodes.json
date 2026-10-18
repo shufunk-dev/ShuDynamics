@@ -10,24 +10,24 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:blackstone"
+            "id": "minecraft:blackstone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:basalt",
-                "Properties": {
+                "id": "minecraft:basalt",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -36,34 +36,34 @@
           ]
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 5
             },
             {
               "data": {
-                "Name": "minecraft:budding_amethyst"
+                "id": "minecraft:budding_amethyst"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 1
             }

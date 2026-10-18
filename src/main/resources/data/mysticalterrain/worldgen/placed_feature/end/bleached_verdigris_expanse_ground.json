@@ -7,48 +7,48 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:oxidized_copper"
+              "id": "minecraft:oxidized_copper"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:weathered_copper"
+              "id": "minecraft:weathered_copper"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 2
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:bone_block",
-              "Properties": {
+              "id": "minecraft:bone_block",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -56,7 +56,7 @@
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.5
     }
   },

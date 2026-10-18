@@ -1,0 +1,62 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "elder",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 28,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 4,
+      "max_exclusive": 5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15,
+      "max_exclusive": 19
+    },
+    "veins": 5,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:rimewood_wood",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:rimewood_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:snow_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:blue_ice"
+        }
+      }
+    }
+  }
+}

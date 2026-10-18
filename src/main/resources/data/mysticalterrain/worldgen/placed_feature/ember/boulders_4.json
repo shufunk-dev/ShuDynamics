@@ -3,12 +3,12 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:basalt",
-              "Properties": {
+              "id": "minecraft:basalt",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -16,19 +16,19 @@
           },
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:magma_block"
+              "id": "minecraft:magma_block"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:ashstone"
+              "id": "mysticalterrain:ashstone"
             },
             "weight": 4
           }

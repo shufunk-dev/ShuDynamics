@@ -15,61 +15,61 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:yellow_terracotta"
+                "id": "minecraft:yellow_terracotta"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:orange_terracotta"
+                "id": "minecraft:orange_terracotta"
               },
               "weight": 1
             }
           ]
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:yellow_terracotta"
+            "id": "minecraft:yellow_terracotta"
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:glowstone"
+            "id": "minecraft:glowstone"
           }
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:yellow_terracotta"
+                "id": "minecraft:yellow_terracotta"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:orange_terracotta"
+                "id": "minecraft:orange_terracotta"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:magma_block"
+            "id": "minecraft:magma_block"
           }
         }
       }

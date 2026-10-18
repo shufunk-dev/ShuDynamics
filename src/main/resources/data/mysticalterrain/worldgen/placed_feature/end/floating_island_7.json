@@ -10,18 +10,18 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:calcite"
+            "id": "minecraft:calcite"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:bone_block",
-                "Properties": {
+                "id": "minecraft:bone_block",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -29,26 +29,26 @@
             },
             {
               "data": {
-                "Name": "minecraft:calcite"
+                "id": "minecraft:calcite"
               },
               "weight": 2
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pearlescent_froglight",
-            "Properties": {
+            "id": "minecraft:pearlescent_froglight",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:bone_block",
-            "Properties": {
+            "id": "minecraft:bone_block",
+            "properties": {
               "axis": "y"
             }
           }

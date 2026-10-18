@@ -1,15 +1,11 @@
 {
   "feature": {
     "type": "minecraft:sculk_patch",
-    "config": {
-      "amount_per_charge": 20,
-      "catalyst_chance": 0.0,
-      "charge_count": 5,
-      "extra_rare_growths": 0,
-      "growth_rounds": 0,
-      "spread_attempts": 40,
-      "spread_rounds": 1
-    }
+    "amount_per_charge": 20,
+    "charge_count": 5,
+    "growth_rounds": 0,
+    "spread_attempts": 40,
+    "spread_rounds": 1
   },
   "placement": [
     {

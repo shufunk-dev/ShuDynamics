@@ -10,38 +10,38 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:packed_ice"
+            "id": "minecraft:packed_ice"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:snow_block"
+                "id": "minecraft:snow_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:packed_ice"
+                "id": "minecraft:packed_ice"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sea_lantern"
+            "id": "minecraft:sea_lantern"
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:blue_ice"
+            "id": "minecraft:blue_ice"
           }
         }
       },

@@ -3,26 +3,26 @@
     "type": "mysticalterrain:colossal_tree",
     "config": {
       "trunk_provider": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:sporewood_log",
-          "Properties": {
+          "id": "mysticalterrain:sporewood_log",
+          "properties": {
             "axis": "y"
           }
         }
       },
       "foliage_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:sporecap_block"
+              "id": "mysticalterrain:sporecap_block"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "mysticalterrain:glowcap_block"
+              "id": "mysticalterrain:glowcap_block"
             },
             "weight": 1
           }

@@ -3,41 +3,41 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:stone"
+          "id": "minecraft:stone"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:mossy_cobblestone"
+              "id": "minecraft:mossy_cobblestone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:andesite"
+              "id": "minecraft:andesite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:stone"
+              "id": "minecraft:stone"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:moss_block"
+              "id": "minecraft:moss_block"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:fossil_stone"
+              "id": "mysticalterrain:fossil_stone"
             },
             "weight": 3
           }

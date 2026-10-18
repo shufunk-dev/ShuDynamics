@@ -1,10 +1,8 @@
 {
   "feature": {
     "type": "minecraft:random_selector",
-    "config": {
-      "features": [],
-      "default": "minecraft:tall_mangrove_checked"
-    }
+    "features": [],
+    "default": "minecraft:tall_mangrove_checked"
   },
   "placement": [
     {

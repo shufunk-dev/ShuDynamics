@@ -4,24 +4,24 @@
     {
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 4.0,
-        "max": 8.0
+        "min": 4,
+        "max": 8
       },
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond",
           "weight": 8,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 5.0
+                "min": 2,
+                "max": 5
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -29,15 +29,15 @@
           "type": "minecraft:item",
           "name": "minecraft:emerald",
           "weight": 8,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 6.0
+                "min": 2,
+                "max": 6
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -45,15 +45,15 @@
           "type": "minecraft:item",
           "name": "minecraft:gold_ingot",
           "weight": 12,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 7.0
+                "min": 2,
+                "max": 7
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -61,15 +61,15 @@
           "type": "minecraft:item",
           "name": "minecraft:iron_ingot",
           "weight": 12,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 4.0,
-                "max": 8.0
+                "min": 4,
+                "max": 8
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -77,15 +77,15 @@
           "type": "minecraft:item",
           "name": "minecraft:ender_pearl",
           "weight": 8,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 5.0
+                "min": 2,
+                "max": 5
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -93,15 +93,15 @@
           "type": "minecraft:item",
           "name": "minecraft:experience_bottle",
           "weight": 8,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 8.0
+                "min": 3,
+                "max": 8
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -114,15 +114,15 @@
           "type": "minecraft:item",
           "name": "minecraft:ender_eye",
           "weight": 4,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "min": 1,
+                "max": 2
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -135,15 +135,15 @@
           "type": "minecraft:item",
           "name": "minecraft:dragon_breath",
           "weight": 3,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "min": 1,
+                "max": 2
               },
-              "add": false
+              "add": false,
+              "type": "minecraft:set_count"
             }
           ]
         },
@@ -151,10 +151,10 @@
           "type": "minecraft:item",
           "name": "minecraft:book",
           "weight": 10,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_randomly",
-              "options": "#minecraft:on_random_loot"
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_randomly"
             }
           ]
         },
@@ -167,23 +167,23 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond_sword",
           "weight": 3,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
-                "min": 20.0,
-                "max": 39.0
+                "min": 20,
+                "max": 39
               },
-              "options": "#minecraft:on_random_loot"
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
             },
             {
-              "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
                 "min": 0.3,
                 "max": 0.9
-              }
+              },
+              "type": "minecraft:set_damage"
             }
           ]
         },
@@ -191,23 +191,23 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond_chestplate",
           "weight": 3,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
-                "min": 20.0,
-                "max": 39.0
+                "min": 20,
+                "max": 39
               },
-              "options": "#minecraft:on_random_loot"
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
             },
             {
-              "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
                 "min": 0.3,
                 "max": 0.9
-              }
+              },
+              "type": "minecraft:set_damage"
             }
           ]
         },
@@ -215,23 +215,23 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond_pickaxe",
           "weight": 3,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
-                "min": 20.0,
-                "max": 39.0
+                "min": 20,
+                "max": 39
               },
-              "options": "#minecraft:on_random_loot"
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
             },
             {
-              "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
                 "min": 0.3,
                 "max": 0.9
-              }
+              },
+              "type": "minecraft:set_damage"
             }
           ]
         },
@@ -239,23 +239,23 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond_helmet",
           "weight": 3,
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
-                "min": 20.0,
-                "max": 39.0
+                "min": 20,
+                "max": 39
               },
-              "options": "#minecraft:on_random_loot"
+              "options": "#minecraft:on_random_loot",
+              "type": "minecraft:enchant_with_levels"
             },
             {
-              "function": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
                 "min": 0.3,
                 "max": 0.9
-              }
+              },
+              "type": "minecraft:set_damage"
             }
           ]
         }
@@ -264,10 +264,10 @@
     {
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 0.0,
-        "max": 1.0
+        "min": 0,
+        "max": 1
       },
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",

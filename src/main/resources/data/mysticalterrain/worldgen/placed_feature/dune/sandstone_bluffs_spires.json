@@ -3,35 +3,35 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:sandstone"
+          "id": "minecraft:sandstone"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:sandstone"
+              "id": "minecraft:sandstone"
             },
             "weight": 4
           },
           {
             "data": {
-              "Name": "minecraft:smooth_sandstone"
+              "id": "minecraft:smooth_sandstone"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:chiseled_sandstone"
+              "id": "minecraft:chiseled_sandstone"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:sandrock"
+              "id": "mysticalterrain:sandrock"
             },
             "weight": 4
           }

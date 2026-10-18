@@ -9,7 +9,7 @@
     "minecraft:cave_extra_underground",
     "minecraft:canyon"
   ],
-  "downfall": 0.0,
+  "downfall": 0,
   "effects": {
     "dry_foliage_color": "#8d7235",
     "foliage_color": "#30b924",
@@ -17,7 +17,7 @@
     "water_color": "#14b1dd"
   },
   "has_precipitation": false,
-  "temperature": 2.0,
+  "temperature": 2,
   "features": [
     [],
     [

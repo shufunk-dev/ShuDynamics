@@ -1,0 +1,83 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "elder",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 28,
+      "max_inclusive": 40
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3.5,
+      "max_exclusive": 5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 15,
+      "max_exclusive": 19
+    },
+    "veins": 5,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:charwood_wood",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:basalt",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:ember_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "id": "minecraft:nether_wart_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "vein": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:magma_block"
+        }
+      },
+      "fruit": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:shroomlight"
+        }
+      },
+      "fruit_chance": 0.02
+    }
+  }
+}

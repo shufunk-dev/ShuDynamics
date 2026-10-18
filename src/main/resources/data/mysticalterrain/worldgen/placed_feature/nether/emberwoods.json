@@ -15,57 +15,57 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 10.0,
-        "max_exclusive": 13.0
+        "min_inclusive": 10,
+        "max_exclusive": 13
       },
       "veins": 4,
       "reach": 14,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:crimson_hyphae",
-            "Properties": {
+            "id": "minecraft:crimson_hyphae",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:nether_wart_block"
+                "id": "minecraft:nether_wart_block"
               },
               "weight": 6
             },
             {
               "data": {
-                "Name": "minecraft:shroomlight"
+                "id": "minecraft:shroomlight"
               },
               "weight": 1
             }
           ]
         },
         "vein": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:magma_block"
+            "id": "minecraft:magma_block"
           }
         },
         "hanging": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:weeping_vines",
-            "Properties": {
+            "id": "minecraft:weeping_vines",
+            "properties": {
               "age": "0"
             }
           }
         },
         "cover": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:crimson_roots"
+            "id": "minecraft:crimson_roots"
           }
         },
         "hanging_chance": 0.25,

@@ -1,50 +1,13 @@
 {
   "feature": {
-    "type": "minecraft:random_patch",
-    "config": {
-      "tries": 16,
-      "xz_spread": 6,
-      "y_spread": 2,
-      "feature": {
-        "feature": {
-          "type": "minecraft:simple_block",
-          "config": {
-            "to_place": {
-              "type": "minecraft:simple_state_provider",
-              "state": {
-                "Name": "minecraft:end_rod",
-                "Properties": {
-                  "facing": "up"
-                }
-              }
-            }
-          }
-        },
-        "placement": [
-          {
-            "type": "minecraft:block_predicate_filter",
-            "predicate": {
-              "type": "minecraft:all_of",
-              "predicates": [
-                {
-                  "type": "minecraft:matching_blocks",
-                  "blocks": "minecraft:air"
-                },
-                {
-                  "type": "minecraft:matching_blocks",
-                  "offset": [
-                    0,
-                    -1,
-                    0
-                  ],
-                  "blocks": [
-                    "minecraft:snow_block"
-                  ]
-                }
-              ]
-            }
-          }
-        ]
+    "type": "minecraft:simple_block",
+    "to_place": {
+      "type": "minecraft:simple",
+      "state": {
+        "id": "minecraft:end_rod",
+        "properties": {
+          "facing": "up"
+        }
       }
     }
   },
@@ -62,6 +25,54 @@
     },
     {
       "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 16
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "min": -6,
+        "max": 6,
+        "plateau": 0
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -2,
+        "max": 2,
+        "plateau": 0
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "min": -6,
+        "max": 6,
+        "plateau": 0
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [
+              0,
+              -1,
+              0
+            ],
+            "blocks": [
+              "minecraft:snow_block"
+            ]
+          }
+        ]
+      }
     }
   ]
 }

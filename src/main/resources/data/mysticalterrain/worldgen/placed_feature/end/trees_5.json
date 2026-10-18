@@ -15,27 +15,27 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 12.0,
-        "max_exclusive": 16.0
+        "min_inclusive": 12,
+        "max_exclusive": 16
       },
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:mystwood_wood",
-            "Properties": {
+            "id": "mysticalterrain:mystwood_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:mystwood_leaves",
-                "Properties": {
+                "id": "mysticalterrain:mystwood_leaves",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -45,8 +45,8 @@
             },
             {
               "data": {
-                "Name": "mysticalterrain:starbloom_blossoms",
-                "Properties": {
+                "id": "mysticalterrain:starbloom_blossoms",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -57,10 +57,10 @@
           ]
         },
         "fruit": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pearlescent_froglight",
-            "Properties": {
+            "id": "minecraft:pearlescent_froglight",
+            "properties": {
               "axis": "y"
             }
           }

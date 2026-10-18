@@ -7,36 +7,36 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 6
           },
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 1
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:amethyst_block"
+          "id": "minecraft:amethyst_block"
         }
       },
-      "accent_scale": 10.0,
+      "accent_scale": 10,
       "accent_threshold": 0.45
     }
   },

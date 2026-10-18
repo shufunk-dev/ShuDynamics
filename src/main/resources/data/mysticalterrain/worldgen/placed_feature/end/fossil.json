@@ -10,21 +10,21 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:bone_block",
-            "Properties": {
+            "id": "minecraft:bone_block",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "accent": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:bone_block",
-                "Properties": {
+                "id": "minecraft:bone_block",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -32,7 +32,7 @@
             },
             {
               "data": {
-                "Name": "minecraft:calcite"
+                "id": "minecraft:calcite"
               },
               "weight": 1
             }

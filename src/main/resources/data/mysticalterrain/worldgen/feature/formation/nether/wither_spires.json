@@ -1,0 +1,81 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "spires",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 24,
+      "max_inclusive": 40
+    },
+    "count": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 6
+    },
+    "lean": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.2,
+      "max_exclusive": 0.6
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:blackstone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:polished_blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:polished_blackstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:blackstone"
+        }
+      },
+      "tip": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:gilded_blackstone"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:shroomlight"
+        }
+      }
+    },
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    }
+  }
+}

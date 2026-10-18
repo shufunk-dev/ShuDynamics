@@ -1,0 +1,57 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "conifer",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 44,
+      "max_inclusive": 70
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2.5,
+      "max_exclusive": 3.5
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 10,
+      "max_exclusive": 13
+    },
+    "droop": 0.6,
+    "shape": 0.3,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:spruce_wood",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:spruce_leaves",
+              "properties": {
+                "distance": "7",
+                "persistent": "false",
+                "waterlogged": "false"
+              }
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "minecraft:snow_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

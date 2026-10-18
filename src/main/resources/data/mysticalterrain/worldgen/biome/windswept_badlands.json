@@ -16,14 +16,14 @@
     "minecraft:canyon"
   ],
   "creature_spawn_probability": 0.03,
-  "downfall": 0.0,
+  "downfall": 0,
   "effects": {
     "foliage_color": "#9e814d",
     "grass_color": "#90814d",
     "water_color": "#3f76e4"
   },
   "has_precipitation": false,
-  "temperature": 2.0,
+  "temperature": 2,
   "features": [
     [],
     [

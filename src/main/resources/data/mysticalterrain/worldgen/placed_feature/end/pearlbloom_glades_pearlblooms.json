@@ -10,30 +10,30 @@
       },
       "trunk_radius": {
         "type": "minecraft:uniform",
-        "min_inclusive": 2.0,
-        "max_exclusive": 3.0
+        "min_inclusive": 2,
+        "max_exclusive": 3
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 14.0,
-        "max_exclusive": 18.0
+        "min_inclusive": 14,
+        "max_exclusive": 18
       },
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pale_oak_wood",
-            "Properties": {
+            "id": "minecraft:pale_oak_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:cherry_leaves",
-            "Properties": {
+            "id": "minecraft:cherry_leaves",
+            "properties": {
               "distance": "7",
               "persistent": "false",
               "waterlogged": "false"
@@ -41,30 +41,30 @@
           }
         },
         "fruit": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pearlescent_froglight",
-            "Properties": {
+            "id": "minecraft:pearlescent_froglight",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "hanging": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pale_hanging_moss",
-            "Properties": {
+            "id": "minecraft:pale_hanging_moss",
+            "properties": {
               "tip": "true"
             }
           }
         },
         "cover": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "north",
                   "flower_amount": "1"
                 }
@@ -73,8 +73,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "north",
                   "flower_amount": "2"
                 }
@@ -83,8 +83,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "north",
                   "flower_amount": "3"
                 }
@@ -93,8 +93,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "north",
                   "flower_amount": "4"
                 }
@@ -103,8 +103,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "east",
                   "flower_amount": "1"
                 }
@@ -113,8 +113,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "east",
                   "flower_amount": "2"
                 }
@@ -123,8 +123,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "east",
                   "flower_amount": "3"
                 }
@@ -133,8 +133,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:pink_petals",
-                "Properties": {
+                "id": "minecraft:pink_petals",
+                "properties": {
                   "facing": "east",
                   "flower_amount": "4"
                 }

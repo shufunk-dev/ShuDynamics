@@ -12,60 +12,60 @@
       "sides": 4,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:oxidized_copper"
+                "id": "minecraft:oxidized_copper"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:weathered_copper"
+                "id": "minecraft:weathered_copper"
               },
               "weight": 1
             }
           ]
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:oxidized_cut_copper"
+                "id": "minecraft:oxidized_cut_copper"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:weathered_cut_copper"
+                "id": "minecraft:weathered_cut_copper"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:oxidized_copper"
+            "id": "minecraft:oxidized_copper"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:copper_bulb",
-            "Properties": {
+            "id": "minecraft:copper_bulb",
+            "properties": {
               "lit": "false",
               "powered": "false"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:lightning_rod",
-            "Properties": {
+            "id": "minecraft:lightning_rod",
+            "properties": {
               "facing": "up",
               "powered": "false",
               "waterlogged": "false"
@@ -73,9 +73,9 @@
           }
         },
         "accent": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:exposed_copper"
+            "id": "minecraft:exposed_copper"
           }
         }
       }

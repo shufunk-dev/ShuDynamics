@@ -15,18 +15,18 @@
       },
       "materials": {
         "light": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:sea_lantern"
+                "id": "minecraft:sea_lantern"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:pearlescent_froglight",
-                "Properties": {
+                "id": "minecraft:pearlescent_froglight",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -35,72 +35,72 @@
           ]
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:light_blue_stained_glass"
+                "id": "minecraft:light_blue_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:magenta_stained_glass"
+                "id": "minecraft:magenta_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:lime_stained_glass"
+                "id": "minecraft:lime_stained_glass"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:yellow_stained_glass"
+                "id": "minecraft:yellow_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:light_blue_stained_glass"
+                "id": "minecraft:light_blue_stained_glass"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:magenta_stained_glass"
+                "id": "minecraft:magenta_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:white_stained_glass"
+                "id": "minecraft:white_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:light_blue_stained_glass"
+                "id": "minecraft:light_blue_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "accent": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:amethyst_block"
+            "id": "minecraft:amethyst_block"
           }
         }
       }

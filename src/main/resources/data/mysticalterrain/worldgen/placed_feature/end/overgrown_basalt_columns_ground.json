@@ -7,18 +7,18 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:smooth_basalt"
+              "id": "minecraft:smooth_basalt"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:basalt",
-              "Properties": {
+              "id": "minecraft:basalt",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -26,37 +26,37 @@
           },
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 2
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:moss_block"
+              "id": "minecraft:moss_block"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "mysticalterrain:primal_moss"
+              "id": "mysticalterrain:primal_moss"
             },
             "weight": 1
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.4
     }
   },

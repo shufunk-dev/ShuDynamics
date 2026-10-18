@@ -15,27 +15,27 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 13.0,
-        "max_exclusive": 17.0
+        "min_inclusive": 13,
+        "max_exclusive": 17
       },
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:silverbark_wood",
-            "Properties": {
+            "id": "mysticalterrain:silverbark_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:silverbark_leaves",
-                "Properties": {
+                "id": "mysticalterrain:silverbark_leaves",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -45,8 +45,8 @@
             },
             {
               "data": {
-                "Name": "mysticalterrain:wisteria_blossoms",
-                "Properties": {
+                "id": "mysticalterrain:wisteria_blossoms",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -57,10 +57,10 @@
           ]
         },
         "hanging": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pale_hanging_moss",
-            "Properties": {
+            "id": "minecraft:pale_hanging_moss",
+            "properties": {
               "tip": "true"
             }
           }

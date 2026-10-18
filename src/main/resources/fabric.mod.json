@@ -23,7 +23,12 @@
     ]
   },
   "mixins": [
-    "enchantedwood.mixins.json"
+    "enchantedwood.mixins.json",
+    "mysticalterrain.mixins.json",
+    {
+      "config": "mysticalterrain.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=0.19.5",

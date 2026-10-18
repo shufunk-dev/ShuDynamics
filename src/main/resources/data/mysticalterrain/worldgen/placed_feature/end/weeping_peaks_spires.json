@@ -3,15 +3,15 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:crying_obsidian"
+          "id": "minecraft:crying_obsidian"
         }
       },
       "shell": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:obsidian"
+          "id": "minecraft:obsidian"
         }
       },
       "height": {

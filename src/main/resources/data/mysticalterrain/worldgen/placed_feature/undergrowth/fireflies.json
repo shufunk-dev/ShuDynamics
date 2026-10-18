@@ -1,5 +1,5 @@
 {
-  "feature": "minecraft:patch_firefly_bush",
+  "feature": "minecraft:firefly_bush",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
@@ -27,7 +27,7 @@
           {
             "type": "minecraft:would_survive",
             "state": {
-              "Name": "minecraft:firefly_bush"
+              "id": "minecraft:firefly_bush"
             }
           },
           {

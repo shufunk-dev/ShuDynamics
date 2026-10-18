@@ -7,13 +7,14 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:blaze_powder",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "min": 0,
-                "max": 2
-              }
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
             }
           ]
         }
@@ -27,15 +28,18 @@
           "name": "mysticalterrain:cinder_heart"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:killed_by_player"
-        },
-        {
-          "condition": "minecraft:random_chance",
-          "chance": 0.02
-        }
-      ]
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:killed_by_player"
+          },
+          {
+            "chance": 0.02,
+            "type": "minecraft:random_chance"
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,72 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "ruins",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 13
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:purpur_block"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:end_stone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:end_stone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:purpur_block"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "minecraft:end_stone_bricks"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:purpur_pillar",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:end_rod",
+          "properties": {
+            "facing": "up"
+          }
+        }
+      }
+    },
+    "loot": "minecraft:chests/end_city_treasure"
+  }
+}

@@ -3,17 +3,17 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:runestone"
+              "id": "mysticalterrain:runestone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 1
           }

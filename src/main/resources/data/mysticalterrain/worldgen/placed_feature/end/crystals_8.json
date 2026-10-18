@@ -15,69 +15,69 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:netherrack"
+                "id": "minecraft:netherrack"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:smooth_quartz"
+                "id": "minecraft:smooth_quartz"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:quartz_block"
+                "id": "minecraft:quartz_block"
               },
               "weight": 1
             }
           ]
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:quartz_block"
+                "id": "minecraft:quartz_block"
               },
               "weight": 4
             },
             {
               "data": {
-                "Name": "minecraft:smooth_quartz"
+                "id": "minecraft:smooth_quartz"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:quartz_block"
+            "id": "minecraft:quartz_block"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:glowstone"
+            "id": "minecraft:glowstone"
           }
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:quartz_block"
+                "id": "minecraft:quartz_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:white_stained_glass"
+                "id": "minecraft:white_stained_glass"
               },
               "weight": 1
             }

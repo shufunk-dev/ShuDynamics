@@ -1,0 +1,89 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "gate",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:deepslate_tiles"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:cobbled_deepslate"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:sculk"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:deepslate_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:cracked_deepslate_bricks"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:deepslate_tiles"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:sculk"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:sculk_catalyst",
+          "properties": {
+            "bloom": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:soul_lantern",
+          "properties": {
+            "hanging": "true",
+            "waterlogged": "false"
+          }
+        }
+      }
+    }
+  }
+}

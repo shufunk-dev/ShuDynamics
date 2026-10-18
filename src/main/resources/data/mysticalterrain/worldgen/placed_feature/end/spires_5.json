@@ -3,15 +3,15 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:runestone"
+          "id": "mysticalterrain:runestone"
         }
       },
       "shell": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:runestone_bricks"
+          "id": "mysticalterrain:runestone_bricks"
         }
       },
       "height": {

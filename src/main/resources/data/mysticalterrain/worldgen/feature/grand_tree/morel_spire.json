@@ -1,0 +1,53 @@
+{
+  "type": "mysticalterrain:grand_tree",
+  "config": {
+    "style": "mushroom",
+    "height": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 20,
+      "max_inclusive": 30
+    },
+    "trunk_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_exclusive": 3
+    },
+    "crown": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_exclusive": 10
+    },
+    "shape": 1,
+    "reach": 21,
+    "blocks": {
+      "trunk": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mushroom_stem",
+          "properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      },
+      "leaves": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:brown_mushroom_block",
+          "properties": {
+            "down": "true",
+            "east": "true",
+            "north": "true",
+            "south": "true",
+            "up": "true",
+            "west": "true"
+          }
+        }
+      }
+    }
+  }
+}

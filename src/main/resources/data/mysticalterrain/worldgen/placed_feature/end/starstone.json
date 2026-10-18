@@ -3,23 +3,23 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:starstone"
+              "id": "mysticalterrain:starstone"
             },
             "weight": 4
           },
           {
             "data": {
-              "Name": "mysticalterrain:starstone_bricks"
+              "id": "mysticalterrain:starstone_bricks"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 2
           }

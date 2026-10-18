@@ -1,0 +1,64 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_nest",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:fossil_stone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:coarse_dirt"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:packed_mud"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:primal_moss"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:bone_block",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:hay_block",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:grothmaw_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_grothmaw",
+    "treasure": "mysticalterrain:chests/lair_grothmaw"
+  }
+}

@@ -3,21 +3,21 @@
     "type": "mysticalterrain:colossal_tree",
     "config": {
       "trunk_provider": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:silverbark_log",
-          "Properties": {
+          "id": "mysticalterrain:silverbark_log",
+          "properties": {
             "axis": "y"
           }
         }
       },
       "foliage_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:silverbark_leaves",
-              "Properties": {
+              "id": "mysticalterrain:silverbark_leaves",
+              "properties": {
                 "distance": "7",
                 "persistent": "false",
                 "waterlogged": "false"
@@ -27,8 +27,8 @@
           },
           {
             "data": {
-              "Name": "mysticalterrain:wisteria_blossoms",
-              "Properties": {
+              "id": "mysticalterrain:wisteria_blossoms",
+              "properties": {
                 "distance": "7",
                 "persistent": "false",
                 "waterlogged": "false"

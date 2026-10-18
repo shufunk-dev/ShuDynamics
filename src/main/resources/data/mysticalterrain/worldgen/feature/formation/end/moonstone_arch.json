@@ -1,0 +1,57 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "gate",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 7,
+      "max_inclusive": 10
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:moonstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:moonstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:moonstone"
+        }
+      },
+      "shell": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:moonstone_bricks"
+        }
+      },
+      "accent": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:calcite"
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:pearlescent_froglight",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      }
+    }
+  }
+}

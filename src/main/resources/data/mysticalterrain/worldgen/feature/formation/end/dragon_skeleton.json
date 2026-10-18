@@ -1,0 +1,42 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "fossil",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 18,
+      "max_inclusive": 28
+    },
+    "materials": {
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:bone_block",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "accent": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:bone_block",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:calcite"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    }
+  }
+}

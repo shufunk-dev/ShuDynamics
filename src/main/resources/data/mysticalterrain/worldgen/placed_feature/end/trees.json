@@ -15,28 +15,28 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 11.0,
-        "max_exclusive": 15.0
+        "min_inclusive": 11,
+        "max_exclusive": 15
       },
       "shape": 0.55,
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:starbark_wood",
-            "Properties": {
+            "id": "mysticalterrain:starbark_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:starbark_leaves",
-                "Properties": {
+                "id": "mysticalterrain:starbark_leaves",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -46,17 +46,17 @@
             },
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "fruit": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:pearlescent_froglight",
-            "Properties": {
+            "id": "minecraft:pearlescent_froglight",
+            "properties": {
               "axis": "y"
             }
           }

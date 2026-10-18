@@ -7,36 +7,36 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:pale_moss_block"
+          "id": "minecraft:pale_moss_block"
         }
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 0,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:fae_moss"
+              "id": "mysticalterrain:fae_moss"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "mysticalterrain:gloam_moss"
+              "id": "mysticalterrain:gloam_moss"
             },
             "weight": 1
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.5
     }
   },

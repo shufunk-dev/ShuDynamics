@@ -10,35 +10,35 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:warped_wart_block"
+                "id": "minecraft:warped_wart_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:warped_nylium"
+                "id": "minecraft:warped_nylium"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:warped_wart_block"
+                "id": "minecraft:warped_wart_block"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:warped_hyphae",
-                "Properties": {
+                "id": "minecraft:warped_hyphae",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -47,15 +47,15 @@
           ]
         },
         "accent": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:shroomlight"
+            "id": "minecraft:shroomlight"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:shroomlight"
+            "id": "minecraft:shroomlight"
           }
         }
       }

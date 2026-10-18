@@ -12,18 +12,18 @@
       "sides": 6,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:smooth_basalt"
+                "id": "minecraft:smooth_basalt"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:basalt",
-                "Properties": {
+                "id": "minecraft:basalt",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -32,28 +32,28 @@
           ]
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:polished_basalt",
-            "Properties": {
+            "id": "minecraft:polished_basalt",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:basalt",
-            "Properties": {
+            "id": "minecraft:basalt",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:polished_basalt",
-            "Properties": {
+            "id": "minecraft:polished_basalt",
+            "properties": {
               "axis": "y"
             }
           }

@@ -10,35 +10,35 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:end_stone"
+            "id": "minecraft:end_stone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:moss_block"
+                "id": "minecraft:moss_block"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:end_stone"
+                "id": "minecraft:end_stone"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:verdant_froglight",
-                "Properties": {
+                "id": "minecraft:verdant_froglight",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -46,19 +46,19 @@
             },
             {
               "data": {
-                "Name": "minecraft:shroomlight"
+                "id": "minecraft:shroomlight"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:azalea_leaves",
-                "Properties": {
+                "id": "minecraft:azalea_leaves",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"
@@ -68,8 +68,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:flowering_azalea_leaves",
-                "Properties": {
+                "id": "minecraft:flowering_azalea_leaves",
+                "properties": {
                   "distance": "7",
                   "persistent": "false",
                   "waterlogged": "false"

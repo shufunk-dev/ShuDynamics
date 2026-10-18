@@ -1,0 +1,68 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "crater",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 8,
+      "max_inclusive": 14
+    },
+    "materials": {
+      "base": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:magma_block"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:blackstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:basalt",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "body": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:obsidian"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:crying_obsidian"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:magma_block"
+            },
+            "weight": 2
+          }
+        ]
+      }
+    },
+    "anchor": "floor",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 40,
+      "max_inclusive": 110
+    }
+  }
+}

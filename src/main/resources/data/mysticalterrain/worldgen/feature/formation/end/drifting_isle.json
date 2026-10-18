@@ -1,0 +1,82 @@
+{
+  "type": "mysticalterrain:formation",
+  "config": {
+    "kind": "island",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 12,
+      "max_inclusive": 18
+    },
+    "materials": {
+      "body": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:end_stone"
+        }
+      },
+      "shell": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:end_stone"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:amethyst_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "light": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:pearlescent_froglight",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:ochre_froglight",
+              "properties": {
+                "axis": "y"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "tip": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:purple_stained_glass"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:amethyst_block"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "anchor": "float",
+    "elevation": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 90,
+      "max_inclusive": 130
+    }
+  }
+}

@@ -3,21 +3,21 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:basalt",
-          "Properties": {
+          "id": "minecraft:basalt",
+          "properties": {
             "axis": "y"
           }
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:basalt",
-              "Properties": {
+              "id": "minecraft:basalt",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -25,7 +25,7 @@
           },
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 1
           }

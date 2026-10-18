@@ -1,64 +1,43 @@
 {
   "feature": {
-    "type": "minecraft:flower",
-    "config": {
-      "tries": 64,
-      "xz_spread": 7,
-      "y_spread": 3,
-      "feature": {
-        "feature": {
-          "type": "minecraft:simple_block",
-          "config": {
-            "to_place": {
-              "type": "minecraft:weighted_state_provider",
-              "entries": [
-                {
-                  "data": {
-                    "Name": "minecraft:blue_orchid"
-                  },
-                  "weight": 16
-                },
-                {
-                  "data": {
-                    "Name": "minecraft:pink_tulip"
-                  },
-                  "weight": 8
-                },
-                {
-                  "data": {
-                    "Name": "minecraft:pitcher_plant",
-                    "Properties": {
-                      "half": "lower"
-                    }
-                  },
-                  "weight": 4
-                },
-                {
-                  "data": {
-                    "Name": "mysticalterrain:hibiscus"
-                  },
-                  "weight": 16
-                },
-                {
-                  "data": {
-                    "Name": "mysticalterrain:bird_of_paradise"
-                  },
-                  "weight": 16
-                }
-              ]
-            }
-          }
+    "type": "minecraft:simple_block",
+    "to_place": {
+      "type": "minecraft:weighted",
+      "entries": [
+        {
+          "data": {
+            "id": "minecraft:blue_orchid"
+          },
+          "weight": 16
         },
-        "placement": [
-          {
-            "type": "minecraft:block_predicate_filter",
-            "predicate": {
-              "type": "minecraft:matching_blocks",
-              "blocks": "minecraft:air"
+        {
+          "data": {
+            "id": "minecraft:pink_tulip"
+          },
+          "weight": 8
+        },
+        {
+          "data": {
+            "id": "minecraft:pitcher_plant",
+            "properties": {
+              "half": "lower"
             }
-          }
-        ]
-      }
+          },
+          "weight": 4
+        },
+        {
+          "data": {
+            "id": "mysticalterrain:hibiscus"
+          },
+          "weight": 16
+        },
+        {
+          "data": {
+            "id": "mysticalterrain:bird_of_paradise"
+          },
+          "weight": 16
+        }
+      ]
     }
   },
   "placement": [
@@ -75,6 +54,38 @@
     },
     {
       "type": "minecraft:biome"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 64
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "min": -7,
+        "max": 7,
+        "plateau": 0
+      },
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -3,
+        "max": 3,
+        "plateau": 0
+      },
+      "z": {
+        "type": "minecraft:trapezoid",
+        "min": -7,
+        "max": 7,
+        "plateau": 0
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      }
     }
   ]
 }

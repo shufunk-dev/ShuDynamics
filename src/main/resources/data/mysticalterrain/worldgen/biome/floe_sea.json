@@ -24,7 +24,7 @@
     "water_color": "#4758d2"
   },
   "has_precipitation": true,
-  "temperature": 0.0,
+  "temperature": 0,
   "temperature_modifier": "frozen",
   "features": [
     [],

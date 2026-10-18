@@ -3,29 +3,29 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:stone"
+              "id": "minecraft:stone"
             },
             "weight": 4
           },
           {
             "data": {
-              "Name": "minecraft:andesite"
+              "id": "minecraft:andesite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:mossy_cobblestone"
+              "id": "minecraft:mossy_cobblestone"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 1
           }

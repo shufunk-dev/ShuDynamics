@@ -13,7 +13,7 @@
     "water_color": "#3b4dcd"
   },
   "has_precipitation": true,
-  "temperature": 0.0,
+  "temperature": 0,
   "features": [
     [],
     [

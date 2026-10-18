@@ -1,0 +1,297 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "graveyard",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 6,
+      "max_inclusive": 11
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.15,
+      "max_exclusive": 0.45
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:dark_oak_fence",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:black_carpet"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:gray_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:dark_oak_planks"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:cobbled_deepslate"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:soul_lantern",
+          "properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:ladder",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:soul_lantern",
+          "properties": {
+            "hanging": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:moss_carpet"
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_tiles"
+        }
+      },
+      "roof_slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_tile_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof_stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_tile_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_brick_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_brick_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:barrel",
+          "properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:dark_oak_log",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:deepslate_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:cracked_deepslate_bricks"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:cobbled_deepslate"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:gray_stained_glass_pane",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:crafting_table"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:furnace",
+              "properties": {
+                "facing": "north",
+                "lit": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:smithing_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:anvil",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:loom",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:cartography_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:fletching_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:stonecutter",
+              "properties": {
+                "facing": "north"
+              }
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:lectern",
+              "properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/overworld_supplies",
+    "treasure": "mysticalterrain:chests/overworld_treasure",
+    "spawners": [
+      "minecraft:zombie",
+      "minecraft:skeleton",
+      "minecraft:spider"
+    ]
+  }
+}

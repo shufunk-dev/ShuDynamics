@@ -4,7 +4,6 @@
     "minecraft:jungle",
     "minecraft:sparse_jungle",
     "minecraft:bamboo_jungle",
-    "minecraft:stony_peaks",
-    "enchantedwood:modified_jungle_edge"
+    "minecraft:stony_peaks"
   ]
 }

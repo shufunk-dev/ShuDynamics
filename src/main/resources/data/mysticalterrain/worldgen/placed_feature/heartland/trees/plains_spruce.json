@@ -1,18 +1,16 @@
 {
   "feature": {
     "type": "minecraft:random_selector",
-    "config": {
-      "features": [
-        {
-          "chance": 0.25,
-          "feature": {
-            "feature": "minecraft:trees_plains",
-            "placement": []
-          }
+    "features": [
+      {
+        "chance": 0.25,
+        "feature": {
+          "feature": "minecraft:trees_plains",
+          "placement": []
         }
-      ],
-      "default": "minecraft:spruce_checked"
-    }
+      }
+    ],
+    "default": "minecraft:spruce_checked"
   },
   "placement": [
     {
@@ -35,8 +33,8 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:oak_sapling",
-          "Properties": {
+          "id": "minecraft:oak_sapling",
+          "properties": {
             "stage": "0"
           }
         }

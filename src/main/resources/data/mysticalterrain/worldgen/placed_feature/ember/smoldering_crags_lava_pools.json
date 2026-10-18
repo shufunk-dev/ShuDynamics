@@ -1,29 +1,27 @@
 {
   "feature": {
     "type": "minecraft:delta_feature",
-    "config": {
-      "contents": {
-        "Name": "minecraft:lava",
-        "Properties": {
-          "level": "0"
-        }
-      },
-      "rim": {
-        "Name": "minecraft:basalt",
-        "Properties": {
-          "axis": "y"
-        }
-      },
-      "size": {
-        "type": "minecraft:uniform",
-        "min_inclusive": 3,
-        "max_inclusive": 6
-      },
-      "rim_size": {
-        "type": "minecraft:uniform",
-        "min_inclusive": 0,
-        "max_inclusive": 2
+    "contents": {
+      "id": "minecraft:lava",
+      "properties": {
+        "level": "0"
       }
+    },
+    "rim": {
+      "id": "minecraft:basalt",
+      "properties": {
+        "axis": "y"
+      }
+    },
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 6
+    },
+    "rim_size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0,
+      "max_inclusive": 2
     }
   },
   "placement": [
@@ -39,9 +37,15 @@
       "heightmap": "WORLD_SURFACE_WG"
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": -1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"

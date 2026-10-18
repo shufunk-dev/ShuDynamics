@@ -7,13 +7,14 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:iron_nugget",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
-                "max": 4
-              }
+                "max": 4,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
             }
           ]
         }
@@ -25,26 +26,30 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:moss_block",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
-                "max": 2
-              }
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
             }
           ]
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:killed_by_player"
-        },
-        {
-          "condition": "minecraft:random_chance",
-          "chance": 0.4
-        }
-      ]
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:killed_by_player"
+          },
+          {
+            "chance": 0.4,
+            "type": "minecraft:random_chance"
+          }
+        ]
+      }
     },
     {
       "rolls": 1,
@@ -52,26 +57,30 @@
         {
           "type": "minecraft:item",
           "name": "mysticalterrain:moonpetal",
-          "functions": [
+          "modifier": [
             {
-              "function": "minecraft:set_count",
               "count": {
                 "min": 1,
-                "max": 2
-              }
+                "max": 2,
+                "type": "minecraft:uniform"
+              },
+              "type": "minecraft:set_count"
             }
           ]
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:killed_by_player"
-        },
-        {
-          "condition": "minecraft:random_chance",
-          "chance": 0.25
-        }
-      ]
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:killed_by_player"
+          },
+          {
+            "chance": 0.25,
+            "type": "minecraft:random_chance"
+          }
+        ]
+      }
     }
   ]
 }

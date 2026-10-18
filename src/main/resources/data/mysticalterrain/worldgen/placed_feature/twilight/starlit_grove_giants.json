@@ -3,19 +3,19 @@
     "type": "mysticalterrain:colossal_tree",
     "config": {
       "trunk_provider": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:gloamwood_log",
-          "Properties": {
+          "id": "mysticalterrain:gloamwood_log",
+          "properties": {
             "axis": "y"
           }
         }
       },
       "foliage_provider": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "mysticalterrain:gloamwood_leaves",
-          "Properties": {
+          "id": "mysticalterrain:gloamwood_leaves",
+          "properties": {
             "distance": "7",
             "persistent": "false",
             "waterlogged": "false"

@@ -10,24 +10,24 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:blackstone"
+                "id": "minecraft:blackstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:basalt",
-                "Properties": {
+                "id": "minecraft:basalt",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -36,23 +36,23 @@
           ]
         },
         "body": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:obsidian"
+                "id": "minecraft:obsidian"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:crying_obsidian"
+                "id": "minecraft:crying_obsidian"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:magma_block"
+                "id": "minecraft:magma_block"
               },
               "weight": 2
             }

@@ -3,12 +3,12 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:mushroom_stem",
-              "Properties": {
+              "id": "minecraft:mushroom_stem",
+              "properties": {
                 "down": "true",
                 "east": "true",
                 "north": "true",
@@ -21,8 +21,8 @@
           },
           {
             "data": {
-              "Name": "minecraft:brown_mushroom_block",
-              "Properties": {
+              "id": "minecraft:brown_mushroom_block",
+              "properties": {
                 "down": "true",
                 "east": "true",
                 "north": "true",
@@ -35,7 +35,7 @@
           },
           {
             "data": {
-              "Name": "minecraft:mossy_cobblestone"
+              "id": "minecraft:mossy_cobblestone"
             },
             "weight": 2
           }

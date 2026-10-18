@@ -1,0 +1,265 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lighthouse",
+    "size": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 3,
+      "max_inclusive": 5
+    },
+    "floors": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 5
+    },
+    "decay": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 0.15,
+      "max_exclusive": 0.5
+    },
+    "materials": {
+      "bars": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_fence",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "carpet": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:purple_carpet"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:magenta_carpet"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "cobweb": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:cobweb"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_planks"
+        }
+      },
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starstone"
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:end_rod",
+          "properties": {
+            "facing": "up"
+          }
+        }
+      },
+      "ladder": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:ladder",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:end_rod",
+          "properties": {
+            "facing": "up"
+          }
+        }
+      },
+      "plant": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:small_amethyst_bud",
+          "properties": {
+            "facing": "up",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_planks"
+        }
+      },
+      "roof_slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "roof_stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "shelf": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:bookshelf"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:purpur_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "stairs": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:purpur_stairs",
+          "properties": {
+            "facing": "north",
+            "half": "bottom",
+            "shape": "straight",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "storage": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:barrel",
+          "properties": {
+            "facing": "north",
+            "open": "false"
+          }
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:starbark_log",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:starstone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:starstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "window": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:magenta_stained_glass_pane",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "waterlogged": "false",
+            "west": "false"
+          }
+        }
+      },
+      "workstation": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:enchanting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:brewing_stand",
+              "properties": {
+                "has_bottle_0": "false",
+                "has_bottle_1": "false",
+                "has_bottle_2": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:lectern",
+              "properties": {
+                "facing": "north",
+                "has_book": "false",
+                "powered": "false"
+              }
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:crafting_table"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "minecraft:cauldron"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "loot": "mysticalterrain:chests/end_supplies",
+    "treasure": "mysticalterrain:chests/end_treasure",
+    "spawners": [
+      "minecraft:enderman",
+      "minecraft:endermite"
+    ]
+  }
+}

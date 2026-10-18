@@ -1,7 +1,7 @@
 {
   "attributes": {
     "minecraft:audio/background_music": {},
-    "minecraft:audio/music_volume": 0.0,
+    "minecraft:audio/music_volume": 0,
     "minecraft:visual/fog_color": "#817770",
     "minecraft:visual/sky_color": "#b9b9b9",
     "minecraft:visual/water_fog_color": "#040533"
@@ -19,7 +19,7 @@
     "water_color": "#3e5bdd"
   },
   "has_precipitation": true,
-  "temperature": 0.0,
+  "temperature": 0,
   "features": [
     [],
     [

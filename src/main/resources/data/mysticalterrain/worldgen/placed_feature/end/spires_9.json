@@ -3,23 +3,23 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:deepslate_tiles"
+          "id": "minecraft:deepslate_tiles"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:deepslate_bricks"
+              "id": "minecraft:deepslate_bricks"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:sculk"
+              "id": "minecraft:sculk"
             },
             "weight": 1
           }

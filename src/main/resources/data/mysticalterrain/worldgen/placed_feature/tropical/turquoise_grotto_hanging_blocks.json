@@ -1,12 +1,10 @@
 {
   "feature": {
     "type": "minecraft:simple_block",
-    "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:sea_lantern"
-        }
+    "to_place": {
+      "type": "minecraft:simple",
+      "state": {
+        "id": "minecraft:sea_lantern"
       }
     }
   },
@@ -43,9 +41,15 @@
       }
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": -1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"

@@ -1,5 +1,5 @@
 {
-  "feature": "minecraft:patch_dry_grass",
+  "feature": "minecraft:dry_grass",
   "placement": [
     {
       "type": "minecraft:count",

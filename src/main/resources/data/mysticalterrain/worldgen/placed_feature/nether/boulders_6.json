@@ -3,18 +3,18 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:soul_soil"
+              "id": "minecraft:soul_soil"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:basalt",
-              "Properties": {
+              "id": "minecraft:basalt",
+              "properties": {
                 "axis": "y"
               }
             },

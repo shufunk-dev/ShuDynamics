@@ -15,30 +15,30 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 6.0,
-        "max_exclusive": 9.0
+        "min_inclusive": 6,
+        "max_exclusive": 9
       },
       "lean": 0.3,
       "reach": 12,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:obsidian"
+            "id": "minecraft:obsidian"
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:crying_obsidian"
+                "id": "minecraft:crying_obsidian"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 1
             }

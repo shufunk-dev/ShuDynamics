@@ -12,63 +12,63 @@
       "sides": 5,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:obsidian"
+                "id": "minecraft:obsidian"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:blackstone"
+                "id": "minecraft:blackstone"
               },
               "weight": 1
             }
           ]
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:tinted_glass"
+                "id": "minecraft:tinted_glass"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:black_stained_glass"
+                "id": "minecraft:black_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:tinted_glass"
+            "id": "minecraft:tinted_glass"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:crying_obsidian"
+            "id": "minecraft:crying_obsidian"
           }
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:black_stained_glass"
+                "id": "minecraft:black_stained_glass"
               },
               "weight": 1
             },
             {
               "data": {
-                "Name": "minecraft:tinted_glass"
+                "id": "minecraft:tinted_glass"
               },
               "weight": 1
             }

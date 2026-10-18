@@ -2,28 +2,24 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "block": "mysticalterrain:gloamwood_door",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
+          "name": "mysticalterrain:gloamwood_door",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mysticalterrain:gloamwood_door",
+            "state": {
+              "half": "lower"
             }
-          ],
-          "name": "mysticalterrain:gloamwood_door"
+          }
         }
       ],
-      "rolls": 1.0
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "mysticalterrain:blocks/gloamwood_door"

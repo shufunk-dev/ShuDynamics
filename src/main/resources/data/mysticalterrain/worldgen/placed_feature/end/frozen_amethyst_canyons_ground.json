@@ -7,53 +7,53 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:smooth_basalt"
+              "id": "minecraft:smooth_basalt"
             },
             "weight": 1
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:snow_block"
+              "id": "minecraft:snow_block"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:packed_ice"
+              "id": "minecraft:packed_ice"
             },
             "weight": 1
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.35
     }
   },

@@ -11,34 +11,34 @@
       "trunk_radius": {
         "type": "minecraft:uniform",
         "min_inclusive": 1.4,
-        "max_exclusive": 2.0
+        "max_exclusive": 2
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 7.0,
-        "max_exclusive": 10.0
+        "min_inclusive": 7,
+        "max_exclusive": 10
       },
       "lean": 0.3,
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:oxidized_copper"
+            "id": "minecraft:oxidized_copper"
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:oxidized_cut_copper"
+                "id": "minecraft:oxidized_cut_copper"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:weathered_copper"
+                "id": "minecraft:weathered_copper"
               },
               "weight": 1
             }

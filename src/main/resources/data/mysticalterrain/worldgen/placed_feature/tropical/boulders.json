@@ -3,23 +3,23 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:sandstone"
+              "id": "minecraft:sandstone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:smooth_sandstone"
+              "id": "minecraft:smooth_sandstone"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:mossy_cobblestone"
+              "id": "minecraft:mossy_cobblestone"
             },
             "weight": 1
           }

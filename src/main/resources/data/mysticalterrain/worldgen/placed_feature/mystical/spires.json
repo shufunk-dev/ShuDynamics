@@ -3,29 +3,29 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:blue_ice"
+          "id": "minecraft:blue_ice"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:packed_ice"
+              "id": "minecraft:packed_ice"
             },
             "weight": 5
           },
           {
             "data": {
-              "Name": "minecraft:snow_block"
+              "id": "minecraft:snow_block"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "minecraft:blue_ice"
+              "id": "minecraft:blue_ice"
             },
             "weight": 1
           }

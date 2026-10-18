@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:desert",
-    "enchantedwood:desert_lakes"
+    "minecraft:desert"
   ]
 }

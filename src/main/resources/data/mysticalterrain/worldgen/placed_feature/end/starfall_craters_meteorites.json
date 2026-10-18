@@ -3,23 +3,23 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:magma_block"
+              "id": "minecraft:magma_block"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:deepslate_iron_ore"
+              "id": "minecraft:deepslate_iron_ore"
             },
             "weight": 1
           }

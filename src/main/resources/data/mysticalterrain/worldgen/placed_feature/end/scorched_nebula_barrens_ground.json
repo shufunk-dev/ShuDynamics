@@ -7,18 +7,18 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:deepslate",
-              "Properties": {
+              "id": "minecraft:deepslate",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -26,38 +26,38 @@
           },
           {
             "data": {
-              "Name": "minecraft:end_stone"
+              "id": "minecraft:end_stone"
             },
             "weight": 3
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:magma_block"
+              "id": "minecraft:magma_block"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:basalt",
-              "Properties": {
+              "id": "minecraft:basalt",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -65,7 +65,7 @@
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.45
     }
   },

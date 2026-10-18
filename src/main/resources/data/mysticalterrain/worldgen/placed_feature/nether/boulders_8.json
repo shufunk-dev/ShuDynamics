@@ -3,17 +3,17 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:yellow_terracotta"
+              "id": "minecraft:yellow_terracotta"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:glowstone"
+              "id": "minecraft:glowstone"
             },
             "weight": 1
           }

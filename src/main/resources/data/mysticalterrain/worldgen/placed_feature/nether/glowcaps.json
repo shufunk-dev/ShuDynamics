@@ -15,32 +15,32 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 6.0,
-        "max_exclusive": 9.0
+        "min_inclusive": 6,
+        "max_exclusive": 9
       },
       "reach": 12,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:sporewood_wood",
-            "Properties": {
+            "id": "mysticalterrain:sporewood_wood",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:glowcap_block"
+                "id": "mysticalterrain:glowcap_block"
               },
               "weight": 4
             },
             {
               "data": {
-                "Name": "minecraft:shroomlight"
+                "id": "minecraft:shroomlight"
               },
               "weight": 1
             }

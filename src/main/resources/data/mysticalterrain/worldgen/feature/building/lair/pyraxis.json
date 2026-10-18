@@ -1,0 +1,94 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_forge",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:ashstone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:ashstone_bricks"
+            },
+            "weight": 4
+          },
+          {
+            "data": {
+              "id": "minecraft:magma_block"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:ashstone_bricks"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:ashstone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:blackstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:polished_basalt",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:polished_blackstone_bricks"
+        }
+      },
+      "slab": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:polished_blackstone_brick_slab",
+          "properties": {
+            "type": "bottom",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:magma_block"
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:pyraxis_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_pyraxis",
+    "treasure": "mysticalterrain:chests/lair_pyraxis"
+  }
+}

@@ -1,21 +1,36 @@
 {
   "feature": {
     "type": "minecraft:lake",
-    "config": {
-      "fluid": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:water",
-          "Properties": {
-            "level": "0"
-          }
+    "fluid": {
+      "type": "minecraft:simple",
+      "state": {
+        "id": "minecraft:water",
+        "properties": {
+          "level": "0"
         }
-      },
-      "barrier": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:stone"
-        }
+      }
+    },
+    "barrier": {
+      "type": "minecraft:simple",
+      "state": {
+        "id": "minecraft:stone"
+      }
+    },
+    "can_place_feature": {
+      "type": "minecraft:true"
+    },
+    "can_replace_with_air_or_fluid": {
+      "type": "minecraft:not",
+      "predicate": {
+        "type": "minecraft:matching_block_tag",
+        "tag": "minecraft:features_cannot_replace"
+      }
+    },
+    "can_replace_with_barrier": {
+      "type": "minecraft:not",
+      "predicate": {
+        "type": "minecraft:matching_block_tag",
+        "tag": "minecraft:features_cannot_replace"
       }
     }
   },
@@ -28,9 +43,20 @@
       "type": "minecraft:in_square"
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": -8,
-      "y_spread": 0
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:trapezoid",
+        "min": -8,
+        "max": 8,
+        "plateau": 0
+      },
+      "y": 0,
+      "z": {
+        "type": "minecraft:trapezoid",
+        "min": -8,
+        "max": 8,
+        "plateau": 0
+      }
     },
     {
       "type": "minecraft:height_range",
@@ -57,9 +83,15 @@
       }
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": 1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"

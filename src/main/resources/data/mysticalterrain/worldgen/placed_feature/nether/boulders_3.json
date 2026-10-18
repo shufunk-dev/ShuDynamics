@@ -3,17 +3,17 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:blackstone"
+              "id": "minecraft:blackstone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:obsidian"
+              "id": "minecraft:obsidian"
             },
             "weight": 1
           }

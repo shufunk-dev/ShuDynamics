@@ -3,35 +3,35 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:red_sandstone"
+          "id": "minecraft:red_sandstone"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:red_sandstone"
+              "id": "minecraft:red_sandstone"
             },
             "weight": 4
           },
           {
             "data": {
-              "Name": "minecraft:smooth_red_sandstone"
+              "id": "minecraft:smooth_red_sandstone"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:orange_terracotta"
+              "id": "minecraft:orange_terracotta"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:sandrock"
+              "id": "mysticalterrain:sandrock"
             },
             "weight": 4
           }

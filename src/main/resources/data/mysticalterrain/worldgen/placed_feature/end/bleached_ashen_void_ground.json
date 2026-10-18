@@ -7,48 +7,48 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "mysticalterrain:ashstone"
+              "id": "mysticalterrain:ashstone"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "mysticalterrain:ash_soil"
+              "id": "mysticalterrain:ash_soil"
             },
             "weight": 1
           }
         ]
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:tuff"
+          "id": "minecraft:tuff"
         }
       },
       "depth": 2,
       "accent": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:bone_block",
-              "Properties": {
+              "id": "minecraft:bone_block",
+              "properties": {
                 "axis": "y"
               }
             },
@@ -56,7 +56,7 @@
           }
         ]
       },
-      "accent_scale": 12.0,
+      "accent_scale": 12,
       "accent_threshold": 0.5
     }
   },

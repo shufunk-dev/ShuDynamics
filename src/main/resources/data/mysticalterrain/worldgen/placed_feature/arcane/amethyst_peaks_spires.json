@@ -3,35 +3,35 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:amethyst_block"
+          "id": "minecraft:amethyst_block"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:amethyst_block"
+              "id": "minecraft:amethyst_block"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:calcite"
+              "id": "minecraft:calcite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:purpur_block"
+              "id": "minecraft:purpur_block"
             },
             "weight": 1
           },
           {
             "data": {
-              "Name": "mysticalterrain:starstone"
+              "id": "mysticalterrain:starstone"
             },
             "weight": 3
           }

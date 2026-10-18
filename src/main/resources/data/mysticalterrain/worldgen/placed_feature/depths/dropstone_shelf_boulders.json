@@ -3,29 +3,29 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:granite"
+              "id": "minecraft:granite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:diorite"
+              "id": "minecraft:diorite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:andesite"
+              "id": "minecraft:andesite"
             },
             "weight": 2
           },
           {
             "data": {
-              "Name": "minecraft:tuff"
+              "id": "minecraft:tuff"
             },
             "weight": 1
           }

@@ -1,0 +1,92 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_shrine",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:mud"
+        }
+      },
+      "floor": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:mirestone"
+            },
+            "weight": 2
+          },
+          {
+            "data": {
+              "id": "minecraft:mud"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:peat"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:mirestone_bricks"
+            },
+            "weight": 3
+          },
+          {
+            "data": {
+              "id": "minecraft:mossy_cobblestone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:mirestone_bricks"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:cypress_planks"
+        }
+      },
+      "plant": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "minecraft:brown_mushroom"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:cattail"
+            },
+            "weight": 2
+          }
+        ]
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:bogrot_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_bogrot",
+    "treasure": "mysticalterrain:chests/lair_bogrot"
+  }
+}

@@ -3,23 +3,23 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:gilded_blackstone"
+          "id": "minecraft:gilded_blackstone"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:polished_blackstone_bricks"
+              "id": "minecraft:polished_blackstone_bricks"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:cracked_polished_blackstone_bricks"
+              "id": "minecraft:cracked_polished_blackstone_bricks"
             },
             "weight": 1
           }

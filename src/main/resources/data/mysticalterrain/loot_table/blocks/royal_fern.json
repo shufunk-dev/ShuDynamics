@@ -2,27 +2,23 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "mysticalterrain:royal_fern",
-          "conditions": [
-            {
-              "condition": "minecraft:match_tool",
-              "predicate": {
-                "items": "minecraft:shears"
-              }
-            }
-          ]
+          "condition": {
+            "predicate": {
+              "items": "minecraft:shears"
+            },
+            "type": "minecraft:match_tool"
+          }
         }
       ],
-      "rolls": 1.0
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      }
     }
   ],
   "random_sequence": "mysticalterrain:blocks/royal_fern"

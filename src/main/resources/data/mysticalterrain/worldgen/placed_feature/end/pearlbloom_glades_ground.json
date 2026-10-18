@@ -7,15 +7,15 @@
         "minecraft:end_stone"
       ],
       "top": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:pale_moss_block"
+          "id": "minecraft:pale_moss_block"
         }
       },
       "under": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:end_stone"
+          "id": "minecraft:end_stone"
         }
       },
       "depth": 0

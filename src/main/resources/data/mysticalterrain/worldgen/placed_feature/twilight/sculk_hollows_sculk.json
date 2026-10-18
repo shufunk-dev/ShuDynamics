@@ -1,15 +1,11 @@
 {
   "feature": {
     "type": "minecraft:sculk_patch",
-    "config": {
-      "amount_per_charge": 32,
-      "catalyst_chance": 0.0,
-      "charge_count": 8,
-      "extra_rare_growths": 0,
-      "growth_rounds": 0,
-      "spread_attempts": 64,
-      "spread_rounds": 1
-    }
+    "amount_per_charge": 32,
+    "charge_count": 8,
+    "growth_rounds": 0,
+    "spread_attempts": 64,
+    "spread_rounds": 1
   },
   "placement": [
     {
@@ -44,9 +40,15 @@
       }
     },
     {
-      "type": "minecraft:random_offset",
-      "xz_spread": 0,
-      "y_spread": 1
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      },
+      "z": 0
     },
     {
       "type": "minecraft:biome"

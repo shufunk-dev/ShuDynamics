@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.vexira.mysticalterrain.client.mixin",
+  "refmap": "mysticalterrain.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "BossHealthOverlayMixin",
+    "CameraShakeMixin",
+    "DragonSoundMixin",
+    "EnderDragonRendererInvoker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

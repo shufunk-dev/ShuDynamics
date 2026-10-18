@@ -3,17 +3,17 @@
     "type": "mysticalterrain:boulder",
     "config": {
       "state_provider": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:wet_sponge"
+              "id": "minecraft:wet_sponge"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:gravel"
+              "id": "minecraft:gravel"
             },
             "weight": 1
           }

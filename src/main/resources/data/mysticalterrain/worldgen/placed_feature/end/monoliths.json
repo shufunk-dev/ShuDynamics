@@ -10,50 +10,50 @@
       },
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:runestone"
+                "id": "mysticalterrain:runestone"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "mysticalterrain:runestone_bricks"
+                "id": "mysticalterrain:runestone_bricks"
               },
               "weight": 2
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:runestone"
+            "id": "mysticalterrain:runestone"
           }
         },
         "shell": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:runestone_bricks"
+            "id": "mysticalterrain:runestone_bricks"
           }
         },
         "accent": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:chiseled_stone_bricks"
+            "id": "minecraft:chiseled_stone_bricks"
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sea_lantern"
+            "id": "minecraft:sea_lantern"
           }
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sea_lantern"
+            "id": "minecraft:sea_lantern"
           }
         }
       }

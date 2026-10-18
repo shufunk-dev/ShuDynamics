@@ -1,0 +1,53 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_observatory",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:runestone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:runestone_bricks"
+        }
+      },
+      "wall": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:runestone_bricks"
+        }
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:chiseled_deepslate"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:lapis_block"
+        }
+      },
+      "fixture": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:rune_pillar"
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:archon_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_archon",
+    "treasure": "mysticalterrain:chests/lair_archon"
+  }
+}

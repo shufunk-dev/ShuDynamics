@@ -10,27 +10,27 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:deepslate",
-            "Properties": {
+            "id": "minecraft:deepslate",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:sculk"
+                "id": "minecraft:sculk"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:deepslate",
-                "Properties": {
+                "id": "minecraft:deepslate",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -39,18 +39,18 @@
           ]
         },
         "light": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:ochre_froglight",
-            "Properties": {
+            "id": "minecraft:ochre_froglight",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:sculk"
+            "id": "minecraft:sculk"
           }
         }
       },

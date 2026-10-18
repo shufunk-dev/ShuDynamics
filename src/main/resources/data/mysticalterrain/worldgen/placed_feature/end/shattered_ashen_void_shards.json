@@ -12,49 +12,49 @@
       "sides": 5,
       "materials": {
         "base": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:ashstone"
+                "id": "mysticalterrain:ashstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:tuff"
+                "id": "minecraft:tuff"
               },
               "weight": 1
             }
           ]
         },
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "mysticalterrain:ashstone"
+            "id": "mysticalterrain:ashstone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "mysticalterrain:ashstone"
+                "id": "mysticalterrain:ashstone"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:cobbled_deepslate"
+                "id": "minecraft:cobbled_deepslate"
               },
               "weight": 1
             }
           ]
         },
         "tip": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:tuff"
+            "id": "minecraft:tuff"
           }
         }
       }

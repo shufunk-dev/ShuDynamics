@@ -3,23 +3,23 @@
     "type": "mysticalterrain:spire",
     "config": {
       "core": {
-        "type": "minecraft:simple_state_provider",
+        "type": "minecraft:simple",
         "state": {
-          "Name": "minecraft:obsidian"
+          "id": "minecraft:obsidian"
         }
       },
       "shell": {
-        "type": "minecraft:weighted_state_provider",
+        "type": "minecraft:weighted",
         "entries": [
           {
             "data": {
-              "Name": "minecraft:obsidian"
+              "id": "minecraft:obsidian"
             },
             "weight": 3
           },
           {
             "data": {
-              "Name": "minecraft:end_stone_bricks"
+              "id": "minecraft:end_stone_bricks"
             },
             "weight": 1
           }

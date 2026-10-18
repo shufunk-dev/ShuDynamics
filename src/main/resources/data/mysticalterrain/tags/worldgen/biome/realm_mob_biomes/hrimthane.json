@@ -7,7 +7,6 @@
     "minecraft:ice_spikes",
     "minecraft:jagged_peaks",
     "minecraft:frozen_peaks",
-    "minecraft:grove",
-    "enchantedwood:alpha_tundra"
+    "minecraft:grove"
   ]
 }

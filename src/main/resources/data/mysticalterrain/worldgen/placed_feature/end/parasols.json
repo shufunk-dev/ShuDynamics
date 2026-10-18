@@ -15,49 +15,49 @@
       },
       "crown": {
         "type": "minecraft:uniform",
-        "min_inclusive": 14.0,
-        "max_exclusive": 18.0
+        "min_inclusive": 14,
+        "max_exclusive": 18
       },
       "shape": 0.3,
       "reach": 21,
       "blocks": {
         "trunk": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:purpur_pillar",
-            "Properties": {
+            "id": "minecraft:purpur_pillar",
+            "properties": {
               "axis": "y"
             }
           }
         },
         "leaves": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:purpur_block"
+                "id": "minecraft:purpur_block"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:magenta_stained_glass"
+                "id": "minecraft:magenta_stained_glass"
               },
               "weight": 1
             }
           ]
         },
         "fruit": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:end_rod",
-            "Properties": {
+            "id": "minecraft:end_rod",
+            "properties": {
               "facing": "up"
             }
           }

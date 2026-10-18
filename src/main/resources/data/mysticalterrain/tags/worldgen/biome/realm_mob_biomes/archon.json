@@ -4,7 +4,6 @@
     "minecraft:windswept_hills",
     "minecraft:windswept_gravelly_hills",
     "minecraft:windswept_forest",
-    "minecraft:stony_shore",
-    "enchantedwood:gravelly_mountains"
+    "minecraft:stony_shore"
   ]
 }

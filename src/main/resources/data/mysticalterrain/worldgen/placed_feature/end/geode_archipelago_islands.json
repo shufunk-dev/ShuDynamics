@@ -10,35 +10,35 @@
       },
       "materials": {
         "body": {
-          "type": "minecraft:simple_state_provider",
+          "type": "minecraft:simple",
           "state": {
-            "Name": "minecraft:end_stone"
+            "id": "minecraft:end_stone"
           }
         },
         "shell": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:end_stone"
+                "id": "minecraft:end_stone"
               },
               "weight": 3
             },
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 1
             }
           ]
         },
         "light": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:pearlescent_froglight",
-                "Properties": {
+                "id": "minecraft:pearlescent_froglight",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -46,8 +46,8 @@
             },
             {
               "data": {
-                "Name": "minecraft:ochre_froglight",
-                "Properties": {
+                "id": "minecraft:ochre_froglight",
+                "properties": {
                   "axis": "y"
                 }
               },
@@ -56,17 +56,17 @@
           ]
         },
         "tip": {
-          "type": "minecraft:weighted_state_provider",
+          "type": "minecraft:weighted",
           "entries": [
             {
               "data": {
-                "Name": "minecraft:purple_stained_glass"
+                "id": "minecraft:purple_stained_glass"
               },
               "weight": 2
             },
             {
               "data": {
-                "Name": "minecraft:amethyst_block"
+                "id": "minecraft:amethyst_block"
               },
               "weight": 1
             }

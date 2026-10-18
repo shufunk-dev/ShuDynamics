@@ -1,0 +1,96 @@
+{
+  "type": "mysticalterrain:building",
+  "config": {
+    "kind": "lair_cathedral",
+    "size": 16,
+    "materials": {
+      "foundation": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:gloomstone"
+        }
+      },
+      "floor": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:gloomstone_bricks"
+        }
+      },
+      "wall": {
+        "type": "minecraft:weighted",
+        "entries": [
+          {
+            "data": {
+              "id": "mysticalterrain:gloomstone_bricks"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "mysticalterrain:gloomstone"
+            },
+            "weight": 1
+          }
+        ]
+      },
+      "trim": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:gloamwood_log",
+          "properties": {
+            "axis": "y"
+          }
+        }
+      },
+      "roof": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:deepslate_tiles"
+        }
+      },
+      "path": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:purple_carpet"
+        }
+      },
+      "window": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:purple_stained_glass_pane",
+          "properties": {
+            "east": "false",
+            "north": "false",
+            "south": "false",
+            "west": "false",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "hanging_light": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "minecraft:soul_lantern",
+          "properties": {
+            "hanging": "true",
+            "waterlogged": "false"
+          }
+        }
+      },
+      "fixture": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:gloom_brazier"
+        }
+      },
+      "altar": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "mysticalterrain:hollow_warden_altar"
+        }
+      }
+    },
+    "loot": "mysticalterrain:chests/lair_hollow_warden",
+    "treasure": "mysticalterrain:chests/lair_hollow_warden"
+  }
+}
