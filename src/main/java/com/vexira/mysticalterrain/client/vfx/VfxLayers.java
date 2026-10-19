@@ -64,7 +64,7 @@ public final class VfxLayers {
          try {
             additive = layer("vfx_additive", BlendFunction.ADDITIVE);
          } catch (Throwable e) {
-            MysticalTerrain.LOGGER.warn("Additive boss effects unavailable, using translucent", e);
+            MysticalTerrain.LOGGER.warn("Additive boss effects unavailable, using translucent: {}", e.getMessage());
             additiveFailed = true;
          }
       }
@@ -77,7 +77,7 @@ public final class VfxLayers {
          try {
             soft = layer("vfx_soft", BlendFunction.TRANSLUCENT);
          } catch (Throwable e) {
-            MysticalTerrain.LOGGER.warn("Soft boss smoke unavailable, using translucent", e);
+            MysticalTerrain.LOGGER.warn("Soft boss smoke unavailable, using translucent: {}", e.getMessage());
             softFailed = true;
          }
       }
@@ -86,10 +86,12 @@ public final class VfxLayers {
    }
 
    static int order(Layer layer) {
-      if (additive != null && additive.equals(layer)) {
+      if (additive != null && additive != Layer.TRANSLUCENT && additive.equals(layer)) {
          return 2;
+      } else if (soft != null && soft != Layer.TRANSLUCENT && soft.equals(layer)) {
+         return 1;
       } else {
-         return soft != null && soft.equals(layer) ? 1 : 0;
+         return 0;
       }
    }
 
@@ -122,6 +124,13 @@ public final class VfxLayers {
       });
       base.getShaderDefines().flags().forEach(b::withShaderDefine);
       RenderPipeline pipeline = b.build();
+      try {
+         if (com.mojang.blaze3d.systems.RenderSystem.getCompiledPipelineNullable(pipeline) == null) {
+            throw new IllegalStateException("Pipeline not compiled in cache: " + pipeline.getLocation());
+         }
+      } catch (Throwable t) {
+         throw new IllegalStateException("Pipeline unavailable: " + pipeline.getLocation(), t);
+      }
       return new Layer(true, Layer.TRANSLUCENT.textureAtlasLocation(), pipeline);
    }
 }

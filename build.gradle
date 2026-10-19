@@ -49,7 +49,7 @@ dependencies {
     compileOnly files("libs/TerraBlender-fabric-26.3-26.3.0.0.9.jar")
 
     // EMI Recipe Viewer API
-    compileOnly files("C:/Users/shufu/curseforge/minecraft/Instances/Curios/mods/emi-1.1.24-2fb0d30+26.3+fabric.jar")
+    compileOnly files("libs/emi-fabric-26.3.jar")
 }
 
 processResources {
@@ -84,7 +84,8 @@ tasks.register('deployMod') {
         def src = jar.archiveFile.get().asFile
         def targetDirs = [
             file("C:/Projects/Minecraft Mod/scratch/mods"),
-            file("C:/Users/shufu/CurseForge/minecraft/Instances/Shu 263/mods")
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/Shu 263/mods"),
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/Curios/mods")
         ]
         targetDirs.each { dir ->
             if (!dir.exists()) dir.mkdirs()
