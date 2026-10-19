@@ -194,7 +194,12 @@ public final class RealmMobs {
          );
          TagKey<Biome> lairRealm = TagKey.of(RegistryKeys.BIOME, MysticalTerrain.id("has_structure/building/lair/" + k.boss()));
          TagKey<Biome> mobRealm = TagKey.of(RegistryKeys.BIOME, MysticalTerrain.id("realm_mob_biomes/" + k.boss()));
-         BiomeModifications.addSpawn(BiomeSelectors.tag(lairRealm).or(BiomeSelectors.tag(mobRealm)), SpawnGroup.MONSTER, type, k.spawnWeight(), 1, k.groupMax());
+         // Native Convergence lairs: full native spawn rates
+         BiomeModifications.addSpawn(BiomeSelectors.tag(lairRealm), SpawnGroup.MONSTER, type, k.spawnWeight(), 1, k.groupMax());
+         // Overworld & dimension incursions: rare precursor encounters (1-2 mobs max)
+         int incursionWeight = Math.max(2, k.spawnWeight() / 5);
+         int incursionMax = Math.min(2, Math.max(1, k.groupMax() / 2));
+         BiomeModifications.addSpawn(BiomeSelectors.tag(mobRealm), SpawnGroup.MONSTER, type, incursionWeight, 1, incursionMax);
          RegistryKey<Item> eggKey = RegistryKey.of(RegistryKeys.ITEM, MysticalTerrain.id(k.id() + "_spawn_egg"));
          MysticalBosses.addToTab((Item)Registry.register(Registries.ITEM, eggKey, new SpawnEggItem(new Settings().registryKey(eggKey).spawnEgg(type))));
       }
