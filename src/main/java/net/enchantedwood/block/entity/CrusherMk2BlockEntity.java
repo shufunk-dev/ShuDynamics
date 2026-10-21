@@ -108,6 +108,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements MenuProvider, 
             case DIAMOND -> 25;
             case NETHERITE -> 10;
             case BLAZE_OVERCLOCK -> 6;
+            case INSANIUM_OVERCLOCK -> 2;
             default -> 100;
         };
     }
@@ -121,6 +122,7 @@ public class CrusherMk2BlockEntity extends BlockEntity implements MenuProvider, 
             case TITANIUM, DIAMOND -> 6 + bonus;
             case NETHERITE -> 8 + bonus;
             case BLAZE_OVERCLOCK -> 10 + bonus;
+            case INSANIUM_OVERCLOCK -> 16 + bonus;
             default -> 3;
         };
     }

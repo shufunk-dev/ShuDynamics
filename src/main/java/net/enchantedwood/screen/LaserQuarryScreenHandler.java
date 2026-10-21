@@ -56,12 +56,9 @@ public class LaserQuarryScreenHandler extends AbstractContainerMenu {
         this.addSlot(new Slot(inventory, LaserQuarryBlockEntity.SPEED_SLOT, 152, 18) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.BLAZE_OVERCLOCK_CORE) ||
-                        stack.is(ModItems.COPPER_GEAR) || stack.is(ModItems.ENCHANTED_COPPER_GEAR) ||
-                        stack.is(ModItems.IRON_GEAR) || stack.is(ModItems.ENCHANTED_IRON_GEAR) ||
-                        stack.is(ModItems.GOLD_GEAR) || stack.is(ModItems.ENCHANTED_GOLD_GEAR) ||
-                        stack.is(ModItems.DIAMOND_GEAR) || stack.is(ModItems.ENCHANTED_DIAMOND_GEAR) ||
-                        stack.is(ModItems.TITANIUM_GEAR) || stack.is(ModItems.ENCHANTED_TITANIUM_GEAR);
+                return stack.getItem() instanceof net.enchantedwood.item.custom.GearItem ||
+                        stack.is(ModItems.BLAZE_OVERCLOCK_CORE) ||
+                        stack.is(ModItems.INSANIUM_OVERCLOCK_GEAR);
             }
         });
 

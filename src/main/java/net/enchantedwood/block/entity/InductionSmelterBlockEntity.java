@@ -378,6 +378,7 @@ public class InductionSmelterBlockEntity extends BlockEntity implements MenuProv
             case TITANIUM, DIAMOND -> 3.0f;
             case NETHERITE -> 4.0f;
             case BLAZE_OVERCLOCK -> 6.0f;
+            case INSANIUM_OVERCLOCK -> 12.0f;
             default -> 1.0f;
         };
     }

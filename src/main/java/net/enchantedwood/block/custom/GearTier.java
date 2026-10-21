@@ -14,7 +14,8 @@ public enum GearTier implements StringRepresentable {
     TITANIUM("titanium", 5),
     DIAMOND("diamond", 5),
     NETHERITE("netherite", 6),
-    BLAZE_OVERCLOCK("blaze_overclock", 8);
+    BLAZE_OVERCLOCK("blaze_overclock", 8),
+    INSANIUM_OVERCLOCK("insanium_overclock", 12);
 
     private final String name;
     private final int baseOreYield;

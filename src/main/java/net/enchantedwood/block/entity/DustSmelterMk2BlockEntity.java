@@ -103,6 +103,7 @@ public class DustSmelterMk2BlockEntity extends BlockEntity implements MenuProvid
             case DIAMOND -> 20;
             case NETHERITE -> 10;
             case BLAZE_OVERCLOCK -> 4;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> 80;
         };
     }

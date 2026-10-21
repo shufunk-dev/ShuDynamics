@@ -105,6 +105,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements MenuProvider, W
             case DIAMOND -> 8;
             case NETHERITE -> 4;
             case BLAZE_OVERCLOCK -> 2;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> 40;
         };
     }
@@ -120,6 +121,7 @@ public class WaterPumpBlockEntity extends BlockEntity implements MenuProvider, W
             case DIAMOND -> 6;
             case NETHERITE -> 4;
             case BLAZE_OVERCLOCK -> 2;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> BASE_ENERGY_DRAW;
         };
     }

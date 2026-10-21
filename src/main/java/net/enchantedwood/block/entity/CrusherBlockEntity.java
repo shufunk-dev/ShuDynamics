@@ -119,6 +119,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider, Wor
             case DIAMOND -> 50;
             case NETHERITE -> 25;
             case BLAZE_OVERCLOCK -> 15;
+            case INSANIUM_OVERCLOCK -> 3;
             default -> 160;
         };
     }

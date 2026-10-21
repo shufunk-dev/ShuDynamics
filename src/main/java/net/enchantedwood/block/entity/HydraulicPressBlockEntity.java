@@ -236,6 +236,7 @@ public class HydraulicPressBlockEntity extends BlockEntity implements MenuProvid
             case DIAMOND -> 9;
             case NETHERITE -> 14;
             case BLAZE_OVERCLOCK -> 19;
+            case INSANIUM_OVERCLOCK -> 32;
             default -> 0;
         };
 

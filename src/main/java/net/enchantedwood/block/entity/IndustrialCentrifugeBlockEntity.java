@@ -97,6 +97,7 @@ public class IndustrialCentrifugeBlockEntity extends BlockEntity implements Menu
             case DIAMOND -> 40;
             case NETHERITE -> 20;
             case BLAZE_OVERCLOCK -> 15;
+            case INSANIUM_OVERCLOCK -> 3;
             default -> 140;
         };
     }

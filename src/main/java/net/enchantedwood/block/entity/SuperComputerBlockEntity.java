@@ -26,11 +26,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -322,6 +324,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
     public java.util.Map<net.minecraft.world.item.Item, Integer> collectAvailableItems(@Nullable EnchantedStorageTerminalBlockEntity terminal,
                                                                                 @Nullable Player player) {
         java.util.Map<net.minecraft.world.item.Item, Integer> available = new java.util.HashMap<>();
+
+        // 0. Super Computer's own Output Buffer (slots 10..13) - ONLY for reusable catalysts (Infusion Crystal)!
+        for (int i = 0; i < OUTPUT_SIZE; i++) {
+            ItemStack stk = this.inventory.get(OUTPUT_START + i);
+            if (!stk.isEmpty() && isInfusionCrystal(stk)) {
+                available.put(stk.getItem(), available.getOrDefault(stk.getItem(), 0) + stk.getCount());
+            }
+        }
 
         // 1. Digital Storage Terminal crystals
         if (terminal != null && terminal.isNetworkOnline()) {
@@ -637,29 +647,30 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public int getStepDurationTicks(CraftStep step) {
+        boolean insanium = isInsaniumOverclocked();
         return switch (step.type) {
             case PRESS -> {
                 HydraulicPressBlockEntity press = getBestAvailablePress();
                 if (press != null) {
-                    int speed = press.getProcessingSpeed(press.getActiveGearTier());
-                    yield Math.max(8, 100 / Math.max(1, speed));
+                    int speed = insanium ? 32 : press.getProcessingSpeed(press.getActiveGearTier());
+                    yield Math.max(2, 100 / Math.max(1, speed));
                 }
-                yield 100;
+                yield insanium ? 4 : 100;
             }
             case FABRICATE -> {
                 CircuitFabricatorBlockEntity fab = getBestAvailableFabricator();
                 if (fab != null) {
-                    float speed = fab.getSpeedMultiplier();
-                    yield Math.max(10, (int) (120 / Math.max(1.0f, speed)));
+                    float speed = insanium ? 12.0f : fab.getSpeedMultiplier();
+                    yield Math.max(2, (int) (120 / Math.max(1.0f, speed)));
                 }
-                yield 120;
+                yield insanium ? 10 : 120;
             }
-            case SMELT -> isFurnaceOnline() ? 60 : 120;
-            case CAST -> 20;
-            case PUMP_WATER -> 20;
-            case PUMP_LAVA -> 30;
-            case MELT_LAVA -> 40;
-            case ASSEMBLE -> isOverclocked() ? 10 : 25;
+            case SMELT -> insanium ? 6 : (isFurnaceOnline() ? 60 : 120);
+            case CAST -> insanium ? 2 : 20;
+            case PUMP_WATER -> insanium ? 2 : 20;
+            case PUMP_LAVA -> insanium ? 3 : 30;
+            case MELT_LAVA -> insanium ? 4 : 40;
+            case ASSEMBLE -> insanium ? 1 : (isOverclocked() ? 10 : 25);
         };
     }
 
@@ -896,7 +907,12 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public boolean isOverclocked() {
-        return this.inventory.get(UPGRADE_SLOT).is(ModItems.BLAZE_OVERCLOCK_CORE);
+        ItemStack stack = this.inventory.get(UPGRADE_SLOT);
+        return stack.is(ModItems.BLAZE_OVERCLOCK_CORE) || stack.is(ModItems.INSANIUM_OVERCLOCK_GEAR);
+    }
+
+    public boolean isInsaniumOverclocked() {
+        return this.inventory.get(UPGRADE_SLOT).is(ModItems.INSANIUM_OVERCLOCK_GEAR);
     }
 
     public static void tick(ServerLevel world, BlockPos pos, BlockState state, SuperComputerBlockEntity entity) {
@@ -909,7 +925,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         boolean wasLit = state.getValue(SuperComputerBlock.LIT);
 
         // Determine current craft speed based on upgrade socket
-        entity.maxCraftProgress = entity.isOverclocked() ? OVERCLOCKED_CRAFT_TIME : BASE_CRAFT_TIME;
+        entity.maxCraftProgress = entity.isInsaniumOverclocked() ? 1 : (entity.isOverclocked() ? OVERCLOCKED_CRAFT_TIME : BASE_CRAFT_TIME);
 
         // Form 3x3 recipe input
         List<ItemStack> patternStacks = new ArrayList<>(9);
@@ -1007,6 +1023,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
             Player player = world.getPlayerByUUID(job.playerUuid);
 
+            if (job.usesRegularCrystal && !job.usesMasterCrystal) {
+                applyCrystalDamage(terminal, player, Math.max(1, job.crystalUsesCount));
+            }
+
             depositCraftedResult(terminal, player, job.finalResult.copy());
             for (ItemStack leftover : job.leftoverItems) {
                 if (!leftover.isEmpty()) {
@@ -1016,6 +1036,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
             if (player != null) {
                 sendFeedback(player, "§a⚡ Factory Completed: §f" + job.finalResult.getCount() + "x " + job.finalResult.getHoverName().getString());
+                world.playSound(null, pos, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5f, 1.5f);
             }
 
             this.craftProgress = 0;
@@ -1042,11 +1063,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
             setChanged();
 
-            if (hadCraftAll && player != null) {
-                executeManualCraft(player, true);
-            } else {
-                world.setBlock(pos, state.setValue(SuperComputerBlock.LIT, false), 3);
-            }
+            world.setBlock(pos, state.setValue(SuperComputerBlock.LIT, false), 3);
             return;
         }
 
@@ -1303,7 +1320,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                     world.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, sPos.getX() + 0.5, sPos.getY() + 0.9, sPos.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.05);
                 }
                 case ASSEMBLE -> {
-                    world.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.5f, 1.4f);
+                    if (world.getGameTime() % 6 == 0) {
+                        world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.25f, 1.8f);
+                    }
                 }
             }
 
@@ -1467,7 +1486,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         String opStr = opBreakdown.toString();
         if (opStr.endsWith(", ")) opStr = opStr.substring(0, opStr.length() - 2);
 
-        this.activeJob = new ActiveCraftJob(player.getUUID(), plan.steps, resultStack.copy(), plan.leftoverSynthesized, craftAll, patternStacks);
+        this.activeJob = new ActiveCraftJob(player.getUUID(), plan.steps, resultStack.copy(), plan.leftoverSynthesized, craftAll, patternStacks, plan.usesMasterCrystal, plan.usesRegularCrystal && !plan.usesMasterCrystal, plan.crystalUsesCount);
         sendFeedback(player, "§6⚡ Factory Activated: §fManufacturing " + resultStack.getHoverName().getString() + " §7(" + (opStr.isEmpty() ? plan.steps.size() + " ops" : opStr) + ")");
         setChanged();
         serverWorld.setBlock(this.worldPosition, serverWorld.getBlockState(this.worldPosition).setValue(SuperComputerBlock.LIT, true), 3);
@@ -1848,6 +1867,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         public int circuitFabrications = 0;
         public int hydraulicPressings = 0;
         public int smeltingSteps = 0;
+        public boolean usesMasterCrystal = false;
+        public boolean usesRegularCrystal = false;
+        public int crystalUsesCount = 0;
+        public int availableRegularCrystalUses = 0;
+        public int searchSteps = 0;
     }
 
     public static class CraftingPlanResult {
@@ -1869,19 +1893,31 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         public final List<ItemStack> leftoverItems;
         public final boolean craftAll;
         public final List<ItemStack> patternSnapshot;
+        public final boolean usesMasterCrystal;
+        public final boolean usesRegularCrystal;
+        public final int crystalUsesCount;
 
         public int currentStepIndex = 0;
         public int currentStepTicks = 0;
         public int currentStepMaxTicks = 20;
 
         public ActiveCraftJob(java.util.UUID playerUuid, List<CraftStep> steps, ItemStack finalResult,
-                              List<ItemStack> leftoverItems, boolean craftAll, List<ItemStack> patternSnapshot) {
+                              List<ItemStack> leftoverItems, boolean craftAll, List<ItemStack> patternSnapshot,
+                              boolean usesMasterCrystal, boolean usesRegularCrystal, int crystalUsesCount) {
             this.playerUuid = playerUuid;
             this.steps = new ArrayList<>(steps);
             this.finalResult = finalResult;
             this.leftoverItems = new ArrayList<>(leftoverItems);
             this.craftAll = craftAll;
             this.patternSnapshot = new ArrayList<>(patternSnapshot);
+            this.usesMasterCrystal = usesMasterCrystal;
+            this.usesRegularCrystal = usesRegularCrystal;
+            this.crystalUsesCount = crystalUsesCount;
+        }
+
+        public ActiveCraftJob(java.util.UUID playerUuid, List<CraftStep> steps, ItemStack finalResult,
+                              List<ItemStack> leftoverItems, boolean craftAll, List<ItemStack> patternSnapshot) {
+            this(playerUuid, steps, finalResult, leftoverItems, craftAll, patternSnapshot, false, false, 0);
         }
 
         public @Nullable CraftStep getCurrentStep() {
@@ -1970,7 +2006,11 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             java.util.Map<net.minecraft.world.item.Item, Integer> available = collectAvailableItems(terminal, player);
 
             CraftingPlan plan = new CraftingPlan();
+            plan.availableRegularCrystalUses = getAvailableCrystalRemainingUses(terminal, player);
             java.util.Map<net.minecraft.world.item.Item, Integer> virtualBuffer = new java.util.HashMap<>();
+            if (hasMasterCrystal(available, virtualBuffer)) {
+                plan.usesMasterCrystal = true;
+            }
             java.util.Set<net.minecraft.world.item.Item> activeRecursion = new java.util.HashSet<>();
             java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> availableMolten = isCasterOnline()
                     ? new java.util.EnumMap<>(getAvailableMoltenMetals())
@@ -1984,17 +2024,17 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             }
 
             boolean allSatisfied = true;
-            if (!ingredients.isEmpty()) {
-                for (net.minecraft.world.item.crafting.Ingredient ing : ingredients) {
-                    if (ing == null || ing.isEmpty()) continue;
-                    if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
-                        allSatisfied = false;
-                    }
-                }
-            } else {
+            if (!patternStacks.isEmpty() && patternStacks.stream().anyMatch(s -> !s.isEmpty())) {
                 for (ItemStack req : patternStacks) {
                     if (req.isEmpty()) continue;
                     if (!resolveItemRequirement(world, req.getItem(), available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
+                        allSatisfied = false;
+                    }
+                }
+            } else if (!ingredients.isEmpty()) {
+                for (net.minecraft.world.item.crafting.Ingredient ing : ingredients) {
+                    if (ing == null || ing.isEmpty()) continue;
+                    if (!resolveIngredientRequirement(world, ing, available, availableMolten, virtualBuffer, plan, missingItems, activeRecursion, 0)) {
                         allSatisfied = false;
                     }
                 }
@@ -2014,7 +2054,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             // Record any leftover synthesized items
             for (java.util.Map.Entry<net.minecraft.world.item.Item, Integer> entry : virtualBuffer.entrySet()) {
                 if (entry.getValue() > 0) {
-                    plan.leftoverSynthesized.add(new ItemStack(entry.getKey(), entry.getValue()));
+                    if (isRegularInfusionCrystal(entry.getKey())) {
+                        ItemStack st = new ItemStack(entry.getKey(), entry.getValue());
+                        int maxD = st.getMaxDamage() > 0 ? st.getMaxDamage() : 1000;
+                        st.setDamageValue(Math.min(maxD, Math.max(1, plan.crystalUsesCount)));
+                        plan.leftoverSynthesized.add(st);
+                    } else {
+                        plan.leftoverSynthesized.add(new ItemStack(entry.getKey(), entry.getValue()));
+                    }
                 }
             }
 
@@ -2081,7 +2128,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
     private static final CraftingInput DUMMY_INPUT = CraftingInput.of(3, 3, java.util.Collections.nCopies(9, ItemStack.EMPTY));
 
-    private ItemStack getSafeRecipeResult(CraftingRecipe recipe, ServerLevel world) {
+    public static ItemStack getSafeRecipeResult(CraftingRecipe recipe, ServerLevel world) {
         try {
             ItemStack res = recipe.assemble(DUMMY_INPUT);
             if (!res.isEmpty()) return res;
@@ -2091,6 +2138,68 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         } catch (Throwable t) {
             return ItemStack.EMPTY;
         }
+    }
+
+    private static java.util.Map<Item, List<CraftingRecipe>> CRAFTING_RECIPE_CACHE = null;
+    private static java.util.Map<Item, List<AbstractCookingRecipe>> SMELTING_RECIPE_CACHE = null;
+    private static int LAST_RECIPES_COUNT = -1;
+
+    private static synchronized void ensureRecipeCache(ServerLevel world) {
+        var allRecipes = world.recipeAccess().getRecipes();
+        int count = allRecipes.size();
+        if (CRAFTING_RECIPE_CACHE != null && LAST_RECIPES_COUNT == count) {
+            return;
+        }
+
+        java.util.Map<Item, List<CraftingRecipe>> craftMap = new java.util.HashMap<>();
+        java.util.Map<Item, List<AbstractCookingRecipe>> smeltMap = new java.util.HashMap<>();
+
+        for (RecipeHolder<?> entry : allRecipes) {
+            Recipe<?> recipe = entry.value();
+            if (recipe instanceof CraftingRecipe cr) {
+                ItemStack res = getSafeRecipeResult(cr, world);
+                if (!res.isEmpty()) {
+                    craftMap.computeIfAbsent(res.getItem(), k -> new ArrayList<>()).add(cr);
+                }
+            } else if (recipe instanceof AbstractCookingRecipe cooking) {
+                if (cooking.getType() == RecipeType.SMELTING || cooking.getType() == RecipeType.BLASTING) {
+                    try {
+                        ItemStack res = cooking.assemble(new SingleRecipeInput(ItemStack.EMPTY));
+                        if (!res.isEmpty()) {
+                            smeltMap.computeIfAbsent(res.getItem(), k -> new ArrayList<>()).add(cooking);
+                        }
+                    } catch (Throwable ignored) {}
+                }
+            }
+        }
+
+        for (java.util.Map.Entry<Item, List<CraftingRecipe>> entry : craftMap.entrySet()) {
+            Item item = entry.getKey();
+            if (isEssenceItem(item)) {
+                entry.getValue().removeIf(r -> isEssenceDowncrafting(r, item));
+                entry.getValue().sort((r1, r2) -> {
+                    boolean d1 = isBlockToEssenceDecompaction(r1, item);
+                    boolean d2 = isBlockToEssenceDecompaction(r2, item);
+                    if (d1 && !d2) return 1;
+                    if (!d1 && d2) return -1;
+                    return 0;
+                });
+            }
+        }
+
+        CRAFTING_RECIPE_CACHE = craftMap;
+        SMELTING_RECIPE_CACHE = smeltMap;
+        LAST_RECIPES_COUNT = count;
+    }
+
+    private static List<CraftingRecipe> getCraftingRecipesFor(ServerLevel world, Item targetItem) {
+        ensureRecipeCache(world);
+        return CRAFTING_RECIPE_CACHE.getOrDefault(targetItem, java.util.Collections.emptyList());
+    }
+
+    private static List<AbstractCookingRecipe> getSmeltingRecipesFor(ServerLevel world, Item targetItem) {
+        ensureRecipeCache(world);
+        return SMELTING_RECIPE_CACHE.getOrDefault(targetItem, java.util.Collections.emptyList());
     }
 
     private static boolean isCircularOrContainsActiveRecursion(java.util.Map<String, Integer> candidateMissing,
@@ -2106,8 +2215,91 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         return false;
     }
 
+    private static int getTotalMissingCount(java.util.Map<String, Integer> map) {
+        if (map == null || map.isEmpty()) return Integer.MAX_VALUE;
+        int total = 0;
+        for (int c : map.values()) total += c;
+        return total;
+    }
+
+    public static boolean isEssenceItem(@Nullable Item item) {
+        if (item == null) return false;
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        String path = id.getPath();
+        return path.contains("essence") && !path.contains("seed") && !path.contains("block");
+    }
+
+    public static boolean isEssenceBlockItem(@Nullable Item item) {
+        if (item == null) return false;
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        String path = id.getPath();
+        return path.contains("block") && (id.getNamespace().equals("mysticalagriculture") || path.contains("essence") || path.contains("inferium") || path.contains("prudentium") || path.contains("tertium") || path.contains("imperium") || path.contains("supremium") || path.contains("awakened"));
+    }
+
+    private static boolean isBlockToEssenceDecompaction(CraftingRecipe recipe, net.minecraft.world.item.Item targetItem) {
+        if (recipe == null || targetItem == null || !isEssenceItem(targetItem)) return false;
+        try {
+            List<net.minecraft.world.item.crafting.Ingredient> ings = recipe.placementInfo().ingredients();
+            List<net.minecraft.world.item.crafting.Ingredient> nonEmpty = ings.stream().filter(i -> i != null && !i.isEmpty()).toList();
+            if (nonEmpty.size() == 1) {
+                for (Item opt : nonEmpty.get(0).items().map(net.minecraft.core.Holder::value).toList()) {
+                    if (isEssenceBlockItem(opt)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Throwable ignored) {}
+        return false;
+    }
+
+    public static int getEssenceTier(@Nullable Item item) {
+        if (item == null) return -1;
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        String path = id.getPath();
+        if (path.contains("inferium")) return 1;
+        if (path.contains("prudentium")) return 2;
+        if (path.contains("tertium")) return 3;
+        if (path.contains("imperium")) return 4;
+        if (path.contains("awakened")) return 6;
+        if (path.contains("supremium")) return 5;
+        return -1;
+    }
+
+    public static boolean isEssenceDowncrafting(CraftingRecipe recipe, net.minecraft.world.item.Item targetItem) {
+        if (recipe == null || targetItem == null || !isEssenceItem(targetItem)) return false;
+        int targetTier = getEssenceTier(targetItem);
+        try {
+            List<net.minecraft.world.item.crafting.Ingredient> ings = recipe.placementInfo().ingredients();
+            List<net.minecraft.world.item.crafting.Ingredient> nonEmpty = ings.stream().filter(i -> i != null && !i.isEmpty()).toList();
+
+            // 1. Single essence item ingredient producing lower tier essence (e.g. 1 Supremium -> 4 Imperium)
+            if (nonEmpty.size() == 1) {
+                for (Item opt : nonEmpty.get(0).items().map(net.minecraft.core.Holder::value).toList()) {
+                    if (isEssenceItem(opt)) return true;
+                }
+            }
+
+            // 2. Any recipe ingredient that is same or higher tier essence (circular or deconstruction)
+            if (targetTier > 0) {
+                for (net.minecraft.world.item.crafting.Ingredient ing : nonEmpty) {
+                    for (Item opt : ing.items().map(net.minecraft.core.Holder::value).toList()) {
+                        if (isEssenceItem(opt)) {
+                            int ingTier = getEssenceTier(opt);
+                            if (ingTier >= targetTier) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignored) {}
+        return false;
+    }
+
     private static boolean isCompactionOrDecompactionRecipe(CraftingRecipe recipe, net.minecraft.world.item.Item targetItem) {
         if (recipe == null || targetItem == null) return false;
+        if (isBlockToEssenceDecompaction(recipe, targetItem)) return true;
+        if (isEssenceDowncrafting(recipe, targetItem)) return true;
 
         MetalCastInfo castInfo = getMetalCastInfo(targetItem);
         if (castInfo != null) {
@@ -2149,7 +2341,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                     String targetKey = targetItem.getDescriptionId();
                     String srcKey = first.getDescriptionId();
                     if ((targetKey.contains("ingot") && srcKey.contains("nugget")) ||
-                        (targetKey.contains("block") && (srcKey.contains("ingot") || srcKey.contains("nugget") || srcKey.contains("gem") || srcKey.contains("dust")))) {
+                        (targetKey.contains("block") && (srcKey.contains("ingot") || srcKey.contains("nugget") || srcKey.contains("gem") || srcKey.contains("dust") || srcKey.contains("essence"))) ||
+                        (targetKey.contains("essence") && srcKey.contains("essence")) ||
+                        (isEssenceBlockItem(targetItem) && isEssenceItem(first))) {
                         return true;
                     }
                 }
@@ -2159,7 +2353,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                     String targetKey = targetItem.getDescriptionId();
                     String srcKey = opts.get(0).getDescriptionId();
                     if ((targetKey.contains("ingot") && srcKey.contains("block")) ||
-                        (targetKey.contains("nugget") && srcKey.contains("ingot"))) {
+                        (targetKey.contains("nugget") && srcKey.contains("ingot")) ||
+                        (targetKey.contains("essence") && srcKey.contains("essence")) ||
+                        (isEssenceItem(targetItem) && isEssenceBlockItem(opts.get(0)))) {
                         return true;
                     }
                 }
@@ -2177,6 +2373,57 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                                            java.util.Map<String, Integer> missingItems,
                                            java.util.Set<net.minecraft.world.item.Item> activeRecursion,
                                            int depth) {
+        // Mystical Agriculture Infusion Crystal handling
+        Item masterCrystalItem = getMasterInfusionCrystalItem();
+        boolean isSynthesizingMaster = (masterCrystalItem != null && targetItem == masterCrystalItem && !plan.usesMasterCrystal && !hasMasterCrystal(available, virtualBuffer));
+
+        if (isInfusionCrystal(targetItem) && !isSynthesizingMaster) {
+            if (plan.usesMasterCrystal) {
+                plan.crystalUsesCount++;
+                return true;
+            }
+            if (hasMasterCrystal(available, virtualBuffer)) {
+                plan.usesMasterCrystal = true;
+                plan.crystalUsesCount++;
+                return true;
+            }
+            if (plan.usesRegularCrystal) {
+                if (plan.crystalUsesCount < plan.availableRegularCrystalUses) {
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+            } else if (hasRegularCrystal(available, virtualBuffer) && plan.crystalUsesCount < plan.availableRegularCrystalUses) {
+                plan.usesRegularCrystal = true;
+                plan.crystalUsesCount++;
+                return true;
+            }
+
+            // Durability exhausted or no crystal: try to synthesize Master Crystal
+            if (masterCrystalItem != null && !activeRecursion.contains(masterCrystalItem)) {
+                java.util.Map<String, Integer> masterMissing = new java.util.LinkedHashMap<>();
+                if (resolveItemRequirement(world, masterCrystalItem, available, availableMolten, virtualBuffer, plan, masterMissing, activeRecursion, depth + 1)) {
+                    plan.usesMasterCrystal = true;
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+            }
+
+            // Try to synthesize new Regular Crystal
+            Item regItem = getRegularInfusionCrystalItem();
+            if (regItem != null && !activeRecursion.contains(regItem)) {
+                java.util.Map<String, Integer> regMissing = new java.util.LinkedHashMap<>();
+                if (resolveItemRequirement(world, regItem, available, availableMolten, virtualBuffer, plan, regMissing, activeRecursion, depth + 1)) {
+                    plan.usesRegularCrystal = true;
+                    plan.availableRegularCrystalUses += 1000;
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+            }
+
+            missingItems.put("Infusion Crystal", 1);
+            return false; // CRITICAL: NEVER FALL THROUGH TO CONSUMPTION OR RAW INGREDIENTS!
+        }
+
         // 1. If item already exists in intermediate virtual buffer, consume 1
         int vCount = virtualBuffer.getOrDefault(targetItem, 0);
         if (vCount > 0) {
@@ -2296,13 +2543,15 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         if (activeRecursion.contains(targetItem)) {
             return false;
         }
-        if (depth >= 8) {
+        if (depth >= 16 || ++plan.searchSteps > 5000) {
             missingItems.put(targetItem.getName(targetItem.getDefaultInstance()).getString(), missingItems.getOrDefault(targetItem.getName(targetItem.getDefaultInstance()).getString(), 0) + 1);
             return false;
         }
 
         activeRecursion.add(targetItem);
         java.util.Map<String, Integer> bestCandidateMissing = null;
+        java.util.Map<net.minecraft.world.item.Item, Integer> bestCandidateAvailable = null;
+        java.util.Map<net.minecraft.world.item.Item, Integer> bestCandidateVirtual = null;
         try {
             // 5. Check if targetItem can be pressed via an online Hydraulic Press
             if (isPressOnline()) {
@@ -2328,8 +2577,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         }
                         return true;
                     } else {
-                        if (!pressMissing.isEmpty() && !isCircularOrContainsActiveRecursion(pressMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || pressMissing.size() < bestCandidateMissing.size())) {
+                        if (!pressMissing.isEmpty() && !isCircularOrContainsActiveRecursion(pressMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || getTotalMissingCount(pressMissing) < getTotalMissingCount(bestCandidateMissing))) {
                             bestCandidateMissing = pressMissing;
+                            bestCandidateAvailable = new java.util.HashMap<>(available);
+                            bestCandidateVirtual = new java.util.HashMap<>(virtualBuffer);
                         }
                         available.clear(); available.putAll(backupAvailable);
                         availableMolten.clear(); availableMolten.putAll(backupMolten);
@@ -2375,8 +2626,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                             }
                             return true;
                         } else {
-                            if (!fabMissing.isEmpty() && !isCircularOrContainsActiveRecursion(fabMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || fabMissing.size() < bestCandidateMissing.size())) {
+                            if (!fabMissing.isEmpty() && !isCircularOrContainsActiveRecursion(fabMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || getTotalMissingCount(fabMissing) < getTotalMissingCount(bestCandidateMissing))) {
                                 bestCandidateMissing = fabMissing;
+                                bestCandidateAvailable = new java.util.HashMap<>(available);
+                                bestCandidateVirtual = new java.util.HashMap<>(virtualBuffer);
                             }
                             available.clear(); available.putAll(backupAvailable);
                             availableMolten.clear(); availableMolten.putAll(backupMolten);
@@ -2392,11 +2645,34 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                 }
             }
 
-            // 7. Search RecipeManager for a crafting recipe that produces targetItem from available materials
-            for (RecipeHolder<?> entry : world.recipeAccess().getRecipes()) {
-                if (!(entry.value() instanceof CraftingRecipe craftingRecipe)) continue;
+            // 7. Search indexed recipes that produce targetItem
+            for (CraftingRecipe craftingRecipe : getCraftingRecipesFor(world, targetItem)) {
+                if (plan.searchSteps > 5000) break;
+                if (isEssenceDowncrafting(craftingRecipe, targetItem)) {
+                    continue;
+                }
                 ItemStack result = getSafeRecipeResult(craftingRecipe, world);
                 if (!result.isEmpty() && result.is(targetItem)) {
+                    // If targetItem is an essence and this recipe uncrafts an essence block:
+                    // Only allow this uncrafting if the block is ALREADY available in storage or virtual buffer!
+                    if (isBlockToEssenceDecompaction(craftingRecipe, targetItem)) {
+                        boolean hasBlockAvailable = false;
+                        for (net.minecraft.world.item.crafting.Ingredient ing : craftingRecipe.placementInfo().ingredients()) {
+                            if (ing != null && !ing.isEmpty()) {
+                                for (Item opt : ing.items().map(net.minecraft.core.Holder::value).toList()) {
+                                    if (available.getOrDefault(opt, 0) > 0 || virtualBuffer.getOrDefault(opt, 0) > 0) {
+                                        hasBlockAvailable = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (hasBlockAvailable) break;
+                        }
+                        if (!hasBlockAvailable) {
+                            continue; // Do not try to craft blocks to uncraft them into essence!
+                        }
+                    }
+
                     int yield = Math.max(1, result.getCount());
                     java.util.Map<net.minecraft.world.item.Item, Integer> backupAvailable = new java.util.HashMap<>(available);
                     java.util.Map<net.enchantedwood.fluid.MoltenMetal, Integer> backupMolten = new java.util.EnumMap<>(availableMolten);
@@ -2429,7 +2705,13 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                     if (success) {
                         plan.totalCraftingSteps++;
                         plan.steps.add(new CraftStep(StepType.ASSEMBLE, null, targetItem));
-                        if (yield > 1) {
+                        if (isMasterInfusionCrystal(targetItem)) {
+                            plan.usesMasterCrystal = true;
+                            virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + 1);
+                        } else if (isRegularInfusionCrystal(targetItem)) {
+                            plan.usesRegularCrystal = true;
+                            virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + 1);
+                        } else if (yield > 1) {
                             virtualBuffer.put(targetItem, virtualBuffer.getOrDefault(targetItem, 0) + (yield - 1));
                         }
                         return true;
@@ -2437,8 +2719,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         if (!craftCandidateMissing.isEmpty()
                                 && !isCompactionOrDecompactionRecipe(craftingRecipe, targetItem)
                                 && !isCircularOrContainsActiveRecursion(craftCandidateMissing, targetItem, activeRecursion)
-                                && (bestCandidateMissing == null || craftCandidateMissing.size() < bestCandidateMissing.size())) {
+                                && (bestCandidateMissing == null || getTotalMissingCount(craftCandidateMissing) < getTotalMissingCount(bestCandidateMissing))) {
                             bestCandidateMissing = craftCandidateMissing;
+                            bestCandidateAvailable = new java.util.HashMap<>(available);
+                            bestCandidateVirtual = new java.util.HashMap<>(virtualBuffer);
                         }
                         // Rollback and try the next recipe candidate
                         available.clear();
@@ -2480,8 +2764,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                         plan.steps.add(new CraftStep(StepType.SMELT, dustCandidate, targetItem));
                         return true;
                     } else {
-                        if (!dustMissing.isEmpty() && !isCircularOrContainsActiveRecursion(dustMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || dustMissing.size() < bestCandidateMissing.size())) {
+                        if (!dustMissing.isEmpty() && !isCircularOrContainsActiveRecursion(dustMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || getTotalMissingCount(dustMissing) < getTotalMissingCount(bestCandidateMissing))) {
                             bestCandidateMissing = dustMissing;
+                            bestCandidateAvailable = new java.util.HashMap<>(available);
+                            bestCandidateVirtual = new java.util.HashMap<>(virtualBuffer);
                         }
                         available.clear(); available.putAll(backupAvailable);
                         availableMolten.clear(); availableMolten.putAll(backupMolten);
@@ -2495,10 +2781,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                     }
                 }
 
-                // B. Check standard smelting recipes (e.g. Glass from Sand, Stone from Cobblestone, Smooth Stone from Stone, Charcoal from Log, etc.)
-                for (RecipeHolder<?> entry : world.recipeAccess().getRecipes()) {
-                    if (!(entry.value() instanceof AbstractCookingRecipe cookingRecipe)) continue;
-                    if (cookingRecipe.getType() != RecipeType.SMELTING && cookingRecipe.getType() != RecipeType.BLASTING) continue;
+                // B. Check standard smelting recipes
+                for (AbstractCookingRecipe cookingRecipe : getSmeltingRecipesFor(world, targetItem)) {
+                    if (plan.searchSteps > 5000) break;
                     if (isEquipmentRecycleRecipe(cookingRecipe, world)) continue;
 
                     ItemStack smeltRes = ItemStack.EMPTY;
@@ -2541,8 +2826,10 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
                             }
                             return true;
                         } else {
-                            if (!smeltMissing.isEmpty() && !isCircularOrContainsActiveRecursion(smeltMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || smeltMissing.size() < bestCandidateMissing.size())) {
+                            if (!smeltMissing.isEmpty() && !isCircularOrContainsActiveRecursion(smeltMissing, targetItem, activeRecursion) && (bestCandidateMissing == null || getTotalMissingCount(smeltMissing) < getTotalMissingCount(bestCandidateMissing))) {
                                 bestCandidateMissing = smeltMissing;
+                                bestCandidateAvailable = new java.util.HashMap<>(available);
+                                bestCandidateVirtual = new java.util.HashMap<>(virtualBuffer);
                             }
                             available.clear(); available.putAll(backupAvailable);
                             availableMolten.clear(); availableMolten.putAll(backupMolten);
@@ -2567,6 +2854,14 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         if (bestCandidateMissing != null && !bestCandidateMissing.isEmpty()) {
             for (java.util.Map.Entry<String, Integer> e : bestCandidateMissing.entrySet()) {
                 missingItems.put(e.getKey(), missingItems.getOrDefault(e.getKey(), 0) + e.getValue());
+            }
+            if (bestCandidateAvailable != null) {
+                available.clear();
+                available.putAll(bestCandidateAvailable);
+            }
+            if (bestCandidateVirtual != null) {
+                virtualBuffer.clear();
+                virtualBuffer.putAll(bestCandidateVirtual);
             }
         } else {
             String name = targetItem.getName(targetItem.getDefaultInstance()).getString();
@@ -2595,6 +2890,79 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             return false;
         }
 
+        boolean isCrystalIng = matchingItems.stream().anyMatch(SuperComputerBlockEntity::isInfusionCrystal);
+        if (!isCrystalIng) {
+            Item masterItem = getMasterInfusionCrystalItem();
+            Item regItem = getRegularInfusionCrystalItem();
+            if ((masterItem != null && ing.test(new ItemStack(masterItem))) || (regItem != null && ing.test(new ItemStack(regItem)))) {
+                isCrystalIng = true;
+            }
+        }
+
+        if (isCrystalIng) {
+            // Priority 1: Master Infusion Crystal already active, in storage, or in virtual buffer! (Unlimited uses)
+            if (plan.usesMasterCrystal) {
+                plan.crystalUsesCount++;
+                return true;
+            }
+
+            if (hasMasterCrystal(available, virtualBuffer)) {
+                plan.usesMasterCrystal = true;
+                plan.crystalUsesCount++;
+                return true;
+            }
+
+            for (net.minecraft.world.item.Item opt : matchingItems) {
+                if (isMasterInfusionCrystal(opt)) {
+                    if (virtualBuffer.getOrDefault(opt, 0) > 0 || available.getOrDefault(opt, 0) > 0) {
+                        plan.usesMasterCrystal = true;
+                        plan.crystalUsesCount++;
+                        return true;
+                    }
+                }
+            }
+
+            // Priority 2: Regular Infusion Crystal already active or available (check durability remaining!)
+            if (plan.usesRegularCrystal) {
+                if (plan.crystalUsesCount < plan.availableRegularCrystalUses) {
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+                // Regular crystal ran out of durability for this craft! Fall through to synthesize Master or new Regular crystal.
+            } else if (hasRegularCrystal(available, virtualBuffer) && plan.crystalUsesCount < plan.availableRegularCrystalUses) {
+                plan.usesRegularCrystal = true;
+                plan.crystalUsesCount++;
+                return true;
+            }
+
+            // Priority 3: Durability exhausted or no crystal available!
+            // First check if Master Infusion Crystal can be synthesized! (Permanent solution)
+            Item masterItem = getMasterInfusionCrystalItem();
+            if (masterItem != null && !activeRecursion.contains(masterItem)) {
+                java.util.Map<String, Integer> masterMissing = new java.util.LinkedHashMap<>();
+                if (resolveItemRequirement(world, masterItem, available, availableMolten, virtualBuffer, plan, masterMissing, activeRecursion, depth + 1)) {
+                    plan.usesMasterCrystal = true;
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+            }
+
+            // Second check if another Regular Infusion Crystal can be synthesized!
+            Item regItem = getRegularInfusionCrystalItem();
+            if (regItem != null && !activeRecursion.contains(regItem)) {
+                java.util.Map<String, Integer> regMissing = new java.util.LinkedHashMap<>();
+                if (resolveItemRequirement(world, regItem, available, availableMolten, virtualBuffer, plan, regMissing, activeRecursion, depth + 1)) {
+                    plan.usesRegularCrystal = true;
+                    plan.availableRegularCrystalUses += 1000;
+                    plan.crystalUsesCount++;
+                    return true;
+                }
+            }
+
+            missingItems.put("Infusion Crystal", 1);
+            return false;
+        }
+
         // Priority 1: Check if any matching item was already synthesized in virtualBuffer
         for (net.minecraft.world.item.Item opt : matchingItems) {
             int vCount = virtualBuffer.getOrDefault(opt, 0);
@@ -2606,6 +2974,7 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
         // Priority 2: Check if any matching item is physically in available storage / inventory
         for (net.minecraft.world.item.Item opt : matchingItems) {
+            if (isInfusionCrystal(opt)) continue; // CRITICAL: NEVER add an Infusion Crystal to rawIngredientsToConsume!
             int pCount = available.getOrDefault(opt, 0);
             if (pCount > 0) {
                 available.put(opt, pCount - 1);
@@ -2633,30 +3002,48 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
         // Priority 4: Try to synthesize one of the matching items recursively from available materials
         java.util.Map<String, Integer> bestSubMissing = null;
+        java.util.Map<net.minecraft.world.item.Item, Integer> bestSubAvailable = null;
+        java.util.Map<net.minecraft.world.item.Item, Integer> bestSubVirtual = null;
+        int candidatesChecked = 0;
         for (net.minecraft.world.item.Item opt : matchingItems) {
+            if (++candidatesChecked > 4) break;
+            if (plan.searchSteps > 5000) break;
             java.util.Map<String, Integer> candidateMissing = new java.util.LinkedHashMap<>();
-            if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, candidateMissing, activeRecursion, depth)) {
+            java.util.Map<net.minecraft.world.item.Item, Integer> subBackupAvail = new java.util.HashMap<>(available);
+            java.util.Map<net.minecraft.world.item.Item, Integer> subBackupVirt = new java.util.HashMap<>(virtualBuffer);
+            if (resolveItemRequirement(world, opt, available, availableMolten, virtualBuffer, plan, candidateMissing, activeRecursion, depth + 1)) {
                 return true;
             }
-            if (!candidateMissing.isEmpty() && !isCircularOrContainsActiveRecursion(candidateMissing, opt, activeRecursion) && (bestSubMissing == null || candidateMissing.size() < bestSubMissing.size())) {
+            if (!candidateMissing.isEmpty() && !isCircularOrContainsActiveRecursion(candidateMissing, opt, activeRecursion)
+                    && (bestSubMissing == null || getTotalMissingCount(candidateMissing) < getTotalMissingCount(bestSubMissing))) {
                 bestSubMissing = candidateMissing;
+                bestSubAvailable = new java.util.HashMap<>(available);
+                bestSubVirtual = new java.util.HashMap<>(virtualBuffer);
             }
+            available.clear(); available.putAll(subBackupAvail);
+            virtualBuffer.clear(); virtualBuffer.putAll(subBackupVirt);
         }
 
         if (bestSubMissing != null && !bestSubMissing.isEmpty()) {
             for (java.util.Map.Entry<String, Integer> e : bestSubMissing.entrySet()) {
                 missingItems.put(e.getKey(), missingItems.getOrDefault(e.getKey(), 0) + e.getValue());
             }
+            if (bestSubAvailable != null) {
+                available.clear(); available.putAll(bestSubAvailable);
+            }
+            if (bestSubVirtual != null) {
+                virtualBuffer.clear(); virtualBuffer.putAll(bestSubVirtual);
+            }
             return false;
         }
 
         // If not found and not synthesizable, record friendly group missing name
         String displayName = getIngredientDisplayName(ing);
-        if (!isFurnaceOnline() && canBeSmelted(world, matchingItems)) {
+        if (!isFurnaceOnline() && canBeSmelted(world, matchingItems, available)) {
             displayName += " §c(Furnace Offline)";
-        } else if (!isPressOnline() && canBePressed(matchingItems)) {
+        } else if (!isPressOnline() && canBePressed(matchingItems, available)) {
             displayName += " §c(Press Offline)";
-        } else if (!isCircuitFabricatorOnline() && canBeFabricated(matchingItems)) {
+        } else if (!isCircuitFabricatorOnline() && canBeFabricated(matchingItems, available)) {
             displayName += " §c(Fabricator Offline)";
         } else if (!isWaterPumpOnline() && matchingItems.stream().anyMatch(i -> i == Items.WATER_BUCKET || i == ModItems.COPPER_WATER_BUCKET)) {
             displayName += " §c(Water Pump Offline)";
@@ -2695,31 +3082,44 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
         return false;
     }
 
-    private boolean canBeSmelted(ServerLevel world, List<net.minecraft.world.item.Item> items) {
+    private boolean canBeSmelted(ServerLevel world, List<net.minecraft.world.item.Item> items, java.util.Map<net.minecraft.world.item.Item, Integer> available) {
         for (net.minecraft.world.item.Item item : items) {
-            if (EnchantedFurnaceBlockEntity.getDustSmeltingResult(item) != null) return true;
+            if (isEssenceItem(item)) continue;
+            for (net.minecraft.world.item.Item dust : getDustSmeltingInputs(item)) {
+                if (available.getOrDefault(dust, 0) > 0) return true;
+            }
             for (RecipeHolder<?> entry : world.recipeAccess().getRecipes()) {
                 if (entry.value() instanceof AbstractCookingRecipe c && (c.getType() == RecipeType.SMELTING || c.getType() == RecipeType.BLASTING)) {
                     if (isEquipmentRecycleRecipe(c, world)) continue;
-                    ItemStack res = c.assemble(new SingleRecipeInput(ItemStack.EMPTY));
-                    if (!res.isEmpty() && res.is(item)) return true;
+                    try {
+                        ItemStack res = c.assemble(new SingleRecipeInput(ItemStack.EMPTY));
+                        if (!res.isEmpty() && res.is(item)) {
+                            net.minecraft.world.item.crafting.Ingredient ing = c.input();
+                            if (ing != null && !ing.isEmpty()) {
+                                for (Item opt : ing.items().map(net.minecraft.core.Holder::value).toList()) {
+                                    if (available.getOrDefault(opt, 0) > 0) return true;
+                                }
+                            }
+                        }
+                    } catch (Throwable ignored) {}
                 }
             }
         }
         return false;
     }
 
-    private boolean canBePressed(List<net.minecraft.world.item.Item> items) {
+    private boolean canBePressed(List<net.minecraft.world.item.Item> items, java.util.Map<net.minecraft.world.item.Item, Integer> available) {
         for (net.minecraft.world.item.Item item : items) {
-            if (getPressRecipeInfo(item) != null) return true;
+            PressRecipeInfo info = getPressRecipeInfo(item);
+            if (info != null && available.getOrDefault(info.input(), 0) > 0) return true;
         }
         return false;
     }
 
-    private boolean canBeFabricated(List<net.minecraft.world.item.Item> items) {
+    private boolean canBeFabricated(List<net.minecraft.world.item.Item> items, java.util.Map<net.minecraft.world.item.Item, Integer> available) {
         for (net.minecraft.world.item.Item item : items) {
             for (CircuitFabricatorBlockEntity.FabricatorRecipe recipe : CircuitFabricatorBlockEntity.getRecipes()) {
-                if (recipe.output().is(item)) return true;
+                if (recipe.output().is(item) && available.getOrDefault(recipe.substrate(), 0) > 0) return true;
             }
         }
         return false;
@@ -2727,8 +3127,9 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
 
     private void consumeIngredients(@Nullable EnchantedStorageTerminalBlockEntity terminal, @Nullable Player player, List<ItemStack> required) {
         for (ItemStack req : required) {
-            if (req.isEmpty()) continue;
+            if (req.isEmpty() || isInfusionCrystal(req)) continue; // SAFETY GUARD: NEVER CONSUME AN INFUSION CRYSTAL!
             int needed = req.getCount();
+
 
             // 1. Deduct from Digital Storage Terminal if online
             if (terminal != null && terminal.isNetworkOnline()) {
@@ -2887,6 +3288,22 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
     }
 
     private void depositCraftedResult(@Nullable EnchantedStorageTerminalBlockEntity terminal, @Nullable Player player, ItemStack result) {
+        if (result.isEmpty()) return;
+
+        // If this is a Master Infusion Crystal, deliver directly to the player or terminal first
+        if (isMasterInfusionCrystal(result)) {
+            if (player != null) {
+                player.getInventory().placeItemBackInInventory(result.copy(), net.minecraft.util.Prediction.SERVER_ONLY);
+                sendFeedback(player, "§6⚡ Master Infusion Crystal delivered to your inventory!");
+                result.setCount(0);
+                return;
+            } else if (terminal != null && terminal.isNetworkOnline()) {
+                terminal.depositItem(result.copy());
+                result.setCount(0);
+                return;
+            }
+        }
+
         // 1. Deposit into 2x2 Output Buffer (slots 10..13) first
         for (int i = 0; i < OUTPUT_SIZE; i++) {
             ItemStack out = this.inventory.get(OUTPUT_START + i);
@@ -3034,6 +3451,310 @@ public class SuperComputerBlockEntity extends BlockEntity implements MenuProvide
             view.putInt("BoundY", this.boundNetworkPos.getY());
             view.putInt("BoundZ", this.boundNetworkPos.getZ());
             view.putString("BoundDim", this.boundDimension != null ? this.boundDimension : "minecraft:overworld");
+        }
+    }
+
+    // ==========================================
+    // Mystical Agriculture Crystal Compatibility
+    // ==========================================
+
+    public static boolean isMasterInfusionCrystal(@Nullable Item item) {
+        if (item == null) return false;
+        String desc = item.getDescriptionId();
+        if (desc != null && desc.contains("master_infusion_crystal")) return true;
+        String cls = item.getClass().getSimpleName();
+        if (cls.contains("MasterInfusionCrystal") || (cls.contains("Master") && cls.contains("Crystal"))) return true;
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        if (id != null) {
+            String path = id.getPath();
+            if (path.contains("master_infusion_crystal") || (path.contains("master") && path.contains("crystal"))) return true;
+        }
+        return false;
+    }
+
+    public static boolean isRegularInfusionCrystal(@Nullable Item item) {
+        if (item == null) return false;
+        if (isMasterInfusionCrystal(item)) return false;
+        String desc = item.getDescriptionId();
+        if (desc != null && desc.contains("infusion_crystal")) return true;
+        String cls = item.getClass().getSimpleName();
+        if (cls.contains("InfusionCrystal") && !cls.contains("Master")) return true;
+        net.minecraft.resources.Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        if (id != null) {
+            String path = id.getPath();
+            if (path.contains("infusion_crystal") && !path.contains("master")) return true;
+        }
+        return false;
+    }
+
+    public static boolean isInfusionCrystal(@Nullable Item item) {
+        return isMasterInfusionCrystal(item) || isRegularInfusionCrystal(item);
+    }
+
+    public static boolean isMasterInfusionCrystal(ItemStack stack) {
+        return !stack.isEmpty() && isMasterInfusionCrystal(stack.getItem());
+    }
+
+    public static boolean isRegularInfusionCrystal(ItemStack stack) {
+        return !stack.isEmpty() && isRegularInfusionCrystal(stack.getItem());
+    }
+
+    public static boolean isInfusionCrystal(ItemStack stack) {
+        return !stack.isEmpty() && isInfusionCrystal(stack.getItem());
+    }
+
+    public static boolean hasMasterCrystal(java.util.Map<Item, Integer> available, java.util.Map<Item, Integer> virtualBuffer) {
+        for (java.util.Map.Entry<Item, Integer> e : available.entrySet()) {
+            if (e.getValue() > 0 && isMasterInfusionCrystal(e.getKey())) return true;
+        }
+        for (java.util.Map.Entry<Item, Integer> e : virtualBuffer.entrySet()) {
+            if (e.getValue() > 0 && isMasterInfusionCrystal(e.getKey())) return true;
+        }
+        return false;
+    }
+
+    public static boolean hasRegularCrystal(java.util.Map<Item, Integer> available, java.util.Map<Item, Integer> virtualBuffer) {
+        for (java.util.Map.Entry<Item, Integer> e : available.entrySet()) {
+            if (e.getValue() > 0 && isRegularInfusionCrystal(e.getKey())) return true;
+        }
+        for (java.util.Map.Entry<Item, Integer> e : virtualBuffer.entrySet()) {
+            if (e.getValue() > 0 && isRegularInfusionCrystal(e.getKey())) return true;
+        }
+        return false;
+    }
+
+    private static Item CACHED_MASTER_CRYSTAL = null;
+    private static Item CACHED_REGULAR_CRYSTAL = null;
+
+    public static @Nullable Item getMasterInfusionCrystalItem() {
+        if (CACHED_MASTER_CRYSTAL != null) return CACHED_MASTER_CRYSTAL;
+        for (Item item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+            if (isMasterInfusionCrystal(item)) {
+                CACHED_MASTER_CRYSTAL = item;
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static @Nullable Item getRegularInfusionCrystalItem() {
+        if (CACHED_REGULAR_CRYSTAL != null) return CACHED_REGULAR_CRYSTAL;
+        for (Item item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+            if (isRegularInfusionCrystal(item)) {
+                CACHED_REGULAR_CRYSTAL = item;
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private int getAvailableCrystalRemainingUses(@Nullable EnchantedStorageTerminalBlockEntity terminal, @Nullable Player player) {
+        int totalRemaining = 0;
+
+        // 0. Super Computer's own Output Buffer (slots 10..13)
+        for (int i = 0; i < OUTPUT_SIZE; i++) {
+            ItemStack stk = this.inventory.get(OUTPUT_START + i);
+            if (isRegularInfusionCrystal(stk)) {
+                int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                totalRemaining += Math.max(0, maxDmg - stk.getDamageValue());
+            }
+        }
+
+        // 1. Digital Storage Terminal
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (EnchantedStorageTerminalBlockEntity.StoredItem item : terminal.getStoredItems()) {
+                ItemStack sample = item.getSample();
+                if (isRegularInfusionCrystal(sample)) {
+                    int maxDmg = sample.getMaxDamage() > 0 ? sample.getMaxDamage() : 1000;
+                    int perItem = Math.max(0, maxDmg - sample.getDamageValue());
+                    totalRemaining += perItem * Math.max(1, item.getCount());
+                }
+            }
+        }
+
+        // 2. Player Inventory
+        if (player != null) {
+            Inventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack pStack = pInv.getItem(i);
+                if (isRegularInfusionCrystal(pStack)) {
+                    int maxDmg = pStack.getMaxDamage() > 0 ? pStack.getMaxDamage() : 1000;
+                    totalRemaining += Math.max(0, maxDmg - pStack.getDamageValue());
+                }
+            }
+        }
+
+        // 3. Directly adjacent inventories
+        if (this.level != null) {
+            for (Direction dir : Direction.values()) {
+                BlockEntity be = this.level.getBlockEntity(this.worldPosition.relative(dir));
+                if (be instanceof Container adjInv && !(be instanceof SuperComputerBlockEntity) && !(be instanceof EnchantedStorageTerminalBlockEntity)) {
+                    for (int s = 0; s < adjInv.getContainerSize(); s++) {
+                        ItemStack stk = adjInv.getItem(s);
+                        if (isRegularInfusionCrystal(stk)) {
+                            int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                            totalRemaining += Math.max(0, maxDmg - stk.getDamageValue());
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. Scanned connected containers
+        for (Container container : this.cachedContainers) {
+            if (container != null && !(container instanceof SuperComputerBlockEntity) && !(container instanceof EnchantedStorageTerminalBlockEntity)) {
+                for (int s = 0; s < container.getContainerSize(); s++) {
+                    ItemStack stk = container.getItem(s);
+                    if (isRegularInfusionCrystal(stk)) {
+                        int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                        totalRemaining += Math.max(0, maxDmg - stk.getDamageValue());
+                    }
+                }
+            }
+        }
+
+        return totalRemaining;
+    }
+
+    private void applyCrystalDamage(@Nullable EnchantedStorageTerminalBlockEntity terminal, @Nullable Player player, int amount) {
+        // 0. Super Computer's own Output Buffer (slots 10..13)
+        for (int i = 0; i < OUTPUT_SIZE; i++) {
+            ItemStack stk = this.inventory.get(OUTPUT_START + i);
+            if (isRegularInfusionCrystal(stk)) {
+                int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                int curDmg = stk.getDamageValue();
+                int newDmg = curDmg + amount;
+
+                if (newDmg >= maxDmg) {
+                    stk.shrink(1);
+                    if (stk.isEmpty()) {
+                        this.inventory.set(OUTPUT_START + i, ItemStack.EMPTY);
+                    }
+                    this.setChanged();
+                    if (player != null) {
+                        sendFeedback(player, "§c⚡ Infusion Crystal shattered after 1000 uses!");
+                    }
+                } else {
+                    stk.setDamageValue(newDmg);
+                    this.setChanged();
+                }
+                return;
+            }
+        }
+
+        // 1. Digital Storage Terminal
+        if (terminal != null && terminal.isNetworkOnline()) {
+            for (int i = 0; i < terminal.getStoredItems().size(); i++) {
+                EnchantedStorageTerminalBlockEntity.StoredItem item = terminal.getStoredItems().get(i);
+                ItemStack sample = item.getSample();
+                if (isRegularInfusionCrystal(sample)) {
+                    int maxDmg = sample.getMaxDamage() > 0 ? sample.getMaxDamage() : 1000;
+                    int curDmg = sample.getDamageValue();
+                    int newDmg = curDmg + amount;
+
+                    item.remove(1);
+                    if (item.getCount() <= 0) {
+                        terminal.getStoredItems().remove(i);
+                    }
+                    terminal.setChanged();
+
+                    if (newDmg < maxDmg) {
+                        ItemStack damaged = sample.copyWithCount(1);
+                        damaged.setDamageValue(newDmg);
+                        terminal.depositItem(damaged);
+                    } else if (player != null) {
+                        sendFeedback(player, "§c⚡ Infusion Crystal shattered after 1000 uses!");
+                    }
+                    return;
+                }
+            }
+        }
+
+        // 2. Player Inventory
+        if (player != null) {
+            Inventory pInv = player.getInventory();
+            for (int i = 0; i < 36; i++) {
+                ItemStack pStack = pInv.getItem(i);
+                if (isRegularInfusionCrystal(pStack)) {
+                    int maxDmg = pStack.getMaxDamage() > 0 ? pStack.getMaxDamage() : 1000;
+                    int curDmg = pStack.getDamageValue();
+                    int newDmg = curDmg + amount;
+
+                    if (newDmg >= maxDmg) {
+                        pStack.shrink(1);
+                        if (pStack.isEmpty()) {
+                            pInv.setItem(i, ItemStack.EMPTY);
+                        }
+                        pInv.setChanged();
+                        sendFeedback(player, "§c⚡ Infusion Crystal shattered after 1000 uses!");
+                    } else {
+                        pStack.setDamageValue(newDmg);
+                        pInv.setChanged();
+                    }
+                    return;
+                }
+            }
+        }
+
+        // 3. Directly adjacent inventories
+        if (this.level != null) {
+            for (Direction dir : Direction.values()) {
+                BlockEntity be = this.level.getBlockEntity(this.worldPosition.relative(dir));
+                if (be instanceof Container adjInv && !(be instanceof SuperComputerBlockEntity) && !(be instanceof EnchantedStorageTerminalBlockEntity)) {
+                    for (int s = 0; s < adjInv.getContainerSize(); s++) {
+                        ItemStack stk = adjInv.getItem(s);
+                        if (isRegularInfusionCrystal(stk)) {
+                            int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                            int curDmg = stk.getDamageValue();
+                            int newDmg = curDmg + amount;
+
+                            if (newDmg >= maxDmg) {
+                                stk.shrink(1);
+                                if (stk.isEmpty()) {
+                                    adjInv.setItem(s, ItemStack.EMPTY);
+                                }
+                                adjInv.setChanged();
+                                if (player != null) {
+                                    sendFeedback(player, "§c⚡ Infusion Crystal shattered after 1000 uses!");
+                                }
+                            } else {
+                                stk.setDamageValue(newDmg);
+                                adjInv.setChanged();
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 4. Scanned connected containers
+        for (Container container : this.cachedContainers) {
+            if (container != null) {
+                for (int s = 0; s < container.getContainerSize(); s++) {
+                    ItemStack stk = container.getItem(s);
+                    if (isRegularInfusionCrystal(stk)) {
+                        int maxDmg = stk.getMaxDamage() > 0 ? stk.getMaxDamage() : 1000;
+                        int curDmg = stk.getDamageValue();
+                        int newDmg = curDmg + amount;
+
+                        if (newDmg >= maxDmg) {
+                            stk.shrink(1);
+                            if (stk.isEmpty()) {
+                                container.setItem(s, ItemStack.EMPTY);
+                            }
+                            container.setChanged();
+                            if (player != null) {
+                                sendFeedback(player, "§c⚡ Infusion Crystal shattered after 1000 uses!");
+                            }
+                        } else {
+                            stk.setDamageValue(newDmg);
+                            container.setChanged();
+                        }
+                        return;
+                    }
+                }
+            }
         }
     }
 }

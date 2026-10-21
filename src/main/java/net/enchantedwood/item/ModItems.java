@@ -1705,6 +1705,15 @@ public class ModItems {
     public static final Item BLAZE_OVERCLOCK_CORE = registerItem("blaze_overclock_core",
             settings -> new GearItem(GearTier.BLAZE_OVERCLOCK, true, settings.stacksTo(16).fireResistant()));
 
+    public static final Item INSANIUM_OVERCLOCK_GEAR = registerItem("insanium_overclock_gear",
+            settings -> new net.enchantedwood.item.custom.OverclockGearItem(GearTier.INSANIUM_OVERCLOCK, true, settings.stacksTo(16).fireResistant().rarity(Rarity.EPIC),
+                    Component.literal("§d✦ Insanium Overclock Gear"),
+                    Component.literal("§7Forged from the pinnacle of mystical agriculture."),
+                    Component.literal("§e⚡ Hyper-Drives all automated machinery:"),
+                    Component.literal("§b • Super Computer: §f1-Tick Assembling & Instant Manual Craft"),
+                    Component.literal("§b • Laser Quarry: §f100 Blocks/sec Hyper Orbital Laser"),
+                    Component.literal("§b • Hydraulic Press & Machines: §fExtreme 32x / 12x Overclock")));
+
     public static final Item INFERNAL_HAMMER = registerItem("infernal_hammer",
             settings -> new net.enchantedwood.item.custom.InfernalHammerItem(settings.pickaxe(ModMaterials.MANYULLYN, 7.0f, -2.9f).fireResistant()));
 
@@ -2282,6 +2291,7 @@ public class ModItems {
                 entries.accept(BASALT_FLUX_CATALYST);
                 entries.accept(THERMAL_REFRACTORY_PLATING);
                 entries.accept(BLAZE_OVERCLOCK_CORE);
+                entries.accept(INSANIUM_OVERCLOCK_GEAR);
                 entries.accept(INFERNAL_HAMMER);
                 entries.accept(PLASMA_FLAMETHROWER);
 

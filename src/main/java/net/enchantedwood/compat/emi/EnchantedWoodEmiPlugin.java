@@ -225,18 +225,83 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
             @Override
             public boolean craft(EmiRecipe recipe, dev.emi.emi.api.recipe.handler.EmiCraftContext<net.enchantedwood.screen.SuperComputerScreenHandler> context) {
-                List<ItemStack> pattern = new ArrayList<>(9);
-                List<EmiIngredient> inputs = recipe.getInputs();
-                for (int i = 0; i < 9; i++) {
-                    if (i < inputs.size() && !inputs.get(i).isEmpty()) {
-                        List<EmiStack> stacks = inputs.get(i).getEmiStacks();
-                        if (!stacks.isEmpty()) {
-                            pattern.add(stacks.get(0).getItemStack());
-                        } else {
-                            pattern.add(ItemStack.EMPTY);
+                List<ItemStack> pattern = new ArrayList<>(java.util.Collections.nCopies(9, ItemStack.EMPTY));
+                boolean populated = false;
+
+                // Method 1: If recipe has backing Minecraft ShapedRecipe, use exact width/height coordinates
+                try {
+                    net.minecraft.world.item.crafting.RecipeHolder<?> holder = recipe.getBackingRecipe();
+                    if (holder != null && holder.value() instanceof net.minecraft.world.item.crafting.ShapedRecipe shaped) {
+                        int width = shaped.getWidth();
+                        int height = shaped.getHeight();
+                        List<java.util.Optional<net.minecraft.world.item.crafting.Ingredient>> ingredients = shaped.getIngredients();
+                        for (int r = 0; r < height && r < 3; r++) {
+                            for (int c = 0; c < width && c < 3; c++) {
+                                int shapedIdx = c + r * width;
+                                if (shapedIdx < ingredients.size()) {
+                                    java.util.Optional<net.minecraft.world.item.crafting.Ingredient> opt = ingredients.get(shapedIdx);
+                                    if (opt.isPresent() && !opt.get().isEmpty()) {
+                                        ItemStack s = opt.get().items().findFirst().map(h -> new ItemStack(h.value())).orElse(ItemStack.EMPTY);
+                                        pattern.set(c + r * 3, s);
+                                        populated = true;
+                                    }
+                                }
+                            }
                         }
-                    } else {
-                        pattern.add(ItemStack.EMPTY);
+                    } else if (holder != null && holder.value() instanceof net.minecraft.world.item.crafting.CraftingRecipe cr) {
+                        List<net.minecraft.world.item.crafting.Ingredient> ingredients = cr.placementInfo().ingredients();
+                        for (int i = 0; i < Math.min(9, ingredients.size()); i++) {
+                            net.minecraft.world.item.crafting.Ingredient ing = ingredients.get(i);
+                            if (ing != null && !ing.isEmpty()) {
+                                ItemStack s = ing.items().findFirst().map(h -> new ItemStack(h.value())).orElse(ItemStack.EMPTY);
+                                pattern.set(i, s);
+                                populated = true;
+                            }
+                        }
+                    }
+                } catch (Throwable ignored) {}
+
+                // Method 2: Extract from EMI's Widget layout coordinates
+                if (!populated) {
+                    try {
+                        List<dev.emi.emi.api.widget.SlotWidget> slotWidgets = new ArrayList<>();
+                        dev.emi.emi.api.widget.WidgetHolder holder = new dev.emi.emi.api.widget.WidgetHolder() {
+                            @Override public int getWidth() { return 120; }
+                            @Override public int getHeight() { return 60; }
+                            @Override
+                            public <T extends dev.emi.emi.api.widget.Widget> T add(T widget) {
+                                if (widget instanceof dev.emi.emi.api.widget.SlotWidget sw) slotWidgets.add(sw);
+                                return widget;
+                            }
+                        };
+                        recipe.addWidgets(holder);
+
+                        for (dev.emi.emi.api.widget.SlotWidget sw : slotWidgets) {
+                            var bounds = sw.getBounds();
+                            if (bounds.x() < 56 && bounds.y() < 56) {
+                                int col = bounds.x() / 18;
+                                int row = bounds.y() / 18;
+                                if (col >= 0 && col < 3 && row >= 0 && row < 3) {
+                                    int slot = col + row * 3;
+                                    EmiIngredient stack = sw.getStack();
+                                    if (stack != null && !stack.isEmpty() && !stack.getEmiStacks().isEmpty()) {
+                                        pattern.set(slot, stack.getEmiStacks().get(0).getItemStack());
+                                        populated = true;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Throwable ignored) {}
+                }
+
+                // Method 3: Fallback sequential placement from recipe.getInputs()
+                if (!populated) {
+                    List<EmiIngredient> inputs = recipe.getInputs();
+                    for (int i = 0; i < Math.min(9, inputs.size()); i++) {
+                        EmiIngredient ing = inputs.get(i);
+                        if (ing != null && !ing.isEmpty() && !ing.getEmiStacks().isEmpty()) {
+                            pattern.set(i, ing.getEmiStacks().get(0).getItemStack());
+                        }
                     }
                 }
 

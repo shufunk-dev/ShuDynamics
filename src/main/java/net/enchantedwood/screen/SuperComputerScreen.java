@@ -43,10 +43,7 @@ public class SuperComputerScreen extends AbstractContainerScreen<SuperComputerSc
 
         this.craftButton = net.minecraft.client.gui.components.Button.builder(Component.literal("⚡ Craft"), button -> {
             if (this.minecraft != null && this.minecraft.gameMode != null) {
-                com.mojang.blaze3d.platform.Window window = this.minecraft.getWindow();
-                boolean shift = com.mojang.blaze3d.platform.InputConstants.isKeyDown(com.mojang.blaze3d.platform.InputConstants.KEY_LSHIFT) || com.mojang.blaze3d.platform.InputConstants.isKeyDown(com.mojang.blaze3d.platform.InputConstants.KEY_RSHIFT);
-                int buttonId = shift ? 1 : 0;
-                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId);
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
             }
         }).bounds(x + 86, y + 50, 36, 18).build();
 
@@ -275,8 +272,7 @@ public class SuperComputerScreen extends AbstractContainerScreen<SuperComputerSc
         if (mouseX >= x + 86 && mouseX <= x + 122 && mouseY >= y + 50 && mouseY <= y + 68) {
             List<Component> lines = new ArrayList<>();
             lines.add(Component.literal("§a⚡ Execute Craft"));
-            lines.add(Component.literal("§7Click: Craft 1 batch"));
-            lines.add(Component.literal("§7Shift-Click: Craft all possible"));
+            lines.add(Component.literal("§7Click: Synthesize 1 batch"));
             lines.add(Component.literal("§8Uses materials from Digital Storage, Tanks & Inventory."));
 
             lines.add(Component.literal(""));

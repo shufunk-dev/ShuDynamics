@@ -104,6 +104,7 @@ public class LavaPumpBlockEntity extends BlockEntity implements MenuProvider, Wo
             case DIAMOND -> 12;
             case NETHERITE -> 5;
             case BLAZE_OVERCLOCK -> 3;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> 40;
         };
     }

@@ -773,6 +773,7 @@ public class ItemSalvagerBlockEntity extends BlockEntity implements MenuProvider
             case TITANIUM -> 0.22;
             case NETHERITE -> 0.15;
             case BLAZE_OVERCLOCK -> 0.10;
+            case INSANIUM_OVERCLOCK -> 0.02;
             default -> 1.0;
         };
         return Math.max(10, (int) (baseCookTime * multiplier));

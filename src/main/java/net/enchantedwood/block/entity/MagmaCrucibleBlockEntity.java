@@ -104,6 +104,7 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements MenuProvide
             case DIAMOND -> 40;
             case NETHERITE -> 18;
             case BLAZE_OVERCLOCK -> 10;
+            case INSANIUM_OVERCLOCK -> 2;
             default -> 140;
         };
     }

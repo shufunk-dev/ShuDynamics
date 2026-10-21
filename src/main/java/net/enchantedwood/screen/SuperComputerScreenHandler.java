@@ -38,6 +38,11 @@ public class SuperComputerScreenHandler extends AbstractContainerMenu {
         // 2. Upgrade Socket (Slot 9)
         this.addSlot(new Slot(inventory, SuperComputerBlockEntity.UPGRADE_SLOT, 8, 53) {
             @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(net.enchantedwood.item.ModItems.BLAZE_OVERCLOCK_CORE) || stack.is(net.enchantedwood.item.ModItems.INSANIUM_OVERCLOCK_GEAR);
+            }
+
+            @Override
             public int getMaxStackSize() {
                 return 1;
             }
@@ -209,8 +214,8 @@ public class SuperComputerScreenHandler extends AbstractContainerMenu {
                 }
             } else {
                 // From player inventory:
-                // If Blaze Overclock Core, insert into Upgrade Slot (slot 9)
-                if (originalStack.is(net.enchantedwood.item.ModItems.BLAZE_OVERCLOCK_CORE) && !this.slots.get(SuperComputerBlockEntity.UPGRADE_SLOT).hasItem()) {
+                // If Blaze Overclock Core or Insanium Overclock Gear, insert into Upgrade Slot (slot 9)
+                if ((originalStack.is(net.enchantedwood.item.ModItems.BLAZE_OVERCLOCK_CORE) || originalStack.is(net.enchantedwood.item.ModItems.INSANIUM_OVERCLOCK_GEAR)) && !this.slots.get(SuperComputerBlockEntity.UPGRADE_SLOT).hasItem()) {
                     if (!this.moveItemStackTo(originalStack, SuperComputerBlockEntity.UPGRADE_SLOT, SuperComputerBlockEntity.UPGRADE_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }

@@ -98,6 +98,7 @@ public class ChemicalSynthesizerBlockEntity extends BlockEntity implements MenuP
             case DIAMOND -> 45;
             case NETHERITE -> 20;
             case BLAZE_OVERCLOCK -> 15;
+            case INSANIUM_OVERCLOCK -> 3;
             default -> 160;
         };
     }

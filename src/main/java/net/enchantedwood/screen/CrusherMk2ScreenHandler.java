@@ -116,6 +116,7 @@ public class CrusherMk2ScreenHandler extends AbstractContainerMenu {
             case TITANIUM, DIAMOND -> 6 + bonus;
             case NETHERITE -> 8 + bonus;
             case BLAZE_OVERCLOCK -> 10 + bonus;
+            case INSANIUM_OVERCLOCK -> 16 + bonus;
             default -> 3;
         };
     }

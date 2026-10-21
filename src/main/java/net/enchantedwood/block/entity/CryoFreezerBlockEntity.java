@@ -107,6 +107,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements MenuProvider,
             case DIAMOND -> 10;
             case NETHERITE -> 5;
             case BLAZE_OVERCLOCK -> 2;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> 80;
         };
     }
@@ -122,6 +123,7 @@ public class CryoFreezerBlockEntity extends BlockEntity implements MenuProvider,
             case DIAMOND -> 10;
             case NETHERITE -> 6;
             case BLAZE_OVERCLOCK -> 4;
+            case INSANIUM_OVERCLOCK -> 1;
             default -> BASE_ENERGY_DRAW;
         };
     }

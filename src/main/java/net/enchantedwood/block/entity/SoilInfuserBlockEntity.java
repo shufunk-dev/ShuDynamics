@@ -100,6 +100,7 @@ public class SoilInfuserBlockEntity extends BlockEntity implements MenuProvider,
             case DIAMOND -> 30;
             case NETHERITE -> 12;
             case BLAZE_OVERCLOCK -> 8;
+            case INSANIUM_OVERCLOCK -> 2;
             default -> 120;
         };
     }

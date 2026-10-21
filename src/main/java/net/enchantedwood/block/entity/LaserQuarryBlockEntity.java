@@ -164,7 +164,14 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
 
             if (quarry.tickDelay >= speedDelay) {
                 quarry.tickDelay = 0;
-                isMining = quarry.performMiningStep(world);
+                int blocksToMine = quarry.getBlocksPerMiningStep();
+                for (int b = 0; b < blocksToMine; b++) {
+                    if (quarry.performMiningStep(world)) {
+                        isMining = true;
+                    } else {
+                        break;
+                    }
+                }
             }
         }
 
@@ -295,10 +302,16 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
         return this.clientRangeRadius;
     }
 
+    public boolean isInsaniumOverclocked() {
+        return this.inventory.get(SPEED_SLOT).is(ModItems.INSANIUM_OVERCLOCK_GEAR);
+    }
+
     public int getMiningDelayTicks() {
         ItemStack speedStack = this.inventory.get(SPEED_SLOT);
         if (!speedStack.isEmpty()) {
+            if (speedStack.is(ModItems.INSANIUM_OVERCLOCK_GEAR)) return 1;
             if (speedStack.is(ModItems.BLAZE_OVERCLOCK_CORE)) return 1;  // 20 blocks/s
+            if (speedStack.is(ModItems.NETHERITE_GEAR) || speedStack.is(ModItems.ENCHANTED_NETHERITE_GEAR)) return 2;
             if (speedStack.is(ModItems.TITANIUM_GEAR) || speedStack.is(ModItems.ENCHANTED_TITANIUM_GEAR)) return 3;
             if (speedStack.is(ModItems.DIAMOND_GEAR) || speedStack.is(ModItems.ENCHANTED_DIAMOND_GEAR)) return 5;
             if (speedStack.is(ModItems.GOLD_GEAR) || speedStack.is(ModItems.ENCHANTED_GOLD_GEAR)) return 8;
@@ -306,6 +319,14 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
             if (speedStack.is(ModItems.COPPER_GEAR) || speedStack.is(ModItems.ENCHANTED_COPPER_GEAR)) return 16;
         }
         return 20; // 1 block/s default
+    }
+
+    public int getBlocksPerMiningStep() {
+        ItemStack speedStack = this.inventory.get(SPEED_SLOT);
+        if (!speedStack.isEmpty() && speedStack.is(ModItems.INSANIUM_OVERCLOCK_GEAR)) {
+            return 5; // 5 blocks per tick = 100 blocks/s!
+        }
+        return 1;
     }
 
     private boolean performMiningStep(ServerLevel world) {
@@ -338,8 +359,9 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
             }
         }
 
-        // Fast-scan air/unbreakables up to 48 positions per tick
-        for (int attempts = 0; attempts < 48; attempts++) {
+        // Fast-scan air/unbreakables up to 48 positions per tick (256 if Insanium Overclocked)
+        int maxScanAttempts = isInsaniumOverclocked() ? 256 : 48;
+        for (int attempts = 0; attempts < maxScanAttempts; attempts++) {
             BlockPos targetPos = new BlockPos(this.scanX, this.scanY, this.scanZ);
             BlockState targetState = world.getBlockState(targetPos);
 
@@ -411,7 +433,9 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
 
         this.currentTargetPos = targetPos;
         this.totalMinedCount++;
-        world.playSound(null, this.worldPosition, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.4f, 1.2f);
+        if (world.getGameTime() % 4 == 0) {
+            world.playSound(null, this.worldPosition, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.4f, 1.2f);
+        }
         setChanged();
 
         return true;
