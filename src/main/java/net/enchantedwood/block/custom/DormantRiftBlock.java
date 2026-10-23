@@ -333,18 +333,23 @@ public class DormantRiftBlock extends Block {
                         BlockState state = world.getBlockState(mpos);
 
                         // If there is water anywhere in this column, it's a lake/ocean - skip this position!
-                        if (!state.getFluidState().isEmpty()) {
+                        if (!state.getFluidState().isEmpty() || state.liquid()) {
                             break;
                         }
 
-                        if (!state.isAir() && state.isSolid() && !state.is(BlockTags.LEAVES)) {
-                            // Solid surface block found with zero water above it!
+                        // Skip canopies, foliage, mushroom caps, stems - continue scanning down through the canopy!
+                        if (state.isAir() || isCanopyOrTrunk(state)) {
+                            continue;
+                        }
+
+                        if (isTrueGround(state)) {
+                            // True solid ground found with zero water above it!
                             // Verify clear dry space above for the sanctuary
                             boolean clearDryAbove = true;
                             for (int h = 1; h <= 5; h++) {
                                 mpos.setY(y + h);
                                 BlockState above = world.getBlockState(mpos);
-                                if (!above.isAir() || !above.getFluidState().isEmpty()) {
+                                if (!above.isAir() && !isCanopyOrTrunk(above)) {
                                     clearDryAbove = false;
                                     break;
                                 }
@@ -359,8 +364,49 @@ public class DormantRiftBlock extends Block {
             }
         }
 
-        // Fallback: origin at sea level + 1
+        // Fallback: search at origin penetrating down to true ground
+        int topY = world.getHeight(Heightmap.Types.MOTION_BLOCKING, originX, originZ);
+        BlockPos.MutableBlockPos scan = new BlockPos.MutableBlockPos(originX, topY, originZ);
+        while (scan.getY() >= seaLevel) {
+            BlockState s = world.getBlockState(scan);
+            if (isTrueGround(s)) {
+                return scan.immutable().above();
+            }
+            scan.move(Direction.DOWN);
+        }
         return new BlockPos(originX, seaLevel + 1, originZ);
+    }
+
+    private static boolean isTrueGround(BlockState state) {
+        if (state == null || state.isAir()) return false;
+        if (isCanopyOrTrunk(state)) return false;
+        if (!state.getFluidState().isEmpty() || state.liquid()) return false;
+        return state.is(BlockTags.DIRT)
+                || state.is(BlockTags.BASE_STONE_OVERWORLD)
+                || state.is(BlockTags.SAND)
+                || state.is(Blocks.GRAVEL)
+                || state.is(Blocks.CLAY)
+                || state.is(Blocks.MUD)
+                || state.is(Blocks.PACKED_MUD)
+                || state.is(Blocks.MUD_BRICKS)
+                || state.is(Blocks.TERRACOTTA)
+                || (state.isSolid() && !isCanopyOrTrunk(state));
+    }
+
+    private static boolean isCanopyOrTrunk(BlockState state) {
+        if (state == null || state.isAir()) return false;
+        if (state.is(BlockTags.LEAVES)) return true;
+        if (state.is(BlockTags.LOGS)) return true;
+        Block b = state.getBlock();
+        return b == Blocks.MUSHROOM_STEM
+                || b == Blocks.BROWN_MUSHROOM_BLOCK
+                || b == Blocks.RED_MUSHROOM_BLOCK
+                || b == Blocks.SHROOMLIGHT
+                || b == Blocks.MANGROVE_ROOTS
+                || b == Blocks.MUDDY_MANGROVE_ROOTS
+                || b == Blocks.VINE
+                || b == Blocks.CAVE_VINES
+                || b == Blocks.CAVE_VINES_PLANT;
     }
 
     private void buildSafeResonanceGateway(ServerLevel world, BlockPos basePos, Direction.Axis axis) {

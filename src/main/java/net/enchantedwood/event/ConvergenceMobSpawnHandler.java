@@ -31,10 +31,14 @@ public class ConvergenceMobSpawnHandler {
             }
             entity.addTag(CONVERGENCE_CONVERTED_TAG);
 
-            // Discard any hostile mobs attempting to spawn within the 48-block Sanctuary Outpost protection zone
+            // Discard any hostile mobs attempting to spawn within the Sanctuary Outpost or Riftwood Haven
             if (entity instanceof net.minecraft.world.entity.monster.Monster) {
+                if (ConvergenceHazardHandler.isInsideSanctuary(world, entity.blockPosition())) {
+                    entity.discard();
+                    return;
+                }
                 for (net.minecraft.core.BlockPos center : ConvergenceHazardHandler.SANCTUARY_CENTERS) {
-                    if (center.closerThan(entity.blockPosition(), 48.0)) {
+                    if (center.closerThan(entity.blockPosition(), 64.0)) {
                         entity.discard();
                         return;
                     }
