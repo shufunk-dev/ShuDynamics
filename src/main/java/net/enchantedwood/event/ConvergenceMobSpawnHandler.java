@@ -31,14 +31,32 @@ public class ConvergenceMobSpawnHandler {
             }
             entity.addCommandTag(CONVERGENCE_CONVERTED_TAG);
 
-            // Discard any hostile mobs attempting to spawn within the 48-block Sanctuary Outpost protection zone
-            if (entity instanceof net.minecraft.entity.mob.HostileEntity) {
+            // 1. ABSOLUTE SANCTUARY & SAFE HAVEN PROTECTION:
+            // Discard any hostile mobs attempting to spawn or exist within the Sanctuary Outpost or Riftwood Haven
+            boolean isHostile = (entity instanceof net.minecraft.entity.mob.HostileEntity)
+                    || (entity instanceof com.vexira.mysticalterrain.boss.RealmMob);
+
+            if (isHostile) {
+                if (ConvergenceHazardHandler.isInsideSanctuary(world, entity.getBlockPos())) {
+                    entity.discard();
+                    return;
+                }
                 for (net.minecraft.util.math.BlockPos center : ConvergenceHazardHandler.SANCTUARY_CENTERS) {
-                    if (center.isWithinDistance(entity.getBlockPos(), 48.0)) {
+                    if (center.isWithinDistance(entity.getBlockPos(), 64.0)) {
                         entity.discard();
                         return;
                     }
                 }
+            }
+
+            // 2. ONLY CONVERT VANILLA MONSTERS (Never convert fish, squids, bats, passive mobs, items, etc.!)
+            boolean isVanillaMonster = (entity instanceof ZombieEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity))
+                    || (entity instanceof SkeletonEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity))
+                    || (entity instanceof CreeperEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity))
+                    || (entity instanceof SpiderEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity));
+
+            if (!isVanillaMonster) {
+                return;
             }
 
             float roll = world.getRandom().nextFloat();
@@ -46,13 +64,13 @@ public class ConvergenceMobSpawnHandler {
 
             if (roll < 0.70f) {
                 // 70% chance: Native Mutant Convergence Mob
-                if (entity instanceof ZombieEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceZombieEntity)) {
+                if (entity instanceof ZombieEntity) {
                     targetType = ModEntities.CONVERGENCE_ZOMBIE;
-                } else if (entity instanceof SkeletonEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSkeletonEntity)) {
+                } else if (entity instanceof SkeletonEntity) {
                     targetType = ModEntities.CONVERGENCE_SKELETON;
-                } else if (entity instanceof CreeperEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceCreeperEntity)) {
+                } else if (entity instanceof CreeperEntity) {
                     targetType = ModEntities.CONVERGENCE_CREEPER;
-                } else if (entity instanceof SpiderEntity && !(entity instanceof net.enchantedwood.entity.custom.ConvergenceSpiderEntity)) {
+                } else if (entity instanceof SpiderEntity) {
                     targetType = ModEntities.CONVERGENCE_SPIDER;
                 }
             } else {

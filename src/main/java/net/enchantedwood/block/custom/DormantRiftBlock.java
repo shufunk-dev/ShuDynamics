@@ -532,54 +532,104 @@ public class DormantRiftBlock extends Block {
             return bestCandidate;
         }
 
-        // Fallback: search at origin
-        world.getChunk(originX >> 4, originZ >> 4, net.minecraft.world.chunk.ChunkStatus.FULL, true);
-        int fallbackY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, originX, originZ);
-        if (fallbackY < world.getSeaLevel()) fallbackY = world.getSeaLevel() + 1;
-        return new BlockPos(originX, fallbackY, originZ);
-    }
-
-    private static int evaluateClearingGround(ServerWorld world, int x, int z) {
-        world.getChunk(x >> 4, z >> 4, net.minecraft.world.chunk.ChunkStatus.FULL, true);
-        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
-        if (topY < world.getSeaLevel() || topY >= world.getTopYInclusive() - 15) {
-            return -1;
+        // Fallback: search outward around origin specifically for true dry ground (penetrating any canopy)
+        for (int r = 0; r <= 32; r += 4) {
+            for (int dx = -r; dx <= r; dx += 4) {
+                for (int dz = -r; dz <= r; dz += 4) {
+                    int gy = findTrueGroundY(world, originX + dx, originZ + dz);
+                    if (gy >= world.getSeaLevel()) {
+                        return new BlockPos(originX + dx, gy, originZ + dz);
+                    }
+                }
+            }
         }
 
-        // Check from topY down to find solid dry surface
-        BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
-        while (scan.getY() >= world.getSeaLevel()) {
+        // Ultimate fallback: scan down through canopy at origin until hitting true ground
+        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, originX, originZ);
+        BlockPos.Mutable scan = new BlockPos.Mutable(originX, topY, originZ);
+        while (scan.getY() > world.getBottomY() + 10) {
             BlockState s = world.getBlockState(scan);
-            // If water encountered, this is a lake/ocean - reject!
+            if (isTrueGround(s)) {
+                return scan.toImmutable().up();
+            }
+            scan.move(Direction.DOWN);
+        }
+        return new BlockPos(originX, Math.max(world.getSeaLevel() + 1, topY), originZ);
+    }
+
+    private static int findTrueGroundY(ServerWorld world, int x, int z) {
+        world.getChunk(x >> 4, z >> 4, net.minecraft.world.chunk.ChunkStatus.FULL, true);
+        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
+        BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
+
+        while (scan.getY() >= world.getSeaLevel() - 5) {
+            BlockState s = world.getBlockState(scan);
+            // If water or lava is encountered at or above ground, reject this column as submerged
             if (!s.getFluidState().isEmpty() || s.isLiquid()) {
                 return -1;
             }
-            if (s.isAir() || isAirOrFoliage(s)) {
+            if (isAirOrFoliage(s) || isCanopyOrTrunk(s)) {
                 scan.move(Direction.DOWN);
                 continue;
             }
-            // If it hits a log or mushroom stem, this spot is inside a tree
-            if (isDenseTrunk(s)) {
-                return -1;
-            }
-            if (s.isOpaqueFullCube()) {
-                // Found genuine solid terrain (dirt, grass, stone, sand, etc.)
-                int groundY = scan.getY() + 1;
-                // Verify terrain consistency in immediate 3x3 footprint
-                int maxDelta = 0;
-                int[][] checks = {{-3, 0}, {3, 0}, {0, -3}, {0, 3}, {-3, -3}, {3, 3}};
-                for (int[] offset : checks) {
-                    int neighborTop = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x + offset[0], z + offset[1]);
-                    maxDelta = Math.max(maxDelta, Math.abs(neighborTop - groundY));
-                }
-                if (maxDelta > 6) {
-                    return -1; // Too steep/cliff
-                }
-                return groundY;
+            if (isTrueGround(s)) {
+                return scan.getY() + 1; // Surface block on top of true ground
             }
             scan.move(Direction.DOWN);
         }
         return -1;
+    }
+
+    private static int evaluateClearingGround(ServerWorld world, int x, int z) {
+        int groundY = findTrueGroundY(world, x, z);
+        if (groundY < world.getSeaLevel()) {
+            return -1; // Must be at or above sea level on dry land
+        }
+
+        // Verify terrain consistency in immediate 3x3 footprint using TRUE GROUND height, not canopy height!
+        int[][] checks = {{-3, 0}, {3, 0}, {0, -3}, {0, 3}, {-3, -3}, {3, 3}};
+        for (int[] offset : checks) {
+            int neighborGround = findTrueGroundY(world, x + offset[0], z + offset[1]);
+            if (neighborGround < world.getSeaLevel()) {
+                return -1; // Submerged neighbor or water
+            }
+            if (Math.abs(neighborGround - groundY) > 5) {
+                return -1; // Too steep/cliff
+            }
+        }
+        return groundY;
+    }
+
+    private static boolean isTrueGround(BlockState state) {
+        if (state == null || state.isAir()) return false;
+        if (isCanopyOrTrunk(state)) return false;
+        if (!state.getFluidState().isEmpty() || state.isLiquid()) return false;
+        return state.isIn(net.minecraft.registry.tag.BlockTags.DIRT)
+                || state.isIn(net.minecraft.registry.tag.BlockTags.BASE_STONE_OVERWORLD)
+                || state.isIn(net.minecraft.registry.tag.BlockTags.SAND)
+                || state.isOf(Blocks.GRAVEL)
+                || state.isOf(Blocks.CLAY)
+                || state.isOf(Blocks.MUD)
+                || state.isOf(Blocks.PACKED_MUD)
+                || state.isOf(Blocks.MUD_BRICKS)
+                || state.isOf(Blocks.TERRACOTTA)
+                || (state.isOpaqueFullCube() && !isCanopyOrTrunk(state));
+    }
+
+    private static boolean isCanopyOrTrunk(BlockState state) {
+        if (state == null || state.isAir()) return false;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LEAVES)) return true;
+        if (state.isIn(net.minecraft.registry.tag.BlockTags.LOGS)) return true;
+        Block b = state.getBlock();
+        return b == Blocks.MUSHROOM_STEM
+                || b == Blocks.BROWN_MUSHROOM_BLOCK
+                || b == Blocks.RED_MUSHROOM_BLOCK
+                || b == Blocks.SHROOMLIGHT
+                || b == Blocks.MANGROVE_ROOTS
+                || b == Blocks.MUDDY_MANGROVE_ROOTS
+                || b == Blocks.VINE
+                || b == Blocks.CAVE_VINES
+                || b == Blocks.CAVE_VINES_PLANT;
     }
 
     private static int countSurroundingTrunks(ServerWorld world, int cx, int groundY, int cz, int radius) {
@@ -590,7 +640,7 @@ public class DormantRiftBlock extends Block {
                 for (int dy = 0; dy <= 8; dy += 2) {
                     scan.set(cx + dx, groundY + dy, cz + dz);
                     BlockState s = world.getBlockState(scan);
-                    if (isDenseTrunk(s)) {
+                    if (isDenseTrunk(s) || isCanopyOrTrunk(s)) {
                         count++;
                     }
                 }
@@ -600,15 +650,7 @@ public class DormantRiftBlock extends Block {
     }
 
     private static boolean isDenseTrunk(BlockState state) {
-        if (state == null || state.isAir()) return false;
-        if (state.isIn(net.minecraft.registry.tag.BlockTags.LOGS)) return true;
-        Block b = state.getBlock();
-        return b == Blocks.MUSHROOM_STEM
-                || b == Blocks.BROWN_MUSHROOM_BLOCK
-                || b == Blocks.RED_MUSHROOM_BLOCK
-                || b == Blocks.SHROOMLIGHT
-                || b == Blocks.MANGROVE_ROOTS
-                || b == Blocks.MUDDY_MANGROVE_ROOTS;
+        return isCanopyOrTrunk(state);
     }
 
     private static boolean isAirOrFoliage(BlockState state) {
@@ -627,39 +669,13 @@ public class DormantRiftBlock extends Block {
 
     private static boolean isCanopyOrVegetation(BlockState state) {
         if (state == null || state.isAir()) return true;
-        if (state.isIn(net.minecraft.registry.tag.BlockTags.LEAVES)) return true;
-        if (state.isIn(net.minecraft.registry.tag.BlockTags.LOGS)) return true;
-        if (state.isIn(net.minecraft.registry.tag.BlockTags.FLOWERS)) return true;
-        Block b = state.getBlock();
-        return b == Blocks.BROWN_MUSHROOM_BLOCK
-                || b == Blocks.RED_MUSHROOM_BLOCK
-                || b == Blocks.MUSHROOM_STEM
-                || b == Blocks.SHROOMLIGHT
-                || b == Blocks.MANGROVE_ROOTS
-                || b == Blocks.MUDDY_MANGROVE_ROOTS
-                || b == Blocks.VINE
-                || b == Blocks.SHORT_GRASS
-                || b == Blocks.TALL_GRASS
-                || b == Blocks.FERN
-                || b == Blocks.LARGE_FERN
-                || b == Blocks.BROWN_MUSHROOM
-                || b == Blocks.RED_MUSHROOM;
+        if (isAirOrFoliage(state)) return true;
+        return isCanopyOrTrunk(state);
     }
 
     private static int findTrueGroundSurfaceY(ServerWorld world, int x, int z, int defaultY) {
-        int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
-        BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
-        while (scan.getY() > world.getBottomY() + 10) {
-            BlockState state = world.getBlockState(scan);
-            if (isAirOrFoliage(state)) {
-                scan.move(Direction.DOWN);
-            } else if (!state.isOpaqueFullCube()) {
-                scan.move(Direction.DOWN);
-            } else {
-                return scan.getY() + 1;
-            }
-        }
-        return Math.max(64, Math.min(100, defaultY));
+        int gy = findTrueGroundY(world, x, z);
+        return gy > 0 ? gy : Math.max(64, Math.min(100, defaultY));
     }
 
     @Override
