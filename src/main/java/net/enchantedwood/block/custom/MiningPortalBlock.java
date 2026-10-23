@@ -21,6 +21,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.enchantedwood.block.ModBlocks;
+import net.enchantedwood.world.dimension.MiningPortalManager;
 import net.enchantedwood.world.dimension.ModDimensions;
 
 import java.util.Set;
@@ -106,28 +107,27 @@ public class MiningPortalBlock extends Block {
         }
     }
 
+    @Override
+    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+        if (!state.isOf(world.getBlockState(pos).getBlock())) {
+            MiningPortalManager.unregisterPortal(world, pos);
+        }
+        super.onStateReplaced(state, world, pos, moved);
+    }
+
     private void teleportPlayer(ServerPlayerEntity player, ServerWorld targetWorld, BlockPos portalPos, Direction.Axis axis) {
+        ServerWorld currentWorld = (ServerWorld) player.getEntityWorld();
+        boolean returningToOverworld = currentWorld.getRegistryKey() == ModDimensions.MINING_DIMENSION_WORLD_KEY;
+        if (!returningToOverworld) {
+            MiningPortalManager.setPlayerReturnPoint(currentWorld.getServer(), player.getUuid(), portalPos);
+        }
+
         int targetX = portalPos.getX();
         int targetZ = portalPos.getZ();
         int targetY = Math.max(targetWorld.getBottomY() + 10, Math.min(targetWorld.getTopYInclusive() - 20, portalPos.getY()));
 
-        // 1. Search for existing portal in target world within 16 blocks
-        BlockPos existingPortalPos = null;
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dz = -16; dz <= 16; dz++) {
-                for (int dy = -16; dy <= 16; dy++) {
-                    BlockPos check = new BlockPos(targetX + dx, targetY + dy, targetZ + dz);
-                    if (targetWorld.isChunkLoaded(check.getX() >> 4, check.getZ() >> 4)) {
-                        if (targetWorld.getBlockState(check).isOf(this)) {
-                            existingPortalPos = check;
-                            break;
-                        }
-                    }
-                }
-                if (existingPortalPos != null) break;
-            }
-            if (existingPortalPos != null) break;
-        }
+        // 1. Search for existing portal in target world
+        BlockPos existingPortalPos = MiningPortalManager.findExistingPortal(targetWorld, portalPos, player.getUuid(), returningToOverworld);
 
         double spawnX;
         double spawnY;
@@ -144,14 +144,18 @@ public class MiningPortalBlock extends Block {
             spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
         } else {
             // Only create new portal if none exists
-            int safeY = Math.max(64, Math.min(100, targetY));
-            BlockPos basePos = new BlockPos(targetX, safeY, targetZ);
+            int safeY = targetY;
+            Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+            BlockPos basePos = new BlockPos(targetX, safeY, targetZ).offset(widthDir.getOpposite(), 1);
             buildSafePortalDestination(targetWorld, basePos, axis);
 
+            BlockPos centerPortalPos = basePos.offset(widthDir, 1).up(1);
+            MiningPortalManager.registerPortal(targetWorld, centerPortalPos);
+
             Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-            spawnX = basePos.getX() + 1.5 + frontDir.getOffsetX() * 1.2;
-            spawnY = basePos.getY() + 1.0;
-            spawnZ = basePos.getZ() + 0.5 + frontDir.getOffsetZ() * 1.2;
+            spawnX = targetX + 0.5 + frontDir.getOffsetX() * 1.2;
+            spawnY = safeY + 1.0;
+            spawnZ = targetZ + 0.5 + frontDir.getOffsetZ() * 1.2;
         }
 
         player.setPortalCooldown(100);
@@ -162,14 +166,16 @@ public class MiningPortalBlock extends Block {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
         Direction depthDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
-        // Clear air space (4 wide, 5 high, 3 deep) and build platform
+        // Clear air space (4 wide, 5 high, 3 deep) and build platform safely
         for (int w = -1; w <= 4; w++) {
-            for (int d = -2; d <= 2; d++) {
+            for (int d = -1; d <= 1; d++) {
                 for (int h = -1; h <= 5; h++) {
                     BlockPos current = basePos.offset(widthDir, w).offset(depthDir, d).up(h);
                     if (h == -1) {
-                        // Solid platform below
-                        world.setBlockState(current, ModBlocks.ENCHANTED_COBBLESTONE.getDefaultState());
+                        // Solid platform below (never overwrite existing portal)
+                        if (!world.getBlockState(current).isOf(this)) {
+                            world.setBlockState(current, ModBlocks.ENCHANTED_COBBLESTONE.getDefaultState());
+                        }
                     } else if (h >= 0 && h <= 4 && d == 0 && (w >= 0 && w <= 3)) {
                         // Portal Frame / Portal Blocks
                         if (w == 0 || w == 3 || h == 0 || h == 4) {
@@ -178,8 +184,9 @@ public class MiningPortalBlock extends Block {
                             world.setBlockState(current, ModBlocks.MINING_PORTAL.getDefaultState().with(AXIS, axis));
                         }
                     } else {
-                        // Clear air around the portal for safe entry/exit
-                        if (!world.isAir(current)) {
+                        // Clear air around the portal for safe entry/exit only if not frame/portal
+                        BlockState existing = world.getBlockState(current);
+                        if (!existing.isAir() && !existing.isOf(this) && !existing.isOf(ModBlocks.ENCHANTED_COBBLESTONE)) {
                             world.setBlockState(current, Blocks.AIR.getDefaultState());
                         }
                     }

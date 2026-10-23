@@ -533,27 +533,33 @@ public class DormantRiftBlock extends Block {
         }
 
         // Fallback: search at origin
+        world.getChunk(originX >> 4, originZ >> 4, net.minecraft.world.chunk.ChunkStatus.FULL, true);
         int fallbackY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, originX, originZ);
-        if (fallbackY <= world.getBottomY() + 10) fallbackY = defaultY;
+        if (fallbackY < world.getSeaLevel()) fallbackY = world.getSeaLevel() + 1;
         return new BlockPos(originX, fallbackY, originZ);
     }
 
     private static int evaluateClearingGround(ServerWorld world, int x, int z) {
+        world.getChunk(x >> 4, z >> 4, net.minecraft.world.chunk.ChunkStatus.FULL, true);
         int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
-        if (topY <= world.getBottomY() + 10 || topY >= world.getTopYInclusive() - 15) {
+        if (topY < world.getSeaLevel() || topY >= world.getTopYInclusive() - 15) {
             return -1;
         }
 
-        // Check from topY down a few blocks (past leaves/vines/grass) to find the solid surface
+        // Check from topY down to find solid dry surface
         BlockPos.Mutable scan = new BlockPos.Mutable(x, topY, z);
-        while (scan.getY() > world.getBottomY() + 10) {
+        while (scan.getY() >= world.getSeaLevel()) {
             BlockState s = world.getBlockState(scan);
+            // If water encountered, this is a lake/ocean - reject!
+            if (!s.getFluidState().isEmpty() || s.isLiquid()) {
+                return -1;
+            }
             if (s.isAir() || isAirOrFoliage(s)) {
                 scan.move(Direction.DOWN);
                 continue;
             }
-            // If it hits a log or mushroom stem or liquid, this spot is NOT open ground
-            if (isDenseTrunk(s) || s.isLiquid()) {
+            // If it hits a log or mushroom stem, this spot is inside a tree
+            if (isDenseTrunk(s)) {
                 return -1;
             }
             if (s.isOpaqueFullCube()) {
