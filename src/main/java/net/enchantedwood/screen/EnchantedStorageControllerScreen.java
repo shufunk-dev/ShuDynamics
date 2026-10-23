@@ -133,7 +133,7 @@ public class EnchantedStorageControllerScreen extends AbstractContainerScreen<En
             if (this.menu.hasInterdimensionalCard()) {
                 lines.add(Component.literal("§5● Status: ACTIVE (Cross-Dimension Link Active)"));
                 lines.add(Component.literal("§7Enables remote quarry & wireless access from:"));
-                lines.add(Component.literal("§d✦ Nether, The End & Mining Dimension!"));
+                lines.add(Component.literal("§d✦ Nether, The End & Mystical Dimension!"));
                 lines.add(Component.literal("§a✨ Base 3x3 chunk area kept loaded 24/7."));
             } else {
                 lines.add(Component.literal("§7○ Status: READY"));

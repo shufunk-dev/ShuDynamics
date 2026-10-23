@@ -366,7 +366,7 @@ public class WrenchItem extends Item {
             int y = nbt.getInt("boundY").orElse(0);
             int z = nbt.getInt("boundZ").orElse(0);
             String dim = nbt.getString("boundDimension").orElse("minecraft:overworld");
-            String dimName = dim.contains("mining_dimension") ? "Mining Dimension" :
+            String dimName = dim.contains("mining_dimension") ? "Mystical Dimension" :
                              dim.contains("nether") ? "Nether" :
                              dim.contains("end") ? "The End" : "Overworld";
             textConsumer.accept(Component.literal("§6✔ Stored Network: §f(" + x + ", " + y + ", " + z + ") in " + dimName));

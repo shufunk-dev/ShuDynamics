@@ -31,11 +31,12 @@ public class EnchantedEmeraldItem extends Item {
                 MiningPortalFrameValidator.tryFindFrame(world, pos, context.getClickedFace());
 
         if (result.valid) {
-            if (!world.isClientSide()) {
+            if (!world.isClientSide() && world instanceof net.minecraft.server.level.ServerLevel serverWorld) {
                 for (BlockPos interiorPos : result.interiorPositions) {
                     world.setBlock(interiorPos,
                             ModBlocks.MINING_PORTAL.defaultBlockState().setValue(MiningPortalBlock.AXIS, result.axis),
                             3);
+                    net.enchantedwood.world.dimension.MiningPortalManager.registerPortal(serverWorld, interiorPos);
                 }
             }
 

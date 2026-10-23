@@ -48,6 +48,11 @@
     "facing=north,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock" },
     "facing=south,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 180 },
     "facing=west,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 270 },
-    "facing=east,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 90 }
+    "facing=east,gear_tier=blaze_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 90 },
+
+    "facing=north,gear_tier=insanium_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock" },
+    "facing=south,gear_tier=insanium_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 180 },
+    "facing=west,gear_tier=insanium_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 270 },
+    "facing=east,gear_tier=insanium_overclock": { "model": "enchantedwood:block/enchanted_chest_blaze_overclock", "y": 90 }
   }
 }

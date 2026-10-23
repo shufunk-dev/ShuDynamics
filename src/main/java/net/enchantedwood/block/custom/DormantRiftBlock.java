@@ -25,6 +25,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -166,13 +168,8 @@ public class DormantRiftBlock extends Block {
             spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
             sanctuaryBase = existingPortalPos;
         } else {
-            // Find surface or safe height
-            int surfaceY = targetWorld.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, targetX, targetZ);
-            int safeY = (surfaceY > targetWorld.getMinY() + 10 && surfaceY < targetWorld.getMaxY() - 10)
-                    ? surfaceY
-                    : Math.max(64, Math.min(100, targetY));
-
-            BlockPos basePos = new BlockPos(targetX, safeY, targetZ);
+            // Find true dry land surface position (never float in air and never submerge in water)
+            BlockPos basePos = findDryLandSanctuaryPos(targetWorld, targetX, targetZ);
             buildSafeResonanceGateway(targetWorld, basePos, axis);
             sanctuaryBase = basePos;
 
@@ -311,6 +308,61 @@ public class DormantRiftBlock extends Block {
                 id.equals(Identifier.fromNamespaceAndPath("enchantedwood", "anoxic_barrens"));
     }
 
+    private static BlockPos findDryLandSanctuaryPos(ServerLevel world, int originX, int originZ) {
+        int seaLevel = world.getSeaLevel();
+
+        // Search outward in expanding rings (0, 4, 8, 12, ... 64) for real dry land
+        for (int r = 0; r <= 64; r += 4) {
+            for (int dx = -r; dx <= r; dx += (r == 0 ? 1 : 4)) {
+                for (int dz = -r; dz <= r; dz += (r == 0 ? 1 : 4)) {
+                    if (r > 0 && Math.abs(dx) != r && Math.abs(dz) != r) continue;
+
+                    int checkX = originX + dx;
+                    int checkZ = originZ + dz;
+
+                    // Ensure chunk is generated and loaded
+                    world.getChunk(checkX >> 4, checkZ >> 4, ChunkStatus.FULL, true);
+
+                    int startY = Math.min(world.getMaxY() - 15, 120);
+                    int minY = seaLevel; // Sanctuary must be at or above sea level
+
+                    BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos(checkX, startY, checkZ);
+
+                    for (int y = startY; y >= minY; y--) {
+                        mpos.setY(y);
+                        BlockState state = world.getBlockState(mpos);
+
+                        // If there is water anywhere in this column, it's a lake/ocean - skip this position!
+                        if (!state.getFluidState().isEmpty()) {
+                            break;
+                        }
+
+                        if (!state.isAir() && state.isSolid() && !state.is(BlockTags.LEAVES)) {
+                            // Solid surface block found with zero water above it!
+                            // Verify clear dry space above for the sanctuary
+                            boolean clearDryAbove = true;
+                            for (int h = 1; h <= 5; h++) {
+                                mpos.setY(y + h);
+                                BlockState above = world.getBlockState(mpos);
+                                if (!above.isAir() || !above.getFluidState().isEmpty()) {
+                                    clearDryAbove = false;
+                                    break;
+                                }
+                            }
+                            if (clearDryAbove) {
+                                return new BlockPos(checkX, y + 1, checkZ);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback: origin at sea level + 1
+        return new BlockPos(originX, seaLevel + 1, originZ);
+    }
+
     private void buildSafeResonanceGateway(ServerLevel world, BlockPos basePos, Direction.Axis axis) {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
         Direction depthDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
@@ -340,6 +392,16 @@ public class DormantRiftBlock extends Block {
                                 ? Blocks.CRYING_OBSIDIAN.defaultBlockState()
                                 : Blocks.SMOOTH_BASALT.defaultBlockState();
                         world.setBlockAndUpdate(current, floorState);
+                        // Anchor downwards into terrain so it never floats on dips or slopes
+                        for (int down = 1; down <= 6; down++) {
+                            BlockPos under = current.below(down);
+                            BlockState underState = world.getBlockState(under);
+                            if (underState.isAir() || underState.canBeReplaced() || underState.is(BlockTags.LEAVES)) {
+                                world.setBlockAndUpdate(under, Blocks.SMOOTH_BASALT.defaultBlockState());
+                            } else {
+                                break;
+                            }
+                        }
                     } else if (h == 4 || h == 5) {
                         // Weather-proof protective roof (shields completely from rain and sky hazards)
                         world.setBlockAndUpdate(current, Blocks.CRYING_OBSIDIAN.defaultBlockState());

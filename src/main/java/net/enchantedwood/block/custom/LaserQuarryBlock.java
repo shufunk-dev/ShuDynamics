@@ -111,7 +111,7 @@ public class LaserQuarryBlock extends HorizontalDirectionalBlock implements Enti
                     if (be instanceof LaserQuarryBlockEntity quarry) {
                         quarry.bindNetwork(new BlockPos(bx, by, bz), bDim);
                         if (placer instanceof Player player) {
-                            String dimName = bDim.contains("mining_dimension") ? "Mining Dimension" :
+                            String dimName = bDim.contains("mining_dimension") ? "Mystical Dimension" :
                                     bDim.contains("nether") ? "Nether" :
                                     bDim.contains("end") ? "The End" : "Overworld";
                             player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("§6[Quarry] §a✨ Auto-connected to Base Network at (" + bx + ", " + by + ", " + bz + ") in " + dimName + "!"));

@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.enchantedwood.block.ModBlocks;
+import net.enchantedwood.world.dimension.MiningPortalManager;
 import net.enchantedwood.world.dimension.ModDimensions;
 
 import java.util.Set;
@@ -103,28 +104,27 @@ public class MiningPortalBlock extends Block {
         }
     }
 
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+        if (!state.is(world.getBlockState(pos).getBlock())) {
+            MiningPortalManager.unregisterPortal(world, pos);
+        }
+        super.affectNeighborsAfterRemoval(state, world, pos, moved);
+    }
+
     private void teleportPlayer(ServerPlayer player, ServerLevel targetWorld, BlockPos portalPos, Direction.Axis axis) {
+        ServerLevel currentWorld = (ServerLevel) player.level();
+        boolean returningToOverworld = currentWorld.dimension() == ModDimensions.MINING_DIMENSION_WORLD_KEY;
+        if (!returningToOverworld) {
+            MiningPortalManager.setPlayerReturnPoint(currentWorld.getServer(), player.getUUID(), portalPos);
+        }
+
         int targetX = portalPos.getX();
         int targetZ = portalPos.getZ();
         int targetY = Math.max(targetWorld.getMinY() + 10, Math.min(targetWorld.getMaxY() - 20, portalPos.getY()));
 
-        // 1. Search for existing portal in target world within 16 blocks
-        BlockPos existingPortalPos = null;
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dz = -16; dz <= 16; dz++) {
-                for (int dy = -16; dy <= 16; dy++) {
-                    BlockPos check = new BlockPos(targetX + dx, targetY + dy, targetZ + dz);
-                    if (targetWorld.hasChunk(check.getX() >> 4, check.getZ() >> 4)) {
-                        if (targetWorld.getBlockState(check).is(this)) {
-                            existingPortalPos = check;
-                            break;
-                        }
-                    }
-                }
-                if (existingPortalPos != null) break;
-            }
-            if (existingPortalPos != null) break;
-        }
+        // 1. Search for existing portal in target world
+        BlockPos existingPortalPos = MiningPortalManager.findExistingPortal(targetWorld, portalPos, player.getUUID(), returningToOverworld);
 
         double spawnX;
         double spawnY;
@@ -141,14 +141,19 @@ public class MiningPortalBlock extends Block {
             spawnZ = existingPortalPos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
         } else {
             // Only create new portal if none exists
-            int safeY = Math.max(64, Math.min(100, targetY));
-            BlockPos basePos = new BlockPos(targetX, safeY, targetZ);
+            int safeY = targetY;
+            Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
+            // Center interior (w=1, 2) around targetX, targetZ
+            BlockPos basePos = new BlockPos(targetX, safeY, targetZ).relative(widthDir.getOpposite(), 1);
             buildSafePortalDestination(targetWorld, basePos, axis);
 
+            BlockPos centerPortalPos = basePos.relative(widthDir, 1).above(1);
+            MiningPortalManager.registerPortal(targetWorld, centerPortalPos);
+
             Direction frontDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-            spawnX = basePos.getX() + 1.5 + frontDir.getStepX() * 1.2;
-            spawnY = basePos.getY() + 1.0;
-            spawnZ = basePos.getZ() + 0.5 + frontDir.getStepZ() * 1.2;
+            spawnX = targetX + 0.5 + frontDir.getStepX() * 1.2;
+            spawnY = safeY + 1.0;
+            spawnZ = targetZ + 0.5 + frontDir.getStepZ() * 1.2;
         }
 
         player.setPortalCooldown(100);
@@ -159,14 +164,16 @@ public class MiningPortalBlock extends Block {
         Direction widthDir = axis == Direction.Axis.X ? Direction.SOUTH : Direction.EAST;
         Direction depthDir = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
 
-        // Clear air space (4 wide, 5 high, 3 deep) and build platform
+        // Clear air space (4 wide, 5 high, 3 deep) and build platform safely
         for (int w = -1; w <= 4; w++) {
-            for (int d = -2; d <= 2; d++) {
+            for (int d = -1; d <= 1; d++) {
                 for (int h = -1; h <= 5; h++) {
                     BlockPos current = basePos.relative(widthDir, w).relative(depthDir, d).above(h);
                     if (h == -1) {
-                        // Solid platform below
-                        world.setBlockAndUpdate(current, ModBlocks.ENCHANTED_COBBLESTONE.defaultBlockState());
+                        // Solid platform below (never overwrite existing portal)
+                        if (!world.getBlockState(current).is(this)) {
+                            world.setBlockAndUpdate(current, ModBlocks.ENCHANTED_COBBLESTONE.defaultBlockState());
+                        }
                     } else if (h >= 0 && h <= 4 && d == 0 && (w >= 0 && w <= 3)) {
                         // Portal Frame / Portal Blocks
                         if (w == 0 || w == 3 || h == 0 || h == 4) {
@@ -175,8 +182,9 @@ public class MiningPortalBlock extends Block {
                             world.setBlockAndUpdate(current, ModBlocks.MINING_PORTAL.defaultBlockState().setValue(AXIS, axis));
                         }
                     } else {
-                        // Clear air around the portal for safe entry/exit
-                        if (!world.isEmptyBlock(current)) {
+                        // Clear air around the portal for safe entry/exit only if not frame/portal
+                        BlockState existing = world.getBlockState(current);
+                        if (!existing.isAir() && !existing.is(this) && !existing.is(ModBlocks.ENCHANTED_COBBLESTONE)) {
                             world.setBlockAndUpdate(current, Blocks.AIR.defaultBlockState());
                         }
                     }
