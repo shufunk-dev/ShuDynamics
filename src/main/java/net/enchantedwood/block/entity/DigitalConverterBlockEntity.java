@@ -57,8 +57,17 @@ public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyC
         return this.boundNetworkPos != null;
     }
 
+    private EnchantedStorageTerminalBlockEntity cachedTerminal = null;
+    private long lastTerminalCheckTick = -1;
+
     public @Nullable EnchantedStorageTerminalBlockEntity getNetworkTerminal() {
         if (this.level == null) return null;
+        long gameTime = this.level.getGameTime();
+        if (this.lastTerminalCheckTick >= 0 && gameTime - this.lastTerminalCheckTick < 20
+                && this.cachedTerminal != null && !this.cachedTerminal.isRemoved()) {
+            return this.cachedTerminal;
+        }
+        this.lastTerminalCheckTick = gameTime;
 
         // 1. Check bound remote network
         if (this.boundNetworkPos != null && this.level.getServer() != null) {
@@ -67,6 +76,7 @@ public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyC
             if (targetWorld != null && targetWorld.hasChunk(this.boundNetworkPos.getX() >> 4, this.boundNetworkPos.getZ() >> 4)) {
                 BlockEntity be = targetWorld.getBlockEntity(this.boundNetworkPos);
                 if (be instanceof EnchantedStorageTerminalBlockEntity terminal && terminal.isNetworkOnline()) {
+                    this.cachedTerminal = terminal;
                     return terminal;
                 } else if (be instanceof EnchantedStorageControllerBlockEntity ctrl && ctrl.isOnline()) {
                     // Search near controller for terminal
@@ -77,6 +87,7 @@ public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyC
                                 mut.set(this.boundNetworkPos.getX() + dx, this.boundNetworkPos.getY() + dy, this.boundNetworkPos.getZ() + dz);
                                 BlockEntity candidate = targetWorld.getBlockEntity(mut);
                                 if (candidate instanceof EnchantedStorageTerminalBlockEntity t && t.isNetworkOnline()) {
+                                    this.cachedTerminal = t;
                                     return t;
                                 }
                             }
@@ -94,11 +105,13 @@ public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyC
                     mut.set(this.worldPosition.getX() + dx, this.worldPosition.getY() + dy, this.worldPosition.getZ() + dz);
                     BlockEntity be = this.level.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal) {
+                        this.cachedTerminal = terminal;
                         return terminal;
                     }
                 }
             }
         }
+        this.cachedTerminal = null;
         return null;
     }
 
@@ -166,27 +179,34 @@ public class DigitalConverterBlockEntity extends BlockEntity implements WorldlyC
 
     public static void tick(ServerLevel world, BlockPos pos, BlockState state, DigitalConverterBlockEntity entity) {
         boolean dirty = false;
-        boolean wasLit = state.getValue(DigitalConverterBlock.LIT);
-        boolean isOnline = entity.isNetworkOnline();
 
-        if (wasLit != isOnline) {
-            world.setBlock(pos, state.setValue(DigitalConverterBlock.LIT, isOnline), 3);
+        if (++entity.checkTimer >= 20) {
+            entity.checkTimer = 0;
+            boolean wasLit = state.getValue(DigitalConverterBlock.LIT);
+            boolean isOnline = entity.isNetworkOnline();
+            if (wasLit != isOnline) {
+                world.setBlock(pos, state.setValue(DigitalConverterBlock.LIT, isOnline), 3);
+            }
         }
 
-        if (isOnline) {
-            EnchantedStorageTerminalBlockEntity terminal = entity.getNetworkTerminal();
-            if (terminal != null && terminal.isNetworkOnline()) {
+        EnchantedStorageTerminalBlockEntity terminal = entity.getNetworkTerminal();
+        if (terminal != null && terminal.isNetworkOnline()) {
                 for (int i = 0; i < BUFFER_SIZE; i++) {
                     ItemStack bufferStack = entity.buffer.get(i);
                     if (bufferStack.isEmpty()) continue;
 
+                    int initialCount = bufferStack.getCount();
                     ItemStack remainder = terminal.depositItem(bufferStack);
-                    if (remainder.getCount() != bufferStack.getCount()) {
+                    if (remainder.isEmpty()) {
+                        entity.buffer.set(i, ItemStack.EMPTY);
+                        dirty = true;
+                    } else if (remainder.getCount() != initialCount) {
                         entity.buffer.set(i, remainder);
                         dirty = true;
+                        break;
+                    } else {
+                        break; // Terminal is full
                     }
-                    if (!remainder.isEmpty()) break; // Network capacity reached
-                }
             }
         }
 

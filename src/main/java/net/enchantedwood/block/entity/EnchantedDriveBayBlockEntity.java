@@ -80,8 +80,17 @@ public class EnchantedDriveBayBlockEntity extends BlockEntity implements MenuPro
         return capacity;
     }
 
+    private long lastStoredCheckTick = -1;
+    private int cachedStoredCount = 0;
+
     public int getTotalStoredItems() {
         if (this.level == null) return 0;
+        long gameTime = this.level.getGameTime();
+        if (this.lastStoredCheckTick >= 0 && gameTime - this.lastStoredCheckTick < 10) {
+            return this.cachedStoredCount;
+        }
+        this.lastStoredCheckTick = gameTime;
+
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -89,11 +98,13 @@ public class EnchantedDriveBayBlockEntity extends BlockEntity implements MenuPro
                     mut.set(this.worldPosition.getX() + dx, this.worldPosition.getY() + dy, this.worldPosition.getZ() + dz);
                     BlockEntity be = this.level.getBlockEntity(mut);
                     if (be instanceof EnchantedStorageTerminalBlockEntity terminal) {
-                        return terminal.getStoredItemCount();
+                        this.cachedStoredCount = terminal.getStoredItemCount();
+                        return this.cachedStoredCount;
                     }
                 }
             }
         }
+        this.cachedStoredCount = 0;
         return 0;
     }
 

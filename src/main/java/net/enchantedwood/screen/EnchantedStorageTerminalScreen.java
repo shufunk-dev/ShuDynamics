@@ -90,16 +90,36 @@ public class EnchantedStorageTerminalScreen extends AbstractContainerScreen<Ench
     }
 
     @Override
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent input, boolean isPrimary) {
+        if (this.searchBox != null) {
+            if (this.searchBox.isMouseOver(input.x(), input.y())) {
+                if (input.button() == 2) { // Right-click clears search bar
+                    this.searchBox.setValue("");
+                    this.searchBox.setFocused(true);
+                    return true;
+                }
+            } else {
+                this.searchBox.setFocused(false);
+            }
+        }
+        return super.mouseClicked(input, isPrimary);
+    }
+
+    @Override
     public boolean keyPressed(net.minecraft.client.input.KeyEvent input) {
+        if (input.isEscape()) {
+            this.onClose();
+            return true;
+        }
         if (this.searchBox != null && this.searchBox.isFocused()) {
-            if (input.key() == 256) { // GLFW_KEY_ESCAPE
-                this.onClose();
+            if (input.isConfirmation()) {
+                this.searchBox.setFocused(false);
                 return true;
             }
             if (this.searchBox.keyPressed(input)) {
                 return true;
             }
-            // Consume key press so inventory key (default 'E') never closes the screen
+            // Consume key press so inventory key (default 'E') never closes the screen while typing
             return true;
         }
         return super.keyPressed(input);

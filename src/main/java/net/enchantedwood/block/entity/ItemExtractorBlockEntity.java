@@ -103,6 +103,12 @@ public class ItemExtractorBlockEntity extends BlockEntity {
                         entity.buffer.set(i, remaining);
                         dirty = true;
                     }
+                } else if (target instanceof ItemExtractorBlockEntity nextExt) {
+                    ItemStack remaining = nextExt.insertItem(stack);
+                    if (remaining.getCount() != stack.getCount()) {
+                        entity.buffer.set(i, remaining);
+                        dirty = true;
+                    }
                 }
             }
         }

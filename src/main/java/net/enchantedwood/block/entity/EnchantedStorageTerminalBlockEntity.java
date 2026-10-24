@@ -131,9 +131,22 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
         return total;
     }
 
+    private long lastScanTick = -1;
+    private long cachedCapacity = 0;
+    private boolean cachedOnline = true;
+
     public long getNetworkCapacityLong() {
         if (this.level == null) return 0;
+        long gameTime = this.level.getGameTime();
+        if (this.lastScanTick >= 0 && gameTime - this.lastScanTick < 20) {
+            return this.cachedCapacity;
+        }
+        this.lastScanTick = gameTime;
+
         long totalCap = 0;
+        boolean online = true;
+        boolean foundController = false;
+
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (int dx = -16; dx <= 16; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
@@ -143,9 +156,18 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
                     if (be instanceof EnchantedDriveBayBlockEntity driveBay) {
                         totalCap += driveBay.getTotalNetworkCapacity();
                     }
+                    if (!foundController) {
+                        BlockState bs = this.level.getBlockState(mut);
+                        if (bs.getBlock() instanceof EnchantedStorageControllerBlock) {
+                            foundController = true;
+                            online = bs.getValue(EnchantedStorageControllerBlock.LIT);
+                        }
+                    }
                 }
             }
         }
+        this.cachedCapacity = totalCap;
+        this.cachedOnline = online;
         return totalCap;
     }
 
@@ -155,19 +177,12 @@ public class EnchantedStorageTerminalBlockEntity extends BlockEntity implements 
 
     public boolean isNetworkOnline() {
         if (this.level == null) return true;
-        BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
-        for (int dx = -16; dx <= 16; dx++) {
-            for (int dy = -8; dy <= 8; dy++) {
-                for (int dz = -16; dz <= 16; dz++) {
-                    mut.set(this.worldPosition.getX() + dx, this.worldPosition.getY() + dy, this.worldPosition.getZ() + dz);
-                    BlockState bs = this.level.getBlockState(mut);
-                    if (bs.getBlock() instanceof EnchantedStorageControllerBlock) {
-                        return bs.getValue(EnchantedStorageControllerBlock.LIT);
-                    }
-                }
-            }
+        long gameTime = this.level.getGameTime();
+        if (this.lastScanTick >= 0 && gameTime - this.lastScanTick < 20) {
+            return this.cachedOnline;
         }
-        return true;
+        getNetworkCapacityLong();
+        return this.cachedOnline;
     }
 
     private void addLoadedItem(ItemStack stack) {

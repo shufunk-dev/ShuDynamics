@@ -49,44 +49,78 @@ public class ItemInserterBlockEntity extends BlockEntity {
 
     public boolean canAccept(ItemStack stack) {
         if (stack.isEmpty()) return false;
+
+        // Check if the target destination container can accept this item first
+        if (this.level != null) {
+            Direction facing = this.getBlockState().getValue(ItemInserterBlock.FACING);
+            BlockPos targetPos = this.worldPosition.relative(facing);
+            Container targetInv = ItemTransportHelper.getInventoryAt(this.level, targetPos);
+            if (targetInv != null) {
+                Container effectiveTarget = targetInv;
+                Direction effectiveSide = facing.getOpposite();
+
+                // If feeding into a hopper that points into a machine/container, validate against the machine
+                if (targetInv instanceof net.minecraft.world.level.block.entity.HopperBlockEntity) {
+                    BlockState targetState = this.level.getBlockState(targetPos);
+                    if (targetState.hasProperty(net.minecraft.world.level.block.HopperBlock.FACING)) {
+                        Direction hopperFacing = targetState.getValue(net.minecraft.world.level.block.HopperBlock.FACING);
+                        BlockPos downstreamPos = targetPos.relative(hopperFacing);
+                        Container downstreamInv = ItemTransportHelper.getInventoryAt(this.level, downstreamPos);
+                        if (downstreamInv != null) {
+                            effectiveTarget = downstreamInv;
+                            effectiveSide = hopperFacing.getOpposite();
+                        }
+                    }
+                }
+
+                boolean targetCanAccept = false;
+                if (effectiveTarget instanceof WorldlyContainer sidedInv) {
+                    int[] slots = sidedInv.getSlotsForFace(effectiveSide);
+                    for (int slot : slots) {
+                        if (!sidedInv.canPlaceItemThroughFace(slot, stack, effectiveSide)) continue;
+                        ItemStack invStack = effectiveTarget.getItem(slot);
+                        if (invStack.isEmpty()) {
+                            targetCanAccept = true;
+                            break;
+                        }
+                        if (ItemStack.isSameItemSameComponents(invStack, stack) && invStack.getCount() < invStack.getMaxStackSize()) {
+                            targetCanAccept = true;
+                            break;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < effectiveTarget.getContainerSize(); i++) {
+                        ItemStack invStack = effectiveTarget.getItem(i);
+                        if (invStack.isEmpty()) {
+                            targetCanAccept = true;
+                            break;
+                        }
+                        if (ItemStack.isSameItemSameComponents(invStack, stack) && invStack.getCount() < invStack.getMaxStackSize()) {
+                            targetCanAccept = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!targetCanAccept) {
+                    return false; // Reject items that the downstream target container cannot accept!
+                }
+            }
+        }
+
         for (ItemStack current : this.buffer) {
             if (current.isEmpty()) return true;
             if (ItemStack.isSameItemSameComponents(current, stack) && current.getCount() < current.getMaxStackSize()) {
                 return true;
             }
         }
-        if (this.level != null) {
-            Direction facing = this.getBlockState().getValue(ItemInserterBlock.FACING);
-            BlockPos targetPos = this.worldPosition.relative(facing);
-            Container targetInv = ItemTransportHelper.getInventoryAt(this.level, targetPos);
-            if (targetInv != null) {
-                if (targetInv instanceof WorldlyContainer sidedInv) {
-                    Direction targetSide = facing.getOpposite();
-                    int[] slots = sidedInv.getSlotsForFace(targetSide);
-                    for (int slot : slots) {
-                        if (!sidedInv.canPlaceItemThroughFace(slot, stack, targetSide)) continue;
-                        ItemStack invStack = targetInv.getItem(slot);
-                        if (invStack.isEmpty()) return true;
-                        if (ItemStack.isSameItemSameComponents(invStack, stack) && invStack.getCount() < invStack.getMaxStackSize()) {
-                            return true;
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < targetInv.getContainerSize(); i++) {
-                        ItemStack invStack = targetInv.getItem(i);
-                        if (invStack.isEmpty()) return true;
-                        if (ItemStack.isSameItemSameComponents(invStack, stack) && invStack.getCount() < invStack.getMaxStackSize()) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
+
         return false;
     }
 
     public ItemStack receiveItemFromPipe(ItemStack stack) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
+        if (!canAccept(stack)) return stack;
         ItemStack toInsert = stack.copy();
 
         // 1. Directly insert into connected inventory for instant flow
