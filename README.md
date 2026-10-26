@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.5.1--26.3%20%7C%20v2.5.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.5.2--26.3%20%7C%20v2.5.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -21,7 +21,7 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.1-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
 | **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.0-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
@@ -33,6 +33,30 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
+
+---
+
+## 🌟 What's New in v2.5.2 — Convergence Ecosystems & Progression Parity Update
+
+* 🌋 **Three Convergence Hazard Ecosystems & Progression Ore Distribution**:
+  * Fully mapped and synchronized exotic progression minerals, subterranean anomalies, and environmental suit hazards across all 113 Convergence and Mystical Terrain biomes:
+  * **1. Thermal Biomes (Volcanic / Scorched)**:
+    * **Biomes**: `scorched_caldera`, `volcanic_isles`, `sulfur_hills`, `charwood_forest`, `cinder_wastes`, `ember_peaks`, `ashen_dunes`, `basalt_organs`, etc.
+    * **Environmental Hazard**: Intense **Thermal Heat Burn** (requires Modular Suit Thermoregulator or sealed ATV cockpit).
+    * **Progression Ores**: Subterranean **Zirconia Ore**, **Hafnium Ore**, **Cobalt Ore**, **Ardite Ore**, and **Nether Tungsten Ore**.
+    * **Landscape Features**: Active volcanic caldera craters and subterranean rift chasm walls with exposed magma, blackstone, and nether iron.
+  * **2. Acid Biomes (Caustic / Toxic / Bog)**:
+    * **Biomes**: `caustic_mire`, `bogrot_basin`, `fungal_mire`, `sludge_plains`, `acid_swamp`, etc.
+    * **Environmental Hazard**: Corrosive **Acid Burn** (requires Fluoropolymer Acid-Proof Plating).
+    * **Progression Ores & Flora**: Subterranean **Fluorite Ore**, **Tantalum Ore**, and wild convergence crops (**Wild Rice**, **Wild Cucumbers**, **Avocado Trees**).
+  * **3. Anoxic Biomes (Atmospheric / Void / Chasm)**:
+    * **Biomes**: `anoxic_barrens`, `crystal_highlands`, `amethyst_peaks`, `abyssal_chasm`, `void_wastes`, `deep_hollows`, `end_highlands`, etc.
+    * **Environmental Hazard**: **Atmospheric Anoxia / Suffocation** (requires Oxygen Scrubber / Life Support).
+    * **Progression Ores**: High-altitude & subterranean **Neodymium Ore**.
+  * **Universal Hazard Ores**: **Aerogel Ore** actively generates across all three hazard ecosystems.
+  * **Universal Baseline Ores**: Vanilla ores (Coal, Iron, Copper, Gold, Redstone, Lapis, Diamond) + **Tin Ore** generate throughout all Convergence biomes.
+* 🛡️ **Modular Suit HUD & Environmental Sensor Parity**:
+  * Synchronized client HUD warning indicators (`[SAFE] NORMAL`, `[HAZARD] THERMAL`, `[HAZARD] CAUSTIC`, `[HAZARD] ANOXIC`) and damage timers across all Mystical Terrain biomes.
 
 ---
 
@@ -290,7 +314,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-2.3.1.jar
+build/libs/shudynamics-2.5.2-26.3.jar
 ```
 
 ---
