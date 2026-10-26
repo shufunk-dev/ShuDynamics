@@ -94,14 +94,82 @@ public class ConvergenceHazardHandler {
         tickAtmosphericHazard(world, player);
     }
 
+    public static boolean isThermalBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("scorched_caldera");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("cinder") ||
+                   path.contains("molten") ||
+                   path.contains("infernal") ||
+                   path.contains("brimstone") ||
+                   path.contains("blackstone") ||
+                   path.contains("charred") ||
+                   path.contains("charwood") ||
+                   path.contains("ember") ||
+                   path.contains("basalt_organs") ||
+                   path.contains("auric_badlands") ||
+                   path.contains("magma") ||
+                   path.contains("glowstone_grotto") ||
+                   path.contains("quartz_crags") ||
+                   path.contains("weeping_rift") ||
+                   path.contains("volcanic") ||
+                   path.contains("sulfur") ||
+                   path.contains("ashen_dunes") ||
+                   path.contains("ashfall") ||
+                   path.contains("caldera") ||
+                   path.contains("scorched");
+        }
+        return false;
+    }
+
+    public static boolean isAcidBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("caustic_mire");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("mire") ||
+                   path.contains("bog") ||
+                   path.contains("marsh") ||
+                   path.contains("rotwood") ||
+                   path.contains("mudroot") ||
+                   path.contains("frogspawn") ||
+                   path.contains("rootcellar") ||
+                   path.contains("alder_carr") ||
+                   path.contains("canebrake") ||
+                   path.contains("cypress_bayou");
+        }
+        return false;
+    }
+
+    public static boolean isAnoxicBiome(Identifier id) {
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("enchantedwood")) {
+            return path.equals("anoxic_barrens");
+        }
+        if (id.getNamespace().equals("mysticalterrain")) {
+            return path.contains("void") ||
+                   path.contains("nebula") ||
+                   path.contains("dragonbone") ||
+                   path.contains("sculk_barrens") ||
+                   path.contains("hollow") ||
+                   path.contains("echoing");
+        }
+        return false;
+    }
+
     // --- 1. CAUSTIC ACID PRECIPITATION & ACID WATERS ---
     private static void tickAcidHazard(ServerLevel world, ServerPlayer player) {
         BlockPos pos = player.blockPosition();
 
-        // Biome Scoping: Acid rain and caustic water hazard ONLY exist in the Caustic Mire biome!
+        // Biome Scoping: Acid rain and caustic water hazard in all caustic bogs/mires
         var biomeKey = world.getBiome(pos).unwrapKey();
-        boolean isCausticBiome = biomeKey.isPresent() &&
-                biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "caustic_mire"));
+        boolean isCausticBiome = biomeKey.isPresent() && isAcidBiome(biomeKey.get().identifier());
         if (!isCausticBiome) return;
 
         boolean inWater = player.isInWater() || player.isUnderWater();
@@ -151,8 +219,7 @@ public class ConvergenceHazardHandler {
         BlockPos pos = player.blockPosition();
 
         var biomeKey = world.getBiome(pos).unwrapKey();
-        boolean isCalderaBiome = biomeKey.isPresent() &&
-                biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "scorched_caldera"));
+        boolean isCalderaBiome = biomeKey.isPresent() && isThermalBiome(biomeKey.get().identifier());
 
         boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
         boolean nearHeatSource = isNearThermalSource(world, pos);
@@ -195,8 +262,7 @@ public class ConvergenceHazardHandler {
 
         BlockPos pos = player.blockPosition();
         var biomeKey = world.getBiome(pos).unwrapKey();
-        boolean isCausticBiome = biomeKey.isPresent() &&
-                biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "caustic_mire"));
+        boolean isCausticBiome = biomeKey.isPresent() && isAcidBiome(biomeKey.get().identifier());
         if (!isCausticBiome) return false;
 
         boolean inWater = player.isInWater() || player.isUnderWater();
@@ -211,8 +277,7 @@ public class ConvergenceHazardHandler {
 
         BlockPos pos = player.blockPosition();
         var biomeKey = world.getBiome(pos).unwrapKey();
-        boolean isCalderaBiome = biomeKey.isPresent() &&
-                biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "scorched_caldera"));
+        boolean isCalderaBiome = biomeKey.isPresent() && isThermalBiome(biomeKey.get().identifier());
 
         boolean isDeepCaldera = player.getY() <= 25 && isCalderaBiome;
         boolean nearHeatSource = isNearThermalSource(world, pos);
@@ -244,8 +309,7 @@ public class ConvergenceHazardHandler {
         BlockPos pos = player.blockPosition();
 
         var biomeKey = world.getBiome(pos).unwrapKey();
-        boolean isAnoxicBiome = biomeKey.isPresent() &&
-                biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "anoxic_barrens"));
+        boolean isAnoxicBiome = biomeKey.isPresent() && isAnoxicBiome(biomeKey.get().identifier());
 
         boolean isHighAltitude = player.getY() >= 180 && world.canSeeSky(pos);
         boolean isAnoxicCave = player.getY() <= 35 && !world.canSeeSky(pos) && world.getMaxLocalRawBrightness(pos) <= 7;

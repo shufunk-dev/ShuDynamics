@@ -209,7 +209,7 @@ public class ModularSuitHudRenderer {
         if (player.level() == null) return false;
         var pos = player.blockPosition();
         var biomeKey = player.level().getBiome(pos).unwrapKey();
-        boolean isCaustic = biomeKey.isPresent() && biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "caustic_mire"));
+        boolean isCaustic = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isAcidBiome(biomeKey.get().identifier());
         if (!isCaustic) return false;
         boolean inWater = player.isInWater() || player.isUnderWater();
         boolean inRain = player.level().isRaining() && player.level().canSeeSky(pos);
@@ -221,7 +221,7 @@ public class ModularSuitHudRenderer {
         if (player.isInLava() || player.isOnFire()) return true;
         var pos = player.blockPosition();
         var biomeKey = player.level().getBiome(pos).unwrapKey();
-        boolean isCaldera = biomeKey.isPresent() && biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "scorched_caldera"));
+        boolean isCaldera = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isThermalBiome(biomeKey.get().identifier());
         boolean isDeepCaldera = isCaldera && player.getY() <= 25;
         boolean nearHeatSource = isClientNearThermalSource(player, pos);
         return isDeepCaldera || nearHeatSource;
@@ -241,7 +241,7 @@ public class ModularSuitHudRenderer {
         if (player.level() == null) return false;
         var pos = player.blockPosition();
         var biomeKey = player.level().getBiome(pos).unwrapKey();
-        boolean isAnoxic = biomeKey.isPresent() && biomeKey.get().identifier().equals(Identifier.fromNamespaceAndPath("enchantedwood", "anoxic_barrens"));
+        boolean isAnoxic = biomeKey.isPresent() && net.enchantedwood.event.ConvergenceHazardHandler.isAnoxicBiome(biomeKey.get().identifier());
         if (isAnoxic) return true;
         boolean isHighAltitude = player.getY() >= 180 && player.level().canSeeSky(pos);
         boolean isAnoxicCave = player.getY() <= 35 && !player.level().canSeeSky(pos);
