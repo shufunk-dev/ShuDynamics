@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.5.2--26.3%20%7C%20v2.5.0--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.5.3--26.3%20%7C%20v2.5.3--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -21,8 +21,8 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.2-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
-| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.0-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.3-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.3-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
@@ -33,6 +33,32 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
+
+---
+
+## 🌟 What's New in v2.5.3 — Machinery GUI Overhauls & Telemetry Update
+
+* ⛏️ **Autonomous Laser Quarry Telemetry & HUD Overhaul**:
+  * Real-time working level tracking (`LEVEL: Y=...`), overall quarry progress percentage, and calculated seconds-to-completion ETA readout directly in the Quarry GUI.
+  * In-world interaction: Shift-Right Clicking any Laser Quarry block outputs immediate action bar telemetry (`§b[Laser Quarry] Working Level: Y=... | ETA: ... | Status: ...`).
+  * Server-client network delegate synchronization with accurate bedrock depth bounds, layer micro progress bars, and operational status states.
+* ⚡ **Solid Generators (Copper, Aluminum, Steel) GUI Overhaul**:
+  * Overhauled dark brushed-metal and conduit chassis textures.
+  * Integrated **Digital Generator Status Monitors**:
+    * Dynamic animated electrical sine-wave visualizer (Copper: amber-orange, Aluminum: cyan, Steel: radiant gold).
+    * Real-time operational diagnostics (`● GEN ON` / `○ STANDBY`, `+XX FE/t`, `♨ Fuel %`, `🔋 Energy %`) and micro progress groove.
+    * Comprehensive hover telemetry tooltips.
+* 🌋 **Geothermal Generator (Tier 4) Overhaul**:
+  * Volcanic basalt casing aesthetic with central thermal core diagnostic monitor and convective magma sparks.
+  * Dedicated Auxiliary Overclock Sub-Panel showing installed gear upgrade multiplier and net generation rate.
+* 🔬 **Circuit Fabricator & Industrial Alloy Foundry Polish**:
+  * Circuit Fabricator: Laser spark animation, new casing & progress layout, and slot tooltips.
+  * Industrial Alloy Foundry: Overhauled dark titanium GUI, induction thermal monitor, molten arrow pouring tip sparks, and tooltips.
+  * Steel Blast Furnace: Corrected progress indicator cutout to render as a clean arrow instead of a solid box.
+  * Super Computer: Cleaned up crafting interface.
+* 🌾 **Agricultural Composting Expansion**:
+  * All 8 custom seeds (`Corn`, `Rice`, `Cucumber`, `Tomato`, `Onion`, `Lettuce`, `Soybean`, `Chili Pepper`) are now fully compostable in vanilla Composters (30% chance).
+  * Added produce, wild flora, leaves, and `villager_plantable_seeds` tag entries.
 
 ---
 
