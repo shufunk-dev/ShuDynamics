@@ -19,11 +19,11 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
     public final BlockPos blockPos;
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), BlockPos.ORIGIN);
+        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(16), BlockPos.ORIGIN);
     }
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(10), pos);
+        this(syncId, playerInventory, new SimpleInventory(LaserQuarryBlockEntity.INVENTORY_SIZE), new ArrayPropertyDelegate(16), pos);
     }
 
     public LaserQuarryScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate propertyDelegate) {
@@ -131,6 +131,26 @@ public class LaserQuarryScreenHandler extends ScreenHandler {
 
     public int getNetworkStatus() {
         return this.propertyDelegate.get(9);
+    }
+
+    public int getStartY() {
+        return (short) this.propertyDelegate.get(10);
+    }
+
+    public int getMinY() {
+        return (short) this.propertyDelegate.get(11);
+    }
+
+    public int getEtaSeconds() {
+        return ((this.propertyDelegate.get(13) & 0xFFFF) << 16) | (this.propertyDelegate.get(12) & 0xFFFF);
+    }
+
+    public int getDetailedStatusCode() {
+        return this.propertyDelegate.get(14);
+    }
+
+    public int getLayerProgressPercent() {
+        return this.propertyDelegate.get(15);
     }
 
     @Override

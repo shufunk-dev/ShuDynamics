@@ -18,6 +18,12 @@ import java.util.List;
 public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
     private static final Identifier GUI_TEXTURE = Identifier.of(EnchantedWoodMod.MOD_ID, "textures/gui/container/laser_quarry_gui.png");
 
+    public static final int STATUS_MINING = 0;
+    public static final int STATUS_PAUSED = 1;
+    public static final int STATUS_NO_ENERGY = 2;
+    public static final int STATUS_BUFFER_FULL = 3;
+    public static final int STATUS_COMPLETED = 4;
+
     private ButtonWidget modeButton;
     private ButtonWidget pauseButton;
 
@@ -90,29 +96,82 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             int energyY = (y + 18) + (54 - scaledH);
             context.fill(x + 8, energyY, x + 17, y + 18 + 54, 0xFFE53935);
         }
+
+        // Telemetry Screen Panel (x + 19, y + 62, w: 56, h: 19)
+        int scanY = this.handler.getScanY();
+        int startY = this.handler.getStartY();
+        int minY = this.handler.getMinY();
+        int totalDepth = Math.max(1, startY - minY + 1);
+        int depthDone = Math.max(0, startY - scanY);
+        int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
+
+        // High-tech sci-fi screen bezel and glass
+        context.fill(x + 19, y + 62, x + 75, y + 81, 0xFF141923);
+        context.fill(x + 20, y + 63, x + 74, y + 80, 0xFF080D12);
+
+        // Micro Progress Bar groove along the bottom of the LCD (h: 2px)
+        int barY = y + 78;
+        context.fill(x + 20, barY, x + 74, barY + 2, 0xFF101922);
+        int fillW = Math.max(0, Math.min(54, (overallPct * 54) / 100));
+        if (fillW > 0) {
+            int barColor = (scanY < minY) ? 0xFF00FF66 : 0xFF00E5FF;
+            context.fill(x + 20, barY, x + 20 + fillW, barY + 2, barColor);
+        }
     }
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
 
-        // Telemetry LCD Display (x: 21..73, y: 64..75)
-        String depthStr = "Y:" + this.handler.getScanY();
-        int radius = this.handler.getRangeChunkRadius();
-        String radiusStr = (radius == 0) ? "1x1" : (radius == 1 ? "3x3" : "5x5");
-        String tele = depthStr + " " + radiusStr;
-        context.drawText(this.textRenderer, Text.literal(tele).formatted(net.minecraft.util.Formatting.AQUA), 23, 66, 0x55FFFF, false);
+        int scanY = this.handler.getScanY();
+        int startY = this.handler.getStartY();
+        int minY = this.handler.getMinY();
+        int totalDepth = Math.max(1, startY - minY + 1);
+        int depthDone = Math.max(0, startY - scanY);
+        int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
 
-        // Digital Storage Network status icon
+        // 1. Header Level & Progress Summary (x: 76, y: 6)
+        if (scanY < minY) {
+            context.drawText(this.textRenderer, Text.literal("§a✔ Bedrock (Done)"), 76, 6, 0xFF00AA44, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("§8Lvl: §bY=" + scanY + " §8(§a" + overallPct + "%§8)"), 76, 6, 0xFF404040, false);
+        }
+
+        // 2. LCD Display Console (x: 22)
+        // Line 1 (y: 64): Working Depth & Depth %
+        if (scanY < minY) {
+            context.drawText(this.textRenderer, Text.literal("§aBEDROCK"), 22, 64, 0xFF00FF66, false);
+        } else {
+            String lvlStr = "§bY:" + scanY + " §a" + overallPct + "%";
+            context.drawText(this.textRenderer, Text.literal(lvlStr), 22, 64, 0xFF00E5FF, false);
+        }
+
+        // Line 2 (y: 71): ETA or Machine State
+        int status = this.handler.getDetailedStatusCode();
+        int etaSec = this.handler.getEtaSeconds();
+        if (scanY < minY) {
+            context.drawText(this.textRenderer, Text.literal("§a✔ COMPLETE"), 22, 71, 0xFF00FF66, false);
+        } else if (status == STATUS_PAUSED) {
+            context.drawText(this.textRenderer, Text.literal("§e⏸ PAUSED"), 22, 71, 0xFFFFCC00, false);
+        } else if (status == STATUS_NO_ENERGY) {
+            context.drawText(this.textRenderer, Text.literal("§c⚡ NO POWER"), 22, 71, 0xFFFF5555, false);
+        } else if (status == STATUS_BUFFER_FULL) {
+            context.drawText(this.textRenderer, Text.literal("§6📦 FULL"), 22, 71, 0xFFFF9900, false);
+        } else {
+            String etaStr = "§e⏱ " + formatEta(etaSec);
+            context.drawText(this.textRenderer, Text.literal(etaStr), 22, 71, 0xFFFFD54F, false);
+        }
+
+        // 3. Digital Storage Network status icon (x: 162, y: 6) with full alpha
         int netStatus = this.handler.getNetworkStatus();
         if (netStatus == 2) {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.AQUA), 162, 6, 0x55FFFF, false);
+            context.drawText(this.textRenderer, Text.literal("●"), 162, 6, 0xFF55FFFF, false);
         } else if (netStatus == 1) {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.GREEN), 162, 6, 0x55FF55, false);
+            context.drawText(this.textRenderer, Text.literal("●"), 162, 6, 0xFF55FF55, false);
         } else if (netStatus == 3 || netStatus == 4) {
-            context.drawText(this.textRenderer, Text.literal("●").formatted(net.minecraft.util.Formatting.RED), 162, 6, 0xFF5555, false);
+            context.drawText(this.textRenderer, Text.literal("●"), 162, 6, 0xFFFF5555, false);
         } else {
-            context.drawText(this.textRenderer, Text.literal("○").formatted(net.minecraft.util.Formatting.GRAY), 162, 6, 0xAAAAAA, false);
+            context.drawText(this.textRenderer, Text.literal("○"), 162, 6, 0xFFAAAAAA, false);
         }
     }
 
@@ -132,6 +191,46 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
             lines.add(Text.literal(String.format("§f%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())));
             lines.add(Text.literal("§7Consumes 150 FE per block extracted."));
             lines.add(Text.literal("§8Powered by cables or connected Storage Network."));
+            context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
+        }
+
+        // Telemetry LCD Hover Tooltip (x + 19 .. 75, y + 62 .. 81)
+        if (mouseX >= x + 19 && mouseX <= x + 75 && mouseY >= y + 62 && mouseY <= y + 81) {
+            int scanY = this.handler.getScanY();
+            int startY = this.handler.getStartY();
+            int minY = this.handler.getMinY();
+            int totalDepth = Math.max(1, startY - minY + 1);
+            int depthDone = Math.max(0, startY - scanY);
+            int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
+            int status = this.handler.getDetailedStatusCode();
+            int etaSec = this.handler.getEtaSeconds();
+
+            List<Text> lines = new ArrayList<>();
+            lines.add(Text.literal("§b📡 Laser Quarry Telemetry"));
+            lines.add(Text.literal("§8──────────────────────────────────"));
+            lines.add(Text.literal("§7Current Working Level: §bY = " + scanY));
+            lines.add(Text.literal("§7Starting Depth:        §8Y = " + startY));
+            lines.add(Text.literal("§7Target Bedrock:        §8Y = " + minY));
+            lines.add(Text.literal("§7Depth Completed:       §a" + overallPct + "% §8[" + getProgressBar(overallPct) + "§8]"));
+            lines.add(Text.literal("§7Current Layer Progress:§3 " + this.handler.getLayerProgressPercent() + "%"));
+
+            String etaDisplay = (scanY < minY) ? "§aCompleted (Bedrock)" : (status == STATUS_PAUSED ? "§ePaused §7(~" + formatEta(etaSec) + " remaining)" : "§e~" + formatEta(etaSec));
+            lines.add(Text.literal("§7Estimated Finish Time: " + etaDisplay));
+
+            int radius = this.handler.getRangeChunkRadius();
+            String radiusStr = (radius == 0) ? "1x1 Chunk (16x16)" : (radius == 1 ? "3x3 Chunks (48x48)" : "5x5 Chunks (80x80)");
+            lines.add(Text.literal("§7Mining Area:           §b" + radiusStr));
+            lines.add(Text.literal(String.format("§7Total Blocks Mined:    §f%,d", this.handler.getTotalMinedCount())));
+
+            String statusStr = switch (status) {
+                case STATUS_COMPLETED -> "§a✔ Completed (Reached Bedrock)";
+                case STATUS_PAUSED -> "§e⏸ Paused";
+                case STATUS_NO_ENERGY -> "§c⚡ Out of Energy";
+                case STATUS_BUFFER_FULL -> "§6📦 Output Buffer Full";
+                default -> "§a● Actively Mining";
+            };
+            lines.add(Text.literal("§7Operational Status:    " + statusStr));
+
             context.drawTooltip(this.textRenderer, lines, mouseX, mouseY);
         }
 
@@ -201,5 +300,23 @@ public class LaserQuarryScreen extends HandledScreen<LaserQuarryScreenHandler> {
                     Text.literal("§8(Automatically piped or teleported to linked storage)")
             ), mouseX, mouseY);
         }
+    }
+
+    public static String formatEta(int seconds) {
+        if (seconds <= 0) return "0s";
+        if (seconds < 60) return seconds + "s";
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        if (mins < 60) {
+            return String.format("%dm %02ds", mins, secs);
+        }
+        int hours = mins / 60;
+        int remMins = mins % 60;
+        return String.format("%dh %02dm", hours, remMins);
+    }
+
+    private static String getProgressBar(int percent) {
+        int bars = Math.max(0, Math.min(10, percent / 10));
+        return "§a" + "■".repeat(bars) + "§8" + "■".repeat(10 - bars);
     }
 }

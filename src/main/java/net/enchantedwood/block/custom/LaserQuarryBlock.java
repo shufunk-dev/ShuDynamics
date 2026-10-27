@@ -21,6 +21,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.enchantedwood.block.entity.LaserQuarryBlockEntity;
 import net.enchantedwood.block.entity.ModBlockEntities;
@@ -81,6 +82,33 @@ public class LaserQuarryBlock extends HorizontalFacingBlock implements BlockEnti
             ((player.getMainHandStack().getItem() instanceof net.enchantedwood.item.custom.WirelessStorageCrystalItem ||
               player.getOffHandStack().getItem() instanceof net.enchantedwood.item.custom.WirelessStorageCrystalItem) && player.isSneaking())) {
             return ActionResult.PASS;
+        }
+        if (player.isSneaking() && player.getMainHandStack().isEmpty()) {
+            if (!world.isClient()) {
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof LaserQuarryBlockEntity quarry) {
+                    int scanY = quarry.getScanY();
+                    int startY = quarry.getEffectiveStartY();
+                    int minY = quarry.getMinDimensionY();
+                    int totalDepth = Math.max(1, startY - minY + 1);
+                    int depthDone = Math.max(0, startY - scanY);
+                    int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
+                    int etaSec = quarry.calculateEtaSeconds();
+
+                    String statusStr = switch (quarry.getDetailedStatusCode()) {
+                        case LaserQuarryBlockEntity.STATUS_COMPLETED -> "§a✔ Finished (Bedrock)";
+                        case LaserQuarryBlockEntity.STATUS_PAUSED -> "§e⏸ Paused";
+                        case LaserQuarryBlockEntity.STATUS_NO_ENERGY -> "§c⚡ No Energy";
+                        case LaserQuarryBlockEntity.STATUS_BUFFER_FULL -> "§6📦 Buffer Full";
+                        default -> "§a● Mining";
+                    };
+
+                    player.sendMessage(Text.literal(
+                            "§b[Laser Quarry] §fWorking Level: §bY=" + scanY + " §8(§a" + overallPct + "%§8) §7| §fETA: §e" + net.enchantedwood.screen.LaserQuarryScreen.formatEta(etaSec) + " §7| " + statusStr
+                    ), true);
+                }
+            }
+            return ActionResult.SUCCESS;
         }
         if (!world.isClient()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);

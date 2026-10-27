@@ -119,6 +119,13 @@ public class EnchantedWoodMod implements ModInitializer {
         composting.add(ModItems.TOFU, 0.65f);
         composting.add(ModItems.GARDEN_SALAD, 1.0f);
         composting.add(ModItems.BERRY_MEDLEY_SALAD, 1.0f);
+        composting.add(ModItems.NORI_SHEET, 0.5f);
+        composting.add(ModItems.WASABI_ROOT, 0.65f);
+        composting.add(ModItems.DRAGON_FRUIT, 0.65f);
+        composting.add(ModBlocks.WILD_RICE, 0.5f);
+        composting.add(ModBlocks.WILD_CUCUMBER, 0.5f);
+        composting.add(ModBlocks.WILD_WASABI, 0.5f);
+        composting.add(ModBlocks.WILD_DRAGON_FRUIT, 0.5f);
     }
 }
 

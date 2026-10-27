@@ -59,6 +59,12 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
     public static final int MAX_RECEIVE = 2_000;
     public static final int ENERGY_PER_BLOCK = 150;
 
+    public static final int STATUS_MINING = 0;
+    public static final int STATUS_PAUSED = 1;
+    public static final int STATUS_NO_ENERGY = 2;
+    public static final int STATUS_BUFFER_FULL = 3;
+    public static final int STATUS_COMPLETED = 4;
+
     public static final int MODE_ORE_ONLY = 0;
     public static final int MODE_EXCAVATE = 1;
 
@@ -91,6 +97,12 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
 
     // Client-side synced range radius
     private int clientRangeRadius = 0;
+    private int startY = 0;
+    private int clientStartY = 0;
+    private int clientMinY = -64;
+    private int clientEtaSeconds = 0;
+    private int clientDetailedStatus = 0;
+    private int clientLayerProgress = 0;
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate() {
         @Override
@@ -106,6 +118,12 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                 case 7 -> totalMinedCount;
                 case 8 -> getRangeChunkRadius();
                 case 9 -> getNetworkStatusCode();
+                case 10 -> getEffectiveStartY();
+                case 11 -> getMinDimensionY();
+                case 12 -> calculateEtaSeconds() & 0xFFFF;
+                case 13 -> (calculateEtaSeconds() >> 16) & 0xFFFF;
+                case 14 -> getDetailedStatusCode();
+                case 15 -> getLayerProgressPercent();
                 default -> 0;
             };
         }
@@ -120,12 +138,18 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
                 case 6 -> scanY = value;
                 case 7 -> totalMinedCount = value;
                 case 8 -> clientRangeRadius = value;
+                case 10 -> clientStartY = value;
+                case 11 -> clientMinY = value;
+                case 12 -> clientEtaSeconds = (clientEtaSeconds & 0xFFFF0000) | (value & 0xFFFF);
+                case 13 -> clientEtaSeconds = (clientEtaSeconds & 0x0000FFFF) | ((value & 0xFFFF) << 16);
+                case 14 -> clientDetailedStatus = value;
+                case 15 -> clientLayerProgress = value;
             }
         }
 
         @Override
         public int size() {
-            return 10;
+            return 16;
         }
     };
 
@@ -283,7 +307,128 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         this.scanX = bounds[0] * 16;
         this.scanZ = bounds[2] * 16;
         this.scanY = this.pos.getY() - 1;
+        this.startY = this.scanY;
         markDirty();
+    }
+
+    public int getEffectiveStartY() {
+        if (this.world != null && this.world.isClient()) {
+            return this.clientStartY != 0 ? this.clientStartY : (this.pos != null ? this.pos.getY() - 1 : this.scanY);
+        }
+        if (this.startY != 0) return this.startY;
+        if (this.pos != null) return this.pos.getY() - 1;
+        return this.scanY;
+    }
+
+    public int getMinDimensionY() {
+        if (this.world != null) return this.world.getBottomY();
+        return this.clientMinY;
+    }
+
+    public boolean isBufferFull() {
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        if (terminal != null && terminal.isNetworkOnline()) {
+            if (terminal.getTotalStoredItemCountLong() < terminal.getNetworkCapacityLong()) {
+                return false;
+            }
+        }
+        for (int i = OUTPUT_START; i < OUTPUT_START + OUTPUT_SIZE; i++) {
+            ItemStack stack = this.inventory.get(i);
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxCount()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean canDrawNetworkPower() {
+        return this.boundNetworkPos != null || getNetworkTerminal() != null;
+    }
+
+    public int getDetailedStatusCode() {
+        if (this.world != null && this.world.isClient()) {
+            return this.clientDetailedStatus;
+        }
+        int minY = getMinDimensionY();
+        if (this.scanY < minY) {
+            return STATUS_COMPLETED;
+        }
+        if (this.isPaused) {
+            return STATUS_PAUSED;
+        }
+        if (this.energyStorage.getEnergy() < ENERGY_PER_BLOCK && !canDrawNetworkPower()) {
+            return STATUS_NO_ENERGY;
+        }
+        if (isBufferFull()) {
+            return STATUS_BUFFER_FULL;
+        }
+        return STATUS_MINING;
+    }
+
+    public int calculateEtaSeconds() {
+        if (this.world != null && this.world.isClient()) {
+            return this.clientEtaSeconds;
+        }
+        int minY = getMinDimensionY();
+        if (this.scanY < minY) {
+            return 0;
+        }
+
+        int[] bounds = getMiningChunkBounds();
+        int minX = bounds[0] * 16;
+        int maxX = bounds[1] * 16 + 15;
+        int minZ = bounds[2] * 16;
+        int maxZ = bounds[3] * 16 + 15;
+        int spanX = maxX - minX + 1;
+        int spanZ = maxZ - minZ + 1;
+        int blocksPerLayer = spanX * spanZ;
+
+        int remainingLayers = Math.max(0, this.scanY - minY);
+        int currentX = Math.min(maxX, Math.max(minX, this.scanX));
+        int currentZ = Math.min(maxZ, Math.max(minZ, this.scanZ));
+        int doneInCurrentLayer = (currentZ - minZ) * spanX + (currentX - minX);
+        int remainingInCurrentLayer = Math.max(0, blocksPerLayer - doneInCurrentLayer);
+
+        long totalRemainingBlocks = (long) remainingLayers * blocksPerLayer + remainingInCurrentLayer;
+        if (totalRemainingBlocks <= 0) return 0;
+
+        int delayTicks = getMiningDelayTicks();
+        double miningSpeedBps = 20.0 / Math.max(1, delayTicks);
+
+        if (this.mode == MODE_EXCAVATE) {
+            double effectiveBlocks = totalRemainingBlocks * 0.88;
+            long seconds = (long) (effectiveBlocks / Math.max(0.1, miningSpeedBps));
+            return (int) Math.min(seconds, 864000L);
+        } else {
+            int scanAttemptsPerTick = 48;
+            double scanRateBps = scanAttemptsPerTick * 20.0;
+            double oreBlocks = totalRemainingBlocks * 0.020;
+            double nonOreBlocks = totalRemainingBlocks * 0.980;
+
+            double timeScanning = nonOreBlocks / scanRateBps;
+            double timeMining = oreBlocks / Math.max(0.1, miningSpeedBps);
+            long seconds = (long) (timeScanning + timeMining);
+            return (int) Math.min(seconds, 864000L);
+        }
+    }
+
+    public int getLayerProgressPercent() {
+        if (this.world != null && this.world.isClient()) {
+            return this.clientLayerProgress;
+        }
+        int[] bounds = getMiningChunkBounds();
+        int minX = bounds[0] * 16;
+        int maxX = bounds[1] * 16 + 15;
+        int minZ = bounds[2] * 16;
+        int maxZ = bounds[3] * 16 + 15;
+        int spanX = maxX - minX + 1;
+        int spanZ = maxZ - minZ + 1;
+        int total = spanX * spanZ;
+        if (total <= 0) return 0;
+        int currentX = Math.min(maxX, Math.max(minX, this.scanX));
+        int currentZ = Math.min(maxZ, Math.max(minZ, this.scanZ));
+        int done = (currentZ - minZ) * spanX + (currentX - minX);
+        return Math.min(100, Math.max(0, (int) ((done * 100L) / total)));
     }
 
     public int getRangeChunkRadius() {
@@ -1129,6 +1274,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         this.scanX = view.getInt("ScanX", 0);
         this.scanY = view.getInt("ScanY", 0);
         this.scanZ = view.getInt("ScanZ", 0);
+        this.startY = view.getInt("StartY", this.scanY != 0 ? this.scanY : (this.pos != null ? this.pos.getY() - 1 : 0));
         this.initializedScan = view.getBoolean("InitializedScan", false);
         this.anomalyUnearthed = view.getBoolean("AnomalyUnearthed", false);
         this.clientRangeRadius = view.getInt("RangeRadius", 0);
@@ -1151,6 +1297,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements NamedScreenHa
         view.putInt("ScanX", this.scanX);
         view.putInt("ScanY", this.scanY);
         view.putInt("ScanZ", this.scanZ);
+        view.putInt("StartY", this.startY);
         view.putBoolean("InitializedScan", this.initializedScan);
         view.putBoolean("AnomalyUnearthed", this.anomalyUnearthed);
         view.putInt("RangeRadius", getRangeChunkRadius());

@@ -20,6 +20,10 @@ public class CircuitFabricatorScreen extends HandledScreen<CircuitFabricatorScre
         super(handler, inventory, title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 166;
+        this.titleX = 8;
+        this.titleY = 6;
+        this.playerInventoryTitleX = 8;
+        this.playerInventoryTitleY = this.backgroundHeight - 94;
     }
 
     @Override
@@ -39,13 +43,28 @@ public class CircuitFabricatorScreen extends HandledScreen<CircuitFabricatorScre
         int cookWidth = this.handler.getScaledCookProgress(24);
         if (cookWidth > 0) {
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 88, y + 34, 188.0f, 0.0f, cookWidth, 17, 256, 256);
+
+            // High-precision laser sintering focal spark at the active beam front
+            long pulse = (System.currentTimeMillis() / 90) % 2;
+            int sparkColor = (pulse == 0) ? 0xFF00FFEE : 0xFFFF44FF;
+            int sparkX = Math.min(x + 88 + cookWidth, x + 111);
+            context.fill(sparkX - 1, y + 41, sparkX + 1, y + 44, sparkColor);
         }
     }
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFF404040, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF404040, false);
+
+        // Live Operational State Header Pill
+        if (this.handler.isCrafting()) {
+            context.drawText(this.textRenderer, Text.literal("§d✦ Sintering..."), 82, 6, 0xFFD033FF, false);
+        } else if (this.handler.getEnergy() < 35) {
+            context.drawText(this.textRenderer, Text.literal("§c⚡ Low Power"), 86, 6, 0xFFFF5555, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("§2● Ready"), 108, 6, 0xFF2E7D32, false);
+        }
     }
 
     @Override
@@ -57,22 +76,36 @@ public class CircuitFabricatorScreen extends HandledScreen<CircuitFabricatorScre
         int x = (this.width - this.backgroundWidth) / 2;
         int y = (this.height - this.backgroundHeight) / 2;
 
-        // Energy Bar Tooltip
-        if (mouseX >= x + 9 && mouseX <= x + 23 && mouseY >= y + 17 && mouseY <= y + 69) {
+        // Energy Bar Tooltip (x + 9 .. 22, y + 17 .. 68)
+        if (mouseX >= x + 9 && mouseX <= x + 22 && mouseY >= y + 17 && mouseY <= y + 68) {
+            int energy = this.handler.getEnergy();
+            int maxEnergy = this.handler.getMaxEnergy();
+            int pct = maxEnergy > 0 ? (int) ((long) energy * 100 / maxEnergy) : 0;
             context.drawTooltip(this.textRenderer, List.of(
-                    Text.literal("§6⚡ Energy Buffer"),
-                    Text.literal(String.format("§e%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy())),
-                    Text.literal("§7Draw: 35 FE/t")
+                    Text.literal("§6⚡ Internal Energy Buffer"),
+                    Text.literal(String.format("§e%,d / %,d FE §7(%d%%)", energy, maxEnergy, pct)),
+                    Text.literal("§7Operating Draw: §f35 FE/t"),
+                    Text.literal("§8Accepts FE via cables or Wireless Storage Crystal.")
             ), mouseX, mouseY);
         }
 
-        // Progress Tooltip
+        // Progress Laser Tooltip (x + 87 .. 113, y + 33 .. 52)
         if (mouseX >= x + 87 && mouseX <= x + 113 && mouseY >= y + 33 && mouseY <= y + 52) {
             int cookProgress = this.handler.getScaledCookProgress(100);
+            String status = this.handler.isCrafting() ? "§aSintering Components (" + cookProgress + "%)" : "§7Standby / Idle";
             context.drawTooltip(this.textRenderer, List.of(
                     Text.literal("§b⚡ Circuit Fabrication Laser"),
-                    Text.literal(String.format("§7Progress: §f%d%%", cookProgress)),
-                    Text.literal("§8Aligns components and sinters microscopic silicon traces.")
+                    Text.literal("§fStatus: " + status),
+                    Text.literal("§8Aligns semiconductor components and sinters micro-traces.")
+            ), mouseX, mouseY);
+        }
+
+        // Gear Socket Tooltip when hovering over slot box (x + 151 .. 169, y + 7 .. 25)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§6⚙ Overclock & Gear Socket"),
+                    Text.literal("§7Accepts: §fCopper..Diamond Gears §7or §6Blaze Overclock Core"),
+                    Text.literal("§8Accelerates laser fabrication speed up to 4.0×.")
             ), mouseX, mouseY);
         }
 

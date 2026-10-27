@@ -20,6 +20,10 @@ public class GeothermalGeneratorScreen extends HandledScreen<GeothermalGenerator
         super(handler, inventory, title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 166;
+        this.titleX = 8;
+        this.titleY = 7;
+        this.playerInventoryTitleX = 8;
+        this.playerInventoryTitleY = this.backgroundHeight - 94;
     }
 
     @Override
@@ -46,11 +50,57 @@ public class GeothermalGeneratorScreen extends HandledScreen<GeothermalGenerator
         if (energyHeight > 0) {
             context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 121, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
+
+        // 4. Geothermal Reactor Core Animation (x + 94..116, y + 21..68)
+        long time = System.currentTimeMillis();
+        if (this.handler.isBurning()) {
+            // Rising convective magma heat sparks in core monitor
+            for (int i = 0; i < 4; i++) {
+                int sparkOffset = (int) ((time / (40 + i * 15) + i * 11) % 44);
+                int py = y + 66 - sparkOffset;
+                int px = x + 97 + (int) (Math.sin(time * 0.005 + i * 2) * 6 + 6);
+                int color = (i % 2 == 0) ? 0xFFFF7700 : 0xFFFFD700;
+                context.fill(px, py, px + 2, py + 2, color);
+            }
+        }
     }
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        super.drawForeground(context, mouseX, mouseY);
+        // Machine Title in illuminated warm ivory without colliding with gear slot
+        context.drawText(this.textRenderer, Text.literal("Geothermal Gen (Tier 4)"), this.titleX, this.titleY, 0xFFE2DDD2, false);
+
+        // Inventory label in muted lavender slate
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFFB8A8C8, false);
+
+        // --- CENTRAL CORE DIAGNOSTIC MONITOR TELEMETRY (x = 95, y = 23) ---
+        boolean burning = this.handler.isBurning();
+        if (burning) {
+            context.drawText(this.textRenderer, Text.literal("§a● CORE"), 95, 23, 0xFF40FF90, false);
+            context.drawText(this.textRenderer, Text.literal("§c♨ MAX"), 95, 33, 0xFFFF4444, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("§7○ IDLE"), 95, 23, 0xFF708090, false);
+            context.drawText(this.textRenderer, Text.literal("§8♨ COOL"), 95, 33, 0xFF666666, false);
+        }
+
+        int lavaPct = (int) (((long) this.handler.getLavaAmount() * 100) / 10000);
+        context.drawText(this.textRenderer, Text.literal(String.format("§6%d%%", lavaPct)), 95, 45, 0xFFFF9900, false);
+
+        int maxEnergy = this.handler.getMaxEnergy();
+        int energyPct = maxEnergy > 0 ? (int) (((long) this.handler.getEnergy() * 100) / maxEnergy) : 0;
+        context.drawText(this.textRenderer, Text.literal(String.format("§e%d%%", energyPct)), 95, 57, 0xFFFFD700, false);
+
+        // --- AUXILIARY OVERCLOCK SUB-PANEL TELEMETRY (x = 142, y = 32) ---
+        context.drawText(this.textRenderer, Text.literal("§dO/CLK"), 142, 32, 0xFFE040FB, false);
+        context.drawText(this.textRenderer, Text.literal(String.format("§f%.2fx", this.handler.getGearMultiplier())), 142, 42, 0xFFFFFFFF, false);
+
+        int rate = Math.round(750 * this.handler.getGearMultiplier());
+        if (burning) {
+            context.drawText(this.textRenderer, Text.literal(String.format("§a+%d", rate)), 142, 52, 0xFF40FF90, false);
+        } else {
+            context.drawText(this.textRenderer, Text.literal("§8+0"), 142, 52, 0xFF666666, false);
+        }
+        context.drawText(this.textRenderer, Text.literal("§7FE/t"), 142, 61, 0xFF888888, false);
     }
 
     @Override
@@ -68,6 +118,28 @@ public class GeothermalGeneratorScreen extends HandledScreen<GeothermalGenerator
                     Text.literal("§c🌋 Lava Buffer Tank"),
                     Text.literal(String.format("§6%,d / 10,000 mB", this.handler.getLavaAmount())),
                     Text.literal("§7Accepts Lava Buckets, Magma Blocks, Fire Crystals, or Pumps")
+            ), mouseX, mouseY);
+        }
+
+        // Central Core Diagnostic Monitor Tooltip
+        if (mouseX >= x + 92 && mouseX <= x + 118 && mouseY >= y + 18 && mouseY <= y + 72) {
+            int rate = Math.round(750 * this.handler.getGearMultiplier());
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§c🌋 Geothermal Core Diagnostics"),
+                    Text.literal(this.handler.isBurning() ? "§aThermal Turbine: ACTIVE" : "§7Thermal Turbine: OFFLINE"),
+                    Text.literal(String.format("§eCurrent Rate: +%d FE/t", this.handler.isBurning() ? rate : 0)),
+                    Text.literal(String.format("§6Lava Reserve: %,d mB", this.handler.getLavaAmount())),
+                    Text.literal(String.format("§bBuffer: %,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy()))
+            ), mouseX, mouseY);
+        }
+
+        // Auxiliary Overclock Sub-Panel Tooltip
+        if (mouseX >= x + 139 && mouseX <= x + 171 && mouseY >= y + 28 && mouseY <= y + 72) {
+            context.drawTooltip(this.textRenderer, List.of(
+                    Text.literal("§d⚙ Turbine Overclock Telemetry"),
+                    Text.literal(String.format("§7Installed Gear: §f%s", this.handler.getGearTier().name())),
+                    Text.literal(String.format("§aOutput Multiplier: §f%.2fx", this.handler.getGearMultiplier())),
+                    Text.literal(String.format("§eEffective Capacity: §f+%,d FE/t", Math.round(750 * this.handler.getGearMultiplier())))
             ), mouseX, mouseY);
         }
 
