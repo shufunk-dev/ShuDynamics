@@ -20,6 +20,7 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.enchantedwood.EnchantedWoodMod;
 import net.enchantedwood.item.custom.BarkskinPickaxeItem;
 import net.enchantedwood.item.custom.EnchantedArmorItem;
@@ -51,17 +52,19 @@ public class ModItems {
 
     // Agriculture & Crops
     public static final Item CORN = registerItem("corn", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§7Can be §eRoasted §7on fire for food, or distilled in a"),
             Component.literal("§eFuel Refinery §7(§62 Corn + Empty Canister§7) into §aBiofuel§7.")
     ));
     public static final Item ROASTED_CORN = registerItem("roasted_corn", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.8f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.8f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH),
             Component.literal("§aDelicious roasted sweet corn. Restores 7 food points.")
     ));
     public static final Item CORN_SEEDS = registerItem("corn_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.CORN_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to grow 8-stage Sweet Corn."),
             Component.literal("§8Obtained by breaking wild grass or crafting with Enchanted Dust.")
     ));
@@ -69,38 +72,42 @@ public class ModItems {
     // Convergence Cuisine & Ingredients
     public static final Item RICE_SEEDS = registerItem("rice_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.RICE_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland or Volcanic Soil to cultivate Rice."),
             Component.literal("§8Native crop of §dThe Convergence§8. Essential ingredient for Sushi.")
     ));
     public static final Item RICE = registerItem("rice", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§7Grown grain from The Convergence."),
             Component.literal("§8Cook in a Smoker/Furnace or combine with water to prepare §fSushi Rice§8.")
     ));
     public static final Item SUSHI_RICE = registerItem("sushi_rice", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH),
             Component.literal("§fSeasoned Steamed Sushi Rice."),
             Component.literal("§8The essential base for rolling authentic Sushi.")
     ));
     public static final Item CUCUMBER_SEEDS = registerItem("cucumber_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.CUCUMBER_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland or Volcanic Soil to grow Crisp Cucumbers."),
             Component.literal("§8Native crop of §dThe Convergence§8.")
     ));
     public static final Item CUCUMBER = registerItem("cucumber", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§aFresh, crisp green cucumber."),
             Component.literal("§8Restores 3 food points. Key ingredient in vegetarian and California rolls.")
     ));
     public static final Item AVOCADO = registerItem("avocado", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.7f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.7f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§2Creamy, nutrient-rich avocado fruit."),
             Component.literal("§8Harvested from Avocado Trees in §dThe Convergence§8.")
     ));
     public static final Item NORI_SHEET = registerItem("nori_sheet", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM),
             Component.literal("§8Thin roasted seaweed sheet pressed from Dried Kelp."),
             Component.literal("§8Used to wrap sushi rolls.")
     ));
@@ -266,7 +273,7 @@ public class ModItems {
                     Consumables.defaultFood()
                             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.HASTE, 20 * 10, 0)))
                             .build()
-            ),
+            ).compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§aConvergence Wasabi Root"),
             Component.literal("§7Pungent wild rhizome harvested along convergence riverbanks."),
             Component.literal("§8Essential spice for crafting Fresh Wasabi Nigiri.")
@@ -278,7 +285,7 @@ public class ModItems {
                     Consumables.defaultFood()
                             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 5, 0)))
                             .build()
-            ),
+            ).compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§dExotic Dragon Fruit"),
             Component.literal("§7Vibrant magenta fruit rich in cellular life-essence."),
             Component.literal("§8Essential ingredient in Dragon Fruit Pitaya Bowls.")
@@ -290,7 +297,7 @@ public class ModItems {
                     Consumables.defaultFood()
                             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20 * 10, 0)))
                             .build()
-            ),
+            ).compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§eResonance Starfruit"),
             Component.literal("§7Luminescent star-shaped fruit charged with anti-gravitational energy."),
             Component.literal("§8Essential ingredient in Resonance Starfruit Tarts.")
@@ -380,55 +387,59 @@ public class ModItems {
     // ==========================================
     public static final Item TOMATO_SEEDS = registerItem("tomato_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.TOMATO_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to cultivate ripe juicy tomatoes."),
             Component.literal("§8Essential for rich tomato sauces and pizza bases.")
     ));
     public static final Item TOMATO = registerItem("tomato", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§cPlump, juicy garden tomato."),
             Component.literal("§8Can be crushed into savory tomato sauce or sliced for burgers and salads.")
     ));
 
     public static final Item ONION_SEEDS = registerItem("onion_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.ONION_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to cultivate pungent onions."),
             Component.literal("§8Aromatic seasoning for pizzas, burgers, tacos, and salads.")
     ));
     public static final Item ONION = registerItem("onion", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§eCrisp, pungent garden onion."),
             Component.literal("§8Adds savory depth to artisan dishes and street food.")
     ));
 
     public static final Item LETTUCE_SEEDS = registerItem("lettuce_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.LETTUCE_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to cultivate fresh leafy lettuce."),
             Component.literal("§8Crisp leafy greens for burgers, tacos, and garden salads.")
     ));
     public static final Item LETTUCE = registerItem("lettuce", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§aCrisp leafy green lettuce."),
             Component.literal("§8Vital ingredient for burgers, tacos, and refreshing salads.")
     ));
 
     public static final Item SOYBEAN_SEEDS = registerItem("soybean_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.SOYBEAN_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to cultivate versatile soybeans."),
             Component.literal("§8High-protein legume processed into soy milk, artisan cheese, and tofu.")
     ));
     public static final Item SOYBEANS = registerItem("soybeans", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§eNutritious golden soybeans."),
             Component.literal("§8Can be pressed into soy milk, curdled into cheese, or made into tofu.")
     ));
 
     public static final Item CHILI_PEPPER_SEEDS = registerItem("chili_pepper_seeds", settings -> new net.enchantedwood.item.custom.TooltipBlockItem(
             net.enchantedwood.block.ModBlocks.CHILI_PEPPER_CROP,
-            settings,
+            settings.compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§7Plant on tilled farmland to cultivate fiery chili peppers."),
             Component.literal("§8Adds spicy heat to supreme pizzas and street tacos.")
     ));
@@ -438,19 +449,21 @@ public class ModItems {
                     Consumables.defaultFood()
                             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.SPEED, 20 * 15, 0)))
                             .build()
-            ),
+            ).compostable(ContextIntProviders.COMPOSTABLE_MEDIUM),
             Component.literal("§cFiery red chili pepper with a spicy kick."),
             Component.literal("§eGrants brief Speed I (15s). Key ingredient for Supreme Pizza & Tacos.")
     ));
 
     public static final Item STRAWBERRY = registerItem("strawberry", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§cSweet, fragrant summer strawberry."),
             Component.literal("§8Harvested from strawberry bushes. Churned into gourmet ice cream.")
     ));
 
     public static final Item BLUEBERRY = registerItem("blueberry", settings -> new net.enchantedwood.item.custom.TooltipItem(
-            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build()),
+            settings.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build())
+                    .compostable(ContextIntProviders.COMPOSTABLE_LOW),
             Component.literal("§9Rich antioxidant wild blueberry."),
             Component.literal("§8Harvested from blueberry bushes. Churned into vibrant ice cream.")
     ));

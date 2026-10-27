@@ -237,18 +237,6 @@ public class SuperComputerScreen extends AbstractContainerScreen<SuperComputerSc
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
-        // Render On-Screen Status Notification Banner directly visible while GUI is open
-        if (!lastStatus.isEmpty() && System.currentTimeMillis() - lastStatusTime < 14000) {
-            Component statusText = Component.literal(lastStatus);
-            int textW = this.font.width(statusText);
-            int bannerX = Math.max(4, (this.width - textW) / 2);
-            int bannerY = y - 16;
-
-            // Draw dark background box
-            context.fill(bannerX - 6, bannerY - 3, bannerX + textW + 6, bannerY + 11, 0xDD111111);
-            context.fill(bannerX - 5, bannerY - 2, bannerX + textW + 5, bannerY + 10, 0xEE222222);
-            context.text(this.font, statusText, bannerX, bannerY, 0xFFFFFF, true);
-        }
 
         // Energy Bar Hover Tooltip (x + 8 .. 16, y + 17 .. 49)
         if (mouseX >= x + 8 && mouseX <= x + 16 && mouseY >= y + 17 && mouseY <= y + 49) {

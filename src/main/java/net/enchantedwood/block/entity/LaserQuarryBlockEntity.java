@@ -65,6 +65,13 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
     private final NonNullList<ItemStack> inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
     private final SimpleEnergyStorage energyStorage = new SimpleEnergyStorage(MAX_ENERGY, MAX_RECEIVE, MAX_RECEIVE, 0);
 
+    public static final int STATUS_IDLE = 0;
+    public static final int STATUS_MINING = 1;
+    public static final int STATUS_PAUSED = 2;
+    public static final int STATUS_NO_ENERGY = 3;
+    public static final int STATUS_BUFFER_FULL = 4;
+    public static final int STATUS_COMPLETED = 5;
+
     private int mode = MODE_ORE_ONLY;
     private boolean isPaused = true;
     private int totalMinedCount = 0;
@@ -73,6 +80,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
     private int scanX = 0;
     private int scanY = 0;
     private int scanZ = 0;
+    private int startY = 0;
     private boolean initializedScan = false;
     private int tickDelay = 0;
     private boolean anomalyUnearthed = false;
@@ -89,8 +97,13 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
     private @Nullable String remoteForcedDimension = null;
     private final Set<Long> remoteForcedChunks = new HashSet<>();
 
-    // Client-side synced range radius
+    // Client-side synced range radius and telemetry
     private int clientRangeRadius = 0;
+    private int clientStartY = 0;
+    private int clientMinY = -64;
+    private int clientEtaSeconds = 0;
+    private int clientDetailedStatus = 0;
+    private int clientLayerProgress = 0;
 
     protected final ContainerData propertyDelegate = new ContainerData() {
         @Override
@@ -106,6 +119,12 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
                 case 7 -> totalMinedCount;
                 case 8 -> getRangeChunkRadius();
                 case 9 -> getNetworkStatusCode();
+                case 10 -> getEffectiveStartY();
+                case 11 -> getMinDimensionY();
+                case 12 -> calculateEtaSeconds() & 0xFFFF;
+                case 13 -> (calculateEtaSeconds() >> 16) & 0xFFFF;
+                case 14 -> getDetailedStatusCode();
+                case 15 -> getLayerProgressPercent();
                 default -> 0;
             };
         }
@@ -120,12 +139,18 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
                 case 6 -> scanY = value;
                 case 7 -> totalMinedCount = value;
                 case 8 -> clientRangeRadius = value;
+                case 10 -> clientStartY = value;
+                case 11 -> clientMinY = value;
+                case 12 -> clientEtaSeconds = (clientEtaSeconds & 0xFFFF0000) | (value & 0xFFFF);
+                case 13 -> clientEtaSeconds = (clientEtaSeconds & 0x0000FFFF) | ((value & 0xFFFF) << 16);
+                case 14 -> clientDetailedStatus = value;
+                case 15 -> clientLayerProgress = value;
             }
         }
 
         @Override
         public int getCount() {
-            return 10;
+            return 16;
         }
     };
 
@@ -290,7 +315,129 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
         this.scanX = bounds[0] * 16;
         this.scanZ = bounds[2] * 16;
         this.scanY = this.worldPosition.getY() - 1;
+        this.startY = this.scanY;
         setChanged();
+    }
+
+    public int getEffectiveStartY() {
+        if (this.level != null && this.level.isClientSide()) {
+            return this.clientStartY != 0 ? this.clientStartY : (this.worldPosition != null ? this.worldPosition.getY() - 1 : this.scanY);
+        }
+        if (this.startY != 0) return this.startY;
+        if (this.worldPosition != null) return this.worldPosition.getY() - 1;
+        return this.scanY;
+    }
+
+    public int getMinDimensionY() {
+        if (this.level != null) return this.level.getMinY();
+        return this.clientMinY;
+    }
+
+    public boolean isBufferFull() {
+        EnchantedStorageTerminalBlockEntity terminal = getNetworkTerminal();
+        if (terminal != null && terminal.isNetworkOnline()) {
+            if (terminal.getTotalStoredItemCountLong() < terminal.getNetworkCapacityLong()) {
+                return false;
+            }
+        }
+        for (int i = OUTPUT_START; i < OUTPUT_START + OUTPUT_SIZE; i++) {
+            ItemStack stack = this.inventory.get(i);
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxStackSize()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean canDrawNetworkPower() {
+        return this.boundNetworkPos != null || getNetworkTerminal() != null;
+    }
+
+    public int getDetailedStatusCode() {
+        if (this.level != null && this.level.isClientSide()) {
+            return this.clientDetailedStatus;
+        }
+        int minY = getMinDimensionY();
+        if (this.scanY < minY) {
+            return STATUS_COMPLETED;
+        }
+        if (this.isPaused) {
+            return STATUS_PAUSED;
+        }
+        if (this.energyStorage.getEnergy() < ENERGY_PER_BLOCK && !canDrawNetworkPower()) {
+            return STATUS_NO_ENERGY;
+        }
+        if (isBufferFull()) {
+            return STATUS_BUFFER_FULL;
+        }
+        return STATUS_MINING;
+    }
+
+    public int calculateEtaSeconds() {
+        if (this.level != null && this.level.isClientSide()) {
+            return this.clientEtaSeconds;
+        }
+        int minY = getMinDimensionY();
+        if (this.scanY < minY) {
+            return 0;
+        }
+
+        int[] bounds = getMiningChunkBounds();
+        int minX = bounds[0] * 16;
+        int maxX = bounds[1] * 16 + 15;
+        int minZ = bounds[2] * 16;
+        int maxZ = bounds[3] * 16 + 15;
+        int spanX = maxX - minX + 1;
+        int spanZ = maxZ - minZ + 1;
+        int blocksPerLayer = spanX * spanZ;
+
+        int remainingLayers = Math.max(0, this.scanY - minY);
+        int currentX = Math.min(maxX, Math.max(minX, this.scanX));
+        int currentZ = Math.min(maxZ, Math.max(minZ, this.scanZ));
+        int doneInCurrentLayer = (currentZ - minZ) * spanX + (currentX - minX);
+        int remainingInCurrentLayer = Math.max(0, blocksPerLayer - doneInCurrentLayer);
+
+        long totalRemainingBlocks = (long) remainingLayers * blocksPerLayer + remainingInCurrentLayer;
+        if (totalRemainingBlocks <= 0) return 0;
+
+        int delayTicks = getMiningDelayTicks();
+        int blocksPerStep = getBlocksPerMiningStep();
+        double miningSpeedBps = (20.0 / Math.max(1, delayTicks)) * blocksPerStep;
+
+        if (this.mode == MODE_EXCAVATE) {
+            double effectiveBlocks = totalRemainingBlocks * 0.88;
+            long seconds = (long) (effectiveBlocks / Math.max(0.1, miningSpeedBps));
+            return (int) Math.min(seconds, 864000L);
+        } else {
+            int scanAttemptsPerTick = isInsaniumOverclocked() ? 256 : 48;
+            double scanRateBps = scanAttemptsPerTick * 20.0;
+            double oreBlocks = totalRemainingBlocks * 0.020;
+            double nonOreBlocks = totalRemainingBlocks * 0.980;
+
+            double timeScanning = nonOreBlocks / scanRateBps;
+            double timeMining = oreBlocks / Math.max(0.1, miningSpeedBps);
+            long seconds = (long) (timeScanning + timeMining);
+            return (int) Math.min(seconds, 864000L);
+        }
+    }
+
+    public int getLayerProgressPercent() {
+        if (this.level != null && this.level.isClientSide()) {
+            return this.clientLayerProgress;
+        }
+        int[] bounds = getMiningChunkBounds();
+        int minX = bounds[0] * 16;
+        int maxX = bounds[1] * 16 + 15;
+        int minZ = bounds[2] * 16;
+        int maxZ = bounds[3] * 16 + 15;
+        int spanX = maxX - minX + 1;
+        int spanZ = maxZ - minZ + 1;
+        int total = spanX * spanZ;
+        if (total <= 0) return 0;
+        int currentX = Math.min(maxX, Math.max(minX, this.scanX));
+        int currentZ = Math.min(maxZ, Math.max(minZ, this.scanZ));
+        int done = (currentZ - minZ) * spanX + (currentX - minX);
+        return Math.min(100, Math.max(0, (int) ((done * 100L) / total)));
     }
 
     public int getRangeChunkRadius() {
@@ -1150,6 +1297,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
         this.scanX = view.getIntOr("ScanX", 0);
         this.scanY = view.getIntOr("ScanY", 0);
         this.scanZ = view.getIntOr("ScanZ", 0);
+        this.startY = view.getIntOr("StartY", this.scanY != 0 ? this.scanY : (this.worldPosition != null ? this.worldPosition.getY() - 1 : 0));
         this.initializedScan = view.getBooleanOr("InitializedScan", false);
         this.anomalyUnearthed = view.getBooleanOr("AnomalyUnearthed", false);
         this.clientRangeRadius = view.getIntOr("RangeRadius", 0);
@@ -1172,6 +1320,7 @@ public class LaserQuarryBlockEntity extends BlockEntity implements MenuProvider,
         view.putInt("ScanX", this.scanX);
         view.putInt("ScanY", this.scanY);
         view.putInt("ScanZ", this.scanZ);
+        view.putInt("StartY", this.startY);
         view.putBoolean("InitializedScan", this.initializedScan);
         view.putBoolean("AnomalyUnearthed", this.anomalyUnearthed);
         view.putInt("RangeRadius", getRangeChunkRadius());

@@ -18,6 +18,10 @@ public class CircuitFabricatorScreen extends AbstractContainerScreen<CircuitFabr
 
     public CircuitFabricatorScreen(CircuitFabricatorScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
+        this.titleLabelX = 8;
+        this.titleLabelY = 6;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -38,13 +42,28 @@ public class CircuitFabricatorScreen extends AbstractContainerScreen<CircuitFabr
         int cookWidth = this.menu.getScaledCookProgress(24);
         if (cookWidth > 0) {
             context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 88, y + 34, 188.0f, 0.0f, cookWidth, 17, 256, 256);
+            
+            // High-precision laser sintering focal spark at the active beam front
+            long pulse = (System.currentTimeMillis() / 90) % 2;
+            int sparkColor = (pulse == 0) ? 0xFF00FFEE : 0xFFFF44FF;
+            int sparkX = Math.min(x + 88 + cookWidth, x + 111);
+            context.fill(sparkX - 1, y + 41, sparkX + 1, y + 44, sparkColor);
         }
     }
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
-        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFF404040, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF404040, false);
+
+        // Live Operational State Header Pill
+        if (this.menu.isCrafting()) {
+            context.text(this.font, Component.literal("§d✦ Sintering..."), 82, 6, 0xFFD033FF, false);
+        } else if (this.menu.getEnergy() < 35) {
+            context.text(this.font, Component.literal("§c⚡ Low Power"), 86, 6, 0xFFFF5555, false);
+        } else {
+            context.text(this.font, Component.literal("§2● Ready"), 108, 6, 0xFF2E7D32, false);
+        }
     }
 
     @Override
@@ -55,22 +74,36 @@ public class CircuitFabricatorScreen extends AbstractContainerScreen<CircuitFabr
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
-        // Energy Bar Tooltip
-        if (mouseX >= x + 9 && mouseX <= x + 23 && mouseY >= y + 17 && mouseY <= y + 69) {
+        // Energy Bar Tooltip (x + 9 .. 22, y + 17 .. 68)
+        if (mouseX >= x + 9 && mouseX <= x + 22 && mouseY >= y + 17 && mouseY <= y + 68) {
+            int energy = this.menu.getEnergy();
+            int maxEnergy = this.menu.getMaxEnergy();
+            int pct = maxEnergy > 0 ? (int) ((long) energy * 100 / maxEnergy) : 0;
             context.setComponentTooltipForNextFrame(this.font, List.of(
-                    Component.literal("§6⚡ Energy Buffer"),
-                    Component.literal(String.format("§e%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy())),
-                    Component.literal("§7Draw: 35 FE/t")
+                    Component.literal("§6⚡ Internal Energy Buffer"),
+                    Component.literal(String.format("§e%,d / %,d FE §7(%d%%)", energy, maxEnergy, pct)),
+                    Component.literal("§7Operating Draw: §f35 FE/t"),
+                    Component.literal("§8Accepts FE via cables or Wireless Storage Crystal.")
             ), mouseX, mouseY);
         }
 
-        // Progress Tooltip
+        // Progress Laser Tooltip (x + 87 .. 113, y + 33 .. 52)
         if (mouseX >= x + 87 && mouseX <= x + 113 && mouseY >= y + 33 && mouseY <= y + 52) {
             int cookProgress = this.menu.getScaledCookProgress(100);
+            String status = this.menu.isCrafting() ? "§aSintering Components (" + cookProgress + "%)" : "§7Standby / Idle";
             context.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.literal("§b⚡ Circuit Fabrication Laser"),
-                    Component.literal(String.format("§7Progress: §f%d%%", cookProgress)),
-                    Component.literal("§8Aligns components and sinters microscopic silicon traces.")
+                    Component.literal("§fStatus: " + status),
+                    Component.literal("§8Aligns semiconductor components and sinters micro-traces.")
+            ), mouseX, mouseY);
+        }
+
+        // Gear Socket Tooltip when hovering over slot box (x + 151 .. 169, y + 7 .. 25)
+        if (mouseX >= x + 151 && mouseX <= x + 169 && mouseY >= y + 7 && mouseY <= y + 25) {
+            context.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.literal("§6⚙ Overclock & Gear Socket"),
+                    Component.literal("§7Accepts: §fCopper..Diamond Gears §7or §6Blaze Overclock Core"),
+                    Component.literal("§8Accelerates laser fabrication speed up to 4.0×.")
             ), mouseX, mouseY);
         }
 

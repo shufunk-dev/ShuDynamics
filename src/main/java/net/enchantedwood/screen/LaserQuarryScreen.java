@@ -10,6 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.enchantedwood.EnchantedWoodMod;
+import net.enchantedwood.block.entity.LaserQuarryBlockEntity;
+import static net.enchantedwood.block.entity.LaserQuarryBlockEntity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,30 +91,107 @@ public class LaserQuarryScreen extends AbstractContainerScreen<LaserQuarryScreen
             int energyY = (y + 18) + (54 - scaledH);
             context.fill(x + 8, energyY, x + 17, y + 18 + 54, 0xFFE53935);
         }
+
+        // Telemetry Screen Panel (x + 19, y + 62, w: 56, h: 19)
+        int scanY = this.menu.getScanY();
+        int startY = this.menu.getStartY();
+        int minY = this.menu.getMinY();
+        int totalDepth = Math.max(1, startY - minY + 1);
+        int depthDone = Math.max(0, startY - scanY);
+        int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
+
+        // High-tech sci-fi screen bezel and glass
+        context.fill(x + 19, y + 62, x + 75, y + 81, 0xFF141923);
+        context.fill(x + 20, y + 63, x + 74, y + 80, 0xFF080D12);
+
+        // Micro Progress Bar groove along the bottom of the LCD (h: 2px)
+        int barY = y + 78;
+        context.fill(x + 20, barY, x + 74, barY + 2, 0xFF101922);
+        int fillW = Math.max(0, Math.min(54, (overallPct * 54) / 100));
+        if (fillW > 0) {
+            int barColor = (scanY < minY) ? 0xFF00FF66 : 0xFF00E5FF;
+            context.fill(x + 20, barY, x + 20 + fillW, barY + 2, barColor);
+        }
     }
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         super.extractLabels(context, mouseX, mouseY);
 
-        // Telemetry LCD Display (x: 21..73, y: 64..75)
-        String depthStr = "Y:" + this.menu.getScanY();
-        int radius = this.menu.getRangeChunkRadius();
-        String radiusStr = (radius == 0) ? "1x1" : (radius == 1 ? "3x3" : "5x5");
-        String tele = depthStr + " " + radiusStr;
-        context.text(this.font, Component.literal(tele).withStyle(net.minecraft.ChatFormatting.AQUA), 23, 66, 0x55FFFF, false);
+        int scanY = this.menu.getScanY();
+        int startY = this.menu.getStartY();
+        int minY = this.menu.getMinY();
+        int totalDepth = Math.max(1, startY - minY + 1);
+        int depthDone = Math.max(0, startY - scanY);
+        int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
 
-        // Digital Storage Network status icon
+        // 1. Header Level & Progress Summary (x: 76, y: 6)
+        if (scanY < minY) {
+            context.text(this.font, Component.literal("§a✔ Bedrock (Done)"), 76, 6, 0xFF00AA44, false);
+        } else {
+            context.text(this.font, Component.literal("§8Lvl: §bY=" + scanY + " §8(§a" + overallPct + "%§8)"), 76, 6, 0xFF404040, false);
+        }
+
+        // 2. LCD Display Console (x: 22)
+        // Line 1 (y: 64): Working Depth & Depth %
+        if (scanY < minY) {
+            context.text(this.font, Component.literal("§aBEDROCK"), 22, 64, 0xFF00FF66, false);
+        } else {
+            String lvlStr = "§bY:" + scanY + " §a" + overallPct + "%";
+            context.text(this.font, Component.literal(lvlStr), 22, 64, 0xFF00E5FF, false);
+        }
+
+        // Line 2 (y: 71): ETA or Machine State
+        int status = this.menu.getDetailedStatusCode();
+        int etaSec = this.menu.getEtaSeconds();
+        if (scanY < minY) {
+            context.text(this.font, Component.literal("§a✔ COMPLETE"), 22, 71, 0xFF00FF66, false);
+        } else if (status == STATUS_PAUSED) {
+            context.text(this.font, Component.literal("§e⏸ PAUSED"), 22, 71, 0xFFFFCC00, false);
+        } else if (status == STATUS_NO_ENERGY) {
+            context.text(this.font, Component.literal("§c⚡ NO POWER"), 22, 71, 0xFFFF5555, false);
+        } else if (status == STATUS_BUFFER_FULL) {
+            context.text(this.font, Component.literal("§6📦 FULL"), 22, 71, 0xFFFF9900, false);
+        } else {
+            String etaStr = "§e⏱ " + formatEta(etaSec);
+            context.text(this.font, Component.literal(etaStr), 22, 71, 0xFFFFD54F, false);
+        }
+
+        // 3. Digital Storage Network status icon (x: 162, y: 6) with full alpha
         int netStatus = this.menu.getNetworkStatus();
         if (netStatus == 2) {
-            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.AQUA), 162, 6, 0x55FFFF, false);
+            context.text(this.font, Component.literal("●"), 162, 6, 0xFF55FFFF, false);
         } else if (netStatus == 1) {
-            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.GREEN), 162, 6, 0x55FF55, false);
+            context.text(this.font, Component.literal("●"), 162, 6, 0xFF55FF55, false);
         } else if (netStatus == 3 || netStatus == 4) {
-            context.text(this.font, Component.literal("●").withStyle(net.minecraft.ChatFormatting.RED), 162, 6, 0xFF5555, false);
+            context.text(this.font, Component.literal("●"), 162, 6, 0xFFFF5555, false);
         } else {
-            context.text(this.font, Component.literal("○").withStyle(net.minecraft.ChatFormatting.GRAY), 162, 6, 0xAAAAAA, false);
+            context.text(this.font, Component.literal("○"), 162, 6, 0xFFAAAAAA, false);
         }
+    }
+
+    public static String formatEta(int seconds) {
+        if (seconds <= 0) return "0s";
+        if (seconds < 60) return seconds + "s";
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        if (mins < 60) {
+            return String.format("%dm %02ds", mins, secs);
+        }
+        int hours = mins / 60;
+        mins = mins % 60;
+        if (hours < 24) {
+            return String.format("%dh %02dm", hours, mins);
+        }
+        int days = hours / 24;
+        hours = hours % 24;
+        return String.format("%dd %dh", days, hours);
+    }
+
+    private String getProgressBar(int percent) {
+        int totalBars = 10;
+        int filled = Math.max(0, Math.min(totalBars, (percent * totalBars) / 100));
+        return "§a" + "█".repeat(filled) + "§8" + "░".repeat(totalBars - filled);
     }
 
     @Override
@@ -130,6 +209,46 @@ public class LaserQuarryScreen extends AbstractContainerScreen<LaserQuarryScreen
             lines.add(Component.literal(String.format("§f%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy())));
             lines.add(Component.literal("§7Consumes 150 FE per block extracted."));
             lines.add(Component.literal("§8Powered by cables or connected Storage Network."));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
+        }
+
+        // Telemetry LCD Hover Tooltip (x + 19 .. 75, y + 62 .. 81)
+        if (mouseX >= x + 19 && mouseX <= x + 75 && mouseY >= y + 62 && mouseY <= y + 81) {
+            int scanY = this.menu.getScanY();
+            int startY = this.menu.getStartY();
+            int minY = this.menu.getMinY();
+            int totalDepth = Math.max(1, startY - minY + 1);
+            int depthDone = Math.max(0, startY - scanY);
+            int overallPct = Math.min(100, Math.max(0, (depthDone * 100) / totalDepth));
+            int status = this.menu.getDetailedStatusCode();
+            int etaSec = this.menu.getEtaSeconds();
+
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("§b📡 Laser Quarry Telemetry"));
+            lines.add(Component.literal("§8──────────────────────────────────"));
+            lines.add(Component.literal("§7Current Working Level: §bY = " + scanY));
+            lines.add(Component.literal("§7Starting Depth:        §8Y = " + startY));
+            lines.add(Component.literal("§7Target Bedrock:        §8Y = " + minY));
+            lines.add(Component.literal("§7Depth Completed:       §a" + overallPct + "% §8[" + getProgressBar(overallPct) + "§8]"));
+            lines.add(Component.literal("§7Current Layer Progress:§3 " + this.menu.getLayerProgressPercent() + "%"));
+
+            String etaDisplay = (scanY < minY) ? "§aCompleted (Bedrock)" : (status == STATUS_PAUSED ? "§ePaused §7(~" + formatEta(etaSec) + " remaining)" : "§e~" + formatEta(etaSec));
+            lines.add(Component.literal("§7Estimated Finish Time: " + etaDisplay));
+
+            int radius = this.menu.getRangeChunkRadius();
+            String radiusStr = (radius == 0) ? "1x1 Chunk (16x16)" : (radius == 1 ? "3x3 Chunks (48x48)" : "5x5 Chunks (80x80)");
+            lines.add(Component.literal("§7Mining Area:           §b" + radiusStr));
+            lines.add(Component.literal(String.format("§7Total Blocks Mined:    §f%,d", this.menu.getTotalMinedCount())));
+
+            String statusStr = switch (status) {
+                case STATUS_COMPLETED -> "§a✔ Completed (Reached Bedrock)";
+                case STATUS_PAUSED -> "§e⏸ Paused";
+                case STATUS_NO_ENERGY -> "§c⚡ Out of Energy";
+                case STATUS_BUFFER_FULL -> "§6📦 Output Buffer Full";
+                default -> "§a● Actively Mining";
+            };
+            lines.add(Component.literal("§7Operational Status:    " + statusStr));
+
             context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
         }
 

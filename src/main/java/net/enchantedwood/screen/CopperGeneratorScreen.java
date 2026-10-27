@@ -18,6 +18,10 @@ public class CopperGeneratorScreen extends AbstractContainerScreen<CopperGenerat
 
     public CopperGeneratorScreen(CopperGeneratorScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
+        this.titleLabelX = 8;
+        this.titleLabelY = 7;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -39,21 +43,74 @@ public class CopperGeneratorScreen extends AbstractContainerScreen<CopperGenerat
         if (energyHeight > 0) {
             context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 138, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
+
+        // 3. Dynamic Power Wave on Status Screen (x + 18..64, y + 63)
+        if (this.menu.isBurning()) {
+            long time = System.currentTimeMillis();
+            int baseY = y + 64;
+            for (int col = 0; col < 46; col += 2) {
+                int wave = (int) Math.round(Math.sin((col * 0.35) + (time * 0.009)) * 2.5);
+                int py = baseY + wave;
+                context.fill(x + 19 + col, py, x + 19 + col + 2, py + 1, 0xFF40FF90);
+            }
+        }
+    }
+
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        // Machine Title in illuminated warm ivory
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFE2DDD2, false);
+
+        // Inventory label in dark slate
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
+
+        // --- DIGITAL STATUS MONITOR TELEMETRY (x = 18, y = 23) ---
+        boolean burning = this.menu.isBurning();
+        if (burning) {
+            context.text(this.font, Component.literal("§a● GEN ON"), 18, 23, 0xFF40FF90, false);
+        } else {
+            context.text(this.font, Component.literal("§7○ STANDBY"), 18, 23, 0xFF708090, false);
+        }
+
+        String rateStr = burning ? String.format("§e+%d §7FE/t", this.menu.getGenerationRate()) : "§80 FE/t";
+        context.text(this.font, Component.literal(rateStr), 18, 33, 0xFFFFCC00, false);
+
+        if (burning) {
+            int fuelPct = this.menu.getScaledFuelProgress(100);
+            context.text(this.font, Component.literal("§6♨ §f" + fuelPct + "%"), 18, 43, 0xFFFFA040, false);
+        } else {
+            context.text(this.font, Component.literal("§8WAIT FUEL"), 18, 43, 0xFF555555, false);
+        }
+
+        int max = this.menu.getMaxEnergy();
+        int pct = max > 0 ? (int)(((long)this.menu.getEnergy() * 100) / max) : 0;
+        context.text(this.font, Component.literal("§b🔋 §f" + pct + "%"), 18, 53, 0xFF64B5F6, false);
     }
 
     @Override
     protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         super.extractTooltip(context, mouseX, mouseY);
 
-
-        // Energy Bar Tooltip
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
+
+        // Status Screen Tooltip
+        if (mouseX >= x + 13 && mouseX <= x + 70 && mouseY >= y + 18 && mouseY <= y + 72) {
+            context.setComponentTooltipForNextFrame(this.font, List.of(
+                    Component.literal("§b📟 Generator Diagnostic Monitor"),
+                    Component.literal(this.menu.isBurning() ? "§aStatus: Actively Generating Power" : "§7Status: Standby (Awaiting Fuel)"),
+                    Component.literal(String.format("§eOutput Rate: +%d FE/t", this.menu.getGenerationRate())),
+                    Component.literal(String.format("§6Fuel Burn: %d%%", this.menu.getScaledFuelProgress(100))),
+                    Component.literal(String.format("§bInternal Buffer: %,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy()))
+            ), mouseX, mouseY);
+        }
+
+        // Energy Bar Tooltip
         if (mouseX >= x + 137 && mouseX <= x + 155 && mouseY >= y + 19 && mouseY <= y + 71) {
             String energyText = String.format("%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy());
             String rateText = String.format("Output: +%d FE/t", this.menu.getGenerationRate());
             context.setComponentTooltipForNextFrame(this.font, List.of(
-                    Component.literal("§6Energy Buffer"),
+                    Component.literal("§6⚡ Energy Buffer"),
                     Component.literal("§e" + energyText),
                     Component.literal("§a" + rateText)
             ), mouseX, mouseY);

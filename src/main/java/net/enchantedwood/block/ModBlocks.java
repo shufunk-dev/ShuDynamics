@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 public class ModBlocks {
 
@@ -1275,23 +1277,25 @@ public class ModBlocks {
                     .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED)
                     .noOcclusion()));
 
-    public static final Block WILD_RICE = registerBlockWithTooltip("wild_rice",
+    public static final Block WILD_RICE = registerCompostableBlockWithTooltip("wild_rice",
             new net.enchantedwood.block.custom.WildRiceBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_rice")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()
                     .noOcclusion()),
+            ContextIntProviders.COMPOSTABLE_LOW_MEDIUM,
             Component.literal("§aWild Rice Plant"),
             Component.literal("§7Native flora of §dThe Convergence§7. Harvest for Rice & Seeds."));
 
-    public static final Block WILD_CUCUMBER = registerBlockWithTooltip("wild_cucumber",
+    public static final Block WILD_CUCUMBER = registerCompostableBlockWithTooltip("wild_cucumber",
             new net.enchantedwood.block.custom.WildCucumberBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_cucumber")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()
                     .noOcclusion()),
+            ContextIntProviders.COMPOSTABLE_LOW_MEDIUM,
             Component.literal("§aWild Cucumber Shrub"),
             Component.literal("§7Native flora of §dThe Convergence§7. Harvest for Cucumbers & Seeds."));
 
@@ -1392,7 +1396,7 @@ public class ModBlocks {
                     .destroyTime(2.0f)
                     .explosionResistance(2.0f)));
 
-    public static final Block AVOCADO_LEAVES = registerBlock("avocado_leaves",
+    public static final Block AVOCADO_LEAVES = registerCompostableBlock("avocado_leaves",
             new net.enchantedwood.block.custom.AvocadoLeavesBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_leaves")))
                     .sound(SoundType.GRASS)
@@ -1400,34 +1404,38 @@ public class ModBlocks {
                     .explosionResistance(0.2f)
                     .noOcclusion()
                     .isSuffocating((state, world, pos) -> false)
-                    ));
+                    ),
+            ContextIntProviders.COMPOSTABLE_LOW);
 
-    public static final Block AVOCADO_SAPLING = registerBlockWithTooltip("avocado_sapling",
+    public static final Block AVOCADO_SAPLING = registerCompostableBlockWithTooltip("avocado_sapling",
             new net.minecraft.world.level.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.AVOCADO, BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "avocado_sapling")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()),
+            ContextIntProviders.COMPOSTABLE_LOW,
             Component.literal("§aAvocado Sapling"),
             Component.literal("§7Grows into a fruit-bearing Avocado Tree. Found in §dThe Convergence§7."));
 
-    public static final Block WILD_WASABI = registerBlockWithTooltip("wild_wasabi",
+    public static final Block WILD_WASABI = registerCompostableBlockWithTooltip("wild_wasabi",
             new net.enchantedwood.block.custom.WildWasabiBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_wasabi")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()
                     .noOcclusion()),
+            ContextIntProviders.COMPOSTABLE_LOW_MEDIUM,
             Component.literal("§aWild Wasabi Plant"),
             Component.literal("§7Grows along water banks in §dThe Convergence§7. Harvest for Wasabi Root."));
 
-    public static final Block WILD_DRAGON_FRUIT = registerBlockWithTooltip("wild_dragon_fruit",
+    public static final Block WILD_DRAGON_FRUIT = registerCompostableBlockWithTooltip("wild_dragon_fruit",
             new net.enchantedwood.block.custom.WildDragonFruitBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "wild_dragon_fruit")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()
                     .noOcclusion()),
+            ContextIntProviders.COMPOSTABLE_LOW_MEDIUM,
             Component.literal("§dWild Dragon Fruit Cactus"),
             Component.literal("§7Exotic flora of §dThe Convergence§7. Harvest for Dragon Fruit."));
 
@@ -1466,7 +1474,7 @@ public class ModBlocks {
                     .destroyTime(2.0f)
                     .explosionResistance(3.0f)));
 
-    public static final Block STARFRUIT_LEAVES = registerBlock("starfruit_leaves",
+    public static final Block STARFRUIT_LEAVES = registerCompostableBlock("starfruit_leaves",
             new net.enchantedwood.block.custom.StarfruitLeavesBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_leaves")))
                     .sound(SoundType.GRASS)
@@ -1474,14 +1482,16 @@ public class ModBlocks {
                     .explosionResistance(0.2f)
                     .noOcclusion()
                     .isSuffocating((state, world, pos) -> false)
-                    ));
+                    ),
+            ContextIntProviders.COMPOSTABLE_LOW);
 
-    public static final Block STARFRUIT_SAPLING = registerBlockWithTooltip("starfruit_sapling",
+    public static final Block STARFRUIT_SAPLING = registerCompostableBlockWithTooltip("starfruit_sapling",
             new net.minecraft.world.level.block.SaplingBlock(net.enchantedwood.world.ModSaplingGenerators.STARFRUIT, BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "starfruit_sapling")))
                     .sound(SoundType.GRASS)
                     .noCollision()
                     .instabreak()),
+            ContextIntProviders.COMPOSTABLE_LOW,
             Component.literal("§eStarfruit Sapling"),
             Component.literal("§7Grows into a fruit-bearing Starfruit Tree. Found in §dThe Convergence§7."));
 
@@ -1962,12 +1972,32 @@ public class ModBlocks {
         return registeredBlock;
     }
 
+    private static Block registerCompostableBlock(String name, Block block, ResourceKey<ContextIntProvider> compostTier) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new BlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix().compostable(compostTier)));
+
+        return registeredBlock;
+    }
+
     private static Block registerBlockWithTooltip(String name, Block block, Component... tooltips) {
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
 
         Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
         Registry.register(BuiltInRegistries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipBlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix(), tooltips));
+
+        return registeredBlock;
+    }
+
+    private static Block registerCompostableBlockWithTooltip(String name, Block block, ResourceKey<ContextIntProvider> compostTier, Component... tooltips) {
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, name));
+
+        Block registeredBlock = Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, new net.enchantedwood.item.custom.TooltipBlockItem(registeredBlock, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix().compostable(compostTier), tooltips));
 
         return registeredBlock;
     }

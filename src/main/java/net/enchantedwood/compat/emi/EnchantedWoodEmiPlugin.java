@@ -751,7 +751,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
             // Machine Background panel (Alloy Foundry)
             widgets.addTexture(ALLOY_FOUNDRY_GUI, 0, 0, 130, 56, 15, 17);
             // Energy Storage Bar (illuminated)
-            widgets.addTexture(ALLOY_FOUNDRY_GUI, 3, 3, 16, 50, 192, 0);
+            widgets.addTexture(ALLOY_FOUNDRY_GUI, 3, 3, 16, 50, 208, 0);
             // Animated smelting arrow
             widgets.addAnimatedTexture(ALLOY_FOUNDRY_GUI, 71, 17, 24, 17, 176, 14, 2000, true, false, false);
             // Slots aligned to authentic GUI
