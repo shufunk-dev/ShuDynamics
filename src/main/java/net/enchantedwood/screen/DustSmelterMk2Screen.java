@@ -32,21 +32,21 @@ public class DustSmelterMk2Screen extends HandledScreen<DustSmelterMk2ScreenHand
         // 1. Energy Bar at x + 18, y + 20 (width 16, height 50)
         int energyHeight = this.handler.getScaledEnergy(50);
         if (energyHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 208.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
 
         // 2. Dual Progress Arrows at x + 75, y + 24 and y + 48 (width 24, height 17)
         int cookWidth = this.handler.getScaledCookProgress(24);
         if (cookWidth > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 75, y + 24, 176.0f, 14.0f, cookWidth, 17, 256, 256);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 75, y + 48, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 77, y + 23, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 77, y + 47, 176.0f, 32.0f, cookWidth, 17, 256, 256);
         }
     }
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFFD040, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

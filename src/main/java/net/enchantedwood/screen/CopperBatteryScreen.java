@@ -51,7 +51,7 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFFB060, false);
 
         // Display live text
         String energyStr = String.format("%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy());
@@ -66,7 +66,7 @@ public class CopperBatteryScreen extends HandledScreen<CopperBatteryScreenHandle
         context.drawText(this.textRenderer, Text.literal("§6IN"), 19, 23, 0x555555, false);
         context.drawText(this.textRenderer, Text.literal("§bOUT"), 144, 23, 0x555555, false);
 
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

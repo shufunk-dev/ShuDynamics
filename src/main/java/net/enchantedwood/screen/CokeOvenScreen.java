@@ -38,8 +38,7 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.backgroundWidth, this.backgroundHeight, 256, 256);
 
         // Draw Mineral Tar slot frame at (142, 35) -> box at (141, 34)
-        drawSlotBox(context, x + 141, y + 34);
-
+        
         // Cook Progress Arrow at (79, 34, 24, 17)
         int cookWidth = this.handler.getScaledCookProgress(24);
         if (cookWidth > 0) {
@@ -49,9 +48,9 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFF9040, false);
         context.drawText(this.textRenderer, Text.literal("§8Tar"), 142, 23, 0x555555, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

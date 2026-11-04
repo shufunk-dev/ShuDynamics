@@ -32,7 +32,7 @@ public class MagmaCrucibleScreen extends HandledScreen<MagmaCrucibleScreenHandle
         // 1. Energy Bar at x + 18, y + 20 (width 16, height 50)
         int energyHeight = this.handler.getScaledEnergy(50);
         if (energyHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 208.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
 
         // 2. Melt Progress Arrow at x + 66, y + 34 (width 24, height 17)
@@ -44,14 +44,14 @@ public class MagmaCrucibleScreen extends HandledScreen<MagmaCrucibleScreenHandle
         // 3. Lava Tank at x + 96, y + 20 (width 16, height 50)
         int lavaHeight = this.handler.getScaledLava(50);
         if (lavaHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 96, y + 70 - lavaHeight, 212.0f, 50.0f - lavaHeight, 16, lavaHeight, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 96, y + 70 - lavaHeight, 226.0f, 50.0f - lavaHeight, 16, lavaHeight, 256, 256);
         }
     }
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFF9040, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

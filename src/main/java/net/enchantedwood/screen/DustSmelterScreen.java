@@ -38,11 +38,18 @@ public class DustSmelterScreen extends HandledScreen<DustSmelterScreenHandler> {
         // 2. Energy Bar (at x + 152, y + 20, width 14, height 52)
         int energyHeight = this.handler.getScaledEnergy(52);
         if (energyHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 152, y + 72 - energyHeight, 190.0f, 52.0f - energyHeight, 14, energyHeight, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 152, y + 72 - energyHeight, 208.0f, 52.0f - energyHeight, 14, energyHeight, 256, 256);
         }
     }
 
+
     @Override
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFFCC60, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
+    }
+
+@Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);

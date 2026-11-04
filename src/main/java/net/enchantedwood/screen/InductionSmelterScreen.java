@@ -180,8 +180,8 @@ public class InductionSmelterScreen extends HandledScreen<InductionSmelterScreen
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, 8, 6, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, 8, 6, 0xFFFFCC60, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

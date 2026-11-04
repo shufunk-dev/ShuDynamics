@@ -51,7 +51,7 @@ public class AluminumBatteryScreen extends HandledScreen<AluminumBatteryScreenHa
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFF00E5FF, false);
 
         String energyStr = String.format("%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy());
         int energyStrWidth = this.textRenderer.getWidth(energyStr);
@@ -65,7 +65,7 @@ public class AluminumBatteryScreen extends HandledScreen<AluminumBatteryScreenHa
         context.drawText(this.textRenderer, Text.literal("§6IN"), 19, 23, 0x555555, false);
         context.drawText(this.textRenderer, Text.literal("§bOUT"), 144, 23, 0x555555, false);
 
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

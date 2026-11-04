@@ -38,7 +38,7 @@ public class TungstenBatteryScreen extends HandledScreen<TungstenBatteryScreenHa
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFD060FF, false);
 
         double percent = (double) this.handler.getEnergy() / (double) this.handler.getMaxEnergy() * 100.0;
         String energyStr = String.format("%,d / %,d FE", this.handler.getEnergy(), this.handler.getMaxEnergy());
@@ -53,7 +53,7 @@ public class TungstenBatteryScreen extends HandledScreen<TungstenBatteryScreenHa
         context.drawText(this.textRenderer, Text.literal("§6IN"), 19, 23, 0x555555, false);
         context.drawText(this.textRenderer, Text.literal("§bOUT"), 144, 23, 0x555555, false);
 
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override

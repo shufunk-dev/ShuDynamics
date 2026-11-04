@@ -32,7 +32,7 @@ public class SoilInfuserScreen extends HandledScreen<SoilInfuserScreenHandler> {
         // 1. Energy Bar at x + 18, y + 20 (width 16, height 50)
         int energyHeight = this.handler.getScaledEnergy(50);
         if (energyHeight > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 192.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 18, y + 70 - energyHeight, 208.0f, 50.0f - energyHeight, 16, energyHeight, 256, 256);
         }
 
         // 2. Infusion Progress Arrow at x + 86, y + 34 (width 24, height 17)
@@ -44,8 +44,8 @@ public class SoilInfuserScreen extends HandledScreen<SoilInfuserScreenHandler> {
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 4210752, false);
-        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
+        context.drawText(this.textRenderer, this.title, this.titleX, this.titleY, 0xFFFFCC60, false);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 0xFF373A40, false);
     }
 
     @Override
