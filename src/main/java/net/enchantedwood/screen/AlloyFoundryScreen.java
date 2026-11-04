@@ -56,10 +56,7 @@ public class AlloyFoundryScreen extends AbstractContainerScreen<AlloyFoundryScre
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-        // Machine title in illuminated warm ivory on the dark titanium nameplate
         context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFE8E0D0, false);
-
-        // Player Inventory label in crisp dark slate
         context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
     }
 

@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.5.3--26.3%20%7C%20v2.5.3--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.5.4--26.3%20%7C%20v2.5.4--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -21,8 +21,8 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.3-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
-| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.3-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.4-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.4-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
@@ -36,6 +36,20 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 ---
 
+## 🌟 What's New in v2.5.4 — Universal Machinery GUI Overhauls & Pixel-Perfect Processing Telemetry
+
+* ⚡ **Universal Industrial Machinery & Energy Cell GUI Overhaul**:
+  * Complete thematic industrial redesign across all 17 processing machines and energy cells:
+    * **Electric & Powered Heavy Machinery**: Powered Anvil, Item Salvager, Dual Powered Induction Smelter.
+    * **High-Throughput Material Processors**: Crusher Mk1 & Mk2, Dust Smelter Mk1 & Mk2, Industrial Centrifuge, Coke Oven, Magma Crucible, Soil Infuser, Fuel Refinery, Enchanted Lava Generator.
+    * **Energy Reservoirs**: Copper, Aluminum, Steel, and Tungsten Energy Cells with illuminated 100px charge reservoirs.
+  * Deep charcoal machine chambers, illuminated title nameplates for high contrast, and pixel-aligned slot boxes matching screen handler coordinates.
+* 🎯 **Pixel-Perfect Vanilla Progress Arrows & Alpha Blending**:
+  * Authentic 24×16 Minecraft arrow mask with true A = 0 transparency, eliminating solid block and T-shape distortion as cooking/processing nears completion.
+  * Separated energy gauge sprite mapping to u = 208 across all affected screens, eliminating texture coordinate overlaps.
+  * Radiant glowing arrowheads and recessed directional tracks.
+
+---
 ## 🌟 What's New in v2.5.3 — Machinery GUI Overhauls & Telemetry Update
 
 * ⛏️ **Autonomous Laser Quarry Telemetry & HUD Overhaul**:

@@ -2,6 +2,7 @@ package net.enchantedwood.screen;
 
 import net.enchantedwood.block.custom.GearTier;
 import net.enchantedwood.block.entity.MagmaCrucibleBlockEntity;
+import net.enchantedwood.item.ModItems;
 import net.enchantedwood.item.custom.GearItem;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -45,7 +46,7 @@ public class MagmaCrucibleScreenHandler extends AbstractContainerMenu {
         this.addSlot(new Slot(inventory, MagmaCrucibleBlockEntity.BUCKET_INPUT_SLOT, 147, 25) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.BUCKET);
+                return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
             }
         });
 
@@ -136,7 +137,7 @@ public class MagmaCrucibleScreenHandler extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(originalStack, MagmaCrucibleBlockEntity.GEAR_SLOT, MagmaCrucibleBlockEntity.GEAR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.is(Items.BUCKET)) {
+                } else if (originalStack.is(Items.BUCKET) || originalStack.is(ModItems.COPPER_BUCKET)) {
                     if (!this.moveItemStackTo(originalStack, MagmaCrucibleBlockEntity.BUCKET_INPUT_SLOT, MagmaCrucibleBlockEntity.BUCKET_INPUT_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }

@@ -178,8 +178,8 @@ public class InductionSmelterScreen extends AbstractContainerScreen<InductionSme
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-        context.text(this.font, this.title, 8, 6, 4210752, false);
-        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        context.text(this.font, this.title, 8, 7, 0xFFFFD040, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
     }
 
     @Override

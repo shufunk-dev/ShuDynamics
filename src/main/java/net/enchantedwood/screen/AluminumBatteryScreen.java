@@ -18,15 +18,10 @@ public class AluminumBatteryScreen extends AbstractContainerScreen<AluminumBatte
 
     public AluminumBatteryScreen(AluminumBatteryScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-    }
-
-    private void drawSlotBox(GuiGraphicsExtractor context, int boxX, int boxY) {
-        // Standard Minecraft 18x18 slot frame
-        context.fill(boxX, boxY, boxX + 18, boxY + 1, 0xFF373737);       // Top shadow
-        context.fill(boxX, boxY, boxX + 1, boxY + 18, 0xFF373737);       // Left shadow
-        context.fill(boxX + 1, boxY + 1, boxX + 17, boxY + 17, 0xFF8B8B8B); // Slot background
-        context.fill(boxX + 1, boxY + 17, boxX + 18, boxY + 18, 0xFFFFFFFF); // Bottom highlight
-        context.fill(boxX + 17, boxY + 1, boxX + 18, boxY + 18, 0xFFFFFFFF); // Right highlight
+        this.titleLabelX = 8;
+        this.titleLabelY = 7;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -37,11 +32,7 @@ public class AluminumBatteryScreen extends AbstractContainerScreen<AluminumBatte
 
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
-        // 1. Draw Visible Slot Frames for Discharge & Charge
-        drawSlotBox(context, x + 15, y + 34); // Discharge slot at (16, 35)
-        drawSlotBox(context, x + 143, y + 34); // Charge slot at (144, 35)
-
-        // 2. Draw Large Energy Bar (width = 100px, at x + 38, y + 36)
+        // Draw Large 100px Horizontal Energy Reservoir Bar (at x + 38, y + 36)
         int energyWidth = this.menu.getScaledEnergy(100);
         if (energyWidth > 0) {
             context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 38, y + 36, 0.0f, 166.0f, energyWidth, 18, 256, 256);
@@ -50,56 +41,55 @@ public class AluminumBatteryScreen extends AbstractContainerScreen<AluminumBatte
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFF00E5FF, false);
 
+        // Display live text centered in dark chamber
         String energyStr = String.format("%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy());
         int energyStrWidth = this.font.width(energyStr);
-        context.text(this.font, energyStr, (this.imageWidth - energyStrWidth) / 2, 24, 0x1E4F7E, false);
+        context.text(this.font, energyStr, (this.imageWidth - energyStrWidth) / 2, 24, 0xFF70FFFF, false);
 
         String rateStr = String.format("Max I/O: %,d FE/t", this.menu.getMaxTransfer());
         int rateStrWidth = this.font.width(rateStr);
-        context.text(this.font, rateStr, (this.imageWidth - rateStrWidth) / 2, 58, 0x5E5E5E, false);
+        context.text(this.font, rateStr, (this.imageWidth - rateStrWidth) / 2, 58, 0xFF40C0E0, false);
 
         // Slot indicators above slots
-        context.text(this.font, Component.literal("§6IN"), 19, 23, 0x555555, false);
-        context.text(this.font, Component.literal("§bOUT"), 144, 23, 0x555555, false);
+        context.text(this.font, Component.literal("§6IN"), 19, 23, 0xD4A017, false);
+        context.text(this.font, Component.literal("§bOUT"), 144, 23, 0x00E5FF, false);
 
-        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
     }
 
     @Override
     protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         super.extractTooltip(context, mouseX, mouseY);
 
-
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
+        // Energy Bar Tooltip
         if (mouseX >= x + 37 && mouseX <= x + 139 && mouseY >= y + 35 && mouseY <= y + 55) {
-            double percent = (double) this.menu.getEnergy() / (double) this.menu.getMaxEnergy() * 100.0;
-            String energyText = String.format("%,d / %,d FE (%.1f%%)", this.menu.getEnergy(), this.menu.getMaxEnergy(), percent);
-            String transferText = String.format("Max Transfer: %,d FE/t", this.menu.getMaxTransfer());
+            int pct = (int) (((long) this.menu.getEnergy() * 100) / this.menu.getMaxEnergy());
             context.setComponentTooltipForNextFrame(this.font, List.of(
-                    Component.literal("§bAluminum Energy Cell (Tier 2)"),
-                    Component.literal("§e" + energyText),
-                    Component.literal("§7" + transferText)
+                    Component.literal("§b⚡ Aluminum Energy Cell Buffer"),
+                    Component.literal(String.format("§e%,d / %,d FE §7(%d%%)", this.menu.getEnergy(), this.menu.getMaxEnergy(), pct)),
+                    Component.literal(String.format("§7Transfer Speed: §f%,d FE/t", this.menu.getMaxTransfer()))
             ), mouseX, mouseY);
         }
 
-        // Discharge Slot Tooltip
-        if (mouseX >= x + 15 && mouseX <= x + 33 && mouseY >= y + 34 && mouseY <= y + 52) {
-            context.setComponentTooltipForNextFrame(this.font, List.of(
-                    Component.literal("§6📥 Discharge Slot (IN)"),
-                    Component.literal("§7Place any battery pack here to drain power into this cell.")
-            ), mouseX, mouseY);
-        }
-
-        // Charge Slot Tooltip
-        if (mouseX >= x + 143 && mouseX <= x + 161 && mouseY >= y + 34 && mouseY <= y + 52) {
-            context.setComponentTooltipForNextFrame(this.font, List.of(
-                    Component.literal("§b⚡ Charge Slot (OUT)"),
-                    Component.literal("§7Place any battery pack or tool here to rapidly recharge it.")
-            ), mouseX, mouseY);
+        // Empty Machine Slot Tooltips
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 2) {
+            switch (this.hoveredSlot.index) {
+                case 0 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§6⚡ Discharge Slot (IN)"),
+                        Component.literal("§7Insert charged batteries or energy items:"),
+                        Component.literal("§8Drains stored power into this energy cell.")
+                ), mouseX, mouseY);
+                case 1 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§b⚡ Charge Slot (OUT)"),
+                        Component.literal("§7Insert depleted tools, armor, or batteries:"),
+                        Component.literal("§8Charges items using stored energy.")
+                ), mouseX, mouseY);
+            }
         }
     }
 }

@@ -36,6 +36,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
     public static final Identifier BRICK_OVEN_GUI = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/brick_oven_gui.png");
     public static final Identifier ICE_CREAM_MACHINE_GUI = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/ice_cream_machine_gui.png");
     public static final Identifier CRYO_FREEZER_GUI = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/cryo_freezer_gui.png");
+    public static final Identifier DUST_SMELTER_GUI = Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "textures/gui/container/dust_smelter_gui.png");
 
     // Categories
     public static final EmiRecipeCategory CRYO_FREEZER = new EmiRecipeCategory(
@@ -788,7 +789,7 @@ public class EnchantedWoodEmiPlugin implements EmiPlugin {
 
         @Override
         public void addWidgets(WidgetHolder widgets) {
-            Identifier gui = (category == HYDRAULIC_PRESS) ? HYDRAULIC_PRESS_GUI : CRUSHER_GUI;
+            Identifier gui = (category == HYDRAULIC_PRESS) ? HYDRAULIC_PRESS_GUI : (category == DUST_SMELTER ? DUST_SMELTER_GUI : CRUSHER_GUI);
             // Machine Background panel
             widgets.addTexture(gui, 0, 0, 126, 56, 46, 17);
             // Energy bar (illuminated)

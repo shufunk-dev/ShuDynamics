@@ -1,5 +1,8 @@
 package net.enchantedwood.screen;
 
+import net.enchantedwood.block.custom.GearTier;
+import net.enchantedwood.item.custom.GearItem;
+import net.minecraft.world.item.ItemStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -18,6 +21,10 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherScreenHandler>
 
     public CrusherScreen(CrusherScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
+        this.titleLabelX = 8;
+        this.titleLabelY = 7;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -28,17 +35,30 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherScreenHandler>
 
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
-        // 1. Cook Progress Arrow (at x + 79, y + 34, width 24, height 17)
+        // 1. Cook Progress Arrow (at x + 79, y + 34, width 24, height 17) using UV at u=176, v=14
         int cookWidth = this.menu.getScaledCookProgress(24);
         if (cookWidth > 0) {
-            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, cookWidth, 16, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 79, y + 34, 176.0f, 14.0f, cookWidth, 17, 256, 256);
+
+            // Active crushing vibration dust flecks
+            long time = System.currentTimeMillis();
+            int sparkX = x + 79 + cookWidth - 1;
+            int sparkY = y + 42 + (int) ((time / 100) % 3) - 1;
+            int sparkColor = ((time / 80) % 2 == 0) ? 0xFFFFD700 : 0xFFCCCCCC;
+            context.fill(sparkX, sparkY, sparkX + 2, sparkY + 2, sparkColor);
         }
 
-        // 2. Energy Bar (at x + 152, y + 20, width 14, height 52)
+        // 2. Energy Bar (at x + 152, y + 20, width 14, height 52) using UV at u=208, v=0
         int energyHeight = this.menu.getScaledEnergy(52);
         if (energyHeight > 0) {
-            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 152, y + 72 - energyHeight, 190.0f, 52.0f - energyHeight, 14, energyHeight, 256, 256);
+            context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 152, y + 72 - energyHeight, 208.0f, 52.0f - energyHeight, 14, energyHeight, 256, 256);
         }
+    }
+
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFE2DDD2, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
     }
 
     @Override
@@ -53,8 +73,20 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherScreenHandler>
             context.setComponentTooltipForNextFrame(this.font, List.of(
                     Component.literal("§e⚡ Energy Buffer"),
                     Component.literal(String.format("§6%,d / %,d FE", this.menu.getEnergy(), this.menu.getMaxEnergy())),
-                    Component.literal("§7Usage: 40 FE/t")
+                    Component.literal("§7Base Usage: 40 FE/t")
             ), mouseX, mouseY);
+        }
+
+        // Gear Tooltip (when gear installed in slot 1 at x + 74, y + 53)
+        if (mouseX >= x + 73 && mouseX <= x + 91 && mouseY >= y + 52 && mouseY <= y + 70 && this.menu.getSlot(1).hasItem()) {
+            ItemStack gearStack = this.menu.getSlot(1).getItem();
+            if (gearStack.getItem() instanceof GearItem gearItem && gearItem.getGearTier() != GearTier.NONE) {
+                context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§d⚙ Installed Gear Upgrade"),
+                        Component.literal(String.format("§7Speed Tier: §f%s", gearItem.getGearTier().name())),
+                        Component.literal("§8Multiplies ore dust yields and processing speed.")
+                ), mouseX, mouseY);
+            }
         }
 
         // Empty Machine Slot Tooltips

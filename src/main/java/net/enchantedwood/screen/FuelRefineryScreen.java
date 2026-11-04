@@ -18,6 +18,10 @@ public class FuelRefineryScreen extends AbstractContainerScreen<FuelRefineryScre
 
     public FuelRefineryScreen(FuelRefineryScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
+        this.titleLabelX = 8;
+        this.titleLabelY = 7;
+        this.inventoryLabelX = 8;
+        this.inventoryLabelY = this.imageHeight - 94;
     }
 
     @Override
@@ -28,23 +32,37 @@ public class FuelRefineryScreen extends AbstractContainerScreen<FuelRefineryScre
 
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
 
-        // 1. Energy Bar (x + 13, y + 15, width 12, height 36)
+        // 1. Energy Bar (x + 13, y + 15, width 12, height 36) using UV at u=176, v=0
         int energyHeight = this.menu.getScaledEnergy();
         if (energyHeight > 0) {
             context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 13, y + 51 - energyHeight, 176.0f, 36.0f - energyHeight, 12, energyHeight, 256, 256);
         }
 
-        // 2. Refining Progress Arrow (x + 74, y + 34, width 24, height 17)
+        // 2. Refining Progress Arrow (x + 74, y + 34, width 24, height 17) using UV at u=176, v=36
         int progressWidth = this.menu.getScaledProgress();
         if (progressWidth > 0) {
             context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 74, y + 34, 176.0f, 36.0f, progressWidth, 17, 256, 256);
+
+            // Active petrochemical distillation bubble sparks
+            if (this.menu.isRefining()) {
+                long time = System.currentTimeMillis();
+                int sparkX = x + 74 + progressWidth - 1;
+                int sparkY = y + 42 + (int) ((time / 90) % 3) - 1;
+                int sparkColor = ((time / 70) % 2 == 0) ? 0xFF00E5FF : 0xFFFFD700;
+                context.fill(sparkX, sparkY, sparkX + 2, sparkY + 2, sparkColor);
+            }
         }
+    }
+
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFFFD700, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
     }
 
     @Override
     protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         super.extractTooltip(context, mouseX, mouseY);
-
 
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
@@ -59,7 +77,7 @@ public class FuelRefineryScreen extends AbstractContainerScreen<FuelRefineryScre
         }
 
         // Empty Machine Slot Tooltips
-        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 4) {
+        if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 5) {
             switch (this.hoveredSlot.index) {
                 case 0 -> context.setComponentTooltipForNextFrame(this.font, List.of(
                         Component.literal("§e📥 Feedstock Input"),
@@ -77,6 +95,10 @@ public class FuelRefineryScreen extends AbstractContainerScreen<FuelRefineryScre
                 case 3 -> context.setComponentTooltipForNextFrame(this.font, List.of(
                         Component.literal("§6🛢️ Mineral Tar Byproduct"),
                         Component.literal("§7Recovered petroleum tar appears here.")
+                ), mouseX, mouseY);
+                case 4 -> context.setComponentTooltipForNextFrame(this.font, List.of(
+                        Component.literal("§e⚡ Battery Charge Socket"),
+                        Component.literal("§7Insert an electric battery to recharge this refinery off-grid.")
                 ), mouseX, mouseY);
             }
         }

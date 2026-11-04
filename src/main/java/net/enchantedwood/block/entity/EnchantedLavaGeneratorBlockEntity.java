@@ -130,11 +130,16 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Me
 
         boolean canMelt = entity.canMeltCobble(cobbleStack);
 
-        // Refuel ONLY using Enchanted Coal Block
+        // Refuel using Enchanted Coal (10,000 ticks) or Enchanted Coal Block (90,000 ticks)
         if (entity.burnTime <= 0 && canMelt) {
             if (fuelStack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
                 entity.burnTime = 90000;
                 entity.totalBurnTime = 90000;
+                fuelStack.shrink(1);
+                stateChanged = true;
+            } else if (fuelStack.is(ModItems.ENCHANTED_COAL)) {
+                entity.burnTime = 10000;
+                entity.totalBurnTime = 10000;
                 fuelStack.shrink(1);
                 stateChanged = true;
             }
@@ -237,7 +242,7 @@ public class EnchantedLavaGeneratorBlockEntity extends BlockEntity implements Me
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == 0) return stack.is(Items.COBBLESTONE);
-        if (slot == 1) return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
+        if (slot == 1) return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) || stack.is(ModItems.ENCHANTED_COAL);
         if (slot == 2) return stack.getItem() instanceof GearItem gear && gear.isEnchanted();
         if (slot == 3) return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
         return false;

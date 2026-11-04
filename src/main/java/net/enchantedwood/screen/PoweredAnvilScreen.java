@@ -23,7 +23,7 @@ public class PoweredAnvilScreen extends AbstractContainerScreen<PoweredAnvilScre
     public PoweredAnvilScreen(PoweredAnvilScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
         this.titleLabelX = 8;
-        this.titleLabelY = 5;
+        this.titleLabelY = 7;
         this.inventoryLabelX = 8;
         this.inventoryLabelY = this.imageHeight - 94;
     }
@@ -58,9 +58,67 @@ public class PoweredAnvilScreen extends AbstractContainerScreen<PoweredAnvilScre
     }
 
     @Override
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractBackground(context, mouseX, mouseY, delta);
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+
+        // Top tab backdrops
+        context.fill(x + 4, y - 17, x + 86, y, 0xFF3C3C3C);
+        context.fill(x + 87, y - 17, x + 169, y, 0xFF222222);
+
+        // Base container background
+        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
+
+        // Vertical Textured Electric Energy Gauge (x + 13, y + 21, w: 12, h: 48) using UV at u=192, v=0
+        int energy = this.menu.getEnergy();
+        int maxEnergy = this.menu.getMaxEnergy();
+        if (maxEnergy > 0 && energy > 0) {
+            int fillH = Math.min(48, (int) ((long) energy * 48 / maxEnergy));
+            if (fillH > 0) {
+                context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x + 13, y + 69 - fillH, 192.0f, 48.0f - fillH, 12, fillH, 256, 256);
+            }
+        }
+
+        // Draw Anvil Plus Sign between input & material slots
+        context.text(this.font, Component.literal("§e+"), x + 61, y + 49, 0xFFDD00, false);
+    }
+
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        context.text(this.font, Component.literal("⚡ Powered Anvil"), 8, 7, 0xFF00E5FF, false);
+        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFF373A40, false);
+
+        context.text(this.font, Component.literal("Item"), 38, 33, 0x555555, false);
+        context.text(this.font, Component.literal("Ingot"), 74, 33, 0x555555, false);
+
+        int energy = this.menu.getEnergy();
+        boolean hasEnergy = energy >= 2500;
+        ItemStack input = this.menu.getInputStack();
+        boolean hasDamaged = !input.isEmpty() && input.isDamaged();
+
+        if (hasDamaged) {
+            context.text(this.font, Component.literal("Cost: 2,500 FE"), 105, 33, hasEnergy ? 0x008000 : 0xAA0000, false);
+        }
+    }
+
+    @Override
     protected void extractTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         super.extractTooltip(context, mouseX, mouseY);
 
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
+
+        // Tooltip for Energy Gauge (x: 12..26, y: 20..70)
+        if (mouseX >= x + 12 && mouseX <= x + 26 && mouseY >= y + 20 && mouseY <= y + 70) {
+            int energy = this.menu.getEnergy();
+            context.setComponentTooltipForNextFrame(this.font, java.util.List.of(
+                    Component.literal("§e⚡ High-Voltage Repair Capacitor"),
+                    Component.literal(String.format("§b%,d / %,d FE", energy, this.menu.getMaxEnergy())),
+                    Component.literal("§7Cost per Repair Cycle: §f2,500 FE"),
+                    Component.literal("§aZero XP Prior-Work Penalty!")
+            ), mouseX, mouseY);
+        }
 
         if (this.hoveredSlot != null && !this.hoveredSlot.hasItem() && this.hoveredSlot.index < 2) {
             switch (this.hoveredSlot.index) {
@@ -79,61 +137,4 @@ public class PoweredAnvilScreen extends AbstractContainerScreen<PoweredAnvilScre
             }
         }
     }
-
-    @Override
-    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
-        super.extractBackground(context, mouseX, mouseY, delta);
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
-
-        // Top tab backdrops
-        context.fill(x + 4, y - 17, x + 86, y, 0xFF3C3C3C);
-        context.fill(x + 87, y - 17, x + 169, y, 0xFF222222);
-
-        // Clean base container background without chest grid lines
-        context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0.0f, 0.0f, this.imageWidth, this.imageHeight, 256, 256);
-
-        // Vertical Energy Gauge inside recess (x + 13, y + 21, w: 12, h: 48)
-        int energy = this.menu.getEnergy();
-        int maxEnergy = this.menu.getMaxEnergy();
-        int gx = x + 14;
-        int gy = y + 22;
-        int gw = 10;
-        int gh = 46;
-
-        if (maxEnergy > 0 && energy > 0) {
-            int fillH = Math.min(gh, (int) ((long) energy * gh / maxEnergy));
-            int fy = (gy + gh) - fillH;
-            context.fill(gx, fy, gx + gw, gy + gh, 0xFF00E5FF);
-        }
-
-        // Draw Anvil Plus Sign between input & material slots
-        context.text(this.font, Component.literal("+"), x + 61, y + 49, 0x555555, false);
-    }
-
-    @Override
-    protected void extractLabels(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-        context.text(this.font, Component.literal("⚡ Powered Anvil"), 8, 6, 0x00E5FF, false);
-        context.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040, false);
-
-        context.text(this.font, Component.literal("Item"), 38, 33, 0x555555, false);
-        context.text(this.font, Component.literal("Ingot"), 76, 33, 0x555555, false);
-
-        int energy = this.menu.getEnergy();
-        boolean hasEnergy = energy >= 2500;
-        ItemStack input = this.menu.getInputStack();
-        boolean hasDamaged = !input.isEmpty() && input.isDamaged();
-
-        if (hasDamaged) {
-            context.text(this.font, Component.literal("Cost: 2,500 FE"), 105, 33, hasEnergy ? 0x228822 : 0xAA2222, false);
-        }
-
-        // Tooltip for Energy Gauge
-        int relX = mouseX - ((this.width - this.imageWidth) / 2);
-        int relY = mouseY - ((this.height - this.imageHeight) / 2);
-        if (relX >= 13 && relX <= 25 && relY >= 21 && relY <= 69) {
-            context.setTooltipForNextFrame(this.font, Component.literal(String.format("§e⚡ Energy: §f%,d / %,d FE", energy, this.menu.getMaxEnergy())), relX, relY);
-        }
-    }
 }
-

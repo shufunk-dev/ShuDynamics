@@ -288,7 +288,7 @@ public class MagmaCrucibleBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
         if (slot == INPUT_SLOT) return getCrucibleResult(stack.getItem()) != null;
-        if (slot == BUCKET_INPUT_SLOT) return stack.is(Items.BUCKET);
+        if (slot == BUCKET_INPUT_SLOT) return stack.is(Items.BUCKET) || stack.is(ModItems.COPPER_BUCKET);
         if (slot == GEAR_SLOT) return stack.getItem() instanceof GearItem;
         return false;
     }

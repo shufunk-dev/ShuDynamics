@@ -40,11 +40,11 @@ public class EnchantedLavaGeneratorScreenHandler extends AbstractContainerMenu {
             }
         });
 
-        // Slot 1: Fuel Slot (Enchanted Coal Block ONLY)
+        // Slot 1: Fuel Slot (Enchanted Coal or Enchanted Coal Block)
         this.addSlot(new Slot(inventory, 1, 26, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem());
+                return stack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) || stack.is(ModItems.ENCHANTED_COAL);
             }
         });
 
@@ -141,7 +141,7 @@ public class EnchantedLavaGeneratorScreenHandler extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (originalStack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem())) {
+                } else if (originalStack.is(ModBlocks.ENCHANTED_COAL_BLOCK.asItem()) || originalStack.is(ModItems.ENCHANTED_COAL)) {
                     if (!this.moveItemStackTo(originalStack, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
