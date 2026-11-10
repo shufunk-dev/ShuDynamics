@@ -97,10 +97,15 @@ tasks.register('deployMod') {
     dependsOn remapJar
     doLast {
         def src = remapJar.archiveFile.get().asFile
-        def finishedDir = new File(System.getProperty("user.home"), "Downloads/finished")
-        if (!finishedDir.exists()) finishedDir.mkdirs()
-        def dest = new File(finishedDir, src.name)
-        java.nio.file.Files.copy(src.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
-        println "DEPLOYED TO: " + dest.absolutePath + " (" + dest.length() + " bytes)"
+        def targetDirs = [
+            file("C:/Projects/Minecraft Mod/scratch/mods"),
+            file("C:/Users/shufu/CurseForge/minecraft/Instances/My Mod/mods")
+        ]
+        targetDirs.each { dir ->
+            if (!dir.exists()) dir.mkdirs()
+            def dest = new File(dir, src.name)
+            java.nio.file.Files.copy(src.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            println "DEPLOYED TO: " + dest.absolutePath + " (" + dest.length() + " bytes)"
+        }
     }
 }
