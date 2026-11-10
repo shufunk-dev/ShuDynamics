@@ -82,17 +82,11 @@ tasks.register('deployMod') {
     dependsOn jar
     doLast {
         def src = jar.archiveFile.get().asFile
-        def targetDirs = [
-            file("C:/Projects/Minecraft Mod/scratch/mods"),
-            file("C:/Users/shufu/CurseForge/minecraft/Instances/Shu 263/mods"),
-            file("C:/Users/shufu/CurseForge/minecraft/Instances/Curios/mods")
-        ]
-        targetDirs.each { dir ->
-            if (!dir.exists()) dir.mkdirs()
-            def dest = new File(dir, src.name)
-            java.nio.file.Files.copy(src.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
-            println "DEPLOYED TO: " + dest.absolutePath + " (" + dest.length() + " bytes)"
-        }
+        def finishedDir = new File(System.getProperty("user.home"), "Downloads/finished")
+        if (!finishedDir.exists()) finishedDir.mkdirs()
+        def dest = new File(finishedDir, src.name)
+        java.nio.file.Files.copy(src.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        println "DEPLOYED TO: " + dest.absolutePath + " (" + dest.length() + " bytes)"
     }
 }
 
