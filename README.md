@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.3%20%7C%201.21.11%2B-brightgreen.svg?style=flat-square&logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Java](https://img.shields.io/badge/Java-25%20%7C%2021-orange.svg?style=flat-square&logo=openjdk)](https://openjdk.org/)
-[![Latest Release](https://img.shields.io/badge/Release-v2.5.4--26.3%20%7C%20v2.5.4--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
+[![Latest Release](https://img.shields.io/badge/Release-v2.5.5--26.3%20%7C%20v2.5.5--1.21.11-purple.svg?style=flat-square)](https://github.com/shufunk-dev/ShuDynamics/releases)
 [![Wiki & Documentation](https://img.shields.io/badge/Wiki-shudynamics.shufunk.net-8B5CF6.svg?style=flat-square)](https://shudynamics.shufunk.net)
 [![CurseForge](https://img.shields.io/badge/CurseForge-ShuDynamics-F16436.svg?style=flat-square&logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat-square)](LICENSE)
@@ -21,8 +21,8 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 
 | Target Minecraft | Git Branch | Mod JAR Name | Java Runtime | Loader Target |
 |:---:|:---:|:---:|:---:|:---:|
-| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.4-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
-| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.4-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
+| **Minecraft 26.3** ("Wilderness Bound") | [`26.3`](https://github.com/shufunk-dev/ShuDynamics/tree/26.3) | `shudynamics-2.5.5-26.3.jar` | **Java 25** | Fabric Loader `0.19.5+` |
+| **Minecraft 1.21.11+ / 1.21.2+** | [`main`](https://github.com/shufunk-dev/ShuDynamics/tree/main) | `shudynamics-2.5.5-1.21.11.jar` | **Java 21** | Fabric Loader `0.16.9+` |
 
 *All ongoing feature updates and patches are actively synchronized across both branches.*
 
@@ -33,6 +33,27 @@ ShuDynamics maintains parallel releases for modern and legacy-stable Minecraft v
 * 🎧 **Official Soundtrack (Suno)**: [https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e](https://suno.com/playlist/343b0f74-ce3c-424d-8324-c26ef30eb78e)
 * 🔥 **CurseForge Project Page**: [https://www.curseforge.com/minecraft/mc-mods/shudynamics](https://www.curseforge.com/minecraft/mc-mods/shudynamics)
 * 💬 **Issues & Bug Tracker**: [https://github.com/shufunk-dev/ShuDynamics/issues](https://github.com/shufunk-dev/ShuDynamics/issues)
+
+---
+
+## 🌟 What's New in v2.5.5 — Orchard Farming, IC2 Rubber Tapping & Croptopia Interoperability
+
+* 🌳 **Orchard Farming & Right-Click Fruit Harvesting**:
+  * Added 4 developmental fruiting growth stages (`age=0..3`) to Avocado and Starfruit leaves.
+  * Players can now right-click mature leaves (`age=3`) to pick fruit without chopping down trees, enabling authentic orchard cultivation.
+  * Bonemeal support to accelerate fruit growth and guaranteed drops upon breaking ripe leaves.
+* 🌿 **Authentic Vanilla Foliage Art**:
+  * Redesigned leaf textures for Avocado, Starfruit, and Rubber trees to match authentic vanilla foliage clustering and dithering.
+  * High-contrast ripe fruit sprites (mature dark Hass plum-black avocados with golden sun glints, and radiant 5-point golden starfruits) that stand out clearly from the foliage.
+* 🪵 **IC2-Style Rubber Tree Resin Tapping**:
+  * Rubber logs generate with harvestable amber resin spots. Right-clicking a resin spot collects **1–3 Raw Resin** and resets the bark.
+  * Tapped spots regenerate resin over time via random block ticks or instantly when fertilized with Bone Meal.
+  * Smelting rubber logs into 4x resin remains available as a secondary option.
+* 🥗 **Croptopia & Common Tag (`c:...`) Compatibility**:
+  * Registered all crops, produce, salt, and soy milk under standard 1.21.2+ conventional tags (`#c:crops/rice`, `#c:crops/avocado`, `#c:crops/cucumber`, `#c:crops/dragon_fruit`, `#c:crops/starfruit`, `#c:crops/tomato`, `#c:crops/onion`, `#c:crops/lettuce`, `#c:crops/soybean`, `#c:crops/chili_pepper`, `#c:salt`, `#c:soy_milk`).
+  * Updated **40 culinary recipes** (sushi rolls, bento boxes, pitaya bowls, salads, burgers, tacos, pizzas, doughs, mochi) to consume tagged ingredients, allowing Overworld Croptopia crops to be used early-game without needing early access to The Convergence dimension.
+  * **Ice Cream Churner**: Accepts Croptopia's Salt as a coolant/refrigerant, Soy Milk as a liquid base, and berries as flavors.
+  * **Brick Oven**: Bakes and roasts Croptopia's Corn and cooks Soy Milk into Tofu.
 
 ---
 
@@ -354,7 +375,7 @@ cd ShuDynamics
 
 The compiled mod JAR will be generated in:
 ```text
-build/libs/shudynamics-2.5.0-1.21.11.jar
+build/libs/shudynamics-2.5.2-26.3.jar
 ```
 
 ---
