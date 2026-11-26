@@ -4,7 +4,7 @@
   "ingredients": [
     "enchantedwood:eternal_bento_box",
     "enchantedwood:primordial_catalyst",
-    "enchantedwood:dragon_fruit"
+    "#c:crops/dragon_fruit"
   ],
   "result": {
     "count": 1,

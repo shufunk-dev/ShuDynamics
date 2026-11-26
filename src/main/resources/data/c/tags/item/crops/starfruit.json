@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:starfruit",
+    {
+      "id": "croptopia:starfruit",
+      "required": false
+    }
+  ]
+}

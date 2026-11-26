@@ -4,8 +4,8 @@
   "ingredients": [
     "minecraft:salmon",
     "minecraft:cod",
-    "enchantedwood:avocado",
-    "enchantedwood:cucumber",
+    "#c:crops/avocado",
+    "#c:crops/cucumber",
     "minecraft:carrot",
     "enchantedwood:sushi_rice",
     "enchantedwood:nori_sheet"

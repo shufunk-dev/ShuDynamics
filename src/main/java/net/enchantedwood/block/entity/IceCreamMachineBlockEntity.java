@@ -237,8 +237,8 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements MenuProvi
             return new ItemStack(ModItems.VANILLA_ICE_CREAM, 2);
         }
         Item f = flavor.getItem();
-        if (f == ModItems.STRAWBERRY) return new ItemStack(ModItems.STRAWBERRY_ICE_CREAM, 2);
-        if (f == ModItems.BLUEBERRY) return new ItemStack(ModItems.BLUEBERRY_ICE_CREAM, 2);
+        if (f == ModItems.STRAWBERRY || flavor.is(net.enchantedwood.tag.ModTags.Items.C_STRAWBERRIES)) return new ItemStack(ModItems.STRAWBERRY_ICE_CREAM, 2);
+        if (f == ModItems.BLUEBERRY || flavor.is(net.enchantedwood.tag.ModTags.Items.C_BLUEBERRIES)) return new ItemStack(ModItems.BLUEBERRY_ICE_CREAM, 2);
         if (f == Items.COCOA_BEANS) return new ItemStack(ModItems.CHOCOLATE_ICE_CREAM, 2);
         if (f == Items.SWEET_BERRIES) return new ItemStack(ModItems.SWEET_BERRY_ICE_CREAM, 2);
         return new ItemStack(ModItems.VANILLA_ICE_CREAM, 2);
@@ -256,12 +256,12 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements MenuProvi
         if (stack.is(Items.BLUE_ICE)) return 3600;
         if (stack.is(Items.SNOW_BLOCK)) return 600;
         if (stack.is(Items.SNOWBALL)) return 150;
-        if (stack.is(ModItems.SALT)) return 800;
+        if (stack.is(ModItems.SALT) || stack.is(net.enchantedwood.tag.ModTags.Items.C_SALT) || stack.is(net.enchantedwood.tag.ModTags.Items.C_SALTS)) return 800;
         return 0;
     }
 
     private static boolean isBaseLiquid(ItemStack stack) {
-        return stack.is(Items.MILK_BUCKET) || stack.is(ModItems.SOY_MILK);
+        return stack.is(Items.MILK_BUCKET) || stack.is(ModItems.SOY_MILK) || stack.is(net.enchantedwood.tag.ModTags.Items.C_SOY_MILK) || stack.is(net.enchantedwood.tag.ModTags.Items.C_SOY_MILKS);
     }
 
     private static boolean isSweetener(ItemStack stack) {

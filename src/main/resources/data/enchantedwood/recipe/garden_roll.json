@@ -3,8 +3,8 @@
   "category": "misc",
   "ingredients": [
     "minecraft:carrot",
-    "enchantedwood:cucumber",
-    "enchantedwood:avocado",
+    "#c:crops/cucumber",
+    "#c:crops/avocado",
     "enchantedwood:sushi_rice",
     "enchantedwood:nori_sheet"
   ],

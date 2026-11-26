@@ -214,8 +214,8 @@ public class BrickOvenBlockEntity extends BlockEntity implements MenuProvider, W
 
         // 4. Street Foods & Gourmet Cookery
         if (item == ModItems.RAW_BURGER_PATTY) return new ItemStack(ModItems.COOKED_BURGER_PATTY);
-        if (item == ModItems.CORN) return new ItemStack(ModItems.ROASTED_CORN);
-        if (item == ModItems.SOY_MILK) return new ItemStack(ModItems.TOFU);
+        if (item == ModItems.CORN || input.is(net.enchantedwood.tag.ModTags.Items.C_CORNS)) return new ItemStack(ModItems.ROASTED_CORN);
+        if (item == ModItems.SOY_MILK || input.is(net.enchantedwood.tag.ModTags.Items.C_SOY_MILK) || input.is(net.enchantedwood.tag.ModTags.Items.C_SOY_MILKS)) return new ItemStack(ModItems.TOFU);
 
         // 5. Vanilla Smoker recipes (all roasted meats, poultry, fish, potatoes, kelp)
         var smokingMatch = world.recipeAccess().getRecipeFor(RecipeType.SMOKING, new SingleRecipeInput(input), world);

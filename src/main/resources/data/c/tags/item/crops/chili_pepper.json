@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:chili_pepper",
+    {
+      "id": "croptopia:chile_pepper",
+      "required": false
+    },
+    {
+      "id": "croptopia:bellpepper",
+      "required": false
+    }
+  ]
+}

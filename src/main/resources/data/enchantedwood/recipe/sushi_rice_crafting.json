@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "minecraft:bowl",
-    "enchantedwood:rice",
+    "#c:crops/rice",
     "minecraft:potion"
   ],
   "result": {

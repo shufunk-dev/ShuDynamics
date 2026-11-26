@@ -4,7 +4,7 @@
   "ingredients": [
     "minecraft:dried_kelp",
     "minecraft:carrot",
-    "enchantedwood:avocado",
+    "#c:crops/avocado",
     "enchantedwood:sushi_rice",
     "enchantedwood:nori_sheet"
   ],

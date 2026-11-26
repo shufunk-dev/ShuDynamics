@@ -1,13 +1,13 @@
 {
-    "ingredients":  [
-                        "minecraft:beef",
-                        "enchantedwood:salt",
-                        "enchantedwood:onion"
-                    ],
-    "category":  "misc",
-    "result":  {
-                   "id":  "enchantedwood:raw_burger_patty",
-                   "count":  2
-               },
-    "type":  "minecraft:crafting_shapeless"
+  "ingredients": [
+    "minecraft:beef",
+    "#c:salt",
+    "#c:crops/onion"
+  ],
+  "category": "misc",
+  "result": {
+    "id": "enchantedwood:raw_burger_patty",
+    "count": 2
+  },
+  "type": "minecraft:crafting_shapeless"
 }

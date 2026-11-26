@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "enchantedwood:dragon_fruit",
-    "enchantedwood:avocado",
+    "#c:crops/dragon_fruit",
+    "#c:crops/avocado",
     "enchantedwood:sushi_rice",
     "minecraft:bowl"
   ],

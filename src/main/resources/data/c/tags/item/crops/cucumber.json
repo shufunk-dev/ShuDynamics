@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:cucumber",
+    {
+      "id": "croptopia:cucumber",
+      "required": false
+    }
+  ]
+}
