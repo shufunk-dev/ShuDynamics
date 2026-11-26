@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
+    "age=0": {
       "model": "enchantedwood:block/starfruit_leaves"
+    },
+    "age=1": {
+      "model": "enchantedwood:block/starfruit_leaves_stage1"
+    },
+    "age=2": {
+      "model": "enchantedwood:block/starfruit_leaves_stage2"
+    },
+    "age=3": {
+      "model": "enchantedwood:block/starfruit_leaves_stage3"
     }
   }
 }

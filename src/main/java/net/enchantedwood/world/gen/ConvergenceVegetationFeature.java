@@ -124,7 +124,8 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
                     }
                     BlockPos leafPos = canopyCenter.add(dx, dy, dz);
                     if (world.isAir(leafPos)) {
-                        world.setBlockState(leafPos, ModBlocks.STARFRUIT_LEAVES.getDefaultState(), 2);
+                        int leafAge = random.nextFloat() < 0.35f ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
+                        world.setBlockState(leafPos, ModBlocks.STARFRUIT_LEAVES.getDefaultState().with(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
                     }
                 }
             }
@@ -162,7 +163,8 @@ public class ConvergenceVegetationFeature extends Feature<DefaultFeatureConfig> 
                     }
                     BlockPos leafPos = canopyCenter.add(dx, dy, dz);
                     if (world.isAir(leafPos)) {
-                        world.setBlockState(leafPos, ModBlocks.AVOCADO_LEAVES.getDefaultState(), 2);
+                        int leafAge = random.nextFloat() < 0.35f ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
+                        world.setBlockState(leafPos, ModBlocks.AVOCADO_LEAVES.getDefaultState().with(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
                     }
                 }
             }
