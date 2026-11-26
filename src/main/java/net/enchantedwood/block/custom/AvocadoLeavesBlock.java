@@ -1,10 +1,9 @@
 package net.enchantedwood.block.custom;
 
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
+import net.enchantedwood.item.ModItems;
 
-public class AvocadoLeavesBlock extends LeavesBlock {
+public class AvocadoLeavesBlock extends FruitLeavesBlock {
     public AvocadoLeavesBlock(Properties settings) {
-        super(AmbientLeavesBlockSoundPlayer.noAmbientSound(), settings);
+        super(settings, () -> ModItems.AVOCADO);
     }
 }
