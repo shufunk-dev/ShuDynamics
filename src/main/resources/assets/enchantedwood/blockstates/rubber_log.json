@@ -1,13 +1,25 @@
 {
   "variants": {
-    "axis=y": {
+    "axis=y,has_resin=true": {
+      "model": "enchantedwood:block/rubber_log_resin"
+    },
+    "axis=y,has_resin=false": {
       "model": "enchantedwood:block/rubber_log"
     },
-    "axis=z": {
+    "axis=z,has_resin=true": {
+      "model": "enchantedwood:block/rubber_log_resin_horizontal",
+      "x": 90
+    },
+    "axis=z,has_resin=false": {
       "model": "enchantedwood:block/rubber_log_horizontal",
       "x": 90
     },
-    "axis=x": {
+    "axis=x,has_resin=true": {
+      "model": "enchantedwood:block/rubber_log_resin_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=x,has_resin=false": {
       "model": "enchantedwood:block/rubber_log_horizontal",
       "x": 90,
       "y": 90
