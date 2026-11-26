@@ -507,12 +507,17 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()));
 
     // Rubber Tree Blocks
-    public static final Block RUBBER_LOG = registerBlock("rubber_log",
-            new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
+    public static final Block RUBBER_LOG = registerBlockWithTooltip("rubber_log",
+            new net.enchantedwood.block.custom.RubberLogBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(EnchantedWoodMod.MOD_ID, "rubber_log")))
                     .sound(SoundType.WOOD)
+                    .randomTicks()
                     .destroyTime(2.0f)
-                    .explosionResistance(2.0f)));
+                    .explosionResistance(2.0f)),
+            Component.literal("§6Rubber Log"),
+            Component.literal("§7Right-click resin spots to tap raw resin without felling."),
+            Component.literal("§e • Resin regenerates over time or with Bone Meal."),
+            Component.literal("§8 • Smeltable into 4x Resin."));
 
     public static final Block RUBBER_WOOD = registerBlock("rubber_wood",
             new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of()
