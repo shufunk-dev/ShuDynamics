@@ -9,8 +9,10 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
+
 public class ConvergenceVegetationFeature implements Feature {
-    public static final com.mojang.serialization.MapCodec<ConvergenceVegetationFeature> CODEC = com.mojang.serialization.MapCodec.unit(ConvergenceVegetationFeature::new);
+    public static final com.mojang.serialization.MapCodec<ConvergenceVegetationFeature> CODEC = com.mojang.serialization.MapCodec
+            .unit(ConvergenceVegetationFeature::new);
 
     public ConvergenceVegetationFeature() {
     }
@@ -21,16 +23,15 @@ public class ConvergenceVegetationFeature implements Feature {
     }
 
     @Override
-    public boolean place(net.minecraft.world.level.WorldGenLevel world, net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos origin) {
-        
+    public boolean place(net.minecraft.world.level.WorldGenLevel world,
+            net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.util.RandomSource random,
+            net.minecraft.core.BlockPos origin) {
 
         // STRICT DIMENSION CHECK: Exclusively generates in The Convergence
         if (world.getLevel().dimension() != ModDimensions.CONVERGENCE_WORLD_KEY) {
             return false;
         }
 
-        
-        
         boolean placedAny = false;
 
         // 1. Generate Wild Rice patches
@@ -79,7 +80,8 @@ public class ConvergenceVegetationFeature implements Feature {
             int dy = random.nextInt(4) - random.nextInt(4);
             BlockPos target = origin.offset(dx, dy, dz);
 
-            if (world.isEmptyBlock(target) && ModBlocks.WILD_DRAGON_FRUIT.defaultBlockState().canSurvive(world, target)) {
+            if (world.isEmptyBlock(target)
+                    && ModBlocks.WILD_DRAGON_FRUIT.defaultBlockState().canSurvive(world, target)) {
                 world.setBlock(target, ModBlocks.WILD_DRAGON_FRUIT.defaultBlockState(), 2);
                 placedAny = true;
             }
@@ -127,8 +129,11 @@ public class ConvergenceVegetationFeature implements Feature {
                     }
                     BlockPos leafPos = canopyCenter.offset(dx, dy, dz);
                     if (world.isEmptyBlock(leafPos)) {
-                        int leafAge = random.nextFloat() < 0.35f ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
-                        world.setBlock(leafPos, ModBlocks.STARFRUIT_LEAVES.defaultBlockState().setValue(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
+                        int leafAge = random.nextFloat() < 0.35f
+                                ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE
+                                : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
+                        world.setBlock(leafPos, ModBlocks.STARFRUIT_LEAVES.defaultBlockState()
+                                .setValue(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
                     }
                 }
             }
@@ -166,8 +171,11 @@ public class ConvergenceVegetationFeature implements Feature {
                     }
                     BlockPos leafPos = canopyCenter.offset(dx, dy, dz);
                     if (world.isEmptyBlock(leafPos)) {
-                        int leafAge = random.nextFloat() < 0.35f ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
-                        world.setBlock(leafPos, ModBlocks.AVOCADO_LEAVES.defaultBlockState().setValue(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
+                        int leafAge = random.nextFloat() < 0.35f
+                                ? net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE
+                                : random.nextInt(net.enchantedwood.block.custom.FruitLeavesBlock.MAX_AGE);
+                        world.setBlock(leafPos, ModBlocks.AVOCADO_LEAVES.defaultBlockState()
+                                .setValue(net.enchantedwood.block.custom.FruitLeavesBlock.AGE, leafAge), 2);
                     }
                 }
             }
