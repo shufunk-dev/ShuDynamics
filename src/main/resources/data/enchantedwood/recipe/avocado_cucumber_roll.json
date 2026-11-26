@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "enchantedwood:avocado",
-    "enchantedwood:cucumber",
+    "#c:crops/avocado",
+    "#c:crops/cucumber",
     "enchantedwood:sushi_rice",
     "enchantedwood:nori_sheet"
   ],

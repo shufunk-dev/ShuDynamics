@@ -1,12 +1,12 @@
-﻿{
-    "ingredients":  [
-                        "minecraft:milk_bucket",
-                        "enchantedwood:salt"
-                    ],
-    "category":  "misc",
-    "result":  {
-                   "id":  "enchantedwood:cheese_slice",
-                   "count":  4
-               },
-    "type":  "minecraft:crafting_shapeless"
+{
+  "ingredients": [
+    "minecraft:milk_bucket",
+    "#c:salt"
+  ],
+  "category": "misc",
+  "result": {
+    "id": "enchantedwood:cheese_slice",
+    "count": 4
+  },
+  "type": "minecraft:crafting_shapeless"
 }

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mysticalagriculture",
+        "mysticalcustomization"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EEE",
+    "E E",
+    "EEE"
+  ],
+  "key": {
+    "E": "mysticalagriculture:titanium_essence"
+  },
+  "result": {
+    "id": "enchantedwood:titanium_ingot",
+    "count": 4
+  }
+}

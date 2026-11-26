@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:salt",
+    {
+      "id": "croptopia:salt",
+      "required": false
+    }
+  ]
+}

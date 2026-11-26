@@ -25,8 +25,21 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_TUNGSTEN = of("repairs_tungsten");
         public static final TagKey<Item> REPAIRS_MODULAR_POWER = of("repairs_modular_power");
 
+        // Conventional Common Tags (Inter-mod compatibility e.g. Croptopia)
+        public static final TagKey<Item> C_SALTS = common("salts");
+        public static final TagKey<Item> C_SALT = common("salt");
+        public static final TagKey<Item> C_SOY_MILK = common("soy_milk");
+        public static final TagKey<Item> C_SOY_MILKS = common("soy_milks");
+        public static final TagKey<Item> C_CORNS = common("crops/corn");
+        public static final TagKey<Item> C_STRAWBERRIES = common("fruits/strawberry");
+        public static final TagKey<Item> C_BLUEBERRIES = common("fruits/blueberry");
+
         private static TagKey<Item> of(String id) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(EnchantedWoodMod.MOD_ID, id));
+        }
+
+        private static TagKey<Item> common(String id) {
+            return TagKey.of(RegistryKeys.ITEM, Identifier.of("c", id));
         }
     }
 }

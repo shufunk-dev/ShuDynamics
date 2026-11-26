@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:iron_dust",
+    "enchantedwood:copper_dust",
+    "enchantedwood:tin_dust",
+    "enchantedwood:bronze_dust",
+    "enchantedwood:titanium_dust",
+    "enchantedwood:bauxite_dust",
+    "enchantedwood:gold_dust",
+    "enchantedwood:diamond_dust",
+    "enchantedwood:netherite_dust",
+    "enchantedwood:emerald_dust",
+    "enchantedwood:coal_dust",
+    "enchantedwood:quartz_dust",
+    "enchantedwood:steel_dust",
+    "enchantedwood:tungsten_dust",
+    "enchantedwood:cobalt_dust",
+    "enchantedwood:ardite_dust",
+    "enchantedwood:manyullyn_dust",
+    "enchantedwood:sulfur_dust",
+    "enchantedwood:tantalum_dust",
+    "enchantedwood:hafnium_dust",
+    "enchantedwood:neodymium_dust"
+  ]
+}

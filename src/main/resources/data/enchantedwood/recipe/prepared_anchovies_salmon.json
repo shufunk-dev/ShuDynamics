@@ -1,12 +1,12 @@
-﻿{
-    "ingredients":  [
-                        "minecraft:salmon",
-                        "enchantedwood:salt"
-                    ],
-    "category":  "misc",
-    "result":  {
-                   "id":  "enchantedwood:prepared_anchovies",
-                   "count":  2
-               },
-    "type":  "minecraft:crafting_shapeless"
+{
+  "ingredients": [
+    "minecraft:salmon",
+    "#c:salt"
+  ],
+  "category": "misc",
+  "result": {
+    "id": "enchantedwood:prepared_anchovies",
+    "count": 2
+  },
+  "type": "minecraft:crafting_shapeless"
 }

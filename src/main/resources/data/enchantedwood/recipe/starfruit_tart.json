@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "food",
+  "category": "misc",
   "ingredients": [
-    "enchantedwood:starfruit",
+    "#c:crops/starfruit",
     "minecraft:wheat",
     "minecraft:sugar",
     "minecraft:egg"

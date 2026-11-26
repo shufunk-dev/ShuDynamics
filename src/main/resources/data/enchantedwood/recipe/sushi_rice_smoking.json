@@ -3,7 +3,7 @@
   "category": "food",
   "cookingtime": 100,
   "experience": 0.25,
-  "ingredient": "enchantedwood:rice",
+  "ingredient": "#c:crops/rice",
   "result": {
     "id": "enchantedwood:sushi_rice"
   }

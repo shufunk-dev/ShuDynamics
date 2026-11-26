@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "enchantedwood:soy_milk",
+    {
+      "id": "croptopia:soy_milk",
+      "required": false
+    }
+  ]
+}

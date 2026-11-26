@@ -237,8 +237,8 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
             return new ItemStack(ModItems.VANILLA_ICE_CREAM, 2);
         }
         Item f = flavor.getItem();
-        if (f == ModItems.STRAWBERRY) return new ItemStack(ModItems.STRAWBERRY_ICE_CREAM, 2);
-        if (f == ModItems.BLUEBERRY) return new ItemStack(ModItems.BLUEBERRY_ICE_CREAM, 2);
+        if (f == ModItems.STRAWBERRY || flavor.isIn(net.enchantedwood.tag.ModTags.Items.C_STRAWBERRIES)) return new ItemStack(ModItems.STRAWBERRY_ICE_CREAM, 2);
+        if (f == ModItems.BLUEBERRY || flavor.isIn(net.enchantedwood.tag.ModTags.Items.C_BLUEBERRIES)) return new ItemStack(ModItems.BLUEBERRY_ICE_CREAM, 2);
         if (f == Items.COCOA_BEANS) return new ItemStack(ModItems.CHOCOLATE_ICE_CREAM, 2);
         if (f == Items.SWEET_BERRIES) return new ItemStack(ModItems.SWEET_BERRY_ICE_CREAM, 2);
         return new ItemStack(ModItems.VANILLA_ICE_CREAM, 2);
@@ -256,12 +256,12 @@ public class IceCreamMachineBlockEntity extends BlockEntity implements NamedScre
         if (stack.isOf(Items.BLUE_ICE)) return 3600;
         if (stack.isOf(Items.SNOW_BLOCK)) return 600;
         if (stack.isOf(Items.SNOWBALL)) return 150;
-        if (stack.isOf(ModItems.SALT)) return 800;
+        if (stack.isOf(ModItems.SALT) || stack.isIn(net.enchantedwood.tag.ModTags.Items.C_SALT) || stack.isIn(net.enchantedwood.tag.ModTags.Items.C_SALTS)) return 800;
         return 0;
     }
 
     private static boolean isBaseLiquid(ItemStack stack) {
-        return stack.isOf(Items.MILK_BUCKET) || stack.isOf(ModItems.SOY_MILK);
+        return stack.isOf(Items.MILK_BUCKET) || stack.isOf(ModItems.SOY_MILK) || stack.isIn(net.enchantedwood.tag.ModTags.Items.C_SOY_MILK) || stack.isIn(net.enchantedwood.tag.ModTags.Items.C_SOY_MILKS);
     }
 
     private static boolean isSweetener(ItemStack stack) {
